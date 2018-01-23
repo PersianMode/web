@@ -1,0 +1,82 @@
+.gnav-member-bar {
+  position: relative;
+  top: 0;
+  z-index: 999;
+  height: 39px;
+}
+
+ul {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  display: table;
+  position: absolute;
+  top: -1px
+}
+
+li {
+  display: inline-block;
+  padding: 5px;
+  overflow: hidden;
+  vertical-align: top;
+  border-left: 1px solid #E5E5E5;
+  height: 29px;
+}
+
+li:hover {
+  background: #E5E5E5;
+}
+
+.right-bar {
+  left:13px
+}
+
+.right-bar li {
+  border:0;
+}
+
+.general {
+  height: 29px;
+  position: relative
+}
+
+.thenorthface {
+  height: 84px;
+  top: -27px
+}
+
+.timberland {
+  height: 100px;
+  top: -33px
+}
+
+.polo_ralph_lauren {
+  height: 34px;
+  top: -3px;
+}
+
+.Hurley {
+  height: 60px;
+  top: -15px
+}
+
+.nike-jordan {
+  top: -2px
+}
+.store-logo-asics {
+  height: 34px;
+}
+.gnav-member-bar a {
+  color: #8D8D8D;
+  text-decoration: none;
+  outline: 0;
+}
+
+nav {
+  position: relative;
+  right: 0px;
+  top: 0px;
+  border-bottom: 1px solid #E5E5E5;
+  line-height: 39px;
+  height: 39px;
+}
