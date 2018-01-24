@@ -1,9 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
-@font-face{
+@font-face {
   font-family: "nikeglyph";
   src: url('assets/fonts/OneNikeGlyphs.woff');
 }
 
-body{
-  margin:0; padding:0;
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.faWrapper {
+  font-size: 18pt;
+  vertical-align: top;
+  position: relative;
+  top: -4px;
+  color: black;
+}
+
+.faWrapper:focus {
+  color: red;
+}
+
+.faWrapper:hover {
+  color: darkred;
 }

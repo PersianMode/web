@@ -1,6 +1,6 @@
-<nav>
+<nav class="first-bar">
 
-  <ul style="right:0px">
+  <ul>
     <li *ngFor="let logo of logos" [ngStyle]="{width: (logo.width ? logo.width + 'px' : 'initial')}">
       <a href="#" class="gnav-member-bar" [title]="logo.brand">
         <img
@@ -9,8 +9,68 @@
     </li>
   </ul>
   <ul class="right-bar">
-    <li><button mat-icon-button>
-      <mat-icon>cart</mat-icon>
-    </button> </li>
+    <li><a href="#" class="faWrapper" aria-label="Shopping Bag"><i class="fa fa-shopping-bag"></i></a>
+    <li><a href="#" class="faWrapper" aria-label="Sign In or Register"><i class="fa fa-sign-in"></i></a></li>
   </ul>
 </nav>
+<div class="second-bar">
+  <ul>
+    <li [class.selected]="selected.men" (mouseenter)="showList('men')" (mouseleave)="countDownHideList()">
+      <a href="#">مردانه</a>
+    </li>
+    <li [class.selected]="selected.women">
+      <a href="#">زنانه</a>
+    </li>
+    <li [class.selected]="selected.girls">
+      <a href="#">دخترانه</a>
+    </li>
+    <li [class.selected]="selected.boys">
+      <a href="#">پسرانه</a>
+    </li>
+  </ul>
+</div>
+<div class="genderList" [class.hidden]="hiddenGenderMenu" (mouseenter)="persistList()" (mouseleave)="hideList(1)">
+  <div class="genderListWrapper">
+    <div class="headerList">
+      <ul>
+        <li><a href="#">تازه‌ها</a></li>
+        <li><a href="#">پرفروش‌ها</a></li>
+        <li><a href="#">مجموعه Equality</a></li>
+        <li><a href="#">زیر ۵۰۰ هزار تومان</a></li>
+        <li><a href="#">داره مد می‌شه</a></li>
+        <li><a href="#">مجموعه Fleece</a></li>
+        <li><a href="#">برای فصل سرما</a></li>
+      </ul>
+    </div>
+    <div class="middle">
+      <ul>
+        <li class="headerItem"><a href="#">کفش‌ها</a></li>
+        <li><a href="#">کفش دویدن</a></li>
+        <li><a href="#">کفش فوتبال</a></li>
+        <li><a href="#">کفش نرمش</a></li>
+        <li><a href="#">کفش بسکتبال</a></li>
+      </ul>
+      <ul>
+        <li class="headerItem"><a href="#">لباس‌ها</a></li>
+        <li><a href="#">لباس‌های Compression و Nike Pro</a></li>
+        <li><a href="#">پیراهن‌های Polo</a></li>
+        <li><a href="#">لباس‌های کلاه‌دار</a></li>
+        <li class="headerItem"><a href="#">لوازم جانبی</a></li>
+        <li><a href="#">کوله‌ها و کیف‌ها</a></li>
+        <li><a href="#">عینک آفتابی</a></li>
+      </ul>
+    </div>
+    <div class="leftColumn">
+      <ul>
+        <li class="headerItem"><a href="#">خرید با برند</a></li>
+        <li><a href="#">Nike</a></li>
+        <li><a href="#">Converse</a></li>
+      </ul>
+      <ul>
+        <li class="headerItem"><a href="#">خرید با ورزش</a></li>
+        <li><a href="#">دویدن</a></li>
+        <li><a href="#">فوتبال</a></li>
+      </ul>
+    </div>
+  </div>
+</div>

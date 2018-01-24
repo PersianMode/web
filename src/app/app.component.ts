@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {MatIconRegistry} from "@angular/material";
 
 @Component({
   selector: 'app-root',
@@ -6,14 +7,22 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-
+  hiddenGenderMenu = true;
+  persistedList = false;
+  doNotClose = false;
+  selected = {
+    men: false,
+    women: false,
+    boys: false,
+    girls: false,
+  };
   logos = [
     {
       brand: 'Nike',
       filename: 'nike',
-      height: 34,
-      top: 2,
-      right: 5,
+      // height: 34,
+      // top: 2,
+      // right: 5,
       width: 60,
     },
     {
@@ -85,7 +94,41 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  constructor(iconRegistry: MatIconRegistry) {
+    //iconRegistry.setDefaultFontSetClass('fa');
+  }
+
   ngOnInit() {
 
+  }
+
+  showList(type) {
+    setTimeout(() => {
+      this.hiddenGenderMenu = false;
+      this.selected[type] = true;
+    }, 100 );
+  }
+
+  persistList() {
+    this.persistedList = true;
+  }
+
+  hideList(x) {
+    this.hiddenGenderMenu = true;
+    this.persistedList = false;
+    for (const i in this.selected) {
+      if (this.selected.hasOwnProperty(i)) {
+        this.selected[i] = false;
+      }
+    }
+  }
+
+  countDownHideList() {
+
+    setTimeout(() => {
+      if (!this.persistedList) {
+        this.hideList(0);
+      }
+    }, 100);
   }
 }

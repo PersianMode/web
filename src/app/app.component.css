@@ -5,16 +5,18 @@
   height: 39px;
 }
 
-ul {
+.first-bar ul {
   background: transparent;
   padding: 0;
   margin: 0;
   display: table;
   position: absolute;
-  top: -1px
+  top: -1px;
+  right: 0px;
+  height: 39px;
 }
 
-li {
+.first-bar li {
   display: inline-block;
   padding: 5px;
   overflow: hidden;
@@ -23,7 +25,11 @@ li {
   height: 29px;
 }
 
-li:hover {
+.first-bar li:hover {
+  background: #E5E5E5;
+}
+
+a:focus img{
   background: #E5E5E5;
 }
 
@@ -39,33 +45,6 @@ li:hover {
   height: 29px;
   position: relative
 }
-
-.thenorthface {
-  height: 84px;
-  top: -27px
-}
-
-.timberland {
-  height: 100px;
-  top: -33px
-}
-
-.polo_ralph_lauren {
-  height: 34px;
-  top: -3px;
-}
-
-.Hurley {
-  height: 60px;
-  top: -15px
-}
-
-.nike-jordan {
-  top: -2px
-}
-.store-logo-asics {
-  height: 34px;
-}
 .gnav-member-bar a {
   color: #8D8D8D;
   text-decoration: none;
@@ -79,4 +58,122 @@ nav {
   border-bottom: 1px solid #E5E5E5;
   line-height: 39px;
   height: 39px;
+}
+
+.second-bar {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  height: 68px;
+  font-family: iranyekan;
+  font-weight: bold;
+  font-size: 16pt;
+  text-align: center;
+  border-bottom:1px solid #E5E5E5;
+}
+.second-bar > ul {
+  background-color: white;
+  text-align: center;
+  font-size: 0;
+  width: 100%;
+  height: 66px;
+  padding:0;
+}
+.second-bar li {
+  display: inline-block;
+  border-bottom: 2px solid transparent;
+  padding: 0 20px;
+  font-size: 16px;
+  height: 66px;
+}
+.second-bar li:hover{
+  border-bottom: 2px #111 solid;
+}
+.selected {
+  border-bottom: 2px #111 solid !important;
+}
+.second-bar a:focus{
+  border-bottom: 2px #111 solid;
+}
+.second-bar a {
+  text-decoration: none;
+  color: black;
+  height: 66px;
+  display: inline-block;
+  line-height: 68px;
+}
+
+.genderList{
+  position: absolute;
+  top: 100px;
+  width: 100%;
+  height: 400px;
+  font-family: iranyekan;
+  font-weight: bold;
+  text-align: center;
+  border-bottom:1px solid #E5E5E5;
+  padding-top: 40px;
+}
+.genderList div {
+  display:inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+}
+.genderList div.middle{
+  border-left: 1px solid #E5E5E5;
+  border-right: 1px solid #E5E5E5;
+  text-align: center;
+}
+.genderList ul{
+  display: inline-block;
+  list-style-type: none;
+  padding:0px 20px;
+  height: 300px;
+  text-align:justify !important;
+  vertical-align: top;
+}
+.headerList{
+  font-weight: bolder !important;
+  text-align: left !important;
+}
+.leftColumn {
+  text-align:right;
+}
+.headerList li{
+  font-weight: bolder !important;
+  margin: 10px 0px !important;
+}
+.genderList li {
+  font-size: 10pt;
+  margin: 5px 0px;
+  font-weight:lighter;
+}
+.headerItem{
+  font-weight: bolder !important;
+  margin: 10px 0px !important;
+}
+.genderList a {
+  text-decoration: none;
+  color: black;
+}
+
+.genderList a:hover{
+  color: darkgray;
+}
+
+.genderList a:focus{
+  color: darkgrey;
+}
+.genderListWrapper{
+  width: 100% !important;
+  min-width: 960px;
+  padding:0;
+  margin:0;
+  overflow: hidden;
+}
+.hidden {
+  visibility: hidden;
+  height: 0px!important;
+  top: -10px;
+  position: absolute;
 }
