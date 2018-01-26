@@ -9,7 +9,7 @@ import {MatIconRegistry} from "@angular/material";
 export class AppComponent implements OnInit {
   hiddenGenderMenu = true;
   persistedList = false;
-  doNotClose = false;
+  searchIsFocused = false;
   selected = {
     men: false,
     women: false,
@@ -130,5 +130,13 @@ export class AppComponent implements OnInit {
         this.hideList(0);
       }
     }, 100);
+  }
+
+  searchFocused() {
+    this.searchIsFocused = true;
+  }
+
+  searchUnfocused() {
+    this.searchIsFocused = false;
   }
 }

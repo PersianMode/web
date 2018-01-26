@@ -31,6 +31,7 @@
 
 a:focus img{
   background: #E5E5E5;
+  outline: none;
 }
 
 .right-bar {
@@ -38,17 +39,37 @@ a:focus img{
 }
 
 .right-bar li {
-  border:0;
+  border: 0;
+  height: 39px;
+  padding: 0 12px;
+  vertical-align: baseline;
+}
+.faWrapper {
+  font-size: 18pt;
+  line-height: 39px;
+  padding: 0px;
+  color: black;
+  position: relative;
 }
 
+.faWrapper:focus {
+  color: red;
+}
+
+.faWrapper:hover {
+  color: darkred;
+}
+.loginIcon {
+  top: 3px;
+  font-size: 20pt;
+  position:relative;
+}
 .general {
   height: 29px;
   position: relative
 }
 .gnav-member-bar a {
   color: #8D8D8D;
-  text-decoration: none;
-  outline: 0;
 }
 
 nav {
@@ -65,7 +86,7 @@ nav {
   top: 40px;
   width: 100%;
   height: 68px;
-  font-family: iranyekan;
+  font-family: iranyekan,sans-serif;
   font-weight: bold;
   font-size: 16pt;
   text-align: center;
@@ -103,21 +124,49 @@ nav {
   line-height: 68px;
 }
 
+.search-bar {
+  position: absolute;
+  display: inline-block;
+  left: 13px;
+  top: 14px;
+  border: #E5E5E5 solid 1px;
+  padding: 3px;
+  transition: all .3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.search-bar i {
+  font-size: 18px;
+  top: 2px;
+  right: 4px;
+}
+
+.search-bar input {
+  border: 0;
+  outline: none;
+  padding: 2px;
+  margin: 0px 4px 5px 2px;
+  font-family: iranyekan,sans-serif;
+}
+
 .genderList{
   position: absolute;
-  top: 100px;
+  top: 109px;
   width: 100%;
-  height: 400px;
-  font-family: iranyekan;
+  min-height: 250px;
+  font-family: iranyekan, sans-serif;
   font-weight: bold;
   text-align: center;
   border-bottom:1px solid #E5E5E5;
   padding-top: 40px;
+  background: #fff;
 }
 .genderList div {
   display:inline-block;
   vertical-align: top;
   white-space: nowrap;
+  margin: 0;
 }
 .genderList div.middle{
   border-left: 1px solid #E5E5E5;
@@ -127,10 +176,10 @@ nav {
 .genderList ul{
   display: inline-block;
   list-style-type: none;
-  padding:0px 20px;
-  height: 300px;
+  padding:0px 15px;
   text-align:justify !important;
   vertical-align: top;
+  margin:0;
 }
 .headerList{
   font-weight: bolder !important;
@@ -141,20 +190,21 @@ nav {
 }
 .headerList li{
   font-weight: bolder !important;
-  margin: 10px 0px !important;
+  margin: 0px 0px 10px 0px !important;
 }
 .genderList li {
   font-size: 10pt;
-  margin: 5px 0px;
+  margin: 0px 0px 5px 0px;
   font-weight:lighter;
 }
 .headerItem{
   font-weight: bolder !important;
-  margin: 10px 0px !important;
+  margin: 0px 0px 10px 0px !important;
 }
 .genderList a {
   text-decoration: none;
   color: black;
+  outline: none;
 }
 
 .genderList a:hover{
@@ -176,4 +226,17 @@ nav {
   height: 0px!important;
   top: -10px;
   position: absolute;
+  z-index: -1 !important;
+}
+.carousel-slider {
+  width: 100%;
+  z-index: -1 !important;
+  font-size: 13px;
+  -webkit-tap-highlight-color: transparent;
+  bottom: auto;
+  position: absolute;
+  top: 109px;
+  height: 60px;
+  background-color: rgb(247, 247, 247);
+  border-bottom: 1px solid rgb(229,229,229);
 }

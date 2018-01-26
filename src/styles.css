@@ -9,18 +9,7 @@ body {
   padding: 0;
 }
 
-.faWrapper {
-  font-size: 18pt;
-  vertical-align: top;
-  position: relative;
-  top: -4px;
-  color: black;
-}
-
-.faWrapper:focus {
-  color: red;
-}
-
-.faWrapper:hover {
-  color: darkred;
+a {
+  text-decoration: none;
+  outline:none;
 }
