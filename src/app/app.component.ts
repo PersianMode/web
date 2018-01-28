@@ -94,26 +94,197 @@ export class AppComponent implements OnInit {
     },
   ];
 
+  slides = [
+    {
+      imgWidth: 40,
+      imgAddr: 'delivery',
+      text: 'ارسال رایگان در تهران و حومه',
+    },
+    {
+      imgWidth: 30,
+      imgMarginLeft: 5,
+      imgAddr: 'return',
+      text: 'پس گرفتن جنس خریداری شده تا ۳۰ روز',
+    },
+    {
+      imgWidth: 40,
+      imgAddr: 'loyalty',
+      text: 'تخفیف‌های ویژه و حراج‌های اختصاصی برای اعضاء',
+    },
+  ];
+
+  placements = {
+    menMenu: {
+      headerList: [
+        {
+          text: 'تازه‌ها',
+          href: '#',
+        },
+        {
+          text: 'پرفروش‌ها',
+          href: '#',
+        },
+        {
+          text: 'مجموعه Equality',
+          href: '#',
+        },
+        {
+          text: 'زیر ۵۰۰ هزار تومان',
+          href: '#',
+        },
+        {
+          text: 'داره مد می‌شه',
+          href: '#',
+        },
+        {
+          text: 'مجموعه Fleece',
+          href: '#',
+        },
+        {
+          text: 'برای فصل سرما',
+          href: '#',
+        },
+      ],
+      middle: [
+        [
+          {
+            text: 'کفش‌ها',
+            href: '#',
+          },
+          {
+            text: 'دویدن',
+            href: '#',
+          },
+          {
+            text: 'فوتبال',
+            href: '#',
+          },
+          {
+            text: 'نرمش',
+            href: '#',
+          },
+          {
+            text: 'بسکتبال',
+            href: '#',
+          },
+        ],
+        [
+          {
+            text: 'لباس‌ها',
+            href: '#',
+          },
+          {
+            text: 'Compression و Nike Pro',
+            href: '#',
+          },
+          {
+            text: 'پیراهن‌های Polo',
+            href: '#',
+          },
+          {
+            text: 'لباس‌های کلاه‌دار',
+            href: '#',
+          },
+        ],
+        [
+          {
+            text: 'لوازم جانبی',
+            href: '#',
+          },
+          {
+            text: 'کوله‌ها و کیف‌ها',
+            href: '#',
+          },
+          {
+            text: 'عینک آفتابی',
+            href: '#',
+          },
+        ],
+      ],
+      leftColumn: [
+        [
+          {
+            text: 'خرید با برند',
+            href: '#',
+          },
+          {
+            text: 'Nike',
+            href: '#',
+          },
+          {
+            text: 'Converse',
+            href: '#',
+          },
+          {
+            text: 'Hurley',
+            href: '#',
+          },
+          {
+            text: 'Nike Jordan',
+            href: '#',
+          },
+          {
+            text: 'The North Face',
+            href: '#',
+          },
+          {
+            text: 'Timberland',
+            href: '#',
+          },
+          {
+            text: 'Polo Ralph Lauren',
+            href: '#',
+          },
+        ],
+        [
+          {
+            text: 'خرید با ورزش',
+            href: '#',
+          },
+          {
+            text: 'دویدن',
+            href: '#',
+          },
+          {
+            text: 'فوتبال',
+            href: '#',
+          },
+        ],
+      ],
+    },
+    womenMenu: {},
+    boysMenu: {},
+    girlsMenu: {},
+    fullPanels: [],
+    halfPanels: [],
+    quarterPanels: [],
+  };
+
+  curSlideIndex = 0;
+  slider: any;
+  menu = {};
+
   constructor(iconRegistry: MatIconRegistry) {
     //iconRegistry.setDefaultFontSetClass('fa');
   }
 
   ngOnInit() {
-
+    this.slider = setInterval(() => this.curSlideIndex = (this.curSlideIndex + 1) % this.slides.length, 3000);
   }
 
   showList(type) {
     setTimeout(() => {
       this.hiddenGenderMenu = false;
       this.selected[type] = true;
-    }, 100 );
+      this.menu = this.placements[type + 'Menu'];
+    }, 100);
   }
 
   persistList() {
     this.persistedList = true;
   }
 
-  hideList(x) {
+  hideList() {
     this.hiddenGenderMenu = true;
     this.persistedList = false;
     for (const i in this.selected) {
@@ -138,5 +309,13 @@ export class AppComponent implements OnInit {
 
   searchUnfocused() {
     this.searchIsFocused = false;
+  }
+
+  nextSlide() {
+    this.curSlideIndex++;
+  }
+
+  prevSlide() {
+    this.curSlideIndex--;
   }
 }
