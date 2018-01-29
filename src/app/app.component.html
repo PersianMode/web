@@ -56,14 +56,44 @@
 <div class="chevron-holder right-chevron"><i *ngIf="!!curSlideIndex" class="fa fa-chevron-right"
                                              (click)="prevSlide()"></i></div>
 <div class="carousel-slider">
-
   <div [style.width]="slides.length * 100 + '%'" [style.right]="-curSlideIndex * 100 +'%'">
     <span *ngFor="let slide of slides" [style.width]="(100 / slides.length).toPrecision(4) + '%'"><img
       [style.width]="slide.imgWidth + 'px'" [style.marginLeft]="slide.imgMarginLeft ? slide.imgMarginLeft + 'px' : 0"
       src="assets/cliparts/{{slide.imgAddr}}.png"/> {{slide.text}}</span>
   </div>
 </div>
-
-<!--<div>-->
-  <!--<router-outlet></router-outlet>-->
-<!--</div>-->
+<div style="margin-top: 130px">
+  <div>
+    <span *ngFor="let item of placements.panels" style="width: 100%">
+      <img src = "{{item.imgUrl}}" style="width: 100%"/>
+      <a href="{{item.href}}">{{item.text}}</a>
+    </span>
+  </div>
+</div>
+  <div style="background-color: #333">
+    <div style="width: 100%" fxLayout="row" fxLayoutAlign="center start">
+      <ul fxFlex="15" style="list-style-type: none;">
+        <li *ngFor="let item of placements.footer.headerList"><a class="footer-link-bold" href="{{item.href}}">{{item.text}}</a></li>
+      </ul>
+      <ul fxFlex="15" style="list-style-type: none;">
+        <li *ngFor="let item of placements.footer.middle">
+          <a *ngIf="item.header" class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
+          <a *ngIf="!item.header" class="footer-link" href="{{item.href}}">{{item.text}}</a>
+        </li>
+      </ul>
+      <ul fxFlex="15" style="list-style-type: none;">
+        <li *ngFor="let item of placements.footer.leftColumn">
+          <a *ngIf="item.header" class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
+          <a *ngIf="!item.header" class="footer-link" href="{{item.href}}">{{item.text}}</a>
+        </li>
+      </ul>
+      <ul fxFlex="15" style="list-style-type: none;">
+        <li>
+          <a class="footer-link" href="#">
+            <span class="nsg-glyph--instagram"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!--<div class="main-footer swoosh-footer clearfix lazy-load" style="display: none;"></div>-->
+  </div>
