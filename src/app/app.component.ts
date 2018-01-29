@@ -112,7 +112,28 @@ export class AppComponent implements OnInit, OnDestroy {
       text: 'تخفیف‌های ویژه و حراج‌های اختصاصی برای اعضاء',
     },
   ];
-
+  topMenu = [
+    {
+      collectionName: 'men',
+      collectionNameFa: 'مردانه',
+      collectionRoute: '#',
+    },
+    {
+      collectionName: 'women',
+      collectionNameFa: 'زنانه',
+      collectionRoute: '#',
+    },
+    {
+      collectionName: 'girls',
+      collectionNameFa: 'دخترانه',
+      collectionRoute: '#',
+    },
+    {
+      collectionName: 'boys',
+      collectionNameFa: 'پسرانه',
+      collectionRoute: '#',
+    },
+  ];
   placements = {
     menMenu: {
       headerList: [
