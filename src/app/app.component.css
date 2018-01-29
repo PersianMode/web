@@ -169,6 +169,10 @@ nav {
   font-family: iranyekan,sans-serif;
 }
 
+.search-bar input::placeholder{
+  color: #cbcbcb;
+  font-size: 12pt;
+}
 .genderList{
   position: absolute;
   top: 109px;
