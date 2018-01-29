@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatIconRegistry} from "@angular/material";
 
 @Component({
@@ -6,7 +6,7 @@ import {MatIconRegistry} from "@angular/material";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   hiddenGenderMenu = true;
   persistedList = false;
   searchIsFocused = false;
@@ -269,7 +269,16 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.initSlider();
+  }
+
+  initSlider() {
+    clearInterval(this.slider);
     this.slider = setInterval(() => this.curSlideIndex = (this.curSlideIndex + 1) % this.slides.length, 5000);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.slider);
   }
 
   showList(type) {
@@ -295,10 +304,9 @@ export class AppComponent implements OnInit {
   }
 
   countDownHideList() {
-
     setTimeout(() => {
       if (!this.persistedList) {
-        this.hideList(0);
+        this.hideList();
       }
     }, 100);
   }
@@ -313,9 +321,11 @@ export class AppComponent implements OnInit {
 
   nextSlide() {
     this.curSlideIndex++;
+    this.initSlider();
   }
 
   prevSlide() {
     this.curSlideIndex--;
+    this.initSlider();
   }
 }
