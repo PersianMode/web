@@ -275,26 +275,21 @@ nav {
 .carousel-slider img {
   vertical-align: middle;
 }
-.left-chevron {
+.chevron-holder {
   position: absolute;
   top: 109px;
   height: 60px;
   line-height: 60px;
-  width: 35%;
-  left: 0px;
-  text-align: right;
+  width: 32%;
   background-color: rgb(247, 247, 247);
   z-index: -1 !important;
 }
+.left-chevron {
+  left: 0px;
+  text-align: right;
+}
 
 .right-chevron {
-  position: absolute;
-  top: 109px;
-  height: 60px;
-  line-height: 60px;
-  width: 35%;
   right: 0px;
   text-align: left;
-  background-color: rgb(247, 247, 247);
-  z-index: -1 !important;
 }

@@ -47,8 +47,8 @@
     </div>
   </div>
 </div>
-<div class="left-chevron"><i *ngIf="curSlideIndex !== slides.length - 1" class="fa fa-chevron-left" (click)="nextSlide()"></i></div>
-<div class="right-chevron"><i *ngIf="!!curSlideIndex" class="fa fa-chevron-right" (click)="prevSlide()"></i></div>
+<div class="chevron-holder left-chevron"><i *ngIf="curSlideIndex !== slides.length - 1" class="fa fa-chevron-left" (click)="nextSlide()"></i></div>
+<div class="chevron-holder right-chevron"><i *ngIf="!!curSlideIndex" class="fa fa-chevron-right" (click)="prevSlide()"></i></div>
 <div class="carousel-slider">
 
   <div [style.width]="slides.length * 100 + '%'" [style.right]="-curSlideIndex * 100 +'%'">
