@@ -49,7 +49,7 @@ a:focus img{
 }
 
 .faWrapper:focus {
-  color: red;
+  color: #d23236;
 }
 
 .faWrapper:hover {
@@ -84,8 +84,9 @@ nav {
 }
 .persian-mode-logo {
   font-family: nastaliq !Important;
-  font-size: 30px;
+  font-size: 24px;
   position: absolute;
+  top: 5px;
   right: 13px;
   display: inline-block;
   color: black;
@@ -168,6 +169,10 @@ nav {
   font-family: iranyekan,sans-serif;
 }
 
+.search-bar input::placeholder{
+  color: #cbcbcb;
+  font-size: 12pt;
+}
 .genderList{
   position: absolute;
   top: 109px;
@@ -207,16 +212,15 @@ nav {
 }
 .headerList li{
   font-weight: bolder !important;
-  margin: 0px 0px 10px 0px !important;
+  margin-bottom:10px !important;
 }
 .genderList li {
-  font-size: 10pt;
-  margin: 0px 0px 5px 0px;
-  font-weight:lighter;
+  margin-bottom: 5px;
+  font-weight: 200;
 }
 .headerItem{
   font-weight: bolder !important;
-  margin: 0px 0px 10px 0px !important;
+  margin-bottom:10px !important;
 }
 .genderList a {
   text-decoration: none;
@@ -261,7 +265,7 @@ nav {
 .carousel-slider div {
   width: 200%;
   -webkit-transition: all 1s ease-in-out;
-  transition: all 1s ease-in-out;
+  transition: all 2s ease-in-out;
   position: relative;
   white-space: nowrap;
   left: 100%;
@@ -275,26 +279,21 @@ nav {
 .carousel-slider img {
   vertical-align: middle;
 }
-.left-chevron {
+.chevron-holder {
   position: absolute;
   top: 109px;
   height: 60px;
   line-height: 60px;
-  width: 35%;
-  left: 0px;
-  text-align: right;
+  width: 32%;
   background-color: rgb(247, 247, 247);
   z-index: -1 !important;
 }
+.left-chevron {
+  left: 0px;
+  text-align: right;
+}
 
 .right-chevron {
-  position: absolute;
-  top: 109px;
-  height: 60px;
-  line-height: 60px;
-  width: 35%;
   right: 0px;
   text-align: left;
-  background-color: rgb(247, 247, 247);
-  z-index: -1 !important;
 }
