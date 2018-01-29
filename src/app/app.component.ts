@@ -298,7 +298,7 @@ export class AppComponent implements OnInit {
 
     setTimeout(() => {
       if (!this.persistedList) {
-        this.hideList(0);
+        this.hideList();
       }
     }, 100);
   }
