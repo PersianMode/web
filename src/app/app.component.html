@@ -46,7 +46,7 @@
     </div>
     <div class="middle">
       <ul *ngFor="let list of menu.middle">
-        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a href="{{item.href}}">{{item.text}}</a></li>
+        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst || item.isHeader" [style.marginTop]="(!isFirst && item.isHeader ? 15 : 0 )+ 'px'"><a href="{{item.href}}">{{item.text}}</a></li>
       </ul>
     </div>
     <div class="leftColumn">

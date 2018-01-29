@@ -185,11 +185,10 @@ export class AppComponent implements OnInit, OnDestroy {
             text: 'لباس‌های کلاه‌دار',
             href: '#',
           },
-        ],
-        [
           {
             text: 'لوازم جانبی',
             href: '#',
+            isHeader: true,
           },
           {
             text: 'کوله‌ها و کیف‌ها',

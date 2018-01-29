@@ -208,16 +208,16 @@ nav {
 }
 .headerList li{
   font-weight: bolder !important;
-  margin: 0px 0px 10px 0px !important;
+  margin-bottom:10px !important;
 }
 .genderList li {
   font-size: 10pt;
-  margin: 0px 0px 5px 0px;
+  margin-bottom: 5px;
   font-weight:lighter;
 }
 .headerItem{
   font-weight: bolder !important;
-  margin: 0px 0px 10px 0px !important;
+  margin-bottom:10px !important;
 }
 .genderList a {
   text-decoration: none;
