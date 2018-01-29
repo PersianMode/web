@@ -1,3 +1,16 @@
-<p>
-  header works!
-</p>
+<nav class="first-bar">
+  <ul>
+    <li *ngFor="let logo of logos" [ngStyle]="{width: (logo.width ? logo.width + 'px' : 'initial')}">
+      <a href="#" class="gnav-member-bar" [title]="logo.brand">
+        <img
+          src="assets/logos/{{logo.filename}}.png" class="general"
+          [ngStyle]="{top: (logo.top ? -logo.top : 0)+ 'px', right: (logo.right ? -logo.right : 0) + 'px', height: (logo.height ? logo.height : 29) + 'px'}"></a>
+    </li>
+  </ul>
+  <ul class="right-bar">
+    <li><a href="#" class="faWrapper" aria-label="Shopping Bag"><i
+      class="fa fa-shopping-bag fa-flip-horizontal"></i></a>
+    <li><a href="#" class="faWrapper" aria-label="Sign In or Register"><i
+      class="fa fa-sign-in fa-flip-horizontal loginIcon"></i></a></li>
+  </ul>
+</nav>

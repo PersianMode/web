@@ -1,3 +1,9 @@
-<p>
-  sliding-header works!
-</p>
+<div *ngIf="curSlideIndex !== slides.length - 1" class="left-chevron"><i class="fa fa-chevron-left" (click)="nextSlide()"></i></div>
+<div *ngIf="!!curSlideIndex" class="right-chevron"><i class="fa fa-chevron-right" (click)="prevSlide()"></i></div>
+<div class="carousel-slider">
+  <div [style.width]="slides.length * 100 + '%'" [style.right]="-curSlideIndex * 100 +'%'">
+    <span *ngFor="let slide of slides" [style.width]="(100 / slides.length).toPrecision(4) + '%'"><img
+      [style.width]="slide.imgWidth + 'px'" [style.marginLeft]="slide.imgMarginLeft ? slide.imgMarginLeft + 'px' : 0"
+      src="assets/cliparts/{{slide.imgAddr}}.png"/> {{slide.text}}</span>
+  </div>
+</div>
