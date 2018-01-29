@@ -152,7 +152,7 @@ export class AppComponent implements OnInit, OnDestroy {
             href: '#',
           },
           {
-            text: 'دویدن',
+            text: 'دو',
             href: '#',
           },
           {
@@ -204,7 +204,7 @@ export class AppComponent implements OnInit, OnDestroy {
       leftColumn: [
         [
           {
-            text: 'خرید با برند',
+            text: 'با برند',
             href: '#',
           },
           {
@@ -238,11 +238,11 @@ export class AppComponent implements OnInit, OnDestroy {
         ],
         [
           {
-            text: 'خرید با ورزش',
+            text: 'با ورزش',
             href: '#',
           },
           {
-            text: 'دویدن',
+            text: 'دو',
             href: '#',
           },
           {
