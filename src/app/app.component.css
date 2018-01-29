@@ -49,7 +49,7 @@ a:focus img{
 }
 
 .faWrapper:focus {
-  color: red;
+  color: #d23236;
 }
 
 .faWrapper:hover {
@@ -84,8 +84,9 @@ nav {
 }
 .persian-mode-logo {
   font-family: nastaliq !Important;
-  font-size: 30px;
+  font-size: 24px;
   position: absolute;
+  top: 5px;
   right: 13px;
   display: inline-block;
   color: black;
@@ -93,6 +94,8 @@ nav {
 }
 .persian-mode-logo:hover{
   color: #d23236;
+  top: 0px;
+  font-size: 30px;
 }
 .persian-mode-logo span {
   top: -20px;
@@ -261,7 +264,7 @@ nav {
 .carousel-slider div {
   width: 200%;
   -webkit-transition: all 1s ease-in-out;
-  transition: all 1s ease-in-out;
+  transition: all 2s ease-in-out;
   position: relative;
   white-space: nowrap;
   left: 100%;

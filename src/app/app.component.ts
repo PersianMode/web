@@ -269,7 +269,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.slider = setInterval(() => this.curSlideIndex = (this.curSlideIndex + 1) % this.slides.length, 3000);
+    this.slider = setInterval(() => this.curSlideIndex = (this.curSlideIndex + 1) % this.slides.length, 5000);
   }
 
   showList(type) {
