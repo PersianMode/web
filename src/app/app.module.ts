@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {MatButtonModule, MatIconModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import {MatButtonModule, MatIconModule} from '@angular/material';
     BrowserModule,
     FormsModule,
     HttpModule,
+    FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
   ],
