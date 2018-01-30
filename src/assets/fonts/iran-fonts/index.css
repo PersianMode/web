@@ -81,7 +81,7 @@
 @font-face {
   font-family: iranyekan;
   font-style: normal;
-  font-weight: lighter;
+  font-weight: 200;
   src: url('iranyekanweblight.eot');
   src: url('iranyekanweblight.eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
   url('iranyekanweblight.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
