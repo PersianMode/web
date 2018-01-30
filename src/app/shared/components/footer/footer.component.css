@@ -1,0 +1,24 @@
+.clearfix {
+    zoom : 1;
+}
+
+.nsg-glyph--instagram:before {
+    content: "\f11d";
+}
+
+.footer-link-bold{
+    color: white;
+    font-weight: bolder;
+    font-size: .875em;
+    text-decoration: none;
+}
+
+.footer-link{
+    color: gray;
+    font-size: .688em;
+    text-decoration: none;
+}
+
+.footer-link:hover{
+    color: white;
+}

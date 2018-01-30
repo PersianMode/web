@@ -1,0 +1,96 @@
+
+/* Container holding the image and the text */
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+/*Alignment based on horizontal-vertical align*/
+
+/* Bottom left text */
+.left-top {
+    position: absolute;
+    bottom: 90%;
+    left: 2%;
+    text-align: left;
+}
+
+/* Bottom left text */
+.left-center {
+    position: absolute;
+    bottom: 33.33%;
+    left: 2%;
+    text-align: left;
+}
+
+/* Center left text */
+.left-bottom {
+    position: absolute;
+    bottom: 10%;
+    left: 2%;
+    text-align: left;
+}
+
+/* Top left text */
+.center-top {
+    position: absolute;
+    bottom: 90%;
+    left: 50%;
+}
+
+/* Top right text */
+.center-center {
+    position: absolute;
+    bottom: 33.33%;
+    left: 50%;
+}
+
+/* Bottom right text */
+.center-bottom {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+}
+
+.right-top {
+    position: absolute;
+    bottom: 90%;
+    right: 2%;
+    text-align: right;
+}
+
+.right-center {
+    position: absolute;
+    bottom: 33.33%;
+    right: 2%;
+    text-align: right;
+}
+
+.right-bottom {
+    position: absolute;
+    bottom: 10%;
+    right: 2%;
+    text-align: right;
+}
+
+.default-color {
+    color: white;
+}
+
+/* Centered text */
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    font-weight: bolder;
+}
+
+.shop-button {
+    color: black;
+    font-size: large ;
+    font-family: 'B Koodak';
+    font-weight: bolder;
+}

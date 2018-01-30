@@ -1,3 +1,17 @@
-<div>
-  Home
+<div style="width:100%; margin-top: 130px">
+  <div *ngFor="let item of placements.panels" style="width: 100%"  class="container">
+    <img src = "{{item.imgUrl}}" style="width: 100%"/>
+    <a href="{{item.href}}"></a>
+    <div *ngFor="let ar of item.areas">
+      <div style="font-size: 1.5em" [ngClass]="ar.pos">
+        <h1  *ngIf="ar.title"  [style.color]="ar.color ? ar.color : null">{{ar.title}}</h1>
+        <div *ngIf="ar.text" [style.color]="ar.color ? ar.color : null"><b>{{ar.text}}</b></div>
+        <div  *ngIf="ar.title"  style="margin-top: 5%;">
+          <button mat-raised-button color="accent" class="shop-button">
+            <b>خرید آنلاین</b>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
