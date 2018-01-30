@@ -183,6 +183,7 @@ nav {
   border-bottom:1px solid #E5E5E5;
   padding-top: 40px;
   background: #fff;
+  z-index: 10;
 }
 .genderList div {
   display:inline-block;
@@ -330,32 +331,76 @@ nav {
   color: white;
 }
 
+/*Alignment based on horizontal-vertical align*/
+
 /* Bottom left text */
-.bottom-left {
+.left-top {
   position: absolute;
-  bottom: 8px;
-  left: 16px;
+  bottom: 90%;
+  left: 2%;
+  text-align: left;
+}
+
+/* Bottom left text */
+.left-center {
+  position: absolute;
+  bottom: 33.33%;
+  left: 2%;
+  text-align: left;
+}
+
+/* Center left text */
+.left-bottom {
+  position: absolute;
+  bottom: 10%;
+  left: 2%;
+  text-align: left;
 }
 
 /* Top left text */
-.top-left {
+.center-top {
   position: absolute;
-  top: 8px;
-  left: 16px;
+  bottom: 90%;
+  left: 50%;
 }
 
 /* Top right text */
-.top-right {
+.center-center {
   position: absolute;
-  top: 8px;
-  right: 16px;
+  bottom: 33.33%;
+  left: 50%;
 }
 
 /* Bottom right text */
-.bottom-right {
+.center-bottom {
   position: absolute;
-  bottom: 8px;
-  right: 16px;
+  bottom: 10%;
+  left: 50%;
+}
+
+.right-top {
+  position: absolute;
+  bottom: 90%;
+  right: 2%;
+  text-align: right;
+}
+
+.right-center {
+  position: absolute;
+  bottom: 33.33%;
+  right: 2%;
+  text-align: right;
+}
+
+.right-bottom {
+  position: absolute;
+  bottom: 10%;
+  right: 2%;
+  text-align: right;
+}
+
+.default-color {
+  color: white;
 }
 
 /* Centered text */
@@ -364,4 +409,13 @@ nav {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 1000;
+  font-weight: bolder;
+}
+
+.shop-button {
+  color: black;
+  font-size: large ;
+  font-family: 'B Koodak';
+  font-weight: bolder;
 }

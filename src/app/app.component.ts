@@ -279,49 +279,263 @@ export class AppComponent implements OnInit, OnDestroy {
       {
         imgUrl: 'assets/pictures/pw-1.png',
         href: '#',
-        areas: {
-          3: {
-            title: 'First Picture',
+        areas : [
+          {
+            pos: 'left-top',
+            title: '',
             text: '',
-          }
-        },
+          },
+          {
+            pos: 'left-center',
+            title: 'متفاوت باش!',
+            text: 'حرکت رو به جلو ...',
+          },
+          {
+            pos: 'left-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'right-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos : 'right-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'right-bottom',
+            title: '',
+            text: '',
+          },
+        ],
         type: 'full',
       },
       {
         imgUrl: 'assets/pictures/pw-2.png',
         href: '#',
-        title: 'Second Picture',
-        text: '',
-        areas: {
-        },
+        areas : [
+          {
+            pos: 'lefttop',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'left-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'left-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'right-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos : 'right-center',
+            title: 'مثل همیشه، فراتر از زمان!',
+            text: 'معرفی محصولات جدید نایک پلاس',
+            color: 'black',
+          },
+          {
+            pos: 'right-bottom',
+            title: '',
+            text: '',
+          },
+        ],
         type: 'full',
       },
       {
         imgUrl: 'assets/pictures/pw-7.png',
         href: '#',
-        title: 'Second Picture',
-        text: '',
-        areas: {
-        },
+        areas : [
+          {
+            pos: 'lefttop',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'left-center',
+            title: 'خاکستری بی نظیر!',
+            text: 'برای اولین بار',
+          },
+          {
+            pos: 'left-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'right-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos : 'right-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'right-bottom',
+            title: '',
+            text: '',
+          },
+        ],
         type: 'full',
       },
       {
         imgUrl: 'assets/pictures/pw-4.png',
         href: '#',
-        title: 'Second Picture',
-        text: '',
-        areas: {
-        },
+        areas : [
+          {
+            pos: 'lefttop',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'left-center',
+            title: 'کاملا گرم',
+            text: 'محصولات ابریشمی مناسب زمستان',
+          },
+          {
+            pos: 'left-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'right-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos : 'right-center',
+            title: 'زمان درخشیدن توست!',
+            text: 'نایک، حامی تیم ملی در طول بازیها',
+          },
+          {
+            pos: 'right-bottom',
+            title: '',
+            text: '',
+          },
+        ],
         type: 'full',
       },
       {
         imgUrl: 'assets/pictures/pw-5.png',
         href: '#',
-        title: 'Second Picture',
-        text: '',
-        areas: {
-
-        },
+        areas : [
+          {
+            pos: 'left-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'left-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'left-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-top',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'center-bottom',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'right-top',
+            title: '.',
+            text: 'رنگهای جدید، دلخواه شما',
+            color: 'black',
+          },
+          {
+            pos : 'right-center',
+            title: '',
+            text: '',
+          },
+          {
+            pos: 'right-bottom',
+            title: '',
+            text: '',
+          },
+        ],
         type: 'full',
       }
     ],
