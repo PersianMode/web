@@ -434,7 +434,6 @@ export class AppComponent implements OnInit {
   }
 
   countDownHideList() {
-
     setTimeout(() => {
       if (!this.persistedList) {
         this.hideList();
