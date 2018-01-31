@@ -5,6 +5,7 @@ import {RouterModule} from '@angular/router';
 
 import { AppComponent } from './app.component';
 import {MatButtonModule, MatIconModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import {AdminModule} from './admin/admin.module';
 import {SiteModule} from './site/site.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -26,6 +27,7 @@ import {HttpClientModule} from '@angular/common/http';
     RouterModule.forRoot([]),
     FormsModule,
     HttpClientModule,
+    FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
   ],
