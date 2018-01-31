@@ -317,3 +317,11 @@ nav {
   background-color: rgb(247, 247, 247);
   z-index: -1 !important;
 }
+
+.mat-drawer {
+  position: fixed !important;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
