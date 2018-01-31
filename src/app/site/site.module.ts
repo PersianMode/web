@@ -5,6 +5,12 @@ import {SiteComponent } from './site.component';
 import {HeaderComponent} from '../shared/components/header/header.component';
 import {CollectionHeaderComponent} from '../shared/components/collection-header/collection-header.component';
 import {SlidingHeaderComponent} from '../shared/components/sliding-header/sliding-header.component';
+import {MobileHeaderComponent} from '../shared/components/mobile-header/mobile-header.component';
+import {
+  MatButtonModule,
+  MatIconModule,
+  MatSidenavModule
+} from '@angular/material';
 import {FooterComponent} from '../shared/components/footer/footer.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
@@ -14,6 +20,9 @@ import {FlexLayoutModule} from '@angular/flex-layout';
   imports: [
     SiteRouting,
     CommonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatButtonModule,
     FlexLayoutModule,
   ],
   declarations: [
@@ -22,7 +31,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     SlidingHeaderComponent,
     SiteComponent,
     FooterComponent,
-  ]
+    MobileHeaderComponent,
+  ],
 })
 export class SiteModule {
 }

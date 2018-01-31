@@ -1,8 +1,13 @@
-<app-header></app-header>
-<app-collection-header></app-collection-header>
-<app-sliding-header></app-sliding-header>
+<div *ngIf="curWidth >= 960">
+  <app-header></app-header>
+  <app-collection-header></app-collection-header>
+  <app-sliding-header></app-sliding-header>
+</div>
+<div *ngIf="curWidth < 960">
+  <app-mobile-header [menuWidth]="curWidth - 40" [menuHeight]="curHeight"></app-mobile-header>
+</div>
 
-<div style="position:absolute;top: 170px; width: 100%">
+<div [style.margin-top]="(curWidth >= 960 ? 130 : 60) + 'px' ">
   <router-outlet></router-outlet>
   <app-footer></app-footer>
 </div>
