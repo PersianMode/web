@@ -32,6 +32,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     SiteComponent,
     FooterComponent,
     MobileHeaderComponent,
+    SiteComponent
   ],
 })
 export class SiteModule {
