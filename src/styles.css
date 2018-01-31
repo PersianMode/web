@@ -317,6 +317,9 @@ nav {
 }
 
 .mat-drawer {
-  /*background: unset !important;*/
   position: fixed !important;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
 }

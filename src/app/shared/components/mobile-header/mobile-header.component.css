@@ -1,3 +1,7 @@
+.mobile-header{
+  padding: 10px;
+}
+
 .backdrop{
   position: absolute;
   /*left: 0;*/
@@ -7,11 +11,11 @@
   background-color: #E5E5E5;
 }
 
-.mobile-menu button{
+.mobile-header button{
   background-color: transparent;
 }
 
-.mobile-menu-item{
+.mobile-header-item{
   margin: 10px;
   top: 10px;
   position: relative;
@@ -27,4 +31,16 @@
   display: inline-block;
   color: black;
   transition: all .3s ease-in;
+}
+
+.menu-item{
+  padding: 20px;
+  text-align: right;
+  border-bottom: solid rgba(197,203,201,0.68) thin;
+  background-color: rgba(197,203,201,0.3);
+}
+
+.menu-title{
+  color: gray;
+  background-color: white;
 }

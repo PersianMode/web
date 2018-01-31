@@ -1,22 +1,77 @@
-<div dir="ltr" class="mobile-menu">
-  <mat-sidenav-container style="height: 57px;">
+<div dir="ltr" class="mobile-header">
+  <mat-sidenav-container style="height: 57px;" (backdropClick)="backDropClick($event)">
     <mat-sidenav #sidenav mode="push"
-                 style="background-color: white"
+                 style="background-color: white; margin-left: -10px;"
                  [style.height]="menuHeight + 'px'" [style.width]="menuWidth + 'px'"
                  (opened)="sideNavIsOpen = true" (closed)="sideNavIsOpen = false">
-      <div>
-        <!--Content of side menu-->
+      <div *ngIf="isFirstLevel">
+        <div *ngIf="!isLoggedIn" class="menu-item menu-title">وارد/عضو شوید</div>
+        <div *ngFor="let first_level of getKeys(menuItems)">
+          <div *ngIf="menuItems[first_level].is_title">
+            <div class="menu-item menu-title">{{first_level}}</div>
+          </div>
+          <div *ngIf="!menuItems[first_level].is_title">
+            <div class="menu-item" (click)="select(2, menuItems[first_level], first_level)">
+              <span *ngIf="menuItems[first_level].menu" style="float: left">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+              </span>
+              <span>{{first_level}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isSecondLevel">
+        <div class="menu-item menu-title" (click)="back(1)">
+          <span style="float: left;">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+          </span>
+          <span>{{secondLevelTitle}}</span>
+        </div>
+        <div *ngFor="let second_level of getKeys(firstLevelSelected)">
+          <div *ngIf="firstLevelSelected[second_level].is_title">
+            <div class="menu-item menu-title">{{second_level}}</div>
+          </div>
+          <div *ngIf="!firstLevelSelected[second_level].is_title">
+            <div class="menu-item" (click)="select(3, firstLevelSelected[second_level], second_level)">
+              <span *ngIf="firstLevelSelected[second_level].menu" style="float: left;">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+              </span>
+              <span>{{second_level}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isThirdLevel">
+        <div class="menu-item menu-title" (click)="back(2)">
+          <span style="float: left;">
+            <i class="fa fa-angle-left" aria-hidden="true"></i>
+          </span>
+          <span>{{thirdLevelTitle}}</span>
+        </div>
+        <div *ngFor="let third_level of getKeys(secondLevelSelected)">
+          <div *ngIf="secondLevelSelected[third_level].is_title">
+            <div class="menu-item menu-title">{{third_level}}</div>
+          </div>
+          <div *ngIf="!secondLevelSelected[third_level].is_title">
+            <div class="menu-item" (click)="select(3, secondLevelSelected[third_level], third_level)">
+              <span *ngIf="secondLevelSelected[third_level].menu" style="float: left;">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+              </span>
+              <span>{{third_level}}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
       <div style="left: 8px; top: 8px; background-color: transparent;">
-        <a class="mobile-menu-item" (click)="sidenav.toggle()" >
+        <a class="mobile-header-item" (click)="sidenav.toggle()">
           <i class="fa fa-bars" aria-hidden="true"></i>
         </a>
-        <a class="mobile-menu-item">
+        <a class="mobile-header-item">
           <i class="fa fa-shopping-bag fa-flip-horizontal"></i>
         </a>
-        <a class="mobile-menu-item">
+        <a class="mobile-header-item">
           <i class="fa fa-search" aria-hidden="true"></i>
         </a>
         <a>
