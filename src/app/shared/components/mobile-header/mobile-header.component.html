@@ -1,5 +1,5 @@
 <div dir="ltr" class="mobile-header">
-  <mat-sidenav-container style="height: 57px;" (backdropClick)="backDropClick($event)">
+  <mat-sidenav-container style="height: 50px;" (backdropClick)="backDropClick($event)">
     <mat-sidenav #sidenav mode="push"
                  style="background-color: white; margin-left: -10px;"
                  [style.height]="menuHeight + 'px'" [style.width]="menuWidth + 'px'"
@@ -8,7 +8,7 @@
         <div *ngIf="!isLoggedIn" class="menu-item menu-title" (click)="authentication()">وارد/عضو شوید</div>
         <div *ngFor="let first_level of getKeys(menuItems)">
           <div *ngIf="menuItems[first_level].is_title">
-            <div class="menu-item menu-title">{{first_level}}</div>
+            <div class="menu-item menu-static-title">{{first_level}}</div>
           </div>
           <div *ngIf="!menuItems[first_level].is_title">
             <div class="menu-item" (click)="select(2, menuItems[first_level], first_level)">
@@ -22,8 +22,8 @@
       </div>
       <div *ngIf="isSecondLevel">
         <div class="menu-item menu-title" (click)="back(1)">
-          <span style="float: left;">
-            <i class="fa fa-angle-left" aria-hidden="true"></i>
+          <span style="float: right;">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
           </span>
           <span>{{secondLevelTitle}}</span>
         </div>
@@ -43,8 +43,8 @@
       </div>
       <div *ngIf="isThirdLevel">
         <div class="menu-item menu-title" (click)="back(2)">
-          <span style="float: left;">
-            <i class="fa fa-angle-left" aria-hidden="true"></i>
+          <span style="float: right;">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
           </span>
           <span>{{thirdLevelTitle}}</span>
         </div>

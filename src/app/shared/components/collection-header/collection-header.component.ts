@@ -16,6 +16,28 @@ export class CollectionHeaderComponent implements OnInit {
   persistedList = false;
   searchIsFocused = false;
   menu = {};
+  topMenu = [
+    {
+      collectionName: 'men',
+      collectionNameFa: 'مردانه',
+      collectionRoute: '#',
+    },
+    {
+      collectionName: 'women',
+      collectionNameFa: 'زنانه',
+      collectionRoute: '#',
+    },
+    {
+      collectionName: 'girls',
+      collectionNameFa: 'دخترانه',
+      collectionRoute: '#',
+    },
+    {
+      collectionName: 'boys',
+      collectionNameFa: 'پسرانه',
+      collectionRoute: '#',
+    },
+  ];
   placements = {
     menMenu: {
       headerList: [
@@ -55,7 +77,7 @@ export class CollectionHeaderComponent implements OnInit {
             href: '#',
           },
           {
-            text: 'دویدن',
+            text: 'دو',
             href: '#',
           },
           {
@@ -88,11 +110,10 @@ export class CollectionHeaderComponent implements OnInit {
             text: 'لباس‌های کلاه‌دار',
             href: '#',
           },
-        ],
-        [
           {
             text: 'لوازم جانبی',
             href: '#',
+            isHeader: true,
           },
           {
             text: 'کوله‌ها و کیف‌ها',
@@ -107,7 +128,7 @@ export class CollectionHeaderComponent implements OnInit {
       leftColumn: [
         [
           {
-            text: 'خرید با برند',
+            text: 'با برند',
             href: '#',
           },
           {
@@ -141,11 +162,11 @@ export class CollectionHeaderComponent implements OnInit {
         ],
         [
           {
-            text: 'خرید با ورزش',
+            text: 'با ورزش',
             href: '#',
           },
           {
-            text: 'دویدن',
+            text: 'دو',
             href: '#',
           },
           {
