@@ -1,0 +1,18 @@
+.filters {
+  bottom: auto;
+  position: absolute;
+  top: 20px;
+  background: red;/* #fff;*/
+  right: 9px;
+  padding: 24px;
+  width: 216px;
+  z-index: 9;
+  font-size: 13px;
+}
+
+.gridwall {
+  min-width: 482px;
+  margin-bottom: 50px;
+  margin-right: 299px;
+  margin-top: 46px;
+}

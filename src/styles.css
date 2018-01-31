@@ -17,6 +17,10 @@ a {
   outline:none;
 }
 
+h1 {
+  font-family: irankharazmi;
+}
+
 .gnav-member-bar {
   position: relative;
   top: 0;
@@ -144,6 +148,7 @@ nav {
   padding: 0 20px;
   font-size: 16px;
   height: 66px;
+  font-family: irankharazmi;
 }
 .second-bar li:hover{
   border-bottom: 2px #111 solid;
@@ -202,6 +207,7 @@ nav {
   border-bottom:1px solid #E5E5E5;
   padding-top: 40px;
   background: #fff;
+  z-index: 10;
 }
 .genderList div {
   display:inline-block;
