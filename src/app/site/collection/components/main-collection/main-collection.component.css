@@ -1,0 +1,107 @@
+.filters {
+  bottom: auto;
+  position: absolute;
+  top: 20px;
+  background: red; /* #fff;*/
+  right: 9px;
+  padding: 24px;
+  width: 216px;
+  z-index: 9;
+  font-size: 13px;
+}
+
+.topFixed {
+  position: fixed !important;
+  top: 109px !important;
+}
+
+.bottomFixed {
+  position: fixed !important;
+}
+.bottomScroll {
+  position: absolute;
+  bottom: 200px;
+}
+.gridwall {
+  min-width: 482px;
+  margin-bottom: 50px;
+  margin-right: 299px;
+  margin-top: 46px;
+}
+
+.gridwall-title {
+  display: inline-block;
+  margin: 0;
+  padding: 0px 0px 35px 0px;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.gridwall-title h1 {
+  font-size: 19px !important;
+  line-height: 24px !important;
+  margin: 0;
+  display: inline-block;
+  width:20%;
+}
+
+.gridwall-title span {
+  color: #999;
+}
+.sorter-row {
+  width: 80%;
+  display: inline-block;
+  margin:0;
+  padding:0;
+  text-align: left;
+}
+.sorter{
+  border: #e5e5e5 solid 1px;
+  border-radius: 2px;
+  color: #111;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 15px;
+  line-height: 38px;
+  padding: 0px 35px 0px 35px;
+  height: 38px;
+  margin-left: 20px;
+}
+
+.gridwall-content {
+  background: yellow;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  height: 10000px;
+}
+
+.gridwall-wrapper {
+  display: inline-block;
+  text-align: right;
+  width: 100%;
+}
+
+@media (max-width: 1023px) {
+  .gridwall-wrapper {
+    width: 492px;
+  }
+}
+
+/*@media (max-width: 1259px) and (min-width: 1024px) {*/
+  /*.gridwall-wrapper {*/
+    /*width: 738px;*/
+  /*}*/
+/*}*/
+
+/*@media (max-width: 1599px) and (min-width: 1260px) {*/
+  /*.gridwall-wrapper {*/
+    /*width: 984px;*/
+  /*}*/
+/*}*/
+
+/*@media (min-width: 1600px) {*/
+  /*.gridwall-wrapper {*/
+    /*width: 1230px;*/
+  /*}*/
+/*}*/

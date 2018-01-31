@@ -4,12 +4,15 @@ import { LeafCollectionComponent } from './components/leaf-collection/leaf-colle
 import { ParentCollectionComponent } from './components/parent-collection/parent-collection.component';
 import {CollectionRouting} from './collection.routing';
 import {CommonModule} from '@angular/common';
+import {FilteringPanelComponent} from '../../shared/components/filtering-panel/filtering-panel.component';
+import {WINDOW_PROVIDERS} from '../../shared/services/window.service';
 
 @NgModule({
   declarations: [
     MainCollectionComponent,
     LeafCollectionComponent,
-    ParentCollectionComponent
+    ParentCollectionComponent,
+    FilteringPanelComponent,
   ],
   imports: [
     CollectionRouting,
