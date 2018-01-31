@@ -11,7 +11,7 @@
 /* Bottom left text */
 .left-top {
     position: absolute;
-    bottom: 90%;
+    bottom: 67%;
     left: 2%;
     text-align: left;
 }
@@ -35,7 +35,7 @@
 /* Top left text */
 .center-top {
     position: absolute;
-    bottom: 90%;
+    bottom: 67%;
     left: 50%;
 }
 
@@ -55,7 +55,7 @@
 
 .right-top {
     position: absolute;
-    bottom: 90%;
+    bottom: 67%;
     right: 2%;
     text-align: right;
 }
@@ -74,35 +74,15 @@
     text-align: right;
 }
 
-.quarter1 {
-    position: absolute;
-    top: 90%;
-    right: 1%;
-    text-align: right;
-}
-.quarter2 {
-    position: absolute;
-    top: 90%;
-    right: 26%;
-    text-align: right;
-}
-.quarter3 {
-    position: absolute;
-    top: 90%;
-    right: 51%;
-    text-align: right;
-}
-.quarter4 {
-    position: absolute;
-    top: 90%;
-    right: 76%;
-    text-align: right;
-}
-
 .default-color {
     color: white;
 }
 
+.sub-title {
+    white-space: nowrap;
+    text-align: right;
+    margin-right: 15px
+}
 /* Centered text */
 .centered {
     position: absolute;
