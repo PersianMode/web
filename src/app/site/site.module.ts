@@ -13,13 +13,12 @@ import {
 } from '@angular/material';
 import {FooterComponent} from '../shared/components/footer/footer.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-
+import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 
 import {GenDialogComponent} from '../shared/components/gen-dialog/gen-dialog.component';
 import {LoginComponent} from './login/components/login/login.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import {FlexLayoutModule} from "@angular/flex-layout";
-import {RegisterComponent} from "./register/components/register/register.component";
+import {RegisterComponent} from './register/components/register/register.component';
 
 @NgModule({
   imports: [
@@ -31,6 +30,7 @@ import {RegisterComponent} from "./register/components/register/register.compone
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    DpDatePickerModule,
   ],
   declarations: [
     HeaderComponent,

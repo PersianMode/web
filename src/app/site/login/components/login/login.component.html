@@ -1,4 +1,4 @@
-<div>
+<div style="direction: rtl">
   <div class="center">
     <span class="persian-mode-center-logo">پرشین مد<span>ُ</span></span>
   </div>
@@ -26,23 +26,23 @@
           <label *ngIf="loginForm.controls['password'].hasError('required')" class="field-error">لطفا رمز عبور را وارد کنید</label>
         </div>
       </div>
-      <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 13px;">
+      <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 13px">
         <div fxFlex="50">
-          <a>رمز را فراموش کرده اید؟</a>
+          <a class="clickable-link">رمز را فراموش کرده اید؟</a>
         </div>
         <div fxFlex="50" style="text-align: left; margin-left: -15px;">
-          <label for="keeplogin">مرا وارد شده نگهدار</label>
+          <label for="keeplogin" class="clickable-link">مرا به خاطر بسپار</label>
           <input id="keeplogin" type="checkbox" formControlName="keep_me_login">
         </div>
       </div>
       <div class="button-area" fxLayout="column" fxLayoutAlign="center center">
         <div fxFlex="50" class="input-container">
-          <div class="btn-field login-btn inform-btn" (click)="login()">
+          <div class="btn-field login-btn inform-btn clickable-link" (click)="login()">
             <label>ورود</label>
           </div>
         </div>
         <div fxFlex="50" class="input-container">
-          <div class="btn-field google-btn">
+          <div class="btn-field google-btn clickable-link">
             <span>ورود با حساب گوگل</span>
             <span style="float: left; margin-top: 4px;">
               <i class="fa fa-google" aria-hidden="true"></i>
@@ -54,6 +54,6 @@
   </div>
   <div class="center join-link">
     <label>عضو نیستید؟</label>
-    <a style="text-decoration: underline;" (click)="goToRegister()">به ما بپیوندید</a>
+    <a class="clickable-link" style="text-decoration: underline;" (click)="goToRegister()">به ما بپیوندید</a>
   </div>
 </div>

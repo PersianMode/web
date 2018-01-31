@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import * as moment from 'jalali-moment';
 
 @Component({
   selector: 'app-register',
@@ -7,6 +8,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  @Output() closeDialog = new EventEmitter<boolean>();
+
+  dateObject = null;
   registerForm: FormGroup;
   gender = null;
   seen = {};
@@ -16,6 +20,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.dateObject = moment('1395-11-22','jYYYY,jMM,jDD');
     this.initForm();
   }
 
@@ -52,15 +57,17 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid && this.gender) {
-
+      // raised event to close dialog after register successfully
     } else {
       Object.keys(this.registerForm.controls).forEach(el => {
-        if (!this.registerForm.controls[el].valid)
+        if (!this.registerForm.controls[el].valid) {
           this.seen[el] = true;
+        }
       });
 
-      if (!this.gender)
+      if (!this.gender) {
         this.seen['gender'] = true;
+      }
     }
   }
 }

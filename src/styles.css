@@ -416,3 +416,35 @@ input {
 .button-area {
   margin-top: 20px;
 }
+
+.mat-raised-button.mat-accent {
+  background-color: white;
+}
+
+.left-direction {
+  direction: ltr;
+}
+
+.clickable-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+dp-date-picker.dp-material .dp-picker-input {
+  width: 98% !important;
+  padding: 5px 5px 5px 5px !important;
+  box-sizing: unset !important;
+  height: 20px !important;
+}
+
+.dp-material {
+  width: 100% !important;
+}
+
+.dp-picker-input {
+  width: 100% !important;
+}
+
+.dp-input-container {
+  width: 100% !important;
+}

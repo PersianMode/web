@@ -95,6 +95,7 @@ export class HeaderComponent implements OnInit {
 
   login() {
     this.dialog.open(GenDialogComponent, {
+      width: '500px',
       data: {
         componentName: this.dialogEnum.login,
       }

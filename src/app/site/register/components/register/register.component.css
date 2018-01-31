@@ -8,10 +8,11 @@
   cursor: pointer;
 }
 
-.left-direction {
-  direction: ltr;
-}
-
 .selected-gender {
   border-color: black;
+}
+
+.dp-hint {
+  position: relative;
+  top: 5px;
 }

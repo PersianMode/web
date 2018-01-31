@@ -1,8 +1,11 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
-import {MatDialogRef} from '@angular/material';
+import {WINDOW} from '../../../../shared/services/window.service';
+import {MatDialog} from "@angular/material";
+import {GenDialogComponent} from "../../../../shared/components/gen-dialog/gen-dialog.component";
+import {DialogEnum} from "../../../../shared/enum/dialog.components.enum";
 
 @Component({
   selector: 'app-login',
@@ -10,10 +13,12 @@ import {MatDialogRef} from '@angular/material';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup;
   @Output() closeDialog = new EventEmitter<boolean>();
+  loginForm: FormGroup;
+  dialogEnum = DialogEnum;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router,
+              @Inject(WINDOW) private window, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -49,6 +54,16 @@ export class LoginComponent implements OnInit {
   }
 
   goToRegister() {
-
+    if (this.window.innerWidth >= 960) {
+      this.closeDialog.emit(true);
+      this.dialog.open(GenDialogComponent, {
+        width: '500px',
+        data: {
+          componentName: this.dialogEnum.register,
+        }
+      });
+    } else {
+      this.router.navigate(['register']);
+    }
   }
 }

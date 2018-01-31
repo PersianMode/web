@@ -1,4 +1,4 @@
-<div>
+<div style="direction: rtl">
   <div class="center">
     <span class="persian-mode-center-logo">پرشین مد<span>ُ</span></span>
   </div>
@@ -11,11 +11,11 @@
     </div>
   </div>
   <div style="margin: 30px;">
-    <div class="btn-field google-btn">
+    <div class="btn-field google-btn clickable-link">
       <span>ورود با حساب گوگل</span>
       <span style="float: left; margin-top: 4px;">
-              <i class="fa fa-google" aria-hidden="true"></i>
-            </span>
+        <i class="fa fa-google" aria-hidden="true"></i>
+      </span>
     </div>
     <div class="center separator">
       <svg height="1" width="45%">
@@ -34,7 +34,9 @@
                  (focus)="setSeen('email')"
                  (blur)="curFocus = null"
                  [ngClass]="(registerForm.controls['email'].hasError('required') || registerForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email' ? 'input-error' : null"/>
-          <label class="field-error" *ngIf="(registerForm.controls['email'].hasError('required') || registerForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email'">لطفا ایمیل معتبری وارد کنید</label>
+          <label class="field-error"
+                 *ngIf="(registerForm.controls['email'].hasError('required') || registerForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email'">لطفا
+            ایمیل معتبری وارد کنید</label>
         </div>
         <div fxFlex="13" class="input-container">
           <input class="input-field left-direction" type="password"
@@ -42,7 +44,9 @@
                  (focus)="setSeen('password')"
                  (blur)="curFocus = null"
                  [ngClass]="registerForm.controls['password'].hasError('required') && seen['password'] && curFocus !== 'password' ? 'input-error' : null"/>
-          <label class="field-error" *ngIf="registerForm.controls['password'].hasError('required') && seen['password'] && curFocus !== 'password'">لطفا رمز عبور را وارد کنید</label>
+          <label class="field-error"
+                 *ngIf="registerForm.controls['password'].hasError('required') && seen['password'] && curFocus !== 'password'">لطفا
+            رمز عبور را وارد کنید</label>
         </div>
         <div fxFlex="13" class="input-container">
           <input class="input-field" type="text"
@@ -50,7 +54,9 @@
                  (focus)="setSeen('firstname')"
                  (blur)="curFocus = null"
                  [ngClass]="registerForm.controls['firstname'].hasError('required') && seen['firstname'] && curFocus !== 'firstname' ? 'input-error' : null"/>
-          <label class="field-error" *ngIf="registerForm.controls['firstname'].hasError('required') && seen['firstname'] && curFocus !== 'firstname'">لطفا نام را وارد کنید</label>
+          <label class="field-error"
+                 *ngIf="registerForm.controls['firstname'].hasError('required') && seen['firstname'] && curFocus !== 'firstname'">لطفا
+            نام را وارد کنید</label>
         </div>
         <div fxFlex="13" class="input-container">
           <input class="input-field" type="text"
@@ -58,15 +64,24 @@
                  (focus)="setSeen('surname')"
                  (blur)="curFocus = null"
                  [ngClass]="registerForm.controls['surname'].hasError('required') && seen['surname'] && curFocus !== 'surname' ? 'input-error' : null"/>
-          <label class="field-error" *ngIf="registerForm.controls['surname'].hasError('required') && seen['surname'] && curFocus !== 'surname'">لطفا نام خانوادگی را وارد کنید</label>
+          <label class="field-error"
+                 *ngIf="registerForm.controls['surname'].hasError('required') && seen['surname'] && curFocus !== 'surname'">لطفا
+            نام خانوادگی را وارد کنید</label>
         </div>
         <div fxFlex="13" class="input-container">
-          <input class="input-field" type="text"
-                 placeholder="تاریخ تولد" formControlName="birthdate"
-                 (focus)="setSeen('birthdate')"
-                 (blur)="curFocus = null"
-                 [ngClass]="registerForm.controls['birthdate'].hasError('required') && seen['birthdate'] && curFocus !== 'birthdate' ? 'input-error' : null"/>
-          <label class="field-error" *ngIf="registerForm.controls['birthdate'].hasError('required') && seen['birthdate'] && curFocus !== 'birthdate'">لطفا تاریخ تولد را وارد کنید</label>
+          <dp-date-picker
+            class="input-field"
+            (click)="setSeen('birthdate')"
+            (blur)="curFocus = null"
+            formControlName="birthdate"
+            mode="day"
+            placeholder="تاریخ تولد"
+            [ngClass]="registerForm.controls['birthdate'].hasError('required') && seen['birthdate'] && curFocus !== 'birthdate' ? 'input-error' : null"
+            theme="dp-material">
+          </dp-date-picker>
+          <label class="field-error dp-hint"
+                 *ngIf="registerForm.controls['birthdate'].hasError('required') && seen['birthdate'] && curFocus !== 'birthdate'">لطفا
+            تاریخ تولد را وارد کنید</label>
         </div>
         <div fxFlex="13" class="input-container">
           <div fxLayout="row" fxLayoutAlign="center center">
@@ -79,24 +94,26 @@
               </div>
             </div>
             <div fxFlex="50" style="margin-right: 10px;">
-              <div class="btn-field div-btn gender-choice" (click)="setGender('f')" [class.selected-gender]="gender === 'f'">
+              <div class="btn-field div-btn gender-choice" (click)="setGender('f')"
+                   [class.selected-gender]="gender === 'f'">
                 <label>زن</label>
                 <i *ngIf="gender === 'f'" class="fa fa-check" aria-hidden="true"></i>
               </div>
             </div>
           </div>
           <div>
-            <label class="field-error" *ngIf="(gender !== 'f' && gender !== 'm') && seen['gender']">لطفا جنسیت را تعیین کنید</label>
+            <label class="field-error" *ngIf="(gender !== 'f' && gender !== 'm') && seen['gender']">لطفا جنسیت را تعیین
+              کنید</label>
           </div>
         </div>
         <div fxFlex="13">
-          <label for="subscribe">دریافت آخرین اخبار از Nike</label>
+          <label for="subscribe" class="clickable-link">دریافت آخرین اخبار از Nike</label>
           <input id="subscribe" type="checkbox"/>
         </div>
       </div>
       <div class="button-area">
-        <div class="div-btn btn-field inform-btn" (click)="register()">
-          <label>ایجاد حساب</label>
+        <div class="div-btn btn-field inform-btn clickable-link" (click)="register()">
+          <label class="clickable-link">ایجاد حساب</label>
         </div>
       </div>
     </form>
