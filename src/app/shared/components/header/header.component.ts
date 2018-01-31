@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {MatDialog} from '@angular/material';
+import {GenDialogComponent} from "../gen-dialog/gen-dialog.component";
+import {DialogEnum} from "../../enum/dialog.components.enum";
 
 @Component({
   selector: 'app-header',
@@ -83,10 +86,18 @@ export class HeaderComponent implements OnInit {
       right: 4,
     },
   ];
+  dialogEnum = DialogEnum;
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
   }
 
+  login() {
+    this.dialog.open(GenDialogComponent, {
+      data: {
+        componentName: this.dialogEnum.login,
+      }
+    });
+  }
 }

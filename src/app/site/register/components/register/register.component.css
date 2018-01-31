@@ -1,0 +1,17 @@
+.separator {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.gender-choice {
+  cursor: pointer;
+}
+
+.left-direction {
+  direction: ltr;
+}
+
+.selected-gender {
+  border-color: black;
+}

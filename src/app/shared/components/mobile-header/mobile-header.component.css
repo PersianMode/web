@@ -44,3 +44,7 @@
   color: gray;
   background-color: white;
 }
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  background-color: #E5E5E5 !important;
+}

@@ -5,7 +5,7 @@
                  [style.height]="menuHeight + 'px'" [style.width]="menuWidth + 'px'"
                  (opened)="sideNavIsOpen = true" (closed)="sideNavIsOpen = false">
       <div *ngIf="isFirstLevel">
-        <div *ngIf="!isLoggedIn" class="menu-item menu-title">وارد/عضو شوید</div>
+        <div *ngIf="!isLoggedIn" class="menu-item menu-title" (click)="authentication()">وارد/عضو شوید</div>
         <div *ngFor="let first_level of getKeys(menuItems)">
           <div *ngIf="menuItems[first_level].is_title">
             <div class="menu-item menu-title">{{first_level}}</div>

@@ -7,26 +7,38 @@ import {CollectionHeaderComponent} from '../shared/components/collection-header/
 import {SlidingHeaderComponent} from '../shared/components/sliding-header/sliding-header.component';
 import {MobileHeaderComponent} from '../shared/components/mobile-header/mobile-header.component';
 import {
-  MatButtonModule,
+  MatButtonModule, MatDialogModule,
   MatIconModule,
   MatSidenavModule
 } from '@angular/material';
+import {GenDialogComponent} from '../shared/components/gen-dialog/gen-dialog.component';
+import {LoginComponent} from './login/components/login/login.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {FlexLayoutModule} from "@angular/flex-layout";
+import {RegisterComponent} from "./register/components/register/register.component";
 
 @NgModule({
   imports: [
     SiteRouting,
     CommonModule,
+    FlexLayoutModule,
+    ReactiveFormsModule,
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
   ],
   declarations: [
     HeaderComponent,
     CollectionHeaderComponent,
     SlidingHeaderComponent,
     MobileHeaderComponent,
-    SiteComponent
+    SiteComponent,
+    GenDialogComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
+  entryComponents: [GenDialogComponent],
 })
 export class SiteModule {
 }
