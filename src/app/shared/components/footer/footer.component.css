@@ -22,3 +22,8 @@
 .footer-link:hover{
     color: white;
 }
+
+.wrapper {
+  background-color: #191919; margin-top: 0; clear: both;
+  height: 150px;
+}

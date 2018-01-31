@@ -1,6 +1,6 @@
-  import {Component, HostListener, Inject, OnInit} from '@angular/core';
+  import {Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
   import { DOCUMENT } from '@angular/platform-browser';
-  import { WINDOW_PROVIDERS, WINDOW } from '../../../../shared/services/window.service';
+  import { WINDOW } from '../../../../shared/services/window.service';
 
 
   @Component({
@@ -179,8 +179,12 @@
         },
       ]
     };
-
-    fixedFilterPanel = false;
+    @ViewChild('filterPane') filterPane;
+    @ViewChild('gridwall') gridwall;
+    topFixedFilterPanel = false;
+    bottomFixedFilterPanel = false;
+    bottomScroll = false;
+    topDist = 0;
     constructor(@Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
     }
 
@@ -190,6 +194,13 @@
     @HostListener('window:scroll', [])
     onWindowScroll() {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
-      this.fixedFilterPanel = offset >= 102
+      const height = this.window.innerHeight - 209;
+      const filterHeight = this.filterPane.nativeElement.scrollHeight;
+      const docHeight = Math.max(filterHeight, this.gridwall.nativeElement.scrollHeight) + 209;
+      this.topFixedFilterPanel = offset >= 102 && filterHeight < height;
+      this.bottomFixedFilterPanel = filterHeight > height && filterHeight - offset < height && docHeight - offset > height + 180;
+      this.bottomScroll = docHeight - offset < height + 180;
+      this.topDist = height - filterHeight + 209;
+      console.log(this.bottomFixedFilterPanel, docHeight - offset, height, docHeight)
     }
   }

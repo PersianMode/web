@@ -1,7 +1,9 @@
-<div class="filters" [class.fixed]="fixedFilterPanel">
+<div class="filters" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
+     [class.bottomScroll]="bottomScroll"
+     [style.top]="bottomFixedFilterPanel ? topDist + 'px': 'unset'" #filterPane>
   <app-filtering-panel></app-filtering-panel>
 </div>
-<div class="gridwall">
+<div class="gridwall" #gridwall>
   <div class="gridwall-wrapper">
     <div class="gridwall-title">
       <h1>{{collection.collectionNameFa}} <span>({{collection.set.length.toLocaleString('fa')}})</span></h1>
