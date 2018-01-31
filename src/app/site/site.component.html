@@ -1,7 +1,22 @@
-<app-header></app-header>
-<app-collection-header></app-collection-header>
-
-<div style="margin-top: 130px;">
-  <app-sliding-header></app-sliding-header>
-  <router-outlet></router-outlet>
+<div *ngIf="curWidth >= 960">
+  <div class="fixed">
+    <app-header></app-header>
+    <app-collection-header></app-collection-header>
+  </div>
+  <div class="scrollable">
+    <app-sliding-header></app-sliding-header>
+    <div class="content">
+      <router-outlet></router-outlet>
+      <app-footer></app-footer>
+    </div>
+  </div>
+</div>
+<div *ngIf="curWidth < 960">
+  <div class="fixed">
+    <app-mobile-header [menuWidth]="curWidth - 40" [menuHeight]="curHeight"></app-mobile-header>
+  </div>
+  <div class="mobile-content">
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
 </div>
