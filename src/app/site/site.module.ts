@@ -12,6 +12,7 @@ import {
   MatIconModule,
   MatSidenavModule
 } from '@angular/material';
+import {WINDOW_PROVIDERS} from "../shared/services/window.service";
 
 @NgModule({
   imports: [
@@ -27,7 +28,7 @@ import {
     SlidingHeaderComponent,
     MobileHeaderComponent,
     SiteComponent
-  ],
+  ]
 })
 export class SiteModule {
 }

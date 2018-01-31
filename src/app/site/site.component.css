@@ -16,3 +16,10 @@
   width:100%;
   background-color: #fff;
 }
+
+.mobile-content {
+  height: 10000px;
+  background: yellow;
+  position: relative;
+  top: 50px;
+}

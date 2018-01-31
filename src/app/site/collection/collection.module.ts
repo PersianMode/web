@@ -18,9 +18,6 @@ import {WINDOW_PROVIDERS} from '../../shared/services/window.service';
     CollectionRouting,
     CommonModule,
   ],
-  providers: [
-    WINDOW_PROVIDERS,
-  ]
 })
 export class CollectionModule {
 }
