@@ -74,6 +74,31 @@
     text-align: right;
 }
 
+.quarter1 {
+    position: absolute;
+    top: 90%;
+    right: 1%;
+    text-align: right;
+}
+.quarter2 {
+    position: absolute;
+    top: 90%;
+    right: 26%;
+    text-align: right;
+}
+.quarter3 {
+    position: absolute;
+    top: 90%;
+    right: 51%;
+    text-align: right;
+}
+.quarter4 {
+    position: absolute;
+    top: 90%;
+    right: 76%;
+    text-align: right;
+}
+
 .default-color {
     color: white;
 }
@@ -84,7 +109,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1000;
+    /*z-index: 1000;*/
     font-weight: bolder;
 }
 

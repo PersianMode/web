@@ -197,6 +197,7 @@ nav {
   border-bottom:1px solid #E5E5E5;
   padding-top: 40px;
   background: #fff;
+  z-index: 10;
 }
 .genderList div {
   display:inline-block;
@@ -317,3 +318,5 @@ nav {
   background-color: rgb(247, 247, 247);
   z-index: -1 !important;
 }
+
+

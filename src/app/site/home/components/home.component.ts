@@ -63,7 +63,7 @@ export class HomeComponent implements OnInit {
         type: 'full',
       },
       {
-        imgUrl: '../../../../assets/pictures/pw-5.png',
+        imgUrl: '../../../../assets/pictures/pw-11.png',
         href: '#',
         areas: [
           {
@@ -73,7 +73,37 @@ export class HomeComponent implements OnInit {
             color: 'black',
           },
         ],
-        type: 'full',
+        type: 'quarter',
+        subTitle : [
+          {
+            pos : 'quarter1',
+            title: 'کفش راحتی زنانه، مدل ژاکلین',
+            text: 'کفش زنانه',
+            color: 'black',
+            textColor: 'gray'
+          },
+          {
+            pos : 'quarter2',
+            title: 'کفش کارمندی زنانه',
+            text: 'کفش زنانه',
+            color: 'black',
+            textColor: 'gray'
+          },
+          {
+            pos : 'quarter3',
+            title: 'کفش ورزشی زنانه نایک، سری نایک پلاس',
+            text: 'کفش ورزشی زنانه',
+            color: 'black',
+            textColor: 'gray'
+          },
+          {
+            pos : 'quarter4',
+            title: 'کفش پیاده روی زنانه نایک، مدل پگاسوس',
+            text: 'کفش پیاده روی زنانه',
+            color: 'black',
+            textColor: 'gray'
+          }
+        ]
       }
     ],
   }
