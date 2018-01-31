@@ -322,3 +322,11 @@ nav {
   right: 0px;
   text-align: left;
 }
+
+.mat-drawer {
+  position: fixed !important;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}

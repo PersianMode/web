@@ -1,3 +1,4 @@
+<div *ngIf="curWidth >= 960">
 <div class="fixed">
   <app-header></app-header>
   <app-collection-header></app-collection-header>
@@ -7,4 +8,12 @@
   <div class="content">
     <router-outlet></router-outlet>
   </div>
+</div>
+</div>
+<div *ngIf="curWidth < 960">
+  <app-mobile-header [menuWidth]="curWidth - 40" [menuHeight]="curHeight"></app-mobile-header>
+</div>
+
+<div [style.margin-top]="(curWidth >= 960 ? 130 : 60) + 'px' ">
+  <router-outlet></router-outlet>
 </div>
