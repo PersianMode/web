@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {WINDOW, WindowService} from '../shared/services/window.service';
-import {DOCUMENT} from "@angular/platform-browser";
+import {WINDOW} from '../shared/services/window.service';
+
 
 @Component({
   selector: 'app-site',

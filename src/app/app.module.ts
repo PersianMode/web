@@ -9,7 +9,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {AdminModule} from './admin/admin.module';
 import {SiteModule} from './site/site.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {WINDOW_PROVIDERS, WindowService} from './shared/services/window.service';
+import {WINDOW_PROVIDERS} from './shared/services/window.service';
 import {HttpService} from './shared/services/http.service';
 import {SocketService} from './shared/services/socket.service';
 import {AuthService} from './shared/services/auth.service';
