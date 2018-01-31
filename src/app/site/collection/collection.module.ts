@@ -5,6 +5,7 @@ import { ParentCollectionComponent } from './components/parent-collection/parent
 import {CollectionRouting} from './collection.routing';
 import {CommonModule} from '@angular/common';
 import {FilteringPanelComponent} from '../../shared/components/filtering-panel/filtering-panel.component';
+import {WINDOW_PROVIDERS} from '../../shared/services/window.service';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,9 @@ import {FilteringPanelComponent} from '../../shared/components/filtering-panel/f
     CollectionRouting,
     CommonModule,
   ],
+  providers: [
+    WINDOW_PROVIDERS,
+  ]
 })
 export class CollectionModule {
 }

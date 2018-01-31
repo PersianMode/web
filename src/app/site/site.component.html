@@ -1,7 +1,10 @@
-<app-header></app-header>
-<app-collection-header></app-collection-header>
-<app-sliding-header></app-sliding-header>
-<div>
-  <router-outlet></router-outlet>
+<div class="fixed">
+  <app-header></app-header>
+  <app-collection-header></app-collection-header>
 </div>
-
+<div class="scrollable">
+  <app-sliding-header></app-sliding-header>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,7 +1,16 @@
-<div class="filters">
+<div class="filters" [class.fixed]="fixedFilterPanel">
   <app-filtering-panel></app-filtering-panel>
 </div>
 <div class="gridwall">
-  <h1>کفش‌های مردانه</h1>
-
+  <div class="gridwall-wrapper">
+    <div class="gridwall-title">
+      <h1>{{collection.collectionNameFa}} <span>({{collection.set.length.toLocaleString('fa')}})</span></h1>
+      <div class="sorter-row">
+        <div class="sorter">ترتیب نمایش</div>
+      </div>
+    </div>
+    <div class="gridwall-content">
+      fff
+    </div>
+  </div>
 </div>
