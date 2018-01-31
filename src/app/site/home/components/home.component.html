@@ -14,7 +14,7 @@
       </div>
     </div>
     <div *ngFor="let su of item.subTitle" class="{{su.pos}}" style="display: inline-block;">
-      <div *ngIf="su.title" [style.color]="su.color ? su.color : null" style="font-weight: bold">{{su.title}}</div>
+      <div *ngIf="su.title" [style.color]="su.color ? su.color : null" style="font-weight: bold; white-space: nowrap;">{{su.title}}</div>
       <div *ngIf="su.text" [style.color]="su.textColor ? su.textColor : null"><b>{{su.text}}</b></div>
     </div>
   </div>
