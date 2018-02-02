@@ -67,3 +67,7 @@
 {
   text-align: right !important;
 }
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  background-color: #E5E5E5 !important;
+}
