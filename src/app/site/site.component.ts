@@ -23,5 +23,4 @@ export class SiteComponent implements OnInit {
       this.curHeight = this.window.innerHeight;
     };
   }
-
 }

@@ -1,3 +1,59 @@
-<p>
-  login works!
-</p>
+<div style="direction: rtl">
+  <div class="center">
+    <span class="persian-mode-center-logo">پرشین مد<span>ُ</span></span>
+  </div>
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <div fxFlex="50">
+      <label class="center">حساب کاربری شما برای</label>
+    </div>
+    <div fxFlex="50">
+      <label class="center">هر محصول NIKE</label>
+    </div>
+  </div>
+  <div style="margin: 25px;">
+    <form (ngSubmit)="login()" [formGroup]="loginForm">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxFlex="50" class="input-container">
+          <input class="input-field left-direction" type="email" placeholder="ایمیل"
+                 formControlName="email"
+                 [ngClass]="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')? 'input-error' : null"/>
+          <label *ngIf="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')" class="field-error">لطفا آدرس ایمیل معتبری وارد کنید</label>
+        </div>
+        <div fxFlex="50" class="input-container">
+          <input class="input-field left-direction" type="password" placeholder="رمز عبور"
+                 formControlName="password"
+                 [ngClass]="loginForm.controls['password'].hasError('required') ? 'input-error' : null"/>
+          <label *ngIf="loginForm.controls['password'].hasError('required')" class="field-error">لطفا رمز عبور را وارد کنید</label>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 13px">
+        <div fxFlex="50">
+          <a class="clickable-link">رمز را فراموش کرده اید؟</a>
+        </div>
+        <div fxFlex="50" style="text-align: left; margin-left: -15px;">
+          <label for="keeplogin" class="clickable-link">مرا به خاطر بسپار</label>
+          <input id="keeplogin" type="checkbox" formControlName="keep_me_login">
+        </div>
+      </div>
+      <div class="button-area" fxLayout="column" fxLayoutAlign="center center">
+        <div fxFlex="50" class="input-container">
+          <div class="btn-field login-btn inform-btn clickable-link" (click)="login()">
+            <label>ورود</label>
+          </div>
+        </div>
+        <div fxFlex="50" class="input-container">
+          <div class="btn-field google-btn clickable-link">
+            <span>ورود با حساب گوگل</span>
+            <span style="float: left; margin-top: 4px;">
+              <i class="fa fa-google" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="center join-link">
+    <label>عضو نیستید؟</label>
+    <a class="clickable-link" style="text-decoration: underline;" (click)="goToRegister()">به ما بپیوندید</a>
+  </div>
+</div>

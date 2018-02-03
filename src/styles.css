@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 @font-face {
   font-family: "nikeglyph";
   src: url('assets/fonts/OneNikeGlyphs.woff');
@@ -124,6 +126,22 @@ nav {
   position: relative;
   font-size: 80%;
 }
+
+.persian-mode-center-logo {
+  font-family: nastaliq !Important;
+  font-size: 30px;
+  display: inline-block;
+  color: black;
+  transition: all .3s ease-in;
+}
+
+.persian-mode-center-logo span {
+  top: -20px;
+  right: -16px;
+  position: relative;
+  font-size: 80%;
+}
+
 .second-bar {
   position: absolute;
   top: 40px;
@@ -197,6 +215,10 @@ nav {
   color: #cbcbcb;
   font-size: 12pt;
 }
+input, button {
+  font-family: iranyekan,sans-serif;
+}
+
 .genderList{
   position: absolute;
   top: 109px;
@@ -329,4 +351,100 @@ nav {
 
 .fill-remaining-space {
   flex: 1 1 auto;
+}
+
+.center {
+  text-align: center;
+}
+
+.field-error {
+  font-size: 0.75em;
+  color: red;
+}
+
+.input-error {
+  border-color: red;
+  border-width: 1px;
+}
+
+input {
+  border-radius: 5px;
+  border-color: #E5E5E5;
+  border-style: solid;
+  outline: none;
+  color: #8D8D8D;
+}
+
+.input-field {
+  padding: 5px 5px 5px 5px;
+  height: 20px;
+  width: 98%;
+  border-radius: 5px;
+}
+
+.input-container {
+  margin: 5px;
+  width: 100%;
+}
+
+.google-btn {
+  background: darkred;
+  color: white;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.btn-field {
+  padding: 5px 0px 5px 5px;
+  width: 100%;
+  height: 25px !important;
+}
+
+.div-btn {
+  border: solid #E5E5E5 thin;
+  border-radius: 3px;
+  text-align: center;
+  color: #8D8D8D;
+}
+
+.inform-btn {
+  background-color: #000;
+  color: white;
+}
+
+.button-area {
+  margin-top: 20px;
+}
+
+.mat-raised-button.mat-accent {
+  background-color: white;
+}
+
+.left-direction {
+  direction: ltr;
+}
+
+.clickable-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+dp-date-picker.dp-material .dp-picker-input {
+  width: 98% !important;
+  padding: 5px 5px 5px 5px !important;
+  box-sizing: unset !important;
+  height: 20px !important;
+}
+
+.dp-material {
+  width: 100% !important;
+}
+
+.dp-picker-input {
+  width: 100% !important;
+}
+
+.dp-input-container {
+  width: 100% !important;
 }
