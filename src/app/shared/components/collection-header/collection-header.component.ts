@@ -43,7 +43,7 @@ export class CollectionHeaderComponent implements OnInit {
       headerList: [
         {
           text: 'تازه‌ها',
-          href: '#',
+          href: 'collection/x',
         },
         {
           text: 'پرفروش‌ها',
