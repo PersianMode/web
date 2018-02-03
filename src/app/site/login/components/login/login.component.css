@@ -1,0 +1,36 @@
+.persian-mode-center-logo {
+  font-family: nastaliq !Important;
+  font-size: 30px;
+  display: inline-block;
+  color: black;
+  transition: all .3s ease-in;
+}
+
+.persian-mode-center-logo span {
+  top: -20px;
+  right: -16px;
+  position: relative;
+  font-size: 80%;
+}
+
+.login-btn {
+  color: white;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+  height: 25px;
+}
+
+.google-btn {
+  background: darkred;
+  color: white;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+  height: 25px;
+}
+
+.join-link {
+  margin-top: 15px;
+  font-size: 0.8em;
+}

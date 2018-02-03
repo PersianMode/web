@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from '../../../../shared/services/auth.service';
+import {Router} from '@angular/router';
+import {WINDOW} from '../../../../shared/services/window.service';
+import {MatDialog} from "@angular/material";
+import {GenDialogComponent} from "../../../../shared/components/gen-dialog/gen-dialog.component";
+import {DialogEnum} from "../../../../shared/enum/dialog.components.enum";
 
 @Component({
   selector: 'app-login',
@@ -6,10 +13,57 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  @Output() closeDialog = new EventEmitter<boolean>();
+  loginForm: FormGroup;
+  dialogEnum = DialogEnum;
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private authService: AuthService, private router: Router,
+              @Inject(WINDOW) private window, public dialog: MatDialog) {
   }
 
+  ngOnInit() {
+    this.initForm();
+  }
+
+  initForm() {
+    this.loginForm = new FormBuilder().group({
+      email: [null, [
+        Validators.required,
+        Validators.email,
+      ]],
+      password: [null, [
+        Validators.required,
+      ]],
+      keep_me_login: [true]
+    });
+  }
+
+  login() {
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value)
+        .then(
+          (data) => {
+            this.closeDialog.emit(true);
+            this.router.navigate(['home']);
+          },
+          (err) => {
+            console.error('Cannot login');
+          }
+        );
+    }
+  }
+
+  goToRegister() {
+    if (this.window.innerWidth >= 960) {
+      this.closeDialog.emit(true);
+      this.dialog.open(GenDialogComponent, {
+        width: '500px',
+        data: {
+          componentName: this.dialogEnum.register,
+        }
+      });
+    } else {
+      this.router.navigate(['register']);
+    }
+  }
 }
