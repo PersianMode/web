@@ -1,0 +1,12 @@
+<div class="main" [class.on]="on">
+  <div class="imgWrapper" (mouseover)="turnOn()" (mouseout)="turnOff()">
+    <img src="assets/pictures/product-small/{{data.colors[pos].url}}" [style.left]="(220 * pos) +'px'">
+  </div>
+  <div *ngIf="on && data.colors.length > 1" class="slider">
+    <img *ngFor="let img of images" src="img.url">
+  </div>
+  <p>{{data.colors.length.toLocaleString('fa')}} رنگ</p>
+  <h2>{{data.name}}</h2>
+  <h3>{{desc}}</h3>
+  <h4>{{price}} تومان</h4>
+</div>
