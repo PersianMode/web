@@ -10,14 +10,14 @@
   })
   export class MainCollectionComponent implements OnInit {
     collection = {
-      collectionNameFa: 'کفش‌های مردانه',
+      collectionNameFa: 'تازه‌های مردانه',
       collectionName: 'men-shoes',
       set: [
         {
           name: 'جوردن ایر مدل ‍۱۰ رترو',
           colors: [
             {
-              url: '06',
+              url: '06.jpg',
               position: 0,
             },
           ],
@@ -28,7 +28,7 @@
           name: 'له‌برون مدل 15 BHM',
           colors: [
             {
-              url: '01',
+              url: '01.jpg',
               position: 0,
             },
           ],
@@ -39,32 +39,27 @@
           name: 'نایک ایر مدل Huarache Drift',
           colors: [
             {
-              url: '02',
+              url: '02.jpg',
               position: 0,
               pi_id: 0,
             },
             {
-              url: '02',
+              url: '02.jpg',
               position: 1,
               pi_id: 0,
             },
             {
-              url: '02',
+              url: '02.jpg',
               position: 2,
               pi_id: 0,
             },
             {
-              url: '11',
+              url: '11.jpeg',
               position: 0,
               pi_id: 0,
             },
             {
-              url: '12',
-              position: 0,
-              pi_id: 0,
-            },
-            {
-              url: '13',
+              url: '12.jpeg',
               position: 0,
               pi_id: 0,
             },
@@ -76,12 +71,12 @@
           name: 'نایک ایر',
           colors: [
             {
-              url: '03',
+              url: '03.jpg',
               position: 0,
               pi_id: 0,
             },
             {
-              url: '03',
+              url: '03.jpg',
               position: 1,
               pi_id: 1,
             },
@@ -93,32 +88,34 @@
           name: 'نایک ایر فورس ۱ مدل Premium \'07',
           colors: [
             {
-              url: '04',
+              url: '04.jpg',
               position: 0,
               pi_id: 0,
             },
             {
-              url: '04',
+              url: '04.jpg',
               position: 1,
               pi_id: 0,
             },
             {
-              url: '04',
+              url: '04.jpg',
               position: 2,
               pi_id: 0,
             },
-          ]
+          ],
+          tags: ['کفش', 'مردانه', 'بسکتبال'],
+          price: 1099900,
         },
         {
           name: 'کایری 4',
           colors: [
             {
-              url: '05',
+              url: '05.jpg',
               position: 0,
               pi_id: 0,
             },
             {
-              url: '05',
+              url: '05.jpg',
               position: 1,
               pi_id: 0,
             },
@@ -130,13 +127,18 @@
           name: 'نایک Sportswear',
           colors: [
             {
-              url: '07',
+              url: '07.jpg',
               position: 0,
               pi_id: 0,
             },
             {
-              url: '07',
+              url: '07.jpg',
               position: 1,
+              pi_id: 0,
+            },
+            {
+              url: '07.jpg',
+              position: 2,
               pi_id: 0,
             },
           ],
@@ -147,17 +149,17 @@
           name: 'نایک Sportswear Tech Shield',
           colors: [
             {
-              url: '08',
+              url: '08.jpg',
               position: 0,
               pi_id: 0,
             },
             {
-              url: '08',
+              url: '08.jpg',
               position: 1,
               pi_id: 0,
             },
             {
-              url: '08',
+              url: '08.jpg',
               position: 2,
               pi_id: 0,
             },
@@ -169,7 +171,7 @@
           name: 'نایک مدل Kobe A.D. Black Mamba',
           colors: [
             {
-              url: '13',
+              url: '13.jpeg',
               position: 0,
               pi_id: 0,
             },
@@ -201,6 +203,5 @@
       this.bottomFixedFilterPanel = filterHeight > height && filterHeight - offset < height && docHeight - offset > height + 180;
       this.bottomScroll = docHeight - offset < height + 180;
       this.topDist = height - filterHeight + 209;
-      console.log(this.bottomFixedFilterPanel, docHeight - offset, height, docHeight)
     }
   }
