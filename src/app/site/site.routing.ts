@@ -12,7 +12,7 @@ const Site_ROUTES: Routes = [
       {path: 'collection', loadChildren: 'app/site/collection/collection.module#CollectionModule'},
       {path: 'cart', loadChildren: 'app/site/cart/cart.module#CartModule'},
   ]
-  }
+  },
 ];
 
 export const SiteRouting = RouterModule.forChild(Site_ROUTES);

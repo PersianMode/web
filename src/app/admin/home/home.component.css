@@ -1,0 +1,11 @@
+.selected-link{
+  background-color: rgba(224,215,208,0.92);
+}
+
+* {
+  direction: ltr;
+}
+
+.admin-content {
+  margin: 50px;
+}

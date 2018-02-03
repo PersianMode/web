@@ -14,17 +14,16 @@ import {HttpService} from './shared/services/http.service';
 import {SocketService} from './shared/services/socket.service';
 import {AuthService} from './shared/services/auth.service';
 import {HttpClientModule} from '@angular/common/http';
+import {routing} from "./app.routing";
 
 @NgModule({
   declarations: [
     AppComponent,
   ],
   imports: [
+    routing,
     BrowserAnimationsModule,
     BrowserModule,
-    AdminModule,
-    SiteModule,
-    RouterModule.forRoot([]),
     FormsModule,
     HttpClientModule,
     FlexLayoutModule,
