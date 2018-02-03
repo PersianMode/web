@@ -54,17 +54,12 @@
               pi_id: 0,
             },
             {
-              url: '11.jpg',
+              url: '11.jpeg',
               position: 0,
               pi_id: 0,
             },
             {
               url: '12.jpeg',
-              position: 0,
-              pi_id: 0,
-            },
-            {
-              url: '13.jpeg',
               position: 0,
               pi_id: 0,
             },
@@ -107,7 +102,9 @@
               position: 2,
               pi_id: 0,
             },
-          ]
+          ],
+          tags: ['کفش', 'مردانه', 'بسکتبال'],
+          price: 1099900,
         },
         {
           name: 'کایری 4',
@@ -137,6 +134,11 @@
             {
               url: '07.jpg',
               position: 1,
+              pi_id: 0,
+            },
+            {
+              url: '07.jpg',
+              position: 2,
               pi_id: 0,
             },
           ],
@@ -201,6 +203,5 @@
       this.bottomFixedFilterPanel = filterHeight > height && filterHeight - offset < height && docHeight - offset > height + 180;
       this.bottomScroll = docHeight - offset < height + 180;
       this.topDist = height - filterHeight + 209;
-      console.log(this.bottomFixedFilterPanel, docHeight - offset, height, docHeight)
     }
   }

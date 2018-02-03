@@ -2,7 +2,7 @@
   bottom: auto;
   position: absolute;
   top: 20px;
-  background: red; /* #fff;*/
+  background: #fff;
   right: 9px;
   padding: 24px;
   width: 216px;
@@ -69,11 +69,9 @@
 }
 
 .gridwall-content {
-  background: yellow;
   display: inline-block;
   text-align: center;
   width: 100%;
-  height: 10000px;
 }
 
 .gridwall-wrapper {
@@ -82,11 +80,11 @@
   width: 100%;
 }
 
-@media (max-width: 1023px) {
-  .gridwall-wrapper {
-    width: 492px;
-  }
-}
+/*@media (max-width: 1023px) {*/
+  /*.gridwall-wrapper {*/
+    /*width: 492px;*/
+  /*}*/
+/*}*/
 
 /*@media (max-width: 1259px) and (min-width: 1024px) {*/
   /*.gridwall-wrapper {*/
