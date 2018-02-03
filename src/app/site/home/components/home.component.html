@@ -1,10 +1,10 @@
-<div style = "width:100%;">
-  <div *ngFor="let item of placements.panels" style="width: 100%" class="container">
-    <h2 *ngIf="item.topTitle" [style.color]="item.topTitle.color ? item.topTitle.color : null" style="text-align: right; margin-right: 35px">{{item.topTitle.title}}</h2>
+<div class="full-width">
+  <div *ngFor="let item of placements.panels" class="container">
+    <h2 *ngIf="item.topTitle" [style.color]="item.topTitle.color ? item.topTitle.color : null" class="top-title">{{item.topTitle.title}}</h2>
     <div fxLayout="row" fxLayoutAlign="cente center" [style.margin-right]="item.type !== 'full' ? '15px' : null" [style.margin-left]="item.type !== 'full' ? '15px' : null">
       <div [fxFlex]="100/item.imgs.length" *ngFor="let im of item.imgs">
         <a href="{{im.href}}">
-          <img src = "{{im.imgUrl}}" style="width: 100%"/>
+          <img src = "{{im.imgUrl}}" class="full-width"/>
         </a>
         <div *ngFor="let ar of im.areas">
           <div [style.font-size] = "(item.type === 'full' && item.imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'" [ngClass]="ar.pos">
@@ -21,6 +21,6 @@
         <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null" class="sub-title">{{im.subTitle.text}}</div>
       </div>
     </div>
-    <h2 *ngIf="item.subTitle" [style.color]="item.subTitle.color ? item.subTitle.color : null" style="text-align: right; margin-right: 10px">{{item.subTitle.title}}</h2>
+    <h2 *ngIf="item.subTitle" [style.color]="item.subTitle.color ? item.subTitle.color : null" class="h2-sub-title">{{item.subTitle.title}}</h2>
   </div>
 </div>

@@ -4,6 +4,7 @@
     position: relative;
     text-align: center;
     color: white;
+    width: 100%;
 }
 
 /*Alignment based on horizontal-vertical align*/
@@ -98,4 +99,17 @@
     font-size: large ;
     font-family: 'irankharazmi';
     font-weight: bolder;
+}
+.full-width {
+    width: 100%;
+}
+
+.top-title {
+     text-align: right;
+     margin-right: 35px
+}
+
+.h2-sub-title {
+    text-align: right;
+    margin-right: 10px
 }
