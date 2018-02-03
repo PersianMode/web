@@ -6,8 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
-  placements = {
-    footer: {
+    footer = {
       headerList: [
         {
           text: 'کارت های هدیه',
@@ -98,7 +97,20 @@ export class FooterComponent implements OnInit {
           href: '#',
         },
       ],
-    }
+      icons: [
+        {
+          text: 'fa fa-twitter-square icons'
+        },
+        {
+          text: 'fa fa-facebook-square icons'
+        },
+        {
+          text: 'fa fa-linkedin-square icons'
+        },
+        {
+          text: 'fa fa-instagram icons'
+        }
+      ]
   }
   constructor() { }
   ngOnInit() {

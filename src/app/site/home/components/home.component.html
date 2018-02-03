@@ -1,26 +1,61 @@
-<div style = "width:100%;">
-  <div *ngFor="let item of placements.panels" style="width: 100%" class="container">
-    <h2 *ngIf="item.topTitle" [style.color]="item.topTitle.color ? item.topTitle.color : null" style="text-align: right; margin-right: 35px">{{item.topTitle.title}}</h2>
-    <div fxLayout="row" fxLayoutAlign="cente center" [style.margin-right]="item.type !== 'full' ? '15px' : null" [style.margin-left]="item.type !== 'full' ? '15px' : null">
-      <div [fxFlex]="100/item.imgs.length" *ngFor="let im of item.imgs">
-        <a href="{{im.href}}">
-          <img src = "{{im.imgUrl}}" style="width: 100%"/>
-        </a>
-        <div *ngFor="let ar of im.areas">
-          <div [style.font-size] = " item.type === 'full'? '1.5em' : '0.75em'" [ngClass]="ar.pos">
-            <h1  *ngIf="ar.title"  [style.color]="ar.color ? ar.color : null">{{ar.title}}</h1>
-            <div *ngIf="ar.text" [style.color]="ar.color ? ar.color : null"><b>{{ar.text}}</b></div>
-            <div  *ngIf="ar.title"  style="margin-top: 5%;">
-              <button mat-raised-button color="accent" class="shop-button">
-                <b>خرید آنلاین</b>
-              </button>
+<div *ngIf="curWidth >= 960" class="full-width">
+    <div *ngFor="let item of placements.panels" class="container">
+        <h2 *ngIf="item.topTitle  && (item.mobileMode === undefined || item.mobileMode === false)"
+            [style.color]="item.topTitle.color ? item.topTitle.color : null" class="top-title">
+            {{item.topTitle.title}}</h2>
+        <div *ngIf="item.mobileMode === undefined || item.mobileMode === false" fxLayout="row"
+             fxLayoutAlign="cente center" [style.margin-right]="item.type !== 'full' ? '15px' : null"
+             [style.margin-left]="item.type !== 'full' ? '15px' : null">
+            <div [fxFlex]="100/item.imgs.length" *ngFor="let im of item.imgs">
+                <a href="{{im.href}}">
+                    <img src="{{im.imgUrl}}" class="full-width"/>
+                </a>
+                <div *ngFor="let ar of im.areas">
+                    <div [style.font-size]="(item.type === 'full' && item.imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
+                         [ngClass]="ar.pos">
+                        <h1 *ngIf="ar.title" [style.color]="ar.color ? ar.color : null">{{ar.title}}</h1>
+                        <div *ngIf="ar.text" [style.color]="ar.color ? ar.color : null"><b>{{ar.text}}</b></div>
+                        <div *ngIf="ar.title" style="margin-top: 5%;">
+                            <button mat-raised-button color="accent" class="shop-button">
+                                <b>خرید آنلاین</b>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="im.subTitle" [style.color]="im.subTitle.color ? im.subTitle.color : null" class="sub-title">
+                    <b>{{im.subTitle.title}}</b></div>
+                <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null"
+                     class="sub-title">{{im.subTitle.text}}
+                </div>
             </div>
-          </div>
         </div>
-        <div *ngIf="im.subTitle" [style.color]="im.subTitle.color ? im.subTitle.color : null" class="sub-title"><b>{{im.subTitle.title}}</b></div>
-        <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null" class="sub-title">{{im.subTitle.text}}</div>
-      </div>
+        <h2 *ngIf="item.subTitle && (item.mobileMode === undefined || item.mobileMode === false)"
+            [style.color]="item.subTitle.color ? item.subTitle.color : null" class="h2-sub-title">
+            {{item.subTitle.title}}</h2>
     </div>
-    <h2 *ngIf="item.subTitle" [style.color]="item.subTitle.color ? item.subTitle.color : null" style="text-align: right; margin-right: 10px">{{item.subTitle.title}}</h2>
-  </div>
+</div>
+<div *ngIf="curWidth < 960">
+    <div *ngFor="let item of placements.panels" class="container">
+        <h2 *ngIf="item.topTitle  && (item.mobileMode === undefined || item.mobileMode === true)" class="title-mobile"
+            style="margin-bottom: 0px;">{{item.topTitle.title}}</h2>
+        <div *ngIf="item.mobileMode === undefined || item.mobileMode === true" fxLayout="row"
+             fxLayoutAlign="cente center" fxLayout.sm="column" fxLayout.xs="column"
+             [style.margin-right]="item.type !== 'full' ? '15px' : null"
+             [style.margin-left]="item.type !== 'full' ? '15px' : null">
+            <div [fxFlex]="100" *ngFor="let im of item.imgs">
+                <a href="{{im.href}}">
+                    <img src="{{im.imgUrl}}" class="full-width"/>
+                </a>
+                <div *ngFor="let ar of im.areas">
+                    <!--<div style="font-size: 1em">-->
+                    <h2 *ngIf="ar.title" class="title-mobile" style="margin-bottom: 30px;margin-top: 0px;">
+                        {{ar.title}}</h2>
+                </div>
+                <div *ngIf="im.subTitle" class="title-mobile"><b>{{im.subTitle.title}}</b></div>
+                <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px;">{{im.subTitle.text}}</div>
+            </div>
+        </div>
+        <h2 *ngIf="item.subTitle && (item.mobileMode === undefined || item.mobileMode === true)" class="h2-sub-title">
+            {{item.subTitle.title}}</h2>
+    </div>
 </div>
