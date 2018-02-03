@@ -1,0 +1,20 @@
+<div class="main" [class.on]="on">
+  <span>
+    <div class="imgWrapper" (mouseover)="turnOn()" (mouseout)="turnOff()">
+      <img src="assets/pictures/product-small/{{data.colors[pos].url}}" [style.right]="(220 * data.colors[pos].position) +'px'">
+    </div>
+    <div *ngIf="on && data.colors.length > 1" class="sliderWrapper" (mouseover)="turnOn(2, 0)" (mouseout)="turnOff()" #slider>
+      <i *ngIf="slidesNum > 1 && slide > 0" (click)="prevSlide()" class="fa fa-chevron-right"></i>
+      <div class="sliderBlind">
+        <div class="slider" [style.right]="(-slide * 180) + 'px'">
+          <img *ngFor="let img of images" src="assets/pictures/product-small/{{img}}">
+        </div>
+      </div>
+      <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
+    </div>
+    <p>{{data.colors.length.toLocaleString('fa')}} رنگ</p>
+    <h2>{{data.name}}</h2>
+    <h3>{{desc}}</h3>
+    <h4>{{price}} تومان</h4>
+  </span>
+</div>

@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="gridwall-content">
-      fff
+      <app-product-grid-item *ngFor="let item of collection.set" [data]="item"></app-product-grid-item>
     </div>
   </div>
 </div>
