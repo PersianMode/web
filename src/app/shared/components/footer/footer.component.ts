@@ -125,5 +125,4 @@ export class FooterComponent implements OnInit {
       this.curHeight = this.window.innerHeight;
     };
   }
-
 }
