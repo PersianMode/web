@@ -113,3 +113,19 @@
     text-align: right;
     margin-right: 10px
 }
+
+.title-mobile {
+    color: black;
+    font-weight: bolder;
+    text-align: center;
+    margin-top: 0px;
+    /*font-size: medium;*/
+}
+
+
+.shop-button-mobile{
+    color: black;
+    font-size: medium ;
+    font-family: 'irankharazmi';
+    font-weight: bold;
+}

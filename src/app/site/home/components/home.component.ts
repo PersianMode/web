@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {WINDOW} from '../../../shared/services/window.service';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +7,8 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  curWidth = 100;
+  curHeight = 100;
   placements = {
     panels: [
       {
@@ -80,6 +83,7 @@ export class HomeComponent implements OnInit {
         ]
       },
       {
+        mobileMode : false,
         type: 'full',
         imgs: [
           {
@@ -95,6 +99,33 @@ export class HomeComponent implements OnInit {
               title: 'زمان درخشیدن توست!',
               text: 'نایک، حامی تیم ملی در طول بازیها',
             },
+            ],
+          },
+        ]
+      },
+      {
+        mobileMode : true,
+        type: 'half',
+        imgs: [
+          {
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/half-1.png',
+            href: '#',
+            areas: [{
+                pos: 'left-center',
+                title: 'کاملا گرم',
+                text: 'محصولات پشمی مناسب زمستان',
+              },
+          ]
+          },
+          {
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/half-2.png',
+            href: '#',
+            areas: [
+              {
+                pos: 'right-center',
+                title: 'زمان درخشیدن توست!',
+                text: 'نایک، حامی تیم ملی در طول بازیها',
+              },
             ],
           },
         ]
@@ -156,10 +187,17 @@ export class HomeComponent implements OnInit {
     ]
   }
 
-  constructor() {
+  constructor(@Inject(WINDOW) private window) {
   }
 
   ngOnInit() {
+    this.curWidth = this.window.innerWidth;
+    this.curHeight = this.window.innerHeight;
+
+    this.window.onresize = (e) => {
+      this.curWidth = this.window.innerWidth;
+      this.curHeight = this.window.innerHeight;
+    };
   }
 
 }
