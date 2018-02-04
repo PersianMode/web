@@ -1,30 +1,48 @@
 <div class="wrapper">
-  <div style="width: 100%;" fxLayout="row" fxLayoutAlign="center center">
-    <ul fxFlex="15" style="list-style-type: none;">
-      <li *ngFor="let item of placements.footer.headerList"><a class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
-      </li>
-    </ul>
-    <ul fxFlex="15" style="list-style-type: none;">
-      <li *ngFor="let item of placements.footer.middle">
+  <div class="div-top" fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex="15">
+      <div *ngFor="let item of footer.headerList">
+        <a class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
+      </div>
+    </div>
+    <div fxFlex="15">
+      <div *ngFor="let item of footer.middle">
         <a *ngIf="item.header" class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
         <a *ngIf="!item.header" class="footer-link" href="{{item.href}}">{{item.text}}</a>
-      </li>
-    </ul>
-    <ul fxFlex="25" style="list-style-type: none;">
-      <li *ngFor="let item of placements.footer.leftColumn">
+      </div>
+    </div>
+    <div fxFlex="25">
+      <div *ngFor="let item of footer.leftColumn">
         <a *ngIf="item.header" class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
         <a *ngIf="!item.header" class="footer-link" href="{{item.href}}">{{item.text}}</a>
-      </li>
-    </ul>
-    <ul fxFlex="15" style="list-style-type: none; float: none; margin-left: 0; text-align: left; min-width: 140px">
-      <li style="font-size: 0; margin-top: -7px; margin-left: -7px; text-align: left">
-        <span style="position: relative" data="twitter">
-            <a class="footer-link" href="#" name="twitter" target="_blank">
-            <span class="nsg-glyph--instagram"></span>
-            </a>
+      </div>
+    </div>
+    <div fxFlex="15" class="icons-outer-div">
+      <div class="icons-inner-div">
+        <span *ngFor="let i of footer.icons" class="icons">
+          <a href="#" target="_blank" class="icons">
+            <i class="{{i.text}}"></i>
+          </a>
         </span>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
-  <!--<div class="main-footer swoosh-footer clearfix lazy-load" style="display: none;"></div>-->
+  <hr class="hr-setting">
+  <div class="div-bottom" fxLayout="row" fxLayoutAlign="center center;">
+    <div fxFlex="35" style="text-align: right;">
+      <div class="div-right-reserved-symbol"><span>©</span></div>
+      <div class="div-right-reserved"> &nbsp; تمامی حقوق این سایت متعلق به پرشین مد می باشد.</div>
+    </div>
+    <div fxFlex="35" style="text-align: left">
+      <div class="div-guide">
+        <a href="#" class="footer-link1">راهنمای سایت</a>
+      </div>
+      <div class="div-use-case">
+        <a href="#" class="footer-link1" >موارد استفاده</a>
+      </div>
+      <div class="div-policy">
+        <a href="#" class="footer-link1">منشور&nbsp;حقوقی&nbsp;پرشین مد</a>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-collection-header',
@@ -43,7 +44,7 @@ export class CollectionHeaderComponent implements OnInit {
       headerList: [
         {
           text: 'تازه‌ها',
-          href: '#',
+          href: 'collection/x',
         },
         {
           text: 'پرفروش‌ها',
@@ -184,7 +185,7 @@ export class CollectionHeaderComponent implements OnInit {
     quarterPanels: [],
   };
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
@@ -225,5 +226,9 @@ export class CollectionHeaderComponent implements OnInit {
         this.selected[i] = false;
       }
     }
+  }
+
+  goToRoot() {
+    this.router.navigate(['']);
   }
 }

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {WINDOW} from '../../../shared/services/window.service';
+import {AuthService} from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  curWidth = 100;
+  curHeight = 100;
   placements = {
     panels: [
       {
@@ -22,7 +26,7 @@ export class HomeComponent implements OnInit {
         },
         imgs: [
           {
-            imgUrl: '../../../../assets/pictures/pm-1.png',
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/pm-1.png',
             href: '#',
             topTitle: {
               title: '',
@@ -48,32 +52,10 @@ export class HomeComponent implements OnInit {
       },
       {
         type: 'full',
-        topTitle: {
-          title: '',
-          text: '',
-          color: '',
-        },
-        subTitle: {
-          title: '',
-          text: '',
-          color: '',
-        },
         imgs: [
           {
-            imgUrl: '../../../../assets/pictures/pm-2.png',
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/pm-2.png',
             href: '#',
-            topTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: ''
-            },
-            subTitle: {
-              title: '',
-              text: '',
-              color: 'black',
-              textColor: 'gray',
-            },
             areas: [
               {
                 pos: 'right-center',
@@ -87,36 +69,14 @@ export class HomeComponent implements OnInit {
       },
       {
         type: 'full',
-        topTitle: {
-          title: '',
-          text: '',
-          color: '',
-        },
-        subTitle: {
-          title: '',
-          text: '',
-          color: '',
-        },
         imgs: [
           {
-            imgUrl: '../../../../assets/pictures/pm-7.png',
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/pm-7.png',
             href: '#',
-            topTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: ''
-            },
-            subTitle: {
-              title: '',
-              text: '',
-              color: 'black',
-              textColor: 'gray',
-            },
             areas: [
               {
                 pos: 'left-center',
-                title: 'خاکستری بی نظیر!',
+                title: 'طوسی بی نظیر!',
                 text: 'برای اولین بار',
               },
             ],
@@ -124,39 +84,44 @@ export class HomeComponent implements OnInit {
         ]
       },
       {
+        mobileMode : false,
         type: 'full',
-        topTitle: {
-          title: '',
-          text: '',
-          color: '',
-        },
-        subTitle: {
-          title: '',
-          text: '',
-          color: '',
-        },
         imgs: [
           {
-            imgUrl: '../../../../assets/pictures/pm-4.png',
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/pm-4.png',
             href: '#',
-            topTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: ''
-            },
-            subTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: '',
-            },
             areas: [
               {
+              pos: 'left-center',
+              title: 'کاملا گرم',
+              text: 'محصولات پشمی مناسب زمستان',
+            }, {
+              pos: 'right-center',
+              title: 'زمان درخشیدن توست!',
+              text: 'نایک، حامی تیم ملی در طول بازیها',
+            },
+            ],
+          },
+        ]
+      },
+      {
+        mobileMode : true,
+        type: 'half',
+        imgs: [
+          {
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/half-1.png',
+            href: '#',
+            areas: [{
                 pos: 'left-center',
                 title: 'کاملا گرم',
                 text: 'محصولات پشمی مناسب زمستان',
               },
+          ]
+          },
+          {
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/half-2.png',
+            href: '#',
+            areas: [
               {
                 pos: 'right-center',
                 title: 'زمان درخشیدن توست!',
@@ -173,21 +138,10 @@ export class HomeComponent implements OnInit {
           text: '',
           color: 'black',
         },
-        subTitle: {
-          title: '',
-          text: '',
-          color: 'black',
-        },
         imgs: [
           {
-            imgUrl: '../../../../assets/pictures/q1.png',
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/q1.png',
             href: '#',
-            topTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: ''
-            },
             subTitle: {
               title: 'کفش راحتی زنانه، مدل ژاکلین',
               text: 'کفش زنانه',
@@ -197,32 +151,19 @@ export class HomeComponent implements OnInit {
             areas: [],
           },
           {
-            imgUrl: '../../../../assets/pictures/q2.png',
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/q2.png',
             href: '#',
-            topTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: ''
-            },
             subTitle: {
               title: 'کفش کارمندی زنانه',
               text: 'کفش زنانه',
               color: 'black',
               textColor: 'gray',
             },
-            areas: [
-            ],
+            areas: [],
           },
           {
-            imgUrl: '../../../../assets/pictures/q3.png',
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/q3.png',
             href: '#',
-            topTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: ''
-            },
             subTitle: {
               title: 'کفش ورزشی زنانه نایک، سری نایک پلاس',
               text: 'کفش ورزشی زنانه',
@@ -232,38 +173,32 @@ export class HomeComponent implements OnInit {
             areas: [],
           },
           {
-            imgUrl: '../../../../assets/pictures/q4.png',
+            imgUrl: '../../../../assets/pictures/nike-first-page-pic/q4.png',
             href: '#',
-            topTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: ''
-            },
             subTitle: {
               title: 'کفش پیاده روی زنانه نایک، مدل پگاسوس',
               text: 'کفش پیاده روی زنانه',
               color: 'black',
               textColor: 'gray'
             },
-            // areas: [{
-            //     pos: 'right-bottom',
-            //     title: 'خاکستری بی نظیر!',
-            //     text: 'برای اولین بار',
-            //     color: 'black',
-            //   },
-            // ],
-            areas: [
-            ],
+            areas: [],
           },
         ]
       },
     ]
   }
 
-  constructor() { }
+  constructor(@Inject(WINDOW) private window, private authService: AuthService) {
+  }
 
   ngOnInit() {
+    this.curWidth = this.window.innerWidth;
+    this.curHeight = this.window.innerHeight;
+
+    this.window.onresize = (e) => {
+      this.curWidth = this.window.innerWidth;
+      this.curHeight = this.window.innerHeight;
+    };
   }
 
 }

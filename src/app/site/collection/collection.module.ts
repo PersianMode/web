@@ -5,7 +5,7 @@ import { ParentCollectionComponent } from './components/parent-collection/parent
 import {CollectionRouting} from './collection.routing';
 import {CommonModule} from '@angular/common';
 import {FilteringPanelComponent} from '../../shared/components/filtering-panel/filtering-panel.component';
-import {WINDOW_PROVIDERS} from '../../shared/services/window.service';
+import {ProductGridItemComponent} from '../../shared/components/product-grid-item/product-grid-item.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +13,7 @@ import {WINDOW_PROVIDERS} from '../../shared/services/window.service';
     LeafCollectionComponent,
     ParentCollectionComponent,
     FilteringPanelComponent,
+    ProductGridItemComponent,
   ],
   imports: [
     CollectionRouting,

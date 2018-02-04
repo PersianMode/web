@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {GenDialogComponent} from "../gen-dialog/gen-dialog.component";
 import {DialogEnum} from "../../enum/dialog.components.enum";
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -87,10 +88,19 @@ export class HeaderComponent implements OnInit {
     },
   ];
   dialogEnum = DialogEnum;
+  isLoggedIn = false;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private authService: AuthService) {
+  }
 
   ngOnInit() {
+    this.authService.isLoggedIn.subscribe(
+      (data) => this.isLoggedIn = data,
+      (err) => {
+        console.error('Cannot subscribe on isLoggedin: ', err);
+        this.isLoggedIn = false;
+      }
+    );
   }
 
   login() {
@@ -100,5 +110,9 @@ export class HeaderComponent implements OnInit {
         componentName: this.dialogEnum.login,
       }
     });
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }
