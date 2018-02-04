@@ -1,5 +1,6 @@
 .mobile-header{
   padding: 0px;
+  overflow: hidden;
 }
 
 .backdrop{
