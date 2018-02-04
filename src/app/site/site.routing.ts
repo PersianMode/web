@@ -2,7 +2,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SiteComponent} from './site.component';
 import {LoginComponent} from './login/components/login/login.component';
-import {RegisterComponent} from "./register/components/register/register.component";
+import {RegisterComponent} from './register/components/register/register.component';
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
 
 const Site_ROUTES: Routes = [
