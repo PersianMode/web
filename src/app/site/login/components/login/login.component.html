@@ -16,13 +16,13 @@
         <div fxFlex="50" class="input-container">
           <input class="input-field left-direction" type="email" placeholder="ایمیل"
                  formControlName="email"
-                 [ngClass]="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')? 'input-error' : null"/>
+                 [ngClass]="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')? 'input-error' : null" (keypress)="keyPress($event)"/>
           <label *ngIf="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')" class="field-error">لطفا آدرس ایمیل معتبری وارد کنید</label>
         </div>
         <div fxFlex="50" class="input-container">
           <input class="input-field left-direction" type="password" placeholder="رمز عبور"
                  formControlName="password"
-                 [ngClass]="loginForm.controls['password'].hasError('required') ? 'input-error' : null"/>
+                 [ngClass]="loginForm.controls['password'].hasError('required') ? 'input-error' : null" (keypress)="keyPress($event)"/>
           <label *ngIf="loginForm.controls['password'].hasError('required')" class="field-error">لطفا رمز عبور را وارد کنید</label>
         </div>
       </div>
