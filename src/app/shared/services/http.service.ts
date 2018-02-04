@@ -10,6 +10,11 @@ export class HttpService {
   constructor(private http: HttpClient) {
   }
 
+  //only for mock server purpose -> will be deleted when server api was completed
+  getMockCollections(): Observable<any> {
+    return this.http.get('https://69ab57c3-ac95-43ee-9f43-f4bd89a4d427.mock.pstmn.io/api/collections/', {observe: 'response'});
+  }
+
   get(url): Observable<any> {
     return this.http.get(this.serverAddress + url, {observe: 'response'});
   }
