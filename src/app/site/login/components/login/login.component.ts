@@ -66,4 +66,11 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['register']);
     }
   }
+
+  keyPress(e) {
+    const code = (e.keyCode ? e.keyCode : e.which);
+    if (code === 13) {
+      this.login();
+    }
+  }
 }
