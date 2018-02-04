@@ -1,5 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-mobile-header',
@@ -91,7 +92,7 @@ export class MobileHeaderComponent implements OnInit {
     }
   };
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit() {
@@ -127,6 +128,8 @@ export class MobileHeaderComponent implements OnInit {
       }
     } else {
       // Redirect to specific url
+      this.router.navigate([object.url]);
+      this.sideNav.close();
     }
   }
 
@@ -151,5 +154,10 @@ export class MobileHeaderComponent implements OnInit {
     this.isSecondLevel = false;
     this.isThirdLevel = false;
     this.sideNav.toggle();
+  }
+
+  authentication() {
+    this.router.navigate(['login']);
+    this.sideNav.close();
   }
 }

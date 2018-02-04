@@ -7,32 +7,43 @@ import {CollectionHeaderComponent} from '../shared/components/collection-header/
 import {SlidingHeaderComponent} from '../shared/components/sliding-header/sliding-header.component';
 import {MobileHeaderComponent} from '../shared/components/mobile-header/mobile-header.component';
 import {
-  MatButtonModule,
+  MatButtonModule, MatDialogModule,
   MatIconModule,
   MatSidenavModule
 } from '@angular/material';
 import {FooterComponent} from '../shared/components/footer/footer.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 
-
+import {GenDialogComponent} from '../shared/components/gen-dialog/gen-dialog.component';
+import {LoginComponent} from './login/components/login/login.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {RegisterComponent} from './register/components/register/register.component';
 
 @NgModule({
   imports: [
     SiteRouting,
     CommonModule,
+    FlexLayoutModule,
+    ReactiveFormsModule,
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
-    FlexLayoutModule,
+    MatDialogModule,
+    DpDatePickerModule,
   ],
   declarations: [
     HeaderComponent,
     CollectionHeaderComponent,
     SlidingHeaderComponent,
-    SiteComponent,
     FooterComponent,
     MobileHeaderComponent,
+    SiteComponent,
+    GenDialogComponent,
+    LoginComponent,
+    RegisterComponent,
   ],
+  entryComponents: [GenDialogComponent],
 })
 export class SiteModule {
 }

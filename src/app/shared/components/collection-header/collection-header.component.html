@@ -1,17 +1,9 @@
 <div class="second-bar">
-  <div class="persian-mode-logo">پرشین مد<span>ُ</span></div>
+  <div class="persian-mode-logo" (click)="goToRoot()">پرشین مد<span>ُ</span></div>
   <ul>
-    <li [class.selected]="selected.men" (mouseenter)="showList('men')" (mouseleave)="countDownHideList()">
-      <a href="#">مردانه</a>
-    </li>
-    <li [class.selected]="selected.women">
-      <a href="#">زنانه</a>
-    </li>
-    <li [class.selected]="selected.girls">
-      <a href="#">دخترانه</a>
-    </li>
-    <li [class.selected]="selected.boys">
-      <a href="#">پسرانه</a>
+    <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
+        (mouseenter)="showList(item.collectionName)" (mouseleave)="countDownHideList()">
+      <a href="{{item.collectionRoute}}">{{item.collectionNameFa}}</a>
     </li>
   </ul>
   <div class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"
@@ -30,12 +22,15 @@
     </div>
     <div class="middle">
       <ul *ngFor="let list of menu.middle">
-        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a href="{{item.href}}">{{item.text}}</a></li>
+        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst || item.isHeader"
+            [style.marginTop]="(!isFirst && item.isHeader ? 15 : 0 )+ 'px'"><a href="{{item.href}}">{{item.text}}</a>
+        </li>
       </ul>
     </div>
     <div class="leftColumn">
       <ul *ngFor="let list of menu.leftColumn">
-        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a href="{{item.href}}">{{item.text}}</a></li>
+        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a href="{{item.href}}">{{item.text}}</a>
+        </li>
       </ul>
     </div>
   </div>

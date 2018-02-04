@@ -8,8 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class FilteringPanelComponent implements OnInit {
 
   constructor() { }
-
+items = [];
   ngOnInit() {
+    for(let i=0;i<10;i++)this.items.push(i+1);
   }
 
 }

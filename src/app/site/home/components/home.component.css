@@ -4,6 +4,7 @@
     position: relative;
     text-align: center;
     color: white;
+    width: 100%;
 }
 
 /*Alignment based on horizontal-vertical align*/
@@ -11,7 +12,7 @@
 /* Bottom left text */
 .left-top {
     position: absolute;
-    bottom: 90%;
+    bottom: 67%;
     left: 2%;
     text-align: left;
 }
@@ -35,7 +36,7 @@
 /* Top left text */
 .center-top {
     position: absolute;
-    bottom: 90%;
+    bottom: 67%;
     left: 50%;
 }
 
@@ -55,7 +56,7 @@
 
 .right-top {
     position: absolute;
-    bottom: 90%;
+    bottom: 67%;
     right: 2%;
     text-align: right;
 }
@@ -74,35 +75,15 @@
     text-align: right;
 }
 
-.quarter1 {
-    position: absolute;
-    top: 90%;
-    right: 1%;
-    text-align: right;
-}
-.quarter2 {
-    position: absolute;
-    top: 90%;
-    right: 26%;
-    text-align: right;
-}
-.quarter3 {
-    position: absolute;
-    top: 90%;
-    right: 51%;
-    text-align: right;
-}
-.quarter4 {
-    position: absolute;
-    top: 90%;
-    right: 76%;
-    text-align: right;
-}
-
 .default-color {
     color: white;
 }
 
+.sub-title {
+    white-space: nowrap;
+    text-align: right;
+    margin-right: 15px
+}
 /* Centered text */
 .centered {
     position: absolute;
@@ -116,6 +97,35 @@
 .shop-button {
     color: black;
     font-size: large ;
-    font-family: 'B Koodak';
+    font-family: 'irankharazmi';
     font-weight: bolder;
+}
+.full-width {
+    width: 100%;
+}
+
+.top-title {
+     text-align: right;
+     margin-right: 35px
+}
+
+.h2-sub-title {
+    text-align: right;
+    margin-right: 10px
+}
+
+.title-mobile {
+    color: black;
+    font-weight: bolder;
+    text-align: center;
+    margin-top: 0px;
+    /*font-size: medium;*/
+}
+
+
+.shop-button-mobile{
+    color: black;
+    font-size: medium ;
+    font-family: 'irankharazmi';
+    font-weight: bold;
 }
