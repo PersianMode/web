@@ -39,9 +39,7 @@
         <h2 *ngIf="item.topTitle  && (item.mobileMode === undefined || item.mobileMode === true)" class="title-mobile"
             style="margin-bottom: 0px;">{{item.topTitle.title}}</h2>
         <div *ngIf="item.mobileMode === undefined || item.mobileMode === true" fxLayout="row"
-             fxLayoutAlign="cente center" fxLayout.sm="column" fxLayout.xs="column"
-             [style.margin-right]="item.type !== 'full' ? '15px' : null"
-             [style.margin-left]="item.type !== 'full' ? '15px' : null">
+             fxLayoutAlign="cente center" fxLayout.sm="column" fxLayout.xs="column">
             <div [fxFlex]="100" *ngFor="let im of item.imgs">
                 <a href="{{im.href}}">
                     <img src="{{im.imgUrl}}" class="full-width"/>
@@ -52,7 +50,7 @@
                         {{ar.title}}</h2>
                 </div>
                 <div *ngIf="im.subTitle" class="title-mobile"><b>{{im.subTitle.title}}</b></div>
-                <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px;">{{im.subTitle.text}}</div>
+                <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px; color: gray;">{{im.subTitle.text}}</div>
             </div>
         </div>
         <h2 *ngIf="item.subTitle && (item.mobileMode === undefined || item.mobileMode === true)" class="h2-sub-title">
