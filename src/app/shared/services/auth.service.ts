@@ -69,4 +69,9 @@ export class AuthService {
       }
     );
   }
+
+  getAllCollections() {
+    //TODO: when server completed
+    return this.httpService.get('/collections');
+  }
 }
