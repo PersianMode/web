@@ -1,0 +1,70 @@
+<div fxLayout="row" class="row" style="direction:ltr">
+  <mat-card fxFlex="60" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset="20" fxFlexOffset.sm="0" fxFlexOffset.xs="0" >
+    <mat-card-header style="direction:rtl">
+      <mat-card-title>
+        <div *ngIf="!productBasicFormId"><b>افزودن محصول جدید</b></div>
+        <div *ngIf="productBasicFormId"><b>ویرایش محصول</b></div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="modifyProduct()" [formGroup]="productBasicForm">
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
+          <div fxFlex="50" class="field-container">
+            <mat-input-container class="field farsi">
+              <input matInput type="text" placeholder="نام" formControlName="proName" role="proName" tabindex="2"/>
+              <mat-hint>نام محصول را وارد کنید</mat-hint>
+              <mat-error
+                  *ngIf="productBasicForm.controls['proName'].hasError('required')">
+                وارد کردن نام محصول الزامی است
+              </mat-error>
+            </mat-input-container>
+          </div>
+          <div fxFlex="50" class="field-container">
+            <mat-input-container class="field farsi">
+              <input matInput type="number" placeholder="قیمت پایه" formControlName="proPrice" role="proPrice" tabindex="2"/>
+              <mat-hint>قیمت محصول را وارد کنید</mat-hint>
+              <mat-error *ngIf="productBasicForm.controls['proPrice'].hasError('required')">
+                وارد کردن قیمت محصول الزامی است
+              </mat-error>
+            </mat-input-container>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
+          <div style="text-align: right" class="field-container">
+            <mat-form-field fxFlex="100" style="text-align:right;" tabindex="3">
+              <mat-select placeholder="نوع محصول" formControlName="proType" role="proType">
+                <mat-option *ngFor="let type of types" style="text-align:right" [value]="type">{{type}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div style="text-align: left" class="field-container" >
+            <mat-form-field fxFlex="100" style="text-align:right" tabindex="4">
+              <mat-select placeholder="برند" formControlName="proBrand" role="proBrand">
+                <mat-option *ngFor="let brand of brands" style="text-align:right" [value]="brand">{{brand}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="field-container" dir="rtl">
+          <mat-input-container class="field">
+                    <textarea matInput placeholder="توضیحات" formControlName="proDesc" role="proDesc" tabindex="5"></textarea>
+            <mat-hint>حداکثر تا 500 کاراکتر وارد کنید</mat-hint>
+            <mat-error *ngIf="productBasicForm.controls['proDesc'].hasError('maxlength')">تعداد کاراکترهای وارد شده بیش از تعداد مجاز می باشد
+            </mat-error>
+          </mat-input-container>
+        </div>
+        <div role="submit-button" style="text-align: left">
+          <button mat-icon-button type="submit"
+            [disabled]="upsertBtnShouldDisabled ||(!productBasicForm.valid || (productBasicFormId && !anyChanges))"
+             tabindex="6">
+            <mat-icon aria-label="accept">done</mat-icon>
+          </button>
+          <button mat-icon-button *ngIf="productBasicFormId"
+             type="button" [disabled]="deleteBtnShouldDisabled" (click)="deleteProduct()" tabindex="7" >
+            <mat-icon aria-label="delete">delete</mat-icon>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
