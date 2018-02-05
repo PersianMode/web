@@ -26,30 +26,27 @@
 }
 
 .on span {
-  border: 1px solid black !important;
+  border: 1px solid #ccc !important;
   background: #fff;
-  display: inline-block;
-  padding: 0;
-  margin:0;
 }
 
 .main p{
   min-height: 20px;
   border-bottom: 1px solid #CCC;
   font-weight: bold;
-  margin: 10px 13px 6px;
+  margin: 10px 13px 0px;
   font-size: 11px;
   color: #222;
 }
 .main h2{
   color: #222;
   font-size: inherit;
-  margin: 10px 13px 6px ;
+  margin: 0px 13px 0px ;
 }
 .main h3{
   color: #666;
   font-size: inherit;
-  margin: -5px 13px 6px;
+  margin: 0px 13px 6px;
   font-weight: 200;
 }
 .main h4 {

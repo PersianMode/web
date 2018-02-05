@@ -1,7 +1,7 @@
 <div dir="ltr" class="mobile-header">
   <mat-sidenav-container style="height: 50px; overflow: hidden; "  (backdropClick)="backDropClick($event)">
     <mat-sidenav #sidenav mode="push"
-                 style="background-color: white; margin-left: -10px;overflow:hidden"
+                 style="background-color: white; margin-left: -10px;"
                  [style.height]="menuHeight + 'px'" [style.width]="menuWidth + 'px'"
                  (opened)="sideNavIsOpen = true" (closed)="sideNavIsOpen = false">
       <div *ngIf="isFirstLevel">
@@ -75,7 +75,7 @@
           <i class="fa fa-search" aria-hidden="true"></i>
         </a>
         <a>
-          <span class="mobile-persian-mode-logo" style="height: 40px;">پرشین مد<span>ُ</span></span>
+          <span class="mobile-persian-mode-logo">پرشین مد<span>ُ</span></span>
         </a>
       </div>
     </mat-sidenav-content>

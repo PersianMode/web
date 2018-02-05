@@ -31,7 +31,8 @@ export class AuthService {
 
   login(username, password) {
     return new Promise((resolve, reject) => {
-      this.httpService.post('login', {username: username, password: password}).subscribe(
+      this.httpService.post(
+        (this.router.url.includes('admin') ? 'agent/' : '') + 'login', {username: username, password: password}).subscribe(
         (data) => {
           this.isLoggedIn.next(true);
           this.isAdmin.next((data.userType === 'admin') ? true : false);
@@ -56,17 +57,22 @@ export class AuthService {
   logout() {
     this.httpService.get('logout').subscribe(
       (data) => {
-        const rt = (this.router.url.includes('admin') ? 'admin/' : '') + 'login';
+        // const rt = (this.router.url.includes('admin') ? 'admin/' : '') + 'login';
 
         this.isLoggedIn.next(false);
         this.isAdmin.next(false);
         this.userId.next(null);
         this.displayName.next(this.defaultDisplayName);
-        this.router.navigate([rt]);
+        // this.router.navigate([rt]);
       },
       (err) => {
         console.error('Cannot logout: ', err);
       }
     );
+  }
+
+  getAllCollections() {
+    //TODO: when server completed
+    return this.httpService.get('/collections');
   }
 }

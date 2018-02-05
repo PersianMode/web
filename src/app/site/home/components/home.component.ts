@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../../shared/services/window.service';
+import {AuthService} from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -187,7 +188,7 @@ export class HomeComponent implements OnInit {
     ]
   }
 
-  constructor(@Inject(WINDOW) private window) {
+  constructor(@Inject(WINDOW) private window, private authService: AuthService) {
   }
 
   ngOnInit() {
