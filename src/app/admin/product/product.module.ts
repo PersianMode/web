@@ -6,14 +6,14 @@ import {
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ProductRouting} from './product.routing';
-import { ProductsComponent } from './components/products/products.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AllProductsComponent } from './all-products.component';
+import {ProductBasicFormComponent} from './components/product-basic-form/product-basic-form.component';
 
 
 @NgModule({
   declarations: [
-    ProductsComponent,
+    ProductBasicFormComponent,
     AllProductsComponent
   ],
   imports: [

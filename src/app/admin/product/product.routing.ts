@@ -1,9 +1,9 @@
 import {RouterModule, Routes} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {ProductsComponent} from './components/products/products.component';
+import {ProductBasicFormComponent} from './components/product-basic-form/product-basic-form.component';
 
 const Product_ROUTES: Routes = [
-  {path: '', component: ProductsComponent, pathMatch: 'full'},
+  {path: '', component: ProductBasicFormComponent, pathMatch: 'full'},
 ];
 
 export const ProductRouting = RouterModule.forChild(Product_ROUTES);

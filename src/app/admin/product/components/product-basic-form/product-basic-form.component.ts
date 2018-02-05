@@ -1,15 +1,15 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {isUndefined} from 'util';
-import {MatSnackBar} from "@angular/material";
-import {HttpService} from "../../../../shared/services/http.service";
+import {MatSnackBar} from '@angular/material';
+import {HttpService} from '../../../../shared/services/http.service';
 
 @Component({
-  selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css']
+  selector: 'app-product-basic-form.component',
+  templateUrl: './product-basic-form.component.html',
+  styleUrls: ['./product-basic-form.component.css']
 })
-export class ProductsComponent implements OnInit {
+export class ProductBasicFormComponent implements OnInit {
   @Input()
   set productBasicFormId(id) {
     this._productBasicFormId = id;
@@ -21,6 +21,7 @@ export class ProductsComponent implements OnInit {
   types = ['عینک آفتابی', 'تی شرت' , 'شلوار', 'کفش'];
   brands = ['نایک', 'آدیداس', 'پلیس' , 'گپ'];
   _productBasicFormId: number = null;
+  originalProductBasicForm: any = null;
   upsertBtnShouldDisabled: boolean = false;
   deleteBtnShouldDisabled: boolean = false;
 
@@ -54,75 +55,53 @@ export class ProductsComponent implements OnInit {
   }
 
   initProductBasicInfo() {
-    if (!this.productBasicFormId)
+    if (!this.productBasicFormId) {
       return;
+    }
   }
   modifyProduct() {
     const productBasicInfo = {
-      productId: this.productBasicFormId,
-      proName: this.productBasicForm.controls['proName'].value,
-      proPrice: this.productBasicForm.controls['proPrice'].value,
-      proType: this.productBasicForm.controls['proType'].value,
-      proBrand: this.productBasicForm.controls['proBrand'].value,
-      proDesc: this.productBasicForm.controls['proDesc'].value,
+      id: this.productBasicFormId,
+      name: this.productBasicForm.controls['proName'].value,
+      base_price: this.productBasicForm.controls['proPrice'].value,
+      // product_type: this.productBasicForm.controls['proType'].value,
+      // brand: this.productBasicForm.controls['proBrand'].value,
+      desc: this.productBasicForm.controls['proDesc'].value,
     }
-    if (!this.productBasicFormId)
-      delete productBasicInfo.productId;
-
+    if (!this.productBasicFormId) {
+      delete productBasicInfo.id;
+    }
     this.upsertBtnShouldDisabled = true;
     this.deleteBtnShouldDisabled = true;
-    this.HttpService.post('user/profile', productBasicInfo).subscribe(
+    this.httpService.put('product', productBasicInfo).subscribe(
       (data) => {
-        this.snackBar.open(this.formId ? 'Person is updated' : 'Person is added', null, {
+        this.snackBar.open(this.productBasicFormId ? 'Person is updated' : 'Person is added', null, {
           duration: 2300,
         });
 
-        this.anyChanges = false;
-
-        if (!this.formId) {
-          this.form.reset();
-          this.form.controls['notify_period'].setValue('d');
+        // this.anyChanges = false;
+        if (!this.productBasicFormId) {
+          this.productBasicForm.reset();
         } else {
-          this.originalForm = Object.assign({pid: data.pid}, personData);
-          this.formId = data;
+          this.originalProductBasicForm = Object.assign({id : data.id}, productBasicInfo);
+          this.productBasicFormId = data;
         }
-
-        this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
         this.deleteBtnShouldDisabled = false;
       },
       (err) => {
-        this.snackBar.open('Cannot ' + this.formId ? 'add' : 'update' + ' this person. Try again', null, {
+        console.log('***', err);
+        this.snackBar.open('Cannot ' + this.productBasicFormId ? 'add' : 'update' + ' this person. Try again', null, {
           duration: 3200,
         });
-        this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
         this.deleteBtnShouldDisabled = false;
       }
     );
   }
-  deleteProduct(){
+  deleteProduct() {
   }
   basicInfoValidation(Ac: AbstractControl) {
-    // let proName = Ac.get('proName').value;
-    // let proPrice = Ac.get('proPrice').value;
-    // if (proName === null || isUndefined(proName))
-    //   proName = '';
-    // if (proPrice === null || isUndefined(proPrice))
-    //   proPrice = '';
-    // proName = proName.trim();
-    // proPrice = proPrice.trim();
-    // if ((!proName || proName === '') || (!proPrice || proPrice === '')) {
-    //   if (!proName || proName === '') {
-    //     Ac.get('proName').setErrors({beingNull: 'Name can not be null.'});
-    //   }
-    //   if (!proPrice || proPrice === '') {
-    //     Ac.get('proPrice').setErrors({beingNull: 'name_fa can not be null.'});
-    //   }
-    // } else {
-    //   Ac.get('proName').setErrors(null);
-    //   return null;
-    // }
   }
 
 }

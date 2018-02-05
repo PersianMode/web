@@ -6,7 +6,7 @@ import {HomeComponent} from './home/home.component';
 const Admin_ROUTES: Routes = [
   {path: '', redirectTo: 'admin/home', pathMatch: 'full'},
   {path: 'login', loadChildren: 'app/admin/login/login.module#LoginModule'},
-  {path: 'products', loadChildren: 'app/admin/product/product.module#ProductModule'},
+  {path: 'product', loadChildren: 'app/admin/product/product.module#ProductModule'},
 ];
 
 export const AdminRouting = RouterModule.forChild(Admin_ROUTES);
