@@ -3,25 +3,13 @@ import {Component, OnInit} from '@angular/core';
 import {HttpService} from "../../shared/services/http.service";
 import {Router} from "@angular/router";
 
-export interface Collection {
-  id: number;
-  name: string;
-  image_url: {
-    url: string,
-    alt: string
-  };
-  products: {
-    name: string
-  }
-}
-
 @Component({
   selector: 'app-collections',
   templateUrl: './collections.component.html',
   styleUrls: ['./collections.component.css']
 })
 export class CollectionsComponent implements OnInit {
-  collections: Collection[] = [];
+  collections: any[] = [];
   selectedId: string = null;
   rows: any = [];
 
@@ -46,9 +34,9 @@ export class CollectionsComponent implements OnInit {
               alt: data[d].image_url.alt
             }
           };
-          col.products = [];
+          col['products'] = [];
           for(let p in data[d].products) {
-            col.products.push({
+            col['products'].push({
               name: data[d].products[p].name
             });
           }
