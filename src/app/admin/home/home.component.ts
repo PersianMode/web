@@ -9,6 +9,7 @@ export class HomeComponent implements OnInit {
   @ViewChild('drawer') drawer;
   navLinks = [
     {label: 'Collections', path: '/admin/collections'},
+    {label: 'Products', path: '/admin/products'},
   ];
   showBurgerMenu: boolean = false;
   height: number = 300;

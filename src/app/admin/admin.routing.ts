@@ -6,7 +6,7 @@ const Admin_ROUTES: Routes = [
   {path: '', component: HomeComponent, children: [
     {path: 'collections', loadChildren: 'app/admin/collections/collections.module#CollectionsModule'},
     {path: 'login', loadChildren: 'app/admin/login/login.module#LoginModule'},
-    {path: 'product', loadChildren: 'app/admin/product/product.module#ProductModule'},
+    {path: 'products', loadChildren: 'app/admin/product/product.module#ProductModule'},
   ]},
 ];
 
