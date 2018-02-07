@@ -7,6 +7,7 @@ import {
   MatTabsModule
 } from "@angular/material";
 import {FlexLayoutModule} from "@angular/flex-layout";
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {FlexLayoutModule} from "@angular/flex-layout";
     FlexLayoutModule,
     MatInputModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    SharedModule,
   ]
 })
 export class AdminModule {
