@@ -4,14 +4,15 @@ import {isUndefined} from 'util';
 import {MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ActivatedRoute} from '@angular/router';
+import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-product-basic-form.component',
+  selector: 'app-product-basic-form',
   templateUrl: './product-basic-form.component.html',
   styleUrls: ['./product-basic-form.component.css']
 })
 export class ProductBasicFormComponent implements OnInit {
-  @Input()
+  // @Input()
   // set productId(id) {
   //   this._productId = id;
   // }
@@ -25,15 +26,16 @@ export class ProductBasicFormComponent implements OnInit {
   upsertBtnShouldDisabled: boolean = false;
   deleteBtnShouldDisabled: boolean = false;
   productId = null;
+  anyChanges = false;
 
-  constructor(private httpService: HttpService , private snackBar: MatSnackBar,  private route: ActivatedRoute) { }
+  constructor(private httpService: HttpService , private snackBar: MatSnackBar,  private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
+    console.log('*********');
     this.initForm();
 
     this.route.params.subscribe(
       (params) => {
-        console.log('===>', params);
         this.productId = +params['id'] ? +params['id'] : null;
         this.initProductBasicInfo();
       }
@@ -79,6 +81,7 @@ export class ProductBasicFormComponent implements OnInit {
       // brand: this.productBasicForm.controls['proBrand'].value,
       desc: this.productBasicForm.controls['proDesc'].value,
     }
+    console.log('==>', productBasicInfo);
     if (!this.productId) {
       delete productBasicInfo.id;
     }
@@ -90,11 +93,7 @@ export class ProductBasicFormComponent implements OnInit {
           duration: 2300,
         });
 
-        // this.anyChanges = false;
         if (!this.productId) {
-          console.log('==>', this.productId);
-          console.log('==>', data._id);
-          console.log('==>', data);
           this.productBasicForm.reset();
         } else {
           this.originalProductBasicForm = Object.assign({id : data.id}, productBasicInfo);
@@ -104,7 +103,7 @@ export class ProductBasicFormComponent implements OnInit {
         this.deleteBtnShouldDisabled = false;
       },
       (err) => {
-        console.log('-->', err);
+        console.error();
         this.snackBar.open('Cannot ' + this.productId ? 'add' : 'update' + ' this product. Try again', null, {
           duration: 3200,
         });
@@ -113,9 +112,11 @@ export class ProductBasicFormComponent implements OnInit {
       }
     );
   }
+  openView(id: string = null) {
+    this.router.navigate([`/admin/products/${id}`]);
+  }
   deleteProduct() {
   }
   basicInfoValidation(Ac: AbstractControl) {
   }
-
 }
