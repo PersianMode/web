@@ -20,7 +20,7 @@ a {
 }
 
 h1 {
-  font-family: irankharazmi;
+  font-family: irankharazmi, sans-serif;
 }
 
 .gnav-member-bar {
@@ -447,4 +447,21 @@ dp-date-picker.dp-material .dp-picker-input {
 
 .dp-input-container {
   width: 100% !important;
+}
+
+.topFixed {
+  position: fixed !important;
+  top: 109px !important;
+}
+
+.bottomFixed {
+  position: fixed !important;
+}
+.bottomScroll {
+  position: absolute !important;
+  bottom: 212px !important;
+  top: unset !important;
+}
+.innerScroll {
+  overflow-y: scroll;
 }

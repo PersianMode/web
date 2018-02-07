@@ -12,7 +12,7 @@ export interface Collection {
   };
   products: {
     name: string
-  }
+  };
 }
 
 @Component({
@@ -38,7 +38,7 @@ export class CollectionsComponent implements OnInit {
       (data) => {
         data = data.body.collections;
         for(let d in data) {
-          let col = {
+          let col: any = {
             id: data[d].id,
             name: data[d].name,
             image_url: {

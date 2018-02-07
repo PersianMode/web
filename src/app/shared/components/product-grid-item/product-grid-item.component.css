@@ -13,7 +13,7 @@
   color: #666;
   background: #fff;
   padding:0;
-
+  cursor: pointer;
 }
 .main span {
   display: inline-block;
