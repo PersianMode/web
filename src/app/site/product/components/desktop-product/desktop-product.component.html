@@ -13,4 +13,6 @@
      [style.top]="(bottomFixedFilterPanel ? topDist : 0) + 'px'" #descPane>
 <h1>{{product.name}}</h1>
   <h4>{{joinedTags}} <span>{{price}} تومان</span></h4>
+  <app-size-picker (value)="size = $event"></app-size-picker>
+  {{size}}
 </div>

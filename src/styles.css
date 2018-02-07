@@ -465,3 +465,17 @@ dp-date-picker.dp-material .dp-picker-input {
 .innerScroll {
   overflow-y: scroll;
 }
+
+.mat-button-toggle-label-content {
+  font-family: iranyekan !important;
+  width: 74px;
+  padding: 12px 0px !important;
+  text-align: center;
+  border: 1px #cccc solid;
+  color: black;
+}
+.mat-button-toggle-checked div
+{
+  background: #000;
+  color: #fff !important;
+}

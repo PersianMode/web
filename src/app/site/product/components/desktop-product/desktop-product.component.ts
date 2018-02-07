@@ -1,8 +1,8 @@
 import {Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {WINDOW} from "../../../../shared/services/window.service";
-import {DOCUMENT} from "@angular/platform-browser";
-import {priceFormatter} from "../../../../shared/lib/priceFormatter";
+import {WINDOW} from '../../../../shared/services/window.service';
+import {DOCUMENT} from '@angular/platform-browser';
+import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 
 @Component({
   selector: 'app-desktop-product',
@@ -264,6 +264,7 @@ export class DesktopProductComponent implements OnInit {
   }
   joinedTags = '';
   price = '';
+  size: number;
 
   constructor(private route: ActivatedRoute, private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
   }
@@ -292,7 +293,6 @@ export class DesktopProductComponent implements OnInit {
     this.bottomScroll = docHeight - offset - height < 180;
     this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && !this.bottomScroll && filterHeight - offset < height && offset >= 65;
     this.topDist = height - filterHeight + 209;
-    console.log({offset, height, filterHeight, docHeight});
   }
 
 }

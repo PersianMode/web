@@ -43,7 +43,7 @@ img, video {
 h4 {
   font-weight: 400;
   font-size: 11px;
-  font-family: irankharazmi, serif;
+  font-family: unset;
 }
 
 h4 span {
