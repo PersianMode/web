@@ -1,0 +1,6 @@
+<mat-button-toggle-group  *ngFor="let subSizes of sizeses" (change)="onChange($event)">
+  <mat-button-toggle *ngFor="let size of subSizes" value="{{size.value}}" [disabled]="!!size.disabled" [checked]="size.value === val">
+   {{size.value.toLocaleString('fa')}}
+  </mat-button-toggle>
+</mat-button-toggle-group>
+
