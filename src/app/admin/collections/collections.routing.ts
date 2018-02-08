@@ -1,7 +1,7 @@
-import {RouterModule, Routes} from "@angular/router";
-import {CollectionsComponent} from "./collections.component";
-import {ViewComponent} from "./components/view/view.component";
-import {FormComponent} from "./components/form/form.component";
+import {RouterModule, Routes} from '@angular/router';
+import {CollectionsComponent} from './collections.component';
+import {ViewComponent} from './components/view/view.component';
+import {FormComponent} from './components/form/form.component';
 
 const Collections_ROUTES: Routes = [
   {path: '', component: CollectionsComponent, pathMatch: 'full'},

@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-// import {AuthService} from "../../shared/services/auth.service";
-import {HttpService} from "../../shared/services/http.service";
-import {Router} from "@angular/router";
+import {HttpService} from '../../shared/services/http.service';
+import {Router} from '@angular/router';
+
+export interface CollectionProducts {
+  name: string;
+};
 
 export interface Collection {
   id: number;
@@ -10,9 +13,7 @@ export interface Collection {
     url: string,
     alt: string
   };
-  products: {
-    name: string
-  };
+  products: CollectionProducts[];
 }
 
 @Component({
@@ -25,7 +26,7 @@ export class CollectionsComponent implements OnInit {
   selectedId: string = null;
   rows: any = [];
 
-  constructor(/*private authService: AuthService, */private httpService: HttpService,
+  constructor(private httpService: HttpService,
               private router: Router) { }
 
   ngOnInit() {
@@ -33,22 +34,23 @@ export class CollectionsComponent implements OnInit {
   }
 
   searching() {
-    //this.authService.getAllCollections().subscribe(
+    // this.authService.getAllCollections().subscribe(
     this.httpService.getMockCollections().subscribe(
       (data) => {
         data = data.body.collections;
-        for(let d in data) {
-          let col: any = {
+        for (let d in data) {
+          let col = {
             id: data[d].id,
             name: data[d].name,
             image_url: {
               url: data[d].image_url.url,
               alt: data[d].image_url.alt
-            }
+            },
+            products: [],
           };
-          col.products = [];
-          for(let p in data[d].products) {
-            col.products.push({
+          col['products'] = [];
+          for (let p in data[d].products) {
+            col['products'].push({
               name: data[d].products[p].name
             });
           }
@@ -61,15 +63,17 @@ export class CollectionsComponent implements OnInit {
   }
 
   alignRow() {
-    //TODO: should be multiple per row not all in one row - after paginator added
+    // TODO: should be multiple per row not all in one row - after paginator added
     this.rows.push(this.collections);
   }
 
   select(id) {
-    if(this.selectedId == id)
+    if (this.selectedId === id) {
       this.selectedId = null;
-    else
+    }
+    else {
       this.selectedId = id;
+    }
   }
 
   openForm(id: string = null) {
