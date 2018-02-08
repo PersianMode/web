@@ -16,14 +16,19 @@
         <div fxFlex="50" class="input-container">
           <input class="input-field left-direction" type="email" placeholder="ایمیل"
                  formControlName="email"
-                 [ngClass]="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')? 'input-error' : null" (keypress)="keyPress($event)"/>
-          <label *ngIf="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')" class="field-error">لطفا آدرس ایمیل معتبری وارد کنید</label>
+                 [ngClass]="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')? 'input-error' : null"
+                 (keypress)="keyPress($event)"/>
+          <label
+            *ngIf="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')"
+            class="field-error">لطفا آدرس ایمیل معتبری وارد کنید</label>
         </div>
         <div fxFlex="50" class="input-container">
           <input class="input-field left-direction" type="password" placeholder="رمز عبور"
                  formControlName="password"
-                 [ngClass]="loginForm.controls['password'].hasError('required') ? 'input-error' : null" (keypress)="keyPress($event)"/>
-          <label *ngIf="loginForm.controls['password'].hasError('required')" class="field-error">لطفا رمز عبور را وارد کنید</label>
+                 [ngClass]="loginForm.controls['password'].hasError('required') ? 'input-error' : null"
+                 (keypress)="keyPress($event)"/>
+          <label *ngIf="loginForm.controls['password'].hasError('required')" class="field-error">لطفا رمز عبور را وارد
+            کنید</label>
         </div>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 13px">
@@ -42,12 +47,14 @@
           </div>
         </div>
         <div fxFlex="50" class="input-container">
-          <div class="btn-field google-btn clickable-link">
-            <span>ورود با حساب گوگل</span>
-            <span style="float: left; margin-top: 4px;">
-              <i class="fa fa-google" aria-hidden="true"></i>
-            </span>
-          </div>
+          <a href="api/login/google" style="color: white;">
+            <div class="btn-field google-btn clickable-link">
+              <span>ورود با حساب گوگل</span>
+              <span style="float: left; margin-top: 4px;">
+                <i class="fa fa-google" aria-hidden="true"></i>
+              </span>
+            </div>
+          </a>
         </div>
       </div>
     </form>
