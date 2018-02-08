@@ -13,7 +13,7 @@ export class ProductColorComponent implements OnInit {
   colors = ['صورتی', 'زرد' , 'سبز', 'قرمز'];
   selectedColor: any = [];
   productId = null;
-  proPictures = {
+  proPictures:any = {
   };
   constructor() { }
 
