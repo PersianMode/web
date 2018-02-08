@@ -20,7 +20,7 @@ a {
 }
 
 h1 {
-  font-family: irankharazmi;
+  font-family: irankharazmi, sans-serif;
 }
 
 .gnav-member-bar {
@@ -151,6 +151,7 @@ nav {
   font-size: 16pt;
   text-align: center;
   border-bottom:1px solid #E5E5E5;
+  background: #fff;
 }
 .second-bar > ul {
   background-color: white;
@@ -447,4 +448,74 @@ dp-date-picker.dp-material .dp-picker-input {
 
 .dp-input-container {
   width: 100% !important;
+}
+
+.topFixed {
+  position: fixed !important;
+  top: 109px !important;
+}
+
+.bottomFixed {
+  position: fixed !important;
+}
+.bottomScroll {
+  position: absolute !important;
+  bottom: 212px !important;
+  top: unset !important;
+}
+.innerScroll {
+  overflow-y: scroll;
+}
+
+.mat-button-toggle-label-content {
+  font-family: iranyekan !important;
+  width: 79px;
+  padding: 4px 0 !important;
+  text-align: center;
+  border: 1px rgba(221,221,221,.7) solid;
+  color: black;
+}
+.mat-button-toggle-label-content:hover {
+  border: 1px black solid;
+  z-index: 10;
+}
+.mat-button-toggle-group {
+  box-shadow: none !important;
+  margin-bottom: -1px;
+}
+.mat-button-toggle-checked div
+{
+  background: #000;
+  color: #fff !important;
+}
+
+.mat-button-toggle-disabled div {
+  color: rgb(221, 221, 221) !important;
+}
+
+.mat-tooltip {
+  font-family: iranyekan !important;
+  font-weight: 200;
+  font-size: 12px;
+}
+.mat-expansion-panel-header {
+  font-family: iranyekan;
+  font-weight: 600;
+  padding: 0 !important;
+}
+.mat-expansion-panel-body{
+  font-family: iranyekan;
+  font-weight: 200;
+  padding: 0 !important;
+}
+
+mat-expansion-panel {
+  box-shadow: none !important;
+  border-top: 1px solid rgba(221,221,221,.7);
+}
+.mat-expansion-panel-header:hover {
+  background: transparent !important;
+}
+mat-panel-title {
+  margin: 0 !important;
 }

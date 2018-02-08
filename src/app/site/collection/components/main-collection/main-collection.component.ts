@@ -25,6 +25,18 @@
           price: 499900,
         },
         {
+          name: 'کایری ۳ مدل What The',
+          colors: [
+            {
+              url: '14.jpeg',
+              position: 0,
+              pi_id: 14,
+            },
+          ],
+          tags: ['کفش', 'بسکتبال', 'نوجوانان'],
+          price: 599000,
+        },
+        {
           name: 'له‌برون مدل 15 BHM',
           colors: [
             {
@@ -187,6 +199,8 @@
     bottomFixedFilterPanel = false;
     bottomScroll = false;
     topDist = 0;
+    innerHeight = 0;
+    innerScroll = false;
     constructor(@Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
     }
 
@@ -198,10 +212,15 @@
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
       const height = this.window.innerHeight - 209;
       const filterHeight = this.filterPane.nativeElement.scrollHeight;
-      const docHeight = Math.max(filterHeight, this.gridwall.nativeElement.scrollHeight) + 209;
-      this.topFixedFilterPanel = offset >= 102 && filterHeight < height;
-      this.bottomFixedFilterPanel = filterHeight > height && filterHeight - offset < height && docHeight - offset > height + 180;
-      this.bottomScroll = docHeight - offset < height + 180;
-      this.topDist = height - filterHeight + 209;
+      const docHeight = this.gridwall.nativeElement.scrollHeight + 209;
+      this.innerScroll = docHeight - filterHeight < 0;
+      this.innerHeight = docHeight - 209;
+      this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
+      this.bottomScroll = docHeight - offset - height < 180;
+      this.bottomFixedFilterPanel = !this.topFixedFilterPanel && !this.bottomScroll && filterHeight - offset < height;
+
+      console.log(docHeight - filterHeight);
+      this.topDist = height - filterHeight + 248;
+
     }
   }
