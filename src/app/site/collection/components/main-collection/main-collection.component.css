@@ -10,18 +10,6 @@
   font-size: 13px;
 }
 
-.topFixed {
-  position: fixed !important;
-  top: 109px !important;
-}
-
-.bottomFixed {
-  position: fixed !important;
-}
-.bottomScroll {
-  position: absolute;
-  bottom: 212px;
-}
 .gridwall {
   min-width: 482px;
   margin-bottom: 50px;

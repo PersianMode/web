@@ -7,6 +7,7 @@ import {RegisterComponent} from './register/components/register/register.compone
 const Site_ROUTES: Routes = [
   {
     path: '', component: SiteComponent, children: [
+      {path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule'},
     {path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule'},
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'home', loadChildren: 'app/site/home/home.module#HomeModule'},

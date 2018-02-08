@@ -24,6 +24,7 @@
     "@angular/platform-browser": "^5.1.0",
     "@angular/platform-browser-dynamic": "^5.1.0",
     "@angular/router": "^5.1.0",
+    "angular2-markdown": "^2.2.3",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
     "jalali-moment": "^3.0.10",

@@ -1,0 +1,43 @@
+<div class="photos" #photosDiv>
+<span>
+  <div *ngFor="let img of product.images">
+    <img *ngIf="img.type !== 'video'" src="{{img.url}}">
+    <video *ngIf="img.type === 'video'" autoplay loop playsinline tabindex="-1"><source src="{{img.url}}"
+                                                                                        type="video/webm"></video>
+  </div>
+</span>
+</div>
+<div class="description" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
+     [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll"
+     [style.height]="innerScroll ? innerHeight + 'px' : 'fit-content'"
+     [style.top]="(bottomFixedFilterPanel ? topDist : 0) + 'px'" #descPane>
+<h1>{{product.name}}</h1>
+  <h4>{{joinedTags}} <span>{{price}} تومان</span></h4>
+  <app-size-picker (value)="size = $event"></app-size-picker>
+  <button class="cart">در سبد بگذار</button><button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>
+  <div class="description-md" Markdown>
+    {{product.desc}}
+  </div>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          بیشتر بدانید
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div Markdown>
+        **این کفش** خیلی راحت و برای تغییر جهت‌های ناگهانی حین بازی ایده‌آل است.
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          نظرات مشتریان
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>
+        نظری داده نشده
+      </p>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

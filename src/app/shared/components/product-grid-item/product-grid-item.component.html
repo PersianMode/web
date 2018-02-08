@@ -1,4 +1,4 @@
-<div class="main" [class.on]="on">
+<div class="main" [class.on]="on" (click)="openProduct()">
   <span>
     <div class="imgWrapper" (mouseover)="turnOn()" (mouseout)="turnOff()">
       <img src="assets/pictures/product-small/{{data.colors[pos].url}}" [style.right]="(220 * data.colors[pos].position) +'px'">
