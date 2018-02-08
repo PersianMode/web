@@ -27,7 +27,7 @@
   top: 0;
   left: 0;
   background: #fff;
-  width: 456px;
+  width: 409px;
   padding: 52px 30px;
 }
 .description span {
@@ -48,4 +48,30 @@ h4 {
 
 h4 span {
   margin: 0 12px 0 0 !important;
+}
+button {
+  line-height: 24px !important;
+  padding: 12px 20px !important;
+  background: black !important;
+  color: #fff !important;
+  margin: 40px 0px !important;
+  vertical-align: top;
+  outline: none;
+  font-size: 16px;
+}
+button:hover{
+  background: rgba(17,17,17,.75) !important;
+}
+button:focus{
+  background: rgba(17,17,17,.75) !important;
+}
+.cart {
+  width: 333px;
+}
+.wishlist {
+  width: 75px;
+  font-size: 14px;
+}
+.description-md {
+  text-align: justify;
 }

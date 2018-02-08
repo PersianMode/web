@@ -1,5 +1,4 @@
 import {Component, OnInit, Output, ViewChild, EventEmitter} from '@angular/core';
-import {detectChanges} from "@angular/core/src/render3";
 
 @Component({
   selector: 'app-size-picker',
@@ -86,6 +85,5 @@ export class SizePickerComponent implements OnInit {
   onChange(e) {
     this.value.emit(+e.value);
     this.val = +e.value;
-    detectChanges(this);
   }
 }
