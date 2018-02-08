@@ -17,6 +17,7 @@ const Site_ROUTES: Routes = [
       {path: 'register', component: RegisterComponent},
       {path: 'collection', loadChildren: 'app/site/collection/collection.module#CollectionModule'},
       {path: 'cart', loadChildren: 'app/site/cart/cart.module#CartModule'},
+      {path: 'uploader', loadChildren: 'app/site/uploader/uploader.module#UploaderModule'},
     ]
   }
 ];
