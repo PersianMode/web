@@ -9,7 +9,7 @@
     <form (ngSubmit)="submitCollection()" [formGroup]="collectionForm">
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
            fxLayoutAlign.xs="center center" dir="rtl">
-        <div fxFlex="50" class="field-container">
+        <div fxFlex="33" class="field-container">
           <mat-input-container class="field farsi">
             <input matInput type="text" placeholder="نام" formControlName="colName"
                    role="colName" tabindex="2">
@@ -19,7 +19,12 @@
             </mat-error>
           </mat-input-container>
         </div>
-        <div role="submit-button" style="text-align: left;">
+        <div fxFlex="33" style="text-align:center; margin-top: 15px" click="addPic()">
+          <button type="button">
+            انتخاب تصویر
+          </button>
+        </div>
+        <div fxFlex="20" role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"
                   [disabled]="upsertBtnShouldDisabled || (!collectionForm.valid)"
                   tabindex="3">

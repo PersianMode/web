@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {HttpService} from "../../../../shared/services/http.service";
 import {AuthService} from "../../../../shared/services/auth.service";
 
@@ -13,7 +13,8 @@ export class ViewComponent implements OnInit {
   currentCollection;
   // productList = [];
 
-  constructor(private route: ActivatedRoute, private httpService: HttpService, private authService: AuthService) { }
+  constructor(private route: ActivatedRoute, private router: Router,
+              private httpService: HttpService, private authService: AuthService) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -43,8 +44,12 @@ export class ViewComponent implements OnInit {
 
   addProduct(expObj) {
     // console.log("GOT!", expObj);
-    this.authService.addProductToCollection(this.currentCollection.id, expObj._id);
+    this.authService.addProductToCollection(this.currentCollection.id, expObj.id);
     this.searchProducts();
+  }
+
+  viewProduct(pid) {
+    this.router.navigate([`/admin/products/${pid}`]);
   }
 
   removeProduct(pid) {

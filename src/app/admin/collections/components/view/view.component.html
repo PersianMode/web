@@ -1,43 +1,51 @@
 <div fxLayout="row">
   <mat-card fxFlex="60" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset="20" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
-    <div>
-      <br/><app-suggestion [name]="'product'" [currentIds]="[0]"
-               [fieldNameEn]="'test'" [fieldNameFa]="'تست'" (add)="addProduct($event)"></app-suggestion>
-    </div>
-    <br/>
+
     <div class="rs-table">
       <mat-card-content>
-        <img mat-card-image style="max-width: 50%; margin-left: 10px;" src="{{currentCollection?.image_url?.url}}" alt="{{currentCollection?.image_url?.alt}}">
+        <img mat-card-image style="max-width: 50%; margin: 20px 0 0 20px;"
+             src="{{currentCollection?.image_url?.url}}" alt="{{currentCollection?.image_url?.alt}}">
         <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
              fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
-          <br>
-          <div fxFlex="50">
-            <div class="view-title"><b>Name</b></div>
+          <!--<br>-->
+          <div fxFlex="90" style="text-align: right;">
+            <div class="view-title"><b>نام</b></div>
             <div class="view-content">{{currentCollection?.name}}</div>
           </div>
         </div>
         <br>
       </mat-card-content>
-      <table class="table">
+      <div class="little-right-margin right-alignment">
+        <br/><app-suggestion [name]="'product'" [currentIds]="[0]" [placeholder]="'نام محصول'"
+                             [fieldNameEn]="'test'" [fieldNameFa]="'تست'" (add)="addProduct($event)"></app-suggestion>
+      </div>
+      <br/>
+      <table class="table little-right-margin" style="float: right;">
         <thead>
-        <td>No.</td>
-        <td>Name</td>
-        <td>Type</td>
-        <td>Brand</td>
-        <td>Remove</td>
+        <td>حذف</td>
+        <td>نمایش</td>
+        <td>برند</td>
+        <td>نوع</td>
+        <td>نام</td>
+        <td>شماره</td>
         </thead>
         <tbody>
         <tr *ngFor="let p of currentCollection?.products; let i = index">
-          <td>{{i+1}}</td>
           <!--<td><img src="" alt=""></td>-->
-          <td>{{p.name}}</td>
-          <td>{{p.product_type.name}}</td>
-          <td>{{p.brand.name}}</td>
           <td>
             <button mat-icon-button (click)="removeProduct(p.id)" color="warn">
-              <mat-icon aria-label="person expertise">delete</mat-icon>
+              <mat-icon aria-label="delete">delete</mat-icon>
             </button>
           </td>
+          <td>
+            <button mat-icon-button (click)="viewProduct(p.id)" color="primary">
+              <mat-icon aria-label="view">visibility</mat-icon>
+            </button>
+          </td>
+          <td>{{p.brand.name}}</td>
+          <td>{{p.product_type.name}}</td>
+          <td>{{p.name}}</td>
+          <td>{{i+1}}</td>
         </tr>
         </tbody>
       </table>
