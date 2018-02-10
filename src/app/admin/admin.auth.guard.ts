@@ -11,13 +11,14 @@ export class AdminAuthGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+    this.authService.checkValidation(state.url);
+
     return this.authService.isLoggedIn.map((res: boolean) => {
-      // if (res && this.authService.isAgent && this.authService.accessLevel.getValue() === this.accessLevel.Admin)
-      //   return true;
-      //
-      // this.router.navigate(['agent/login']);
-      // return false;
-      return true;
+      if (res && this.authService.userDetails.isAgent && this.authService.userDetails.accessLevel === this.accessLevel.Admin)
+        return true;
+
+      this.router.navigate(['agent/login']);
+      return false;
     });
   }
 }

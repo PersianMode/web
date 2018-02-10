@@ -29,15 +29,7 @@ export class HeaderComponent implements OnInit {
     this.authService.isLoggedIn.subscribe(
       (data) => {
         this.isLoggedIn = data;
-        this.btnLabel = data && !!this.authService.displayName.getValue() ? this.authService.displayName.getValue() : 'Logout';
-      }
-    );
-
-    this.authService.displayName.subscribe(
-      (data) => this.btnLabel = data,
-      (err) => {
-        console.error('Error when subscribing on displayName: ', err);
-        this.btnLabel = null;
+        this.btnLabel = data ? this.authService.userDetails.displayName : 'Logout';
       }
     );
 
