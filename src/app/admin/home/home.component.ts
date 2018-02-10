@@ -8,8 +8,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 export class HomeComponent implements OnInit {
   @ViewChild('drawer') drawer;
   navLinks = [
-    {label: 'Collections', path: '/admin/collections'},
-    {label: 'Products', path: '/admin/products'},
+    {label: 'Collections', path: '/agent/collections'},
+    {label: 'Products', path: '/agent/products'},
   ];
   showBurgerMenu: boolean = false;
   height: number = 300;
