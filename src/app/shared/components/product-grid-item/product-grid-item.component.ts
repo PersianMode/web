@@ -1,5 +1,7 @@
 import {Component, Input, OnInit, NgZone, Inject, ViewChild} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
+import {Router} from '@angular/router';
+import {priceFormatter} from '../../lib/priceFormatter';
 
 @Component({
   selector: 'app-product-grid-item',
@@ -17,9 +19,8 @@ export class ProductGridItemComponent implements OnInit {
   slide = 0;
   slidesNum = 0;
   rect;
-  onTime: any;
 
-  constructor(@Inject(WINDOW) private window, private zone: NgZone) {
+  constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router) {
     this.zone.runOutsideAngular(() => {
       this.window.document.addEventListener('mousemove', this.mouseMove.bind(this));
     });
@@ -27,20 +28,9 @@ export class ProductGridItemComponent implements OnInit {
 
   ngOnInit() {
     this.desc = this.data.tags.join(' ');
-    this.price = this.priceFormatter(this.data.price);
+    this.price = priceFormatter(this.data.price);
     this.images = Array.from(new Set<any>(this.data.colors.map(r => r.url)).values());
     this.slidesNum = Math.ceil(this.data.colors.length / 3);
-  }
-
-  priceFormatter(p) {
-    let ret = '';
-    (p + '').split('').reverse().forEach((digit, ind) => {
-      ret = parseInt(digit, 10).toLocaleString('fa') + ret;
-      if (ind % 3 === 2 && ind !== Math.floor(Math.log10(p))) {
-        ret = '٫' + ret;
-      }
-    });
-    return ret;
   }
 
   turnOn(e, time) {
@@ -78,5 +68,9 @@ export class ProductGridItemComponent implements OnInit {
         this.zone.run(() => this.changePos(i));
       }
     }
+  }
+
+  openProduct() {
+    this.router.navigate(['product', this.data.colors[this.pos].pi_id]);
   }
 }

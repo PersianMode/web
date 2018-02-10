@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+
 import {AuthService} from "../../shared/services/auth.service";
 import {HttpService} from "../../shared/services/http.service";
 import {Router} from "@angular/router";
@@ -21,22 +22,23 @@ export class CollectionsComponent implements OnInit {
   }
 
   searching() {
-    //this.authService.getAllCollections().subscribe(
+    // this.authService.getAllCollections().subscribe(
     this.httpService.getMockCollections().subscribe(
       (data) => {
         this.collections = []; this.rows = [];
         data = data.body.collections;
-        for(let d in data) {
+        for (let d in data) {
           let col = {
             id: data[d].id,
             name: data[d].name,
             image_url: {
               url: data[d].image_url.url,
               alt: data[d].image_url.alt
-            }
+            },
+            products: [],
           };
           col['products'] = [];
-          for(let p in data[d].products) {
+          for (let p in data[d].products) {
             col['products'].push({
               name: data[d].products[p].name
             });
@@ -50,15 +52,17 @@ export class CollectionsComponent implements OnInit {
   }
 
   alignRow() {
-    //TODO: should be multiple per row not all in one row - after paginator added
+    // TODO: should be multiple per row not all in one row - after paginator added
     this.rows.push(this.collections);
   }
 
   select(id) {
-    if(this.selectedId == id)
+    if (this.selectedId === id) {
       this.selectedId = null;
-    else
+    }
+    else {
       this.selectedId = id;
+    }
   }
 
   openForm(id: string = null) {

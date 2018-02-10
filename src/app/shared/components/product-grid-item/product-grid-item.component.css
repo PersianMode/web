@@ -13,12 +13,12 @@
   color: #666;
   background: #fff;
   padding:0;
-
+  cursor: pointer;
 }
 .main span {
   display: inline-block;
   border: 1px solid transparent;
-  padding:13px 0 0 0;
+  padding: 13px 0 0 0;
 }
 .on {
   z-index: 20 !important;

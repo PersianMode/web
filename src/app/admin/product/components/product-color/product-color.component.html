@@ -1,0 +1,64 @@
+<mat-card class="card-view">
+  <mat-card-header style="direction:rtl">
+    <mat-card-title>
+      <div *ngIf="!productId"><b>رنگ های موجود</b></div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="modifyColor()" [formGroup]="productColorForm">
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+           fxLayoutAlign.xs="center center" dir="rtl">
+        <div style="text-align: right" fxFlex="100" class="field-container">
+          <mat-form-field  style="text-align:right;">
+            <mat-select placeholder="رنگ محصول" formControlName="proColor" role="proColor">
+              <mat-option *ngFor="let color of colors" style="text-align:right" [value]="color">
+                {{color}}
+              </mat-option>
+            </mat-select>
+            <mat-hint>رنگ محصول را انتخاب کنید</mat-hint>
+            <mat-error *ngIf="productColorForm.controls['proColor'].hasError('required')">
+              وارد کردن رنگ محصول الزامی است
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100" style="text-align:center; margin-top: 25px" click="addPic()">
+          <button type="button">
+            انتخاب تصویر
+          </button>
+        </div>
+        <div role="submit-button" fxFlex="100" style="text-align:center; margin-top: 15px ">
+          <button mat-icon-button type="submit"
+                  [disabled]="!productColorForm.valid">
+            <mat-icon aria-label="accept">done</mat-icon>
+          </button>
+        </div>
+      </div>
+    </form>
+    <div dir="rtl" style="width:100%" *ngIf="productColorForm.controls['proColor'].value">
+      <mat-card>
+        <div class="rs-table" style="width: 100%">
+          <table style="width: 100%">
+            <thead>
+            <td style="width: 10%"><b>ردیف</b></td>
+            <td style="width: 10%"><b>رنگ</b></td>
+            <td style="width: 70%; text-align: center"><b>تصاویر</b></td>
+            <td style="width: 10%"><b>حذف</b></td>
+            </thead>
+            <tbody>
+            <tr *ngFor="let c of selectedColor; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{c}}</td>
+              <td *ngFor="let i of c.testColor" style="text-align: center"><img style="width: 5%" src="{{i}}"></td>
+              <td>
+                <button mat-icon-button (click)="removeImg(p.img)" color="warn">
+                  <mat-icon aria-label="clear">delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card-content>
+</mat-card>
