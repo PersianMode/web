@@ -80,6 +80,9 @@ export class AuthService {
   }
 
   createCollection(values) {
+    //if collection doesn't exist, create it
+    //if collection already exists, update it
+    //(in the server, should be checked if the received id exists in database or not
     return this.httpService.put(`/collection`, values);
   }
 
