@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {HttpService} from './http.service';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router, RouterStateSnapshot} from '@angular/router';
 import {AccessLevel} from '../enum/accessLevel.enum';
 
 @Injectable()
@@ -14,23 +14,35 @@ export class AuthService {
   userId: BehaviorSubject<number> = new BehaviorSubject<number>(null);
   displayName: BehaviorSubject<string> = new BehaviorSubject<string>(this.defaultDisplayName);
 
-  constructor(private httpService: HttpService, private router: Router) {
-    this.httpService.get('validUser').subscribe(
-      (data) => {
-        this.isLoggedIn.next(true);
-        this.isAgent.next((data.personType === 'agent') ? true : false);
-        this.userId.next(data.pid);
-        this.displayName.next(data.displayName);
-        if (data.hasOwnProperty('access_level')) {
-          this.accessLevel.next(data.acceleration);
+  constructor(private httpService: HttpService, private router: Router, private routerState: RouterStateSnapshot) {
+    console.log(this.router);
+
+    console.log(this.routerState.url);
+
+    this.router.events.subscribe(
+      (dt) => {
+        console.log('Event: ', dt);
+
+        if (dt instanceof NavigationEnd) {
+          this.httpService.get((this.router.url.includes('agent') ? 'agent/' : '') + 'validUser').subscribe(
+            (data) => {
+              this.isLoggedIn.next(true);
+              this.isAgent.next((data.personType === 'agent') ? true : false);
+              this.userId.next(data.pid);
+              this.displayName.next(data.displayName);
+              if (data.hasOwnProperty('access_level')) {
+                this.accessLevel.next(data.acceleration);
+              }
+            },
+            (err) => {
+              this.isLoggedIn.next(false);
+              this.isAgent.next(false);
+              this.userId.next(null);
+              this.displayName.next(this.defaultDisplayName);
+              this.accessLevel.next(null);
+            }
+          );
         }
-      },
-      (err) => {
-        this.isLoggedIn.next(false);
-        this.isAgent.next(false);
-        this.userId.next(null);
-        this.displayName.next(this.defaultDisplayName);
-        this.accessLevel.next(null);
       }
     );
   }
@@ -67,21 +79,27 @@ export class AuthService {
   }
 
   logout() {
-    this.httpService.get('logout').subscribe(
-      (data) => {
-        // const rt = (this.router.url.includes('admin') ? 'admin/' : '') + 'login';
+    return new Promise((resolve, reject) => {
+      this.httpService.get('logout').subscribe(
+        (data) => {
+          // const rt = (this.router.url.includes('admin') ? 'admin/' : '') + 'login';
 
-        this.isLoggedIn.next(false);
-        this.isAgent.next(false);
-        this.userId.next(null);
-        this.displayName.next(this.defaultDisplayName);
-        this.accessLevel.next(null);
-        // this.router.navigate([rt]);
-      },
-      (err) => {
-        console.error('Cannot logout: ', err);
-      }
-    );
+          this.isLoggedIn.next(false);
+          this.isAgent.next(false);
+          this.userId.next(null);
+          this.displayName.next(this.defaultDisplayName);
+          this.accessLevel.next(null);
+          // this.router.navigate([rt]);
+
+          resolve();
+        },
+        (err) => {
+          console.error('Cannot logout: ', err);
+
+          reject();
+        }
+      );
+    });
   }
 
   loginCheck() {

@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
-import {WINDOW} from '../../../../shared/services/window.service';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +13,7 @@ export class LoginComponent implements OnInit {
   seen = {};
   curFocus = null;
 
-  constructor(private authService: AuthService, private router: Router,
-              @Inject(WINDOW) private window) {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit() {
@@ -39,7 +37,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value)
         .then(data => {
-          this.router.navigate(['agent/home']);
+          this.router.navigate(['agent/collections']);
         })
         .catch(err => console.error('Cannot login: ', err));
     }

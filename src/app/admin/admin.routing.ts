@@ -1,13 +1,13 @@
 import {RouterModule, Routes} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HomeComponent} from './home/home.component';
+import {AdminAuthGuard} from './admin.auth.guard';
 
 const Admin_ROUTES: Routes = [
   {path: '', component: HomeComponent, children: [
-    {path: 'home', component: HomeComponent},
-    {path: 'collections', loadChildren: 'app/admin/collections/collections.module#CollectionsModule'},
+    {path: 'collections', loadChildren: 'app/admin/collections/collections.module#CollectionsModule', canActivate: [AdminAuthGuard]},
     {path: 'login', loadChildren: 'app/admin/login/login.module#LoginModule'},
-    {path: 'products', loadChildren: 'app/admin/product/product.module#ProductModule'},
+    {path: 'products', loadChildren: 'app/admin/product/product.module#ProductModule', canActivate: [AdminAuthGuard]},
   ]},
 ];
 

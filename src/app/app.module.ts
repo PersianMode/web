@@ -11,6 +11,7 @@ import {SocketService} from './shared/services/socket.service';
 import {AuthService} from './shared/services/auth.service';
 import {HttpClientModule} from '@angular/common/http';
 import {routing} from './app.routing';
+import {ProgressService} from './shared/services/progress.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import {routing} from './app.routing';
     MatButtonModule,
     MatIconModule,
   ],
-  providers: [WINDOW_PROVIDERS, HttpService, SocketService, AuthService],
+  providers: [WINDOW_PROVIDERS, HttpService, SocketService, AuthService, ProgressService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
