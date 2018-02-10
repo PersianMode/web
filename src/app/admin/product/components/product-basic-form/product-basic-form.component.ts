@@ -23,8 +23,8 @@ export class ProductBasicFormComponent implements OnInit {
   types = ['عینک آفتابی', 'تی شرت' , 'شلوار', 'کفش'];
   brands = ['نایک', 'آدیداس', 'پلیس' , 'گپ'];
   originalProductBasicForm: any = null;
-  upsertBtnShouldDisabled: boolean = false;
-  deleteBtnShouldDisabled: boolean = false;
+  upsertBtnShouldDisabled = false;
+  deleteBtnShouldDisabled = false;
   productId = null;
   anyChanges = false;
 
@@ -80,7 +80,7 @@ export class ProductBasicFormComponent implements OnInit {
       // product_type: this.productBasicForm.controls['proType'].value,
       // brand: this.productBasicForm.controls['proBrand'].value,
       desc: this.productBasicForm.controls['proDesc'].value,
-    }
+    };
     console.log('==>', productBasicInfo);
     if (!this.productId) {
       delete productBasicInfo.id;
@@ -113,7 +113,7 @@ export class ProductBasicFormComponent implements OnInit {
     );
   }
   openView(id: string = null) {
-    this.router.navigate([`/admin/products/${id}`]);
+    this.router.navigate([`/agent/products/${id}`]);
   }
   deleteProduct() {
   }

@@ -11,7 +11,7 @@ export class OauthHandlerComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.loginCheck()
+    this.authService.checkValidation(this.router.url)
       .then(res => {
         this.router.navigate(['/home']);
       })

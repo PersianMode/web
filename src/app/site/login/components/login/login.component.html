@@ -16,18 +16,22 @@
         <div fxFlex="50" class="input-container">
           <input class="input-field left-direction" type="email" placeholder="ایمیل"
                  formControlName="email"
-                 [ngClass]="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')? 'input-error' : null"
+                 (focus)="setSeen('email')"
+                 (blur)="curFocus = null"
+                 [ngClass]="(loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email' ? 'input-error' : null"
                  (keypress)="keyPress($event)"/>
           <label
-            *ngIf="loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')"
+            *ngIf="(loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email'"
             class="field-error">لطفا آدرس ایمیل معتبری وارد کنید</label>
         </div>
         <div fxFlex="50" class="input-container">
           <input class="input-field left-direction" type="password" placeholder="رمز عبور"
                  formControlName="password"
-                 [ngClass]="loginForm.controls['password'].hasError('required') ? 'input-error' : null"
+                 (focus)="setSeen('password')"
+                 (blur)="curFocus = null"
+                 [ngClass]="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus['password'] ? 'input-error' : null"
                  (keypress)="keyPress($event)"/>
-          <label *ngIf="loginForm.controls['password'].hasError('required')" class="field-error">لطفا رمز عبور را وارد
+          <label *ngIf="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus['password']" class="field-error">لطفا رمز عبور را وارد
             کنید</label>
         </div>
       </div>
