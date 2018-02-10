@@ -1,20 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpService} from '../../shared/services/http.service';
-import {Router} from '@angular/router';
 
-export interface CollectionProducts {
-  name: string;
-};
-
-export interface Collection {
-  id: number;
-  name: string;
-  image_url: {
-    url: string,
-    alt: string
-  };
-  products: CollectionProducts[];
-}
+import {AuthService} from "../../shared/services/auth.service";
+import {HttpService} from "../../shared/services/http.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-collections',
@@ -22,11 +10,11 @@ export interface Collection {
   styleUrls: ['./collections.component.css']
 })
 export class CollectionsComponent implements OnInit {
-  collections: Collection[] = [];
+  collections: any[] = [];
   selectedId: string = null;
   rows: any = [];
 
-  constructor(private httpService: HttpService,
+  constructor(private authService: AuthService, private httpService: HttpService,
               private router: Router) { }
 
   ngOnInit() {
@@ -37,6 +25,7 @@ export class CollectionsComponent implements OnInit {
     // this.authService.getAllCollections().subscribe(
     this.httpService.getMockCollections().subscribe(
       (data) => {
+        this.collections = []; this.rows = [];
         data = data.body.collections;
         for (let d in data) {
           let col = {
@@ -81,10 +70,12 @@ export class CollectionsComponent implements OnInit {
   }
 
   openView(id: string = null) {
-
+    this.router.navigate([`/admin/collections/${id}`]);
   }
 
   deleteCollection(id: string = null) {
-
+    //call DELETE api for /collection/:cid
+    this.authService.deleteCollection(id);
+    this.searching();
   }
 }

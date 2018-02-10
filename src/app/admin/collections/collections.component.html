@@ -22,7 +22,7 @@
             {{p.name}}
           </div>
         </mat-card-content>
-        <mat-card-actions>
+        <mat-card-actions *ngIf="c.id == selectedId">
           <button mat-icon-button (click)="openView(c.id)" color="primary">
             <mat-icon aria-label="view">visibility</mat-icon>
           </button>

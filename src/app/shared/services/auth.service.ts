@@ -72,7 +72,30 @@ export class AuthService {
   }
 
   getAllCollections() {
-    //TODO: when server completed
-    return this.httpService.get('/collections');
+    return this.httpService.get('/collection');
+  }
+
+  getOneCollection(id) {
+    return this.httpService.get(`/collection/${id}`);
+  }
+
+  createCollection(values) {
+    return this.httpService.put(`/collection`, values);
+  }
+
+  addProductToCollection(cid, pid) {
+    //SHOULD BE THIS ONE, BUT ALSO SHOULD BE CHANGED ON THE SERVER TO DO THIS :D
+    // return this.httpService.put(`/collection/product/${cid}`, {pid: pid});
+
+    //BUT FOR NOW, BECAUSE SERVER IS BUILD UPON THIS WAY, I USED THIS API CALL INSTEAD :D
+    return this.httpService.put(`/collection/product/${cid}/${pid}`, {});
+  }
+
+  deleteCollection(cid) {
+    return this.httpService.delete(`/collection/${cid}`);
+  }
+
+  deleteProductFromCollection(cid, pid) {
+    return this.httpService.delete(`/collection/product/${cid}/${pid}`);
   }
 }

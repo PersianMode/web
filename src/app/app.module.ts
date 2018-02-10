@@ -10,7 +10,8 @@ import {HttpService} from './shared/services/http.service';
 import {SocketService} from './shared/services/socket.service';
 import {AuthService} from './shared/services/auth.service';
 import {HttpClientModule} from '@angular/common/http';
-import {routing} from './app.routing';
+import {routing} from "./app.routing";
+import {SharedModule} from "./shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import {routing} from './app.routing';
     routing,
     BrowserAnimationsModule,
     BrowserModule,
+    SharedModule,
     FormsModule,
     HttpClientModule,
     FlexLayoutModule,
