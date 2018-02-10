@@ -389,7 +389,7 @@ input {
 }
 
 .google-btn {
-  background: darkred;
+  background: #d34836;
   color: white;
   border-radius: 3px;
   text-align: center;
@@ -518,4 +518,12 @@ mat-expansion-panel {
 }
 mat-panel-title {
   margin: 0 !important;
+}
+
+.login-btn {
+  color: white;
+  border-radius: 3px;
+  text-align: center;
+  vertical-align: middle;
+  height: 25px;
 }
