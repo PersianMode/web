@@ -17,15 +17,6 @@
         <a *ngIf="!item.header" class="footer-link" href="{{item.href}}">{{item.text}}</a>
       </div>
     </div>
-    <div fxFlex="15" class="icons-outer-div">
-      <div class="icons-inner-div">
-        <span *ngFor="let i of footer.icons" class="icons">
-          <a href="#" target="_blank" class="icons">
-            <i class="{{i.text}}"></i>
-          </a>
-        </span>
-      </div>
-    </div>
   </div>
   <hr class="hr-setting">
   <div class="div-bottom" fxLayout="row" fxLayoutAlign="center center;">

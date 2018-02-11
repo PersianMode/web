@@ -13,14 +13,6 @@
   font-size: 80%;
 }
 
-.login-btn {
-  color: white;
-  border-radius: 3px;
-  text-align: center;
-  vertical-align: middle;
-  height: 25px;
-}
-
 .google-btn {
   background: darkred;
   color: white;
