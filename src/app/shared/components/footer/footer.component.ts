@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {WINDOW} from '../../../shared/services/window.service';
 
 @Component({
   selector: 'app-footer',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
+  curWidth = 100;
+  curHeight = 100;
     footer = {
       headerList: [
         {
@@ -112,8 +115,14 @@ export class FooterComponent implements OnInit {
         }
       ]
   }
-  constructor() { }
+  constructor(@Inject(WINDOW) private window) { }
   ngOnInit() {
-  }
+    this.curWidth = this.window.innerWidth;
+    this.curHeight = this.window.innerHeight;
 
+    this.window.onresize = (e) => {
+      this.curWidth = this.window.innerWidth;
+      this.curHeight = this.window.innerHeight;
+    };
+  }
 }
