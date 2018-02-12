@@ -4,11 +4,12 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {HttpService} from './http.service';
 import {ActivatedRoute, NavigationEnd, Router, RouterStateSnapshot} from '@angular/router';
 import {AccessLevel} from '../enum/accessLevel.enum';
+import {getExpressionLoweringTransformFactory} from '@angular/compiler-cli/src/transformers/lower_expressions';
+import {reject} from 'q';
 
 @Injectable()
 export class AuthService {
   private defaultDisplayName = 'Anonymous user';
-  accessLevel = AccessLevel;
   isLoggedIn: ReplaySubject<boolean> = new ReplaySubject(1);
   userDetails = {
     isAgent: null,
@@ -22,32 +23,34 @@ export class AuthService {
 
   checkValidation(url) {
     return new Promise((resolve, reject) => {
-      this.httpService.get((url.includes('agent') ? 'agent/' : '') + 'validUser').subscribe(
+
+      this.httpService.get((url.includes('agent') ? 'agent' : '') + '/validUser').subscribe(
         (data) => {
           data = data.body;
-          this.isLoggedIn.next(true);
           this.userDetails = {
-            isAgent: (data.personType === 'agent') ? true : false,
+            isAgent: data.personType === 'agent',
             userId: data.pid,
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
           };
-
+          this.isLoggedIn.next(true);
           resolve();
+
         },
         (err) => {
-          this.isLoggedIn.next(false);
           this.userDetails = {
             isAgent: null,
             accessLevel: null,
             userId: null,
             displayName: this.defaultDisplayName,
           };
+          this.isLoggedIn.next(false);
 
           reject();
-        }
-      );
+        });
+
     });
+
   }
 
   login(username, password) {
@@ -60,7 +63,7 @@ export class AuthService {
         (data) => {
           this.isLoggedIn.next(true);
           this.userDetails = {
-            isAgent: (data.personType === 'agent') ? true : false,
+            isAgent: data.personType === 'agent',
             userId: data.pid,
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
@@ -92,7 +95,7 @@ export class AuthService {
 
           this.isLoggedIn.next(false);
           this.userDetails = {
-            isAgent: (data.personType === 'agent') ? true : false,
+            isAgent: data.personType === 'agent',
             userId: data.pid,
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,

@@ -1,42 +1,55 @@
 import {Component, OnInit, OnDestroy, EventEmitter, Output, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload';
+
 @Component({
   selector: 'app-uploader',
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.css']
 })
-export class UploaderComponent implements OnInit, OnDestroy {
+export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
 
   public uploader: FileUploader;
   public hasBaseDropZoneOver = true;
   enabled = false;
 
 
-  @Input() personnel_id;
-  @Output() new_upload_code = new EventEmitter<number>();
+  @Input() url: string;
+  @Output() images = new EventEmitter<string[]>();
+
+  private imagesList: string[] = [];
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.url && changes.url.currentValue) {
+
+      this.uploader = new FileUploader({url: 'api/' + this.url});
+    }
+
+  }
+
 
   constructor() {
   }
 
 
-
   ngOnInit(): void {
 
 
-    this.uploader = new FileUploader({url: `api/product/image/5a7ae328d5dfe636e01c97f8/5a7c0a9a9a8c9b259c7e91e7`});
+    this.uploader = new FileUploader({url: 'api/' + this.url});
 
     this.enabled = true;
 
     this.uploader.onSuccessItem = (item, response, status, headers) => {
 
+      const result = JSON.parse(response);
+      this.imagesList.push(result.downloadURL);
+
     };
 
     this.uploader.onCompleteAll = () => {
 
-      const newCode = Math.round(Math.random() * 10000);
+      this.images.emit(this.imagesList);
 
-      this.new_upload_code.emit(newCode);
-
+      this.imagesList = [];
     };
 
 
