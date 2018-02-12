@@ -18,7 +18,8 @@ export class AllProductsComponent implements OnInit {
   rows: any = [];
 
   constructor(private httpService: HttpService,
-              private router: Router, private progressService: ProgressService, private dialog: MatDialog, private snackBar: MatSnackBar) {
+              private router: Router, private progressService: ProgressService,
+              private dialog: MatDialog, private snackBar: MatSnackBar) {
   }
   ngOnInit() {
     this.getAllProducts();
@@ -60,13 +61,17 @@ export class AllProductsComponent implements OnInit {
   }
 
   openForm(id: string = null) {
-    console.log(id);
-    this.router.navigate([`/agent/products/productInfo/${id}`]);
+    if (id)
+     this.router.navigate([`/agent/products/productInfo/${id}`]);
+    else
+      this.router.navigate([`/agent/products/productInfo/`]);
   }
   openView(id: string = null) {
+    console.log(id);
     this.router.navigate([`/agent/products/${id}`]);
   }
   deleteProduct(id: string = null): void {
+    console.log(id);
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });

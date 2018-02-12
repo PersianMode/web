@@ -1,10 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {isUndefined} from 'util';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ActivatedRoute} from '@angular/router';
 import {Router} from '@angular/router';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-product-basic-form',
@@ -14,51 +15,72 @@ import {Router} from '@angular/router';
 export class ProductBasicFormComponent implements OnInit {
   productBasicForm: FormGroup;
   types = [
-    {text : 'عینک', value : '5a813ae66760822bb8329a2b'},
-    {text : 'تی شرت' , value : '5a813ad56760822bb8329a2a'},
-    {text : 'شلوار' , value : '5a813ac86760822bb8329a29'},
-    {text : 'کفش' , value : '5a813b066760822bb8329a2c'},
+    {text: 'عینک', value: '5a813ae66760822bb8329a2b'},
+    {text: 'تی شرت', value: '5a813ad56760822bb8329a2a'},
+    {text: 'شلوار', value: '5a813ac86760822bb8329a29'},
+    {text: 'کفش', value: '5a813b066760822bb8329a2c'},
   ];
   brands = [
-    {text : 'نایک', value : '5a8138696760822bb8329a25'},
-    {text : 'آدیداس' , value : '5a81387d6760822bb8329a26'},
-    {text : 'پلیس' , value : '5a8138a56760822bb8329a28'},
-    {text : 'گپ' , value : '5a81388d6760822bb8329a27'},
+    {text: 'نایک', value: '5a8138696760822bb8329a25'},
+    {text: 'آدیداس', value: '5a81387d6760822bb8329a26'},
+    {text: 'پلیس', value: '5a8138a56760822bb8329a28'},
+    {text: 'گپ', value: '5a81388d6760822bb8329a27'},
   ];
   originalProductBasicForm: any = null;
   upsertBtnShouldDisabled = false;
   deleteBtnShouldDisabled = false;
-  productId = null;
+  productId: string = null;
   anyChanges = false;
+  product: any = {};
+  loadedValue: any = {};
 
-  constructor(private httpService: HttpService , private snackBar: MatSnackBar,  private route: ActivatedRoute, private router: Router) { }
+  constructor(private httpService: HttpService, private snackBar: MatSnackBar,
+              private route: ActivatedRoute, private router: Router,
+              public dialog: MatDialog, private progressService: ProgressService) {
+  }
 
   ngOnInit() {
     this.initForm();
-
     this.route.params.subscribe(
       (params) => {
-        this.productId = +params['id'] ? +params['id'] : null;
+        this.productId = params['id'];
         this.initProductBasicInfo();
-      }
-    );
+        if (this.productId) {
+          this.progressService.enable();
+
+          this.httpService.get(`/product/${this.productId}`).subscribe(
+            (data) => {
+              this.product = data.body[0];
+              this.loadedValue = data.body[0];
+              console.log(data.body);
+              console.log('load ==> ', this.loadedValue);
+              this.progressService.disable();
+              this.initForm();
+            },
+            (err) => {
+              this.progressService.disable();
+              console.error('Cannot get product info... Error: ', err);
+            }
+          );
+        }
+      });
   }
 
   initForm() {
     this.productBasicForm = new FormBuilder().group({
-        proName : [null, [
+        proName: [(Object.keys(this.loadedValue).length && this.loadedValue.name) ? this.loadedValue.name : null, [
           Validators.required,
         ]],
-        proPrice : [null, [
-          Validators.required,
-        ] ],
-        proType : [null,  [
+        proPrice: [(Object.keys(this.loadedValue).length && this.loadedValue.base_price) ? this.loadedValue.base_price : null, [
           Validators.required,
         ]],
-        proBrand : [null,  [
+        proType: [(Object.keys(this.loadedValue).length && this.loadedValue.product_type._id) ? this.loadedValue.product_type._id : null, [
           Validators.required,
         ]],
-        proDesc : [null, [
+        proBrand: [null, [
+          Validators.required,
+        ]],
+        proDesc: [null, [
           Validators.maxLength(50),
         ]]
       },
@@ -74,6 +96,7 @@ export class ProductBasicFormComponent implements OnInit {
       return;
     }
   }
+
   modifyProduct() {
     const productBasicInfo = {
       id: this.productId,
@@ -83,7 +106,6 @@ export class ProductBasicFormComponent implements OnInit {
       brand: this.productBasicForm.controls['proBrand'].value,
       desc: this.productBasicForm.controls['proDesc'].value,
     };
-    console.log('==>', productBasicInfo);
     if (!this.productId) {
       delete productBasicInfo.id;
     }
@@ -98,7 +120,7 @@ export class ProductBasicFormComponent implements OnInit {
         if (!this.productId) {
           this.productBasicForm.reset();
         } else {
-          this.originalProductBasicForm = Object.assign({id : data.id}, productBasicInfo);
+          this.originalProductBasicForm = Object.assign({id: data.id}, productBasicInfo);
           this.productId = data;
         }
         this.upsertBtnShouldDisabled = false;
@@ -114,12 +136,15 @@ export class ProductBasicFormComponent implements OnInit {
       }
     );
   }
+
   openView(id: string = null) {
     this.router.navigate([`/agent/products/${id}`]);
   }
+
   deleteProduct() {
 
   }
+
   basicInfoValidation(Ac: AbstractControl) {
   }
 }

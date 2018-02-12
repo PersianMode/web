@@ -25,13 +25,13 @@ export class AuthService {
       this.httpService.get((url.includes('agent') ? 'agent/' : '') + 'validUser').subscribe(
         (data) => {
           data = data.body;
-          this.isLoggedIn.next(true);
           this.userDetails = {
             isAgent: (data.personType === 'agent') ? true : false,
             userId: data.pid,
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
           };
+          this.isLoggedIn.next(true);
 
           resolve();
         },
