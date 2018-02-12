@@ -37,8 +37,8 @@
                 <div style="text-align: right" class="field-container">
                     <mat-form-field fxFlex="100" style="text-align:right;" tabindex="3">
                         <mat-select placeholder="نوع محصول" formControlName="proType" role="proType">
-                            <mat-option *ngFor="let type of types" style="text-align:right" [value]="type">
-                                {{type}}
+                            <mat-option *ngFor="let type of types" style="text-align:right" [value]="type.value">
+                                {{type.text}}
                             </mat-option>
                         </mat-select>
                         <mat-hint>نوع محصول را انتخاب کنید</mat-hint>
@@ -51,8 +51,8 @@
                     <mat-form-field fxFlex="100" style="text-align:right" tabindex="4">
                         <mat-select placeholder="برند" formControlName="proBrand" role="proBrand">
                             <mat-option *ngFor="let brand of brands" style="text-align:right"
-                                        [value]="brand">
-                                {{brand}}
+                                        [value]="brand.value">
+                                {{brand.text}}
                             </mat-option>
                         </mat-select>
                         <mat-hint>برند را انتخاب کنید</mat-hint>

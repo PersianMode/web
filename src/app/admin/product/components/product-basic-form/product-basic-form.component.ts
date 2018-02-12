@@ -12,16 +12,19 @@ import {Router} from '@angular/router';
   styleUrls: ['./product-basic-form.component.css']
 })
 export class ProductBasicFormComponent implements OnInit {
-  // @Input()
-  // set productId(id) {
-  //   this._productId = id;
-  // }
-  // get productId() {
-  //   return this._productId;
-  // }
   productBasicForm: FormGroup;
-  types = ['عینک آفتابی', 'تی شرت' , 'شلوار', 'کفش'];
-  brands = ['نایک', 'آدیداس', 'پلیس' , 'گپ'];
+  types = [
+    {text : 'عینک', value : '5a813ae66760822bb8329a2b'},
+    {text : 'تی شرت' , value : '5a813ad56760822bb8329a2a'},
+    {text : 'شلوار' , value : '5a813ac86760822bb8329a29'},
+    {text : 'کفش' , value : '5a813b066760822bb8329a2c'},
+  ];
+  brands = [
+    {text : 'نایک', value : '5a8138696760822bb8329a25'},
+    {text : 'آدیداس' , value : '5a81387d6760822bb8329a26'},
+    {text : 'پلیس' , value : '5a8138a56760822bb8329a28'},
+    {text : 'گپ' , value : '5a81388d6760822bb8329a27'},
+  ];
   originalProductBasicForm: any = null;
   upsertBtnShouldDisabled = false;
   deleteBtnShouldDisabled = false;
@@ -31,7 +34,6 @@ export class ProductBasicFormComponent implements OnInit {
   constructor(private httpService: HttpService , private snackBar: MatSnackBar,  private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    console.log('*********');
     this.initForm();
 
     this.route.params.subscribe(
@@ -44,25 +46,25 @@ export class ProductBasicFormComponent implements OnInit {
 
   initForm() {
     this.productBasicForm = new FormBuilder().group({
-      proName : [null, [
-        Validators.required,
-      ]],
-      proPrice : [null, [
-        Validators.required,
-      ] ],
-      proType : [null,  [
-        Validators.required,
-      ]],
-      proBrand : [null,  [
-        Validators.required,
-      ]],
-      proDesc : [null, [
-        Validators.maxLength(50),
-      ]]
-    },
+        proName : [null, [
+          Validators.required,
+        ]],
+        proPrice : [null, [
+          Validators.required,
+        ] ],
+        proType : [null,  [
+          Validators.required,
+        ]],
+        proBrand : [null,  [
+          Validators.required,
+        ]],
+        proDesc : [null, [
+          Validators.maxLength(50),
+        ]]
+      },
       {
-      validator: this.basicInfoValidation
-    });
+        validator: this.basicInfoValidation
+      });
   }
 
   initProductBasicInfo() {
@@ -77,8 +79,8 @@ export class ProductBasicFormComponent implements OnInit {
       id: this.productId,
       name: this.productBasicForm.controls['proName'].value,
       base_price: this.productBasicForm.controls['proPrice'].value,
-      // product_type: this.productBasicForm.controls['proType'].value,
-      // brand: this.productBasicForm.controls['proBrand'].value,
+      product_type: this.productBasicForm.controls['proType'].value,
+      brand: this.productBasicForm.controls['proBrand'].value,
       desc: this.productBasicForm.controls['proDesc'].value,
     };
     console.log('==>', productBasicInfo);

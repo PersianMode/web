@@ -9,47 +9,71 @@ import {HttpService} from '../../shared/services/http.service';
   styleUrls: ['./all-products.component.css']
 })
 export class AllProductsComponent implements OnInit {
-  products = [
-    {
-      imgUrl: '../../../../assets/pictures/product-small/11.jpeg',
-      name : 'کفش پیاده روی نایک',
-      base_price : '155000',
-    },
-    {
-      imgUrl: '../../../../assets/pictures/product-small/12.jpeg',
-      name: 'کفش ورزشی آدیداس',
-      base_price : '270000',
-    },
-  ];
+  products = [];
+  id: number;
   selectedId: string = null;
   rows: any = [];
+
   constructor(private httpService: HttpService,
-              private router: Router) { }
+              private router: Router) {
+  }
 
   ngOnInit() {
     // TODO: should get products with calling a api
+    this.httpService.get('product').subscribe(
+      (data) => {
+        console.log('===>', data.body);
+        for (const d in data.body) {
+          this.products.push({
+            _id: data.body[d]._id,
+            name: data.body[d].name,
+            // 'desc' : data.body[i].desc,
+            base_price: data.body[d].base_price,
+            product_type: data.body[d].product_type.name,
+            brand: data.body[d].brand.name,
+            imgUrl: '../../../../assets/pictures/product-small/11.jpeg'
+          });
+        }
+      }
+    );
     this.searching();
+  }
+
+  select(item) {
+    console.log('===>', item);
+    if (this.selectedId === item._id) {
+      this.selectedId = null;
+    } else {
+      this.selectedId = item._id;
+    }
+    console.log('===>', this.selectedId);
   }
 
   searching() {
     this.alignRow();
   }
 
+  // alignRow() {
+  //   // TODO: should be multiple per row not all in one row - after paginator added
+  //   // TODO: should get products with calling a api
+  //   for ( let p in this.products ){
+  //     this.rows.push(this.products[p]);
+  //   }
+  //   console.log('***', this.rows);
+  // }
+
   alignRow() {
-    // TODO: should be multiple per row not all in one row - after paginator added
-    // TODO: should get products with calling a api
     this.rows.push(this.products);
   }
 
   openForm(id: string = null) {
+    console.log(id);
     this.router.navigate([`/agent/products/productInfo/${id}`]);
   }
-
   openView(id: string = null) {
     this.router.navigate([`/agent/products/${id}`]);
   }
 
   deleteProduct(id: string = null) {
   }
-
 }
