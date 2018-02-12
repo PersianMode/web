@@ -28,7 +28,6 @@ export class AllProductsComponent implements OnInit {
     this.rows = [];
     this.httpService.get('product').subscribe(
       (data) => {
-        console.log('=>', data.body);
         for (const d in data.body) {
           this.products.push({
             _id: data.body[d]._id,
