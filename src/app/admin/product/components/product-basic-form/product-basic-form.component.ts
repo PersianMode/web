@@ -118,6 +118,7 @@ export class ProductBasicFormComponent implements OnInit {
     this.router.navigate([`/agent/products/${id}`]);
   }
   deleteProduct() {
+
   }
   basicInfoValidation(Ac: AbstractControl) {
   }

@@ -13,6 +13,7 @@ import {ProductViewComponent} from './components/product-view/product-view.compo
 import { ProductFullInfoComponent } from './components/product-full-info/product-full-info.component';
 import { ProductColorComponent } from './components/product-color/product-color.component';
 import { ProductSizeComponent } from './components/product-size/product-size.component';
+import {SharedModule} from '../../shared/shared.module';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { ProductSizeComponent } from './components/product-size/product-size.com
   MatDialogModule,
   MatSelectModule,
   MatTabsModule,
+  SharedModule,
 ],
 })
 export class ProductModule {
