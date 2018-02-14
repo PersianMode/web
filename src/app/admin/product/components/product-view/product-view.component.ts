@@ -5,6 +5,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-product-view',
@@ -14,10 +15,12 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 export class ProductViewComponent implements OnInit, OnDestroy {
   product: any = [];
   productId: string = null;
+  productColors: any = [];
+
   constructor(private snackBar: MatSnackBar,
               public dialog: MatDialog, private progressService: ProgressService,
               private route: ActivatedRoute,
-              private router: Router, private httpService: HttpService) { }
+              private router: Router, private httpService: HttpService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -28,7 +31,6 @@ export class ProductViewComponent implements OnInit, OnDestroy {
 
           this.httpService.get(`/product/${this.productId}`).subscribe(
             (data) => {
-              console.log(data.body);
               this.product = data.body;
               this.product[0].base_price = priceFormatter(this.product[0].base_price);
               this.progressService.disable();
@@ -40,6 +42,24 @@ export class ProductViewComponent implements OnInit, OnDestroy {
           );
         }
       });
+    this.getProductColors();
+  }
+
+  getURL(path) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+  }
+
+  getProductColors() {
+    this.httpService.get(`product/color/${this.productId}`).subscribe(
+      (data) => {
+        for (let i = 0; i < data.body.colors.length; i++) {
+          this.productColors.push(data.body.colors[i].info.name);
+        }
+      },
+      (err) => {
+        console.error('Cannot get product info. Error: ', err);
+      }
+    );
   }
 
   openForm(id: string = null) {
@@ -84,5 +104,4 @@ export class ProductViewComponent implements OnInit, OnDestroy {
     this.productId = null;
     this.product = null;
   }
-
 }

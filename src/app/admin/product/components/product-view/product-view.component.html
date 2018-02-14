@@ -1,41 +1,44 @@
 <div fxLayout="row" dir="rtl">
-  <mat-card fxFlex="50" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset="20" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
-    <mat-card-header>
-      <mat-card-title>
-        <div style="font-weight: bold; font-family: irankharazmi">{{product[0].name}}</div>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="imgWrapper">
-
-        <img src="../../../../assets/pictures/product-small/11.jpeg">
-      </div>
-      <hr>
-      <div style="font-weight: bold; font-family: irankharazmi">
-        قیمت محصول : {{product[0].base_price}}  تومان
-      </div>
-      <div style="font-weight: bold; font-family: irankharazmi">
-       نوع محصول : {{product[0].product_type.name}}
-      </div>
-      <div style="font-weight: bold; font-family: irankharazmi">
-        برند محصول : {{product[0].brand.name}}
-      </div>
-      <div style="font-weight: bold; font-family: irankharazmi">
-        توضیحات : {{product[0].desc}}
-      </div>
-      <div style="font-weight: bold; font-family: irankharazmi">  دارای {{product[0].colors
-        .length}} رنگ، {{product[0].instances.length}} سایز
-      </div>
-    </mat-card-content>
-    <mat-card-actions style="text-align: left">
-      <button mat-icon-button (click)="openForm(product[0]._id)" color="accent">
-        <mat-icon aria-label="edit">edit</mat-icon>
-      </button>
-      <button mat-icon-button type (click)="deleteProduct(product[0]._id)" color="warn">
-        <mat-icon aria-label="delete">delete</mat-icon>
-      </button>
-    </mat-card-actions>
-  </mat-card>
+    <mat-card fxFlex="100" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset="20" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
+        <mat-card-header>
+            <mat-card-title>
+                <div style="font-weight: bold; font-family: irankharazmi">{{product[0].name}}</div>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div *ngFor="let color of product[0].colors; let i = index">
+                <div class="imgWrapper" *ngFor="let imgUrl of color.images"
+                     style="display: inline-block; width: 5%; height: 5%">
+                    <img style="width: 100%; height: 100%" [src]="getURL(imgUrl)">
+                </div>
+            </div>
+            <hr>
+            <div style="font-weight: bold; font-family: irankharazmi">
+                قیمت محصول : {{product[0].base_price}} تومان
+            </div>
+            <div style="font-weight: bold; font-family: irankharazmi">
+                نوع محصول : {{product[0].product_type.name}}
+            </div>
+            <div style="font-weight: bold; font-family: irankharazmi">
+                برند محصول : {{product[0].brand.name}}
+            </div>
+            <div style="font-weight: bold; font-family: irankharazmi">
+                توضیحات : {{product[0].desc}}
+            </div>
+            <div style="font-weight: bold;font-family: irankharazmi">
+                <div style="display: inline-block"> دارای {{product[0].colors.length}} رنگ : </div>
+                <div style="display: inline-block" *ngFor="let item of productColors"> {{item}}{{'،'}}</div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions style="text-align: left">
+            <button mat-icon-button (click)="openForm(product[0]._id)" color="accent">
+                <mat-icon aria-label="edit">edit</mat-icon>
+            </button>
+            <button mat-icon-button type (click)="deleteProduct(product[0]._id)" color="warn">
+                <mat-icon aria-label="delete">delete</mat-icon>
+            </button>
+        </mat-card-actions>
+    </mat-card>
 </div>
 
 

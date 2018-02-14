@@ -15,29 +15,29 @@ export class ProductColorComponent implements OnInit {
   productColorForm: FormGroup;
   colors: IColor[] = [
     {
-      _id: '5a814dc4bfa8b535fc01fac6',
+      _id: '5a8402148a4c831e60ce8cc4',
       name: 'سبز',
       color_id: '101'
     },
     {
-      _id: '5a814e02bfa8b535fc01fac7',
+      _id: '5a84022d8a4c831e60ce8cc5',
       name: 'قرمز',
       color_id: '102'
     },
     {
-      _id: '5a814e14bfa8b535fc01fac8',
+      _id: '5a8402498a4c831e60ce8cc6',
       name: 'صورتی',
       color_id: '103'
     },
     {
-      _id: '5a814e24bfa8b535fc01fac9',
+      _id: '5a8402628a4c831e60ce8cc7',
       name: 'بنفش',
       color_id: '104'
     }];
 
   productColors: IProductColor[] = [];
   selectedColorId: string = null;
-  productId = '5a815bd7bfa8b535fc01fad2';
+  productId = '5a82e102a9dbf62bb04679a0';
 
   constructor(private httpService: HttpService, private sanitizer: DomSanitizer) {
   }
