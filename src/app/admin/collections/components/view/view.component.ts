@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {HttpService} from "../../../../shared/services/http.service";
 import {AuthService} from "../../../../shared/services/auth.service";
 import {ProgressService} from "../../../../shared/services/progress.service";
 
@@ -12,11 +11,9 @@ import {ProgressService} from "../../../../shared/services/progress.service";
 export class ViewComponent implements OnInit {
   collectionId: string;
   currentCollection;
-  // productList = [];
 
   constructor(private route: ActivatedRoute, private router: Router,
-              private httpService: HttpService, private authService: AuthService,
-              private progressService: ProgressService) { }
+              private authService: AuthService, private progressService: ProgressService) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -54,9 +51,13 @@ export class ViewComponent implements OnInit {
   }
 
   addProduct(expObj) {
-    // console.log("GOT!", expObj);
-    this.authService.addProductToCollection(this.currentCollection.id, expObj.id);
-    this.searchProducts();
+    this.authService.addProductToCollection(this.currentCollection._id, expObj._id).subscribe(
+      data => {
+        this.searchProducts();
+      }, err => {
+        console.log("couldn't add product", err);
+      }
+    );
   }
 
   viewProduct(pid) {
@@ -64,10 +65,8 @@ export class ViewComponent implements OnInit {
   }
 
   removeProduct(pid) {
-    //call DELETE api for /collection/product/:cid/:pid or something like that
     this.authService.deleteProductFromCollection(this.collectionId, pid).subscribe(
       (data) => {
-
         this.searchProducts();
       });
   }

@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {HttpService} from "../../services/http.service";
-import {Observable} from "rxjs/Observable";
-import {map} from "rxjs/operator/map";
+// import {Observable} from "rxjs/Observable";
+// import {map} from "rxjs/operator/map";
 import 'rxjs/add/operator/debounceTime';
+import {ProgressService} from "../../services/progress.service";
 
 @Component({
   selector: 'app-suggestion',
@@ -22,8 +23,7 @@ export class SuggestionComponent implements OnInit {
   filteredItems: any[] = [];
   fn = '';
 
-  constructor(private httpService: HttpService) { }
-  //Q: don't we need progressiveService here?
+  constructor(private httpService: HttpService, private progressService: ProgressService) { }
 
   ngOnInit() {
     if(!this.placeholder)
@@ -50,30 +50,24 @@ export class SuggestionComponent implements OnInit {
     if((!phrase || phrase == '') || phrase.length < 3)
       this.filteredItems = [];
     else {
-      //enable progressive bar
+      this.progressService.enable();
 
       if(phrase.charCodeAt(0) >= 48 && phrase.charCodeAt(0) <= 122)
         this.fn = this.fieldNameEn;
       else
         this.fn = this.fieldNameFa;
 
-      //should be ---> this.httpService.post('suggest', {});
-      //But we don't have 'suggest' on server, so for now I used this instead
-      //  POST /products/ {phrase: <phrase: string>}
-      // AND WE GET: {products: [ {name, product_type.name, brand.name} ]}
-      this.httpService.getProductByName({
-        //for now, only support for product name
-        phrase: phrase
+      this.httpService.suggest(name,{
+        name: phrase
+        // phrase: phrase
       }).subscribe(
-        (data) => {
-          data = data.body;
-          // console.log(data);
+        (data: any) => {
           this.filteredItems = data;
-          //disable progressive bar
+          this.progressService.disable();
         },
         (err) => {
           this.filteredItems = [];
-          //disable progressive bar
+          this.progressService.disable();
         }
       );
     }

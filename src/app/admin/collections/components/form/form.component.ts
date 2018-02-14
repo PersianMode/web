@@ -5,6 +5,7 @@ import {HttpService} from "../../../../shared/services/http.service";
 import {AuthService} from "../../../../shared/services/auth.service";
 import {isUndefined} from "util";
 import {MatSnackBar} from "@angular/material";
+import {ProgressService} from "../../../../shared/services/progress.service";
 
 @Component({
   selector: 'app-form',
@@ -19,7 +20,7 @@ export class FormComponent implements OnInit {
   anyChanges = false;
   upsertBtnShouldDisabled: boolean = false;
 
-  constructor(private route: ActivatedRoute, private httpService: HttpService,
+  constructor(private route: ActivatedRoute, private progressService: ProgressService,
               private authService: AuthService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -58,10 +59,9 @@ export class FormComponent implements OnInit {
       return;
     }
 
-    //enable progressive bar
+    this.progressService.enable();
     this.upsertBtnShouldDisabled = true;
     this.authService.getOneCollection(this.collectionId).subscribe(
-    // this.httpService.getOneCollection(this.collectionId).subscribe(
       (data) => {
         data = data.body[0];
         data['_id'] = data['collection']['_id'];
@@ -71,7 +71,7 @@ export class FormComponent implements OnInit {
         this.collectionForm.controls['colName'].setValue(data.name);
         this.originalCollection = data;
 
-        //disable progressive bar
+        this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
       (error) => {
@@ -80,7 +80,7 @@ export class FormComponent implements OnInit {
           duration: 2500,
         });
 
-        //disable progressive bar
+        this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       }
     );
@@ -95,7 +95,7 @@ export class FormComponent implements OnInit {
     // if(this.collectionId)
     //   data['_id'] = this.collectionId;
 
-    //enable progressive bar
+    this.progressService.enable();
     this.upsertBtnShouldDisabled = true;
     this.authService.createCollection(data).subscribe(
       (data) => {
@@ -105,8 +105,6 @@ export class FormComponent implements OnInit {
         let isCreating = false;
         if(data._id)
           isCreating = true;
-
-        // console.log(data);
 
         this.snackBar.open('Collection is ' + (this.collectionId ? 'updated' : 'added'), null, {
           duration: 2300,
@@ -124,7 +122,7 @@ export class FormComponent implements OnInit {
           // this.originalCollection.name = this.collectionForm.controls['colName'].value;
         // }
 
-        //disable progressive bar
+        this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
       (error) => {
@@ -132,7 +130,7 @@ export class FormComponent implements OnInit {
           duration: 3200,
         });
 
-        //disable progressive bar
+        this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
         console.log(error);
       }

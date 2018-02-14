@@ -7,7 +7,6 @@
              src="{{currentCollection?.image_url}}" alt="">
         <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
              fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
-          <!--<br>-->
           <div fxFlex="90" style="text-align: right;">
             <div class="view-title"><b>نام</b></div>
             <div class="view-content">{{currentCollection?.name}}</div>
@@ -31,7 +30,6 @@
         </thead>
         <tbody>
         <tr *ngFor="let p of currentCollection?.products; let i = index">
-          <!--<td><img src="" alt=""></td>-->
           <td>
             <button mat-icon-button (click)="removeProduct(p._id)" color="warn">
               <mat-icon aria-label="delete">delete</mat-icon>

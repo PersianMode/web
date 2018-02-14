@@ -9,9 +9,15 @@ import {NgModule} from "@angular/core";
 // import {SizeOptionsComponent} from "./components/size-options/size-options.component";
 // import {SlidingHeaderComponent} from "./components/sliding-header/sliding-header.component";
 import {SuggestionComponent} from "./components/suggestion/suggestion.component";
-import {MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatOptionModule} from "@angular/material";
+import {
+  MatAutocompleteModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule,
+  MatOptionModule,
+  MatToolbarModule
+} from "@angular/material";
 import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { SearchFieldsComponent } from './components/search-fields/search-fields.component';
+import {FlexLayoutModule} from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
@@ -24,20 +30,27 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     // ProductGridItemComponent,
     // SizeOptionsComponent,
     // SlidingHeaderComponent,
+    SearchFieldsComponent,
     SuggestionComponent,
+    SearchFieldsComponent,
   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
+    FlexLayoutModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatMenuModule,
     MatInputModule,
     MatOptionModule,
     MatAutocompleteModule,
-    MatFormFieldModule,
+    MatIconModule,
   ],
   exports: [
     SuggestionComponent,
-
+    SearchFieldsComponent,
   ]
 })
 export class SharedModule {

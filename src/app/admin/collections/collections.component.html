@@ -1,3 +1,6 @@
+<div class="row" fxLayout="row">
+  <app-search-fields fxFlex="100" [target]="'collection'" (searching)="search($event)"></app-search-fields>
+</div>
 <div fxLayout="row" class="row">
   <button mat-fab color="accent" (click)="openForm()">
     <mat-icon aria-label="Add new Expertise">add</mat-icon>

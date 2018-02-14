@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 import {AuthService} from "../../shared/services/auth.service";
-import {HttpService} from "../../shared/services/http.service";
+// import {HttpService} from "../../shared/services/http.service";
 import {Router} from "@angular/router";
 import {ProgressService} from "../../shared/services/progress.service";
 
@@ -15,8 +15,8 @@ export class CollectionsComponent implements OnInit {
   selectedId: string = null;
   rows: any = [];
 
-  constructor(private authService: AuthService, private httpService: HttpService,
-              private router: Router, private progressService: ProgressService) { }
+  constructor(private authService: AuthService, private router: Router,
+              private progressService: ProgressService) { }
 
   ngOnInit() {
     this.searching();
@@ -24,31 +24,11 @@ export class CollectionsComponent implements OnInit {
 
   searching() {
     this.progressService.enable();
+    //I should use a search on this instead of this 'getAllCollections' :D TODO: when search-bar api added
     this.authService.getAllCollections().subscribe(
-    // this.httpService.getMockCollections().subscribe(
       (data) => {
         data = data.body;
-        this.collections = []; this.rows = [];
-        for (let d in data) {
-          // let col = {
-          //   id: data[d].id,
-          //   name: data[d].name,
-          //   image_url: {
-          //     url: data[d].image_url.url,
-          //     alt: data[d].image_url.alt
-          //   },
-          //   products: [],
-          // };
-          // col['products'] = [];
-          // for (let p in data[d].products) {
-          //   col['products'].push({
-          //     name: data[d].products[p].name
-          //   });
-          // }
-          let col = data[d];
-          this.collections.push(col);
-        }
-        // console.log(this.collections);
+        this.collections = data;
         this.alignRow();
         this.progressService.disable();
       }, (err) => {
@@ -96,7 +76,6 @@ export class CollectionsComponent implements OnInit {
   }
 
   deleteCollection(id: string = null) {
-    //call DELETE api for /collection/:cid
     this.progressService.enable();
     this.authService.deleteCollection(id).subscribe(
       (data) => {
@@ -107,5 +86,9 @@ export class CollectionsComponent implements OnInit {
         this.progressService.disable();
       }
     );
+  }
+
+  search(data) {
+    //TODO: when search API was created
   }
 }

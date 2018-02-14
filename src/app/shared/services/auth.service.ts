@@ -119,17 +119,10 @@ export class AuthService {
   }
 
   createCollection(values) {
-    //if collection doesn't exist, create it
-    //if collection already exists, update it
-    //(in the server, should be checked if the received id exists in database or not
     return this.httpService.put(`collection`, values);
   }
 
   addProductToCollection(cid, pid) {
-    //SHOULD BE THIS ONE, BUT ALSO SHOULD BE CHANGED ON THE SERVER TO DO THIS :D
-    // return this.httpService.put(`/collection/product/${cid}`, {pid: pid});
-
-    //BUT FOR NOW, BECAUSE SERVER IS BUILD UPON THIS WAY, I USED THIS API CALL INSTEAD :D
     return this.httpService.put(`collection/product/${cid}/${pid}`, {});
   }
 
