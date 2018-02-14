@@ -1,0 +1,35 @@
+<div>
+  <mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <span *ngIf="isLoggedIn" style="font-size: 0.8em;">
+        <button mat-button [matMenuTriggerFor]="menu">{{btnLabel}}</button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="logout()">Logout</button>
+        </mat-menu>
+      </span>
+      <span class="fill-remaining-space"></span>
+      <span class="persian-mode-logo"><a target="_blank" [routerLink]="['/home']">پرشین مد<span>ُ</span></a></span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <section>
+    <mat-progress-bar
+      *ngIf="showProgressing"
+      [color]="color"
+      [mode]="mode"
+      [value]="value"
+      [bufferValue]="bufferValue">
+    </mat-progress-bar>
+  </section>
+</div>
+<div *ngIf="isLoggedIn" dir="rtl">
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link
+       class="clickable-link"
+       *ngFor="let link of navLinks"
+       [routerLink]="link.path"
+       routerLinkActive #rla="routerLinkActive"
+       [active]="rla.isActive">
+      {{link.label}}
+    </a>
+  </nav>
+</div>

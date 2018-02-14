@@ -42,11 +42,11 @@ export class AllProductsComponent implements OnInit {
   }
 
   openForm(id: string = null) {
-    this.router.navigate([`/admin/products/productInfo/${id}`]);
+    this.router.navigate([`/agent/products/productInfo/${id}`]);
   }
 
   openView(id: string = null) {
-    this.router.navigate([`/admin/products/${id}`]);
+    this.router.navigate([`/agent/products/${id}`]);
   }
 
   deleteProduct(id: string = null) {
