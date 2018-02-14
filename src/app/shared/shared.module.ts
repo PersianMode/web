@@ -18,6 +18,7 @@ import {CommonModule} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { SearchFieldsComponent } from './components/search-fields/search-fields.component';
 import {FlexLayoutModule} from "@angular/flex-layout";
+import { AbstractSearchComponent } from './components/abstract-search/abstract-search.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
     SearchFieldsComponent,
     SuggestionComponent,
     SearchFieldsComponent,
+    AbstractSearchComponent,
   ],
   imports: [
     FormsModule,

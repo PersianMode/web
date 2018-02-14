@@ -3,7 +3,8 @@ import { HomeComponent } from './home/home.component';
 import {AdminRouting} from './admin.routing';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatMenuModule, MatProgressBarModule, MatSidenavModule,
+  MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule,
+  MatProgressBarModule, MatSidenavModule,
   MatTabsModule, MatToolbarModule
 } from '@angular/material';
 import {SharedModule} from "../shared/shared.module";
@@ -31,6 +32,8 @@ import {AdminAuthGuard} from './admin.auth.guard';
     MatMenuModule,
     MatToolbarModule,
     MatProgressBarModule,
+    MatPaginatorModule,
+    MatTabsModule,
     SharedModule,
   ],
   providers: [AdminAuthGuard],
