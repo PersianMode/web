@@ -6,7 +6,7 @@ import { ViewComponent } from './components/view/view.component';
 import {
   MatAutocompleteModule,
   MatButtonModule, MatCardActions, MatCardHeader, MatCardModule, MatGridListModule, MatIconModule,
-  MatInputModule, MatSelectModule, MatSnackBarModule
+  MatInputModule, MatPaginatorModule, MatSelectModule, MatSnackBarModule
 } from "@angular/material";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import { FormComponent } from './components/form/form.component';
@@ -28,6 +28,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     MatGridListModule,
     MatAutocompleteModule,
     MatSnackBarModule,
+    MatPaginatorModule,
     SharedModule,
   ],
   declarations: [

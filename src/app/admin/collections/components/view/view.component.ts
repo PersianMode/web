@@ -61,7 +61,7 @@ export class ViewComponent implements OnInit {
   }
 
   viewProduct(pid) {
-    this.router.navigate([`/admin/products/${pid}`]);
+    this.router.navigate([`/agent/products/${pid}`]);
   }
 
   removeProduct(pid) {

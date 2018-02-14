@@ -24,7 +24,6 @@ export class SearchFieldsComponent implements OnInit {
 
     this.searchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
-        data = data.body;
         this.phrase = data.trim() !== '' ? data.trim() : null;
         this.searchOnData();
 
