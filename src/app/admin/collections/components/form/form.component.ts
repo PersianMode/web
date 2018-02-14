@@ -3,6 +3,8 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 import {ActivatedRoute} from "@angular/router";
 import {HttpService} from "../../../../shared/services/http.service";
 import {AuthService} from "../../../../shared/services/auth.service";
+import {isUndefined} from "util";
+import {MatSnackBar} from "@angular/material";
 
 @Component({
   selector: 'app-form',
@@ -11,11 +13,14 @@ import {AuthService} from "../../../../shared/services/auth.service";
 })
 export class FormComponent implements OnInit {
   collectionId: string = null;
+  originalCollection: any = null;
   collectionForm: FormGroup;
+
+  anyChanges = false;
   upsertBtnShouldDisabled: boolean = false;
 
   constructor(private route: ActivatedRoute, private httpService: HttpService,
-              private authService: AuthService) { }
+              private authService: AuthService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.initForm();
@@ -26,6 +31,14 @@ export class FormComponent implements OnInit {
         this.initCollectionInfo();
       }
     )
+    this.collectionForm.valueChanges.subscribe(
+      (data) => {
+        this.fieldChanged();
+      },
+      (err) => {
+        console.error('ERR', err);
+      }
+    );
   }
 
   initForm() {
@@ -47,17 +60,25 @@ export class FormComponent implements OnInit {
 
     //enable progressive bar
     this.upsertBtnShouldDisabled = true;
-    //this.authService.getOneCollection(collectionId).subscribe(
-    this.httpService.getOneCollection(this.collectionId).subscribe(
+    this.authService.getOneCollection(this.collectionId).subscribe(
+    // this.httpService.getOneCollection(this.collectionId).subscribe(
       (data) => {
-        data = data.body;
+        data = data.body[0];
+        data['_id'] = data['collection']['_id'];
+        data['name'] = data['collection']['name'];
+        data['image_url'] = data['collection']['image_url'];
+
         this.collectionForm.controls['colName'].setValue(data.name);
+        this.originalCollection = data;
 
         //disable progressive bar
         this.upsertBtnShouldDisabled = false;
       },
       (error) => {
         console.log(error);
+        this.snackBar.open('Cannot get expertise details. Please try again', null, {
+          duration: 2500,
+        });
 
         //disable progressive bar
         this.upsertBtnShouldDisabled = false;
@@ -67,32 +88,71 @@ export class FormComponent implements OnInit {
 
   submitCollection() {
     const data = {
-      id: this.collectionId,
+      _id: this.collectionId,
       name: this.collectionForm.controls['colName'].value,
       //and the name of products
     };
+    // if(this.collectionId)
+    //   data['_id'] = this.collectionId;
 
     //enable progressive bar
     this.upsertBtnShouldDisabled = true;
     this.authService.createCollection(data).subscribe(
       (data) => {
+        if(data.body)
+          data = data.body;
 
-        if(!this.collectionId) {
+        let isCreating = false;
+        if(data._id)
+          isCreating = true;
+
+        // console.log(data);
+
+        this.snackBar.open('Collection is ' + (this.collectionId ? 'updated' : 'added'), null, {
+          duration: 2300,
+        });
+
+        this.anyChanges = false;
+        if(isCreating) {
+          this.collectionId = data._id;
+          this.originalCollection = Object.assign({_id: data._id}, data);
           this.collectionForm.reset();
         }
-        else {
-          this.collectionId = data.id;
-        }
-
-        //disbale progressive bar
-        this.upsertBtnShouldDisabled = false;
-      },
-      (error) => {
+        // else {
+          // this.collectionId = data._id;
+          // this.originalCollection = Object.assign({_id: data._id}, data);
+          // this.originalCollection.name = this.collectionForm.controls['colName'].value;
+        // }
 
         //disable progressive bar
         this.upsertBtnShouldDisabled = false;
+      },
+      (error) => {
+        this.snackBar.open('Cannot ' + this.collectionId ? 'add' : 'update' + ' this collection. Try again', null, {
+          duration: 3200,
+        });
+
+        //disable progressive bar
+        this.upsertBtnShouldDisabled = false;
+        console.log(error);
       }
     );
+  }
+
+  fieldChanged() {
+    if(!this.originalCollection)
+      return;
+
+    this.anyChanges = false;
+
+    let colName = (this.collectionForm.controls['colName'].value === null || isUndefined(this.collectionForm.controls['colName'].value)) ? '' : this.collectionForm.controls['colName'].value;
+    colName = colName.trim();
+
+    let orig_colName = this.originalCollection.name;
+    orig_colName = orig_colName.trim();
+
+    if(colName !== orig_colName && (colName !== '' || orig_colName !== null))
+      this.anyChanges = true;
   }
 
   basicInfoValidation(AC: AbstractControl) {

@@ -4,7 +4,7 @@
     <div class="rs-table">
       <mat-card-content>
         <img mat-card-image style="max-width: 50%; margin: 20px 0 0 20px;"
-             src="{{currentCollection?.image_url?.url}}" alt="{{currentCollection?.image_url?.alt}}">
+             src="{{currentCollection?.image_url}}" alt="">
         <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
              fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
           <!--<br>-->
@@ -33,17 +33,17 @@
         <tr *ngFor="let p of currentCollection?.products; let i = index">
           <!--<td><img src="" alt=""></td>-->
           <td>
-            <button mat-icon-button (click)="removeProduct(p.id)" color="warn">
+            <button mat-icon-button (click)="removeProduct(p._id)" color="warn">
               <mat-icon aria-label="delete">delete</mat-icon>
             </button>
           </td>
           <td>
-            <button mat-icon-button (click)="viewProduct(p.id)" color="primary">
+            <button mat-icon-button (click)="viewProduct(p._id)" color="primary">
               <mat-icon aria-label="view">visibility</mat-icon>
             </button>
           </td>
-          <td>{{p.brand.name}}</td>
-          <td>{{p.product_type.name}}</td>
+          <td>{{p.brand}}</td>
+          <td>{{p.product_type}}</td>
           <td>{{p.name}}</td>
           <td>{{i+1}}</td>
         </tr>

@@ -14,7 +14,7 @@
             <input matInput type="text" placeholder="نام" formControlName="colName"
                    role="colName" tabindex="2">
             <mat-hint>نام کالکشن را وارد کنید</mat-hint>
-            <mat-error *ngIf="collectionForm.controls['colName'].hasError('required')">
+            <mat-error *ngIf="collectionForm.controls['colName'].hasError('required') && anyChanges">
               وارد کردن نام کالکشن الزامی است
             </mat-error>
           </mat-input-container>
@@ -26,7 +26,7 @@
         </div>
         <div fxFlex="20" role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"
-                  [disabled]="upsertBtnShouldDisabled || (!collectionForm.valid)"
+                  [disabled]="upsertBtnShouldDisabled || (!collectionForm.valid || (collectionId && !anyChanges))"
                   tabindex="3">
             <mat-icon aria-label="accept">done</mat-icon>
           </button>

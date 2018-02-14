@@ -22,27 +22,28 @@ export class CollectionsComponent implements OnInit {
   }
 
   searching() {
-    // this.authService.getAllCollections().subscribe(
-    this.httpService.getMockCollections().subscribe(
+    this.authService.getAllCollections().subscribe(
+    // this.httpService.getMockCollections().subscribe(
       (data) => {
+        data = data.body;
         this.collections = []; this.rows = [];
-        data = data.body.collections;
         for (let d in data) {
-          let col = {
-            id: data[d].id,
-            name: data[d].name,
-            image_url: {
-              url: data[d].image_url.url,
-              alt: data[d].image_url.alt
-            },
-            products: [],
-          };
-          col['products'] = [];
-          for (let p in data[d].products) {
-            col['products'].push({
-              name: data[d].products[p].name
-            });
-          }
+          // let col = {
+          //   id: data[d].id,
+          //   name: data[d].name,
+          //   image_url: {
+          //     url: data[d].image_url.url,
+          //     alt: data[d].image_url.alt
+          //   },
+          //   products: [],
+          // };
+          // col['products'] = [];
+          // for (let p in data[d].products) {
+          //   col['products'].push({
+          //     name: data[d].products[p].name
+          //   });
+          // }
+          let col = data[d];
           this.collections.push(col);
         }
         console.log(this.collections);
@@ -75,7 +76,10 @@ export class CollectionsComponent implements OnInit {
 
   deleteCollection(id: string = null) {
     //call DELETE api for /collection/:cid
-    this.authService.deleteCollection(id);
-    this.searching();
+    this.authService.deleteCollection(id).subscribe(
+      (data) => {
+        this.searching();
+      }
+    );
   }
 }

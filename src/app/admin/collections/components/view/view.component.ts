@@ -21,18 +21,22 @@ export class ViewComponent implements OnInit {
       (params) => {
         this.collectionId = params['id']? params['id'] : null;
 
-        //enable progressive bar
-        //this.authService.getOneCollection(this.collectionId).subscribe(
+        this.currentCollection = [];
         this.searchProducts();
       }
     )
   }
 
   searchProducts() {
-    this.httpService.getOneCollection(this.collectionId).subscribe(
+    //enable progressive bar
+    this.authService.getOneCollection(this.collectionId).subscribe(
       (data) => {
-        data = data.body;
+        data = data.body[0];
         this.currentCollection = data;
+        this.currentCollection['_id'] = data['collection']['_id'];
+        this.currentCollection['name'] = data['collection']['name'];
+        this.currentCollection['image_url'] = data['collection']['image_url'];
+
         //disable progressive bar
       },
       (err) => {
@@ -54,8 +58,11 @@ export class ViewComponent implements OnInit {
 
   removeProduct(pid) {
     //call DELETE api for /collection/product/:cid/:pid or something like that
-    this.authService.deleteProductFromCollection(this.currentCollection.id, pid);
-    this.searchProducts();
+    this.authService.deleteProductFromCollection(this.collectionId, pid).subscribe(
+      (data) => {
+
+        this.searchProducts();
+      });
   }
 
 }

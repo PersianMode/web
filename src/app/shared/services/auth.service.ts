@@ -110,18 +110,18 @@ export class AuthService {
   }
 
   getAllCollections() {
-    return this.httpService.get('/collection');
+    return this.httpService.get('collection');
   }
 
   getOneCollection(id) {
-    return this.httpService.get(`/collection/${id}`);
+    return this.httpService.get(`collection/${id}`);
   }
 
   createCollection(values) {
     //if collection doesn't exist, create it
     //if collection already exists, update it
     //(in the server, should be checked if the received id exists in database or not
-    return this.httpService.put(`/collection`, values);
+    return this.httpService.put(`collection`, values);
   }
 
   addProductToCollection(cid, pid) {
@@ -129,14 +129,14 @@ export class AuthService {
     // return this.httpService.put(`/collection/product/${cid}`, {pid: pid});
 
     //BUT FOR NOW, BECAUSE SERVER IS BUILD UPON THIS WAY, I USED THIS API CALL INSTEAD :D
-    return this.httpService.put(`/collection/product/${cid}/${pid}`, {});
+    return this.httpService.put(`collection/product/${cid}/${pid}`, {});
   }
 
   deleteCollection(cid) {
-    return this.httpService.delete(`/collection/${cid}`);
+    return this.httpService.delete(`collection/${cid}`);
   }
 
   deleteProductFromCollection(cid, pid) {
-    return this.httpService.delete(`/collection/product/${cid}/${pid}`);
+    return this.httpService.delete(`collection/product/${cid}/${pid}`);
   }
 }
