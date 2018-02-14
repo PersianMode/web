@@ -59,8 +59,23 @@ export class CollectionsComponent implements OnInit {
   }
 
   alignRow() {
-    // TODO: should be multiple per row not all in one row - after paginator added
-    this.rows.push(this.collections);
+    this.rows = [];
+    let chunk = [], counter = 0;
+    for(let c in this.collections) {
+      if(this.collections.hasOwnProperty(c)) {
+        chunk.push(this.collections[c]);
+        counter ++;
+
+        if(counter >= 4) {
+          counter = 0;
+          this.rows.push(chunk);
+          chunk = [];
+        }
+      }
+    }
+    if(counter > 0) {
+      this.rows.push(chunk);
+    }
   }
 
   select(id) {

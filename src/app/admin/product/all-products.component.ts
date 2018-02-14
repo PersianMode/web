@@ -36,9 +36,24 @@ export class AllProductsComponent implements OnInit {
   }
 
   alignRow() {
-    // TODO: should be multiple per row not all in one row - after paginator added
     // TODO: should get products with calling a api
-    this.rows.push(this.products);
+    this.rows = [];
+    let chunk = [], counter = 0;
+    for(let c in this.products) {
+      if(this.products.hasOwnProperty(c)) {
+        chunk.push(this.products[c]);
+        counter ++;
+
+        if(counter >= 4) {
+          counter = 0;
+          this.rows.push(chunk);
+          chunk = [];
+        }
+      }
+    }
+    if(counter > 0) {
+      this.rows.push(chunk);
+    }
   }
 
   openForm(id: string = null) {
