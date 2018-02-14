@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpService} from "../../../../shared/services/http.service";
 import {AuthService} from "../../../../shared/services/auth.service";
+import {ProgressService} from "../../../../shared/services/progress.service";
 
 @Component({
   selector: 'app-view',
@@ -14,7 +15,8 @@ export class ViewComponent implements OnInit {
   // productList = [];
 
   constructor(private route: ActivatedRoute, private router: Router,
-              private httpService: HttpService, private authService: AuthService) { }
+              private httpService: HttpService, private authService: AuthService,
+              private progressService: ProgressService) { }
 
   ngOnInit() {
     this.route.params.subscribe(
@@ -28,7 +30,7 @@ export class ViewComponent implements OnInit {
   }
 
   searchProducts() {
-    //enable progressive bar
+    this.progressService.enable();
     this.authService.getOneCollection(this.collectionId).subscribe(
       (data) => {
         data = data.body[0];
@@ -37,11 +39,16 @@ export class ViewComponent implements OnInit {
         this.currentCollection['name'] = data['collection']['name'];
         this.currentCollection['image_url'] = data['collection']['image_url'];
 
-        //disable progressive bar
+        if(this.currentCollection.products)
+          if(this.currentCollection.products.length == 1)
+            if(!this.currentCollection.products[0]._id)
+              delete this.currentCollection.products;
+
+        this.progressService.disable();
       },
       (err) => {
         console.log("Collection not found! ", err);
-        //disable progressive bar
+        this.progressService.disable();
       }
     )
   }

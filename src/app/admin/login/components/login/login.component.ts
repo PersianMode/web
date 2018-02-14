@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value)
         .then(data => {
-          this.router.navigate(['agent/collections']);
+          this.router.navigate(['/agent/collections']);
         })
         .catch(err => console.error('Cannot login: ', err));
     }

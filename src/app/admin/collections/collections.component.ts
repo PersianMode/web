@@ -3,6 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../shared/services/auth.service";
 import {HttpService} from "../../shared/services/http.service";
 import {Router} from "@angular/router";
+import {ProgressService} from "../../shared/services/progress.service";
 
 @Component({
   selector: 'app-collections',
@@ -15,13 +16,14 @@ export class CollectionsComponent implements OnInit {
   rows: any = [];
 
   constructor(private authService: AuthService, private httpService: HttpService,
-              private router: Router) { }
+              private router: Router, private progressService: ProgressService) { }
 
   ngOnInit() {
     this.searching();
   }
 
   searching() {
+    this.progressService.enable();
     this.authService.getAllCollections().subscribe(
     // this.httpService.getMockCollections().subscribe(
       (data) => {
@@ -46,8 +48,12 @@ export class CollectionsComponent implements OnInit {
           let col = data[d];
           this.collections.push(col);
         }
-        console.log(this.collections);
+        // console.log(this.collections);
         this.alignRow();
+        this.progressService.disable();
+      }, (err) => {
+        console.log("err", err);
+        this.progressService.disable();
       }
     );
   }
@@ -71,14 +77,19 @@ export class CollectionsComponent implements OnInit {
   }
 
   openView(id: string = null) {
-    this.router.navigate([`/admin/collections/${id}`]);
+    this.router.navigate([`/agent/collections/${id}`]);
   }
 
   deleteCollection(id: string = null) {
     //call DELETE api for /collection/:cid
+    this.progressService.enable();
     this.authService.deleteCollection(id).subscribe(
       (data) => {
         this.searching();
+        this.progressService.disable();
+      }, (err) => {
+        console.log("Error", err);
+        this.progressService.disable();
       }
     );
   }
