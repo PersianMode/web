@@ -15,15 +15,18 @@ export class AllProductsComponent implements OnInit, OnDestroy {
   products = [];
   id: number;
   productId: string = null;
+  tempArr: any = [];
   rows: any = [];
 
   constructor(private httpService: HttpService,
               private router: Router, private progressService: ProgressService,
               private dialog: MatDialog, private snackBar: MatSnackBar) {
   }
+
   ngOnInit() {
     this.getAllProducts();
   }
+
   getAllProducts() {
     this.products = [];
     this.rows = [];
@@ -39,11 +42,13 @@ export class AllProductsComponent implements OnInit, OnDestroy {
             imgUrl: '../../../../assets/pictures/product-small/11.jpeg'
           });
         }
+      },
+      (err) => {
+        console.error('Cannot get products info. Error: ', err);
       }
     );
     this.searching();
   }
-
   select(item) {
     if (this.productId === item._id) {
       this.productId = null;
@@ -62,10 +67,11 @@ export class AllProductsComponent implements OnInit, OnDestroy {
 
   openForm(id: string = null) {
     if (id)
-     this.router.navigate([`/agent/products/productInfo/${id}`]);
+      this.router.navigate([`/agent/products/productInfo/${id}`]);
     else
       this.router.navigate([`/agent/products/productInfo/`]);
   }
+
   openView(id: string = null) {
     if (id) {
       this.router.navigate([`/agent/products/${id}`]);
@@ -73,6 +79,7 @@ export class AllProductsComponent implements OnInit, OnDestroy {
     else
       this.router.navigate(['agent/products']);
   }
+
   deleteProduct(id: string = null): void {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
@@ -104,6 +111,7 @@ export class AllProductsComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   ngOnDestroy() {
     // this.products = null;
     // this.id = null;
