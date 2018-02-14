@@ -4,6 +4,7 @@ import {IColor} from '../../interfaces/icolor';
 import {IProductColor} from '../../interfaces/iproduct-color';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-product-color',
@@ -37,13 +38,29 @@ export class ProductColorComponent implements OnInit {
 
   productColors: IProductColor[] = [];
   selectedColorId: string = null;
-  productId = '5a82e102a9dbf62bb04679a0';
-
-  constructor(private httpService: HttpService, private sanitizer: DomSanitizer) {
+  productId: string = null;
+  constructor(private httpService: HttpService, private sanitizer: DomSanitizer, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-
+    this.route.params.subscribe(
+      (params) => {
+        this.productId = params['id'] ? params['id'] : null;
+        // if (this.productId) {
+        //   this.progressService.enable();
+        //   //
+        //   // this.httpService.get(`/product/${this.productId}`).subscribe(
+        //   //   (data) => {
+        //   //     this.product = data.body;
+        //   //     this.progressService.disable();
+        //   //   },
+        //   //   (err) => {
+        //   //     this.progressService.disable();
+        //   //     console.error('Cannot get product info. Error: ', err);
+        //   //   }
+        //   // );
+        // }
+      });
     this.initForm();
     this.getProductColors();
   }

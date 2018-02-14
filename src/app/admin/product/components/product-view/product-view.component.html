@@ -8,8 +8,8 @@
         <mat-card-content>
             <div *ngFor="let color of product[0].colors; let i = index">
                 <div class="imgWrapper" *ngFor="let imgUrl of color.images"
-                     style="display: inline-block; width: 5%; height: 5%">
-                    <img style="width: 100%; height: 100%" [src]="getURL(imgUrl)">
+                     style="display: inline-block; width: 10%; height: 10%;text-align: center">
+                    <img style="width: 80%; height: 80%;" [src]="getURL(imgUrl)">
                 </div>
             </div>
             <hr>
