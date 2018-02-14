@@ -1,3 +1,54 @@
-<p>
-  login works!
-</p>
+<div fxLayout="row">
+  <div style="direction: rtl" fxFlex="40" fxFlexOffset="30" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
+    <div class="center">
+      <span class="persian-mode-center-logo">پرشین مد<span>ُ</span></span>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <div fxFlex="50">
+        <label class="center">حساب کاری شما برای مدیریت</label>
+      </div>
+      <div fxFlex="50">
+        <label class="center">فروشگاه اینترنتی NIKE</label>
+      </div>
+    </div>
+    <div style="margin: 25px;">
+      <form (ngSubmit)="login()" [formGroup]="loginForm">
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <div fxFlex="50" class="input-container">
+            <input class="input-field left-direction" type="email" placeholder="ایمیل"
+                   formControlName="email"
+                   (focus)="setSeen('email')"
+                   (blur)="curFocus = null"
+                   [ngClass]="(loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email' ? 'input-error' : null"
+                   (keypress)="keyPress($event)"/>
+            <label
+              *ngIf="(loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email'"
+              class="field-error">لطفا آدرس ایمیل معتبری وارد کنید</label>
+          </div>
+          <div fxFlex="50" class="input-container">
+            <input class="input-field left-direction" type="password" placeholder="رمز عبور"
+                   formControlName="password"
+                   (focus)="setSeen('password')"
+                   (blur)="curFocus = null"
+                   [ngClass]="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus !== 'password' ? 'input-error' : null"
+                   (keypress)="keyPress($event)"/>
+            <label *ngIf="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus !== 'password'" class="field-error">لطفا رمز عبور را وارد
+              کنید</label>
+          </div>
+        </div>
+        <!--<div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 13px">-->
+        <!--<div fxFlex="100" style="text-align: left; margin-left: -15px;">-->
+        <!--<label for="keeplogin" class="clickable-link">مرا به خاطر بسپار</label>-->
+        <!--<input id="keeplogin" type="checkbox" formControlName="keep_me_login">-->
+        <!--</div>-->
+        <!--</div>-->
+        <div class="input-container button-area">
+          <div class="btn-field login-btn inform-btn clickable-link" (click)="login()">
+            <label>ورود</label>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>

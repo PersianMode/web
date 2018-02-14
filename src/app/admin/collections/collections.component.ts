@@ -67,7 +67,7 @@ export class CollectionsComponent implements OnInit {
   }
 
   openForm(id: string = null) {
-    this.router.navigate([`/admin/collections/form/${id}`]);
+    this.router.navigate([`/agent/collections/form/${id}`]);
   }
 
   openView(id: string = null) {
