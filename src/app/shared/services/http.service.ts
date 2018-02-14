@@ -27,12 +27,12 @@ export class HttpService {
   }
   //------------------------------------------------ END MOCK --------------------------------------------------------
 
-  // getMockProducts(): Observable<any> {
-  //   return this.http.get('https://b8478a2d-c842-415e-af78-1c41137667ee' +
-  //     '.mock.pstmn.io/api/products/', {observe: 'response', headers: {
-  //     'x-api-key': '9dbabc8e50de4db09056119030e44770',
-  //   }});
-  // }
+  getMockProducts(): Observable<any> {
+    return this.http.get('https://b8478a2d-c842-415e-af78-1c41137667ee' +
+      '.mock.pstmn.io/api/products/', {observe: 'response', headers: {
+      'x-api-key': '9dbabc8e50de4db09056119030e44770',
+    }});
+  }
 
   get(url): Observable<any> {
     return this.http.get(this.serverAddress + url, {observe: 'response'});
@@ -48,5 +48,16 @@ export class HttpService {
 
   delete(url): Observable<any> {
     return this.http.delete(this.serverAddress + url, {observe: 'response'});
+  }
+
+  //ONLY WORKS FOR ADDING PRODUCTS TO COLLECTIONS FOR NOW!
+  suggest(data, values) {
+    //API address should be changed in order to be generalized
+    return this.http.post(this.serverAddress + 'products/search', values);
+  }
+
+  //ONLY WORKS FOR SEARCHING ON COLLECTIONS FOR NOW
+  search(data, offset, pageSize = 10) {
+    return this.http.post(this.serverAddress + 'search/' + (offset? offset: 0) + '/' + pageSize, data);
   }
 }

@@ -1,23 +1,50 @@
+.view-title {
+  font-family: irankharazmi;
+}
+
+
 .table thead {
+  font-family: irankharazmi;
   font-weight: bold;
 }
 
+.table tbody {
+  font-family: irankharazmi;
+}
+
+.table td {
+  direction: rtl;
+}
+
 .table td:nth-child(1) {
-  padding: 5px 30px 5px 0px;
+  padding: 5px 40px 5px 0px;
 }
 
 .table td:nth-child(2) {
-  padding: 5px 30px 5px 0px;
+  padding: 5px 40px 5px 0px;
 }
 
 .table td:nth-child(3) {
-  padding: 5px 30px 5px 0px;
+  padding: 5px 40px 5px 0px;
 }
 
 .table td:nth-child(4) {
-  padding: 5px 30px 5px 0px;
+  padding: 5px 40px 5px 0px;
 }
 
 .table td:nth-child(5) {
+  padding: 5px 40px 5px 0px;
+}
+
+.table td:nth-child(6) {
   padding: 5px 10px 5px 0px;
+}
+
+.little-right-margin {
+  margin-right: 20px;
+}
+
+.right-alignment {
+  direction: rtl;
+  text-align: right;
 }

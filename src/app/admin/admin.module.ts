@@ -28,6 +28,7 @@ import {SharedModule} from '../shared/shared.module';
     MatInputModule,
     MatTabsModule,
     MatCardModule,
+    SharedModule,
     MatMenuModule,
     MatToolbarModule,
     MatProgressBarModule,

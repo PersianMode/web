@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 
 import {AuthService} from "../../shared/services/auth.service";
-import {HttpService} from "../../shared/services/http.service";
+// import {HttpService} from "../../shared/services/http.service";
 import {Router} from "@angular/router";
+import {ProgressService} from "../../shared/services/progress.service";
 
 @Component({
   selector: 'app-collections',
@@ -14,46 +15,47 @@ export class CollectionsComponent implements OnInit {
   selectedId: string = null;
   rows: any = [];
 
-  constructor(private authService: AuthService, private httpService: HttpService,
-              private router: Router) { }
+  constructor(private authService: AuthService, private router: Router,
+              private progressService: ProgressService) { }
 
   ngOnInit() {
     this.searching();
   }
 
   searching() {
-    // this.authService.getAllCollections().subscribe(
-    this.httpService.getMockCollections().subscribe(
+    this.progressService.enable();
+    //I should use a search on this instead of this 'getAllCollections' :D TODO: when search-bar api added
+    this.authService.getAllCollections().subscribe(
       (data) => {
-        this.collections = []; this.rows = [];
-        data = data.body.collections;
-        for (let d in data) {
-          let col = {
-            id: data[d].id,
-            name: data[d].name,
-            image_url: {
-              url: data[d].image_url.url,
-              alt: data[d].image_url.alt
-            },
-            products: [],
-          };
-          col['products'] = [];
-          for (let p in data[d].products) {
-            col['products'].push({
-              name: data[d].products[p].name
-            });
-          }
-          this.collections.push(col);
-        }
-        console.log(this.collections);
+        data = data.body;
+        this.collections = data;
         this.alignRow();
+        this.progressService.disable();
+      }, (err) => {
+        console.log("err", err);
+        this.progressService.disable();
       }
     );
   }
 
   alignRow() {
-    // TODO: should be multiple per row not all in one row - after paginator added
-    this.rows.push(this.collections);
+    this.rows = [];
+    let chunk = [], counter = 0;
+    for(let c in this.collections) {
+      if(this.collections.hasOwnProperty(c)) {
+        chunk.push(this.collections[c]);
+        counter ++;
+
+        if(counter >= 4) {
+          counter = 0;
+          this.rows.push(chunk);
+          chunk = [];
+        }
+      }
+    }
+    if(counter > 0) {
+      this.rows.push(chunk);
+    }
   }
 
   select(id) {
@@ -70,12 +72,23 @@ export class CollectionsComponent implements OnInit {
   }
 
   openView(id: string = null) {
-    this.router.navigate([`/admin/collections/${id}`]);
+    this.router.navigate([`/agent/collections/${id}`]);
   }
 
   deleteCollection(id: string = null) {
-    //call DELETE api for /collection/:cid
-    this.authService.deleteCollection(id);
-    this.searching();
+    this.progressService.enable();
+    this.authService.deleteCollection(id).subscribe(
+      (data) => {
+        this.searching();
+        this.progressService.disable();
+      }, (err) => {
+        console.log("Error", err);
+        this.progressService.disable();
+      }
+    );
+  }
+
+  search(data) {
+    //TODO: when search API was created
   }
 }

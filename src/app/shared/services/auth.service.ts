@@ -112,4 +112,28 @@ export class AuthService {
       );
     });
   }
+
+  getAllCollections() {
+    return this.httpService.get('collection');
+  }
+
+  getOneCollection(id) {
+    return this.httpService.get(`collection/${id}`);
+  }
+
+  createCollection(values) {
+    return this.httpService.put(`collection`, values);
+  }
+
+  addProductToCollection(cid, pid) {
+    return this.httpService.put(`collection/product/${cid}/${pid}`, {});
+  }
+
+  deleteCollection(cid) {
+    return this.httpService.delete(`collection/${cid}`);
+  }
+
+  deleteProductFromCollection(cid, pid) {
+    return this.httpService.delete(`collection/product/${cid}/${pid}`);
+  }
 }

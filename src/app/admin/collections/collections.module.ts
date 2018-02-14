@@ -6,16 +6,19 @@ import { ViewComponent } from './components/view/view.component';
 import {
   MatAutocompleteModule,
   MatButtonModule, MatCardActions, MatCardHeader, MatCardModule, MatGridListModule, MatIconModule,
-  MatInputModule, MatSelectModule
+  MatInputModule, MatSelectModule, MatSnackBarModule
 } from "@angular/material";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import { FormComponent } from './components/form/form.component';
 import {SharedModule} from "../../shared/shared.module";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
     CommonModule,
     CollectionsRouting,
+    FormsModule,
+    ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,
     FlexLayoutModule,
@@ -24,6 +27,7 @@ import {SharedModule} from "../../shared/shared.module";
     MatSelectModule,
     MatGridListModule,
     MatAutocompleteModule,
+    MatSnackBarModule,
     SharedModule,
   ],
   declarations: [

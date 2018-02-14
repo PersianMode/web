@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {HttpService} from "../../../../shared/services/http.service";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../../shared/services/auth.service";
+import {ProgressService} from "../../../../shared/services/progress.service";
 
 @Component({
   selector: 'app-view',
@@ -11,46 +11,64 @@ import {AuthService} from "../../../../shared/services/auth.service";
 export class ViewComponent implements OnInit {
   collectionId: string;
   currentCollection;
-  // productList = [];
 
-  constructor(private route: ActivatedRoute, private httpService: HttpService, private authService: AuthService) { }
+  constructor(private route: ActivatedRoute, private router: Router,
+              private authService: AuthService, private progressService: ProgressService) { }
 
   ngOnInit() {
     this.route.params.subscribe(
       (params) => {
         this.collectionId = params['id']? params['id'] : null;
 
-        //enable progressive bar
-        //this.authService.getOneCollection(this.collectionId).subscribe(
+        this.currentCollection = [];
         this.searchProducts();
       }
     )
   }
 
   searchProducts() {
-    this.httpService.getOneCollection(this.collectionId).subscribe(
+    this.progressService.enable();
+    this.authService.getOneCollection(this.collectionId).subscribe(
       (data) => {
-        data = data.body;
+        data = data.body[0];
         this.currentCollection = data;
-        //disable progressive bar
+        this.currentCollection['_id'] = data['collection']['_id'];
+        this.currentCollection['name'] = data['collection']['name'];
+        this.currentCollection['image_url'] = data['collection']['image_url'];
+
+        if(this.currentCollection.products)
+          if(this.currentCollection.products.length == 1)
+            if(!this.currentCollection.products[0]._id)
+              delete this.currentCollection.products;
+
+        this.progressService.disable();
       },
       (err) => {
         console.log("Collection not found! ", err);
-        //disable progressive bar
+        this.progressService.disable();
       }
     )
   }
 
   addProduct(expObj) {
-    // console.log("GOT!", expObj);
-    this.authService.addProductToCollection(this.currentCollection.id, expObj._id);
-    this.searchProducts();
+    this.authService.addProductToCollection(this.currentCollection._id, expObj._id).subscribe(
+      data => {
+        this.searchProducts();
+      }, err => {
+        console.log("couldn't add product", err);
+      }
+    );
+  }
+
+  viewProduct(pid) {
+    this.router.navigate([`/admin/products/${pid}`]);
   }
 
   removeProduct(pid) {
-    //call DELETE api for /collection/product/:cid/:pid or something like that
-    this.authService.deleteProductFromCollection(this.currentCollection.id, pid);
-    this.searchProducts();
+    this.authService.deleteProductFromCollection(this.collectionId, pid).subscribe(
+      (data) => {
+        this.searchProducts();
+      });
   }
 
 }

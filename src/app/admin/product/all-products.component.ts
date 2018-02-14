@@ -1,9 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpService} from '../../shared/services/http.service';
-import {MatDialog, MatSnackBar} from '@angular/material';
-import {ProgressService} from '../../shared/services/progress.service';
-import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 
 
 @Component({
@@ -11,50 +8,27 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
   templateUrl: './all-products.component.html',
   styleUrls: ['./all-products.component.css']
 })
-export class AllProductsComponent implements OnInit, OnDestroy {
-  products = [];
-  id: number;
-  productId: string = null;
-  tempArr: any = [];
+export class AllProductsComponent implements OnInit {
+  products = [
+    {
+      imgUrl: '../../../../assets/pictures/product-small/11.jpeg',
+      name : 'کفش پیاده روی نایک',
+      base_price : '155000',
+    },
+    {
+      imgUrl: '../../../../assets/pictures/product-small/12.jpeg',
+      name: 'کفش ورزشی آدیداس',
+      base_price : '270000',
+    },
+  ];
+  selectedId: string = null;
   rows: any = [];
-
   constructor(private httpService: HttpService,
-              private router: Router, private progressService: ProgressService,
-              private dialog: MatDialog, private snackBar: MatSnackBar) {
-  }
+              private router: Router) { }
 
   ngOnInit() {
-    this.getAllProducts();
-  }
-
-  getAllProducts() {
-    this.products = [];
-    this.rows = [];
-    this.httpService.get('product').subscribe(
-      (data) => {
-        for (const d in data.body) {
-          this.products.push({
-            _id: data.body[d]._id,
-            name: data.body[d].name,
-            base_price: data.body[d].base_price,
-            product_type: data.body[d].product_type.name,
-            brand: data.body[d].brand.name,
-            imgUrl: '../../../../assets/pictures/product-small/11.jpeg'
-          });
-        }
-      },
-      (err) => {
-        console.error('Cannot get products info. Error: ', err);
-      }
-    );
+    // TODO: should get products with calling a api
     this.searching();
-  }
-  select(item) {
-    if (this.productId === item._id) {
-      this.productId = null;
-    } else {
-      this.productId = item._id;
-    }
   }
 
   searching() {
@@ -62,60 +36,35 @@ export class AllProductsComponent implements OnInit, OnDestroy {
   }
 
   alignRow() {
-    this.rows.push(this.products);
+    // TODO: should get products with calling a api
+    this.rows = [];
+    let chunk = [], counter = 0;
+    for(let c in this.products) {
+      if(this.products.hasOwnProperty(c)) {
+        chunk.push(this.products[c]);
+        counter ++;
+
+        if(counter >= 4) {
+          counter = 0;
+          this.rows.push(chunk);
+          chunk = [];
+        }
+      }
+    }
+    if(counter > 0) {
+      this.rows.push(chunk);
+    }
   }
 
   openForm(id: string = null) {
-    if (id)
-      this.router.navigate([`/agent/products/productInfo/${id}`]);
-    else
-      this.router.navigate([`/agent/products/productInfo/`]);
+    this.router.navigate([`/agent/products/productInfo/${id}`]);
   }
 
   openView(id: string = null) {
-    if (id) {
-      this.router.navigate([`/agent/products/${id}`]);
-    }
-    else
-      this.router.navigate(['agent/products']);
+    this.router.navigate([`/agent/products/${id}`]);
   }
 
-  deleteProduct(id: string = null): void {
-    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
-      width: '400px',
-    });
-    rmDialog.afterClosed().subscribe(
-      (status) => {
-        if (status) {
-          this.progressService.enable();
-          this.httpService.delete(`/product/${id}`).subscribe(
-            (data) => {
-              this.productId = null;
-              this.snackBar.open('Product delete successfully', null, {
-                duration: 2000,
-              });
-              this.progressService.disable();
-              this.getAllProducts();
-            },
-            (error) => {
-              this.snackBar.open('Cannot delete this product. Please try again', null, {
-                duration: 2700
-              });
-              this.progressService.disable();
-            }
-          );
-        }
-      },
-      (err) => {
-        console.log('Error in dialog: ', err);
-      }
-    );
+  deleteProduct(id: string = null) {
   }
 
-  ngOnDestroy() {
-    // this.products = null;
-    // this.id = null;
-    // this.productId = null;
-    // this.rows = null;
-  }
 }
