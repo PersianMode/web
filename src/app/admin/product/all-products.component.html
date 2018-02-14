@@ -1,9 +1,9 @@
 <div fxLayout="row" class="row">
-    <button mat-fab color="accent" (click)="openForm()">
+    <button mat-fab color="primary" (click)="openForm()">
         <mat-icon aria-label="add new organization">add</mat-icon>
     </button>
 </div>
-<div *ngFor="let r of rows">
+<div *ngFor="let r of rows" dir="rtl">
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
          fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center" class="row">
         <div fxFlex="20" *ngFor="let p of r" class="outer-card">
@@ -21,7 +21,7 @@
                         {{p.base_price}}
                     </div>
                 </mat-card-content>
-                <mat-card-actions>
+                <mat-card-actions style="text-align: left">
                     <button mat-icon-button (click)="openView(p._id)" color="primary">
                         <mat-icon aria-label="view">visibility</mat-icon>
                     </button>

@@ -1,9 +1,41 @@
-<p>
-  {{product[0].name}}
-  <br>
-  {{product[0].product_type.name}}
-  <br>
-  {{product[0].brand.name}}
-  <br>
-  {{product[0].desc}}
-</p>
+<div fxLayout="row" dir="rtl">
+  <mat-card fxFlex="50" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset="20" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
+    <mat-card-header>
+      <mat-card-title>
+        <div style="font-weight: bold; font-family: irankharazmi">{{product[0].name}}</div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="imgWrapper">
+
+        <img src="../../../../assets/pictures/product-small/11.jpeg">
+      </div>
+      <hr>
+      <div style="font-weight: bold; font-family: irankharazmi">
+        قیمت محصول : {{product[0].base_price}}  تومان
+      </div>
+      <div style="font-weight: bold; font-family: irankharazmi">
+       نوع محصول : {{product[0].product_type.name}}
+      </div>
+      <div style="font-weight: bold; font-family: irankharazmi">
+        برند محصول : {{product[0].brand.name}}
+      </div>
+      <div style="font-weight: bold; font-family: irankharazmi">
+        توضیحات : {{product[0].desc}}
+      </div>
+      <div style="font-weight: bold; font-family: irankharazmi">  دارای {{product[0].colors
+        .length}} رنگ، {{product[0].instances.length}} سایز
+      </div>
+    </mat-card-content>
+    <mat-card-actions style="text-align: left">
+      <button mat-icon-button (click)="openForm(product[0]._id)" color="accent">
+        <mat-icon aria-label="edit">edit</mat-icon>
+      </button>
+      <button mat-icon-button type (click)="deleteProduct(product[0]._id)" color="warn">
+        <mat-icon aria-label="delete">delete</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+

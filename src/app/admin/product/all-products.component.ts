@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpService} from '../../shared/services/http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
@@ -11,10 +11,10 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
   templateUrl: './all-products.component.html',
   styleUrls: ['./all-products.component.css']
 })
-export class AllProductsComponent implements OnInit {
+export class AllProductsComponent implements OnInit, OnDestroy {
   products = [];
   id: number;
-  selectedId: string = null;
+  productId: string = null;
   rows: any = [];
 
   constructor(private httpService: HttpService,
@@ -45,10 +45,10 @@ export class AllProductsComponent implements OnInit {
   }
 
   select(item) {
-    if (this.selectedId === item._id) {
-      this.selectedId = null;
+    if (this.productId === item._id) {
+      this.productId = null;
     } else {
-      this.selectedId = item._id;
+      this.productId = item._id;
     }
   }
 
@@ -67,11 +67,13 @@ export class AllProductsComponent implements OnInit {
       this.router.navigate([`/agent/products/productInfo/`]);
   }
   openView(id: string = null) {
-    console.log(id);
-    this.router.navigate([`/agent/products/${id}`]);
+    if (id) {
+      this.router.navigate([`/agent/products/${id}`]);
+    }
+    else
+      this.router.navigate(['agent/products']);
   }
   deleteProduct(id: string = null): void {
-    console.log(id);
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
@@ -81,7 +83,7 @@ export class AllProductsComponent implements OnInit {
           this.progressService.enable();
           this.httpService.delete(`/product/${id}`).subscribe(
             (data) => {
-              this.selectedId = null;
+              this.productId = null;
               this.snackBar.open('Product delete successfully', null, {
                 duration: 2000,
               });
@@ -101,5 +103,11 @@ export class AllProductsComponent implements OnInit {
         console.log('Error in dialog: ', err);
       }
     );
+  }
+  ngOnDestroy() {
+    // this.products = null;
+    // this.id = null;
+    // this.productId = null;
+    // this.rows = null;
   }
 }
