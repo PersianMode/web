@@ -10,7 +10,9 @@ import {ProductFullInfoComponent} from './components/product-full-info/product-f
 const Product_ROUTES: Routes = [
   {path: '', component: AllProductsComponent, pathMatch: 'full'},
   {path: 'productInfo/:id', component: ProductFullInfoComponent},
+  {path: 'productInfo', component: ProductFullInfoComponent},
   {path: 'productBasicForm/:id', component: ProductBasicFormComponent},
+  {path: 'productBasicForm', component: ProductBasicFormComponent},
   {path: 'productColor/:id', component: ProductColorComponent},
   {path: 'productSize/:id', component: ProductSizeComponent},
   {path: ':id', component: ProductViewComponent}

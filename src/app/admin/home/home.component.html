@@ -1,13 +1,5 @@
-<nav mat-tab-nav-bar>
-  <a mat-tab-link
-     class="clickable-link"
-     *ngFor="let link of navLinks"
-     [routerLink]="link.path"
-     routerLinkActive #rla="routerLinkActive"
-     [active]="rla.isActive">
-    {{link.label}}
-  </a>
-</nav>
+<app-admin-header></app-admin-header>
 <div class="admin-content">
   <router-outlet></router-outlet>
 </div>
+<app-admin-footer></app-admin-footer>

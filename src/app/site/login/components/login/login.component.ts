@@ -3,9 +3,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
-import {MatDialog} from "@angular/material";
-import {GenDialogComponent} from "../../../../shared/components/gen-dialog/gen-dialog.component";
-import {DialogEnum} from "../../../../shared/enum/dialog.components.enum";
+import {MatDialog} from '@angular/material';
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   @Output() closeDialog = new EventEmitter<boolean>();
   loginForm: FormGroup;
   dialogEnum = DialogEnum;
+  seen = {};
+  curFocus = null;
 
   constructor(private authService: AuthService, private router: Router,
               @Inject(WINDOW) private window, public dialog: MatDialog) {
@@ -41,15 +43,11 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value)
-        .then(
-          (data) => {
-            this.closeDialog.emit(true);
-            this.router.navigate(['home']);
-          },
-          (err) => {
-            console.error('Cannot login');
-          }
-        );
+        .then(data => {
+          this.closeDialog.emit(true);
+          this.router.navigate(['home']);
+        })
+        .catch(err => console.error('Cannot login: ', err));
     }
   }
 
@@ -72,5 +70,10 @@ export class LoginComponent implements OnInit {
     if (code === 13) {
       this.login();
     }
+  }
+
+  setSeen(item) {
+    this.seen[item] = true;
+    this.curFocus = item;
   }
 }
