@@ -1,3 +1,8 @@
-<p>
-  suggestion works!
-</p>
+<mat-input-container class="field">
+  <input matInput type="text" placeholder="{{placeholder}}" [matAutocomplete]="auto" [formControl]="suggestionCtrl"/>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addItem($event)">
+    <mat-option *ngFor="let item of filteredItems" [value]="item._id" class="farsi">
+      {{item.name}} ({{item.product_type.name}} - {{item.brand.name}})
+    </mat-option>
+  </mat-autocomplete>
+</mat-input-container>
