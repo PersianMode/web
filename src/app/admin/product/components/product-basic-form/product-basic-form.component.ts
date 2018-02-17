@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, Output, EventEmitter} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {isUndefined} from 'util';
 import {MatDialog, MatSnackBar} from '@angular/material';
@@ -7,6 +7,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Router} from '@angular/router';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+
 
 @Component({
   selector: 'app-product-basic-form',
@@ -29,10 +30,14 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
   ];
   upsertBtnShouldDisabled = false;
   deleteBtnShouldDisabled = false;
-  productId: string = null;
+  // productId: string = null;
   anyChanges = false;
   product: any = {};
   loadedValue: any = {};
+
+  productId: string = null;
+
+  @Output() productIdEvent = new EventEmitter<string>();
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar,
               private route: ActivatedRoute, private router: Router,
@@ -63,6 +68,7 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
           this.productId = null;
         }
       });
+    this.productIdEvent.emit(this.productId);
   }
 
   initForm() {
@@ -113,12 +119,13 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
           this.snackBar.open('Product is added', null, {
             duration: 2300,
           });
+          this.productId = data._id;
           this.productBasicForm.reset();
-
           this.upsertBtnShouldDisabled = true;
           this.deleteBtnShouldDisabled = true;
           this.initForm();
           this.anyChanges = false;
+          this.productIdEvent.emit(this.productId);
         },
         (err) => {
           console.error();
@@ -140,6 +147,7 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
             this.upsertBtnShouldDisabled = false;
             this.deleteBtnShouldDisabled = false;
             this.anyChanges = false;
+            this.productIdEvent.emit(this.productId);
           },
           (err) => {
             console.error();

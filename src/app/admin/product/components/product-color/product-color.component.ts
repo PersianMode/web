@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IColor} from '../../interfaces/icolor';
 import {IProductColor} from '../../interfaces/iproduct-color';
@@ -38,15 +38,16 @@ export class ProductColorComponent implements OnInit {
 
   productColors: IProductColor[] = [];
   selectedColorId: string = null;
-  productId: string = null;
+
+  @Input () productId;
   constructor(private httpService: HttpService, private sanitizer: DomSanitizer, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      (params) => {
-        this.productId = params['id'] ? params['id'] : null;
-      });
+    // this.route.params.subscribe(
+    //   (params) => {
+    //     this.productId = params['id'] ? params['id'] : null;
+    //   });
     this.initForm();
     this.getProductColors();
   }
@@ -67,9 +68,8 @@ export class ProductColorComponent implements OnInit {
 
         this.productColors.push(color);
       });
-
-      console.log('-> ', this.productColors);
     }, err => {
+      console.error();
     });
 
 
