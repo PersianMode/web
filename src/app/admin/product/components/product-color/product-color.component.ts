@@ -44,10 +44,6 @@ export class ProductColorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      (params) => {
-        this.productId = params['id'] ? params['id'] : null;
-      });
     this.initForm();
     this.getProductColors();
   }
