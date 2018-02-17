@@ -1,9 +1,4 @@
 <mat-card class="card-view">
-    <mat-card-header style="direction:rtl">
-        <mat-card-title>
-            <div *ngIf="!productId"><b>رنگ های موجود</b></div>
-        </mat-card-title>
-    </mat-card-header>
     <mat-card-content>
         <form (ngSubmit)="modifyColor()" [formGroup]="productColorForm">
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"

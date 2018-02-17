@@ -32,7 +32,7 @@ export class ProductViewComponent implements OnInit, OnDestroy {
 
           this.httpService.get(`/product/${this.productId}`).subscribe(
             (data) => {
-              this.product = data.body;
+              this.product.push(data.body[0]);
               this.product[0].base_price = priceFormatter(this.product[0].base_price);
               this.progressService.disable();
             },

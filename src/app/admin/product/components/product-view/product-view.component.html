@@ -6,8 +6,8 @@
             </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <div *ngFor="let color of product[0].colors; let i = index">
-                <div class="imgWrapper" *ngFor="let imgUrl of color.images"
+            <div *ngFor="let item of product[0].colors">
+                <div class="imgWrapper" *ngFor="let imgUrl of item.images"
                      style="display: inline-block; width: 10%; height: 10%;text-align: center">
                     <img style="width: 80%; height: 80%;" [src]="getURL(imgUrl)">
                 </div>

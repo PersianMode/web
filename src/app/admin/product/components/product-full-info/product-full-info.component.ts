@@ -10,7 +10,7 @@ import {HttpService} from '../../../../shared/services/http.service';
   styleUrls: ['./product-full-info.component.css']
 })
 export class ProductFullInfoComponent implements OnInit, OnDestroy {
-  productId;
+  productId : string;
   product: any = {};
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar,

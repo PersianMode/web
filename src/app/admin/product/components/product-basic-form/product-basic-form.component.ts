@@ -119,12 +119,12 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
           this.snackBar.open('Product is added', null, {
             duration: 2300,
           });
-          this.productId = data._id;
           this.productBasicForm.reset();
           this.upsertBtnShouldDisabled = true;
           this.deleteBtnShouldDisabled = true;
           this.initForm();
           this.anyChanges = false;
+          this.productId = data._id;
           this.productIdEvent.emit(this.productId);
         },
         (err) => {
