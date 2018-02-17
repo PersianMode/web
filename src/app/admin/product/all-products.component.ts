@@ -4,6 +4,7 @@ import {HttpService} from '../../shared/services/http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../shared/services/progress.service';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
+import {priceFormatter} from '../../shared/lib/priceFormatter';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class AllProductsComponent implements OnInit, OnDestroy {
           this.products.push({
             _id: data.body[d]._id,
             name: data.body[d].name,
-            base_price: data.body[d].base_price,
+            base_price: priceFormatter(data.body[d].base_price),
             product_type: data.body[d].product_type.name,
             brand: data.body[d].brand.name,
             imgUrl: '../../../../assets/pictures/product-small/11.jpeg'

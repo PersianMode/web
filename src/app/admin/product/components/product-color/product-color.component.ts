@@ -46,20 +46,6 @@ export class ProductColorComponent implements OnInit {
     this.route.params.subscribe(
       (params) => {
         this.productId = params['id'] ? params['id'] : null;
-        // if (this.productId) {
-        //   this.progressService.enable();
-        //   //
-        //   // this.httpService.get(`/product/${this.productId}`).subscribe(
-        //   //   (data) => {
-        //   //     this.product = data.body;
-        //   //     this.progressService.disable();
-        //   //   },
-        //   //   (err) => {
-        //   //     this.progressService.disable();
-        //   //     console.error('Cannot get product info. Error: ', err);
-        //   //   }
-        //   // );
-        // }
       });
     this.initForm();
     this.getProductColors();

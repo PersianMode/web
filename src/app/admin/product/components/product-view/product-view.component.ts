@@ -16,6 +16,7 @@ export class ProductViewComponent implements OnInit, OnDestroy {
   product: any = [];
   productId: string = null;
   productColors: any = [];
+  colorLength: string = '';
 
   constructor(private snackBar: MatSnackBar,
               public dialog: MatDialog, private progressService: ProgressService,
@@ -55,11 +56,13 @@ export class ProductViewComponent implements OnInit, OnDestroy {
         for (let i = 0; i < data.body.colors.length; i++) {
           this.productColors.push(data.body.colors[i].info.name);
         }
+        this.colorLength = priceFormatter(data.body.colors.length);
       },
       (err) => {
         console.error('Cannot get product info. Error: ', err);
       }
     );
+
   }
 
   openForm(id: string = null) {
