@@ -47,7 +47,9 @@ export class ProductViewComponent implements OnInit, OnDestroy {
   }
 
   getURL(path) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path)
+
+      ;
   }
 
   getProductColors() {

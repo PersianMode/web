@@ -114,9 +114,5 @@ export class AllProductsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.products = null;
-    // this.id = null;
-    // this.productId = null;
-    // this.rows = null;
   }
 }

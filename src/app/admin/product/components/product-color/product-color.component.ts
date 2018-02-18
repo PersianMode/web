@@ -4,7 +4,9 @@ import {IColor} from '../../interfaces/icolor';
 import {IProductColor} from '../../interfaces/iproduct-color';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
-import {ActivatedRoute} from '@angular/router';
+import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-product-color',
@@ -40,7 +42,9 @@ export class ProductColorComponent implements OnInit {
   selectedColorId: string = null;
 
   @Input () productId;
-  constructor(private httpService: HttpService, private sanitizer: DomSanitizer, private route: ActivatedRoute) {
+  constructor(private httpService: HttpService,
+              private sanitizer: DomSanitizer, private dialog: MatDialog,
+              private progressService: ProgressService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -61,22 +65,48 @@ export class ProductColorComponent implements OnInit {
     this.httpService.get(`product/color/${this.productId}`).subscribe(res => {
       this.productColors = [];
       res.body.colors.forEach(color => {
-
         this.productColors.push(color);
       });
+      console.log('product colors : ', this.productColors);
     }, err => {
       console.error();
     });
-
-
   }
 
-  removeImg(id: string) {
+  removeImg(color_id: string) {
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.delete(`/product/color/${this.productId}/${color_id}`).subscribe(
+            (data) => {
+              // this.productId = null;
+              this.snackBar.open('Product images for this color deleted successfully', null, {
+                duration: 2000,
+              });
+              this.progressService.disable();
+              this.getProductColors();
+            },
+            (error) => {
+              this.snackBar.open('Cannot delete this product. Please try again', null, {
+                duration: 2700
+              });
+              this.progressService.disable();
+            }
+          );
+        }
+      },
+      (err) => {
+        console.log('Error in dialog: ', err);
+      }
+    );
 
   }
 
   addToTable(images: any) {
-
     const pc = this.productColors.filter(x => x.info._id === this.selectedColorId)[0];
 
     if (pc) {
