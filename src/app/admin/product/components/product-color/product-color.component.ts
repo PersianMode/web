@@ -67,7 +67,6 @@ export class ProductColorComponent implements OnInit {
       res.body.colors.forEach(color => {
         this.productColors.push(color);
       });
-      console.log('product colors : ', this.productColors);
     }, err => {
       console.error();
     });
@@ -83,7 +82,6 @@ export class ProductColorComponent implements OnInit {
           this.progressService.enable();
           this.httpService.delete(`/product/color/${this.productId}/${color_id}`).subscribe(
             (data) => {
-              // this.productId = null;
               this.snackBar.open('Product images for this color deleted successfully', null, {
                 duration: 2000,
               });

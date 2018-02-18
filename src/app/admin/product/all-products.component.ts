@@ -5,6 +5,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../shared/services/progress.service';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 import {priceFormatter} from '../../shared/lib/priceFormatter';
+import {DomSanitizer} from '@angular/platform-browser';
 
 
 @Component({
@@ -16,12 +17,13 @@ export class AllProductsComponent implements OnInit, OnDestroy {
   products = [];
   id: number;
   productId: string = null;
-  tempArr: any = [];
+  tempUrl: string = '';
+  noPic;
   rows: any = [];
 
   constructor(private httpService: HttpService,
               private router: Router, private progressService: ProgressService,
-              private dialog: MatDialog, private snackBar: MatSnackBar) {
+              private dialog: MatDialog, private snackBar: MatSnackBar, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
@@ -34,15 +36,19 @@ export class AllProductsComponent implements OnInit, OnDestroy {
     this.httpService.get('product').subscribe(
       (data) => {
         for (const d in data.body) {
+          this.tempUrl = data.body[d].colors.length ? data.body[d].colors[0].images[0] : '../../../../assets/pictures/product-small/11.jpeg';
+          this.noPic = data.body[d].colors.length ? false : true;
           this.products.push({
             _id: data.body[d]._id,
             name: data.body[d].name,
             base_price: priceFormatter(data.body[d].base_price),
             product_type: data.body[d].product_type.name,
             brand: data.body[d].brand.name,
-            imgUrl: '../../../../assets/pictures/product-small/11.jpeg'
+            imgUrl: this.tempUrl,
+            imgDefaultPic: this.noPic,
           });
         }
+        console.log('***', data.body);
       },
       (err) => {
         console.error('Cannot get products info. Error: ', err);
@@ -50,6 +56,7 @@ export class AllProductsComponent implements OnInit, OnDestroy {
     );
     this.searching();
   }
+
   select(item) {
     if (this.productId === item._id) {
       this.productId = null;
@@ -111,6 +118,11 @@ export class AllProductsComponent implements OnInit, OnDestroy {
         console.log('Error in dialog: ', err);
       }
     );
+  }
+
+
+  getURL(path) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }
 
   ngOnDestroy() {

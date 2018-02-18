@@ -9,8 +9,11 @@
         <div fxFlex="20" *ngFor="let p of r" class="outer-card">
             <mat-card class="card-view">
                 <mat-card-content (click)="select(p)">
-                    <div style="text-align: center">
-                        <img mat-card-image style="width: 60%" src="{{p.imgUrl}}">
+                    <div *ngIf="!p.imgDefaultPic" style="text-align: center">
+                        <img mat-card-image style="width: 60%; height: 60%" [src]="getURL(p.imgUrl)">
+                    </div>
+                    <div *ngIf="p.imgDefaultPic" style="text-align: center">
+                        <img mat-card-image style="width: 60%; height: 60%" src="{{p.imgUrl}}">
                     </div>
                     <hr>
                     <div dir="rtl" style="font-weight: bold; font-family: 'irankharazmi'">
