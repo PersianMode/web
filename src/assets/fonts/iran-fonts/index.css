@@ -107,10 +107,10 @@
   font-family: irankharazmi;
   font-style: normal;
   font-weight: normal;
-  src: url('IRAN-kharazmi.eot');
-  src: url('IRAN-kharazmi.eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
-  url('IRAN-kharazmi.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
-  url('IRAN-kharazmi.ttf') format('truetype');
+  src: url('IRAN-Kharazmi.eot');
+  src: url('IRAN-Kharazmi.eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
+  url('IRAN-Kharazmi.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+  url('IRAN-Kharazmi.ttf') format('truetype');
   unicode-range: U+0600-06FF;
 }
 
