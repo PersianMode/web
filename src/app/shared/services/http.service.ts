@@ -11,27 +11,9 @@ export class HttpService {
   constructor(private http: HttpClient) {
   }
 
-  //---------- START MOCK SERVER !! FOR TEST ONLY !! WILL BE REMOVED WHEN REAL SERVER WAS CREATED !! -----------------
-  private mockServerAddress = 'http://p183d.mocklab.io/';
-
+  // only for mock server purpose -> will be deleted when server api was completed
   getMockCollections(): Observable<any> {
-    return this.http.get(this.mockServerAddress + 'api/collections', {observe: 'response'});
-  }
-
-  getProductByName(values): Observable<any> {
-    return this.http.post(this.mockServerAddress + 'api/products', values, {observe: 'response'});
-  }
-
-  getOneCollection(id): Observable<any> {
-    return this.http.get(this.mockServerAddress + 'api/collections/' + id, {observe: 'response'});
-  }
-  //------------------------------------------------ END MOCK --------------------------------------------------------
-
-  getMockProducts(): Observable<any> {
-    return this.http.get('https://b8478a2d-c842-415e-af78-1c41137667ee' +
-      '.mock.pstmn.io/api/products/', {observe: 'response', headers: {
-      'x-api-key': '9dbabc8e50de4db09056119030e44770',
-    }});
+    return this.http.get('https://69ab57c3-ac95-43ee-9f43-f4bd89a4d427.mock.pstmn.io/api/collections/', {observe: 'response'});
   }
 
   get(url): Observable<any> {

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -10,37 +10,20 @@ import {HttpService} from '../../../../shared/services/http.service';
   styleUrls: ['./product-full-info.component.css']
 })
 export class ProductFullInfoComponent implements OnInit, OnDestroy {
-  productId: string = null;
+  productId : string;
   product: any = {};
-  loadedValue: any = {};
+
   constructor(private httpService: HttpService, private snackBar: MatSnackBar,
               private route: ActivatedRoute, private router: Router,
-              public dialog: MatDialog, private progressService: ProgressService) { }
-
-  ngOnInit() {
-    // this.route.params.subscribe(
-    //   (params) => {
-    //     this.productId = params['id'];
-    //     if (this.productId) {
-    //       this.progressService.enable();
-    //       this.httpService.get(`/product/${this.productId}`).subscribe(
-    //         (data) => {
-    //           this.product = data.body[0];
-    //           this.loadedValue = data.body[0];
-    //           this.progressService.disable();
-    //         },
-    //         (err) => {
-    //           this.progressService.disable();
-    //           console.error('Cannot get product info... Error: ', err);
-    //         }
-    //       );
-    //     }
-    //   });
+              public dialog: MatDialog, private progressService: ProgressService) {
   }
 
+  setProductId($event) {
+    this.productId = $event;
+  }
+
+  ngOnInit() {
+  }
   ngOnDestroy() {
-    // this.productId = null;
-    // this.product = null;
-    // this.loadedValue = null;
   }
 }

@@ -7,17 +7,17 @@ import {
   MatProgressBarModule, MatSidenavModule,
   MatTabsModule, MatToolbarModule
 } from '@angular/material';
+import {SharedModule} from '../shared/shared.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import {AdminAuthGuard} from './admin.auth.guard';
-import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   declarations: [
     HomeComponent,
     FooterComponent,
-    HeaderComponent,
+    HeaderComponent
   ],
   imports: [
     AdminRouting,
@@ -29,7 +29,6 @@ import {SharedModule} from '../shared/shared.module';
     MatInputModule,
     MatTabsModule,
     MatCardModule,
-    SharedModule,
     MatMenuModule,
     MatToolbarModule,
     MatProgressBarModule,
