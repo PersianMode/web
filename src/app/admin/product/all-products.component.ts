@@ -6,7 +6,6 @@ import {ProgressService} from '../../shared/services/progress.service';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 import {priceFormatter} from '../../shared/lib/priceFormatter';
 import {DomSanitizer} from '@angular/platform-browser';
-import {Component, OnInit} from '@angular/core';
 import {AbstractSearchComponent} from "../../shared/components/abstract-search/abstract-search.component";
 
 
