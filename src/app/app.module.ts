@@ -10,7 +10,8 @@ import {HttpService} from './shared/services/http.service';
 import {SocketService} from './shared/services/socket.service';
 import {AuthService} from './shared/services/auth.service';
 import {HttpClientModule} from '@angular/common/http';
-import {routing} from './app.routing';
+import {routing} from "./app.routing";
+import {SharedModule} from "./shared/shared.module";
 import {ProgressService} from './shared/services/progress.service';
 import {SharedModule} from './shared/shared.module';
 
@@ -22,6 +23,7 @@ import {SharedModule} from './shared/shared.module';
     routing,
     BrowserAnimationsModule,
     BrowserModule,
+    SharedModule,
     FormsModule,
     HttpClientModule,
     FlexLayoutModule,

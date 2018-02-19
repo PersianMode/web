@@ -29,6 +29,7 @@ import {SharedModule} from '../../shared/shared.module';
   ],
   imports: [
     ProductRouting,
+    SharedModule,
     CommonModule,
     MatButtonModule,
     MatIconModule,

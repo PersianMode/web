@@ -1,3 +1,6 @@
+<div class="row" fxLayout="row">
+  <app-search-fields fxFlex="100" [target]="'product'" (searching)="search($event)"></app-search-fields>
+</div>
 <div fxLayout="row" class="row">
     <button mat-fab color="primary" (click)="openForm()">
         <mat-icon aria-label="add new organization">add</mat-icon>
