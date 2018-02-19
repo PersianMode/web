@@ -28,17 +28,11 @@ export class HomeComponent implements OnInit {
           {
             imgUrl: '../../../../assets/pictures/nike-first-page-pic/pm-1.png',
             href: '#',
-            topTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: ''
-            },
             subTitle: {
-              title: '',
-              text: '',
-              color: '',
-              textColor: '',
+              title: 'dsds',
+              text: 'ddfd',
+              color: 'black',
+              textColor: 'gray',
             },
             areas: [
               {

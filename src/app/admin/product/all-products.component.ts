@@ -20,7 +20,6 @@ export class AllProductsComponent implements OnInit, OnDestroy {
   tempUrl: string = '';
   noPic;
   rows: any = [];
-
   constructor(private httpService: HttpService,
               private router: Router, private progressService: ProgressService,
               private dialog: MatDialog, private snackBar: MatSnackBar, private sanitizer: DomSanitizer) {
@@ -48,7 +47,6 @@ export class AllProductsComponent implements OnInit, OnDestroy {
             imgDefaultPic: this.noPic,
           });
         }
-        console.log('***', data.body);
       },
       (err) => {
         console.error('Cannot get products info. Error: ', err);
@@ -119,7 +117,6 @@ export class AllProductsComponent implements OnInit, OnDestroy {
       }
     );
   }
-
 
   getURL(path) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
