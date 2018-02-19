@@ -38,6 +38,11 @@ export class CollectionHeaderComponent implements OnInit {
       collectionNameFa: 'پسرانه',
       collectionRoute: '#',
     },
+    {
+      collectionName: 'test',
+      collectionNameFa: 'test',
+      collectionRoute: '#',
+    },
   ];
   placements = {
     menMenu: {
@@ -125,6 +130,21 @@ export class CollectionHeaderComponent implements OnInit {
             href: '#',
           },
         ],
+        [
+          {
+            text: 'لوازم جانبی',
+            href: '#',
+            isHeader: true,
+          },
+          {
+            text: 'کوله‌ها و کیف‌ها',
+            href: '#',
+          },
+          {
+            text: 'عینک آفتابی',
+            href: '#',
+          },
+        ]
       ],
       leftColumn: [
         [
@@ -179,7 +199,10 @@ export class CollectionHeaderComponent implements OnInit {
     },
     womenMenu: {},
     boysMenu: {},
-    girlsMenu: {},
+    girlsMenu: {
+    },
+    testMenu:{
+    },
     fullPanels: [],
     halfPanels: [],
     quarterPanels: [],

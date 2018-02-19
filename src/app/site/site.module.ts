@@ -20,6 +20,7 @@ import {LoginComponent} from './login/components/login/login.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RegisterComponent} from './register/components/register/register.component';
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-hand
     MatButtonModule,
     MatDialogModule,
     DpDatePickerModule,
+    SharedModule,
   ],
   declarations: [
     HeaderComponent,
@@ -40,10 +42,10 @@ import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-hand
     FooterComponent,
     MobileHeaderComponent,
     SiteComponent,
-    GenDialogComponent,
     LoginComponent,
     OauthHandlerComponent,
     RegisterComponent,
+    GenDialogComponent
   ],
   entryComponents: [GenDialogComponent],
 })

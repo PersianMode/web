@@ -7,7 +7,7 @@ import {
   MatProgressBarModule, MatSidenavModule,
   MatTabsModule, MatToolbarModule
 } from '@angular/material';
-import {SharedModule} from "../shared/shared.module";
+import {SharedModule} from '../shared/shared.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';

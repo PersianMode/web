@@ -15,8 +15,7 @@ import {ProductColorComponent} from './components/product-color/product-color.co
 import {ProductSizeComponent} from './components/product-size/product-size.component';
 import {UploaderComponent} from '../../shared/components/uploader/uploader.component';
 import {FileUploadModule} from 'ng2-file-upload';
-import {SharedModule} from "../../shared/shared.module";
-
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -46,7 +45,8 @@ import {SharedModule} from "../../shared/shared.module";
     MatDialogModule,
     MatSelectModule,
     MatTabsModule,
-    FileUploadModule
+    FileUploadModule,
+    SharedModule,
   ],
 })
 export class ProductModule {

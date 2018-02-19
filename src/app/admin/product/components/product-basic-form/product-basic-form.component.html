@@ -11,22 +11,22 @@
                  fxLayoutAlign.xs="center center" dir="rtl">
                 <div fxFlex="50" class="field-container">
                     <mat-input-container class="field farsi">
-                        <input matInput type="text" placeholder="نام" formControlName="proName"
-                               role="proName"
+                        <input matInput type="text" placeholder="نام" formControlName="name"
+                               role="name"
                                tabindex="2"/>
                         <mat-hint>نام محصول را وارد کنید</mat-hint>
                         <mat-error
-                                *ngIf="productBasicForm.controls['proName'].hasError('required')">
+                                *ngIf="productBasicForm.controls['name'].hasError('required')">
                             وارد کردن نام محصول الزامی است
                         </mat-error>
                     </mat-input-container>
                 </div>
                 <div fxFlex="50" class="field-container">
                     <mat-input-container class="field farsi">
-                        <input matInput type="number" placeholder="قیمت پایه" formControlName="proPrice"
-                               role="proPrice" tabindex="2"/>
+                        <input matInput type="number" placeholder="قیمت پایه" formControlName="base_price"
+                               role="base_price" tabindex="2"/>
                         <mat-hint>قیمت محصول را وارد کنید</mat-hint>
-                        <mat-error *ngIf="productBasicForm.controls['proPrice'].hasError('required')">
+                        <mat-error *ngIf="productBasicForm.controls['base_price'].hasError('required')">
                             وارد کردن قیمت محصول الزامی است
                         </mat-error>
                     </mat-input-container>
@@ -36,27 +36,27 @@
                  fxLayoutAlign.xs="center center" dir="rtl">
                 <div style="text-align: right" class="field-container">
                     <mat-form-field fxFlex="100" style="text-align:right;" tabindex="3">
-                        <mat-select placeholder="نوع محصول" formControlName="proType" role="proType">
-                            <mat-option *ngFor="let type of types" style="text-align:right" [value]="type">
-                                {{type}}
+                        <mat-select placeholder="نوع محصول" formControlName="product_type" role="product_type">
+                            <mat-option *ngFor="let type of types" style="text-align:right" [value]="type.value">
+                                {{type.text}}
                             </mat-option>
                         </mat-select>
                         <mat-hint>نوع محصول را انتخاب کنید</mat-hint>
-                        <mat-error *ngIf="productBasicForm.controls['proType'].hasError('required')">
+                        <mat-error *ngIf="productBasicForm.controls['product_type'].hasError('required')">
                             وارد کردن نوع محصول الزامی است
                         </mat-error>
                     </mat-form-field>
                 </div>
                 <div style="text-align: left" class="field-container">
                     <mat-form-field fxFlex="100" style="text-align:right" tabindex="4">
-                        <mat-select placeholder="برند" formControlName="proBrand" role="proBrand">
+                        <mat-select placeholder="برند" formControlName="brand" role="brand">
                             <mat-option *ngFor="let brand of brands" style="text-align:right"
-                                        [value]="brand">
-                                {{brand}}
+                                        [value]="brand.value">
+                                {{brand.text}}
                             </mat-option>
                         </mat-select>
                         <mat-hint>برند را انتخاب کنید</mat-hint>
-                        <mat-error *ngIf="productBasicForm.controls['proBrand'].hasError('required')">
+                        <mat-error *ngIf="productBasicForm.controls['brand'].hasError('required')">
                             وارد کردن برند محصول الزامی است
                         </mat-error>
                     </mat-form-field>
@@ -64,10 +64,10 @@
             </div>
             <div class="field-container" dir="rtl">
                 <mat-input-container class="field">
-                            <textarea matInput placeholder="توضیحات" formControlName="proDesc" role="proDesc"
+                            <textarea matInput placeholder="توضیحات" formControlName="desc" role="desc"
                                       tabindex="5"></textarea>
                     <mat-hint>حداکثر تا 500 کاراکتر وارد کنید</mat-hint>
-                    <mat-error *ngIf="productBasicForm.controls['proDesc'].hasError('maxlength')">تعداد
+                    <mat-error *ngIf="productBasicForm.controls['desc'].hasError('maxlength')">تعداد
                         کاراکترهای وارد شده بیش از تعداد مجاز می باشد
                     </mat-error>
                 </mat-input-container>
@@ -77,12 +77,12 @@
                     <mat-icon aria-label="view" type="button" >visibility</mat-icon>
                 </button>
                 <button mat-icon-button type="submit"
-                        [disabled]="upsertBtnShouldDisabled ||(!productBasicForm.valid || (productId && !anyChanges))"
-                        tabindex="6">
+                        [disabled]="upsertBtnShouldDisabled || (!productBasicForm.valid) || (productId && !anyChanges)"
+                        tabindex="6" color="accent">
                     <mat-icon aria-label="accept">done</mat-icon>
                 </button>
-                <button mat-icon-button *ngIf="productId"
-                        type="button" [disabled]="deleteBtnShouldDisabled" (click)="deleteProduct()"
+                <button mat-icon-button *ngIf="productId" color="warn"
+                        type="button" [disabled]="deleteBtnShouldDisabled" (click)="deleteProduct(productId)"
                         tabindex="7">
                     <mat-icon aria-label="delete">delete</mat-icon>
                 </button>
