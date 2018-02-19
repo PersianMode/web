@@ -15,6 +15,7 @@ import {ProductColorComponent} from './components/product-color/product-color.co
 import {ProductSizeComponent} from './components/product-size/product-size.component';
 import {UploaderComponent} from '../../shared/components/uploader/uploader.component';
 import {FileUploadModule} from 'ng2-file-upload';
+import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {FileUploadModule} from 'ng2-file-upload';
   ],
   imports: [
     ProductRouting,
+    SharedModule,
     CommonModule,
     MatButtonModule,
     MatIconModule,

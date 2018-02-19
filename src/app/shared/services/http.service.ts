@@ -8,20 +8,7 @@ export class HttpService {
 
   public static Host = 'http://localhost:3000';
   private serverAddress = '/api/';
-
   constructor(private http: HttpClient) {
-  }
-
-  // only for mock server purpose -> will be deleted when server api was completed
-  getMockCollections(): Observable<any> {
-    return this.http.get('https://69ab57c3-ac95-43ee-9f43-f4bd89a4d427.mock.pstmn.io/api/collections/', {observe: 'response'});
-  }
-
-  getMockProducts(): Observable<any> {
-    return this.http.get('https://b8478a2d-c842-415e-af78-1c41137667ee' +
-      '.mock.pstmn.io/api/products/', {observe: 'response', headers: {
-      'x-api-key': '9dbabc8e50de4db09056119030e44770',
-    }});
   }
 
   get(url): Observable<any> {
@@ -38,5 +25,17 @@ export class HttpService {
 
   delete(url): Observable<any> {
     return this.http.delete(this.serverAddress + url, {observe: 'response'});
+  }
+
+  //ONLY WORKS FOR ADDING PRODUCTS TO COLLECTIONS FOR NOW!
+  suggest(data, values) {
+    //API address should be changed in order to be generalized
+    //BETTER TO BE: 'suggest/' and data is given through values :-?
+    return this.http.post(this.serverAddress + 'products/search', values);
+  }
+
+  //ONLY WORKS FOR SEARCHING ON COLLECTIONS FOR NOW
+  search(data) {
+    return this.http.post(this.serverAddress + 'search/', data);
   }
 }
