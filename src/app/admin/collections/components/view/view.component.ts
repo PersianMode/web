@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {AuthService} from "../../../../shared/services/auth.service";
-import {ProgressService} from "../../../../shared/services/progress.service";
+import {ActivatedRoute, Router} from '@angular/router';
+import {ProgressService} from '../../../../shared/services/progress.service';
+import {HttpService} from '../../../../shared/services/http.service';
 
 @Component({
   selector: 'app-view',
@@ -13,22 +13,22 @@ export class ViewComponent implements OnInit {
   currentCollection;
 
   constructor(private route: ActivatedRoute, private router: Router,
-              private authService: AuthService, private progressService: ProgressService) { }
+              private httpService: HttpService, private progressService: ProgressService) { }
 
   ngOnInit() {
     this.route.params.subscribe(
       (params) => {
-        this.collectionId = params['id']? params['id'] : null;
+        this.collectionId = params['id'] ? params['id'] : null;
 
         this.currentCollection = [];
         this.searchProducts();
       }
-    )
+    );
   }
 
   searchProducts() {
     this.progressService.enable();
-    this.authService.getOneCollection(this.collectionId).subscribe(
+    this.httpService.get(`collection/${this.collectionId}`).subscribe(
       (data) => {
         data = data.body[0];
         this.currentCollection = data;
@@ -36,26 +36,26 @@ export class ViewComponent implements OnInit {
         this.currentCollection['name'] = data['collection']['name'];
         this.currentCollection['image_url'] = data['collection']['image_url'];
 
-        if(this.currentCollection.products)
-          if(this.currentCollection.products.length == 1)
-            if(!this.currentCollection.products[0]._id)
+        if (this.currentCollection.products)
+          if (this.currentCollection.products.length === 1)
+            if (!this.currentCollection.products[0]._id)
               delete this.currentCollection.products;
 
         this.progressService.disable();
       },
       (err) => {
-        console.log("Collection not found! ", err);
+        console.log('Collection not found! ', err);
         this.progressService.disable();
       }
-    )
+    );
   }
 
   addProduct(expObj) {
-    this.authService.addProductToCollection(this.currentCollection._id, expObj._id).subscribe(
+    this.httpService.put(`collection/product/${this.currentCollection._id}/${expObj._id}`, {}).subscribe(
       data => {
         this.searchProducts();
       }, err => {
-        console.log("couldn't add product", err);
+        console.log('couldn\'t add product', err);
       }
     );
   }
@@ -65,7 +65,7 @@ export class ViewComponent implements OnInit {
   }
 
   removeProduct(pid) {
-    this.authService.deleteProductFromCollection(this.collectionId, pid).subscribe(
+    this.httpService.delete(`collection/product/${this.collectionId}/${pid}`).subscribe(
       (data) => {
         this.searchProducts();
       });
