@@ -75,3 +75,18 @@ button:focus{
 .description-md {
   text-align: justify;
 }
+.colors div {
+  width: 100%
+}
+.colors img {
+  max-height: 69px;
+  width: auto;
+  margin-left:2px;
+  display: inline-block;
+  transition: all .5s ease-in-out;
+  opacity: .5;
+}
+
+.colors img:hover {
+  opacity: 1 !important;
+}
