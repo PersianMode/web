@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 
+
 @Component({
   selector: 'app-search-fields',
   templateUrl: './search-fields.component.html',

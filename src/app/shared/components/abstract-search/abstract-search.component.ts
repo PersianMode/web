@@ -3,6 +3,7 @@ import {AuthService} from '../../services/auth.service';
 import {HttpService} from '../../services/http.service';
 import {ProgressService} from '../../services/progress.service';
 import {Router} from '@angular/router';
+import {MatDialog, MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-abstract-search',
@@ -22,7 +23,7 @@ export class AbstractSearchComponent implements OnInit {
   key: string;
 
   constructor(protected httpService: HttpService,
-              protected progressService: ProgressService, protected router: Router) {
+              protected progressService: ProgressService, protected router: Router, protected dialog: MatDialog, protected snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
