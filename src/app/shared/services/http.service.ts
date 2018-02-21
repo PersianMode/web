@@ -21,7 +21,7 @@ export class HttpService {
   }
 
   post(url, values): Observable<any> {
-    return this.http.post(this.serverAddress + url, values, {observe: 'response'}).map(data => data.body);
+    return this.http.post(this.serverAddress + url, values, {observe: 'response'});
   }
 
   delete(url): Observable<any> {
