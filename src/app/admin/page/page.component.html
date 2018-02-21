@@ -1,5 +1,5 @@
 <div class="row" fxLayout="row">
-  <app-search-fields fxFlex="100" [target]="'collection'" (searching)="search($event)"></app-search-fields>
+  <app-search-fields fxFlex="100" [target]="'page'" (searching)="search($event)"></app-search-fields>
 </div>
 <div fxLayout="row" class="row">
   <button mat-fab color="accent" (click)="openForm()" style="margin-top: 15px">
@@ -9,22 +9,17 @@
 <div *ngFor="let r of rows">
   <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center" class="row">
     <div fxFlex="25" *ngFor="let c of r" class="outer-card">
-      <mat-card class="card-view" (click)="select(c._id)" [ngClass]="{'mat-elevation-z24': c._id === selectedId}">
-        <img mat-card-image src="{{c.image_url}}" alt="">
+      <mat-card class="card-view"  style="margin-top: 15px; margin-left: 10px" (click)="select(c._id)" [ngClass]="{'mat-elevation-z24': c._id === selectedId}">
+        <!--<img mat-card-image src="{{c.image_url}}" alt="">-->
         <mat-card-header>
           <mat-card-title>
-            <label class="name">{{c.name}}</label>
+            <a href="#" >{{c.address}}</a>
           </mat-card-title>
           <mat-card-subtitle>
-
+            <span *ngIf="c.is_app">{{'Site Page'}}</span>
+            <span *ngIf="!c.is_app">{{'App Page'}}</span>
           </mat-card-subtitle>
         </mat-card-header>
-        <!--<hr>-->
-        <!--<mat-card-content>-->
-          <!--<div *ngFor="let p of c.products">-->
-            <!--{{p.name}}-->
-          <!--</div>-->
-        <!--</mat-card-content>-->
         <mat-card-actions *ngIf="c._id == selectedId">
           <button mat-icon-button (click)="openView(c._id)" color="primary">
             <mat-icon aria-label="view">visibility</mat-icon>
@@ -39,8 +34,4 @@
       </mat-card>
     </div>
   </div>
-</div>
-<div>
-  <mat-paginator [length]="cards?.length" [pageSize]="8" [pageSizeOptions]="[4, 8, 16, 32]"
-                 (page)="changeOffset($event)"></mat-paginator>
 </div>
