@@ -10,6 +10,7 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 })
 export class ProductComponent implements OnInit {
   id;
+  colorId;
   mobileView = false;
   product: any = {
     id: 14,
@@ -118,21 +119,9 @@ export class ProductComponent implements OnInit {
     this.mobileView = this.window.innerWidth < 960;
     this.route.paramMap.subscribe(params => {
       this.id = +params.get('product_id');
-      if (this.id === 10) {
-        this.product.name = 'یک پروداکت دیگه';
-        this.product.images = [
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg'
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_022.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-          },
-        ]
-      } else {
-        this.product.name = 'کایری ۳ مدل What The';
+      this.product.id = this.id;
+      this.colorId = +params.get('color');
+      if (this.colorId === 10) {
         this.product.images = [
           {
             type: 'video',
@@ -158,6 +147,18 @@ export class ProductComponent implements OnInit {
           },
           {
             url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg',
+          },
+        ];
+      } else {
+        this.product.images = [
+          {
+            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg'
+          },
+          {
+            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_022.jpg',
+          },
+          {
+            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
           },
         ];
       }

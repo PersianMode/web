@@ -10,7 +10,7 @@
 </swiper>
 <div *ngIf="product.colors" class="colors">
   <div [style.width]="(product.colors.length * 129 - 4) + 'px'">
-    <a *ngFor="let img of product.colors" [routerLink]="['..', img.pcid]"><img [style.opacity]="img.pcid === id ? 1 : .5" src="assets/pictures/product-small/{{img.url}}"></a>
+    <a *ngFor="let img of product.colors" [routerLink]="['/', 'product', product.id, img.pcid]"><img [style.opacity]="img.pcid === id ? 1 : .5" src="assets/pictures/product-small/{{img.url}}"></a>
   </div>
 </div>
 <div class="container">

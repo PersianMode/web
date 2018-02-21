@@ -4,6 +4,7 @@ import {ProductComponent} from './components/product/product.component';
 
 const Collection_ROUTES: Routes = [
   {path: ':product_id', component: ProductComponent},
+  {path: ':product_id/:color', component: ProductComponent},
 ];
 
 export const ProductRouting = RouterModule.forChild(Collection_ROUTES);
