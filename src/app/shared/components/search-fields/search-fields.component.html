@@ -28,8 +28,9 @@
                                role="phrase-field">
                     </mat-input-container>
                 </div>
-                <div *ngIf="target === 'page'">
-                    <mat-checkbox name="is_app">Is App Page
+                <div *ngIf="targets.includes(targetEnum.page)">
+                    <mat-checkbox name="is_app" [ngModel]="isApp" (change)="changeState(elementEnum.isActive)"
+                                  [indeterminate]="isApp == null" role="is-app-button">Is App Page
                     </mat-checkbox>
                 </div>
             </form>

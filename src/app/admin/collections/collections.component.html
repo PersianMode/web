@@ -19,12 +19,6 @@
 
           </mat-card-subtitle>
         </mat-card-header>
-        <!--<hr>-->
-        <!--<mat-card-content>-->
-          <!--<div *ngFor="let p of c.products">-->
-            <!--{{p.name}}-->
-          <!--</div>-->
-        <!--</mat-card-content>-->
         <mat-card-actions *ngIf="c._id == selectedId">
           <button mat-icon-button (click)="openView(c._id)" color="primary">
             <mat-icon aria-label="view">visibility</mat-icon>

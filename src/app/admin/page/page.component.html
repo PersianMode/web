@@ -15,8 +15,8 @@
             <a href="#" >{{c.address}}</a>
           </mat-card-title>
           <mat-card-subtitle>
-            <span *ngIf="c.is_app !== 'true'">{{'Site Page'}}</span>
-            <span *ngIf="c.is_app === 'true'">{{'App Page'}}</span>
+            <span *ngIf="c.is_app !== 'true'">Site Page</span>
+            <span *ngIf="c.is_app === 'true'">App Page</span>
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions *ngIf="c._id == selectedId">
