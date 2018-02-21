@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
-import {HttpService} from "../../../../shared/services/http.service";
-import {AuthService} from "../../../../shared/services/auth.service";
-import {isUndefined} from "util";
-import {MatSnackBar} from "@angular/material";
-import {ProgressService} from "../../../../shared/services/progress.service";
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {HttpService} from '../../../../shared/services/http.service';
+import {AuthService} from '../../../../shared/services/auth.service';
+import {isUndefined} from 'util';
+import {MatSnackBar} from '@angular/material';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-form',
@@ -18,20 +18,20 @@ export class FormComponent implements OnInit {
   collectionForm: FormGroup;
 
   anyChanges = false;
-  upsertBtnShouldDisabled: boolean = false;
+  upsertBtnShouldDisabled = false;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-              private authService: AuthService, private snackBar: MatSnackBar) { }
+              private httpService: HttpService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.initForm();
 
     this.route.params.subscribe(
       (params) => {
-        this.collectionId = params['id'] && params['id'] != 'null'? params['id'] : null;
+        this.collectionId = params['id'] && params['id'] !== 'null' ? params['id'] : null;
         this.initCollectionInfo();
       }
-    )
+    );
     this.collectionForm.valueChanges.subscribe(
       (data) => {
         this.fieldChanged();
@@ -49,11 +49,11 @@ export class FormComponent implements OnInit {
       ]],
     }, {
       validator: this.basicInfoValidation
-    })
+    });
   }
 
   initCollectionInfo() {
-    if(!this.collectionId) {
+    if (!this.collectionId) {
       this.collectionForm = null;
       this.initForm();
       return;
@@ -61,7 +61,7 @@ export class FormComponent implements OnInit {
 
     this.progressService.enable();
     this.upsertBtnShouldDisabled = true;
-    this.authService.getOneCollection(this.collectionId).subscribe(
+    this.httpService.get(`collection/${this.collectionId}`).subscribe(
       (data) => {
         data = data.body[0];
         data['_id'] = data['collection']['_id'];
@@ -90,20 +90,20 @@ export class FormComponent implements OnInit {
     const data = {
       _id: this.collectionId,
       name: this.collectionForm.controls['colName'].value,
-      //and the name of products
+      // and the name of products
     };
     // if(this.collectionId)
     //   data['_id'] = this.collectionId;
 
     this.progressService.enable();
     this.upsertBtnShouldDisabled = true;
-    this.authService.createCollection(data).subscribe(
+    this.httpService.put(`collection`, data).subscribe(
       (data) => {
-        if(data.body)
+        if (data.body)
           data = data.body;
 
         let isCreating = false;
-        if(data._id)
+        if (data._id)
           isCreating = true;
 
         this.snackBar.open('Collection is ' + (this.collectionId ? 'updated' : 'added'), null, {
@@ -111,7 +111,7 @@ export class FormComponent implements OnInit {
         });
 
         this.anyChanges = false;
-        if(isCreating) {
+        if (isCreating) {
           this.collectionId = data._id;
           this.originalCollection = Object.assign({_id: data._id}, data);
           this.collectionForm.reset();
@@ -138,7 +138,7 @@ export class FormComponent implements OnInit {
   }
 
   fieldChanged() {
-    if(!this.originalCollection)
+    if (!this.originalCollection)
       return;
 
     this.anyChanges = false;
@@ -149,7 +149,7 @@ export class FormComponent implements OnInit {
     let orig_colName = this.originalCollection.name;
     orig_colName = orig_colName.trim();
 
-    if(colName !== orig_colName && (colName !== '' || orig_colName !== null))
+    if (colName !== orig_colName && (colName !== '' || orig_colName !== null))
       this.anyChanges = true;
   }
 
