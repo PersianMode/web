@@ -9,8 +9,7 @@ import {AbstractSearchComponent} from '../../shared/components/abstract-search/a
 export class CollectionsComponent extends AbstractSearchComponent implements OnInit {
 
   ngOnInit() {
-    this.key = 'collection';
-    this.viewName = 'Collection';
+    this.key = 'Collection';
     super.ngOnInit();
   }
 
