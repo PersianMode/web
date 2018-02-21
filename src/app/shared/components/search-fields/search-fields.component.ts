@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormControl} from "@angular/forms";
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-search-fields',
@@ -17,10 +17,10 @@ export class SearchFieldsComponent implements OnInit {
 
   phrase = null;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
-
 
     this.searchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
@@ -28,7 +28,7 @@ export class SearchFieldsComponent implements OnInit {
         this.searchOnData();
 
       }, err => {
-        console.log("Couldn't refresh", err);
+        console.log('Couldn\'t refresh', err);
       }
     );
   }
@@ -42,23 +42,15 @@ export class SearchFieldsComponent implements OnInit {
   }
 
   searchOnData(phrase?) {
-    if(!phrase)
+    if (!phrase) {
       phrase = this.phrase;
-
-    //wondering what this does :-?
-    let trg = {};
+    }
+    const trg = {};
     this.targets.forEach(el => {
       trg[el] = true;
     });
 
-    let searchData = {
-      phrase: phrase,
-      options: {
-        target: trg,
-      },
-    };
-
-    this.searching.emit(searchData);
+    this.searching.emit(phrase);
   }
 
 }
