@@ -13,7 +13,7 @@
 <h1>{{product.name}}</h1>
   <h4>{{sub}} <span>{{price}} تومان</span></h4>
   <div *ngIf="product.colors" class="colors">
-    <a *ngFor="let img of product.colors" [routerLink]="['..', img.pcid]"><img [style.opacity]="img.pcid === id ? 1 : .5" src="assets/pictures/product-small/{{img.url}}"></a>
+    <a *ngFor="let img of product.colors" [routerLink]="['/', 'product', product.id, img.pcid]"><img [style.opacity]="img.pcid === id ? 1 : .5" src="assets/pictures/product-small/{{img.url}}"></a>
   </div>
   <app-size-picker (value)="size = $event"></app-size-picker>
   <button class="cart">در سبد بگذار</button><button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>

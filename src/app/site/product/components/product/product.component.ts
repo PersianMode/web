@@ -124,7 +124,7 @@ export class ProductComponent implements OnInit {
       this.product.id = this.id;
       this.colorId =  params.get('color') ? +params.get('color')
                       : this.product.colors && this.product.colors.length ? this.product.colors.map(r => r.pcid)[0]
-                      : null;
+                      : NaN;
       // TODO: remove below lines - it is just for making a working mock
       if (this.colorId === 10) {
         this.product.images = [
