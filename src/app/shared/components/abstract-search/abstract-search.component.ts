@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {AuthService} from "../../services/auth.service";
-import {HttpService} from "../../services/http.service";
-import {ProgressService} from "../../services/progress.service";
-import {Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../services/auth.service';
+import {HttpService} from '../../services/http.service';
+import {ProgressService} from '../../services/progress.service';
+import {Router} from '@angular/router';
+import {MatDialog, MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-abstract-search',
@@ -17,76 +18,59 @@ export class AbstractSearchComponent implements OnInit {
 
   offset = 0;
   limit = 10;
-  searchData: string = null;
-
+  searchData: any = null;
+  initSearchData: any = null;
   key: string;
-  viewName: string;
 
-  constructor(protected authService: AuthService, protected httpService: HttpService,
-              protected progressService: ProgressService, protected router: Router) { }
+  constructor(protected httpService: HttpService, protected progressService: ProgressService,
+              protected router: Router, protected dialog: MatDialog,
+              protected snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
+    this.initSearchData = this.searchData;
     this.searching();
   }
 
   searching() {
-    //I should use a search on this instead of this 'getAllCollections' :D TODO: when search-bar api added
-    //this.httpService.search({
-    //  phrase: this.searchData,
-    //  options: {
-    //    target: 'collection',
-    //    offset: this.offset ? this.offset : 0,
-    //    limit: this.limit ? this.limit : 10,
-    //}).subscribe(
-    if(this.viewName == 'Collection') {
-      this.progressService.enable();
-      this.authService.getAllCollections().subscribe(
-        (data) => {
-          data = data.body;
-          this.cards = data;
-          this.alignRow();
-          this.progressService.disable();
-        }, (err) => {
-          console.log("err", err);
-          this.progressService.disable();
-        }
-      );
-    }
-    else if(this.viewName == 'Product') {
-      this.cards = [
-        {
-          _id: 'lfsdmfs',
-          imgUrl: '../../../../assets/pictures/product-small/11.jpeg',
-          name: 'کفش پیاده روی نایک',
-          base_price: '155000',
-        },
-        {
-          _id: 'iejpfqemr',
-          imgUrl: '../../../../assets/pictures/product-small/12.jpeg',
-          name: 'کفش ورزشی آدیداس',
-          base_price: '270000',
-        },
-      ];
-      this.alignRow();
-    }
+    this.progressService.enable();
+
+    this.searchData = this.searchData ? this.searchData : {options: {phrase : ''}};
+
+    let data = Object.assign({
+      offset: this.offset ? this.offset : 0,
+      limit: this.limit ? this.limit : 10,
+    }, this.searchData);
+
+    this.httpService.post(`search/${this.key}`, data).subscribe(
+      (data) => {
+        data = data.body;
+        this.cards = data;
+        this.alignRow();
+        this.progressService.disable();
+      }, (err) => {
+        console.log('err', err);
+        this.progressService.disable();
+      }
+    );
   }
 
   alignRow() {
     this.rows = [];
     let chunk = [], counter = 0;
-    for(let c in this.cards) {
-      if(this.cards.hasOwnProperty(c)) {
+    for (const c in this.cards) {
+      if (this.cards.hasOwnProperty(c)) {
         chunk.push(this.cards[c]);
-        counter ++;
+        counter++;
 
-        if(counter >= 4) {
+        if (counter >= 4) {
           counter = 0;
           this.rows.push(chunk);
           chunk = [];
         }
       }
     }
-    if(counter > 0) {
+    if (counter > 0) {
       this.rows.push(chunk);
     }
   }
@@ -94,8 +78,7 @@ export class AbstractSearchComponent implements OnInit {
   select(id) {
     if (this.selectedId === id) {
       this.selectedId = null;
-    }
-    else {
+    } else {
       this.selectedId = id;
     }
   }

@@ -6,7 +6,6 @@ import {ProgressService} from '../../shared/services/progress.service';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 import {priceFormatter} from '../../shared/lib/priceFormatter';
 import {DomSanitizer} from '@angular/platform-browser';
-import {AbstractSearchComponent} from "../../shared/components/abstract-search/abstract-search.component";
 
 
 @Component({
@@ -18,7 +17,7 @@ export class AllProductsComponent implements OnInit, OnDestroy {
   products = [];
   id: number;
   productId: string = null;
-  tempUrl: string = '';
+  tempUrl = '';
   noPic;
   rows: any = [];
   constructor(private httpService: HttpService,

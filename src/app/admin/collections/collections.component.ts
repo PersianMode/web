@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractSearchComponent} from "../../shared/components/abstract-search/abstract-search.component";
+import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
 
 @Component({
   selector: 'app-collections',
@@ -9,8 +9,7 @@ import {AbstractSearchComponent} from "../../shared/components/abstract-search/a
 export class CollectionsComponent extends AbstractSearchComponent implements OnInit {
 
   ngOnInit() {
-    this.key = 'collection';
-    this.viewName = 'Collection';
+    this.key = 'Collection';
     super.ngOnInit();
   }
 
@@ -24,12 +23,12 @@ export class CollectionsComponent extends AbstractSearchComponent implements OnI
 
   deleteCollection(id: string = null) {
     this.progressService.enable();
-    this.authService.deleteCollection(id).subscribe(
+    this.httpService.delete(`collection/${id}`).subscribe(
       (data) => {
         this.searching();
         this.progressService.disable();
       }, (err) => {
-        console.log("Error", err);
+        console.log('Error', err);
         this.progressService.disable();
       }
     );

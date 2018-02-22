@@ -5,9 +5,11 @@ import {AdminAuthGuard} from './admin.auth.guard';
 
 const Admin_ROUTES: Routes = [
   {path: '', component: HomeComponent, children: [
+    {path: '', redirectTo: 'collections', pathMatch: 'full', canActivate: [AdminAuthGuard]},
     {path: 'collections', loadChildren: 'app/admin/collections/collections.module#CollectionsModule', canActivate: [AdminAuthGuard]},
     {path: 'login', loadChildren: 'app/admin/login/login.module#LoginModule'},
     {path: 'products', loadChildren: 'app/admin/product/product.module#ProductModule', canActivate: [AdminAuthGuard]},
+    {path: 'pages', loadChildren: 'app/admin/page/page.module#PageModule', canActivate: [AdminAuthGuard]},
   ]},
 ];
 

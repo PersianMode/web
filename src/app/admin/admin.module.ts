@@ -13,11 +13,12 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import {AdminAuthGuard} from './admin.auth.guard';
 
+
 @NgModule({
   declarations: [
     HomeComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
   ],
   imports: [
     AdminRouting,
