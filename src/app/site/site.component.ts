@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../shared/services/window.service';
 
 
@@ -17,10 +17,12 @@ export class SiteComponent implements OnInit {
   ngOnInit() {
     this.curWidth = this.window.innerWidth;
     this.curHeight = this.window.innerHeight;
+  }
 
-    this.window.onresize = (e) => {
-      this.curWidth = this.window.innerWidth;
-      this.curHeight = this.window.innerHeight;
-    };
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.curWidth = event.target.innerWidth;
+    this.curHeight = event.target.innerHeight;
   }
 }
+
