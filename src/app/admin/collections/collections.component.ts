@@ -11,6 +11,7 @@ export class CollectionsComponent extends AbstractSearchComponent implements OnI
   ngOnInit() {
     this.key = 'Collection';
     super.ngOnInit();
+
   }
 
   openForm(id: string = null) {

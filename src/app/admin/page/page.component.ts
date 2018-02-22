@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 
@@ -9,19 +9,15 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
 })
 export class PageComponent extends AbstractSearchComponent implements OnInit {
 
-  // constructor() { }
-
   ngOnInit() {
     this.key = 'Page';
     super.ngOnInit();
   }
-  openForm() {
+
+  openForm(id: string = null) {
+    this.router.navigate([`/agent/pages/info/${id}`]);
   }
 
-
-  openView(id: string = null) {
-    // this.router.navigate([`/agent/collections/${id}`]);
-  }
 
   deletePage(id: string = null) {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {

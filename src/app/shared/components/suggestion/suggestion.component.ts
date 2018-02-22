@@ -5,6 +5,7 @@ import {HttpService} from '../../services/http.service';
 // import {map} from "rxjs/operator/map";
 import 'rxjs/add/operator/debounceTime';
 import {ProgressService} from '../../services/progress.service';
+import {TargetEnum} from '../../enum/target.enum';
 
 @Component({
   selector: 'app-suggestion',
@@ -14,16 +15,18 @@ import {ProgressService} from '../../services/progress.service';
 export class SuggestionComponent implements OnInit {
   @Input() name = '';
   @Input() placeholder: string = null;
-  @Input() fieldNameEn = '';
-  @Input() fieldNameFa = '';
+  @Input() fieldName = '';
   @Input() currentIds: number[] = [];
   @Output() add = new EventEmitter<any>();
 
+  targetEnum = TargetEnum;
+
+
   suggestionCtrl: FormControl;
   filteredItems: any[] = [];
-  fn = '';
 
-  constructor(private httpService: HttpService, private progressService: ProgressService) { }
+  constructor(private httpService: HttpService, private progressService: ProgressService) {
+  }
 
   ngOnInit() {
     if (!this.placeholder)
@@ -52,14 +55,8 @@ export class SuggestionComponent implements OnInit {
     else {
       this.progressService.enable();
 
-      if (phrase.charCodeAt(0) >= 48 && phrase.charCodeAt(0) <= 122)
-        this.fn = this.fieldNameEn;
-      else
-        this.fn = this.fieldNameFa;
-
-      this.httpService.suggest(name, {
-        name: phrase
-        // phrase: phrase
+      this.httpService.post(`suggest/${this.name}`, {
+        phrase
       }).subscribe(
         (data: any) => {
           this.filteredItems = data;
