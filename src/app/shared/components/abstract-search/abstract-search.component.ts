@@ -3,6 +3,7 @@ import {AuthService} from '../../services/auth.service';
 import {HttpService} from '../../services/http.service';
 import {ProgressService} from '../../services/progress.service';
 import {Router} from '@angular/router';
+import {MatDialog, MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-abstract-search',
@@ -17,27 +18,31 @@ export class AbstractSearchComponent implements OnInit {
 
   offset = 0;
   limit = 10;
-  searchData: string = null;
-
+  searchData: any = null;
+  initSearchData: any = null;
   key: string;
 
-  constructor(protected httpService: HttpService,
-              protected progressService: ProgressService, protected router: Router) {
+  constructor(protected httpService: HttpService, protected progressService: ProgressService,
+              protected router: Router, protected dialog: MatDialog,
+              protected snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
+    this.initSearchData = this.searchData;
     this.searching();
   }
 
   searching() {
     this.progressService.enable();
-    this.httpService.post(`search/${this.key}`, {
+
+    this.searchData = this.searchData ? this.searchData : {options: {phrase : ''}};
+
+    let data = Object.assign({
       offset: this.offset ? this.offset : 0,
       limit: this.limit ? this.limit : 10,
-      options: {
-        phrase: this.searchData,
-      }
-    }).subscribe(
+    }, this.searchData);
+
+    this.httpService.post(`search/${this.key}`, data).subscribe(
       (data) => {
         data = data.body;
         this.cards = data;

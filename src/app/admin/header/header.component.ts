@@ -12,6 +12,7 @@ export class HeaderComponent implements OnInit {
   navLinks = [
     {label: 'کلکسیون ها', path: '/agent/collections'},
     {label: 'محصولات', path: '/agent/products'},
+    {label: 'صفحه ها', path: '/agent/pages'},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;
