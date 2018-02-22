@@ -18,6 +18,7 @@ export class AbstractSearchComponent implements OnInit {
 
   offset = 0;
   limit = 10;
+  totalCards: number = null;
   searchData: any = null;
   initSearchData: any = null;
   key: string;
@@ -43,9 +44,11 @@ export class AbstractSearchComponent implements OnInit {
     }, this.searchData);
 
     this.httpService.post(`search/${this.key}`, data).subscribe(
-      (data) => {
-        data = data.body;
+      (resData) => {
+        console.log('----->', data);
+        data = resData.body.data;
         this.cards = data;
+        this.totalCards = resData.body.total ? parseInt(resData.body.total) : 0;
         this.alignRow();
         this.progressService.disable();
       }, (err) => {
@@ -56,6 +59,10 @@ export class AbstractSearchComponent implements OnInit {
   }
 
   alignRow() {
+    if (this.totalCards <= 0) {
+      this.rows = [];
+      return;
+    }
     this.rows = [];
     let chunk = [], counter = 0;
     for (const c in this.cards) {
