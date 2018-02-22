@@ -86,12 +86,12 @@ export class SearchFieldsComponent implements OnInit {
   changeState(element) {
     switch (element) {
       case this.elementEnum.isApp: {
-        // if (this.isApp === null)
-        //   this.isApp = true;
-        // else if (this.isApp === true)
-        //   this.isApp = false;
-        // else if (this.isApp === false)
-        //   this.isApp = null;
+        if (this.isApp === null)
+          this.isApp = true;
+        else if (this.isApp === true)
+          this.isApp = false;
+        else if (this.isApp === false)
+          this.isApp = null;
       }
         break;
     }
