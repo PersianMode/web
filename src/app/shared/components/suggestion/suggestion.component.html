@@ -2,7 +2,8 @@
   <input matInput type="text" placeholder="{{placeholder}}" [matAutocomplete]="auto" [formControl]="suggestionCtrl"/>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addItem($event)">
     <mat-option *ngFor="let item of filteredItems" [value]="item._id" class="farsi">
-      {{item.name}} ({{item.product_type}} - {{item.brand}})
+
+      <span  *ngIf="name === targetEnum.collection.toString()">{{item.name}}</span>
     </mat-option>
   </mat-autocomplete>
 </mat-input-container>
