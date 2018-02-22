@@ -114,13 +114,18 @@ export class ProductComponent implements OnInit {
   joinedTags = '';
   formattedPrice = '';
 
-  constructor(private route: ActivatedRoute, @Inject(WINDOW) private window) { }
+  constructor(private route: ActivatedRoute, @Inject(WINDOW) private window) {
+  }
+
   ngOnInit() {
     this.mobileView = this.window.innerWidth < 960;
     this.route.paramMap.subscribe(params => {
       this.id = +params.get('product_id');
       this.product.id = this.id;
-      this.colorId = +params.get('color');
+      this.colorId =  params.get('color') ? +params.get('color')
+                      : this.product.colors && this.product.colors.length ? this.product.colors.map(r => r.pcid)[0]
+                      : null;
+      // TODO: remove below lines - it is just for making a working mock
       if (this.colorId === 10) {
         this.product.images = [
           {
@@ -162,6 +167,7 @@ export class ProductComponent implements OnInit {
           },
         ];
       }
+      // TODO: remove above lines - it is just for making a working mock
     });
     this.joinedTags = this.product.tags.join(' ');
     this.formattedPrice = priceFormatter(this.product.price);
