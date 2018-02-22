@@ -10,9 +10,9 @@ import {ProgressService} from '../../shared/services/progress.service';
 })
 export class HeaderComponent implements OnInit {
   navLinks = [
-    {label: 'کلکسیون ها', path: '/agent/collections'},
+    {label: 'کلکسیون‌ها', path: '/agent/collections'},
     {label: 'محصولات', path: '/agent/products'},
-    {label: 'صفحه ها', path: '/agent/pages'},
+    {label: 'صفحه‌ها', path: '/agent/pages'},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;
