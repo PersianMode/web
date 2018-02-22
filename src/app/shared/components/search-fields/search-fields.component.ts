@@ -33,7 +33,7 @@ export class SearchFieldsComponent implements OnInit {
   targetEnum = TargetEnum;
   elementEnum = ElementEnum;
   phrase = null;
-  isApp = true;
+  isApp = null;
   _initItems: any = null;
 
 
