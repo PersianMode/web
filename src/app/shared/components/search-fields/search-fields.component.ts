@@ -33,7 +33,7 @@ export class SearchFieldsComponent implements OnInit {
   targetEnum = TargetEnum;
   elementEnum = ElementEnum;
   phrase = null;
-  isApp = null;
+  isApp = true;
   _initItems: any = null;
 
 
@@ -87,11 +87,11 @@ export class SearchFieldsComponent implements OnInit {
     switch (element) {
       case this.elementEnum.isApp: {
         if (this.isApp === null)
-          this.isApp = false;
-        else if (this.isApp === true)
           this.isApp = true;
-        else if (this.isApp === false)
+        else if (this.isApp === true)
           this.isApp = false;
+        else if (this.isApp === false)
+          this.isApp = null;
       }
         break;
     }
