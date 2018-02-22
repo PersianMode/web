@@ -1,6 +1,8 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'jalali-moment';
+import {HttpService} from '../../../../shared/services/http.service';
+import {AuthService} from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -16,31 +18,35 @@ export class RegisterComponent implements OnInit {
   seen = {};
   curFocus = null;
 
-  constructor() {
+  constructor(private httpService: HttpService, private authService: AuthService) {
   }
 
   ngOnInit() {
-    this.dateObject = moment('1395-11-22','jYYYY,jMM,jDD');
+    this.dateObject = moment(new Date()).format('jYYYY,jMM,jDD');
     this.initForm();
   }
 
   initForm() {
     this.registerForm = new FormBuilder().group({
-      email: [null, [
+      username: [null, [
         Validators.required,
         Validators.email,
       ]],
       password: [null, [
         Validators.required,
       ]],
-      firstname: [null, [
+      first_name: [null, [
         Validators.required,
       ]],
       surname: [null, [
         Validators.required,
       ]],
-      birthdate: [null, [
+      dob: [null, [
         Validators.required,
+      ]],
+      mobile_no: [null, [
+        Validators.required,
+        Validators.pattern(/^((\+)?(\d{2}[-])?(\d{10}){1})?(\d{11}){0,1}?$/),
       ]],
     });
   }
@@ -57,7 +63,24 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid && this.gender) {
-      // raised event to close dialog after register successfully
+      let data = {};
+      Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
+      data['gender'] = this.gender;
+
+      this.httpService.put('register', data).subscribe(
+        (res) => {
+          this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
+            .then(res => {
+              this.closeDialog.emit(true);
+            })
+            .catch(err => {
+              console.error('Cannot login: ', err);
+            });
+        },
+        (err) => {
+          console.error('Cannot register user: ', err);
+        }
+      );
     } else {
       Object.keys(this.registerForm.controls).forEach(el => {
         if (!this.registerForm.controls[el].valid) {
