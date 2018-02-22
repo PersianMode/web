@@ -55,7 +55,7 @@ export class SuggestionComponent implements OnInit {
     else {
       this.progressService.enable();
 
-      this.httpService.suggest(name, {
+      this.httpService.post(`suggest/${this.name}`, {
         name,
         phrase
       }).subscribe(

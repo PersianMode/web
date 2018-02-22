@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 
@@ -7,7 +7,7 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
   templateUrl: './page.component.html',
   styleUrls: ['./page.component.css']
 })
-export class PageComponent extends AbstractSearchComponent  implements OnInit {
+export class PageComponent extends AbstractSearchComponent implements OnInit {
 
   ngOnInit() {
     this.key = 'Page';
@@ -15,32 +15,9 @@ export class PageComponent extends AbstractSearchComponent  implements OnInit {
   }
 
   openForm(id: string = null) {
-    this.router.navigate([`/agent/page/form/${id}`]);
+    this.router.navigate([`/agent/pages/info/${id}`]);
   }
 
-  openView(id: string = null) {
-    this.router.navigate([`/agent/page/${id}`]);
-  }
-
-  deletePage(id: string = null) {
-    this.progressService.enable();
-    this.httpService.delete(`collection/${id}`).subscribe(
-      (data) => {
-        this.searching();
-        this.progressService.disable();
-      }, (err) => {
-        console.log('Error', err);
-        this.progressService.disable();
-      }
-  }
-
-  openForm() {
-  }
-
-
-  openView(id: string = null) {
-    // this.router.navigate([`/agent/collections/${id}`]);
-  }
 
   deletePage(id: string = null) {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {

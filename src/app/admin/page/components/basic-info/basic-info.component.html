@@ -7,7 +7,7 @@
   </mat-card-header>
   <mat-card-content>
 
-    <app-suggestion > </app-suggestion>
+    <app-suggestion [name]="'Collection'" [currentIds]="[collectionId]" [fieldName]="'name'" [placeholder]="'نام کالکشن'"> </app-suggestion>
     <form (ngSubmit)="submitPage()" [formGroup]="form">
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
            fxLayoutAlign.xs="center center" dir="rtl">

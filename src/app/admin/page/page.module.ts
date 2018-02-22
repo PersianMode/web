@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatNativeDateModule,
+  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
   MatSnackBarModule, MatTabsModule
 } from '@angular/material';
@@ -11,6 +11,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileUploadModule} from 'ng2-file-upload';
 import {SharedModule} from '../../shared/shared.module';
 import {PageComponent} from './page.component';
+import {BasicInfoComponent} from './components/basic-info/basic-info.component';
 
 @NgModule({
   declarations: [
