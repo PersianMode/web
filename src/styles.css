@@ -543,7 +543,6 @@ mat-panel-title {
 
 .footer-wrapper {
   background-color: #191919;
-  margin-top: 0;
   clear: both;
   margin-top: 60px;
 }
@@ -598,4 +597,19 @@ mat-panel-title {
   width: 100%;
   padding-bottom: 25px;
   padding-top: 25px
+}
+.mat-drawer-content {
+  overflow: hidden !important;
+  height: 49px !important;
+  border-bottom: 1px solid #E5E5E5;
+}
+
+@media(max-width:959px) {
+  .mat-button-toggle-label-content {
+    width: 50px;
+    padding: 4px 0 !important;
+    text-align: center;
+    border: 1px rgba(221,221,221,.7) solid;
+    color: black;
+  }
 }

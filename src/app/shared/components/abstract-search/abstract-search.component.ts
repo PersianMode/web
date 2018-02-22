@@ -2,10 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {HttpService} from '../../services/http.service';
 import {ProgressService} from '../../services/progress.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
-import {RemovingConfirmComponent} from '../removing-confirm/removing-confirm.component';
-import {MatDialog} from '@angular/material';
+import {Router} from '@angular/router';
+import {MatDialog, MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-abstract-search',
@@ -17,51 +15,34 @@ export class AbstractSearchComponent implements OnInit {
   cards: any = null;
   selectedId: string = null;
   rows: any = [];
-  totalCards: number = null;
-  cardId: number = null;
-
 
   offset = 0;
   limit = 10;
-  searchData: string = null;
-
+  searchData: any = null;
+  initSearchData: any = null;
   key: string;
 
-  constructor(protected httpService: HttpService,
-              protected progressService: ProgressService, protected router: Router,
-              protected activatedRoute: ActivatedRoute, private dialog: MatDialog) {
+  constructor(protected httpService: HttpService, protected progressService: ProgressService,
+              protected router: Router, protected dialog: MatDialog,
+              protected snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
+    this.initSearchData = this.searchData;
     this.searching();
-  }
-
-  open(id: number = null) {
-    this.cardId = id;
-    this.router.navigate(['/' + id], {relativeTo: this.activatedRoute});
-  }
-
-  deleteCard(id: number = null, name = ''): Observable<any> {
-    this.cardId = id;
-    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
-      width: '400px',
-      data: {
-        name: name,
-      }
-    });
-
-    return rmDialog.afterClosed();
   }
 
   searching() {
     this.progressService.enable();
-    this.httpService.post(`search/${this.key}`, {
+
+    this.searchData = this.searchData ? this.searchData : {options: {phrase : ''}};
+
+    let data = Object.assign({
       offset: this.offset ? this.offset : 0,
       limit: this.limit ? this.limit : 10,
-      options: {
-        phrase: this.searchData,
-      }
-    }).subscribe(
+    }, this.searchData);
+
+    this.httpService.post(`search/${this.key}`, data).subscribe(
       (data) => {
         data = data.body;
         this.cards = data;

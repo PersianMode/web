@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 import {SuggestionComponent} from './components/suggestion/suggestion.component';
 import {
-  MatAutocompleteModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule,
+  MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatIconModule,
+  MatInputModule,
   MatMenuModule,
   MatOptionModule,
   MatToolbarModule
@@ -47,6 +48,7 @@ import {BidiModule} from '@angular/cdk/bidi';
     MatButtonModule,
     BidiModule,
     MatIconModule,
+    MatCheckboxModule,
 
   ],
   entryComponents: [RemovingConfirmComponent],

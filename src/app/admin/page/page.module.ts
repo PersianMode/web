@@ -1,14 +1,15 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatNativeDateModule, MatSelectModule,
+  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatNativeDateModule,
+  MatPaginatorModule, MatSelectModule,
   MatSnackBarModule, MatTabsModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {SharedModule} from '../../shared/shared.module';
 import {PageRouting} from './page.routing';
-import { BasicInfoComponent } from './components/basic-info/basic-info.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FileUploadModule} from 'ng2-file-upload';
+import {SharedModule} from '../../shared/shared.module';
 import {PageComponent} from './page.component';
 
 @NgModule({
@@ -34,6 +35,10 @@ import {PageComponent} from './page.component';
     MatDialogModule,
     MatSelectModule,
     MatTabsModule,
+    MatPaginatorModule,
+    MatSelectModule,
+    MatTabsModule,
+    FileUploadModule,
     SharedModule,
   ],
 })
