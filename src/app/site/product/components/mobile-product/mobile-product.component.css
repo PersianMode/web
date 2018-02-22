@@ -47,11 +47,14 @@ button:focus{
 }
 .colors img {
   max-height: 127px;
+  max-width: 127px;
   width: auto;
+  height: auto;
   margin-left:4px;
   display: inline-block;
   transition: all .5s ease-in-out;
   opacity: .5;
+  vertical-align: top;
 }
 
 .colors img:hover {
