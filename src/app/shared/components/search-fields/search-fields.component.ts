@@ -14,6 +14,7 @@ enum ElementEnum {
 export class SearchFieldsComponent implements OnInit {
 
   @Input() target = null;
+  @Input() searchInFirst = true;
 
   @Input()
   set initItems(value) {
@@ -42,6 +43,9 @@ export class SearchFieldsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (this.searchInFirst && this.target)
+      this.searchOnData(null);
     this.searchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
         this.phrase = data.trim() !== '' ? data.trim() : null;
@@ -51,6 +55,7 @@ export class SearchFieldsComponent implements OnInit {
         console.log('Couldn\'t refresh', err);
       }
     );
+
   }
 
   addTarget(target_index) {
@@ -69,40 +74,34 @@ export class SearchFieldsComponent implements OnInit {
     this.targets.forEach(el => {
       trg[el] = true;
     });
-    //
-    // const searchData = {
-    //   phrase: phrase,
-    //   options: {
-    //     target: trg,
-    //     is_app: this.isApp,
-    //     show_all: (this.target
-    //       && (phrase === null || phrase === '')
-    //       && this.isApp === null),
-    //   }
-    // };
 
-
-    this.searching.emit(phrase);
+    const searchData = {
+      options: {
+        phrase: phrase,
+        is_app: this.isApp,
+        show_all: (this.target
+          && (phrase === null || phrase === '')
+          && this.isApp === null),
+      }
+    };
+    this.searching.emit(searchData);
   }
-
 
   changeState(element) {
     switch (element) {
       case this.elementEnum.isApp: {
-        if (this.isApp === null)
-          this.isApp = true;
-        else if (this.isApp === true)
-          this.isApp = false;
-        else if (this.isApp === false)
-          this.isApp = null;
+        // if (this.isApp === null)
+        //   this.isApp = true;
+        // else if (this.isApp === true)
+        //   this.isApp = false;
+        // else if (this.isApp === false)
+        //   this.isApp = null;
       }
         break;
     }
 
     this.searchOnData();
   }
-
-
 
   setInitSearchData() {
     if (this.initItems) {
@@ -111,5 +110,4 @@ export class SearchFieldsComponent implements OnInit {
       this.isApp = this.initItems.options.is_app ? this.initItems.options.is_app : null;
     }
   }
-
 }
