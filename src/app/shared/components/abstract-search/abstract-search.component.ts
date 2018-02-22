@@ -37,7 +37,6 @@ export class AbstractSearchComponent implements OnInit {
     this.progressService.enable();
 
     this.searchData = this.searchData ? this.searchData : {options: {phrase : ''}};
-
     let data = Object.assign({
       offset: this.offset ? this.offset : 0,
       limit: this.limit ? this.limit : 10,
@@ -45,7 +44,6 @@ export class AbstractSearchComponent implements OnInit {
 
     this.httpService.post(`search/${this.key}`, data).subscribe(
       (resData) => {
-        console.log('----->', data);
         data = resData.body.data;
         this.cards = data;
         this.totalCards = resData.body.total ? parseInt(resData.body.total) : 0;
