@@ -7,3 +7,15 @@
 mat-card {
   cursor: pointer;
 }
+
+.is_smart {
+  padding-top: 10px;
+}
+
+.smart {
+  color: blue;
+}
+
+.manual {
+  color: gray;
+}

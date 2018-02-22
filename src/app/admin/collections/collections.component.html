@@ -10,13 +10,13 @@
   <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center" class="row">
     <div fxFlex="25" *ngFor="let c of r" class="outer-card">
       <mat-card class="card-view" (click)="select(c._id)" [ngClass]="{'mat-elevation-z24': c._id === selectedId}">
-        <img mat-card-image src="{{c.image_url}}" alt="">
         <mat-card-header>
           <mat-card-title>
             <label class="name">{{c.name}}</label>
           </mat-card-title>
-          <mat-card-subtitle>
-
+          <mat-card-subtitle class="is_smart">
+            <label class="smart" *ngIf="c.is_smart">Smart</label>
+            <label class="manual" *ngIf="!c.is_smart">Manual</label>
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions *ngIf="c._id == selectedId">
