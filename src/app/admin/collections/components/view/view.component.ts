@@ -44,11 +44,6 @@ export class ViewComponent implements OnInit {
         this.searchDetails();
       }
     );
-    this.types.valueChanges.subscribe(
-      (data) => {
-        console.log(data);
-      }
-    );
   }
 
   searchDetails() {
@@ -73,10 +68,22 @@ export class ViewComponent implements OnInit {
             this.tagGroupIds.push(data.tagGroups[tagGroupId]._id);
           }
         }
-        this.httpService.get(`product_type/`).subscribe(
+        this.httpService.post(`search/ProductType`, {
+          offset: 0,
+          limit: 100,
+          options: {
+            phrase: ''
+          }
+        }).subscribe(
           product_types => {
             this.typesList = product_types.body;
-            this.httpService.get(`tag_group/`).subscribe(
+            this.httpService.post(`search/TagGroup`, {
+              offset: 0,
+              limit: 100,
+              options: {
+                phrase: ''
+              }
+            }).subscribe(
               tag_groups => {
                 this.tagGroupsList = tag_groups.body;
                 this.progressService.disable();
