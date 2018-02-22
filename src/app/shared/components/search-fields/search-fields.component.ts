@@ -3,6 +3,7 @@ import {FormControl} from '@angular/forms';
 import {TargetEnum} from '../../enum/target.enum';
 
 enum ElementEnum {
+  isSmart,
   isApp,
 }
 
@@ -34,8 +35,8 @@ export class SearchFieldsComponent implements OnInit {
   elementEnum = ElementEnum;
   phrase = null;
   isApp = null;
+  isSmart = null;
   _initItems: any = null;
-
 
 
   constructor() {
@@ -75,6 +76,7 @@ export class SearchFieldsComponent implements OnInit {
       options: {
         phrase: phrase,
         is_app: this.isApp,
+        is_smart: this.isSmart,
         show_all: (this.target
           && (phrase === null || phrase === '')
           && this.isApp === null),
@@ -85,14 +87,21 @@ export class SearchFieldsComponent implements OnInit {
 
   changeState(element) {
     switch (element) {
-      case this.elementEnum.isApp: {
+      case this.elementEnum.isApp:
         if (this.isApp === null)
           this.isApp = true;
         else if (this.isApp === true)
           this.isApp = false;
         else if (this.isApp === false)
           this.isApp = null;
-      }
+        break;
+      case this.elementEnum.isSmart:
+        if (this.isSmart === null)
+          this.isSmart = true;
+        else if (this.isSmart === true)
+          this.isSmart = false;
+        else if (this.isSmart === false)
+          this.isSmart = null;
         break;
     }
 
@@ -104,6 +113,7 @@ export class SearchFieldsComponent implements OnInit {
       this.searchCtrl.setValue(this.initItems.phrase ? this.initItems.phrase : null);
       this.phrase = this.initItems.phrase ? this.initItems.phrase : null;
       this.isApp = this.initItems.options.is_app ? this.initItems.options.is_app : null;
+      this.isSmart = this.initItems.options.is_smart ? this.initItems.options.is_smart : null;
     }
   }
 }

@@ -76,7 +76,7 @@ export class ViewComponent implements OnInit {
           }
         }).subscribe(
           product_types => {
-            this.typesList = product_types.body;
+            this.typesList = product_types.data;
             this.httpService.post(`search/TagGroup`, {
               offset: 0,
               limit: 100,
@@ -85,7 +85,7 @@ export class ViewComponent implements OnInit {
               }
             }).subscribe(
               tag_groups => {
-                this.tagGroupsList = tag_groups.body;
+                this.tagGroupsList = tag_groups.data;
                 this.progressService.disable();
 
               }, err => {
@@ -104,7 +104,7 @@ export class ViewComponent implements OnInit {
   }
 
   addProduct(expObj) {
-    this.httpService.put(`collection/product/${this.currentCollection._id}/${expObj._id}`, {}).subscribe(
+    this.httpService.post(`collection/product/${this.currentCollection._id}/${expObj._id}`, {}).subscribe(
       data => {
         this.searchDetails();
       }, err => {
@@ -114,7 +114,7 @@ export class ViewComponent implements OnInit {
   }
 
   addTag(expObj) {
-    this.httpService.put(`collection/tag/${this.currentCollection._id}/${expObj._id}`, {}).subscribe(
+    this.httpService.post(`collection/tag/${this.currentCollection._id}/${expObj._id}`, {}).subscribe(
       data => {
         this.searchDetails();
       }, err => {
