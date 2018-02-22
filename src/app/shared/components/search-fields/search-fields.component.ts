@@ -14,7 +14,6 @@ enum ElementEnum {
 export class SearchFieldsComponent implements OnInit {
 
   @Input() target = null;
-  @Input() searchInFirst = true;
 
   @Input()
   set initItems(value) {
@@ -43,9 +42,6 @@ export class SearchFieldsComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    if (this.searchInFirst && this.target)
-      this.searchOnData(null);
     this.searchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
         this.phrase = data.trim() !== '' ? data.trim() : null;

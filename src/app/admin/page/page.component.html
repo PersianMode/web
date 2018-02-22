@@ -1,5 +1,5 @@
 <div class="row" fxLayout="row">
-  <app-search-fields fxFlex="100" [searchInFirst]="searchInFirst" [initItems]="initSearchData" [target]="'page'" (searching)="search($event)"></app-search-fields>
+  <app-search-fields fxFlex="100"  [initItems]="initSearchData" [target]="'page'" (searching)="search($event)"></app-search-fields>
 </div>
 <div fxLayout="row" class="row">
   <button mat-fab color="accent" (click)="openForm()" style="margin-top: 15px">

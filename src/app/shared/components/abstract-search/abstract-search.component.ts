@@ -20,7 +20,6 @@ export class AbstractSearchComponent implements OnInit {
   limit = 10;
   searchData: any = null;
   initSearchData: any = null;
-  searchInFirst = true;
   key: string;
 
   constructor(protected httpService: HttpService, protected progressService: ProgressService,
@@ -29,7 +28,6 @@ export class AbstractSearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.searchInFirst = false;
     this.initSearchData = this.searchData;
     this.searching();
   }
