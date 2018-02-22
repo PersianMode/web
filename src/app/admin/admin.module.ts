@@ -19,7 +19,6 @@ import { PageComponent } from './page/page.component';
     HomeComponent,
     FooterComponent,
     HeaderComponent,
-    PageComponent
   ],
   imports: [
     AdminRouting,

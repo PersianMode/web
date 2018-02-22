@@ -2,7 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {HttpService} from '../../services/http.service';
 import {ProgressService} from '../../services/progress.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs/Observable';
+import {RemovingConfirmComponent} from '../removing-confirm/removing-confirm.component';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-abstract-search',
@@ -14,6 +17,9 @@ export class AbstractSearchComponent implements OnInit {
   cards: any = null;
   selectedId: string = null;
   rows: any = [];
+  totalCards: number = null;
+  cardId: number = null;
+
 
   offset = 0;
   limit = 10;
@@ -22,11 +28,29 @@ export class AbstractSearchComponent implements OnInit {
   key: string;
 
   constructor(protected httpService: HttpService,
-              protected progressService: ProgressService, protected router: Router) {
+              protected progressService: ProgressService, protected router: Router,
+              protected activatedRoute: ActivatedRoute, private dialog: MatDialog) {
   }
 
   ngOnInit() {
     this.searching();
+  }
+
+  open(id: number = null) {
+    this.cardId = id;
+    this.router.navigate(['/' + id], {relativeTo: this.activatedRoute});
+  }
+
+  deleteCard(id: number = null, name = ''): Observable<any> {
+    this.cardId = id;
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+      data: {
+        name: name,
+      }
+    });
+
+    return rmDialog.afterClosed();
   }
 
   searching() {
