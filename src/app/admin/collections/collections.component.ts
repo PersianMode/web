@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
-import {RemovingConfirmComponent} from "../../shared/components/removing-confirm/removing-confirm.component";
+import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-collections',

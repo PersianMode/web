@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+// import {Router} from '@angular/router';
 import {HttpService} from '../../shared/services/http.service';
-import {MatDialog, MatSnackBar} from '@angular/material';
-import {ProgressService} from '../../shared/services/progress.service';
+// import {MatDialog, MatSnackBar} from '@angular/material';
+// import {ProgressService} from '../../shared/services/progress.service';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
-import {priceFormatter} from '../../shared/lib/priceFormatter';
-import {DomSanitizer} from '@angular/platform-browser';
-import {AbstractSearchComponent} from "../../shared/components/abstract-search/abstract-search.component";
+// import {priceFormatter} from '../../shared/lib/priceFormatter';
+// import {DomSanitizer} from '@angular/platform-browser';
+import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
 
 
 @Component({
@@ -30,7 +30,8 @@ export class AllProductsComponent extends AbstractSearchComponent implements OnI
   //   this.httpService.get('product').subscribe(
   //     (data) => {
   //       for (const d in data.body) {
-  //         this.tempUrl = data.body[d].colors.length ? data.body[d].colors[0].images[0] : '../../../../assets/pictures/product-small/11.jpeg';
+  //         this.tempUrl = data.body[d].colors.length ? data.body[d].colors[0].images[0] :
+  //          '../../../../assets/pictures/product-small/11.jpeg';
   //         this.noPic = data.body[d].colors.length ? false : true;
   //         this.products.push({
   //           _id: data.body[d]._id,
