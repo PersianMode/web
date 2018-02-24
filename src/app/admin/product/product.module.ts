@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatNativeDateModule, MatSelectModule,
+  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatNativeDateModule,
+  MatPaginatorModule, MatSelectModule,
   MatSnackBarModule, MatTabsModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -45,6 +46,7 @@ import {SharedModule} from '../../shared/shared.module';
     MatDialogModule,
     MatSelectModule,
     MatTabsModule,
+    MatPaginatorModule,
     FileUploadModule,
     SharedModule,
   ],

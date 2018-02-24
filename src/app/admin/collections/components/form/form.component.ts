@@ -103,9 +103,6 @@ export class FormComponent implements OnInit {
     this.upsertBtnShouldDisabled = true;
     this.httpService.put(`collection`, sendingData).subscribe(
       data => {
-        if (data.body) {
-          data = data.body;
-        }
         let isCreating = false;
         if (data._id) {
           isCreating = true;
