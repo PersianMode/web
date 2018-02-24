@@ -2,8 +2,8 @@
   <div class="persian-mode-logo" (click)="goToRoot()">پرشین مد<span>ُ</span></div>
   <ul>
     <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
-        (mouseenter)="showList(item.collectionName)" (mouseleave)="countDownHideList()">
-      <a href="{{item.collectionRoute}}">{{item.collectionNameFa}}</a>
+        (mouseenter)="showList(item.info.href)" (mouseleave)="countDownHideList()">
+      <a href="{{item.info.href}}">{{item.info.text}}</a>
     </li>
   </ul>
   <div class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"

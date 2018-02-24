@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-collection-header',
@@ -17,33 +18,33 @@ export class CollectionHeaderComponent implements OnInit {
   persistedList = false;
   searchIsFocused = false;
   menu = {};
-  topMenu = [
-    {
-      collectionName: 'men',
-      collectionNameFa: 'مردانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'women',
-      collectionNameFa: 'زنانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'girls',
-      collectionNameFa: 'دخترانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'boys',
-      collectionNameFa: 'پسرانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'test',
-      collectionNameFa: 'test',
-      collectionRoute: '#',
-    },
-  ];
+  // topMenu = [
+  //   {
+  //     collectionName: 'men',
+  //     collectionNameFa: 'مردانه',
+  //     collectionRoute: '#',
+  //   },
+  //   {
+  //     collectionName: 'women',
+  //     collectionNameFa: 'زنانه',
+  //     collectionRoute: '#',
+  //   },
+  //   {
+  //     collectionName: 'girls',
+  //     collectionNameFa: 'دخترانه',
+  //     collectionRoute: '#',
+  //   },
+  //   {
+  //     collectionName: 'boys',
+  //     collectionNameFa: 'پسرانه',
+  //     collectionRoute: '#',
+  //   },
+  //   {
+  //     collectionName: 'test',
+  //     collectionNameFa: 'test',
+  //     collectionRoute: '#',
+  //   },
+  // ];
   placements = {
     menMenu: {
       headerList: [
@@ -199,18 +200,48 @@ export class CollectionHeaderComponent implements OnInit {
     },
     womenMenu: {},
     boysMenu: {},
-    girlsMenu: {
-    },
-    testMenu:{
-    },
+    girlsMenu: {},
+    testMenu: {},
     fullPanels: [],
     halfPanels: [],
     quarterPanels: [],
   };
 
-  constructor(private router: Router) { }
+  headerPlacements = [];
+  topMenu = [];
+  subMenu = [];
+
+  constructor(private router: Router, private http: HttpClient) {
+  }
 
   ngOnInit() {
+    this.http.get('assets/test_input_for_menu.json').subscribe(
+      data => {
+        this.headerPlacements = [];
+        data = data['placement'];
+        for (const item in data) {
+          if (data[item].component_name === 'menu')
+            this.headerPlacements.push(data[item]);
+        }
+        this.adapterFunction();
+      }, err => {
+        console.log('err: ', err);
+      }
+    );
+  }
+
+  adapterFunction() {
+    this.topMenu = [];
+    this.headerPlacements.forEach((item) => {
+      // check conditions
+      if (item.variable_name === 'topMenu') {
+        item['collectionName'] = item.info.href.split('/')[1];
+        this.topMenu.push(item);
+      } else if (item.variable_name === 'subMenu') {
+        item['collectionName'] = item.info.section.split('/')[0];
+        this.subMenu.push(item);
+      }
+    });
   }
 
   showList(type) {
