@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
       ]],
       mobile_no: [null, [
         Validators.required,
-        Validators.pattern(/^((\+)?(\d{2}[-])?(\d{10}){1})?(\d{11}){0,1}?$/),
+        Validators.pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/),
       ]],
     });
   }
