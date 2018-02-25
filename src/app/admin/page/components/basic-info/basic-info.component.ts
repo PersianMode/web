@@ -16,7 +16,7 @@ export class BasicInfoComponent implements OnInit {
   id: string = null;
   originalForm: IPageInfo = null;
   form: FormGroup;
-
+  textData: string;
   collection: ICollection = null;
   content: string = null;
 
