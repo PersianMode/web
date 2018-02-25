@@ -13,10 +13,13 @@ import {HttpClientModule} from '@angular/common/http';
 import {routing} from './app.routing';
 import {ProgressService} from './shared/services/progress.service';
 import {SharedModule} from './shared/shared.module';
+import { MarkdownModule } from 'angular2-markdown';
+
 
 @NgModule({
   declarations: [
     AppComponent,
+
   ],
   imports: [
     routing,
