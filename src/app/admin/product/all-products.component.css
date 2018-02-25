@@ -1,4 +1,8 @@
 .card-view {
     margin: 10px;
-    box-shadow: 10px 10px 80px grey;
+    /*box-shadow: 10px 10px 80px grey;*/
+}
+
+mat-card {
+  cursor: pointer;
 }

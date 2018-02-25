@@ -1,5 +1,6 @@
 export enum TargetEnum {
-  page = 'page',
-  collection = 'collection',
-  product = 'product',
+  product = 'Product',
+  collection = 'Collection',
+  page = 'Page',
+  tag = 'Tag',
 }

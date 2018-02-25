@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -21,7 +21,8 @@ export class FormComponent implements OnInit {
   upsertBtnShouldDisabled = false;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-              private httpService: HttpService, private snackBar: MatSnackBar) { }
+              private httpService: HttpService, private snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
     this.initForm();
@@ -47,6 +48,7 @@ export class FormComponent implements OnInit {
       colName: [null, [
         Validators.required,
       ]],
+      is_smart: [null, []],
     }, {
       validator: this.basicInfoValidation
     });
@@ -64,19 +66,21 @@ export class FormComponent implements OnInit {
     this.httpService.get(`collection/${this.collectionId}`).subscribe(
       (data) => {
         data = data.body[0];
-        data['_id'] = data['collection']['_id'];
-        data['name'] = data['collection']['name'];
-        data['image_url'] = data['collection']['image_url'];
 
         this.collectionForm.controls['colName'].setValue(data.name);
-        this.originalCollection = data;
+        this.collectionForm.controls['is_smart'].setValue(data.is_smart);
+        this.originalCollection = {
+          _id: data._id,
+          name: data.name,
+          is_smart: data.is_smart
+        };
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
       (error) => {
         console.log(error);
-        this.snackBar.open('Cannot get expertise details. Please try again', null, {
+        this.snackBar.open('Cannot get collection details. Please try again', null, {
           duration: 2500,
         });
 
@@ -87,25 +91,22 @@ export class FormComponent implements OnInit {
   }
 
   submitCollection() {
-    const data = {
+    const sendingData = {
       _id: this.collectionId,
       name: this.collectionForm.controls['colName'].value,
-      // and the name of products
+      is_smart: this.collectionForm.controls['is_smart'].value,
     };
     // if(this.collectionId)
     //   data['_id'] = this.collectionId;
 
     this.progressService.enable();
     this.upsertBtnShouldDisabled = true;
-    this.httpService.put(`collection`, data).subscribe(
-      (data) => {
-        if (data.body)
-          data = data.body;
-
+    this.httpService.put(`collection`, sendingData).subscribe(
+      data => {
         let isCreating = false;
-        if (data._id)
+        if (data._id) {
           isCreating = true;
-
+        }
         this.snackBar.open('Collection is ' + (this.collectionId ? 'updated' : 'added'), null, {
           duration: 2300,
         });
@@ -117,40 +118,46 @@ export class FormComponent implements OnInit {
           this.collectionForm.reset();
         }
         // else {
-          // this.collectionId = data._id;
-          // this.originalCollection = Object.assign({_id: data._id}, data);
-          // this.originalCollection.name = this.collectionForm.controls['colName'].value;
+        // this.collectionId = data._id;
+        // this.originalCollection = Object.assign({_id: data._id}, data);
+        // this.originalCollection.name = this.collectionForm.controls['colName'].value;
         // }
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
-      (error) => {
-        this.snackBar.open('Cannot ' + this.collectionId ? 'add' : 'update' + ' this collection. Try again', null, {
+      error => {
+        this.snackBar.open('Cannot ' + (this.collectionId ? 'update' : 'add') + ' this collection. Try again', null, {
           duration: 3200,
         });
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
-        console.log(error);
+        // console.log(error);
       }
     );
   }
 
   fieldChanged() {
-    if (!this.originalCollection)
+    if (!this.originalCollection) {
       return;
-
+    }
     this.anyChanges = false;
-
-    let colName = (this.collectionForm.controls['colName'].value === null || isUndefined(this.collectionForm.controls['colName'].value)) ? '' : this.collectionForm.controls['colName'].value;
+    let colName = (this.collectionForm.controls['colName'].value === null ||
+      isUndefined(this.collectionForm.controls['colName'].value)) ? '' : this.collectionForm.controls['colName'].value;
     colName = colName.trim();
 
     let orig_colName = this.originalCollection.name;
     orig_colName = orig_colName.trim();
 
-    if (colName !== orig_colName && (colName !== '' || orig_colName !== null))
+    const is_smart = (this.collectionForm.controls['is_smart'].value === null ||
+      isUndefined(this.collectionForm.controls['is_smart'].value)) ? '' : this.collectionForm.controls['is_smart'].value;
+    const orig_is_smart = this.originalCollection.is_smart;
+
+    if ((colName !== orig_colName && (colName !== '' || orig_colName !== null)) ||
+      ((is_smart !== orig_is_smart && (is_smart !== '' || orig_is_smart !== null)))) {
       this.anyChanges = true;
+    }
   }
 
   basicInfoValidation(AC: AbstractControl) {

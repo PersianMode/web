@@ -1,0 +1,34 @@
+<mat-card class="card-view">
+  <mat-card-header>
+    <mat-card-title>
+      <div *ngIf="!id">افزودن صفحه جدید</div>
+      <div *ngIf="id">ویرایش صفحه</div>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+
+    <app-suggestion [name]="'Collection'" [currentIds]="[collectionId]" [fieldName]="'name'" [placeholder]="'نام کالکشن'"> </app-suggestion>
+    <form (ngSubmit)="submitPage()" [formGroup]="form">
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+           fxLayoutAlign.xs="center center" dir="rtl">
+        <div fxFlex="33" class="field-container">
+          <mat-input-container class="field farsi">
+            <input matInput type="text" placeholder="آدرس" formControlName="address"
+                   role="address" tabindex="2">
+            <mat-hint>آدرس صفحه را وارد کنید</mat-hint>
+            <mat-error *ngIf="form.controls['address'].hasError('required') && anyChanges">
+              وارد کردن آدرس صفحه الزامی است
+            </mat-error>
+          </mat-input-container>
+        </div>
+        <div fxFlex="20" role="submit-button" style="text-align: left; margin-top: 10px;">
+          <button mat-icon-button type="submit"
+                  [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges))"
+                  tabindex="3">
+            <mat-icon aria-label="accept">done</mat-icon>
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
