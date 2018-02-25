@@ -201,8 +201,6 @@ export class CollectionHeaderComponent implements OnInit {
     boysMenu: {},
     girlsMenu: {
     },
-    testMenu:{
-    },
     fullPanels: [],
     halfPanels: [],
     quarterPanels: [],

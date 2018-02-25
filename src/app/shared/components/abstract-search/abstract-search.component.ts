@@ -45,6 +45,7 @@ export class AbstractSearchComponent implements OnInit {
 
     this.httpService.post(`search/${this.key}`, data).subscribe(
       (res) => {
+        console.log('---->', res.data);
         this.cards = res.data;
         this.totalCards = res.total ? parseInt(res.total, 10) : 0;
         this.alignRow();
