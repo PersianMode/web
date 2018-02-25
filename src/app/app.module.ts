@@ -13,6 +13,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {routing} from './app.routing';
 import {ProgressService} from './shared/services/progress.service';
 import {SharedModule} from './shared/shared.module';
+import {PlacementService} from './shared/services/placement.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import {SharedModule} from './shared/shared.module';
     MatIconModule,
     MatCardModule,
   ],
-  providers: [WINDOW_PROVIDERS, HttpService, SocketService, AuthService, ProgressService],
+  providers: [WINDOW_PROVIDERS, HttpService, SocketService, AuthService, ProgressService, PlacementService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

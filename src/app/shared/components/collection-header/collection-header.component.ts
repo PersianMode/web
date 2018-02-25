@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
+import {PlacementService} from '../../services/placement.service';
 
 @Component({
   selector: 'app-collection-header',
@@ -45,7 +46,7 @@ export class CollectionHeaderComponent implements OnInit {
   //     collectionRoute: '#',
   //   },
   // ];
-  placements = {
+  placements: any = {
     menMenu: {
       headerList: [
         {
@@ -211,23 +212,50 @@ export class CollectionHeaderComponent implements OnInit {
   topMenu = [];
   subMenu = [];
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(private router: Router, private placementService: PlacementService) {
   }
 
   ngOnInit() {
-    this.http.get('assets/test_input_for_menu.json').subscribe(
+    this.placementService.placement$.filter(r => r[0] === 'menu').map(r => r[1]).subscribe(
       data => {
-        this.headerPlacements = [];
-        data = data['placement'];
-        for (const item in data) {
-          if (data[item].component_name === 'menu')
-            this.headerPlacements.push(data[item]);
-        }
-        this.adapterFunction();
-      }, err => {
-        console.log('err: ', err);
-      }
-    );
+        this.topMenu = data.filter(r => r.variable_name === 'topMenu');
+        this.topMenu.forEach(r => r.type = r.info.href.split('/')[1]);
+        const subMenu = data.filter(r => r.variable_name === 'subMenu');
+        const sections = Array.from(new Set(subMenu.map(r => r.info.section)));
+        this.placements = {};
+        sections.forEach(s => {
+          subMenu
+            .filter(r => r.info.section === s)
+            .sort((x, y) => (x.info.column * 100 + x.info.row) - (y.info.column * 100 + y.info.row))
+            .forEach(r => {
+              const path = r.info.section.split('/');
+              if (!this.placements[path[0] + 'Menu']) {
+                this.placements[path[0] + 'Menu'] = {};
+              }
+              if (!this.placements[path[0] + 'Menu'][path[1] + 'List']) {
+                this.placements[path[0] + 'Menu'][path[1] + 'List'] = [];
+              }
+              if (r.info.column > 1 &&
+                (!this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1] ||
+                  !this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1].length)) {
+                if (r.info.column === 2) {
+                  const temp = [];
+                  this.placements[path[0] + 'Menu'][path[1] + 'List'].forEach(x => temp.push(x));
+                  this.placements[path[0] + 'Menu'][path[1] + 'List'] = [];
+                  this.placements[path[0] + 'Menu'][path[1] + 'List'].push(temp);
+                }
+                this.placements[path[0] + 'Menu'][path[1] + 'List'].push([]);
+              }
+              if (r.info.column > 1) {
+                this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1].push(r.info);
+              } else {
+                this.placements[path[0] + 'Menu'][path[1] + 'List'].push(r.info);
+              }
+            });
+        });
+        console.log(this.placements)
+      });
+    this.placementService.getPlacements('');
   }
 
   adapterFunction() {

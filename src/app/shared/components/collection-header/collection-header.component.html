@@ -2,7 +2,7 @@
   <div class="persian-mode-logo" (click)="goToRoot()">پرشین مد<span>ُ</span></div>
   <ul>
     <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
-        (mouseenter)="showList(item.info.href)" (mouseleave)="countDownHideList()">
+        (mouseenter)="showList(item.type)" (mouseleave)="countDownHideList()">
       <a href="{{item.info.href}}">{{item.info.text}}</a>
     </li>
   </ul>
@@ -15,20 +15,20 @@
 </div>
 <div class="genderList" [class.hidden]="hiddenGenderMenu" (mouseenter)="persistList()" (mouseleave)="hideList()">
   <div class="genderListWrapper">
-    <div class="headerList">
+    <div *ngIf="menu && menu.headerList" class="headerList">
       <ul>
         <li *ngFor="let item of menu.headerList"><a href="{{item.href}}">{{item.text}}</a></li>
       </ul>
     </div>
-    <div class="middle">
-      <ul *ngFor="let list of menu.middle">
+    <div *ngIf="menu && menu.middleList" class="middle">
+      <ul *ngFor="let list of menu.middleList">
         <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst || item.isHeader"
             [style.marginTop]="(!isFirst && item.isHeader ? 15 : 0 )+ 'px'"><a href="{{item.href}}">{{item.text}}</a>
         </li>
       </ul>
     </div>
-    <div class="leftColumn">
-      <ul *ngFor="let list of menu.leftColumn">
+    <div *ngIf="menu && menu.leftList" class="leftColumn">
+      <ul *ngFor="let list of menu.leftList">
         <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a href="{{item.href}}">{{item.text}}</a>
         </li>
       </ul>
