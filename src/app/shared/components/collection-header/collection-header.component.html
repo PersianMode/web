@@ -1,37 +1,37 @@
 <div class="second-bar">
-  <div class="persian-mode-logo" (click)="goToRoot()">پرشین مد<span>ُ</span></div>
-  <ul>
-    <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
-        (mouseenter)="showList(item.collectionName)" (mouseleave)="countDownHideList()">
-      <a href="{{item.collectionRoute}}">{{item.collectionNameFa}}</a>
-    </li>
-  </ul>
-  <div class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"
-       [style.width]="(searchIsFocused ? 247 : 197) + 'px'">
-    <i class="fa fa-search fa-flip-horizontal"></i>
-    <input placeholder="جُست‌وجو" type="text" (focus)="searchFocused()" (blur)="searchUnfocused()"
-           [style.width]="(searchIsFocused ? 206 : 156) + 'px'">
-  </div>
+    <div class="persian-mode-logo" (click)="goToRoot()">پرشین مد<span>ُ</span></div>
+    <ul>
+        <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
+            (mouseenter)="showList(item.info.href)" (mouseleave)="countDownHideList()">
+            <a href="{{item.info.href}}">{{item.info.text}}</a>
+        </li>
+    </ul>
+    <div class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"
+         [style.width]="(searchIsFocused ? 247 : 197) + 'px'">
+        <i class="fa fa-search fa-flip-horizontal"></i>
+        <input placeholder="جُست‌وجو" type="text" (focus)="searchFocused()" (blur)="searchUnfocused()"
+               [style.width]="(searchIsFocused ? 206 : 156) + 'px'">
+    </div>
 </div>
 <div class="genderList" [class.hidden]="hiddenGenderMenu" (mouseenter)="persistList()" (mouseleave)="hideList()">
-  <div class="genderListWrapper">
-    <div class="headerList">
-      <ul>
-        <li *ngFor="let item of menu.headerList"><a href="{{item.href}}">{{item.text}}</a></li>
-      </ul>
+    <div class="genderListWrapper">
+        <div class="headerList">
+            <ul>
+                <li *ngFor="let item of menu.headerList"><a href="{{item.href}}">{{item.text}}</a></li>
+            </ul>
+        </div>
+        <div class="middle">
+            <ul *ngFor="let list of menu.middle">
+                <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst || item.isHeader"
+                    [style.marginTop]="(!isFirst && item.isHeader ? 15 : 0 )+ 'px'"><a href="{{item.href}}">{{item.text}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="leftColumn">
+            <ul *ngFor="let list of menu.leftColumn">
+                <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a href="{{item.href}}">{{item.text}}</a>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="middle">
-      <ul *ngFor="let list of menu.middle">
-        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst || item.isHeader"
-            [style.marginTop]="(!isFirst && item.isHeader ? 15 : 0 )+ 'px'"><a href="{{item.href}}">{{item.text}}</a>
-        </li>
-      </ul>
-    </div>
-    <div class="leftColumn">
-      <ul *ngFor="let list of menu.leftColumn">
-        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a href="{{item.href}}">{{item.text}}</a>
-        </li>
-      </ul>
-    </div>
-  </div>
 </div>

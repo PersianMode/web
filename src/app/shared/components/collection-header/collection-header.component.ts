@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {HttpService} from '../../services/http.service';
 
 @Component({
   selector: 'app-collection-header',
@@ -17,33 +19,28 @@ export class CollectionHeaderComponent implements OnInit {
   persistedList = false;
   searchIsFocused = false;
   menu = {};
-  topMenu = [
-    {
-      collectionName: 'men',
-      collectionNameFa: 'مردانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'women',
-      collectionNameFa: 'زنانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'girls',
-      collectionNameFa: 'دخترانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'boys',
-      collectionNameFa: 'پسرانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'test',
-      collectionNameFa: 'test',
-      collectionRoute: '#',
-    },
-  ];
+  // topMenu = [
+  //   {
+  //     collectionName: 'men',
+  //     collectionNameFa: 'مردانه',
+  //     collectionRoute: '#',
+  //   },
+  //   {
+  //     collectionName: 'women',
+  //     collectionNameFa: 'زنانه',
+  //     collectionRoute: '#',
+  //   },
+  //   {
+  //     collectionName: 'girls',
+  //     collectionNameFa: 'دخترانه',
+  //     collectionRoute: '#',
+  //   },
+  //   {
+  //     collectionName: 'boys',
+  //     collectionNameFa: 'پسرانه',
+  //     collectionRoute: '#',
+  //   },
+  // ];
   placements = {
     menMenu: {
       headerList: [
@@ -199,16 +196,46 @@ export class CollectionHeaderComponent implements OnInit {
     },
     womenMenu: {},
     boysMenu: {},
-    girlsMenu: {
-    },
+    girlsMenu: {},
     fullPanels: [],
     halfPanels: [],
     quarterPanels: [],
   };
+  headerPlacements = [];
+  topMenu = [];
+  subMenu = [];
 
-  constructor(private router: Router) { }
+  constructor(protected httpService: HttpService, private router: Router, private http: HttpClient) {
+  }
 
   ngOnInit() {
+    this.httpService.get('/pagePlacement/5a8d1a5bf8c37f1f9455b78c').subscribe(
+      data => {
+        this.headerPlacements = [];
+        data = data.body[0].pagePlacement;
+        for (const item in data) {
+          if (data[item].component_name === 'menu')
+            this.headerPlacements.push(data[item]);
+        }
+        this.adapterFunction();
+      }, err => {
+        console.log('err: ', err);
+      }
+    );
+  }
+
+  adapterFunction() {
+    this.topMenu = [];
+    this.headerPlacements.forEach((item) => {
+      // check conditions
+      if (item.variable_name === 'topMenu') {
+        item['collectionName'] = item.info.href.split('/')[1];
+        this.topMenu.push(item);
+      } else if (item.variable_name === 'subMenu') {
+        item['collectionName'] = item.info.section.split('/')[0];
+        this.subMenu.push(item);
+      }
+    });
   }
 
   showList(type) {
