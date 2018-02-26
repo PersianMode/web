@@ -50,7 +50,7 @@ export class ViewComponent implements OnInit {
     this.progressService.enable();
     this.httpService.get(`collection/${this.collectionId}`).subscribe(
       (data) => {
-        data = data.body[0];
+        data = data[0];
         this.currentCollection = data;
         if (!data.is_smart) {
           this.progressService.disable();
