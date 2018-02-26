@@ -1,9 +1,9 @@
 <div class="second-bar">
-  <div class="persian-mode-logo" (click)="goToRoot()">پرشین مد<span>ُ</span></div>
+  <div class="persian-mode-logo" [routerLink]="['/']">پرشین مد<span>ُ</span></div>
   <ul>
     <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
         (mouseenter)="showList(item.type)" (mouseleave)="countDownHideList()">
-      <a href="{{item.info.href}}">{{item.info.text}}</a>
+      <a [routerLink]="item.routerLink">{{item.info.text}}</a>
     </li>
   </ul>
   <div class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"
@@ -17,19 +17,19 @@
   <div class="genderListWrapper">
     <div *ngIf="menu && menu.headerList" class="headerList">
       <ul>
-        <li *ngFor="let item of menu.headerList"><a href="{{item.href}}">{{item.text}}</a></li>
+        <li *ngFor="let item of menu.headerList"><a [routerLink]="item.routerLink">{{item.text}}</a></li>
       </ul>
     </div>
     <div *ngIf="menu && menu.middleList" class="middle">
       <ul *ngFor="let list of menu.middleList">
         <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst || item.isHeader"
-            [style.marginTop]="(!isFirst && item.isHeader ? 15 : 0 )+ 'px'"><a href="{{item.href}}">{{item.text}}</a>
+            [style.marginTop]="(!isFirst && item.isHeader ? 15 : 0 )+ 'px'"><a [routerLink]="item.routerLink">{{item.text}}</a>
         </li>
       </ul>
     </div>
     <div *ngIf="menu && menu.leftList" class="leftColumn">
       <ul *ngFor="let list of menu.leftList">
-        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a href="{{item.href}}">{{item.text}}</a>
+        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a [routerLink]="item.routerLink">{{item.text}}</a>
         </li>
       </ul>
     </div>
