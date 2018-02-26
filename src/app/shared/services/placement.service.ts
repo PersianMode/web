@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs/Subject';
-
+const defaultComponents = ['menu', 'slider', 'logos'];
 @Injectable()
 export class PlacementService {
   private cache: any = {};
@@ -18,11 +18,11 @@ export class PlacementService {
     const dataSplit = components.map(c => data.filter(r => r.component_name === c));
 
     if (pageName === 'home') {
-      ['menu', 'slider'].forEach(r => {
+      defaultComponents.forEach(r => {
         this.homeComponents[r] = dataSplit[components.indexOf(r)];
       });
     } else {
-      ['menu', 'slider'].forEach(r => {
+      defaultComponents.forEach(r => {
         if (!components.includes(r)) {
           components.push(r);
           dataSplit.push(this.homeComponents[r]);
