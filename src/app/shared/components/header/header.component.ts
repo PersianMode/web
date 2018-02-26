@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit {
       }
     );
     this.placementService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
+      this.logos = [];
       data = data.sort((x, y) => x.column - y.column);
       data.forEach(r => {
         const obj = {
