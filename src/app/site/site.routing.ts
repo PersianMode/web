@@ -7,7 +7,7 @@ import {RegisterComponent} from './register/components/register/register.compone
 const Site_ROUTES: Routes = [
   {
     path: '', component: SiteComponent, children: [
-    {path: '', redirectTo: 'product/14', pathMatch: 'full'},
+    {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'home', loadChildren: 'app/site/home/home.module#HomeModule'},
     // {path: 'login', loadChildren: 'app/site/login/login.module#LoginModule'},
     {path: 'login', component: LoginComponent},
