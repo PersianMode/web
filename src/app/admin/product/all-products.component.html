@@ -1,5 +1,5 @@
 <div class="row" fxLayout="row">
-  <app-search-fields fxFlex="100" [target]="'Product'" (searching)="search($event)"></app-search-fields>
+    <app-search-fields fxFlex="100" [target]="'Product'" (searching)="search($event)"></app-search-fields>
 </div>
 <div fxLayout="row" class="row">
     <button mat-fab color="accent" style="margin-top: 15px" (click)="openForm()">
@@ -29,10 +29,10 @@
                 </mat-card-content>
                 <mat-card-actions style="text-align: left" *ngIf="p._id == selectedId">
                     <button mat-icon-button type (click)="deleteProduct(p._id)" color="warn">
-                      <mat-icon aria-label="delete">delete</mat-icon>
+                        <mat-icon aria-label="delete">delete</mat-icon>
                     </button>
                     <button mat-icon-button (click)="openForm(p._id)" color="accent">
-                      <mat-icon aria-label="edit">edit</mat-icon>
+                        <mat-icon aria-label="edit">edit</mat-icon>
                     </button>
                     <button mat-icon-button (click)="openView(p._id)" color="primary">
                         <mat-icon aria-label="view">visibility</mat-icon>
@@ -43,6 +43,6 @@
     </div>
 </div>
 <div>
-  <mat-paginator [length]="totalCards" [pageSize]="8" [pageSizeOptions]="[4, 8, 16, 32]"
-                 (page)="changeOffset($event)"></mat-paginator>
+    <mat-paginator [length]="totalCards" [pageSize]="8" [pageSizeOptions]="[4, 8, 16, 32]"
+                   (page)="changeOffset($event)"></mat-paginator>
 </div>

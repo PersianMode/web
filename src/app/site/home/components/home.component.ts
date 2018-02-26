@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../../shared/services/window.service';
 import {AuthService} from '../../../shared/services/auth.service';
-import {HttpService} from '../../../shared/services/http.service';
 
 @Component({
   selector: 'app-home',
@@ -87,14 +86,14 @@ export class HomeComponent implements OnInit {
             href: '#',
             areas: [
               {
-              pos: 'left-center',
-              title: 'کاملا گرم',
-              text: 'محصولات پشمی مناسب زمستان',
-            }, {
-              pos: 'right-center',
-              title: 'زمان درخشیدن توست!',
-              text: 'نایک، حامی تیم ملی در طول بازیها',
-            },
+                pos: 'left-center',
+                title: 'کاملا گرم',
+                text: 'محصولات پشمی مناسب زمستان',
+              }, {
+                pos: 'right-center',
+                title: 'زمان درخشیدن توست!',
+                text: 'نایک، حامی تیم ملی در طول بازیها',
+              },
             ],
           },
         ]
@@ -107,11 +106,11 @@ export class HomeComponent implements OnInit {
             imgUrl: '../../../../assets/pictures/nike-first-page-pic/half-1.png',
             href: '#',
             areas: [{
-                pos: 'left-center',
-                title: 'کاملا گرم',
-                text: 'محصولات پشمی مناسب زمستان',
-              },
-          ]
+              pos: 'left-center',
+              title: 'کاملا گرم',
+              text: 'محصولات پشمی مناسب زمستان',
+            },
+            ]
           },
           {
             imgUrl: '../../../../assets/pictures/nike-first-page-pic/half-2.png',
@@ -182,47 +181,18 @@ export class HomeComponent implements OnInit {
       },
     ]
   }
-  headerPlacements = [];
-  topMenu = [];
-  subMenu = [];
-  constructor(@Inject(WINDOW) private window, private authService: AuthService, protected httpService: HttpService) {
+
+  constructor(@Inject(WINDOW) private window, private authService: AuthService) {
   }
 
   ngOnInit() {
     this.curWidth = this.window.innerWidth;
     this.curHeight = this.window.innerHeight;
+
     this.window.onresize = (e) => {
       this.curWidth = this.window.innerWidth;
       this.curHeight = this.window.innerHeight;
     };
-
-    this.httpService.get('/pagePlacement/5a8d1a5bf8c37f1f9455b78c').subscribe(
-      data => {
-        this.headerPlacements = [];
-        data = data.body[0].pagePlacement;
-        for (const item in data) {
-          if (data[item].component_name === 'main')
-            this.headerPlacements.push(data[item]);
-        }
-        this.adapterFunction();
-      }, err => {
-        console.log('err: ', err);
-      }
-    );
-  }
-
-  adapterFunction() {
-    this.topMenu = [];
-    this.headerPlacements.forEach((item) => {
-      // check conditions
-      if (item.variable_name === 'topMenu') {
-        item['collectionName'] = item.info.href.split('/')[1];
-        this.topMenu.push(item);
-      } else if (item.variable_name === 'subMenu') {
-        item['collectionName'] = item.info.section.split('/')[0];
-        this.subMenu.push(item);
-      }
-    });
   }
 
 }
