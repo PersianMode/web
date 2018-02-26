@@ -1,5 +1,3 @@
-
-
 <mat-card class="card-view">
   <mat-card-header>
     <mat-card-title>
@@ -7,37 +5,70 @@
       <div *ngIf="id">ویرایش صفحه</div>
     </mat-card-title>
 
-
   </mat-card-header>
   <mat-card-content>
 
-    <app-suggestion [name]="'Collection'" [currentIds]="[collectionId]" [fieldName]="'name'" [placeholder]="'نام کالکشن'"> </app-suggestion>
     <form (ngSubmit)="submitPage()" [formGroup]="form">
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
-           fxLayoutAlign.xs="center center" dir="rtl">
-        <div fxFlex="33" class="field-container">
-          <mat-input-container class="field farsi">
+
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+        <div fxFlex="50" class="field-container">
+
+          <app-suggestion fxFlex="50" [name]="'Collection'" [currentIds]="collection ?  [collection._id] : []"
+                          [fieldName]="'name'"
+                          [placeholder]="'نام کالکشن'" (add)="setCollection($event)"></app-suggestion>
+          <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{collection ? collection.name : ''}} </h3>
+        </div>
+
+        <div fxFlex="50" class="field-container">
+          <mat-input-container class="field">
             <input matInput type="text" placeholder="آدرس" formControlName="address"
-                   role="address" tabindex="2">
+                   role="address" tabindex="2" dir="ltr">
             <mat-hint>آدرس صفحه را وارد کنید</mat-hint>
             <mat-error *ngIf="form.controls['address'].hasError('required') && anyChanges">
               وارد کردن آدرس صفحه الزامی است
             </mat-error>
           </mat-input-container>
         </div>
-        <div fxFlex="20" role="submit-button" style="text-align: left; margin-top: 10px;">
+
+      </div>
+
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+        <div fxFlex="50" class="field-container">
+
+          <mat-checkbox formControlName="is_app" role="is_app" dir="ltr">
+            Is App?
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+        <mat-form-field class="example-full-width" >
+          <textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down" ></textarea>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+        <markdown *ngIf="form.controls['content'].value" [data]="form.controls['content'].value"></markdown>
+
+      </div>
+
+
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+        <div role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"
                   [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges))"
                   tabindex="3">
             <mat-icon aria-label="accept">done</mat-icon>
           </button>
         </div>
+
       </div>
-       </form>
-    <mat-form-field class="example-full-width">
-      <textarea [(ngModel)]="textData" matInput placeholder="Leave a comment"></textarea>
-    </mat-form-field>
-    <markdown [data]="textData"></markdown>
+
+
+    </form>
 
   </mat-card-content>
 </mat-card>
