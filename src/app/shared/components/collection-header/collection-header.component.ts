@@ -64,7 +64,6 @@ export class CollectionHeaderComponent implements OnInit {
             });
         });
       });
-    this.placementService.getPlacements('');
   }
 
   showList(type) {

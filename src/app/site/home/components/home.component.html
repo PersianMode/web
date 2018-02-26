@@ -1,13 +1,13 @@
 <div *ngIf="curWidth >= 960" class="full-width">
-    <div *ngFor="let item of placements.panels" class="container">
-        <h2 *ngIf="item.topTitle  && (item.mobileMode === undefined || item.mobileMode === false)"
+    <div *ngFor="let item of placements" class="container">
+        <h2 *ngIf="item.topTitle"
             [style.color]="item.topTitle.color ? item.topTitle.color : null" class="top-title">
             {{item.topTitle.title}}</h2>
-        <div *ngIf="item.mobileMode === undefined || item.mobileMode === false" fxLayout="row"
+        <div fxLayout="row"
              fxLayoutAlign="cente center" [style.margin-right]="item.type !== 'full' ? '15px' : null"
              [style.margin-left]="item.type !== 'full' ? '15px' : null">
             <div [fxFlex]="100/item.imgs.length" *ngFor="let im of item.imgs">
-                <a href="{{im.href}}">
+                <a [routerLink]="im.href">
                     <img src="{{im.imgUrl}}" class="full-width"/>
                 </a>
                 <div *ngFor="let ar of im.areas">
@@ -29,30 +29,31 @@
                 </div>
             </div>
         </div>
-        <h2 *ngIf="item.subTitle && (item.mobileMode === undefined || item.mobileMode === false)"
+        <h2 *ngIf="item.subTitle"
             [style.color]="item.subTitle.color ? item.subTitle.color : null" class="h2-sub-title">
             {{item.subTitle.title}}</h2>
     </div>
 </div>
 <div *ngIf="curWidth < 960">
-    <div *ngFor="let item of placements.panels" class="container">
-        <h2 *ngIf="item.topTitle  && (item.mobileMode === undefined || item.mobileMode === true)" class="title-mobile"
-            style="margin-bottom: 0px;">{{item.topTitle.title}}</h2>
-        <div *ngIf="item.mobileMode === undefined || item.mobileMode === true" fxLayout="row"
-             fxLayoutAlign="cente center" fxLayout.sm="column" fxLayout.xs="column">
-            <div [fxFlex]="100" *ngFor="let im of item.imgs">
-                <a href="{{im.href}}">
-                    <img src="{{im.imgUrl}}" class="full-width"/>
-                </a>
-                <div *ngFor="let ar of im.areas">
-                    <h2 *ngIf="ar.title" class="title-mobile" style="margin-bottom: 30px;margin-top: 0px;">
-                        {{ar.title}}</h2>
-                </div>
-                <div *ngIf="im.subTitle" class="title-mobile"><b>{{im.subTitle.title}}</b></div>
-                <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px; color: gray;">{{im.subTitle.text}}</div>
-            </div>
+  <div *ngFor="let item of placements" class="container">
+    <h2 *ngIf="item.topTitle" class="title-mobile"
+        style="margin-bottom: 0px;">{{item.topTitle.title}}</h2>
+    <div fxLayout="row"
+         fxLayoutAlign="center center" fxLayout.sm="column" fxLayout.xs="column">
+      <div [fxFlex]="100" *ngFor="let im of item.imgs">
+        <a [routerLink]="im.href">
+          <img src="{{im.imgUrl}}" class="full-width"/>
+        </a>
+        <div *ngFor="let ar of im.areas">
+          <h2 *ngIf="ar.title" class="title-mobile" style="margin-bottom: 30px;margin-top: 0px;">
+            {{ar.title}}</h2>
         </div>
-        <h2 *ngIf="item.subTitle && (item.mobileMode === undefined || item.mobileMode === true)" class="h2-sub-title">
-            {{item.subTitle.title}}</h2>
+        <div *ngIf="im.subTitle" class="title-mobile"><b>{{im.subTitle.title}}</b></div>
+        <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px; color: gray;">{{im.subTitle.text}}</div>
+      </div>
     </div>
+    <h2 *ngIf="item.subTitle" class="h2-sub-title">
+      {{item.subTitle.title}}</h2>
+  </div>
 </div>
+

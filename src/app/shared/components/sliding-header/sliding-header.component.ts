@@ -1,4 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
+import {PlacementService} from '../../services/placement.service';
 
 @Component({
   selector: 'app-sliding-header',
@@ -27,7 +28,7 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
   ];
   slider: any;
 
-  constructor() { }
+  constructor( private placementService: PlacementService) { }
 
   ngOnInit() {
     this.initSlider();
