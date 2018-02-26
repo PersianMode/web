@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
   MatSnackBarModule, MatTabsModule
 } from '@angular/material';
@@ -12,11 +12,12 @@ import {FileUploadModule} from 'ng2-file-upload';
 import {SharedModule} from '../../shared/shared.module';
 import {PageComponent} from './page.component';
 import {BasicInfoComponent} from './components/basic-info/basic-info.component';
+import {MarkdownModule} from 'angular2-markdown';
 
 @NgModule({
   declarations: [
     PageComponent,
-    BasicInfoComponent
+    BasicInfoComponent,
   ],
   imports: [
     PageRouting,
@@ -39,8 +40,10 @@ import {BasicInfoComponent} from './components/basic-info/basic-info.component';
     MatPaginatorModule,
     MatSelectModule,
     MatTabsModule,
+    MatCheckboxModule,
     FileUploadModule,
     SharedModule,
+    MarkdownModule.forRoot(),
   ],
 })
 export class PageModule {

@@ -32,7 +32,7 @@ export class ProductViewComponent implements OnInit, OnDestroy {
 
           this.httpService.get(`/product/${this.productId}`).subscribe(
             (data) => {
-              this.product.push(data.body[0]);
+              this.product.push(data[0]);
               this.product[0].base_price = priceFormatter(this.product[0].base_price);
               this.progressService.disable();
             },
@@ -53,10 +53,10 @@ export class ProductViewComponent implements OnInit, OnDestroy {
   getProductColors() {
     this.httpService.get(`product/color/${this.productId}`).subscribe(
       (data) => {
-        for (let i = 0; i < data.body.colors.length; i++) {
-          this.productColors.push(data.body.colors[i].info.name);
+        for (let i = 0; i < data.colors.length; i++) {
+          this.productColors.push(data.colors[i].info.name);
         }
-        this.colorLength = priceFormatter(data.body.colors.length);
+        this.colorLength = priceFormatter(data.colors.length);
       },
       (err) => {
         console.error('Cannot get product info. Error: ', err);

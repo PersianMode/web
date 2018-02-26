@@ -1,18 +1,159 @@
 {
   "placement": [
     {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 1,
+      "info": {
+        "title": "Nike",
+        "imgUrl": "nike.png",
+        "style": {
+          "width": 60
+        }
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 2,
+      "info": {
+        "title": "Converse",
+        "imgUrl": "converse.png",
+        "style": {
+          "width": 77,
+          "height": 36,
+          "right": 7,
+          "top": 4
+        }
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 3,
+      "info": {
+        "title": "Nike Jordan",
+        "imgUrl": "nike-jordan.png",
+        "style": {
+          "width": 88,
+          "right": 4,
+          "top": 2
+        }
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 4,
+      "info": {
+        "title": "Hurley",
+        "imgUrl": "Hurley.png",
+        "style": {
+          "height": 45,
+          "top": 8
+        }
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 5,
+      "info": {
+        "title": "The North Face",
+        "imgUrl": "thenorthface.png",
+        "style": {
+          "width": 76,
+          "height": 84,
+          "right": 3,
+          "top": 27
+        }
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 6,
+      "info": {
+        "title": "Timberland",
+        "imgUrl": "timberland.png",
+        "style": {
+          "width": 110,
+          "height": 110,
+          "top": 41
+        }
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 7,
+      "info": {
+        "title": "Polo Ralph Lauren",
+        "imgUrl": "Polo-Ralph-Lauren-Clean.png",
+        "style": {
+          "width": 38,
+          "height": 50,
+          "right": 16,
+          "top": 10
+        }
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 8,
+      "info": {
+        "title": "ASICS",
+        "imgUrl": "store-logo-asics.png",
+        "style": {
+          "width": 62,
+          "height": 34,
+          "right": 5
+        }
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 9,
+      "info": {
+        "title": "Adidas",
+        "imgUrl": "adidas.png",
+        "style": {
+          "width": 45,
+          "right": 3
+        }
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 10,
+      "info": {
+        "title": "Puma",
+        "imgUrl": "puma.png"
+      }
+    },
+    {
+      "component_name": "logos",
+      "variable_name": "",
+      "column": 11,
+      "info": {
+        "title": "Tommy Hilfiger",
+        "imgUrl": "tommyhilfiger.png",
+        "style": {
+          "width": 40,
+          "right": 4
+        }
+      }
+    },
+    {
       "component_name": "main",
       "variable_name": "",
       "start_date": "",
       "end_date": "",
       "info": {
         "panel_type": "full",
-        "subTitle": {
-          "title": "dsds",
-          "text": "ddfd",
-          "color": "black",
-          "textColor": "gray"
-        },
         "imgUrl": "../../../../assets/pictures/nike-first-page-pic/pm-1.png",
         "href": "#",
         "areas": [
@@ -89,7 +230,7 @@
       "end_date": "",
       "info": {
         "panel_type": "half",
-        "imgUrl": "../../../../assets/pictures/nike-first-page-pic/pm-4.png",
+        "imgUrl": "../../../../assets/pictures/nike-first-page-pic/half-2.png",
         "href": "#",
         "areas": [
           {
@@ -197,7 +338,11 @@
       "info": {
         "column": 1,
         "imgUrl": "assets/cliparts/return.png",
-        "href": "#"
+        "href": "#",
+        "style": {
+          "imgWidth": 30,
+          "imgMarginLeft": 5
+        }
       }
     },
     {
@@ -217,7 +362,7 @@
       "start_date": "",
       "end_date": "",
       "info": {
-        "text": "مردااانه",
+        "text": "مردانه",
         "href": "collection/men"
       }
     },
@@ -228,9 +373,8 @@
         "section": "men/header",
         "column": 1,
         "row": 1,
-        "text": "تازه‌هها",
-        "href": "collection/x",
-        "is_header": true
+        "text": "تازه‌ها",
+        "href": "collection/x"
       }
     },
     {
@@ -241,8 +385,7 @@
         "column": 1,
         "row": 2,
         "text": "پرفروش‌ها",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -253,8 +396,7 @@
         "column": 1,
         "row": 3,
         "text": "مجموعه Equality",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -265,8 +407,7 @@
         "column": 1,
         "row": 4,
         "text": "زیر ۵۰۰ هزار تومان",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -277,8 +418,7 @@
         "column": 1,
         "row": 5,
         "text": "داره مد میشه",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -289,8 +429,7 @@
         "column": 1,
         "row": 6,
         "text": "مجموعه Fleece",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -301,8 +440,7 @@
         "column": 1,
         "row": 7,
         "text": "برای فصل سرما",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -313,8 +451,7 @@
         "column": 1,
         "row": 1,
         "text": "کفش‌ها",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -325,8 +462,7 @@
         "column": 1,
         "row": 2,
         "text": "دو",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -337,8 +473,7 @@
         "column": 1,
         "row": 3,
         "text": "فوتبال",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -349,8 +484,7 @@
         "column": 1,
         "row": 4,
         "text": "نرمش",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -361,8 +495,7 @@
         "column": 1,
         "row": 5,
         "text": "بسکتبال",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -373,8 +506,7 @@
         "column": 2,
         "row": 1,
         "text": "لباس‌ها",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -385,8 +517,7 @@
         "column": 2,
         "row": 2,
         "text": "Nike Pro و Compression",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -397,8 +528,7 @@
         "column": 2,
         "row": 3,
         "text": "پیراهن‌های Polo",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -409,8 +539,7 @@
         "column": 2,
         "row": 4,
         "text": "لباس‌های کلاه‌دار",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -422,7 +551,7 @@
         "row": 5,
         "text": "لوازم جانبی",
         "href": "#",
-        "is_header": true
+        "isHeader": true
       }
     },
     {
@@ -433,8 +562,7 @@
         "column": 2,
         "row": 6,
         "text": "کوله‌ها و کیف‌ها",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -445,44 +573,7 @@
         "column": 2,
         "row": 7,
         "text": "عینک آفتابی",
-        "href": "#",
-        "is_header": false
-      }
-    },
-    {
-      "component_name": "menu",
-      "variable_name": "subMenu",
-      "info": {
-        "section": "men/middle",
-        "column": 3,
-        "row": 1,
-        "text": "لوازم جانبی",
-        "href": "#",
-        "is_header": true
-      }
-    },
-    {
-      "component_name": "menu",
-      "variable_name": "subMenu",
-      "info": {
-        "section": "men/middle",
-        "column": 3,
-        "row": 2,
-        "text": "کوله‌ها و کیف‌ها",
-        "href": "#",
-        "is_header": false
-      }
-    },
-    {
-      "component_name": "menu",
-      "variable_name": "subMenu",
-      "info": {
-        "section": "men/middle",
-        "column": 3,
-        "row": 3,
-        "text": "عینک آفتابی",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -493,8 +584,7 @@
         "column": 1,
         "row": 1,
         "text": "با برند",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -505,8 +595,7 @@
         "column": 1,
         "row": 2,
         "text": "Nike",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -517,8 +606,7 @@
         "column": 1,
         "row": 3,
         "text": "Converse",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -529,8 +617,7 @@
         "column": 1,
         "row": 4,
         "text": "Hurley",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -541,8 +628,7 @@
         "column": 1,
         "row": 5,
         "text": "Nike Jordan",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -553,8 +639,7 @@
         "column": 1,
         "row": 6,
         "text": "The North Face",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -565,8 +650,7 @@
         "column": 1,
         "row": 7,
         "text": "Timberland",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -577,8 +661,7 @@
         "column": 1,
         "row": 8,
         "text": "Polo Ralph Lauren",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -589,8 +672,7 @@
         "column": 2,
         "row": 1,
         "text": "با ورزش",
-        "href": "#",
-        "is_header": true
+        "href": "#"
       }
     },
     {
@@ -601,8 +683,7 @@
         "column": 2,
         "row": 2,
         "text": "دو",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {
@@ -613,8 +694,7 @@
         "column": 2,
         "row": 3,
         "text": "فوتبال",
-        "href": "#",
-        "is_header": false
+        "href": "#"
       }
     },
     {

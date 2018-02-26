@@ -16,9 +16,7 @@ export class BasicInfoComponent implements OnInit {
   id: string = null;
   originalForm: IPageInfo = null;
   form: FormGroup;
-
   collection: ICollection = null;
-  content: string = null;
 
   anyChanges = false;
   upsertBtnShouldDisabled = false;
@@ -48,9 +46,10 @@ export class BasicInfoComponent implements OnInit {
 
   initForm() {
     this.form = new FormBuilder().group({
-      address: [null, [
-        Validators.required,
-      ]],
+      address: [, [Validators.required]],
+      is_app: [false],
+      content: []
+
     }, {});
   }
 
@@ -65,8 +64,10 @@ export class BasicInfoComponent implements OnInit {
     this.upsertBtnShouldDisabled = true;
     this.httpService.get(`page/${this.id}`).subscribe(
       (data) => {
+        data = data[0];
         this.form.controls['address'].setValue(data.address);
         this.form.controls['is_app'].setValue(data.is_app);
+        this.form.controls['content'].setValue(data.page_info.content);
 
         this.collection = {
           _id: data.collection._id,
@@ -93,9 +94,9 @@ export class BasicInfoComponent implements OnInit {
 
     const data = {
       address: this.form.controls['address'].value,
-      is_app: this.form.controls['is_app'],
-      collection_id: this.collection._id,
-      content: this.content
+      is_app: this.form.controls['is_app'].value,
+      collection_id: this.collection ? this.collection._id : null,
+      content: this.form.controls['content'].value
     };
 
     this.progressService.enable();
@@ -115,14 +116,16 @@ export class BasicInfoComponent implements OnInit {
         });
 
         this.anyChanges = false;
-        this.id = result._id;
-        this.form.reset();
 
+        if (!this.id) {
+          this.form.reset();
+          this.collection = null;
+        }
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
       (error) => {
-        this.snackBar.open('Cannot ' + this.id ? 'add' : 'update' + ' this page. Try again', null, {
+        this.snackBar.open(`Cannot ${ !this.id ? 'add' : 'update' } ' this page. Try again`, null, {
           duration: 3200,
         });
 
@@ -163,4 +166,7 @@ export class BasicInfoComponent implements OnInit {
   }
 
 
+  setCollection(collection: any) {
+    this.collection = collection;
+  }
 }

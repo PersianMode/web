@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {PlacementService} from '../../services/placement.service';
 
 @Component({
   selector: 'app-collection-header',
@@ -17,198 +19,55 @@ export class CollectionHeaderComponent implements OnInit {
   persistedList = false;
   searchIsFocused = false;
   menu = {};
-  topMenu = [
-    {
-      collectionName: 'men',
-      collectionNameFa: 'مردانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'women',
-      collectionNameFa: 'زنانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'girls',
-      collectionNameFa: 'دخترانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'boys',
-      collectionNameFa: 'پسرانه',
-      collectionRoute: '#',
-    },
-    {
-      collectionName: 'test',
-      collectionNameFa: 'test',
-      collectionRoute: '#',
-    },
-  ];
-  placements = {
-    menMenu: {
-      headerList: [
-        {
-          text: 'تازه‌ها',
-          href: 'collection/x',
-        },
-        {
-          text: 'پرفروش‌ها',
-          href: '#',
-        },
-        {
-          text: 'مجموعه Equality',
-          href: '#',
-        },
-        {
-          text: 'زیر ۵۰۰ هزار تومان',
-          href: '#',
-        },
-        {
-          text: 'داره مد می‌شه',
-          href: '#',
-        },
-        {
-          text: 'مجموعه Fleece',
-          href: '#',
-        },
-        {
-          text: 'برای فصل سرما',
-          href: '#',
-        },
-      ],
-      middle: [
-        [
-          {
-            text: 'کفش‌ها',
-            href: '#',
-          },
-          {
-            text: 'دو',
-            href: '#',
-          },
-          {
-            text: 'فوتبال',
-            href: '#',
-          },
-          {
-            text: 'نرمش',
-            href: '#',
-          },
-          {
-            text: 'بسکتبال',
-            href: '#',
-          },
-        ],
-        [
-          {
-            text: 'لباس‌ها',
-            href: '#',
-          },
-          {
-            text: 'Compression و Nike Pro',
-            href: '#',
-          },
-          {
-            text: 'پیراهن‌های Polo',
-            href: '#',
-          },
-          {
-            text: 'لباس‌های کلاه‌دار',
-            href: '#',
-          },
-          {
-            text: 'لوازم جانبی',
-            href: '#',
-            isHeader: true,
-          },
-          {
-            text: 'کوله‌ها و کیف‌ها',
-            href: '#',
-          },
-          {
-            text: 'عینک آفتابی',
-            href: '#',
-          },
-        ],
-        [
-          {
-            text: 'لوازم جانبی',
-            href: '#',
-            isHeader: true,
-          },
-          {
-            text: 'کوله‌ها و کیف‌ها',
-            href: '#',
-          },
-          {
-            text: 'عینک آفتابی',
-            href: '#',
-          },
-        ]
-      ],
-      leftColumn: [
-        [
-          {
-            text: 'با برند',
-            href: '#',
-          },
-          {
-            text: 'Nike',
-            href: '#',
-          },
-          {
-            text: 'Converse',
-            href: '#',
-          },
-          {
-            text: 'Hurley',
-            href: '#',
-          },
-          {
-            text: 'Nike Jordan',
-            href: '#',
-          },
-          {
-            text: 'The North Face',
-            href: '#',
-          },
-          {
-            text: 'Timberland',
-            href: '#',
-          },
-          {
-            text: 'Polo Ralph Lauren',
-            href: '#',
-          },
-        ],
-        [
-          {
-            text: 'با ورزش',
-            href: '#',
-          },
-          {
-            text: 'دو',
-            href: '#',
-          },
-          {
-            text: 'فوتبال',
-            href: '#',
-          },
-        ],
-      ],
-    },
-    womenMenu: {},
-    boysMenu: {},
-    girlsMenu: {
-    },
-    fullPanels: [],
-    halfPanels: [],
-    quarterPanels: [],
-  };
+  placements: any = {};
+  topMenu = [];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private placementService: PlacementService) {
+  }
 
   ngOnInit() {
+    this.placementService.placement$.filter(r => r[0] === 'menu').map(r => r[1]).subscribe(
+      data => {
+        this.topMenu = data.filter(r => r.variable_name === 'topMenu');
+        this.topMenu.forEach(r => {
+          r.routerLink = ['/'].concat(r.info.href.split('/'));
+          r.type = r.routerLink[2];
+        });
+        const subMenu = data.filter(r => r.variable_name === 'subMenu');
+        const sections = Array.from(new Set(subMenu.map(r => r.info.section)));
+        this.placements = {};
+        sections.forEach(s => {
+          subMenu
+            .filter(r => r.info.section === s)
+            .sort((x, y) => (x.info.column * 100 + x.info.row) - (y.info.column * 100 + y.info.row))
+            .forEach(r => {
+              const path = r.info.section.split('/');
+              r.info.routerLink = ['/'].concat(r.info.href.split('/'));
+              if (!this.placements[path[0] + 'Menu']) {
+                this.placements[path[0] + 'Menu'] = {};
+              }
+              if (!this.placements[path[0] + 'Menu'][path[1] + 'List']) {
+                this.placements[path[0] + 'Menu'][path[1] + 'List'] = [];
+              }
+              if (r.info.column > 1 &&
+                (!this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1] ||
+                  !this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1].length)) {
+                if (r.info.column === 2) {
+                  const temp = [];
+                  this.placements[path[0] + 'Menu'][path[1] + 'List'].forEach(x => temp.push(x));
+                  this.placements[path[0] + 'Menu'][path[1] + 'List'] = [];
+                  this.placements[path[0] + 'Menu'][path[1] + 'List'].push(temp);
+                }
+                this.placements[path[0] + 'Menu'][path[1] + 'List'].push([]);
+              }
+              if (r.info.column > 1) {
+                this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1].push(r.info);
+              } else {
+                this.placements[path[0] + 'Menu'][path[1] + 'List'].push(r.info);
+              }
+            });
+        });
+      });
   }
 
   showList(type) {
