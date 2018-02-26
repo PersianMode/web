@@ -218,8 +218,6 @@
       this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
       this.bottomScroll = docHeight - offset - height < 180;
       this.bottomFixedFilterPanel = !this.topFixedFilterPanel && !this.bottomScroll && filterHeight - offset < height;
-
-      console.log(docHeight - filterHeight);
       this.topDist = height - filterHeight + 248;
 
     }

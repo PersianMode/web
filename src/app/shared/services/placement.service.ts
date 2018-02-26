@@ -47,7 +47,6 @@ export class PlacementService {
         if (!this.cache[pageName]) {
           this.http.get('assets/test_input_for_menu.json').subscribe(
             (data: any) => {
-              console.log('here', this.cache)
               this.cache[pageName] = this.classifyPlacements(pageName, data.placement);
               if (emit) {
                 this.emitPlacements(this.cache[pageName]);

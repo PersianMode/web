@@ -1,5 +1,5 @@
 <div class="second-bar">
-  <div class="persian-mode-logo" (click)="goToRoot()">پرشین مد<span>ُ</span></div>
+  <div class="persian-mode-logo" [routerLink]="['/']">پرشین مد<span>ُ</span></div>
   <ul>
     <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
         (mouseenter)="showList(item.type)" (mouseleave)="countDownHideList()">
