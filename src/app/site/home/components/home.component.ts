@@ -11,177 +11,6 @@ import {PlacementService} from '../../../shared/services/placement.service';
 export class HomeComponent implements OnInit {
   curWidth = 100;
   curHeight = 100;
-  placementss = {
-    panels: [
-      {
-        type: 'full',
-        topTitle: {
-          title: '',
-          text: '',
-          color: '',
-        },
-        subTitle: {
-          title: '',
-          text: '',
-          color: '',
-        },
-        imgs: [
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/pm-1.png',
-            href: '#',
-            subTitle: {
-              title: 'dsds',
-              text: 'ddfd',
-              color: 'black',
-              textColor: 'gray',
-            },
-            areas: [
-              {
-                pos: 'left-center',
-                title: 'متفاوت باش!',
-                text: 'حرکت رو به جلو ...',
-              },
-            ],
-          },
-        ]
-      },
-      {
-        type: 'full',
-        imgs: [
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/pm-2.png',
-            href: '#',
-            areas: [
-              {
-                pos: 'right-center',
-                title: 'مثل همیشه، فراتر از زمان!',
-                text: 'معرفی محصولات جدید نایک پلاس',
-                color: 'black',
-              },
-            ],
-          },
-        ]
-      },
-      {
-        type: 'full',
-        imgs: [
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/pm-7.png',
-            href: '#',
-            areas: [
-              {
-                pos: 'left-center',
-                title: 'طوسی بی نظیر!',
-                text: 'برای اولین بار',
-              },
-            ],
-          },
-        ]
-      },
-      {
-        mobileMode: false,
-        type: 'full',
-        imgs: [
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/pm-4.png',
-            href: '#',
-            areas: [
-              {
-                pos: 'left-center',
-                title: 'کاملا گرم',
-                text: 'محصولات پشمی مناسب زمستان',
-              }, {
-                pos: 'right-center',
-                title: 'زمان درخشیدن توست!',
-                text: 'نایک، حامی تیم ملی در طول بازیها',
-              },
-            ],
-          },
-        ]
-      },
-      {
-        mobileMode: true,
-        type: 'half',
-        imgs: [
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/half-1.png',
-            href: '#',
-            areas: [{
-              pos: 'left-center',
-              title: 'کاملا گرم',
-              text: 'محصولات پشمی مناسب زمستان',
-            },
-            ]
-          },
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/half-2.png',
-            href: '#',
-            areas: [
-              {
-                pos: 'right-center',
-                title: 'زمان درخشیدن توست!',
-                text: 'نایک، حامی تیم ملی در طول بازیها',
-              },
-            ],
-          },
-        ]
-      },
-      {
-        type: 'quarter',
-        topTitle: {
-          title: 'رنگهای جدید، دلخواه شما',
-          text: '',
-          color: 'black',
-        },
-        imgs: [
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/q1.png',
-            href: '#',
-            subTitle: {
-              title: 'کفش راحتی زنانه، مدل ژاکلین',
-              text: 'کفش زنانه',
-              color: 'black',
-              textColor: 'gray',
-            },
-            areas: [],
-          },
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/q2.png',
-            href: '#',
-            subTitle: {
-              title: 'کفش کارمندی زنانه',
-              text: 'کفش زنانه',
-              color: 'black',
-              textColor: 'gray',
-            },
-            areas: [],
-          },
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/q3.png',
-            href: '#',
-            subTitle: {
-              title: 'کفش ورزشی زنانه نایک، سری نایک پلاس',
-              text: 'کفش ورزشی زنانه',
-              color: 'black',
-              textColor: 'gray',
-            },
-            areas: [],
-          },
-          {
-            imgUrl: '../../../../assets/pictures/nike-first-page-pic/q4.png',
-            href: '#',
-            subTitle: {
-              title: 'کفش پیاده روی زنانه نایک، مدل پگاسوس',
-              text: 'کفش پیاده روی زنانه',
-              color: 'black',
-              textColor: 'gray'
-            },
-            areas: [],
-          },
-        ]
-      },
-    ]
-  }
   placements: any = [];
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService, private placementService: PlacementService) {
@@ -194,7 +23,6 @@ export class HomeComponent implements OnInit {
         const infos = [];
         data.forEach(r => infos.push(r.info));
         for (let i = 0; i < infos.length; i++) {
-          console.log(infos[i]);
           let numberOfPicture = 1;
           if (infos[i].panel_type === 'half') {
             numberOfPicture = 2;
@@ -229,8 +57,6 @@ export class HomeComponent implements OnInit {
           this.placements.push(object);
           i += numberOfPicture - 1;
         }
-        console.log(this.placements);
-        console.log(this.placementss.panels);
       }
     );
     this.placementService.getPlacements('');

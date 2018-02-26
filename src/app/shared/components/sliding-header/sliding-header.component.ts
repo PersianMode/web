@@ -8,7 +8,8 @@ import {PlacementService} from '../../services/placement.service';
 })
 export class SlidingHeaderComponent implements OnInit, OnDestroy {
   curSlideIndex = 0;
-  slides = [
+  slides = [];
+  slidess = [
     {
       imgWidth: 40,
       imgAddr: 'delivery',
@@ -28,9 +29,23 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
   ];
   slider: any;
 
-  constructor( private placementService: PlacementService) { }
+  constructor(private placementService: PlacementService) {
+  }
 
   ngOnInit() {
+    this.placementService.placement$.filter(r => r[0] === 'slider').map(r => r[1]).subscribe(
+      data => {
+        console.log(data);
+        for (let i = 0; i < data.length; i++) {
+          this.slides.push({});
+          this.slides[i].text = data[i].variable_name;
+          this.slides[i].imgAddr = data[i].info.imgUrl;
+          this.slides[i].href = data[i].info.href;
+        }
+        console.log(this.slides);
+      });
+
+
     this.initSlider();
   }
 

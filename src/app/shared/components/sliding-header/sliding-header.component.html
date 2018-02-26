@@ -6,7 +6,7 @@
 
   <div [style.width]="slides.length * 100 + '%'" [style.right]="-curSlideIndex * 100 +'%'">
     <span *ngFor="let slide of slides" [style.width]="(100 / slides.length).toPrecision(4) + '%'"><img
-      [style.width]="slide.imgWidth + 'px'" [style.marginLeft]="slide.imgMarginLeft ? slide.imgMarginLeft + 'px' : 0"
-      src="assets/cliparts/{{slide.imgAddr}}.png"/> {{slide.text}}</span>
+      [style.width]="slide.imgWidth? slide.imgWidth + 'px': '40px'" [style.marginLeft]="slide.imgMarginLeft ? slide.imgMarginLeft + 'px' : 0"
+      src="{{slide.imgAddr}}"/> {{slide.text}}</span>
   </div>
 </div>
