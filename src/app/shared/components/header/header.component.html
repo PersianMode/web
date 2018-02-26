@@ -3,7 +3,7 @@
     <li *ngFor="let logo of logos" [ngStyle]="{width: (logo.width ? logo.width + 'px' : 'initial')}">
       <a href="#" class="gnav-member-bar" [title]="logo.brand">
         <img
-          src="assets/logos/{{logo.filename}}.png" class="general"
+          src="assets/logos/{{logo.filename}}" class="general"
           [ngStyle]="{top: (logo.top ? -logo.top : 0)+ 'px', right: (logo.right ? -logo.right : 0) + 'px', height: (logo.height ? logo.height : 29) + 'px'}"></a>
     </li>
   </ul>
