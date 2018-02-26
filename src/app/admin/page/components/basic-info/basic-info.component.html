@@ -1,9 +1,13 @@
+
+
 <mat-card class="card-view">
   <mat-card-header>
     <mat-card-title>
       <div *ngIf="!id">افزودن صفحه جدید</div>
       <div *ngIf="id">ویرایش صفحه</div>
     </mat-card-title>
+
+
   </mat-card-header>
   <mat-card-content>
 
@@ -29,6 +33,11 @@
           </button>
         </div>
       </div>
-    </form>
+       </form>
+    <mat-form-field class="example-full-width">
+      <textarea [(ngModel)]="textData" matInput placeholder="Leave a comment"></textarea>
+    </mat-form-field>
+    <markdown [data]="textData"></markdown>
+
   </mat-card-content>
 </mat-card>

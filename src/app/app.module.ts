@@ -13,6 +13,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {routing} from './app.routing';
 import {ProgressService} from './shared/services/progress.service';
 import {SharedModule} from './shared/shared.module';
+
 import {PlacementService} from './shared/services/placement.service';
 
 @NgModule({

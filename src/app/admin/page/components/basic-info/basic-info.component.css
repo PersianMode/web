@@ -18,3 +18,10 @@
 .farsi{
   direction:rtl;
 }
+
+.example-full-width {
+  width: 100%;
+  text-align: right;
+  margin: 0px 10px;
+
+}
