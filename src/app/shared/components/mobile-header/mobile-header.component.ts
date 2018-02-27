@@ -1,6 +1,7 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
+import {WINDOW} from '../../services/window.service';
 
 @Component({
   selector: 'app-mobile-header',
@@ -13,6 +14,7 @@ export class MobileHeaderComponent implements OnInit {
   @Input() menuHeight = 100;
 
   isLoggedIn = false;
+  isVerified = false;
   sideNavIsOpen = false;
   isFirstLevel = true;
   isSecondLevel = false;
@@ -92,13 +94,18 @@ export class MobileHeaderComponent implements OnInit {
     }
   };
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router,
+              @Inject(WINDOW) private window) {
   }
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
       (data) => this.isLoggedIn = data,
-      (err) => console.error('Cannot subscribe to isloggedin')
+      (err) => console.error('Cannot subscribe to isloggedIn: ', err)
+    );
+    this.authService.isVerified.subscribe(
+      (data) => this.isVerified = data,
+      (err) => console.error('Cannot subscribe to isVerified: ', err)
     );
   }
 
@@ -157,7 +164,26 @@ export class MobileHeaderComponent implements OnInit {
   }
 
   authentication() {
-    this.router.navigate(['login']);
+    this.authService.checkValidation(this.router.url)
+      .then(() => {
+        this.authService.isVerified.subscribe(
+          (data) => {
+            if (!data && this.window.innerWidth < 960)
+              this.router.navigate(['login/oauth/other/verify']);
+          }
+        );
+      })
+      .catch(err => {
+        this.router.navigate(['login']);
+      });
+
+    this.sideNav.close();
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['home']);
     this.sideNav.close();
   }
 }
+
