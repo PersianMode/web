@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {HttpService} from './http.service';
+import {HttpClient} from '@angular/common/http';
 const defaultComponents = ['menu', 'slider', 'logos'];
 @Injectable()
 export class PlacementService {
@@ -9,7 +10,7 @@ export class PlacementService {
   id;
   placement$: Subject<any> = new Subject<any>();
 
-  constructor(private httpService: HttpService) {
+  constructor(private http: HttpClient, private httpService: HttpService) {
     this.getPlacements('home', false);
   }
 
@@ -45,7 +46,7 @@ export class PlacementService {
       if (pageName === 'home' || this.homeComponents.menu) {
         clearInterval(i);
         if (!this.cache[pageName]) {
-          this.httpService.get(`page/placement/${pageName}`).subscribe(
+          this.http.get('assets/test_input_for_menu.json').subscribe(
             (data: any) => {
               if (data[pageName] && data[pageName].placements) {
                 this.cache[pageName] = this.classifyPlacements(pageName, data[pageName].placements);
