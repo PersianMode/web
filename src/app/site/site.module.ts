@@ -45,7 +45,7 @@ import {SharedModule} from '../shared/shared.module';
     LoginComponent,
     OauthHandlerComponent,
     RegisterComponent,
-    GenDialogComponent
+    GenDialogComponent,
   ],
   entryComponents: [GenDialogComponent],
 })

@@ -1,6 +1,8 @@
   import {Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
   import { DOCUMENT } from '@angular/platform-browser';
   import { WINDOW } from '../../../../shared/services/window.service';
+  import {ActivatedRoute, Router} from '@angular/router';
+  import {PlacementService} from '../../../../shared/services/placement.service';
 
 
   @Component({
@@ -201,10 +203,16 @@
     topDist = 0;
     innerHeight = 0;
     innerScroll = false;
-    constructor(@Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
+    pageName = '';
+    constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window, private placementService: PlacementService) {
     }
 
     ngOnInit() {
+      this.route.paramMap.subscribe(params => {
+        this.pageName = 'collection/' + params.get('typeName');
+        this.placementService.getPlacements(this.pageName);
+        this.onWindowScroll();
+      });
     }
 
     @HostListener('window:scroll', [])
@@ -218,7 +226,7 @@
       this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
       this.bottomScroll = docHeight - offset - height < 180;
       this.bottomFixedFilterPanel = !this.topFixedFilterPanel && !this.bottomScroll && filterHeight - offset < height;
-      this.topDist = height - filterHeight + 248;
+      this.topDist = height - filterHeight + 228;
 
     }
   }
