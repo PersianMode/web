@@ -47,7 +47,15 @@ export class PlacementService {
         if (!this.cache[pageName]) {
           this.http.get('assets/test_input_for_menu.json').subscribe(
             (data: any) => {
-              this.cache[pageName] = this.classifyPlacements(pageName, data.placement);
+              if (data[pageName] && data[pageName].placements) {
+                this.cache[pageName] = this.classifyPlacements(pageName, data[pageName].placements);
+              } else {
+                this.cache[pageName] = [['main'], [[]]];
+                defaultComponents.forEach(r => {
+                    this.cache[pageName][0].push(r);
+                    this.cache[pageName][1].push(this.homeComponents[r]);
+                });
+              }
               if (emit) {
                 this.emitPlacements(this.cache[pageName]);
               }

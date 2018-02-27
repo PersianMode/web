@@ -4,10 +4,11 @@ import {HomeRouting} from './home.routing';
 import {CommonModule} from '@angular/common';
 import {MatButtonModule, MatIconModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     HomeRouting,
@@ -15,6 +16,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatButtonModule,
     MatIconModule,
     FlexLayoutModule,
+    SharedModule,
   ],
 })
 export class HomeModule {

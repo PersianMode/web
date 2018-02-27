@@ -14,6 +14,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import { AbstractSearchComponent } from './components/abstract-search/abstract-search.component';
 import {RemovingConfirmComponent} from './components/removing-confirm/removing-confirm.component';
 import {BidiModule} from '@angular/cdk/bidi';
+import {PanelsComponent} from './components/panels/panels.component';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -31,10 +33,12 @@ import {BidiModule} from '@angular/cdk/bidi';
     SearchFieldsComponent,
     AbstractSearchComponent,
     RemovingConfirmComponent,
+    PanelsComponent,
   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
+    RouterModule,
     CommonModule,
     FlexLayoutModule,
     MatToolbarModule,
@@ -55,6 +59,7 @@ import {BidiModule} from '@angular/cdk/bidi';
   exports: [SuggestionComponent,
     SearchFieldsComponent,
     RemovingConfirmComponent,
+    PanelsComponent,
   ]
 })
 export class SharedModule {
