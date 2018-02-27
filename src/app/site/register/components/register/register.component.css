@@ -16,3 +16,15 @@
   position: relative;
   top: 5px;
 }
+
+.full-width {
+  margin: unset;
+}
+
+.box-center {
+  width: unset;
+}
+
+.box-center input{
+  text-align: center;
+}

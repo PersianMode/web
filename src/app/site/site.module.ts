@@ -17,10 +17,11 @@ import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 
 import {GenDialogComponent} from '../shared/components/gen-dialog/gen-dialog.component';
 import {LoginComponent} from './login/components/login/login.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RegisterComponent} from './register/components/register/register.component';
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
 import {SharedModule} from '../shared/shared.module';
+import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import {SharedModule} from '../shared/shared.module';
     CommonModule,
     FlexLayoutModule,
     ReactiveFormsModule,
+    FormsModule,
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
@@ -46,6 +48,7 @@ import {SharedModule} from '../shared/shared.module';
     OauthHandlerComponent,
     RegisterComponent,
     GenDialogComponent,
+    OtherDetailsComponent,
   ],
   entryComponents: [GenDialogComponent],
 })
