@@ -1,8 +1,7 @@
 <mat-card class="card-view">
   <mat-card-header>
     <mat-card-title>
-      <div *ngIf="!id">افزودن صفحه جدید</div>
-      <div *ngIf="id">ویرایش صفحه</div>
+      <h2> {{ id ? 'ویرایش صفحه':  'افزودن صفحه جدید'  }} </h2>
     </mat-card-title>
 
   </mat-card-header>
@@ -44,8 +43,8 @@
 
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
 
-        <mat-form-field class="example-full-width" >
-          <textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down" ></textarea>
+        <mat-form-field class="example-full-width">
+          <textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down"></textarea>
         </mat-form-field>
       </div>
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
@@ -61,6 +60,10 @@
           <button mat-icon-button type="submit"
                   [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges))"
                   tabindex="3">
+
+            <button mat-icon-button *ngIf="id" (click)="deletePage(id)" color="warn">
+              <mat-icon aria-label="delete">delete</mat-icon>
+            </button>
             <mat-icon aria-label="accept">done</mat-icon>
           </button>
         </div>
@@ -70,5 +73,59 @@
 
     </form>
 
+
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="id" class="card-view" style="margin-top: 10px" dir="ltr">
+  <mat-card-header dir="ltr">
+    <mat-card-title>
+      <h2 dir="ltr">Placements:</h2>
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content dir="ltr">
+
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+      <div fxFlex="20" class="field-container">
+        <mat-form-field>
+          <mat-select placeholder="Component Name" dir="ltr">
+            <mat-option value="Menu">Logos</mat-option>
+            <mat-option value="Menu">Menu</mat-option>
+            <mat-option value="Slider">Slider</mat-option>
+            <mat-option value="Main">Main</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-fab color="accent" (click)="addPlacement()" style="margin-left: 20px">
+          <mat-icon aria-label="Add new Collection">add</mat-icon>
+        </button>
+      </div>
+
+    </div>
+
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="ltr">
+      <div fxFlex="20" *ngFor="let placement of placements" class="outer-card" dir="ltr">
+        <mat-card class="card-view">
+          <mat-card-header dir="ltr">
+            <mat-card-title dir="ltr">
+              <h3>{{placement.component_name}}</h3>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-actions dir="ltr">
+            <button mat-icon-button (click)="editPlacement(placement._id)" color="accent">
+              <mat-icon aria-label="edit">edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deletePlacement(placement._id)" color="warn">
+              <mat-icon aria-label="delete">delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+    <div>
+      <mat-paginator [length]="totalPlacements" [pageSize]="5"
+                     (page)="changePlacementsOffset($event)"></mat-paginator>
+    </div>
   </mat-card-content>
 </mat-card>

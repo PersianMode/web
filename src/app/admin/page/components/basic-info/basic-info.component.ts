@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {IPageInfo} from 'app/admin/page/interfaces/IPageInfo.interface';
 import {ICollection} from '../../interfaces/ICollection.interface';
+import {IPlacement} from '../../interfaces/IPlacement.interface';
+import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-form',
@@ -21,8 +23,13 @@ export class BasicInfoComponent implements OnInit {
   anyChanges = false;
   upsertBtnShouldDisabled = false;
 
+  totalPlacements: number;
+  placements: IPlacement[] = null;
+  placementOffset = 0;
+  placementLimit = 5;
+
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-              private httpService: HttpService, private snackBar: MatSnackBar) {
+              private httpService: HttpService, private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit() {
@@ -32,9 +39,11 @@ export class BasicInfoComponent implements OnInit {
       (params) => {
         this.id = params['id'] && params['id'] !== 'null' ? params['id'] : null;
         this.initPageInfo();
+        this.searchPagePlacements();
       }
     );
-    this.form.valueChanges.subscribe(
+
+     this.form.valueChanges.subscribe(
       (data) => {
         this.fieldChanged();
       },
@@ -55,8 +64,6 @@ export class BasicInfoComponent implements OnInit {
 
   initPageInfo() {
     if (!this.id) {
-      this.form = null;
-      this.initForm();
       return;
     }
 
@@ -74,7 +81,6 @@ export class BasicInfoComponent implements OnInit {
           name: data.collection.name
         };
         this.originalForm = data;
-
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
@@ -88,6 +94,11 @@ export class BasicInfoComponent implements OnInit {
         this.upsertBtnShouldDisabled = false;
       }
     );
+
+  }
+
+  setCollection(collection: any) {
+    this.collection = collection;
   }
 
   submitPage() {
@@ -117,10 +128,9 @@ export class BasicInfoComponent implements OnInit {
 
         this.anyChanges = false;
 
-        if (!this.id) {
-          this.form.reset();
-          this.collection = null;
-        }
+        this.id = result._id;
+        this.searchPagePlacements();
+
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
@@ -137,6 +147,38 @@ export class BasicInfoComponent implements OnInit {
 
 
   }
+
+  deletePage(id: string = null) {
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.delete(`/page/${id}`).subscribe(
+            (data) => {
+              this.snackBar.open('Page delete successfully', null, {
+                duration: 2000,
+              });
+              this.progressService.disable();
+              this.router.navigate(['/agent/pages']);
+            },
+            (error) => {
+              this.snackBar.open('Cannot delete this page. Please try again', null, {
+                duration: 2700
+              });
+              this.progressService.disable();
+            }
+          );
+        }
+      },
+      (err) => {
+        console.log('Error in dialog: ', err);
+      }
+    );
+  }
+
 
   fieldChanged() {
     if (!this.originalForm)
@@ -166,7 +208,54 @@ export class BasicInfoComponent implements OnInit {
   }
 
 
-  setCollection(collection: any) {
-    this.collection = collection;
+  searchPagePlacements() {
+    if (!this.id) {
+      return;
+    }
+
+    this.progressService.enable();
+    this.httpService.get(`page/placement/${this.id}/${this.placementOffset}/${this.placementLimit}`).subscribe(
+      (result) => {
+
+        this.placements = [];
+        result.data.forEach(d => {
+          this.placements.push({
+            _id: d._id,
+            component_name: d.placement.component_name
+          });
+        });
+
+        this.totalPlacements = result.total;
+
+        this.progressService.disable();
+      },
+      (error) => {
+        console.log(error);
+        this.snackBar.open('Cannot get page placements. Please try again', null, {
+          duration: 2500,
+        });
+
+        this.progressService.disable();
+      }
+    );
+
+  }
+
+  addPlacement() {
+
+  }
+
+  editPlacement(_id: String) {
+
+  }
+
+  deletePlacement(_id: String) {
+
+  }
+
+  changePlacementsOffset(data: any) {
+    this.placementLimit = data.pageSize ? data.pageSize : 5;
+    this.placementOffset = data.pageIndex * this.placementLimit;
+    this.searchPagePlacements();
   }
 }

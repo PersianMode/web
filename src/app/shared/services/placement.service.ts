@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs/Subject';
+
 const defaultComponents = ['menu', 'slider', 'logos'];
+
 @Injectable()
 export class PlacementService {
   private cache: any = {};
@@ -43,17 +45,20 @@ export class PlacementService {
   getPlacements(pageName, emit = true) {
     const i = setInterval(() => { // All other pages should wait for initialisation of Home placements
       if (pageName === 'home' || this.homeComponents.menu) {
+
         clearInterval(i);
         if (!this.cache[pageName]) {
           this.http.get('assets/test_input_for_menu.json').subscribe(
             (data: any) => {
-              if (data[pageName] && data[pageName].placements) {
-                this.cache[pageName] = this.classifyPlacements(pageName, data[pageName].placements);
+
+              const key = pageName === 'home' ? 'home' : 'page';
+              if (data[key]) {
+                this.cache[pageName] = this.classifyPlacements(pageName, data[key]);
               } else {
                 this.cache[pageName] = [['main'], [[]]];
                 defaultComponents.forEach(r => {
-                    this.cache[pageName][0].push(r);
-                    this.cache[pageName][1].push(this.homeComponents[r]);
+                  this.cache[pageName][0].push(r);
+                  this.cache[pageName][1].push(this.homeComponents[r]);
                 });
               }
               if (emit) {
