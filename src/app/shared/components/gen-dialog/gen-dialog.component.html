@@ -1,5 +1,5 @@
 <div>
   <app-login *ngIf="componentName === dialogEnum.login" (closeDialog)="close()"></app-login>
   <app-register *ngIf="componentName === dialogEnum.register" (closeDialog)="close()"></app-register>
-  <app-other-details *ngIf="componentName === dialogEnum.oauthOtherDetails" (closeDialog)="close()"></app-other-details>
+  <app-other-details *ngIf="componentName === dialogEnum.oauthOtherDetails" (closeDialog)="close()" [status]="extraData.status"></app-other-details>
 </div>

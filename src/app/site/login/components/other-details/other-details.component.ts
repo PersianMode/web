@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 enum StatusEnum {
   details,
@@ -15,16 +16,33 @@ enum StatusEnum {
 export class OtherDetailsComponent implements OnInit {
   @Output() closeDialog = new EventEmitter();
 
+  @Input()
+  set status(value) {
+    if (value && value.toLowerCase() === 'verify')
+      this.curStatus = this.statusEnum.verify;
+    else
+      this.curStatus = this.statusEnum.details;
+  }
+
   statusEnum = StatusEnum;
   curStatus = StatusEnum.details;
   mobile_no = null;
   mobileHasError = false;
   code = null;
 
-  constructor(private httpService: HttpService, private authService: AuthService) {
+  constructor(private httpService: HttpService, private authService: AuthService,
+              private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit() {
+    this.route.params.subscribe(
+      (params) => {
+        if (params['status'] && params['status'].toLowerCase() === 'verify')
+          this.curStatus = this.statusEnum.verify;
+        else
+          this.curStatus = this.statusEnum.details;
+      }
+    );
   }
 
   addMobileNumber() {
@@ -49,7 +67,9 @@ export class OtherDetailsComponent implements OnInit {
       code: this.code,
     }).subscribe(
       (data) => {
+        this.authService.isVerified.next(true);
         this.closeDialog.emit(true);
+        this.router.navigate(['home']);
       },
       (err) => {
         console.error('Cannot verify code: ', err);
@@ -76,5 +96,9 @@ export class OtherDetailsComponent implements OnInit {
       this.mobileHasError = false;
     else
       this.mobileHasError = true;
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

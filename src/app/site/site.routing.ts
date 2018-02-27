@@ -4,6 +4,7 @@ import {SiteComponent} from './site.component';
 import {LoginComponent} from './login/components/login/login.component';
 import {RegisterComponent} from './register/components/register/register.component';
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
+import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
 
 const Site_ROUTES: Routes = [
   {
@@ -18,6 +19,7 @@ const Site_ROUTES: Routes = [
     {path: 'cart', loadChildren: 'app/site/cart/cart.module#CartModule'},
     {path: 'product', loadChildren: 'app/site/product/product.module#ProductModule'},
     {path: 'login/oauth', component: OauthHandlerComponent},
+    {path: 'login/oauth/other/:status', component: OtherDetailsComponent}
   ]
   }
 ];

@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
 import {AuthService} from '../../services/auth.service';
 import {PlacementService} from '../../services/placement.service';
+import {Router} from '@angular/router';
+import {WINDOW} from '../../services/window.service';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +18,9 @@ export class HeaderComponent implements OnInit {
   isLoggedIn = false;
   isVerified = false;
 
-  constructor(public dialog: MatDialog, private authService: AuthService, private placementService: PlacementService) {
+  constructor(public dialog: MatDialog, private authService: AuthService,
+              private placementService: PlacementService, private router: Router,
+              @Inject(WINDOW) private window) {
   }
 
   ngOnInit() {
@@ -54,12 +58,31 @@ export class HeaderComponent implements OnInit {
   }
 
   login() {
-    this.dialog.open(GenDialogComponent, {
-      width: '500px',
-      data: {
-        componentName: this.dialogEnum.login,
-      }
-    });
+    this.authService.checkValidation(this.router.url)
+      .then(() => {
+        this.authService.isVerified.subscribe(
+          (data) => {
+            if (!data && this.window.innerWidth >= 960)
+              this.dialog.open(GenDialogComponent, {
+                width: '500px',
+                data: {
+                  componentName: this.dialogEnum.oauthOtherDetails,
+                  extraData: {
+                    status: 'verify',
+                  }
+                }
+              });
+          }
+        );
+      })
+      .catch(err => {
+        this.dialog.open(GenDialogComponent, {
+          width: '500px',
+          data: {
+            componentName: this.dialogEnum.login,
+          }
+        });
+      });
   }
 
   logout() {
