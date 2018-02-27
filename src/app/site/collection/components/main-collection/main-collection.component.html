@@ -1,9 +1,10 @@
 <div class="filters" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
      [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [style.height]="innerScroll ? this.innerHeight + 'px' : 'unset'"
-     [style.top]="bottomFixedFilterPanel ? topDist + 'px': 'unset'" #filterPane>
+     [style.top]="bottomFixedFilterPanel ? topDist + 'px !important': 'unset'" #filterPane>
   <app-filtering-panel></app-filtering-panel>
 </div>
 <div class="gridwall" #gridwall>
+  <app-panels></app-panels>
   <div class="gridwall-wrapper">
     <div class="gridwall-title">
       <h1>{{collection.collectionNameFa}} <span>({{collection.set.length.toLocaleString('fa')}})</span></h1>
