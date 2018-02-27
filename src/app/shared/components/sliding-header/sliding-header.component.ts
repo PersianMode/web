@@ -22,6 +22,7 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.placementService.placement$.filter(r => r[0] === 'slider').map(r => r[1]).subscribe(
       data => {
+        this.slides = [];
         for (let i = 0; i < data.length; i++) {
           this.slides.push({});
           this.slides[i].text = data[i].variable_name;
@@ -33,7 +34,6 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
           }
           this.slides[i].href = data[i].info.href;
         }
-        console.log(this.slides);
       });
 
 
