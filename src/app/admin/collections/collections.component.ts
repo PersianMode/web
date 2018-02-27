@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
+import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-collections',
@@ -23,15 +24,31 @@ export class CollectionsComponent extends AbstractSearchComponent implements OnI
   }
 
   deleteCollection(id: string = null) {
-    this.progressService.enable();
-    this.httpService.delete(`collection/${id}`).subscribe(
-      (data) => {
-        this.searching();
-        this.progressService.disable();
-      }, (err) => {
-        console.log('Error', err);
-        this.progressService.disable();
-      }
-    );
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px'
+    });
+    rmDialog.afterClosed().subscribe(
+      status => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.delete(`collection/${id}`).subscribe(
+            (data) => {
+              this.selectedId = null;
+              this.snackBar.open('Collection deleted successfully', null, {
+                duration: 2000,
+              });
+              this.searching();
+              this.progressService.disable();
+            }, (err) => {
+              this.snackBar.open('Cannot delete this product. Please try again.', null, {
+                duration: 2700,
+              });
+              console.log('Error', err);
+              this.progressService.disable();
+            });
+        }
+      }, err => {
+        console.log('Error in dialog: ', err);
+      });
   }
 }

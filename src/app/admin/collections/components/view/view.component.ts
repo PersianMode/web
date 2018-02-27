@@ -44,18 +44,13 @@ export class ViewComponent implements OnInit {
         this.searchDetails();
       }
     );
-    this.types.valueChanges.subscribe(
-      (data) => {
-        console.log(data);
-      }
-    );
   }
 
   searchDetails() {
     this.progressService.enable();
     this.httpService.get(`collection/${this.collectionId}`).subscribe(
       (data) => {
-        data = data.body[0];
+        data = data[0];
         this.currentCollection = data;
         if (!data.is_smart) {
           this.progressService.disable();
@@ -73,12 +68,24 @@ export class ViewComponent implements OnInit {
             this.tagGroupIds.push(data.tagGroups[tagGroupId]._id);
           }
         }
-        this.httpService.get(`product_type/`).subscribe(
+        this.httpService.post(`search/ProductType`, {
+          offset: 0,
+          limit: 100,
+          options: {
+            phrase: ''
+          }
+        }).subscribe(
           product_types => {
-            this.typesList = product_types.body;
-            this.httpService.get(`tag_group/`).subscribe(
+            this.typesList = product_types.data;
+            this.httpService.post(`search/TagGroup`, {
+              offset: 0,
+              limit: 100,
+              options: {
+                phrase: ''
+              }
+            }).subscribe(
               tag_groups => {
-                this.tagGroupsList = tag_groups.body;
+                this.tagGroupsList = tag_groups.data;
                 this.progressService.disable();
 
               }, err => {
@@ -97,7 +104,7 @@ export class ViewComponent implements OnInit {
   }
 
   addProduct(expObj) {
-    this.httpService.put(`collection/product/${this.currentCollection._id}/${expObj._id}`, {}).subscribe(
+    this.httpService.post(`collection/product/${this.currentCollection._id}/${expObj._id}`, {}).subscribe(
       data => {
         this.searchDetails();
       }, err => {
@@ -107,7 +114,7 @@ export class ViewComponent implements OnInit {
   }
 
   addTag(expObj) {
-    this.httpService.put(`collection/tag/${this.currentCollection._id}/${expObj._id}`, {}).subscribe(
+    this.httpService.post(`collection/tag/${this.currentCollection._id}/${expObj._id}`, {}).subscribe(
       data => {
         this.searchDetails();
       }, err => {

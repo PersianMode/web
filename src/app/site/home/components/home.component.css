@@ -100,6 +100,9 @@
   font-family: 'irankharazmi';
   font-weight: bolder;
 }
+.full-width {
+    width: 100%;
+}
 
 .top-title {
      text-align: right;

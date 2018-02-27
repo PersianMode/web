@@ -64,7 +64,7 @@ export class ProductColorComponent implements OnInit {
   getProductColors() {
     this.httpService.get(`product/color/${this.productId}`).subscribe(res => {
       this.productColors = [];
-      res.body.colors.forEach(color => {
+      res.colors.forEach(color => {
         this.productColors.push(color);
       });
     }, err => {

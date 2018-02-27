@@ -27,7 +27,6 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.httpService.get((url.includes('agent') ? 'agent' : '') + '/validUser').subscribe(
         (data) => {
-          data = data.body;
           this.userDetails = {
             isAgent: data.personType === 'agent',
             userId: data.pid,

@@ -65,7 +65,7 @@ export class FormComponent implements OnInit {
     this.upsertBtnShouldDisabled = true;
     this.httpService.get(`collection/${this.collectionId}`).subscribe(
       (data) => {
-        data = data.body[0];
+        data = data[0];
 
         this.collectionForm.controls['colName'].setValue(data.name);
         this.collectionForm.controls['is_smart'].setValue(data.is_smart);
@@ -103,9 +103,6 @@ export class FormComponent implements OnInit {
     this.upsertBtnShouldDisabled = true;
     this.httpService.put(`collection`, sendingData).subscribe(
       data => {
-        if (data.body) {
-          data = data.body;
-        }
         let isCreating = false;
         if (data._id) {
           isCreating = true;
