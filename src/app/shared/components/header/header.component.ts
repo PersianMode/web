@@ -89,6 +89,7 @@ export class HeaderComponent implements OnInit {
   ];
   dialogEnum = DialogEnum;
   isLoggedIn = false;
+  isVerified = false;
 
   constructor(public dialog: MatDialog, private authService: AuthService) {
   }
@@ -97,8 +98,15 @@ export class HeaderComponent implements OnInit {
     this.authService.isLoggedIn.subscribe(
       (data) => this.isLoggedIn = data,
       (err) => {
-        console.error('Cannot subscribe on isLoggedin: ', err);
+        console.error('Cannot subscribe on isLoggedIn: ', err);
         this.isLoggedIn = false;
+      }
+    );
+    this.authService.isVerified.subscribe(
+      (data) => this.isVerified = data,
+      (err) => {
+        console.error('Cannot subscribe on isVerified: ', err);
+        this.isVerified = false;
       }
     );
   }

@@ -1,8 +1,15 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
+import {ActivatedRoute} from '@angular/router';
+
+enum RegStatus {
+  Register = 'Register',
+  Verify = 'Verify'
+}
+;
 
 @Component({
   selector: 'app-register',
@@ -17,6 +24,9 @@ export class RegisterComponent implements OnInit {
   gender = null;
   seen = {};
   curFocus = null;
+  regStatus = RegStatus;
+  curStatus = RegStatus.Register;
+  code = null;
 
   constructor(private httpService: HttpService, private authService: AuthService) {
   }
@@ -34,6 +44,7 @@ export class RegisterComponent implements OnInit {
       ]],
       password: [null, [
         Validators.required,
+        Validators.minLength(8),
       ]],
       first_name: [null, [
         Validators.required,
@@ -69,13 +80,7 @@ export class RegisterComponent implements OnInit {
 
       this.httpService.put('register', data).subscribe(
         (res) => {
-          this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
-            .then(res => {
-              this.closeDialog.emit(true);
-            })
-            .catch(err => {
-              console.error('Cannot login: ', err);
-            });
+          this.curStatus = this.regStatus.Verify;
         },
         (err) => {
           console.error('Cannot register user: ', err);
@@ -92,5 +97,43 @@ export class RegisterComponent implements OnInit {
         this.seen['gender'] = true;
       }
     }
+  }
+
+  resendCode() {
+    this.httpService.post('register/resend', {
+      username: this.registerForm.controls['username'].value,
+      code: this.code
+    }).subscribe(
+      (data) => {
+        console.log('New code is sent: ', data);
+      },
+      (err) => {
+        console.error('Cannot send new code: ', err);
+      }
+    );
+  }
+
+  backToRegister() {
+    this.curStatus = this.regStatus.Register;
+  }
+
+  checkCode() {
+    this.httpService.post('register/verify', {
+      code: this.code,
+      username: this.registerForm.controls['username'].value,
+    }).subscribe(
+      (data) => {
+        this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
+          .then(res => {
+            this.closeDialog.emit(true);
+          })
+          .catch(err => {
+            console.error('Cannot login: ', err);
+          });
+      },
+      (err) => {
+        console.error('Cannot verify registration: ', err);
+      }
+    );
   }
 }

@@ -95,14 +95,10 @@
 }
 
 .shop-button {
-    color: black;
-    font-size: large ;
-    font-family: 'irankharazmi';
-    font-weight: bolder;
-}
-.full-width {
-    width: 100%;
-    margin-top: -9px;
+  color: black;
+  font-size: large;
+  font-family: 'irankharazmi';
+  font-weight: bolder;
 }
 
 .top-title {
