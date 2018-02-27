@@ -22,6 +22,7 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.placementService.placement$.filter(r => r[0] === 'slider').map(r => r[1]).subscribe(
       data => {
+        console.log('data2 :', data);
         for (let i = 0; i < data.length; i++) {
           this.slides.push({});
           this.slides[i].text = data[i].variable_name;
