@@ -23,10 +23,7 @@ export class BasicInfoComponent implements OnInit {
   anyChanges = false;
   upsertBtnShouldDisabled = false;
 
-  totalPlacements: number;
   placements: IPlacement[] = null;
-  placementOffset = 0;
-  placementLimit = 5;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
               private httpService: HttpService, private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
@@ -214,7 +211,7 @@ export class BasicInfoComponent implements OnInit {
     }
 
     this.progressService.enable();
-    this.httpService.get(`page/placement/${this.id}/${this.placementOffset}/${this.placementLimit}`).subscribe(
+    this.httpService.get(`page/placement/list`).subscribe(
       (result) => {
 
         this.placements = [];
@@ -225,7 +222,6 @@ export class BasicInfoComponent implements OnInit {
           });
         });
 
-        this.totalPlacements = result.total;
 
         this.progressService.disable();
       },
@@ -253,9 +249,5 @@ export class BasicInfoComponent implements OnInit {
 
   }
 
-  changePlacementsOffset(data: any) {
-    this.placementLimit = data.pageSize ? data.pageSize : 5;
-    this.placementOffset = data.pageIndex * this.placementLimit;
-    this.searchPagePlacements();
-  }
+
 }
