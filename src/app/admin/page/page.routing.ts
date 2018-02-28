@@ -1,11 +1,11 @@
 import {RouterModule, Routes} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {PageComponent} from './page.component';
-import {BasicInfoComponent} from './components/basic-info/basic-info.component';
+import {PageBasicInfoComponent} from './components/page-basic-info/page-basic-info.component';
 
 const PAGE_ROUTES: Routes = [
   {path: '', component: PageComponent, pathMatch: 'full'},
-  {path: 'info/:id', component: BasicInfoComponent},
+  {path: 'info/:id', component: PageBasicInfoComponent},
 ];
 
 export const PageRouting = RouterModule.forChild(PAGE_ROUTES);

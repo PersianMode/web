@@ -1,17 +1,18 @@
 <div dir="ltr" class="mobile-header">
-  <mat-sidenav-container style="height: 50px; overflow: hidden; "  (backdropClick)="backDropClick($event)">
+  <mat-sidenav-container (backdropClick)="backDropClick($event)">
     <mat-sidenav #sidenav mode="push"
                  style="background-color: white; margin-left: -10px;"
                  [style.height]="menuHeight + 'px'" [style.width]="menuWidth + 'px'"
                  (opened)="sideNavIsOpen = true" (closed)="sideNavIsOpen = false">
       <div *ngIf="isFirstLevel">
-        <div *ngIf="!isLoggedIn" class="menu-item menu-title" (click)="authentication()">وارد/عضو شوید</div>
+        <div *ngIf="!isLoggedIn || !isVerified" class="menu-item menu-title clickable-link" (click)="authentication()">وارد/عضو شوید</div>
+        <div *ngIf="isLoggedIn && isVerified" class="menu-item menu-title clickable-link" (click)="logout()">خارج شوید</div>
         <div *ngFor="let first_level of getKeys(menuItems)">
           <div *ngIf="menuItems[first_level].is_title">
             <div class="menu-item menu-static-title">{{first_level}}</div>
           </div>
           <div *ngIf="!menuItems[first_level].is_title">
-            <div class="menu-item" (click)="select(2, menuItems[first_level], first_level)">
+            <div class="menu-item clickable-link" (click)="select(2, menuItems[first_level], first_level)">
               <span *ngIf="menuItems[first_level].menu" style="float: left">
                 <i class="fa fa-angle-left" aria-hidden="true"></i>
               </span>
@@ -32,7 +33,7 @@
             <div class="menu-item menu-title">{{second_level}}</div>
           </div>
           <div *ngIf="!firstLevelSelected[second_level].is_title">
-            <div class="menu-item" (click)="select(3, firstLevelSelected[second_level], second_level)">
+            <div class="menu-item clickable-link" (click)="select(3, firstLevelSelected[second_level], second_level)">
               <span *ngIf="firstLevelSelected[second_level].menu" style="float: left;">
                 <i class="fa fa-angle-left" aria-hidden="true"></i>
               </span>
@@ -53,7 +54,7 @@
             <div class="menu-item menu-title">{{third_level}}</div>
           </div>
           <div *ngIf="!secondLevelSelected[third_level].is_title">
-            <div class="menu-item" (click)="select(3, secondLevelSelected[third_level], third_level)">
+            <div class="menu-item clickable-link" (click)="select(3, secondLevelSelected[third_level], third_level)">
               <span *ngIf="secondLevelSelected[third_level].menu" style="float: left;">
                 <i class="fa fa-angle-left" aria-hidden="true"></i>
               </span>

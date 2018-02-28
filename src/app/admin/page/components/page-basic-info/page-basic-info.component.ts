@@ -1,18 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {IPageInfo} from 'app/admin/page/interfaces/IPageInfo.interface';
 import {ICollection} from '../../interfaces/ICollection.interface';
+import {IPlacement} from '../../interfaces/IPlacement.interface';
+import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
-  selector: 'app-form',
-  templateUrl: './basic-info.component.html',
-  styleUrls: ['./basic-info.component.css']
+  selector: 'app-page-basic-form',
+  templateUrl: './page-basic-info.component.html',
+  styleUrls: ['./page-basic-info.component.css']
 })
-export class BasicInfoComponent implements OnInit {
+export class PageBasicInfoComponent implements OnInit {
+  placementRows: any[];
   id: string = null;
   originalForm: IPageInfo = null;
   form: FormGroup;
@@ -21,8 +24,10 @@ export class BasicInfoComponent implements OnInit {
   anyChanges = false;
   upsertBtnShouldDisabled = false;
 
+  placements: IPlacement[] = null;
+
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-              private httpService: HttpService, private snackBar: MatSnackBar) {
+              private httpService: HttpService, private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit() {
@@ -32,8 +37,10 @@ export class BasicInfoComponent implements OnInit {
       (params) => {
         this.id = params['id'] && params['id'] !== 'null' ? params['id'] : null;
         this.initPageInfo();
+
       }
     );
+
     this.form.valueChanges.subscribe(
       (data) => {
         this.fieldChanged();
@@ -55,8 +62,6 @@ export class BasicInfoComponent implements OnInit {
 
   initPageInfo() {
     if (!this.id) {
-      this.form = null;
-      this.initForm();
       return;
     }
 
@@ -67,16 +72,19 @@ export class BasicInfoComponent implements OnInit {
         data = data[0];
         this.form.controls['address'].setValue(data.address);
         this.form.controls['is_app'].setValue(data.is_app);
-        this.form.controls['content'].setValue(data.page_info.content);
+        this.form.controls['content'].setValue((data.page_info && data.page_info.content) ? data.page_info.content : null);
 
-        this.collection = {
-          _id: data.collection._id,
-          name: data.collection.name
-        };
+        if (data.collection) {
+          this.collection = {
+            _id: data.collection._id,
+            name: data.collection.name
+          };
+        }
         this.originalForm = data;
-
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
+
+        this.searchPagePlacements();
       },
       (error) => {
         console.log(error);
@@ -88,6 +96,11 @@ export class BasicInfoComponent implements OnInit {
         this.upsertBtnShouldDisabled = false;
       }
     );
+
+  }
+
+  setCollection(collection: any) {
+    this.collection = collection;
   }
 
   submitPage() {
@@ -117,10 +130,9 @@ export class BasicInfoComponent implements OnInit {
 
         this.anyChanges = false;
 
-        if (!this.id) {
-          this.form.reset();
-          this.collection = null;
-        }
+        this.id = result._id;
+        this.searchPagePlacements();
+
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
@@ -137,6 +149,38 @@ export class BasicInfoComponent implements OnInit {
 
 
   }
+
+  deletePage(id: string = null) {
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.delete(`/page/${id}`).subscribe(
+            (data) => {
+              this.snackBar.open('Page delete successfully', null, {
+                duration: 2000,
+              });
+              this.progressService.disable();
+              this.router.navigate(['/agent/pages']);
+            },
+            (error) => {
+              this.snackBar.open('Cannot delete this page. Please try again', null, {
+                duration: 2700
+              });
+              this.progressService.disable();
+            }
+          );
+        }
+      },
+      (err) => {
+        console.log('Error in dialog: ', err);
+      }
+    );
+  }
+
 
   fieldChanged() {
     if (!this.originalForm)
@@ -166,7 +210,72 @@ export class BasicInfoComponent implements OnInit {
   }
 
 
-  setCollection(collection: any) {
-    this.collection = collection;
+  searchPagePlacements() {
+    if (!this.id) {
+      return;
+    }
+
+    this.progressService.enable();
+    this.httpService.post(`page/placement/list`, {address: this.form.controls['address'].value}).subscribe(
+      (result) => {
+
+        this.placements = [];
+        result.placement.forEach(p => {
+          this.placements.push({
+            _id: p._id,
+            component_name: p.component_name
+          });
+        });
+
+        this.alignRow();
+
+        this.progressService.disable();
+      },
+      (error) => {
+        console.log(error);
+        this.snackBar.open('Cannot get page placements. Please try again', null, {
+          duration: 2500,
+        });
+
+        this.progressService.disable();
+      }
+    );
+
   }
+
+  alignRow() {
+    if (this.placements.length <= 0) {
+      this.placementRows = [];
+      return;
+    }
+    this.placementRows = [];
+    let chunk = [], counter = 0;
+    for (const p in this.placements) {
+      chunk.push(this.placements[p]);
+      counter++;
+
+      if (counter >= 5) {
+        counter = 0;
+        this.placementRows.push(chunk);
+        chunk = [];
+      }
+    }
+    if (counter > 0) {
+      this.placementRows.push(chunk);
+    }
+  }
+
+  addPlacement() {
+
+  }
+
+  editPlacement(_id: String) {
+
+  }
+
+  deletePlacement(_id: String) {
+
+  }
+
+
 }

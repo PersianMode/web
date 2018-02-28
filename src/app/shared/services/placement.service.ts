@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {HttpService} from './http.service';
-import {HttpClient} from '@angular/common/http';
 const defaultComponents = ['menu', 'slider', 'logos'];
 @Injectable()
 export class PlacementService {
@@ -10,7 +9,7 @@ export class PlacementService {
   id;
   placement$: Subject<any> = new Subject<any>();
 
-  constructor(private http: HttpClient, private httpService: HttpService) {
+  constructor(private httpService: HttpService) {
     this.getPlacements('home', false);
   }
 
@@ -46,15 +45,15 @@ export class PlacementService {
       if (pageName === 'home' || this.homeComponents.menu) {
         clearInterval(i);
         if (!this.cache[pageName]) {
-          this.http.get('assets/test_input_for_menu.json').subscribe(
+          this.httpService.post('page/placement/list', {address: pageName}).subscribe(
             (data: any) => {
-              if (data[pageName] && data[pageName].placements) {
-                this.cache[pageName] = this.classifyPlacements(pageName, data[pageName].placements);
+              if (data && data.placement) {
+                this.cache[pageName] = this.classifyPlacements(pageName, data.placement);
               } else {
                 this.cache[pageName] = [['main'], [[]]];
                 defaultComponents.forEach(r => {
-                    this.cache[pageName][0].push(r);
-                    this.cache[pageName][1].push(this.homeComponents[r]);
+                  this.cache[pageName][0].push(r);
+                  this.cache[pageName][1].push(this.homeComponents[r]);
                 });
               }
               if (emit) {
