@@ -211,7 +211,7 @@
       this.route.paramMap.subscribe(params => {
         this.pageName = 'collection/' + params.get('typeName');
         this.placementService.getPlacements(this.pageName);
-        this.onWindowScroll();
+        setTimeout(() => this.onWindowScroll(), 1000);
       });
     }
 

@@ -27,7 +27,8 @@
   font-family: nastaliq !Important;
   font-size: 20px;
   position: absolute;
-  top: 2px;
+  top: 8px;
+  line-height: 40px;
   right: 13px;
   display: inline-block;
   color: black;
