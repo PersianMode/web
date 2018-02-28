@@ -40,10 +40,10 @@ export class HeaderComponent implements OnInit {
     );
     this.placementService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
       this.logos = [];
-      data = data.sort((x, y) => x.column - y.column);
+      data = data.sort((x, y) => x.info.column - y.info.column);
       data.forEach(r => {
         const obj = {
-          brand: r.info.title,
+          brand: r.info.text,
           filename: r.info.imgUrl,
         };
         if (r.info.style) {
