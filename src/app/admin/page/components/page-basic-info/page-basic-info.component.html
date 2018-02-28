@@ -1,0 +1,131 @@
+<mat-card class="card-view">
+  <mat-card-header>
+    <mat-card-title>
+      <h2> {{ id ? 'ویرایش صفحه': 'افزودن صفحه جدید' }} </h2>
+    </mat-card-title>
+
+  </mat-card-header>
+  <mat-card-content>
+
+    <form (ngSubmit)="submitPage()" [formGroup]="form">
+
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+        <div fxFlex="50" class="field-container">
+
+          <app-suggestion fxFlex="50" [name]="'Collection'" [currentIds]="collection ?  [collection._id] : []"
+                          [fieldName]="'name'"
+                          [placeholder]="'نام کالکشن'" (add)="setCollection($event)"></app-suggestion>
+          <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{collection ? collection.name : ''}} </h3>
+        </div>
+
+        <div fxFlex="50" class="field-container">
+          <mat-input-container class="field">
+            <input matInput type="text" placeholder="آدرس" formControlName="address"
+                   role="address" tabindex="2" dir="ltr">
+            <mat-hint>آدرس صفحه را وارد کنید</mat-hint>
+            <mat-error *ngIf="form.controls['address'].hasError('required') && anyChanges">
+              وارد کردن آدرس صفحه الزامی است
+            </mat-error>
+          </mat-input-container>
+        </div>
+
+      </div>
+
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+        <div fxFlex="50" class="field-container">
+
+          <mat-checkbox formControlName="is_app" role="is_app" dir="ltr">
+            Is App?
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+        <mat-form-field class="example-full-width">
+          <textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down"></textarea>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+        <markdown *ngIf="form.controls['content'].value" [data]="form.controls['content'].value"></markdown>
+
+      </div>
+
+
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+        <div role="submit-button" style="text-align: left; margin-top: 10px;">
+          <button mat-icon-button type="submit"
+                  [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges))"
+                  tabindex="3">
+
+            <button mat-icon-button *ngIf="id" (click)="deletePage(id)" color="warn">
+              <mat-icon aria-label="delete">delete</mat-icon>
+            </button>
+            <mat-icon aria-label="accept">done</mat-icon>
+          </button>
+        </div>
+
+      </div>
+
+
+    </form>
+
+
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="id" class="card-view" style="margin-top: 10px" dir="ltr">
+  <mat-card-header dir="ltr">
+    <mat-card-title>
+      <h2 dir="ltr">Placements:</h2>
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content dir="ltr">
+
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+
+      <div fxFlex="20" class="field-container">
+        <mat-form-field>
+          <mat-select placeholder="Component Name" dir="ltr">
+            <mat-option value="Menu">Logos</mat-option>
+            <mat-option value="Menu">Menu</mat-option>
+            <mat-option value="Slider">Slider</mat-option>
+            <mat-option value="Main">Main</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-fab color="accent" (click)="addPlacement()" style="margin-left: 20px">
+          <mat-icon aria-label="Add new Collection">add</mat-icon>
+        </button>
+      </div>
+
+    </div>
+
+    <div fxLayout="row" *ngFor="let row of placementRows" fxLayout.xs="column" fxLayoutAlign="start start"
+         fxLayoutAlign.xs="center center" dir="ltr">
+      <div fxFlex="20" *ngFor="let placement of row" class="outer-card" dir="ltr">
+        <mat-card class="card-view" style="margin: 10px">
+          <mat-card-header dir="ltr">
+            <mat-card-title dir="ltr">
+              <h3>{{placement.component_name}}</h3>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-actions dir="ltr">
+            <button mat-icon-button (click)="editPlacement(placement._id)" color="accent">
+              <mat-icon aria-label="edit">edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="deletePlacement(placement._id)" color="warn">
+              <mat-icon aria-label="delete">delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+    <div>
+
+    </div>
+  </mat-card-content>
+</mat-card>

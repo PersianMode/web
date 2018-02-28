@@ -10,11 +10,11 @@
   <ul class="right-bar">
     <li><a href="#" class="faWrapper" aria-label="Shopping Bag"><i
       class="fa fa-shopping-bag fa-flip-horizontal"></i></a>
-    <li *ngIf="!isLoggedIn">
+    <li *ngIf="!isLoggedIn || !isVerified">
       <a (click)="login()" class="faWrapper clickable-link" aria-label="Sign In or Register"><i
         class="fa fa-sign-in fa-flip-horizontal loginIcon"></i></a>
     </li>
-    <li *ngIf="isLoggedIn">
+    <li *ngIf="isLoggedIn && isVerified">
       <a (click)="logout()" class="faWrapper clickable-link" aria-label="Sign Out"><i
         class="fa fa-sign-out loginIcon"></i></a>
     </li>

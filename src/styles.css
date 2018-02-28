@@ -359,6 +359,11 @@ input, button {
   text-align: center;
 }
 
+.box-center {
+  width: 50%;
+  margin: 0 auto;
+}
+
 .field-error {
   font-size: 0.75em;
   color: red;
@@ -616,4 +621,9 @@ mat-panel-title {
     border: 1px rgba(221,221,221,.7) solid;
     color: black;
   }
+}
+
+.full-width {
+  width: 100%;
+  margin-top: -9px;
 }

@@ -10,11 +10,13 @@ import {DialogEnum} from '../../enum/dialog.components.enum';
 export class GenDialogComponent implements OnInit {
   componentName = null;
   dialogEnum = DialogEnum;
+  extraData = {};
 
   constructor(public dialogRef: MatDialogRef<GenDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
     this.componentName = this.data.componentName;
+    this.extraData = this.data.extraData ? this.data.extraData : {};
   }
 
   close() {

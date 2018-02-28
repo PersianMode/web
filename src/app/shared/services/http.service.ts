@@ -13,7 +13,7 @@ export class HttpService {
 
 
   get(url): Observable<any> {
-    return this.http.get(this.serverAddress + url, {observe: 'response'});
+    return this.http.get(this.serverAddress + url, {observe: 'response'}).map(data => data.body);
   }
 
   put(url, values): Observable<any> {
@@ -25,7 +25,7 @@ export class HttpService {
   }
 
   delete(url): Observable<any> {
-    return this.http.delete(this.serverAddress + url, {observe: 'response'});
+    return this.http.delete(this.serverAddress + url, {observe: 'response'}).map(data => data.body);
   }
 
 

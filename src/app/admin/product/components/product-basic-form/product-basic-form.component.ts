@@ -53,8 +53,8 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
           this.progressService.enable();
           this.httpService.get(`/product/${this.productId}`).subscribe(
             (data) => {
-              this.product = data.body[0];
-              this.loadedValue = data.body[0];
+              this.product = data[0];
+              this.loadedValue = data[0];
               this.progressService.disable();
               this.initForm();
             },
