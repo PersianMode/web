@@ -11,13 +11,13 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FileUploadModule} from 'ng2-file-upload';
 import {SharedModule} from '../../shared/shared.module';
 import {PageComponent} from './page.component';
-import {BasicInfoComponent} from './components/basic-info/basic-info.component';
+import {PageBasicInfoComponent} from './components/page-basic-info/page-basic-info.component';
 import {MarkdownModule} from 'angular2-markdown';
 
 @NgModule({
   declarations: [
     PageComponent,
-    BasicInfoComponent,
+    PageBasicInfoComponent,
   ],
   imports: [
     PageRouting,

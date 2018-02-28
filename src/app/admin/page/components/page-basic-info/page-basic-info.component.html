@@ -1,7 +1,7 @@
 <mat-card class="card-view">
   <mat-card-header>
     <mat-card-title>
-      <h2> {{ id ? 'ویرایش صفحه':  'افزودن صفحه جدید'  }} </h2>
+      <h2> {{ id ? 'ویرایش صفحه': 'افزودن صفحه جدید' }} </h2>
     </mat-card-title>
 
   </mat-card-header>
@@ -104,9 +104,10 @@
 
     </div>
 
-    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="ltr">
-      <div fxFlex="20" *ngFor="let placement of placements" class="outer-card" dir="ltr">
-        <mat-card class="card-view">
+    <div fxLayout="row" *ngFor="let row of placementRows" fxLayout.xs="column" fxLayoutAlign="start start"
+         fxLayoutAlign.xs="center center" dir="ltr">
+      <div fxFlex="20" *ngFor="let placement of row" class="outer-card" dir="ltr">
+        <mat-card class="card-view" style="margin: 10px">
           <mat-card-header dir="ltr">
             <mat-card-title dir="ltr">
               <h3>{{placement.component_name}}</h3>
@@ -124,8 +125,7 @@
       </div>
     </div>
     <div>
-      <mat-paginator [length]="totalPlacements" [pageSize]="5"
-                     (page)="changePlacementsOffset($event)"></mat-paginator>
+
     </div>
   </mat-card-content>
 </mat-card>

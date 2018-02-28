@@ -10,11 +10,12 @@ import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
-  selector: 'app-form',
-  templateUrl: './basic-info.component.html',
-  styleUrls: ['./basic-info.component.css']
+  selector: 'app-page-basic-form',
+  templateUrl: './page-basic-info.component.html',
+  styleUrls: ['./page-basic-info.component.css']
 })
-export class BasicInfoComponent implements OnInit {
+export class PageBasicInfoComponent implements OnInit {
+  placementRows: any[];
   id: string = null;
   originalForm: IPageInfo = null;
   form: FormGroup;
@@ -36,11 +37,11 @@ export class BasicInfoComponent implements OnInit {
       (params) => {
         this.id = params['id'] && params['id'] !== 'null' ? params['id'] : null;
         this.initPageInfo();
-        this.searchPagePlacements();
+
       }
     );
 
-     this.form.valueChanges.subscribe(
+    this.form.valueChanges.subscribe(
       (data) => {
         this.fieldChanged();
       },
@@ -71,15 +72,19 @@ export class BasicInfoComponent implements OnInit {
         data = data[0];
         this.form.controls['address'].setValue(data.address);
         this.form.controls['is_app'].setValue(data.is_app);
-        this.form.controls['content'].setValue(data.page_info.content);
+        this.form.controls['content'].setValue((data.page_info && data.page_info.content) ? data.page_info.content : null);
 
-        this.collection = {
-          _id: data.collection._id,
-          name: data.collection.name
-        };
+        if (data.collection) {
+          this.collection = {
+            _id: data.collection._id,
+            name: data.collection.name
+          };
+        }
         this.originalForm = data;
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
+
+        this.searchPagePlacements();
       },
       (error) => {
         console.log(error);
@@ -211,17 +216,18 @@ export class BasicInfoComponent implements OnInit {
     }
 
     this.progressService.enable();
-    this.httpService.get(`page/placement/list`).subscribe(
+    this.httpService.post(`page/placement/list`, {address: this.form.controls['address'].value}).subscribe(
       (result) => {
 
         this.placements = [];
-        result.data.forEach(d => {
+        result.placement.forEach(p => {
           this.placements.push({
-            _id: d._id,
-            component_name: d.placement.component_name
+            _id: p._id,
+            component_name: p.component_name
           });
         });
 
+        this.alignRow();
 
         this.progressService.disable();
       },
@@ -235,6 +241,28 @@ export class BasicInfoComponent implements OnInit {
       }
     );
 
+  }
+
+  alignRow() {
+    if (this.placements.length <= 0) {
+      this.placementRows = [];
+      return;
+    }
+    this.placementRows = [];
+    let chunk = [], counter = 0;
+    for (const p in this.placements) {
+      chunk.push(this.placements[p]);
+      counter++;
+
+      if (counter >= 5) {
+        counter = 0;
+        this.placementRows.push(chunk);
+        chunk = [];
+      }
+    }
+    if (counter > 0) {
+      this.placementRows.push(chunk);
+    }
   }
 
   addPlacement() {

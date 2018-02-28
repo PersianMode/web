@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormComponent } from './basic-info.component';
+import { FormComponent } from './page-basic-info.component';
 
 describe('FormComponent', () => {
   let component: FormComponent;
