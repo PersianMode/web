@@ -194,7 +194,8 @@
               "pos": "left-center",
               "title": "متفاوت باش!",
               "text": "حرکت رو به جلو ...",
-              "color": ""
+              "color": "",
+              "buttonText": "خرید کنید"
             }
           ]
         }
