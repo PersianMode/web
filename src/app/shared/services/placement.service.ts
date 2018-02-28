@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs/Subject';
+import {HttpService} from './http.service';
+import {HttpClient} from '@angular/common/http';
 const defaultComponents = ['menu', 'slider', 'logos'];
 @Injectable()
 export class PlacementService {
@@ -9,7 +10,7 @@ export class PlacementService {
   id;
   placement$: Subject<any> = new Subject<any>();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private httpService: HttpService) {
     this.getPlacements('home', false);
   }
 

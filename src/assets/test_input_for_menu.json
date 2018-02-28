@@ -16,6 +16,18 @@
             }
           ]
         }
+      },
+      {
+        "component_name": "logos",
+        "variable_name": "",
+        "column": 1,
+        "info": {
+          "title": "Nike",
+          "imgUrl": "nike.png",
+          "style": {
+            "width": 60
+          }
+        }
       }
     ]
   },
