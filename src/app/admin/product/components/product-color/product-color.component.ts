@@ -18,22 +18,22 @@ export class ProductColorComponent implements OnInit {
   productColorForm: FormGroup;
   colors: IColor[] = [
     {
-      _id: '5a8402148a4c831e60ce8cc4',
-      name: 'سبز',
+      _id: '5a969ca83b2e51157c355e72',
+      name: 'قرمز',
       color_id: '101'
     },
     {
-      _id: '5a84022d8a4c831e60ce8cc5',
-      name: 'قرمز',
+      _id: '5a969cd33b2e51157c355e73',
+      name: 'سبز',
       color_id: '102'
     },
     {
-      _id: '5a8402498a4c831e60ce8cc6',
+      _id: '5a969d0c3b2e51157c355e75',
       name: 'صورتی',
       color_id: '103'
     },
     {
-      _id: '5a8402628a4c831e60ce8cc7',
+      _id: '5a969d2d3b2e51157c355e76',
       name: 'بنفش',
       color_id: '104'
     }];

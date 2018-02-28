@@ -17,16 +17,16 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 export class ProductBasicFormComponent implements OnInit, OnDestroy {
   productBasicForm: FormGroup;
   types = [
-    {text: 'عینک', value: '5a813ae66760822bb8329a2b'},
-    {text: 'تی شرت', value: '5a813ad56760822bb8329a2a'},
-    {text: 'شلوار', value: '5a813ac86760822bb8329a29'},
-    {text: 'کفش', value: '5a813b066760822bb8329a2c'},
+    {text: 'عینک', value: '5a969de13b2e51157c355e7b'},
+    {text: 'تی شرت', value: '5a969e003b2e51157c355e7c'},
+    {text: 'شلوار', value: '5a969e163b2e51157c355e7d'},
+    {text: 'کفش', value: '5a969e333b2e51157c355e7e'},
   ];
   brands = [
-    {text: 'نایک', value: '5a8138696760822bb8329a25'},
-    {text: 'آدیداس', value: '5a81387d6760822bb8329a26'},
-    {text: 'پلیس', value: '5a8138a56760822bb8329a28'},
-    {text: 'گپ', value: '5a81388d6760822bb8329a27'},
+    {text: 'نایک', value: '5a969d5f3b2e51157c355e77'},
+    {text: 'آدیداس', value: '5a969d863b2e51157c355e78'},
+    {text: 'پلیس', value: '5a969d9b3b2e51157c355e79'},
+    {text: 'گپ', value: '5a969db83b2e51157c355e7a'},
   ];
   upsertBtnShouldDisabled = false;
   deleteBtnShouldDisabled = false;
