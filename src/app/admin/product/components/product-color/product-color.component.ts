@@ -23,11 +23,6 @@ export class ProductColorComponent implements OnInit {
       color_id: '101'
     },
     {
-      _id: '5a969cd33b2e51157c355e73',
-      name: 'سبز',
-      color_id: '102'
-    },
-    {
       _id: '5a969d0c3b2e51157c355e75',
       name: 'صورتی',
       color_id: '103'
