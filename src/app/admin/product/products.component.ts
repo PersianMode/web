@@ -5,7 +5,7 @@ import {AbstractSearchComponent} from '../../shared/components/abstract-search/a
 
 
 @Component({
-  selector: 'app-all-products',
+  selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
