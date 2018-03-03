@@ -6,21 +6,18 @@ import {
   MatSnackBarModule, MatTabsModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {PageRouting} from './page.routing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
-import {PageComponent} from './page.component';
-import {PageBasicInfoComponent} from './components/page-basic-info/page-basic-info.component';
 import {MarkdownModule} from 'angular2-markdown';
+import {UploadComponent} from './upload.component';
+import {UploadRouting} from './upload.routing';
 
 @NgModule({
   declarations: [
-    PageComponent,
-    PageBasicInfoComponent,
+    UploadComponent,
   ],
   imports: [
-    PageRouting,
-    SharedModule,
+    UploadRouting,
     CommonModule,
     MatButtonModule,
     MatIconModule,
@@ -44,5 +41,5 @@ import {MarkdownModule} from 'angular2-markdown';
     MarkdownModule.forRoot(),
   ],
 })
-export class PageModule {
+export class UploadModule {
 }

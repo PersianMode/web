@@ -1,6 +1,6 @@
 <div class="photos" #photosDiv>
 <span>
-  <div *ngFor="let img of product.images">
+  <div *ngFor="let img of product.OnCompleted">
     <img *ngIf="img.type !== 'video'" src="{{img.url}}">
     <video *ngIf="img.type === 'video'" autoplay loop playsinline tabindex="-1"><source src="{{img.url}}" type="video/webm"></video>
   </div>

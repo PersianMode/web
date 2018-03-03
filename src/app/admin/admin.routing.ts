@@ -10,6 +10,7 @@ const Admin_ROUTES: Routes = [
     {path: 'login', loadChildren: 'app/admin/login/login.module#LoginModule'},
     {path: 'products', loadChildren: 'app/admin/product/product.module#ProductModule', canActivate: [AdminAuthGuard]},
     {path: 'pages', loadChildren: 'app/admin/page/page.module#PageModule', canActivate: [AdminAuthGuard]},
+    {path: 'upload', loadChildren: 'app/admin/upload/upload.module#UploadModule', canActivate: [AdminAuthGuard]},
   ]},
 ];
 
