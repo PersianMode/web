@@ -605,11 +605,14 @@ mat-panel-title {
   padding-top: 25px
 }
 .mat-drawer-content {
-  overflow: hidden !important;
+  overflow-x: hidden !important;
   height: 49px !important;
   border-bottom: 1px solid #E5E5E5;
 }
-
+.mat-drawer-container {
+  z-index: 10 !important;
+  overflow: visible !important;
+}
 @media(max-width:959px) {
   .mat-button-toggle-label-content {
     width: 50px;
@@ -622,5 +625,4 @@ mat-panel-title {
 
 .full-width {
   width: 100%;
-  margin-top: -9px;
 }

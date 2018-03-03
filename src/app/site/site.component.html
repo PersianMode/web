@@ -1,22 +1,15 @@
- <div *ngIf="curWidth >= 960">
+<div >
   <div class="fixed">
-    <app-header></app-header>
-    <app-collection-header></app-collection-header>
+    <app-header *ngIf="curWidth >= 960"></app-header>
+    <app-collection-header *ngIf="curWidth >= 960"></app-collection-header>
+    <app-mobile-header  *ngIf="curWidth < 960" [menuWidth]="curWidth - 40" [menuHeight]="curHeight"></app-mobile-header>
   </div>
-  <div class="scrollable">
-    <app-sliding-header></app-sliding-header>
-    <div class="content">
+  <div [class.scrollable]="curWidth >= 960">
+    <app-sliding-header *ngIf="curWidth >= 960"></app-sliding-header>
+    <div [class.content]="curWidth >= 960" [class.mobile-content]="curWidth < 960">
       <router-outlet></router-outlet>
       <app-footer></app-footer>
     </div>
   </div>
 </div>
-<div *ngIf="curWidth < 960">
-  <div class="fixed">
-    <app-mobile-header [menuWidth]="curWidth - 40" [menuHeight]="curHeight"></app-mobile-header>
-  </div>
-  <div class="mobile-content">
-    <router-outlet></router-outlet>
-  </div>
-  <app-footer></app-footer>
-</div>
+

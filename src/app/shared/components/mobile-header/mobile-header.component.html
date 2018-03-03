@@ -1,5 +1,5 @@
 <div dir="ltr" class="mobile-header">
-  <mat-sidenav-container style="height: 50px; overflow: hidden; "  (backdropClick)="backDropClick($event)">
+  <mat-sidenav-container (backdropClick)="backDropClick($event)">
     <mat-sidenav #sidenav mode="push"
                  style="background-color: white; margin-left: -10px;"
                  [style.height]="menuHeight + 'px'" [style.width]="menuWidth + 'px'"
