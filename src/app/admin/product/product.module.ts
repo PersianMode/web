@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatNativeDateModule,
+  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
   MatSnackBarModule, MatTabsModule
 } from '@angular/material';
@@ -13,8 +13,6 @@ import {ProductBasicFormComponent} from './components/product-basic-form/product
 import {ProductFullInfoComponent} from './components/product-full-info/product-full-info.component';
 import {ProductColorComponent} from './components/product-color/product-color.component';
 import {ProductInstanceComponent} from './components/product-instance/product-instance.component';
-import {UploaderComponent} from '../../shared/components/uploader/uploader.component';
-import {FileUploadModule} from 'ng2-file-upload';
 import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
@@ -24,7 +22,6 @@ import {SharedModule} from '../../shared/shared.module';
     ProductFullInfoComponent,
     ProductColorComponent,
     ProductInstanceComponent,
-    UploaderComponent
   ],
   imports: [
     ProductRouting,
@@ -45,7 +42,6 @@ import {SharedModule} from '../../shared/shared.module';
     MatSelectModule,
     MatTabsModule,
     MatPaginatorModule,
-    FileUploadModule,
     SharedModule,
   ],
 })

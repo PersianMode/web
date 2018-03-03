@@ -19,7 +19,7 @@
                 </div>
                 <app-uploader fxFlex="100" *ngIf="selectedColorId"
                               [url]="'product/image/'+ productId + '/' + selectedColorId"
-                              (images)="addToTable($event)"></app-uploader>
+                              (OnCompleted)="addToTable($event)"></app-uploader>
 
             </div>
         </form>

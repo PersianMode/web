@@ -55,7 +55,7 @@ export class ProductColorComponent implements OnInit {
           this.progressService.enable();
           this.httpService.delete(`/product/color/${this.productId}/${color_id}`).subscribe(
             (data) => {
-              this.snackBar.open('Product images for this color deleted successfully', null, {
+              this.snackBar.open('Product OnCompleted for this color deleted successfully', null, {
                 duration: 2000,
               });
               this.progressService.disable();

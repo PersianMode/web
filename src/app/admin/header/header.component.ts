@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit {
     {label: 'کلکسیون‌ها', path: '/agent/collections'},
     {label: 'محصولات', path: '/agent/products'},
     {label: 'صفحه‌ها', path: '/agent/pages'},
+    {label: 'بارگذاری فایل', path: '/agent/upload'},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;
