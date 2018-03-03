@@ -16,9 +16,12 @@ export class ProductGridItemComponent implements OnInit {
   price = '';
   on = 0;
   images = [];
+  colors = [];
   slide = 0;
   slidesNum = 0;
   rect;
+  curWidth = 100;
+  curHeight = 100;
 
   constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router) {
     this.zone.runOutsideAngular(() => {
@@ -27,11 +30,14 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.curWidth = this.window.innerWidth;
+    this.curHeight = this.window.innerHeight;
     this.desc = this.data.tags.join(' ');
     this.price = priceFormatter(this.data.price);
     this.images = Array.from(new Set<any>(this.data.colors.map(r => r.url)).values());
     this.slidesNum = Math.ceil(this.data.colors.length / 3);
-
+    this.colors = Array.from(new Set<any>(this.data.colors.map(r => r.hex)).values());
+    this.colors.length--;
   }
 
   turnOn(e, time) {

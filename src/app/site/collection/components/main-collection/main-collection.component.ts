@@ -52,10 +52,12 @@
             {
               url: '02-1.jpg',
               pi_id: 0,
+              hex: '#32ff14',
             },
             {
               url: '02-2.jpg',
               pi_id: 0,
+              hex: '#f21353',
             },
             {
               url: '02-3.jpg',

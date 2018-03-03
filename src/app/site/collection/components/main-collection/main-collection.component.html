@@ -1,5 +1,6 @@
 <div class="filters" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
-     [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [style.height]="innerScroll ? this.innerHeight + 'px' : 'unset'"
+     [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll"
+     [style.height]="innerScroll ? this.innerHeight + 'px' : 'unset'"
      [style.top]="bottomFixedFilterPanel ? topDist + 'px !important': 'unset !important'" #filterPane>
   <app-filtering-panel></app-filtering-panel>
 </div>
