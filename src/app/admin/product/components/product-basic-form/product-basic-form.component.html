@@ -37,8 +37,8 @@
                 <div style="text-align: right" class="field-container">
                     <mat-form-field fxFlex="100" style="text-align:right;" tabindex="3">
                         <mat-select placeholder="نوع محصول" formControlName="product_type" role="product_type">
-                            <mat-option *ngFor="let type of types" style="text-align:right" [value]="type.value">
-                                {{type.text}}
+                            <mat-option *ngFor="let type of types" style="text-align:right" [value]="type._id">
+                                {{type.name}}
                             </mat-option>
                         </mat-select>
                         <mat-hint>نوع محصول را انتخاب کنید</mat-hint>
@@ -51,8 +51,8 @@
                     <mat-form-field fxFlex="100" style="text-align:right" tabindex="4">
                         <mat-select placeholder="برند" formControlName="brand" role="brand">
                             <mat-option *ngFor="let brand of brands" style="text-align:right"
-                                        [value]="brand.value">
-                                {{brand.text}}
+                                        [value]="brand._id">
+                                {{brand.name}}
                             </mat-option>
                         </mat-select>
                         <mat-hint>برند را انتخاب کنید</mat-hint>
@@ -73,9 +73,6 @@
                 </mat-input-container>
             </div>
             <div role="submit-button" style="text-align: left">
-                <button mat-icon-button *ngIf="productId" (click)="openView(productId)" color="primary">
-                    <mat-icon aria-label="view" type="button" >visibility</mat-icon>
-                </button>
                 <button mat-icon-button type="submit"
                         [disabled]="upsertBtnShouldDisabled || (!productBasicForm.valid) || (productId && !anyChanges)"
                         tabindex="6" color="accent">

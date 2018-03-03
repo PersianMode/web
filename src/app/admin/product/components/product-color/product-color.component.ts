@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IColor} from '../../interfaces/icolor';
 import {IProductColor} from '../../interfaces/iproduct-color';
@@ -16,32 +16,16 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 export class ProductColorComponent implements OnInit {
 
   productColorForm: FormGroup;
-  colors: IColor[] = [
-    {
-      _id: '5a8402148a4c831e60ce8cc4',
-      name: 'سبز',
-      color_id: '101'
-    },
-    {
-      _id: '5a84022d8a4c831e60ce8cc5',
-      name: 'قرمز',
-      color_id: '102'
-    },
-    {
-      _id: '5a8402498a4c831e60ce8cc6',
-      name: 'صورتی',
-      color_id: '103'
-    },
-    {
-      _id: '5a8402628a4c831e60ce8cc7',
-      name: 'بنفش',
-      color_id: '104'
-    }];
 
-  productColors: IProductColor[] = [];
+
+  @Input() productColors: IProductColor[];
+  @Output() onProductColorChanged = new EventEmitter<IProductColor[]>();
+  @Input() colors: IColor[];
+
   selectedColorId: string = null;
 
-  @Input () productId;
+  @Input() productId;
+
   constructor(private httpService: HttpService,
               private sanitizer: DomSanitizer, private dialog: MatDialog,
               private progressService: ProgressService, private snackBar: MatSnackBar) {
@@ -49,7 +33,6 @@ export class ProductColorComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getProductColors();
   }
 
   initForm() {
@@ -61,16 +44,6 @@ export class ProductColorComponent implements OnInit {
     );
   }
 
-  getProductColors() {
-    this.httpService.get(`product/color/${this.productId}`).subscribe(res => {
-      this.productColors = [];
-      res.colors.forEach(color => {
-        this.productColors.push(color);
-      });
-    }, err => {
-      console.error();
-    });
-  }
 
   removeImg(color_id: string) {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
@@ -82,11 +55,15 @@ export class ProductColorComponent implements OnInit {
           this.progressService.enable();
           this.httpService.delete(`/product/color/${this.productId}/${color_id}`).subscribe(
             (data) => {
-              this.snackBar.open('Product images for this color deleted successfully', null, {
+              this.snackBar.open('Product OnCompleted for this color deleted successfully', null, {
                 duration: 2000,
               });
               this.progressService.disable();
-              this.getProductColors();
+
+              this.productColors = this.productColors.filter(pc => pc.info._id !== color_id);
+
+              this.onProductColorChanged.emit(this.productColors);
+
             },
             (error) => {
               this.snackBar.open('Cannot delete this product. Please try again', null, {
@@ -116,6 +93,7 @@ export class ProductColorComponent implements OnInit {
         _id: null
       };
       this.productColors.push(newProductColor);
+      this.onProductColorChanged.emit(this.productColors);
     }
   }
 
