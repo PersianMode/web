@@ -83,8 +83,8 @@ export class FilteringPanelComponent implements OnInit {
   filter_options_fa = [];
   exist_types = [];
   exist_brands = [];
-  exist_colors = [];
   exist_sizes = [];
+  exist_colors = [];
 constructor() {
   }
 
@@ -108,6 +108,12 @@ constructor() {
     });
     this.getTypes();
     this.getBrands();
+    this.getSize();
+    console.log('==>', this.filter_options);
+    console.log('==>', this.filter_options_fa);
+    console.log('==>', this.exist_types);
+    console.log('==>', this.exist_sizes);
+    console.log('==>', this.exist_brands);
   }
   getTypes() {
   this.exist_types = [];
@@ -115,7 +121,8 @@ constructor() {
       if (this.exist_types.findIndex(i => i === el.type) === -1)
         this.exist_types.push(el.type);
     });
-    console.log('==>', this.exist_types);
+    if (this.exist_types.length > 0)
+      this.filter_options_fa[3].push(this.exist_types);
   }
 
   getBrands() {
@@ -124,6 +131,15 @@ constructor() {
       if (this.exist_brands.findIndex(i => i === el.brand) === -1)
         this.exist_brands.push(el.brand);
     });
-    console.log('==>', this.exist_brands);
+  }
+
+  getSize() {
+    this.exist_sizes = [];
+    this.collection_data.set.forEach(el => {
+      el.size.forEach( i => {
+        if (this.exist_sizes.findIndex(s => s === i) === -1)
+          this.exist_sizes.push(i);
+      });
+    });
   }
 }

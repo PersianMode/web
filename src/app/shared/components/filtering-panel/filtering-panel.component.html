@@ -1,9 +1,12 @@
 <p *ngFor="let i of items">
-  filtering-panel works! {{i}}
+    filtering-panel works! {{i}}
 </p>
 <h1>فیلترها</h1>
 <div *ngFor="let fo of filter_options_fa">
- {{fo}}
-  <hr>
+    <b>{{fo}}</b>
+    <div *ngFor="let item of fo">
+        {{item}}
+    </div>
+    <hr>
 </div>
 
