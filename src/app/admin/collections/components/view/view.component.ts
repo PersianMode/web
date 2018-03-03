@@ -68,15 +68,9 @@ export class ViewComponent implements OnInit {
             this.tagGroupIds.push(data.tagGroups[tagGroupId]._id);
           }
         }
-        this.httpService.post(`search/ProductType`, {
-          offset: 0,
-          limit: 100,
-          options: {
-            phrase: ''
-          }
-        }).subscribe(
+        this.httpService.get(`productType`).subscribe(
           product_types => {
-            this.typesList = product_types.data;
+            this.typesList = product_types;
             this.httpService.post(`search/TagGroup`, {
               offset: 0,
               limit: 100,
