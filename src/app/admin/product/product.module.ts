@@ -8,24 +8,22 @@ import {
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ProductRouting} from './product.routing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {AllProductsComponent} from './all-products.component';
+import {ProductsComponent} from './products.component';
 import {ProductBasicFormComponent} from './components/product-basic-form/product-basic-form.component';
-import {ProductViewComponent} from './components/product-view/product-view.component';
 import {ProductFullInfoComponent} from './components/product-full-info/product-full-info.component';
 import {ProductColorComponent} from './components/product-color/product-color.component';
-import {ProductSizeComponent} from './components/product-size/product-size.component';
+import {ProductInstanceComponent} from './components/product-instance/product-instance.component';
 import {UploaderComponent} from '../../shared/components/uploader/uploader.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   declarations: [
-    AllProductsComponent,
+    ProductsComponent,
     ProductBasicFormComponent,
-    ProductViewComponent,
     ProductFullInfoComponent,
     ProductColorComponent,
-    ProductSizeComponent,
+    ProductInstanceComponent,
     UploaderComponent
   ],
   imports: [

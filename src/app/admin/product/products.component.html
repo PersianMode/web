@@ -6,37 +6,28 @@
         <mat-icon aria-label="add new organization">add</mat-icon>
     </button>
 </div>
-<div *ngFor="let r of rows" dir="rtl">
+<div *ngFor="let row of rows" dir="rtl">
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
          fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center" class="row">
-        <div fxFlex="20" *ngFor="let p of r" class="outer-card">
-            <mat-card class="card-view" (click)="select(p._id)" [ngClass]="{'mat-elevation-z24': p._id === selectedId}">
+        <div fxFlex="20" *ngFor="let product of row" class="outer-card">
+            <mat-card class="card-view" (click)="select(product._id)" [ngClass]="{'mat-elevation-z24': product._id === selectedId}">
                 <mat-card-content>
-                    <div *ngIf="!p.imgDefaultPic" style="text-align: center">
-                        <img mat-card-image style="width: 60%; height: 60%" [src]="getURL(p.imgUrl)">
-                    </div>
-                    <div *ngIf="p.imgDefaultPic" style="text-align: center">
-                        <img mat-card-image style="width: 60%; height: 60%" src="{{p.imgUrl}}">
-                    </div>
-                    <hr>
                     <div dir="rtl" style="font-weight: bold; font-family: 'irankharazmi'">
-                        {{p.name}}
+                        {{product.name}}
                     </div>
                     <div dir="rtl" style="font-family: 'irankharazmi'">
                         <span>قیمت پایه :</span>
-                        {{p.base_price}}
+                        {{product.base_price}}
                     </div>
                 </mat-card-content>
-                <mat-card-actions style="text-align: left" *ngIf="p._id == selectedId">
-                    <button mat-icon-button type (click)="deleteProduct(p._id)" color="warn">
+                <mat-card-actions style="text-align: left" *ngIf="product._id == selectedId">
+                    <button mat-icon-button type (click)="deleteProduct(product._id)" color="warn">
                       <mat-icon aria-label="delete">delete</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="openForm(p._id)" color="accent">
+                    <button mat-icon-button (click)="openForm(product._id)" color="accent">
                       <mat-icon aria-label="edit">edit</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="openView(p._id)" color="primary">
-                        <mat-icon aria-label="view">visibility</mat-icon>
-                    </button>
+
                 </mat-card-actions>
             </mat-card>
         </div>

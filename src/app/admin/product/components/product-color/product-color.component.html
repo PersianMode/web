@@ -17,7 +17,6 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <p>{{selectedColor}}</p>
                 <app-uploader fxFlex="100" *ngIf="selectedColorId"
                               [url]="'product/image/'+ productId + '/' + selectedColorId"
                               (images)="addToTable($event)"></app-uploader>
