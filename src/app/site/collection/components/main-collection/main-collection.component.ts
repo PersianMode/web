@@ -16,11 +16,10 @@
       collectionName: 'men-shoes',
       set: [
         {
-          name: 'جوردن ایر مدل ‍۱۰ رترو',
+          name: 'جوردن ا  یر مدل ‍۱۰ رترو',
           colors: [
             {
               url: '06.jpg',
-              position: 0,
             },
           ],
           tags: ['کفش', 'مردانه', 'بسکتبال'],
@@ -31,7 +30,6 @@
           colors: [
             {
               url: '14.jpeg',
-              position: 0,
               pi_id: 14,
             },
           ],
@@ -42,8 +40,7 @@
           name: 'له‌برون مدل 15 BHM',
           colors: [
             {
-              url: '01.jpg',
-              position: 0,
+              url: '01-1.jpg',
             },
           ],
           tags: ['کفش', 'مردانه', 'بسکتبال'],
@@ -53,28 +50,23 @@
           name: 'نایک ایر مدل Huarache Drift',
           colors: [
             {
-              url: '02.jpg',
-              position: 0,
+              url: '02-1.jpg',
               pi_id: 0,
             },
             {
-              url: '02.jpg',
-              position: 1,
+              url: '02-2.jpg',
               pi_id: 0,
             },
             {
-              url: '02.jpg',
-              position: 2,
+              url: '02-3.jpg',
               pi_id: 0,
             },
             {
               url: '11.jpeg',
-              position: 0,
               pi_id: 0,
             },
             {
               url: '12.jpeg',
-              position: 0,
               pi_id: 0,
             },
           ],
@@ -85,13 +77,11 @@
           name: 'نایک ایر',
           colors: [
             {
-              url: '03.jpg',
-              position: 0,
+              url: '03-1.jpg',
               pi_id: 0,
             },
             {
-              url: '03.jpg',
-              position: 1,
+              url: '03-2.jpg',
               pi_id: 1,
             },
           ],
@@ -102,18 +92,15 @@
           name: 'نایک ایر فورس ۱ مدل Premium \'07',
           colors: [
             {
-              url: '04.jpg',
-              position: 0,
+              url: '04-1.jpg',
               pi_id: 0,
             },
             {
-              url: '04.jpg',
-              position: 1,
+              url: '04-2.jpg',
               pi_id: 0,
             },
             {
-              url: '04.jpg',
-              position: 2,
+              url: '04-3.jpg',
               pi_id: 0,
             },
           ],
@@ -124,13 +111,11 @@
           name: 'کایری 4',
           colors: [
             {
-              url: '05.jpg',
-              position: 0,
+              url: '05-1.jpg',
               pi_id: 0,
             },
             {
-              url: '05.jpg',
-              position: 1,
+              url: '05-2.jpg',
               pi_id: 0,
             },
           ],
@@ -141,18 +126,15 @@
           name: 'نایک Sportswear',
           colors: [
             {
-              url: '07.jpg',
-              position: 0,
+              url: '07-1.jpg',
               pi_id: 0,
             },
             {
-              url: '07.jpg',
-              position: 1,
+              url: '07-2.jpg',
               pi_id: 0,
             },
             {
-              url: '07.jpg',
-              position: 2,
+              url: '07-3.jpg',
               pi_id: 0,
             },
           ],
@@ -163,18 +145,15 @@
           name: 'نایک Sportswear Tech Shield',
           colors: [
             {
-              url: '08.jpg',
-              position: 0,
+              url: '08-1.jpg',
               pi_id: 0,
             },
             {
-              url: '08.jpg',
-              position: 1,
+              url: '08-2.jpg',
               pi_id: 0,
             },
             {
-              url: '08.jpg',
-              position: 2,
+              url: '08-3.jpg',
               pi_id: 0,
             },
           ],
@@ -186,7 +165,6 @@
           colors: [
             {
               url: '13.jpeg',
-              position: 0,
               pi_id: 0,
             },
           ],

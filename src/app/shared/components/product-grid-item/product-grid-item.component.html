@@ -1,4 +1,4 @@
-<div class="main" [class.on]="on">
+  <div class="main" [class.on]="on">
   <span>
     <div class="imgWrapper" (mouseover)="turnOn()" (mouseout)="turnOff()">
       <img src="assets/pictures/product-small/{{data.colors[pos].url}}" [style.right]="(220 * data.colors[pos].position) +'px'" (click)="openProduct()">
@@ -10,7 +10,7 @@
           <img *ngFor="let img of images" src="assets/pictures/product-small/{{img}}">
         </div>
       </div>
-      <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
+      <i *ngIf="slidesNum > 1 && slide < slidesNum-1" (click)="nextSlide()" class="fa fa-chevron-left"></i>
     </div>
     <p>{{data.colors.length.toLocaleString('fa')}} رنگ</p>
     <h2>{{data.name}}</h2>
