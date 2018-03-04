@@ -3,7 +3,7 @@
   display: inline-block;
   text-align: right;
   width: 244px;
-  height: 314px;
+  height: 324px;
   overflow: hidden;
   float: right;
   margin-bottom: 34px;
@@ -66,6 +66,9 @@
   overflow: hidden;
   direction:ltr;
   transition: all .5s ease-out;
+}
+.color-span{
+  margin-right: 5px;
 }
 
 .imgWrapper img{
