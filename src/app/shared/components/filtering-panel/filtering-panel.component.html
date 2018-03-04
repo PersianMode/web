@@ -1,11 +1,31 @@
+<br>
+<br>
 <div style="height: 60px">
     <h1>فیلترها</h1>
 </div>
-<div *ngFor="let fo of filter_options">
-    <b>{{Object.keys(fo)}}</b>
-    <!--<div *ngFor="let item of fo">-->
-        <!--{{item}}-->
-    <!--</div>-->
-    <hr>
+<hr>
+<div *ngFor="let fo of filter_options; let i = index">
+    <div style="font-weight: bold; padding-bottom: 5px">{{fo.name}}</div>
+    <div *ngFor="let v of filter_options[i].values" style="margin-right: -10px">
+        <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز'" style="opacity: 0.8" (change)="getValue(fo.name, v)" [ngModel]="is_test">
+            <span class="check-box-text">{{v}}</span>
+        </mat-checkbox>
+    </div>
+    <span *ngIf="fo.name === 'رنگ'">
+      <span *ngFor="let v of filter_options[i].values; let j = index" class="color-span" (click)="getColor(fo.name, v)" style="cursor: pointer;">
+        <svg height="26" width="26">
+         <circle cx="13" cy="13" r="13" stroke="black" stroke-width="0" attr.fill="{{v}}"></circle>
+        </svg>
+          <br *ngIf="(j+1) % 6 === 0 && j !== 0">
+      </span>
+    </span>
+    <span *ngIf="fo.name === 'سایز'">
+      <mat-button-toggle *ngFor="let v of filter_options[i].values" style="width: 52px; height: 35px;" (click)="getSize(fo.name, v)">
+          <div style="text-align: center; width: 70%;">{{v.toLocaleString('fa')}}</div>
+      </mat-button-toggle>
+    </span>
+    <hr *ngIf=" i < filter_options.length-1">
 </div>
+<br>
+<button (click)="clearFilters()">برداشتن تمام فیلترها</button>
 

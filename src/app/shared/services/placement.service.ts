@@ -69,5 +69,7 @@ export class PlacementService {
       }
     }, 500);
   }
+  getFilterOptions() {
+  }
 
 }
