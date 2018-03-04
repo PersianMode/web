@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PlacementService} from '../../../shared/services/placement.service';
+import {PageService} from '../../../shared/services/page.service';
 
 @Component({
   selector: 'app-home',
@@ -8,10 +8,10 @@ import {PlacementService} from '../../../shared/services/placement.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private placementService: PlacementService) {
+  constructor(private pageService: PageService) {
   }
 
   ngOnInit() {
-    this.placementService.getPlacements('home');
+    this.pageService.getPage('home');
   }
 }

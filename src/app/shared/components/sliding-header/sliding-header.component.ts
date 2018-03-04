@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PlacementService} from '../../services/placement.service';
+import {PageService} from '../../services/page.service';
 
 const defaultStyle = {
   imgWidth: 40,
@@ -16,11 +16,11 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
   slides = [];
   slider: any;
 
-  constructor(private placementService: PlacementService) {
+  constructor(private pageService: PageService) {
   }
 
   ngOnInit() {
-    this.placementService.placement$.filter(r => r[0] === 'slider').map(r => r[1]).subscribe(
+    this.pageService.placement$.filter(r => r[0] === 'slider').map(r => r[1]).subscribe(
       data => {
         this.slides = [];
         for (let i = 0; i < data.length; i++) {
