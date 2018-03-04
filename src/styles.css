@@ -208,14 +208,18 @@ nav {
 .search-bar input {
   border: 0;
   outline: none;
-  padding: 2px;
+  padding: 2px 0px;
   margin: 0px 4px 5px 2px;
   font-family: iranyekan,sans-serif;
+  font-size: 14px;
 }
 
 .search-bar input::placeholder{
   color: #cbcbcb;
-  font-size: 12pt;
+  font-size: 16px;
+  padding:0px 0px 10px;
+  margin:0;
+  line-height: 16px;
 }
 input, button {
   font-family: iranyekan,sans-serif;
