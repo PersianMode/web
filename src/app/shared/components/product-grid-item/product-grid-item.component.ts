@@ -16,9 +16,12 @@ export class ProductGridItemComponent implements OnInit {
   price = '';
   on = 0;
   images = [];
+  colors = [];
   slide = 0;
   slidesNum = 0;
   rect;
+  curWidth = 100;
+  curHeight = 100;
 
   constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router) {
     this.zone.runOutsideAngular(() => {
@@ -27,10 +30,14 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.curWidth = this.window.innerWidth;
+    this.curHeight = this.window.innerHeight;
     this.desc = this.data.tags.join(' ');
     this.price = priceFormatter(this.data.price);
     this.images = Array.from(new Set<any>(this.data.colors.map(r => r.url)).values());
     this.slidesNum = Math.ceil(this.data.colors.length / 3);
+    this.colors = Array.from(new Set<any>(this.data.colors.map(r => r.hex)).values());
+    this.colors.length--;
   }
 
   turnOn(e, time) {
@@ -44,7 +51,7 @@ export class ProductGridItemComponent implements OnInit {
 
   turnOff() {
     setTimeout(() => {
-        this.on = 0;
+      this.on = 0;
     }, 100);
   }
 
@@ -63,7 +70,6 @@ export class ProductGridItemComponent implements OnInit {
   mouseMove(event) {
     if (this.slider && this.rect && this.rect.left && this.on === 2) {
       const i = Math.floor(Math.max(0, Math.min(179, (this.rect.right - event.clientX))) / 60) + this.slide * 3;
-
       if (i > -1 && i < this.data.colors.length) {
         this.zone.run(() => this.changePos(i));
       }
