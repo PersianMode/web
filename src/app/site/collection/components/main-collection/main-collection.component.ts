@@ -3,6 +3,7 @@ import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
+import {ProductService} from '../../../../shared/services/productService';
 
 
 @Component({
@@ -185,13 +186,22 @@ export class MainCollectionComponent implements OnInit {
   innerScroll = false;
   pageName = '';
 
-  constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window, private pageService: PageService) {
+  constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
+              private pageService: PageService, private proudctService: ProductService) {
   }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.pageName = 'collection/' + params.get('typeName');
       this.pageService.getPage(this.pageName);
+
+      this.pageService.pageInfo$.subscribe(res => {
+          if (res['page_info'] && res['page_info'].collection_id)
+            this.proudctService.loadProducts(res['page_info'].collection_id);
+        }
+        , err => {
+        });
+
       setTimeout(() => this.onWindowScroll(), 1000);
     });
   }
