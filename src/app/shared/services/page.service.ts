@@ -1,16 +1,19 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
 import {HttpService} from './http.service';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {IPageInfo} from '../../admin/page/interfaces/IPageInfo.interface';
+
 const defaultComponents = ['menu', 'slider', 'logos'];
+
 @Injectable()
-export class PlacementService {
+export class PageService {
   private cache: any = {};
   private homeComponents: any = {};
-  id;
-  placement$: Subject<any> = new Subject<any>();
+  placement$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  pageInfo$: ReplaySubject<IPageInfo> = new ReplaySubject<IPageInfo>(1);
 
   constructor(private httpService: HttpService) {
-    this.getPlacements('home', false);
+    this.getPage('home', false);
   }
 
   private classifyPlacements(pageName, data) {
@@ -40,24 +43,32 @@ export class PlacementService {
     });
   }
 
-  getPlacements(pageName, emit = true) {
+  private emitPageInfo(info: IPageInfo) {
+    this.pageInfo$.next(info);
+  }
+
+  getPage(pageName, emit = true) {
     const i = setInterval(() => { // All other pages should wait for initialisation of Home placements
       if (pageName === 'home' || this.homeComponents.menu) {
         clearInterval(i);
-        if (!this.cache[pageName]) {
-          this.httpService.post('page/placement/list', {address: pageName}).subscribe(
+        if ( !this.cache[pageName]) {
+          this.httpService.post('page', {address: pageName}).subscribe(
             (data: any) => {
               if (data && data.placement) {
-                this.cache[pageName] = this.classifyPlacements(pageName, data.placement);
+                this.cache[pageName] = {
+                  placement: this.classifyPlacements(pageName, data.placement),
+                  page_info: data.page_info
+                };
               } else {
-                this.cache[pageName] = [['main'], [[]]];
+                this.cache[pageName] = {placement: [['main'], [[]]]};
                 defaultComponents.forEach(r => {
-                  this.cache[pageName][0].push(r);
-                  this.cache[pageName][1].push(this.homeComponents[r]);
+                  this.cache[pageName].placement[0].push(r);
+                  this.cache[pageName].placement[1].push(this.homeComponents[r]);
                 });
               }
               if (emit) {
-                this.emitPlacements(this.cache[pageName]);
+                this.emitPlacements(this.cache[pageName].placement);
+                this.emitPageInfo(this.cache[pageName].page_info);
               }
             }, err => {
               console.log('err: ', err);

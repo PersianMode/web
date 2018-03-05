@@ -2,7 +2,7 @@ import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../shared/services/window.service';
 import {AuthService} from '../shared/services/auth.service';
 import {Router} from '@angular/router';
-import {PlacementService} from '../shared/services/placement.service';
+import {PageService} from '../shared/services/page.service';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class SiteComponent implements OnInit {
   curHeight = 100;
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
-              private router: Router, private placementService: PlacementService) {
+              private router: Router, private pageService: PageService) {
   }
 
   ngOnInit() {
@@ -28,7 +28,7 @@ export class SiteComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     if ((this.curWidth >= 960 && event.target.innerWidth < 960) || (this.curWidth < 960 && event.target.innerWidth >= 960)) {
-      this.placementService.getPlacements(this.router.url.substring(1));
+      this.pageService.getPage(this.router.url.substring(1));
     }
     this.curWidth = event.target.innerWidth;
     this.curHeight = event.target.innerHeight;
