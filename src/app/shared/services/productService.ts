@@ -3,19 +3,16 @@ import {HttpService} from './http.service';
 import {SortOptions} from '../enum/sort.options.enum';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
-import {ISort} from '../interfaces/isort.interface';
 
 @Injectable()
 export class ProductService {
-  // Products array has mock data
   private products = [];
   private filteredProducts = [];
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
 
-  private sortOptions = SortOptions;
   private filterInput: IFilter[];
-  private sortInput: ISort;
+  private sortInput: SortOptions;
 
   constructor(private httpService: HttpService) {
   }
@@ -72,6 +69,23 @@ export class ProductService {
   setFilter(data: IFilter[]) {
 
     this.filterInput = data;
+    this.filterSortProducts();
+  }
+
+  setSort(data: SortOptions) {
+    this.sortInput = data;
+    this.filterSortProducts();
+  }
+
+
+  private filterSortProducts() {
+    this.sortProducts();
+    this.filterProducts();
+    this.extractFilters();
+    this.productList$.next(this.filteredProducts);
+  }
+
+  private filterProducts() {
     this.filteredProducts = [];
     this.filterInput.forEach(item => {
 
@@ -81,7 +95,7 @@ export class ProductService {
           break;
         case 'رنگ':
           this.filteredProducts.concat(this.products.filter(product => {
-            const colors = [].concat.apply([] , product.colors.map(color => color.name.split('/')));
+            const colors = [].concat.apply([], product.colors.map(color => color.name.split('/')));
             const duplicated: string[] = Array.from(new Set(colors));
             return duplicated.some(r => item.values.includes(r));
           }));
@@ -94,47 +108,29 @@ export class ProductService {
 
           break;
         case 'قیمت':
-          this.filteredProducts.concat(this.products.filter(product =>  product.base_price >= item.values[0] && product.base_price < item.values[1]));
+          this.filteredProducts.concat(this.products.filter(product => {
+            return product.base_price >= item.values[0] && product.base_price < item.values[1];
+          }));
           break;
       }
     });
 
-
-    this.productList$.next(this.filteredProducts);
-    this.extractFilters();
-  }
-
-  setSort(data: ISort) {
-    this.sortInput = data;
-  }
-
-
-  private filterSortProducts() {
-    this.filteredProducts = this.sortProducts(this.sortInput, this.filterProducts(this.filterInput));
-    this.extractFilters();
-
-    this.productList$.next(this.filteredProducts);
-  }
-
-  private filterProducts(options: IFilter[]) {
-
-
     return this.products;
   }
 
-  private sortProducts(option, data) {
-    switch (option) {
-      case this.sortOptions.newest: {
-        return data.sort(this.newestSort);
+  private sortProducts() {
+    switch (this.sortInput) {
+      case SortOptions.newest: {
+        return this.filteredProducts.sort(this.newestSort);
       }
-      case this.sortOptions.lowerPrice: {
-        return data.sort((a, b) => this.priceSort(a, b, true));
+      case SortOptions.lowerPrice: {
+        return this.filteredProducts.sort((a, b) => this.priceSort(a, b, true));
       }
-      case this.sortOptions.highestPrice: {
-        return data.sort((a, b) => this.priceSort(a, b, false));
+      case SortOptions.highestPrice: {
+        return this.filteredProducts.sort((a, b) => this.priceSort(a, b, false));
       }
       default: {
-        return this.products;
+        return this.filteredProducts;
       }
     }
   }
@@ -151,7 +147,7 @@ export class ProductService {
   private priceSort(a, b, lowToHigh = true) {
     const dir = lowToHigh ? 1 : -1;
     if (a.base_price < b.base_price)
-      return dir * 1;
+      return dir;
     else if (a.base_price > b.base_price)
       return dir * -1;
     else
