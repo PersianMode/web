@@ -197,13 +197,17 @@ export class ProductService {
 
   extractFilters() {
 
+
+
+
   }
 
   loadProducts(collection_id) {
     this.httpService.get('collection/' + collection_id).subscribe(
       (data) => {
-        this.products = data[0].products;
+        this.products = data;
 
+        console.log('-> ', this.products);
         this.extractFilters();
 
         this.filterSortProducts();

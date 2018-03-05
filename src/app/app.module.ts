@@ -14,6 +14,7 @@ import {routing} from './app.routing';
 import {ProgressService} from './shared/services/progress.service';
 import {SharedModule} from './shared/shared.module';
 import {PageService} from './shared/services/page.service';
+import {ProductService} from './shared/services/productService';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import {PageService} from './shared/services/page.service';
     MatIconModule,
     MatCardModule,
   ],
-  providers: [WINDOW_PROVIDERS, HttpService, SocketService, AuthService, ProgressService, PageService],
+  providers: [WINDOW_PROVIDERS, HttpService, SocketService, AuthService, ProgressService, PageService, ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
