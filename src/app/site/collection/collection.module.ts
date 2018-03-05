@@ -7,6 +7,8 @@ import {CommonModule} from '@angular/common';
 import {FilteringPanelComponent} from '../../shared/components/filtering-panel/filtering-panel.component';
 import {ProductGridItemComponent} from '../../shared/components/product-grid-item/product-grid-item.component';
 import {SharedModule} from '../../shared/shared.module';
+import {DataScrollerModule} from 'primeng/datascroller';
+import {SidebarModule} from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import {SharedModule} from '../../shared/shared.module';
     CollectionRouting,
     CommonModule,
     SharedModule,
+    DataScrollerModule,
+    SidebarModule,
   ],
 })
 export class CollectionModule {

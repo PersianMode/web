@@ -474,8 +474,20 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 .innerScroll {
   overflow-y: scroll;
+  height: calc(100% - 51px);
 }
-
+.ui-sidebar {
+  background: #fff;
+  overflow: scroll !important;
+  width: calc(50% + 40px) !important;
+  top: 51px !important;
+}
+.ui-sidebar-mask {
+  background: rgba(0,0,0,.2);
+}
+.ui-datascroller .ui-datascroller-content {
+  padding: 0 !important;
+}
 .mat-button-toggle-label-content {
   font-family: iranyekan !important;
   width: 79px;
