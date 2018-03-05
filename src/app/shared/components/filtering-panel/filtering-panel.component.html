@@ -1,8 +1,8 @@
-<div style="height: 60px;">
+<div style="height: 60px;" [ngClass]="isMobile ? 'set-size-mobile' : null">
     <h1>فیلترها</h1>
 </div>
 <hr>
-<div *ngFor="let fo of filter_options; let i = index">
+<div *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null">
     <div>
         <div style="font-weight: bold; padding-bottom: 5px; display: inline-block">{{fo.name}}</div>
     </div>
@@ -36,11 +36,11 @@
 <div *ngIf="!isMobile" style="width: 100%; text-align: center">
     <button (click)="clearFilters()">برداشتن تمام فیلترها</button>
 </div>
-<div *ngIf="isMobile" style="width: 100%;">
+<div *ngIf="isMobile" style="width: 100%;" class="set-size-mobile">
     <table style="width: 100%">
         <tr width="100">
             <td width="50" style="text-align: center">
-                <button>اعمال فیلترها</button>
+                <button (click)="changeDisplayFilter()">اعمال فیلترها</button>
             </td>
             <td width="50" style="text-align: center">
                 <button (click)="clearFilters()">برداشتن تمام فیلترها</button>

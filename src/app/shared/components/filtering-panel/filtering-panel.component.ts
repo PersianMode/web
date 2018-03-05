@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class FilteringPanelComponent implements OnInit {
   current_filter_state = [];
   clear_box = null;
   isMobile = false;
-
+  @Output() displayFilterEvent = new EventEmitter<any>();
   constructor(private responsiveService: ResponsiveService) {
   }
 
@@ -70,5 +70,9 @@ export class FilteringPanelComponent implements OnInit {
     });
     this.clear_box = false;
     // console.log('--->', this.current_filter_state);
+  }
+
+  changeDisplayFilter() {
+    this.displayFilterEvent.emit(false);
   }
 }

@@ -271,4 +271,8 @@ export class MainCollectionComponent implements OnInit {
       this.topDist = height - filterHeight + 228;
     }
   }
+
+  setDispalyFilter($event) {
+    this.displayFilter = $event;
+  }
 }
