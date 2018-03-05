@@ -11,9 +11,7 @@ const Site_ROUTES: Routes = [
     path: '', component: SiteComponent, children: [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
     {path: 'home', loadChildren: 'app/site/home/home.module#HomeModule'},
-    // {path: 'login', loadChildren: 'app/site/login/login.module#LoginModule'},
     {path: 'login', component: LoginComponent},
-    // {path: 'register', loadChildren: 'app/site/register/register.module#RegisterModule'},
     {path: 'register', component: RegisterComponent},
     {path: 'collection', loadChildren: 'app/site/collection/collection.module#CollectionModule'},
     {path: 'cart', loadChildren: 'app/site/cart/cart.module#CartModule'},

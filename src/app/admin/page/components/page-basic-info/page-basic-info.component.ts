@@ -216,7 +216,7 @@ export class PageBasicInfoComponent implements OnInit {
     }
 
     this.progressService.enable();
-    this.httpService.post(`page/placement/list`, {address: this.form.controls['address'].value}).subscribe(
+    this.httpService.post(`page`, {address: this.form.controls['address'].value}).subscribe(
       (result) => {
 
         this.placements = [];

@@ -2,7 +2,8 @@ import {Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core'
 import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PlacementService} from '../../../../shared/services/placement.service';
+import {PageService} from '../../../../shared/services/page.service';
+import {ProductService} from '../../../../shared/services/productService';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 
 
@@ -213,8 +214,7 @@ export class MainCollectionComponent implements OnInit {
   gridHeight: number;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
-              @Inject(WINDOW) private window, private placementService: PlacementService,
-              private responsiveService: ResponsiveService) {
+              @Inject(WINDOW) private window, private responsiveService: ResponsiveService, private pageService: PageService, private productService: ProductService) {
     let a = [];
     for (let i = 0; i < 10; i++) {
       a = a.concat(this.collection.set);
@@ -224,10 +224,24 @@ export class MainCollectionComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.pageName = 'collection/' + params.get('typeName');
-      this.placementService.getPlacements(this.pageName);
-      setTimeout(() => this.onWindowScroll(), 1000);
-    });
+        this.pageName = 'collection/' + params.get('typeName');
+        this.pageService.getPage(this.pageName);
+
+        this.pageService.pageInfo$.subscribe(res => {
+            if (res && res['collection_id']) {
+              this.productService.loadProducts(res['collection_id']);
+            } else {
+              console.error('-> ', `${this.pageName} is getting empty data for page`);
+            }
+          },
+          err => {
+          }
+        )
+        ;
+
+        setTimeout(() => this.onWindowScroll(), 1000);
+      }
+    );
     this.calcWidth();
     this.responsiveService.resize$.subscribe(r => {
       this.calcWidth();

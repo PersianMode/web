@@ -1,7 +1,7 @@
 import {Component, HostListener, Inject, Input, OnInit} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {AuthService} from '../../services/auth.service';
-import {PlacementService} from '../../services/placement.service';
+import {PageService} from '../../services/page.service';
 
 
 @Component({
@@ -14,11 +14,11 @@ export class PanelsComponent implements OnInit {
   curHeight = 100;
   placements: any = [];
 
-  constructor(@Inject(WINDOW) private window, private authService: AuthService, private placementService: PlacementService) {
+  constructor(@Inject(WINDOW) private window, private authService: AuthService, private pageService: PageService) {
   }
 
   ngOnInit() {
-    this.placementService.placement$.filter(r => r[0] === 'main').map(r => r[1]).subscribe(
+    this.pageService.placement$.filter(r => r[0] === 'main').map(r => r[1]).subscribe(
       data => {
         this.placements = [];
         /* filter by date add be later */
