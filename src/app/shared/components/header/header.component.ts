@@ -3,7 +3,7 @@ import {MatDialog} from '@angular/material';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
 import {AuthService} from '../../services/auth.service';
-import {PlacementService} from '../../services/placement.service';
+import {PageService} from '../../services/page.service';
 import {Router} from '@angular/router';
 import {WINDOW} from '../../services/window.service';
 
@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
   isVerified = false;
 
   constructor(public dialog: MatDialog, private authService: AuthService,
-              private placementService: PlacementService, private router: Router,
+              private pageService: PageService, private router: Router,
               @Inject(WINDOW) private window) {
   }
 
@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit {
         this.isVerified = false;
       }
     );
-    this.placementService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
+    this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
       this.logos = [];
       data = data.sort((x, y) => x.info.column - y.info.column);
       data.forEach(r => {

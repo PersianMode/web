@@ -13,7 +13,8 @@ import {HttpClientModule} from '@angular/common/http';
 import {routing} from './app.routing';
 import {ProgressService} from './shared/services/progress.service';
 import {SharedModule} from './shared/shared.module';
-import {PlacementService} from './shared/services/placement.service';
+import {PageService} from './shared/services/page.service';
+import {ProductService} from './shared/services/productService';
 import {ResponsiveService} from './shared/services/responsive.service';
 
 @NgModule({
@@ -32,7 +33,7 @@ import {ResponsiveService} from './shared/services/responsive.service';
     MatIconModule,
     MatCardModule,
   ],
-  providers: [WINDOW_PROVIDERS, HttpService, SocketService, AuthService, ProgressService, PlacementService, ResponsiveService],
+  providers: [WINDOW_PROVIDERS, HttpService, SocketService, AuthService, ProgressService, PageService, ProductService, ResponsiveService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

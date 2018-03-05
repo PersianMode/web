@@ -2,7 +2,7 @@ import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../shared/services/window.service';
 import {AuthService} from '../shared/services/auth.service';
 import {Router} from '@angular/router';
-import {PlacementService} from '../shared/services/placement.service';
+import {PageService} from '../shared/services/page.service';
 import {ResponsiveService} from '../shared/services/responsive.service';
 
 
@@ -18,7 +18,7 @@ export class SiteComponent implements OnInit {
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
-              private router: Router, private placementService: PlacementService) {
+              private router: Router, private pageService: PageService) {
   }
 
   ngOnInit() {
@@ -46,7 +46,7 @@ export class SiteComponent implements OnInit {
       this.responsiveService.switch$.next(this.isMobileCalc(w, h));
       this.isMobile = this.isMobileCalc(w, h);
       this.responsiveService.isMobile = this.isMobile;
-      this.placementService.getPlacements(this.router.url.substring(1));
+      this.pageService.getPage(this.router.url.substring(1));
     }
   }
 
