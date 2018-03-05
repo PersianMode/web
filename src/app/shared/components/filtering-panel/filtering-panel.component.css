@@ -13,3 +13,10 @@
     color: yellow;
 }
 
+.fit-check-box {
+    margin-right: -10px
+}
+
+.fit-check-box-mobile {
+    margin-right: -5px
+}

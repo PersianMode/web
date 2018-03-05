@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {PlacementService} from '../../services/placement.service';
+import {ResponsiveService} from '../../services/responsive.service';
 
 @Component({
   selector: 'app-filtering-panel',
@@ -14,15 +15,15 @@ export class FilteringPanelComponent implements OnInit {
     },
     {
       name: 'نوع',
-      values : ['کفش', 'لباس', 'عینک', 'کوله ورزشی'],
+      values: ['کفش', 'لباس', 'عینک', 'کوله ورزشی'],
     },
     {
       name: 'قیمت',
-      values : ['زیر 200 هزار تومان', 'از 200 هزار تومان تا 500 هزار تومان', 'بالای 500 هزار تومان'],
+      values: ['زیر 200 هزار تومان', 'از 200 هزار تومان تا 500 هزار تومان', 'بالای 500 هزار تومان'],
     },
     {
       name: 'سایز',
-      values : ['6', '6.5', '7', '8', '8.5', '9', '10', '10.5', '11', '12', '12.5', '13', '13.5', '5', '14'],
+      values: ['6', '6.5', '7', '8', '8.5', '9', '10', '10.5', '11', '12', '12.5', '13', '13.5', '5', '14'],
     },
     {
       name: 'رنگ',
@@ -31,18 +32,21 @@ export class FilteringPanelComponent implements OnInit {
   ];
   current_filter_state = [];
   clear_box = null;
-constructor(private placementService: PlacementService) {
+  isMobile = false;
+
+  constructor(private placementService: PlacementService, private responsiveService: ResponsiveService) {
   }
 
-  constructor() { }
   ngOnInit() {
-    // for(let i=0;i<400;i++)this.items.push(i+1);
-  this.filter_options.forEach(el => {
-    const tempObj = {name : '', values: []};
-    tempObj.name = el.name;
-    this.current_filter_state.push(tempObj);
-  })
-    console.log('filter_options : ', this.current_filter_state);
+    console.log('***', this.isMobile);
+    this.filter_options.forEach(el => {
+      const tempObj = {name: '', values: []};
+      tempObj.name = el.name;
+      this.current_filter_state.push(tempObj);
+    });
+    this.isMobile = this.responsiveService.isMobile;
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    // console.log('filter_options : ', this.current_filter_state);
   }
 
   getValue(name, value) {
