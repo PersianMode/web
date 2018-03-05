@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {SortOptions} from '../enum/sort.options.enum';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class ProductService {
@@ -186,8 +186,8 @@ export class ProductService {
       base_price: 999900,
     },
   ];
-  productList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-  filtering$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  filtering$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   sortOptions = SortOptions;
   filterData = {};
   sortData = null;
@@ -198,7 +198,27 @@ export class ProductService {
   extractFilters() {
 
 
+    const types = Array.from(new Set(this.products.map(x => x['product_type'].name)));
 
+    let colors = [];
+    let _colors: any = this.products.map(x => x['colors']);
+    _colors = [].concat.apply([], _colors).map(x => x.name);
+    _colors.forEach(c => c.split('/').map(x => x.trim()).forEach(x => colors.push(x)));
+    colors = Array.from(new Set(colors));
+
+    let sizes = this.products.map(x => x['size']);
+    sizes = Array.from(new Set([].concat.apply([], sizes)));
+
+    const prices = Array.from(new Set((this.products.map(x => x['base_price']))));
+
+    const filter = [];
+
+    if (types.length > 1) filter.push({name: 'نوع', values: types});
+    if (colors.length > 1) filter.push({name: 'رنگ', values: colors});
+    if (sizes.length > 1) filter.push({name: 'سایز', values: sizes});
+    if (prices.length > 1) filter.push({name: 'قیمت', values: prices});
+
+    this.filtering$.next(filter);
 
   }
 
