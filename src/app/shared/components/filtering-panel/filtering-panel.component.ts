@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {PlacementService} from '../../services/placement.service';
 import {ResponsiveService} from '../../services/responsive.service';
 
 @Component({
@@ -34,7 +33,7 @@ export class FilteringPanelComponent implements OnInit {
   clear_box = null;
   isMobile = false;
 
-  constructor(private placementService: PlacementService, private responsiveService: ResponsiveService) {
+  constructor(private responsiveService: ResponsiveService) {
   }
 
   ngOnInit() {

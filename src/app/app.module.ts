@@ -15,7 +15,6 @@ import {ProgressService} from './shared/services/progress.service';
 import {SharedModule} from './shared/shared.module';
 import {PageService} from './shared/services/page.service';
 import {ProductService} from './shared/services/productService';
-// import {PlacementService} from './shared/services/placement.service';
 import {ResponsiveService} from './shared/services/responsive.service';
 
 @NgModule({

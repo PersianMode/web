@@ -3,12 +3,16 @@
 </div>
 <hr>
 <div *ngFor="let fo of filter_options; let i = index">
-    <div style="font-weight: bold; padding-bottom: 5px">{{fo.name}}</div>
-    <div *ngFor="let v of filter_options[i].values" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
-        <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز'" style="opacity: 0.8"
-                      (click)="getValue(fo.name, v)" [checked]="clear_box">
-            <span class="check-box-text">{{v}}</span>
-        </mat-checkbox>
+    <div>
+        <div style="font-weight: bold; padding-bottom: 5px; display: inline-block">{{fo.name}}</div>
+    </div>
+    <div class="container">
+        <div *ngFor="let v of filter_options[i].values" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
+            <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز'" style="opacity: 0.8"
+                          (click)="getValue(fo.name, v)" [checked]="clear_box">
+                <span class="check-box-text">{{v}}</span>
+            </mat-checkbox>
+        </div>
     </div>
     <span *ngIf="fo.name === 'رنگ'">
       <span *ngFor="let v of filter_options[i].values; let j = index" class="color-span" (click)="getValue(fo.name, v)"
