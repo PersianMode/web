@@ -34,7 +34,9 @@ export class FilteringPanelComponent implements OnInit {
 constructor(private placementService: PlacementService) {
   }
 
+  constructor() { }
   ngOnInit() {
+    // for(let i=0;i<400;i++)this.items.push(i+1);
   this.filter_options.forEach(el => {
     const tempObj = {name : '', values: []};
     tempObj.name = el.name;

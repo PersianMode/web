@@ -1,7 +1,8 @@
-import {Component, Input, OnInit, NgZone, Inject, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, NgZone, Inject, ViewChild, HostListener} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {Router} from '@angular/router';
 import {priceFormatter} from '../../lib/priceFormatter';
+import {ResponsiveService} from '../../services/responsive.service';
 
 @Component({
   selector: 'app-product-grid-item',
@@ -9,7 +10,9 @@ import {priceFormatter} from '../../lib/priceFormatter';
   styleUrls: ['./product-grid-item.component.css']
 })
 export class ProductGridItemComponent implements OnInit {
-  @Input('data') data;
+  @Input() data;
+  @Input() width;
+  @Input() height;
   @ViewChild('slider') slider;
   pos = 0;
   desc = '';
@@ -20,24 +23,23 @@ export class ProductGridItemComponent implements OnInit {
   slide = 0;
   slidesNum = 0;
   rect;
-  curWidth = 100;
-  curHeight = 100;
+  isMobile = false;
 
-  constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router) {
+
+  constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router,
+              private responsiveService: ResponsiveService) {
     this.zone.runOutsideAngular(() => {
       this.window.document.addEventListener('mousemove', this.mouseMove.bind(this));
     });
   }
 
   ngOnInit() {
-    this.curWidth = this.window.innerWidth;
-    this.curHeight = this.window.innerHeight;
     this.desc = this.data.tags.join(' ');
     this.price = priceFormatter(this.data.price);
     this.images = Array.from(new Set<any>(this.data.colors.map(r => r.url)).values());
     this.slidesNum = Math.ceil(this.data.colors.length / 3);
-    this.colors = Array.from(new Set<any>(this.data.colors.map(r => r.hex)).values());
-    this.colors.length--;
+    this.isMobile = this.responsiveService.isMobile;
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }
 
   turnOn(e, time) {
