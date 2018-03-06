@@ -17,7 +17,8 @@ export class SiteComponent implements OnInit {
   curHeight: number;
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
-              private router: Router, private pageService: PageService, private responsiveService: ResponsiveService) {
+              private responsiveService: ResponsiveService,
+              private router: Router, private pageService: PageService) {
   }
 
   ngOnInit() {

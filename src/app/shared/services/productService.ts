@@ -2,195 +2,17 @@ import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
 import {SortOptions} from '../enum/sort.options.enum';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {IFilter} from '../interfaces/ifilter.interface';
 
 @Injectable()
 export class ProductService {
-  // Products array has mock data
-  products = [
-    {
-      name: 'جوردن ایر مدل ‍۱۰ رترو',
-      colors: [
-        {
-          url: 'assets/product-pic/06.jpg',
-          position: 0,
-        },
-      ],
-      tags: ['کفش', 'مردانه', 'بسکتبال'],
-      base_price: 499900,
-    },
-    {
-      name: 'کایری ۳ مدل What The',
-      colors: [
-        {
-          url: 'assets/product-pic/14.jpeg',
-          position: 0,
-          pi_id: 14,
-        },
-      ],
-      tags: ['کفش', 'بسکتبال', 'نوجوانان'],
-      base_price: 599000,
-    },
-    {
-      name: 'له‌برون مدل 15 BHM',
-      colors: [
-        {
-          url: 'assets/product-pic/01.jpg',
-          position: 0,
-        },
-      ],
-      tags: ['کفش', 'مردانه', 'بسکتبال'],
-      base_price: 1499900,
-    },
-    {
-      name: 'نایک ایر مدل Huarache Drift',
-      colors: [
-        {
-          url: 'assets/product-pic/02.jpg',
-          position: 0,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/02.jpg',
-          position: 1,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/02.jpg',
-          position: 2,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/11.jpeg',
-          position: 0,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/12.jpeg',
-          position: 0,
-          pi_id: 0,
-        },
-      ],
-      tags: ['کفش', 'مردانه'],
-      base_price: 1499900,
-    },
-    {
-      name: 'نایک ایر',
-      colors: [
-        {
-          url: 'assets/product-pic/03.jpg',
-          position: 0,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/03.jpg',
-          position: 1,
-          pi_id: 1,
-        },
-      ],
-      tags: ['تاپ', 'نیم‌زیپ', 'مردانه'],
-      base_price: 499900,
-    },
-    {
-      name: 'نایک ایر فورس ۱ مدل Premium \'07',
-      colors: [
-        {
-          url: 'assets/product-pic/04.jpg',
-          position: 0,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/04.jpg',
-          position: 1,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/04.jpg',
-          position: 2,
-          pi_id: 0,
-        },
-      ],
-      tags: ['کفش', 'مردانه', 'بسکتبال'],
-      base_price: 1099900,
-    },
-    {
-      name: 'کایری 4',
-      colors: [
-        {
-          url: 'assets/product-pic/05.jpg',
-          position: 0,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/05.jpg',
-          position: 1,
-          pi_id: 0,
-        },
-      ],
-      tags: ['کفش', 'مردانه', 'بسکتبال'],
-      base_price: 799900,
-    },
-    {
-      name: 'نایک Sportswear',
-      colors: [
-        {
-          url: 'assets/product-pic/07.jpg',
-          position: 0,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/07.jpg',
-          position: 1,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/07.jpg',
-          position: 2,
-          pi_id: 0,
-        },
-      ],
-      tags: ['جکت', 'مردانه'],
-      base_price: 899900,
-    },
-    {
-      name: 'نایک Sportswear Tech Shield',
-      colors: [
-        {
-          url: 'assets/product-pic/08.jpg',
-          position: 0,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/08.jpg',
-          position: 1,
-          pi_id: 0,
-        },
-        {
-          url: 'assets/product-pic/08.jpg',
-          position: 2,
-          pi_id: 0,
-        },
-      ],
-      tags: ['جکت', 'مردانه'],
-      base_price: 1399900,
-    },
-    {
-      name: 'نایک مدل Kobe A.D. Black Mamba',
-      colors: [
-        {
-          url: 'assets/product-pic/13.jpeg',
-          position: 0,
-          pi_id: 0,
-        },
-      ],
-      tags: ['کفش', 'مردانه', 'بسکتبال'],
-      base_price: 999900,
-    },
-  ];
+  private products = [];
+  private filteredProducts = [];
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  filtering$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  sortOptions = SortOptions;
-  filterData = {};
-  sortData = null;
+  filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
+
+  private filterInput: IFilter[];
+  private sortInput: SortOptions;
 
   constructor(private httpService: HttpService) {
   }
@@ -198,20 +20,20 @@ export class ProductService {
   extractFilters() {
 
 
-    const types = Array.from(new Set(this.products.map(x => x['product_type'].name)));
+    const types: string[] = Array.from(new Set(this.filteredProducts.map(x => x['product_type'].name)));
 
-    let colors = [];
-    let _colors: any = this.products.map(x => x['colors']);
+    let colors: string[] = [];
+    let _colors: string[] = this.filteredProducts.map(x => x['colors']);
     _colors = [].concat.apply([], _colors).map(x => x.name);
     _colors.forEach(c => c.split('/').map(x => x.trim()).forEach(x => colors.push(x)));
     colors = Array.from(new Set(colors));
 
-    let sizes = this.products.map(x => x['size']);
+    let sizes: string[] = this.filteredProducts.map(x => x['size']);
     sizes = Array.from(new Set([].concat.apply([], sizes)));
 
-    const prices = Array.from(new Set((this.products.map(x => x['base_price']))));
+    const prices: string[] = Array.from(new Set((this.filteredProducts.map(x => x['base_price']))));
 
-    const filter = [];
+    const filter: IFilter[] = [];
 
     if (types.length > 1) filter.push({name: 'نوع', values: types});
     if (colors.length > 1) filter.push({name: 'رنگ', values: colors});
@@ -226,8 +48,8 @@ export class ProductService {
     this.httpService.get('collection/' + collection_id).subscribe(
       (data) => {
         this.products = data;
+        this.filteredProducts = this.products.slice();
 
-        console.log('-> ', this.products);
         this.extractFilters();
 
         this.filterSortProducts();
@@ -239,37 +61,76 @@ export class ProductService {
   }
 
   getProducts(startIndex, boundSize = 10) {
-    const tempProducts = this.filterSortProducts(true);
-    if (tempProducts && tempProducts.length > 0 && tempProducts.length > startIndex)
-      this.productList$.next(tempProducts.slice(0, startIndex + boundSize));
+
+    if (this.filteredProducts && this.filteredProducts.length > 0 && this.filteredProducts.length > startIndex)
+      this.productList$.next(this.filteredProducts.slice(0, startIndex + boundSize));
   }
 
-  filterSortProducts(returnData = false) {
-    const newData = this.sortProducts(this.sortData, this.filterProducts(this.filterData));
+  setFilter(data: IFilter[]) {
 
-    if (returnData)
-      return newData;
-    this.productList$.next(newData);
+    this.filterInput = data;
+    this.filterSortProducts();
   }
 
-  private filterProducts(options) {
-    // Mock code
+  setSort(data: SortOptions) {
+    this.sortInput = data;
+    this.filterSortProducts();
+  }
+
+
+  private filterSortProducts() {
+    this.sortProducts();
+    this.filterProducts();
+    this.extractFilters();
+    this.productList$.next(this.filteredProducts);
+  }
+
+  private filterProducts() {
+    this.filteredProducts = [];
+    this.filterInput.forEach(item => {
+
+      switch (item.name) {
+        case 'نوع' :
+          this.filteredProducts.concat(this.products.filter(product => item.values.includes(product.product_type.name)));
+          break;
+        case 'رنگ':
+          this.filteredProducts.concat(this.products.filter(product => {
+            const colors = [].concat.apply([], product.colors.map(color => color.name.split('/')));
+            const duplicated: string[] = Array.from(new Set(colors));
+            return duplicated.some(r => item.values.includes(r));
+          }));
+          break;
+        case 'سایز':
+          this.filteredProducts.concat(this.products.filter(product => {
+            const productSizes: string[] = Array.from(new Set(product.sizes));
+            return productSizes.some(r => item.values.includes(r));
+          }));
+
+          break;
+        case 'قیمت':
+          this.filteredProducts.concat(this.products.filter(product => {
+            return product.base_price >= item.values[0] && product.base_price < item.values[1];
+          }));
+          break;
+      }
+    });
+
     return this.products;
   }
 
-  private sortProducts(option, data) {
-    switch (option) {
-      case this.sortOptions.newest: {
-        return data.sort(this.newestSort);
+  private sortProducts() {
+    switch (this.sortInput) {
+      case SortOptions.newest: {
+        return this.filteredProducts.sort(this.newestSort);
       }
-      case this.sortOptions.lowerPrice: {
-        return data.sort((a, b) => this.priceSort(a, b, true));
+      case SortOptions.lowerPrice: {
+        return this.filteredProducts.sort((a, b) => this.priceSort(a, b, true));
       }
-      case this.sortOptions.highestPrice: {
-        return data.sort((a, b) => this.priceSort(a, b, false));
+      case SortOptions.highestPrice: {
+        return this.filteredProducts.sort((a, b) => this.priceSort(a, b, false));
       }
       default: {
-        return this.products;
+        return this.filteredProducts;
       }
     }
   }
@@ -286,7 +147,7 @@ export class ProductService {
   private priceSort(a, b, lowToHigh = true) {
     const dir = lowToHigh ? 1 : -1;
     if (a.base_price < b.base_price)
-      return dir * 1;
+      return dir;
     else if (a.base_price > b.base_price)
       return dir * -1;
     else
