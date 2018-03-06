@@ -92,23 +92,24 @@ export class ProductService {
   }
 
   private filterProducts() {
-    this.filteredProducts = [];
     if (this.filterInput) {
+      this.filteredProducts = [];
+
       this.filterInput.forEach(item => {
 
         switch (item.name) {
           case 'نوع' :
-            this.filteredProducts.concat(this.products.filter(product => item.values.includes(product.product_type.name)));
+            this.filteredProducts = this.filteredProducts.concat(this.products.filter(product => item.values.includes(product.product_type.name)));
             break;
           case 'رنگ':
-            this.filteredProducts.concat(this.products.filter(product => {
+            this.filteredProducts =  this.filteredProducts.concat(this.products.filter(product => {
               const colors = [].concat.apply([], product.colors.map(color => color.name.split('/')));
               const duplicated: string[] = Array.from(new Set(colors));
               return duplicated.some(r => item.values.includes(r));
             }));
             break;
           case 'سایز':
-            this.filteredProducts.concat(this.products.filter(product => {
+            this.filteredProducts =  this.filteredProducts.concat(this.products.filter(product => {
               const productSizes: string[] = Array.from(new Set(product.sizes));
               return productSizes.some(r => item.values.includes(r));
             }));
@@ -117,7 +118,7 @@ export class ProductService {
         }
       });
     }
-    return this.products;
+    return this.filteredProducts;
   }
 
   private sortProducts() {
