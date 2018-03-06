@@ -37,7 +37,6 @@ export class FilteringPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('***', this.isMobile);
     this.filter_options.forEach(el => {
       const tempObj = {name: '', values: []};
       tempObj.name = el.name;
