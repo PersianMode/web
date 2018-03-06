@@ -233,14 +233,14 @@
           }
         );
         setTimeout(() => this.onWindowScroll(), 1000);
-      }
+      });
 
+      this.calcWidth();
+      this.responsiveService.resize$.subscribe(r => {
         this.calcWidth();
-        this.responsiveService.resize$.subscribe(r => {
-          this.calcWidth();
-        });
-        this.isMobile = this.responsiveService.isMobile;
-        this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+      });
+      this.isMobile = this.responsiveService.isMobile;
+      this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     }
 
     private calcWidth() {
@@ -249,7 +249,7 @@
       this.gridWidth = (this.curWidth - 20) / Math.floor(this.curWidth / 244);
       this.gridHeight = this.gridWidth + 76;
 
-    });
+    };
     @HostListener('window:scroll', [])
     onWindowScroll() {
       if (!this.isMobile) {
