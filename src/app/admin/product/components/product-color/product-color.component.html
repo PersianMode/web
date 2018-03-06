@@ -22,6 +22,7 @@
                               (OnCompleted)="addToTable($event)"></app-uploader>
 
             </div>
+            <mat-checkbox formControlName="isThumbnail" role="isThumbnail" [(ngModel)]="is_thumbnail">تصویر نماینده</mat-checkbox>
         </form>
         <div dir="rtl" style="width:100%">
             <mat-card>
@@ -30,17 +31,26 @@
                         <thead>
                         <td style="width: 10%"><b>ردیف</b></td>
                         <td style="width: 10%"><b>رنگ</b></td>
-                        <td style="width: 70%; text-align: center"><b>تصاویر</b></td>
+                        <td style="width: 20%; text-align: center"><b>تصویر نماینده</b></td>
+                        <td style="width: 50%; text-align: center"><b>تصاویر زاویه ای</b></td>
                         <td style="width: 10%"><b>حذف</b></td>
                         </thead>
                         <tbody>
                         <tr *ngFor="let pc of productColors; let i = index">
                             <td>{{i+1}}</td>
                             <td>{{pc.info.name}}</td>
+                            <td style="text-align: center">
+                                <div style="text-align: center">
+                                    <div style="width: 10% ;height: 10%; display: inline-block;text-align: center;">
+                                        <img style="width: 65% ;" [src]="getURL(pc.images.thumbnail)">
+                                    </div>
+                                </div>
+                            </td>
                             <td>
                                 <div style="text-align: center">
-                                    <div *ngFor="let image of pc.images" style="width: 10% ;height: 10%; display: inline-block;text-align: center;">
-                                        <img style="width: 80% ;" [src]="getURL(image)">
+                                    <div *ngFor="let image of pc.images.angles"
+                                         style="width: 10% ;height: 10%; display: inline-block;text-align: center;">
+                                        <img style="width: 65% ;" [src]="getURL(image)">
                                     </div>
                                 </div>
                             </td>

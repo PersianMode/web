@@ -23,6 +23,7 @@ export class ProductColorComponent implements OnInit {
   @Input() colors: IColor[];
 
   selectedColorId: string = null;
+  is_thumbnail: false;
 
   @Input() productId;
 
@@ -40,6 +41,9 @@ export class ProductColorComponent implements OnInit {
         proColor: [null, [
           Validators.required,
         ]],
+        isThumbnail: [null, [
+          Validators.required,
+        ]]
       },
     );
   }
@@ -81,7 +85,7 @@ export class ProductColorComponent implements OnInit {
 
   }
 
-  addToTable(images: any) {
+  addToTable(images: any, ) {
     const pc = this.productColors.filter(x => x.info._id === this.selectedColorId)[0];
 
     if (pc) {
