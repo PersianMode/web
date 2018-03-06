@@ -651,7 +651,7 @@ mat-panel-title {
 }
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background: #ccc !important;
+  background: gray !important;
 }
 
 .mat-checkbox {

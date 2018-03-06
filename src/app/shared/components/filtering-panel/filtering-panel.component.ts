@@ -34,6 +34,7 @@ export class FilteringPanelComponent implements OnInit {
   isMobile = false;
   @Output() displayFilterEvent = new EventEmitter<any>();
   isChecked: any = {};
+  oppositeColor: any = {};
 
   constructor(private responsiveService: ResponsiveService) {
   }
@@ -48,6 +49,10 @@ export class FilteringPanelComponent implements OnInit {
           this.isChecked[el.name][key] = false;
       }
     });
+
+    for (const color in this.isChecked['رنگ']) {
+      this.oppositeColor[color] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
+    }
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     let sizes = this.filter_options.filter( r => r.name === 'سایز')[0];
