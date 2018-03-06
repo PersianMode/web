@@ -14,8 +14,7 @@ import {ResponsiveService} from '../../../../shared/services/responsive.service'
 })
 export class MainCollectionComponent implements OnInit {
   collection: any = {
-    collectionNameFa: 'تازه‌های مردانه',
-    collectionName: 'men-shoes',
+    collectionName: '',
     set: [
       {
         name: 'جوردن ایر مدل ‍۱۰ رترو',
