@@ -1,8 +1,8 @@
 <div *ngIf="!isMobile" class="filters" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
      [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll"
-     [style.height]="innerScroll ? this.innerHeight + 'px' : 'unset'"
-     [style.top]="bottomFixedFilterPanel ? topDist + 'px !important': 'unset !important'" #filterPane>
-  <app-filtering-panel></app-filtering-panel>
+     [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
+     'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}" #filterPane>
+  <app-filtering-panel (scrollChange)="calcAfterScroll()"></app-filtering-panel>
 </div>
 <p-sidebar *ngIf="isMobile" [(visible)]="displayFilter" position="right" [blockScroll]="true">
   <div class="innerScroll">
