@@ -4,7 +4,7 @@
 <hr>
 <div *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null">
     <div>
-        <div style="font-weight: bold; padding-bottom: 5px; display: inline-block">{{fo.name}}</div>
+        <div class="checkbox-title">{{fo.name}}</div>
     </div>
     <div class="container">
         <div *ngFor="let v of filter_options[i].values" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
@@ -20,14 +20,13 @@
         <svg height="26" width="26">
          <circle cx="13" cy="13" r="13" stroke="black" stroke-width="0" attr.fill="{{v}}"></circle>
         </svg>
-          <br *ngIf="!isMobile && (j+1) % 6 === 0 && j !== 0">
-          <br *ngIf="isMobile && (j+1) % 5 === 0 && j !== 0">
+        <i *ngIf="isChecked[fo.name][v]" class="fa fa-check"></i>
       </span>
     </span>
     <span *ngIf="fo.name === 'سایز'">
-      <mat-button-toggle *ngFor="let v of filter_options[i].values" style="width: 52px; height: 35px;"
+      <mat-button-toggle *ngFor="let v of filter_options[i].values" class="filter-size"
                          (click)="getValue(fo.name, v)" [checked]="clear_box">
-          <div style="text-align: center; width: 70%;">{{v.toLocaleString('fa')}}</div>
+          {{v}}
       </mat-button-toggle>
     </span>
     <hr *ngIf=" i < filter_options.length-1">

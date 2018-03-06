@@ -46,7 +46,7 @@ export class SiteComponent implements OnInit {
       this.responsiveService.switch$.next(this.isMobileCalc(w, h));
       this.isMobile = this.isMobileCalc(w, h);
       this.responsiveService.isMobile = this.isMobile;
-      this.pageService.getPage(this.router.url.substring(1));
+      setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
     }
   }
 

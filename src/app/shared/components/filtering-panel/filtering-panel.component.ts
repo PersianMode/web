@@ -33,6 +33,8 @@ export class FilteringPanelComponent implements OnInit {
   clear_box = null;
   isMobile = false;
   @Output() displayFilterEvent = new EventEmitter<any>();
+  isChecked: any = {};
+
   constructor(private responsiveService: ResponsiveService) {
   }
 
@@ -41,13 +43,20 @@ export class FilteringPanelComponent implements OnInit {
       const tempObj = {name: '', values: []};
       tempObj.name = el.name;
       this.current_filter_state.push(tempObj);
+      this.isChecked[el.name] = {};
+      for (const key of el.values) {
+          this.isChecked[el.name][key] = false;
+      }
     });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    let sizes = this.filter_options.filter( r => r.name === 'سایز')[0];
+    sizes.values = sizes.values.map( s => (+s).toLocaleString('fa'));
     // console.log('filter_options : ', this.current_filter_state);
   }
 
   getValue(name, value) {
+    this.isChecked[name][value] = !this.isChecked[name][value];
     this.current_filter_state.forEach(el => {
       if (el.name === name) {
         if (el.values.length === 0 || el.values.findIndex(i => i === value) === -1)
@@ -68,7 +77,12 @@ export class FilteringPanelComponent implements OnInit {
       el.values = [];
     });
     this.clear_box = false;
-    // console.log('--->', this.current_filter_state);
+
+    for (const name in this.isChecked) {
+      for (const value in this.isChecked[name]) {
+        this.isChecked[name][value] = false;
+      }
+    }
   }
 
   changeDisplayFilter() {

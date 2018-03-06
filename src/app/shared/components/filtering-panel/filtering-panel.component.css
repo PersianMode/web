@@ -8,9 +8,20 @@
     color: gray;
 }
 
-.color-span{
-    margin-right: 5px;
-    color: yellow;
+i {
+  color: black;
+  top: -22px;
+  right: 6px;
+  font-size: 13px;
+  position: relative;
+}
+
+.color-span {
+  width: 26px;
+  overflow: hidden;
+  height: 26px;
+  display: inline-block;
+  margin: 0 0 10px 10px;
 }
 
 .fit-check-box {
@@ -23,4 +34,11 @@
 
 .set-size-mobile {
     font-size: xx-small;
+}
+.checkbox-title {
+  font-weight: bold;
+  padding-bottom: 5px;
+  display: inline-block;
+  font-size: 14px;
+  font-family: irankharazmi;
 }

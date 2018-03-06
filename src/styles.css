@@ -496,11 +496,19 @@ dp-date-picker.dp-material .dp-picker-input {
   border: 1px rgba(221,221,221,.7) solid;
   color: black;
 }
+.filter-size .mat-button-toggle-label-content {
+  width: 42px !important;
+  font-size: 10px !important;
+}
 .mat-button-toggle-label-content:hover {
   border: 1px black solid;
   z-index: 10;
 }
 .mat-button-toggle-group {
+  box-shadow: none !important;
+  margin-bottom: -1px;
+}
+.mat-button-toggle-standalone {
   box-shadow: none !important;
   margin-bottom: -1px;
 }
@@ -640,4 +648,16 @@ mat-panel-title {
 
 .full-width {
   width: 100%;
+}
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background: #ccc !important;
+}
+
+.mat-checkbox {
+  font-family: iranyekan !important;
+  font-weight: 200 !important;
+}
+.mat-checkbox-frame {
+  border: 1px #ccc solid !important;
 }
