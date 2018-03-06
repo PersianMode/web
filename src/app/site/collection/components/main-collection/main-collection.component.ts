@@ -222,7 +222,6 @@ export class MainCollectionComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.pageName = 'collection/' + params.get('typeName');
       this.pageService.getPage(this.pageName);
-
       this.pageService.pageInfo$.subscribe(res => {
           if (res && res['collection_id']) {
             this.productService.loadProducts(res['collection_id']);
