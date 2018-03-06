@@ -478,9 +478,15 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 .ui-sidebar {
   background: #fff;
-  overflow: scroll !important;
-  width: calc(50% + 40px) !important;
-  top: 51px !important;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  width: calc(100% - 40px) !important;
+  padding: 0px 4px 0px 10px  !important;
+}
+.ui-sidebar-close {
+  visibility: hidden;
+  width: 0px;
+  height: 0px;
 }
 .ui-sidebar-mask {
   background: rgba(0,0,0,.2);
@@ -498,7 +504,7 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 .filter-size .mat-button-toggle-label-content {
   width: 42px !important;
-  font-size: 10px !important;
+  font-size: 14px !important;
 }
 .mat-button-toggle-label-content:hover {
   border: 1px black solid;
@@ -651,7 +657,7 @@ mat-panel-title {
 }
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background: #ccc !important;
+  background: gray !important;
 }
 
 .mat-checkbox {
@@ -661,3 +667,4 @@ mat-panel-title {
 .mat-checkbox-frame {
   border: 1px #ccc solid !important;
 }
+
