@@ -208,6 +208,7 @@ export class MainCollectionComponent implements OnInit {
   pageName = '';
   curWidth: number;
   curHeight: number;
+  displayFilter = false;
   gridWidth: number;
   gridHeight: number;
   isMobile = false;
@@ -264,5 +265,8 @@ export class MainCollectionComponent implements OnInit {
       this.bottomFixedFilterPanel = !this.topFixedFilterPanel && !this.bottomScroll && filterHeight - offset < height;
       this.topDist = height - filterHeight + 228;
     }
+  }
+  setDispalyFilter($event) {
+    this.displayFilter = $event;
   }
 }

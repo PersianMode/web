@@ -80,5 +80,7 @@ export class PageService {
       }
     }, 500);
   }
+  getFilterOptions() {
+  }
 
 }

@@ -1,4 +1,50 @@
-<h1>فیلترها</h1>
-<p *ngFor="let i of items">
-  filtering-panel works! {{i}}
-</p>
+<div style="height: 60px;" [ngClass]="isMobile ? 'set-size-mobile' : null">
+    <h1>فیلترها</h1>
+</div>
+<hr>
+<div *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null">
+    <div>
+        <div style="font-weight: bold; padding-bottom: 5px; display: inline-block">{{fo.name}}</div>
+    </div>
+    <div class="container">
+        <div *ngFor="let v of filter_options[i].values" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
+            <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز'" style="opacity: 0.8"
+                          (click)="getValue(fo.name, v)" [checked]="clear_box">
+                <span class="check-box-text">{{v}}</span>
+            </mat-checkbox>
+        </div>
+    </div>
+    <span *ngIf="fo.name === 'رنگ'">
+      <span *ngFor="let v of filter_options[i].values; let j = index" class="color-span" (click)="getValue(fo.name, v)"
+            style="cursor: pointer;">
+        <svg height="26" width="26">
+         <circle cx="13" cy="13" r="13" stroke="black" stroke-width="0" attr.fill="{{v}}"></circle>
+        </svg>
+          <br *ngIf="!isMobile && (j+1) % 6 === 0 && j !== 0">
+          <br *ngIf="isMobile && (j+1) % 5 === 0 && j !== 0">
+      </span>
+    </span>
+    <span *ngIf="fo.name === 'سایز'">
+      <mat-button-toggle *ngFor="let v of filter_options[i].values" style="width: 52px; height: 35px;"
+                         (click)="getValue(fo.name, v)" [checked]="clear_box">
+          <div style="text-align: center; width: 70%;">{{v.toLocaleString('fa')}}</div>
+      </mat-button-toggle>
+    </span>
+    <hr *ngIf=" i < filter_options.length-1">
+</div>
+<br>
+<div *ngIf="!isMobile" style="width: 100%; text-align: center">
+    <button (click)="clearFilters()">برداشتن تمام فیلترها</button>
+</div>
+<div *ngIf="isMobile" style="width: 100%;" class="set-size-mobile">
+    <table style="width: 100%">
+        <tr width="100">
+            <td width="50" style="text-align: center">
+                <button (click)="changeDisplayFilter()">اعمال فیلترها</button>
+            </td>
+            <td width="50" style="text-align: center">
+                <button (click)="clearFilters()">برداشتن تمام فیلترها</button>
+            </td>
+        </tr>
+    </table>
+</div>
