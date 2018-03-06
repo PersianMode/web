@@ -8,6 +8,7 @@ import {IFilter} from '../interfaces/ifilter.interface';
 export class ProductService {
   private products = [];
   private filteredProducts = [];
+  collectionInfo$: ReplaySubject<any> = new ReplaySubject<any>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
 
@@ -28,6 +29,7 @@ export class ProductService {
     _colors.forEach(c => c.split('/').map(x => x.trim()).forEach(x => colors.push(x)));
     colors = Array.from(new Set(colors));
 
+
     let sizes: string[] = this.filteredProducts.map(x => x['size']);
     sizes = Array.from(new Set([].concat.apply([], sizes)));
 
@@ -46,25 +48,25 @@ export class ProductService {
     this.httpService.get('collection/' + collection_id).subscribe(
       (data) => {
 
-        console.log('-> ',data);
-        this.products = data;
+        if (data.name)
+          this.collectionInfo$.next(data.name);
 
-        this.filteredProducts = this.products.slice();
+        if (data.products) {
+          this.products = data.products;
 
-        this.extractFilters();
+          console.log('-> ', this.products);
 
-        this.filterSortProducts();
+          this.filteredProducts = this.products.slice();
+
+          this.extractFilters();
+
+          this.filterSortProducts();
+        }
       },
       (err) => {
         console.error('Cannot get products of collection: ', err);
       }
     );
-  }
-
-  getProducts(startIndex, boundSize = 10) {
-
-    if (this.filteredProducts && this.filteredProducts.length > 0 && this.filteredProducts.length > startIndex)
-      this.productList$.next(this.filteredProducts.slice(0, startIndex + boundSize));
   }
 
   setFilter(data: IFilter[]) {
@@ -88,47 +90,48 @@ export class ProductService {
 
   private filterProducts() {
     this.filteredProducts = [];
-    this.filterInput.forEach(item => {
+    if (this.filterInput) {
+      this.filterInput.forEach(item => {
 
-      switch (item.name) {
-        case 'نوع' :
-          this.filteredProducts.concat(this.products.filter(product => item.values.includes(product.product_type.name)));
-          break;
-        case 'رنگ':
-          this.filteredProducts.concat(this.products.filter(product => {
-            const colors = [].concat.apply([], product.colors.map(color => color.name.split('/')));
-            const duplicated: string[] = Array.from(new Set(colors));
-            return duplicated.some(r => item.values.includes(r));
-          }));
-          break;
-        case 'سایز':
-          this.filteredProducts.concat(this.products.filter(product => {
-            const productSizes: string[] = Array.from(new Set(product.sizes));
-            return productSizes.some(r => item.values.includes(r));
-          }));
+        switch (item.name) {
+          case 'نوع' :
+            this.filteredProducts.concat(this.products.filter(product => item.values.includes(product.product_type.name)));
+            break;
+          case 'رنگ':
+            this.filteredProducts.concat(this.products.filter(product => {
+              const colors = [].concat.apply([], product.colors.map(color => color.name.split('/')));
+              const duplicated: string[] = Array.from(new Set(colors));
+              return duplicated.some(r => item.values.includes(r));
+            }));
+            break;
+          case 'سایز':
+            this.filteredProducts.concat(this.products.filter(product => {
+              const productSizes: string[] = Array.from(new Set(product.sizes));
+              return productSizes.some(r => item.values.includes(r));
+            }));
 
-          break;
-      }
-    });
-
+            break;
+        }
+      });
+    }
     return this.products;
   }
 
   private sortProducts() {
-    switch (this.sortInput) {
-      case SortOptions.newest: {
-        return this.filteredProducts.sort(this.newestSort);
-      }
-      case SortOptions.lowerPrice: {
-        return this.filteredProducts.sort((a, b) => this.priceSort(a, b, true));
-      }
-      case SortOptions.highestPrice: {
-        return this.filteredProducts.sort((a, b) => this.priceSort(a, b, false));
-      }
-      default: {
-        return this.filteredProducts;
+    if (this.sortInput) {
+      switch (this.sortInput) {
+        case SortOptions.newest: {
+          return this.filteredProducts.sort(this.newestSort);
+        }
+        case SortOptions.lowerPrice: {
+          return this.filteredProducts.sort((a, b) => this.priceSort(a, b, true));
+        }
+        case SortOptions.highestPrice: {
+          return this.filteredProducts.sort((a, b) => this.priceSort(a, b, false));
+        }
       }
     }
+    return this.filteredProducts;
   }
 
   private newestSort(a, b) {
