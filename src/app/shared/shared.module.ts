@@ -27,7 +27,7 @@ import {FileUploadModule} from 'ng2-file-upload';
     AbstractSearchComponent,
     RemovingConfirmComponent,
     PanelsComponent,
-    UploaderComponent
+    UploaderComponent,
   ],
   imports: [
     FormsModule,
@@ -54,7 +54,7 @@ import {FileUploadModule} from 'ng2-file-upload';
     SearchFieldsComponent,
     RemovingConfirmComponent,
     PanelsComponent,
-    UploaderComponent
+    UploaderComponent,
   ]
 })
 export class SharedModule {

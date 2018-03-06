@@ -16,7 +16,10 @@
                         <h1 *ngIf="ar.title" [style.color]="ar.color ? ar.color : null">{{ar.title}}</h1>
                         <div *ngIf="ar.text" [style.color]="ar.color ? ar.color : null"><b>{{ar.text}}</b></div>
                         <div *ngIf="ar.title" style="margin-top: 5%;">
-                            <button mat-raised-button color="accent" class="shop-button">
+                            <button *ngIf="ar.buttonText" mat-raised-button color="accent" class="shop-button">
+                                <b>{{ar.buttonText}}</b>
+                            </button>
+                            <button *ngIf="ar.buttonText === undefined" mat-raised-button color="accent" class="shop-button">
                                 <b>خرید آنلاین</b>
                             </button>
                         </div>
