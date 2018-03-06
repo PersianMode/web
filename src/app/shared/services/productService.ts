@@ -6,6 +6,7 @@ import {IFilter} from '../interfaces/ifilter.interface';
 
 @Injectable()
 export class ProductService {
+  private collectionName: string;
   private products = [];
   private filteredProducts = [];
   collectionInfo$: ReplaySubject<any> = new ReplaySubject<any>(1);
@@ -48,9 +49,11 @@ export class ProductService {
     this.httpService.get('collection/' + collection_id).subscribe(
       (data) => {
 
-        if (data.name)
+        if (data.name) {
+          this.collectionName = data.name;
           this.collectionInfo$.next(data.name);
 
+        }
         if (data.products) {
           this.products = data.products;
 
