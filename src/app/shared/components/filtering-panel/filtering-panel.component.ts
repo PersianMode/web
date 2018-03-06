@@ -10,7 +10,7 @@ export class FilteringPanelComponent implements OnInit {
   constructor() { }
 items = [];
   ngOnInit() {
-    for(let i=0;i<40;i++)this.items.push(i+1);
+    for(let i=0;i<400;i++)this.items.push(i+1);
   }
 
 }

@@ -16,7 +16,30 @@
   margin-right: 299px;
   margin-top: 46px;
 }
+.mobileGridwall {
+  padding: 10px;
+}
+.mobileGridwallTitle h1{
+  text-align: center;
+  padding-bottom: 20px;
 
+  width:100%
+}
+.mobileGridwallTitle div {
+  border-top: 1px solid #ccc;
+}
+.mobileGridwallTitle p{
+  float: left;
+  display: inline-block;
+  margin: 10px;
+}
+.mobileGridwallTitle i {
+  font-size: 20px;
+}
+.mobileGridwallTitle span{
+  float: right;
+  margin:10px;
+}
 .gridwall-title {
   display: inline-block;
   margin: 0;
