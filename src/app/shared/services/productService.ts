@@ -31,14 +31,12 @@ export class ProductService {
     let sizes: string[] = this.filteredProducts.map(x => x['size']);
     sizes = Array.from(new Set([].concat.apply([], sizes)));
 
-    const prices: string[] = Array.from(new Set((this.filteredProducts.map(x => x['base_price']))));
 
     const filter: IFilter[] = [];
 
     if (types.length > 1) filter.push({name: 'نوع', values: types});
     if (colors.length > 1) filter.push({name: 'رنگ', values: colors});
     if (sizes.length > 1) filter.push({name: 'سایز', values: sizes});
-    if (prices.length > 1) filter.push({name: 'قیمت', values: prices});
 
     this.filtering$.next(filter);
 
@@ -47,7 +45,10 @@ export class ProductService {
   loadProducts(collection_id) {
     this.httpService.get('collection/' + collection_id).subscribe(
       (data) => {
+
+        console.log('-> ',data);
         this.products = data;
+
         this.filteredProducts = this.products.slice();
 
         this.extractFilters();
@@ -106,11 +107,6 @@ export class ProductService {
             return productSizes.some(r => item.values.includes(r));
           }));
 
-          break;
-        case 'قیمت':
-          this.filteredProducts.concat(this.products.filter(product => {
-            return product.base_price >= item.values[0] && product.base_price < item.values[1];
-          }));
           break;
       }
     });
