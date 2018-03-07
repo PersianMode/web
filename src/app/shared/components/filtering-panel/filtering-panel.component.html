@@ -2,12 +2,12 @@
   <h1>فیلترها</h1>
 </div>
 <mat-accordion multi="true">
-  <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null">
+  <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null" [expanded]="expanded[fo]">
     <mat-expansion-panel-header>
       <div class="checkbox-title">{{fo.name}}</div>
     </mat-expansion-panel-header>
     <div *ngFor="let v of filter_options[i].values" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
-      <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز'" style="opacity: 0.8"
+      <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز'"
                     (click)="getValue(fo.name, v)" [checked]="clear_box">
         <span class="check-box-text">{{v}}</span>
       </mat-checkbox>
@@ -29,19 +29,7 @@
     </span>
   </mat-expansion-panel>
 </mat-accordion>
-<br>
-<div *ngIf="!isMobile" style="width: 100%; text-align: center">
-  <button (click)="clearFilters()">برداشتن تمام فیلترها</button>
-</div>
-<div *ngIf="isMobile" style="width: 100%;" class="set-size-mobile">
-  <table style="width: 100%">
-    <tr width="100">
-      <td width="50" style="text-align: center">
-        <button (click)="changeDisplayFilter()">اعمال فیلترها</button>
-      </td>
-      <td width="50" style="text-align: center">
-        <button (click)="clearFilters()">برداشتن تمام فیلترها</button>
-      </td>
-    </tr>
-  </table>
+<div class="actions">
+  <button mat-button *ngIf="isMobile" (click)="changeDisplayFilter()">اعمال فیلترها</button>
+  <button mat-button (click)="clearFilters()">برداشتن تمام فیلترها</button>
 </div>

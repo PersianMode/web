@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
-import {SortOptions} from '../enum/sort.options.enum';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
 
@@ -14,7 +13,7 @@ export class ProductService {
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
 
   private filterInput: IFilter[];
-  private sortInput: SortOptions;
+  private sortInput = '';
 
   constructor(private httpService: HttpService) {
   }
@@ -78,7 +77,7 @@ export class ProductService {
     this.filterSortProducts();
   }
 
-  setSort(data: SortOptions) {
+  setSort(data) {
     this.sortInput = data;
     this.filterSortProducts();
   }
@@ -123,13 +122,16 @@ export class ProductService {
   private sortProducts() {
     if (this.sortInput) {
       switch (this.sortInput) {
-        case SortOptions.newest: {
+        case 'newest': {
           return this.filteredProducts.sort(this.newestSort);
         }
-        case SortOptions.lowerPrice: {
+        case 'highest': {
+          return this.filteredProducts.sort((a, b) => this.reviewSort(a, b));
+        }
+        case 'cheapest': {
           return this.filteredProducts.sort((a, b) => this.priceSort(a, b, true));
         }
-        case SortOptions.highestPrice: {
+        case 'most': {
           return this.filteredProducts.sort((a, b) => this.priceSort(a, b, false));
         }
       }
@@ -144,6 +146,10 @@ export class ProductService {
       return -1;
     else
       return this.nameSort(a, b);
+  }
+
+  private reviewSort(a, b) {
+    return 0;
   }
 
   private priceSort(a, b, lowToHigh = true) {

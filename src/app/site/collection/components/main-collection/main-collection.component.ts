@@ -3,7 +3,7 @@ import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
-import {ProductService} from '../../../../shared/services/productService';
+import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 
 
@@ -212,7 +212,25 @@ export class MainCollectionComponent implements OnInit {
   gridWidth: number;
   gridHeight: number;
   isMobile = false;
-
+  sortOptions = [
+    {
+      value: 'newest',
+      fa: 'تازه‌ترین‌ها',
+    },
+    {
+      value: 'highest',
+      fa: 'بالاترین امتیازها',
+    },
+    {
+      value: 'cheapest',
+      fa: 'ارزان‌ترین‌ها',
+    },
+    {
+      value: 'most',
+      fa: 'گران‌ترین‌ها',
+    }
+  ];
+  sortedBy: any;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
               private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService) {
@@ -269,6 +287,15 @@ export class MainCollectionComponent implements OnInit {
       this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= 65 &&
         !this.bottomScroll && filterHeight - offset < height - 209;
       this.topDist = height - filterHeight + 209;
+    }
+  }
+
+  selectSortOption(sortPanel, index) {
+    sortPanel.hide();
+    if (this.sortedBy && this.sortedBy.value === this.sortOptions[index].value) {
+      this.sortedBy = null;
+    } else {
+      this.sortedBy = this.sortOptions[index];
     }
   }
 

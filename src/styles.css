@@ -580,6 +580,7 @@ mat-panel-title {
   background-color: #191919;
   clear: both;
   margin-top: 60px;
+  height: 210px;
 }
 
 .hr-setting{
@@ -667,4 +668,23 @@ mat-panel-title {
 .mat-checkbox-frame {
   border: 1px #ccc solid !important;
 }
-
+.ui-overlaypanel {
+  display: block;
+  z-index: 999 !important;
+  top: unset !important;
+  left: 15.9531px;
+  opacity: 1;
+  padding: 0px !important;
+  text-align: right;
+}
+.ui-overlaypanel-content {
+  padding: 0px 1px !important;
+  background-color: #fff;
+}
+.ui-overlaypanel-content div {
+  padding: 10px 38px;
+  cursor: pointer;
+}
+.mat-button-wrapper {
+  font-family: iranyekan, sans-serif !Important;
+}

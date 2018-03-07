@@ -15,7 +15,12 @@
     <div *ngIf="!isMobile" class="gridwall-title">
       <h1>{{collection.collectionNameFa}} <span>({{collection.set.length.toLocaleString('fa')}})</span></h1>
       <div class="sorter-row">
-        <div class="sorter">ترتیب نمایش</div>
+      <div class="sorter" (click)="sortPanel.toggle($event)">ترتیب نمایش<span *ngIf="sortedBy"> با {{sortedBy.fa}}</span> <i class="fa" [ngClass]="sortPanel.visible ? 'fa-chevron-up' : 'fa-chevron-down'"></i></div>
+        <p-overlayPanel #sortPanel>
+          <div *ngFor="let sortOption of sortOptions;let i=index" (click)="selectSortOption(sortPanel,i)" [style.borderRight]="sortedBy && (sortedBy.value === sortOption.value) ? 'black 4px solid':'transparent 4px solid'">
+            {{sortOption.fa}}
+          </div>
+        </p-overlayPanel>
       </div>
     </div>
     <div *ngIf="isMobile" class="mobileGridwallTitle">

@@ -57,7 +57,6 @@ export class FilteringPanelComponent implements OnInit {
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     let sizes = this.filter_options.filter( r => r.name === 'سایز')[0];
     sizes.values = sizes.values.map( s => (+s).toLocaleString('fa'));
-    // console.log('filter_options : ', this.current_filter_state);
   }
 
   getValue(name, value) {
@@ -74,7 +73,7 @@ export class FilteringPanelComponent implements OnInit {
       }
     });
     this.clear_box = null;
-    // console.log('===>', this.current_filter_state);
+     console.log('===>', this.current_filter_state);
   }
 
   clearFilters() {
