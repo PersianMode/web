@@ -11,7 +11,7 @@
      [style.height]="innerScroll ? innerHeight + 'px' : 'fit-content'"
      [style.top]="(bottomFixedFilterPanel ? topDist : 0) + 'px'" #descPane>
 <h1>{{product.name}}</h1>
-  <h4>{{sub}} <span>{{price}} تومان</span></h4>
+  <h4>{{sub}} <span>{{product.base_price}} تومان</span></h4>
   <div *ngIf="product.colors" class="colors">
     <a *ngFor="let img of product.colors" [routerLink]="['/', 'product', product.id, img.pcid]"><img [style.opacity]="img.pcid === id ? 1 : .5" src="assets/pictures/product-small/{{img.url}}"></a>
   </div>

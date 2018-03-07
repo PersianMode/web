@@ -3,7 +3,7 @@ import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
-import {ProductService} from '../../../../shared/services/productService';
+import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 
 

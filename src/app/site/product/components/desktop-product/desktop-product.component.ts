@@ -25,6 +25,7 @@ export class DesktopProductComponent implements OnInit {
   size: number;
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
+
   }
 
   ngOnInit() {
