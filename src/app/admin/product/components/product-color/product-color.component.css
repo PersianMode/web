@@ -27,3 +27,17 @@
   direction: rtl;
   text-align: right;
 }
+
+
+.img-title {
+    width: 70%;
+    text-align: center
+}
+.img-style {
+    width: 10% ;
+    height: 10%; display: inline-block;
+    text-align: center;
+}
+.td-width {
+    width: 10%;
+}

@@ -44,6 +44,7 @@ import {SharedModule} from '../../shared/shared.module';
     MatCheckboxModule,
     MatPaginatorModule,
     SharedModule,
+    MatCheckboxModule,
   ],
 })
 export class ProductModule {
