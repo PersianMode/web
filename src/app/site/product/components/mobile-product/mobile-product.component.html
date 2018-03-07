@@ -1,7 +1,7 @@
 <h1>{{product.name}}</h1>
 <h4>{{sub}} <span>{{price}} تومان</span></h4>
 <swiper [config]="config" [(index)]="index">
-  <div *ngFor="let img of product.OnCompleted">
+  <div *ngFor="let img of product.images">
     <img *ngIf="img.type !== 'video'" src="{{img.url}}">
     <video *ngIf="img.type === 'video'" autoplay loop playsinline tabindex="-1">
       <source src="{{img.url}}" type="video/webm">

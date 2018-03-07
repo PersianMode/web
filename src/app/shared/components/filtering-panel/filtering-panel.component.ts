@@ -44,8 +44,6 @@ export class FilteringPanelComponent implements OnInit {
     });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
-    // console.log('current_filter_state : ', this.current_filter_state);
-    // console.log('filter_options : ', this.filter_options);
   }
 
   getValue(name, value) {

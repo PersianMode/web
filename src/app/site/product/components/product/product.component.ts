@@ -2,6 +2,7 @@ import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
+import {ResponsiveService} from '../../../../shared/services/responsive.service';
 
 @Component({
   selector: 'app-product',
@@ -11,7 +12,6 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 export class ProductComponent implements OnInit {
   id;
   colorId;
-  mobileView = false;
   product: any = {
     id: 14,
     name: 'کایری ۳ مدل What The',
@@ -113,12 +113,14 @@ export class ProductComponent implements OnInit {
   };
   joinedTags = '';
   formattedPrice = '';
+  isMobile = false;
 
-  constructor(private route: ActivatedRoute, @Inject(WINDOW) private window) {
+  constructor(private route: ActivatedRoute, @Inject(WINDOW) private window, private responsiveService: ResponsiveService) {
   }
 
   ngOnInit() {
-    this.mobileView = this.window.innerWidth < 960;
+    this.isMobile = this.responsiveService.isMobile;
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.route.paramMap.subscribe(params => {
       this.id = +params.get('product_id');
       this.product.id = this.id;
@@ -175,6 +177,6 @@ export class ProductComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.mobileView = event.target.innerWidth < 960;
+    this.isMobile = event.target.innerWidth < 960;
   }
 }
