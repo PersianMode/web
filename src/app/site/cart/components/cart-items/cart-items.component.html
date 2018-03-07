@@ -1,3 +1,40 @@
-<p>
-  cart-items works!
-</p>
+<div style="text-align: center; width: 50%; margin-right: 25%; margin-top: 10px">
+<mat-card>
+  <mat-card-content>
+  <div fxLayout="row" fxLayoutAlign="center top">
+    <div fxFlex="30" style="height: 80%">
+      <div>
+        <a [routerLink]="['/', 'product', product.id, product.colors[0].color_id]">
+          <img src="assets/pictures/product-small/{{product.colors[0].images.thumbnail}}">
+        </a>
+      </div>
+    </div>
+    <div fxFlex="60" style="text-align: right; font-family: irankharazmi; height: 80%; display: inline-block;">
+      <div style="margin-top: 5px; display: inline-block;  width: 80%">
+        <b><a style="text-decoration : underline">{{product.name}}{{'   '}}</a></b>
+        <a *ngFor="let t of product.tags" style="text-decoration : underline">{{t}}{{' '}}</a>
+      </div>
+      <div style="margin-top: 5px;display: inline-block; text-align: left; width: 15%">
+        <span style="color: #fa5400; font-size: small">{{price_fa}}{{' '}}{{'تومان'}}</span>
+      </div>
+      <div>
+        <b>سایز : </b>{{' '}}{{size_fa}}
+      </div>
+      <div>
+        <b>تعداد : </b>{{' '}} 2 {{'عدد'}}
+      </div>
+      <div>
+        <b>استایل : </b>
+      </div>
+      <div style="margin-top: 70px;">
+        <button type="button" (click)="deleteProduct()" color="warn">حذف از سبد خرید</button>
+        <button (click)="openForm()" color="accent">ویرایش محصول</button>
+      </div>
+    </div>
+  </div>
+  </mat-card-content>
+  <mat-card-actions style="text-align: left">
+
+  </mat-card-actions>
+</mat-card>
+</div>

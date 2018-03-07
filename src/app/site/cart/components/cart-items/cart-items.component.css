@@ -1,0 +1,9 @@
+.card-view {
+    margin: 10px;
+    width: 50%;
+}
+
+mat-card {
+    cursor: pointer;
+}
+
