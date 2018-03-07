@@ -478,9 +478,15 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 .ui-sidebar {
   background: #fff;
-  overflow: scroll !important;
-  width: calc(50% + 40px) !important;
-  top: 51px !important;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  width: calc(100% - 40px) !important;
+  padding: 0px 4px 0px 10px  !important;
+}
+.ui-sidebar-close {
+  visibility: hidden;
+  width: 0px;
+  height: 0px;
 }
 .ui-sidebar-mask {
   background: rgba(0,0,0,.2);
@@ -496,11 +502,19 @@ dp-date-picker.dp-material .dp-picker-input {
   border: 1px rgba(221,221,221,.7) solid;
   color: black;
 }
+.filter-size .mat-button-toggle-label-content {
+  width: 42px !important;
+  font-size: 14px !important;
+}
 .mat-button-toggle-label-content:hover {
   border: 1px black solid;
   z-index: 10;
 }
 .mat-button-toggle-group {
+  box-shadow: none !important;
+  margin-bottom: -1px;
+}
+.mat-button-toggle-standalone {
   box-shadow: none !important;
   margin-bottom: -1px;
 }
@@ -641,3 +655,16 @@ mat-panel-title {
 .full-width {
   width: 100%;
 }
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background: gray !important;
+}
+
+.mat-checkbox {
+  font-family: iranyekan !important;
+  font-weight: 200 !important;
+}
+.mat-checkbox-frame {
+  border: 1px #ccc solid !important;
+}
+
