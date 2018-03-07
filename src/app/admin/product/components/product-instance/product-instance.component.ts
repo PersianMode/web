@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {HttpService} from '../../../../shared/services/http.service';
-import {IProductColor} from '../../interfaces/iproduct-color';
+// TODO: // import {IProductColor} from '../../interfaces/iproduct-color';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IWarehouse} from '../../interfaces/iwarehouse';
 
@@ -11,7 +11,7 @@ import {IWarehouse} from '../../interfaces/iwarehouse';
 })
 export class ProductInstanceComponent implements OnInit {
 
-  @Input() productColors: IProductColor[];
+  @Input() productColors: any;
   @Input() productId;
   @Input() warehouses: IWarehouse[];
 

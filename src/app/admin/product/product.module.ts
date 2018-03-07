@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
   MatSnackBarModule, MatTabsModule
 } from '@angular/material';
@@ -41,6 +41,7 @@ import {SharedModule} from '../../shared/shared.module';
     MatDialogModule,
     MatSelectModule,
     MatTabsModule,
+    MatCheckboxModule,
     MatPaginatorModule,
     SharedModule,
   ],

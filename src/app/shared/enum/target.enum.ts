@@ -3,4 +3,5 @@ export enum TargetEnum {
   collection = 'Collection',
   page = 'Page',
   tag = 'Tag',
+  color = 'Color',
 }
