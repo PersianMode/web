@@ -94,4 +94,10 @@
   text-align: right;
   width: 100%;
 }
+.mobileScroll {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+  padding-bottom: 50px;
+}
 

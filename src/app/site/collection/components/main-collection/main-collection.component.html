@@ -5,7 +5,7 @@
   <app-filtering-panel (scrollChange)="calcAfterScroll()"></app-filtering-panel>
 </div>
 <p-sidebar *ngIf="isMobile" [(visible)]="displayFilter" position="right" [blockScroll]="true">
-  <div class="innerScroll">
+  <div class="mobileScroll">
     <app-filtering-panel (displayFilterEvent)="setDispalyFilter($event)" [sortOptions]="sortOptions" (sortedByChange)="sortedBy=$event"></app-filtering-panel>
   </div>
 </p-sidebar>

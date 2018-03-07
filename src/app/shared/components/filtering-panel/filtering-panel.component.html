@@ -15,10 +15,14 @@
       <div class="checkbox-title">{{fo.name}}</div>
     </mat-expansion-panel-header>
     <div *ngFor="let v of filter_options[i].values" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
-      <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز'"
+      <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز' && fo.name !=='قیمت'"
                     (click)="getValue(fo.name, v)" [checked]="clear_box">
         <span class="check-box-text">{{v}}</span>
       </mat-checkbox>
+    </div>
+    <div *ngIf="fo.name==='قیمت'">
+      <p-slider [(ngModel)]="rangeValues" [range]="true" [min]="minPrice" [max]="maxPrice" (onChange)="priceRangeChange()"></p-slider>
+      <span style="float:left">{{selectedMinPriceFormatted}} تومان</span><span>{{selectedMaxPriceFormatted}} تومان</span>
     </div>
     <span *ngIf="fo.name === 'رنگ'">
       <span *ngFor="let v of filter_options[i].values; let j = index" class="color-span" (click)="getValue(fo.name, v)"

@@ -651,6 +651,9 @@ mat-panel-title {
     border: 1px rgba(221,221,221,.7) solid;
     color: black;
   }
+  .ui-slider {
+    margin: 0px 10px !important;
+  }
 }
 
 .full-width {
@@ -690,4 +693,18 @@ mat-panel-title {
 }
 .mat-button-wrapper {
   font-family: iranyekan, sans-serif !Important;
+}
+
+.ui-slider-handle {
+  background: black;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+.ui-slider {
+  border: 1px solid black;
+
+}
+
+.ui-slider-range {
+  background: #999999;
 }

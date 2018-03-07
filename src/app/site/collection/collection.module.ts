@@ -12,6 +12,7 @@ import {SidebarModule} from 'primeng/sidebar';
 import {MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatExpansionModule} from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
+import {SliderModule} from 'primeng/slider';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
     MatButtonToggleModule,
     MatExpansionModule,
     OverlayPanelModule,
+    SliderModule,
   ],
 })
 export class CollectionModule {

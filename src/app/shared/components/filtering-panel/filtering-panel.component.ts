@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
+import {priceFormatter} from '../../lib/priceFormatter';
 
 @Component({
   selector: 'app-filtering-panel',
@@ -39,7 +40,11 @@ export class FilteringPanelComponent implements OnInit {
   isChecked: any = {};
   oppositeColor: any = {};
   expanded: any = {};
-
+  rangeValues: any;
+  minPrice = 5e5;
+  maxPrice = 2.5e6;
+  selectedMinPriceFormatted = '';
+  selectedMaxPriceFormatted = '';
   constructor(private responsiveService: ResponsiveService) {
   }
 
@@ -61,6 +66,15 @@ export class FilteringPanelComponent implements OnInit {
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     let sizes = this.filter_options.filter( r => r.name === 'سایز')[0];
     sizes.values = sizes.values.map( s => (+s).toLocaleString('fa'));
+    this.priceRangeChange();
+  }
+  priceRangeChange() {
+    if (!this.rangeValues) {
+      this.rangeValues = [this.minPrice, this.maxPrice];
+    }
+    this.rangeValues = this.rangeValues.map(r => Math.round(r / 1000 ) * 1000);
+    this.selectedMinPriceFormatted = priceFormatter(this.rangeValues[0]);
+    this.selectedMaxPriceFormatted = priceFormatter(this.rangeValues[1]);
   }
 
   getValue(name, value) {
