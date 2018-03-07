@@ -1,12 +1,12 @@
 <div >
   <div class="fixed">
-    <app-header *ngIf="curWidth >= 960"></app-header>
-    <app-collection-header *ngIf="curWidth >= 960"></app-collection-header>
-    <app-mobile-header  *ngIf="curWidth < 960" [menuWidth]="curWidth - 40" [menuHeight]="curHeight"></app-mobile-header>
+    <app-header *ngIf="!isMobile"></app-header>
+    <app-collection-header *ngIf="!isMobile"></app-collection-header>
+    <app-mobile-header  *ngIf="isMobile" [menuWidth]="curWidth - 40" [menuHeight]="curHeight"></app-mobile-header>
   </div>
-  <div [class.scrollable]="curWidth >= 960">
-    <app-sliding-header *ngIf="curWidth >= 960"></app-sliding-header>
-    <div [class.content]="curWidth >= 960" [class.mobile-content]="curWidth < 960">
+  <div [class.scrollable]="!isMobile">
+    <app-sliding-header *ngIf="!isMobile"></app-sliding-header>
+    <div [class.content]="!isMobile" [class.mobile-content]="isMobile">
       <router-outlet></router-outlet>
       <app-footer></app-footer>
     </div>

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
-import {PlacementService} from '../../services/placement.service';
+import {PageService} from '../../services/page.service';
 
 @Component({
   selector: 'app-collection-header',
@@ -22,11 +22,11 @@ export class CollectionHeaderComponent implements OnInit {
   placements: any = {};
   topMenu = [];
 
-  constructor(private router: Router, private placementService: PlacementService) {
+  constructor(private router: Router, private pageService: PageService) {
   }
 
   ngOnInit() {
-    this.placementService.placement$.filter(r => r[0] === 'menu').map(r => r[1]).subscribe(
+    this.pageService.placement$.filter(r => r[0] === 'menu').map(r => r[1]).subscribe(
       data => {
         this.topMenu = data.filter(r => r.variable_name === 'topMenu');
         this.topMenu.forEach(r => {

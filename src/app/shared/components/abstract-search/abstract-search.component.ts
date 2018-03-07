@@ -16,7 +16,6 @@ export class AbstractSearchComponent implements OnInit {
   cards: any = null;
   selectedId: string = null;
   rows: any = [];
-
   offset = 0;
   limit = 8;
   totalCards: number = null;
