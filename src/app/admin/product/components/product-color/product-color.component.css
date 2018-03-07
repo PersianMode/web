@@ -17,3 +17,9 @@
 .rs-table{
     margin: 10px;
 }
+
+.img-style {
+    width: 10% ;
+    height: 10%; display: inline-block;
+    text-align: center;
+}
