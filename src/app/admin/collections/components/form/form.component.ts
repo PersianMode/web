@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
-import {AuthService} from '../../../../shared/services/auth.service';
 import {isUndefined} from 'util';
 import {MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';

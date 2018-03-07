@@ -1,5 +1,5 @@
 <div class="row" fxLayout="row">
-  <app-search-fields fxFlex="100"  [initItems]="initSearchData" [target]="'page'" (searching)="search($event)"></app-search-fields>
+  <app-search-fields fxFlex="100"  [initItems]="initSearchData" [target]="'Page'" (searching)="search($event)"></app-search-fields>
 </div>
 <div fxLayout="row" class="row">
   <button mat-fab color="accent" (click)="openForm()" style="margin-top: 15px">
@@ -15,8 +15,8 @@
             <a href="#" >{{c.address}}</a>
           </mat-card-title>
           <mat-card-subtitle>
-            <span *ngIf="c.is_app !== 'true'">Site Page</span>
-            <span *ngIf="c.is_app === 'true'">App Page</span>
+            <span *ngIf="c.is_app !== true">Site Page</span>
+            <span *ngIf="c.is_app === true">App Page</span>
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions *ngIf="c._id == selectedId">

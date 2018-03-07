@@ -1,16 +1,18 @@
 <h1>{{product.name}}</h1>
 <h4>{{sub}} <span>{{price}} تومان</span></h4>
 <swiper [config]="config" [(index)]="index">
-  <div *ngFor="let img of product.OnCompleted">
-    <img *ngIf="img.type !== 'video'" src="{{img.url}}">
-    <video *ngIf="img.type === 'video'" autoplay loop playsinline tabindex="-1">
-      <source src="{{img.url}}" type="video/webm">
+  <div *ngFor="let item of selected_product_color.images.angles">
+    <img *ngIf="item.type !== 'video'" src="{{item.url}}">
+    <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
+      <source src="{{item.url}}" type="video/webm">
     </video>
   </div>
 </swiper>
 <div *ngIf="product.colors" class="colors">
   <div [style.width]="(product.colors.length * 131) + 'px'">
-    <a *ngFor="let img of product.colors" [routerLink]="['/', 'product', product.id, img.pcid]"><img [style.opacity]="img.pcid === id ? 1 : .5" src="assets/pictures/product-small/{{img.url}}"></a>
+    <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item.color_id]" (click)="showAngles(item.color_id)"><img
+            [style.opacity]="item.color_id === id ? 1 : .5"
+            src="assets/pictures/product-small/{{item.images.thumbnail}}"></a>
   </div>
 </div>
 <div class="container">

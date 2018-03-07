@@ -3,7 +3,7 @@ import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
-import {ProductService} from '../../../../shared/services/productService';
+import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 
 
@@ -207,6 +207,7 @@ export class MainCollectionComponent implements OnInit {
   pageName = '';
   curWidth: number;
   curHeight: number;
+  displayFilter = false;
   gridWidth: number;
   gridHeight: number;
   isMobile = false;
@@ -246,22 +247,31 @@ export class MainCollectionComponent implements OnInit {
     this.curHeight = this.responsiveService.curHeight;
     this.gridWidth = (this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10;
     this.gridHeight = this.gridWidth + 76;
-
+    setTimeout(() => this.calcAfterScroll(), 1000);
   }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
+    this.calcAfterScroll();
+  }
+
+  calcAfterScroll() {
     if (!this.isMobile) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
       const height = this.window.innerHeight - 209;
       const filterHeight = this.filterPane.nativeElement.scrollHeight;
       const docHeight = this.gridwall.nativeElement.scrollHeight + 209;
-      this.innerScroll = docHeight - filterHeight < 0;
+      this.innerScroll = docHeight - filterHeight < 100;
       this.innerHeight = docHeight - 209;
       this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
-      this.bottomScroll = docHeight - offset - height < 180;
-      this.bottomFixedFilterPanel = !this.topFixedFilterPanel && !this.bottomScroll && filterHeight - offset < height;
-      this.topDist = height - filterHeight + 228;
+      this.bottomScroll = !this.innerScroll && offset >= 65 && (docHeight - offset - height < 180);
+      this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= 65 &&
+        !this.bottomScroll && filterHeight - offset < height - 209;
+      this.topDist = height - filterHeight + 209;
     }
+  }
+
+  setDispalyFilter($event) {
+    this.displayFilter = $event;
   }
 }

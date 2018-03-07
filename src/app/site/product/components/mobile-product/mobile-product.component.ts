@@ -10,9 +10,13 @@ export class MobileProductComponent implements OnInit {
   @Input() price;
   @Input() sub;
   @Input() id;
+  selected_product_color = [];
   constructor() { }
 
   ngOnInit() {
+    this.selected_product_color = this.product.colors[0];
   }
-
+  showAngles(colorId) {
+    this.selected_product_color = this.product.colors.filter(el => el.color_id === colorId)[0];
+  }
 }

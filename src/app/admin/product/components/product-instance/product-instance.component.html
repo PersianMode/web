@@ -8,7 +8,7 @@
           <mat-form-field style="text-align:right;">
             <mat-select placeholder="رنگ محصول" formControlName="proColorId" role="proColorId">
               <mat-option *ngFor="let pc of productColors" style="text-align:right" [value]="pc._id">
-                {{pc.info.name}}
+                {{pc.info?.name}}
               </mat-option>
             </mat-select>
             <mat-hint>رنگ محصول را انتخاب کنید</mat-hint>
@@ -74,10 +74,10 @@
               <tbody>
               <tr *ngFor="let pc of productColors; let i = index">
                 <td>{{i+1}}</td>
-                <td>{{pc.info.name}}</td>
+                <td>{{pc.info?.name}}</td>
                 <td>
                   <div style="text-align: center">
-                    <div *ngFor="let image of pc.images"
+                    <div *ngFor="let image of pc.image.angles"
                          style="width: 10% ;height: 10%; display: inline-block;text-align: center;">
 
                     </div>

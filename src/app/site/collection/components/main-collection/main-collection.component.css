@@ -1,7 +1,6 @@
 .filters {
   bottom: auto;
   position: absolute;
-  top: 20px !important;
   background: #fff;
   right: 9px;
   padding: 24px;
@@ -91,26 +90,3 @@
   width: 100%;
 }
 
-/*@media (max-width: 1023px) {*/
-  /*.gridwall-wrapper {*/
-    /*width: 492px;*/
-  /*}*/
-/*}*/
-
-/*@media (max-width: 1259px) and (min-width: 1024px) {*/
-  /*.gridwall-wrapper {*/
-    /*width: 738px;*/
-  /*}*/
-/*}*/
-
-/*@media (max-width: 1599px) and (min-width: 1260px) {*/
-  /*.gridwall-wrapper {*/
-    /*width: 984px;*/
-  /*}*/
-/*}*/
-
-/*@media (min-width: 1600px) {*/
-  /*.gridwall-wrapper {*/
-    /*width: 1230px;*/
-  /*}*/
-/*}*/

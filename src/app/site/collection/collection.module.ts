@@ -9,6 +9,8 @@ import {ProductGridItemComponent} from '../../shared/components/product-grid-ite
 import {SharedModule} from '../../shared/shared.module';
 import {DataScrollerModule} from 'primeng/datascroller';
 import {SidebarModule} from 'primeng/sidebar';
+import {MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatExpansionModule} from '@angular/material';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,9 +23,14 @@ import {SidebarModule} from 'primeng/sidebar';
   imports: [
     CollectionRouting,
     CommonModule,
+    FormsModule,
     SharedModule,
     DataScrollerModule,
     SidebarModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatExpansionModule,
   ],
 })
 export class CollectionModule {

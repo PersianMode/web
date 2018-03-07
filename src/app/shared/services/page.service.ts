@@ -75,10 +75,13 @@ export class PageService {
             }
           );
         } else if (emit) {
-          this.emitPlacements(this.cache[pageName]);
+          this.emitPlacements(this.cache[pageName].placement);
+          this.emitPageInfo(this.cache[pageName].page_info);
         }
       }
     }, 500);
+  }
+  getFilterOptions() {
   }
 
 }
