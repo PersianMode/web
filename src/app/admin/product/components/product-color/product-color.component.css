@@ -5,7 +5,6 @@
 .field-container{
     width: 100%;
     margin: 5px;
-    text-align: right
 }
 
 .field{
@@ -18,6 +17,17 @@
 .rs-table{
     margin: 10px;
 }
+
+
+.little-right-margin {
+  margin-right: 20px;
+}
+
+.right-alignment {
+  direction: rtl;
+  text-align: right;
+}
+
 
 .img-title {
     width: 70%;

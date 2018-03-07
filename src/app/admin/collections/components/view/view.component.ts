@@ -70,7 +70,7 @@ export class ViewComponent implements OnInit {
         }
         this.httpService.get(`productType`).subscribe(
           product_types => {
-            this.typesList = product_types.data;
+            this.typesList = product_types;
             this.httpService.post(`search/TagGroup`, {
               offset: 0,
               limit: 100,
