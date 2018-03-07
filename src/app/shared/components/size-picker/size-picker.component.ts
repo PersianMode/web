@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, ViewChild, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, ViewChild, EventEmitter, Input} from '@angular/core';
 
 @Component({
   selector: 'app-size-picker',
@@ -6,7 +6,7 @@ import {Component, OnInit, Output, ViewChild, EventEmitter} from '@angular/core'
   styleUrls: ['./size-picker.component.css']
 })
 export class SizePickerComponent implements OnInit {
-  sizes = [
+ /* sizes = [
     {
       value: 12,
     },
@@ -69,15 +69,18 @@ export class SizePickerComponent implements OnInit {
     {
       value: 31,
     },
+  ];*/
 
-  ];
+ @Input() sizes ;
   sizeses = [];
   @Output('value') value = new EventEmitter();
   val = 0;
   constructor() { }
 
   ngOnInit() {
+    console.log("_______-sizes",this.sizes);
     while (this.sizes.length) {
+
       this.sizeses.push(this.sizes.splice(0, 5));
     }
   }

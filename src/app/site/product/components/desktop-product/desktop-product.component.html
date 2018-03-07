@@ -1,9 +1,8 @@
 <div class="photos" #photosDiv>
 <span>
-<div *ngFor="let item of selected_product_color.images.angles">
+<div *ngFor="let item of product.colors[0].images.angles">
+<video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1"><source src="{{item.url}}" type="video/webm"></video>
 <img *ngIf="item.type !== 'video'" src="{{item.url}}">
-<video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1"><source src="{{item.url}}"
-                                                                                     type="video/webm"></video>
   </div>
 </span>
 </div>
@@ -15,10 +14,10 @@
     <h4>{{sub}} <span>{{price}} تومان</span></h4>
     <div *ngIf="product.colors" class="colors">
         <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item.color_id]" (click)="showAngles(item.color_id)">
-            <img [style.opacity]="item.color_id === id ? 1 : .5" src="assets/pictures/product-small/{{item.images.thumbnail}}">
+            <img [style.opacity]="item.color_id === id ? 1 : .5" src="{{item.images.thumbnail}}">
         </a>
     </div>
-    <app-size-picker (value)="size = $event"></app-size-picker>
+    <app-size-picker [sizes]="product.sizes" (value)="size = $event"></app-size-picker>
     <button class="cart">در سبد بگذار</button>
     <button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>
     <div class="description-md" Markdown>

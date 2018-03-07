@@ -30,7 +30,7 @@ export class DesktopProductComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.selected_product_color = this.product.colors[0];
+    // this.selected_product_color = this.product.colors[0];
   }
 
   up() {
