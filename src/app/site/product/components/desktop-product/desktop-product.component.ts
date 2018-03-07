@@ -23,16 +23,23 @@ export class DesktopProductComponent implements OnInit {
   innerHeight = 0;
   innerScroll = false;
   size: number;
+  selected_product_color = [];
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
 
   }
 
   ngOnInit() {
+    this.selected_product_color = this.product.colors[0];
   }
 
   up() {
     this.router.navigate(['product', +this.id + 1]);
+  }
+
+
+  showAngles(colorId) {
+    this.selected_product_color = this.product.colors.filter(el => el.color_id === colorId)[0];
   }
 
   @HostListener('window:scroll', [])

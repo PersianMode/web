@@ -1,8 +1,9 @@
 <div class="photos" #photosDiv>
 <span>
-  <div *ngFor="let img of product.images">
-    <img *ngIf="img.type !== 'video'" src="{{img.url}}">
-    <video *ngIf="img.type === 'video'" autoplay loop playsinline tabindex="-1"><source src="{{img.url}}" type="video/webm"></video>
+<div *ngFor="let item of selected_product_color.images.angles">
+<img *ngIf="item.type !== 'video'" src="{{item.url}}">
+<video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1"><source src="{{item.url}}"
+                                                                                     type="video/webm"></video>
   </div>
 </span>
 </div>
@@ -10,36 +11,39 @@
      [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll"
      [style.height]="innerScroll ? innerHeight + 'px' : 'fit-content'"
      [style.top]="(bottomFixedFilterPanel ? topDist : 0) + 'px'" #descPane>
-<h1>{{product.name}}</h1>
-  <h4>{{sub}} <span>{{product.base_price}} تومان</span></h4>
-  <div *ngIf="product.colors" class="colors">
-    <a *ngFor="let img of product.colors" [routerLink]="['/', 'product', product.id, img.pcid]"><img [style.opacity]="img.pcid === id ? 1 : .5" src="assets/pictures/product-small/{{img.url}}"></a>
-  </div>
-  <app-size-picker (value)="size = $event"></app-size-picker>
-  <button class="cart">در سبد بگذار</button><button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>
-  <div class="description-md" Markdown>
-    {{product.desc}}
-  </div>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          بیشتر بدانید
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div Markdown>
-        **این کفش** خیلی راحت و برای تغییر جهت‌های ناگهانی حین بازی ایده‌آل است.
-      </div>
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          نظرات مشتریان
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <p>
-        نظری داده نشده
-      </p>
-    </mat-expansion-panel>
-  </mat-accordion>
+    <h1>{{product.name}}</h1>
+    <h4>{{sub}} <span>{{price}} تومان</span></h4>
+    <div *ngIf="product.colors" class="colors">
+        <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item.color_id]" (click)="showAngles(item.color_id)">
+            <img [style.opacity]="item.color_id === id ? 1 : .5" src="assets/pictures/product-small/{{item.images.thumbnail}}">
+        </a>
+    </div>
+    <app-size-picker (value)="size = $event"></app-size-picker>
+    <button class="cart">در سبد بگذار</button>
+    <button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>
+    <div class="description-md" Markdown>
+        {{product.desc}}
+    </div>
+    <mat-accordion>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    بیشتر بدانید
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div Markdown>
+                **این کفش** خیلی راحت و برای تغییر جهت‌های ناگهانی حین بازی ایده‌آل است.
+            </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    نظرات مشتریان
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>
+                نظری داده نشده
+            </p>
+        </mat-expansion-panel>
+    </mat-accordion>
 </div>
