@@ -6,7 +6,7 @@
     <mat-expansion-panel-header>
       <div class="checkbox-title">ترتیب نمایش</div>
     </mat-expansion-panel-header>
-    <div *ngFor="let sortOption of sortOptions;let i=index" (click)="selectSortOption(i)">
+    <div *ngFor="let sortOption of sortOptions;let i=index" (click)="selectSortOption(i)" class="sorter">
      {{sortOption.fa}}  <i *ngIf="sortedBy && (sortedBy.value === sortOption.value)" class="fa fa-check sort"></i>
     </div>
   </mat-expansion-panel>
