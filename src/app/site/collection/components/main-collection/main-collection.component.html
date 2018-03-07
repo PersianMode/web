@@ -6,7 +6,7 @@
 </div>
 <p-sidebar *ngIf="isMobile" [(visible)]="displayFilter" position="right" [blockScroll]="true">
   <div class="innerScroll">
-    <app-filtering-panel (displayFilterEvent)="setDispalyFilter($event)"></app-filtering-panel>
+    <app-filtering-panel (displayFilterEvent)="setDispalyFilter($event)" [sortOptions]="sortOptions" (sortedByChange)="sortedBy=$event"></app-filtering-panel>
   </div>
 </p-sidebar>
 <div [class.gridwall]="!isMobile" [class.mobileGridwall]="isMobile" #gridwall>

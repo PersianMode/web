@@ -658,7 +658,7 @@ mat-panel-title {
 }
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background: gray !important;
+  background: #999999 !important;
 }
 
 .mat-checkbox {
@@ -666,7 +666,10 @@ mat-panel-title {
   font-weight: 200 !important;
 }
 .mat-checkbox-frame {
-  border: 1px #ccc solid !important;
+  border: 1px #999999 solid !important;
+}
+.mat-ripple-element {
+  background-color: rgba(160,160,160, .26) !important;
 }
 .ui-overlaypanel {
   display: block;

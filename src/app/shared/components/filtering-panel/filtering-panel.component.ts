@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
 
 @Component({
@@ -7,6 +7,7 @@ import {ResponsiveService} from '../../services/responsive.service';
   styleUrls: ['./filtering-panel.component.css']
 })
 export class FilteringPanelComponent implements OnInit {
+  @Input() sortOptions;
   filter_options = [
     {
       name: 'برند',
@@ -32,9 +33,12 @@ export class FilteringPanelComponent implements OnInit {
   current_filter_state = [];
   clear_box = null;
   isMobile = false;
+  sortedBy: any;
   @Output() displayFilterEvent = new EventEmitter<any>();
+  @Output() sortedByChange = new EventEmitter<any>();
   isChecked: any = {};
   oppositeColor: any = {};
+  expanded: any = {};
 
   constructor(private responsiveService: ResponsiveService) {
   }
@@ -87,9 +91,21 @@ export class FilteringPanelComponent implements OnInit {
         this.isChecked[name][value] = false;
       }
     }
+
+    this.sortedBy = null;
+    this.sortedByChange.emit(this.sortedBy);
   }
 
   changeDisplayFilter() {
     this.displayFilterEvent.emit(false);
+  }
+
+  selectSortOption(index) {
+    if (this.sortedBy && this.sortedBy.value === this.sortOptions[index].value) {
+      this.sortedBy = null;
+    } else {
+      this.sortedBy = this.sortOptions[index];
+    }
+    this.sortedByChange.emit(this.sortedBy);
   }
 }

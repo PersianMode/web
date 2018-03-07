@@ -8,7 +8,7 @@
     color: gray;
 }
 
-i {
+.circle{
   top: -27px;
   right: 6px;
   font-size: 13px;
@@ -43,4 +43,8 @@ i {
 }
 .actions {
   text-align: center;
+}
+.sort {
+  font-size: 14px;
+  margin-right: 10px;
 }
