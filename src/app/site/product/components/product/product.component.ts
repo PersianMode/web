@@ -47,69 +47,6 @@ export class ProductComponent implements OnInit {
         size: 34,
       }
     ],
-    // colors: [
-    //   {
-    //     url: '11.jpeg',
-    //     pcid: 10,
-    //   },
-    //   {
-    //     url: '12.jpeg',
-    //
-    //   },
-    //   {
-    //     url: '13.jpeg',
-    //
-    //   },
-    //   {
-    //     url: '14.jpeg',
-    //     pcid: 14,
-    //
-    //   },
-    //   {
-    //     url: '11.jpeg',
-    //
-    //   },
-    //   {
-    //     url: '12.jpeg',
-    //
-    //   },
-    //   // {
-    //   //   url: '13.jpeg',
-    //   //
-    //   // },
-    //   // {
-    //   //   url: '14.jpeg',
-    //   //
-    //   // },
-    //
-    // ],
-    // images: [
-    //   {
-    //     type: 'video',
-    //     url: 'assets/pictures/products/video.webm',
-    //   },
-    //   {
-    //     url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-    //   },
-    //   {
-    //     url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-    //   },
-    //   {
-    //     url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-    //   },
-    //   {
-    //     url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_020.jpg',
-    //   },
-    //   {
-    //     url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_021.jpg',
-    //   },
-    //   {
-    //     url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_022.jpg',
-    //   },
-    //   {
-    //     url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg',
-    //   },
-    // ],
     colors: [
       {
         color_id : 101,
@@ -208,10 +145,6 @@ export class ProductComponent implements OnInit {
         images: {
           thumbnail : '11.jpeg',
           angles : [
-          //   {
-          //   type: 'video',
-          //   url: 'assets/pictures/products/video.webm',
-          // },
             {
               url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
             },
