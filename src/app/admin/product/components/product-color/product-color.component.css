@@ -5,6 +5,7 @@
 .field-container{
     width: 100%;
     margin: 5px;
+    text-align: right
 }
 
 .field{
@@ -18,8 +19,15 @@
     margin: 10px;
 }
 
+.img-title {
+    width: 70%;
+    text-align: center
+}
 .img-style {
     width: 10% ;
     height: 10%; display: inline-block;
     text-align: center;
+}
+.td-width {
+    width: 10%;
 }

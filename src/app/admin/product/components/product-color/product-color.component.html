@@ -3,7 +3,7 @@
         <form (ngSubmit)="modifyColor()" [formGroup]="productColorForm">
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
                  fxLayoutAlign.xs="center center" dir="rtl">
-                <div style="text-align: right" fxFlex="100" class="field-container">
+                <div fxFlex="100" class="field-container">
                     <mat-form-field style="text-align:right;">
                         <mat-select placeholder="رنگ محصول" formControlName="proColor" role="proColor"
                                     [(ngModel)]="selectedColorId">
@@ -23,15 +23,15 @@
 
             </div>
         </form>
-        <div dir="rtl" style="width:100%">
+        <div dir="rtl" class="field">
             <mat-card>
-                <div class="rs-table" style="width: 100%">
-                    <table style="width: 100%">
+                <div class="rs-table field">
+                    <table class="field">
                         <thead>
-                        <td style="width: 10%"><b>ردیف</b></td>
-                        <td style="width: 10%"><b>رنگ</b></td>
-                        <td style="width: 70%; text-align: center"><b>تصاویر</b></td>
-                        <td style="width: 10%"><b>حذف</b></td>
+                        <td class="td-width"><b>ردیف</b></td>
+                        <td class="td-width"><b>رنگ</b></td>
+                        <td class="img-title"><b>تصاویر</b></td>
+                        <td class="td-width"><b>حذف</b></td>
                         </thead>
                         <tbody>
                         <tr *ngFor="let pc of productColors; let i = index">
