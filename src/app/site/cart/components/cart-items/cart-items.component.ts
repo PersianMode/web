@@ -8,44 +8,36 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 })
 export class CartItemsComponent implements OnInit {
   product: any = {
-    id: 14,
+    instance_id: 14,
     name: 'کایری ۳ مدل What The',
     tags: ['کفش', 'بسکتبال', 'نوجوانان'],
-    desc: `# راحت
-    *کایری ۳ مدل What The* کمک می‌کند به سرعت در هر جهتی حرکت کنید چون پاشنه‌های مدور منحصر به فردی دارد.
-     
-    * **رنگ نمایش داده شده**: طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی
-    * **سبک**: AH2287-700`,
     price: 599000,
     size: 6.5,
     quantity : 3,
-    colors: [
-      {
-        color_id : 101,
-        color_name : 'طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی',
-        images: {
-          thumbnail : '11.jpeg',
-          angles : [{
-            type: 'video',
-            url: 'assets/pictures/products/video.webm',
-          },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_020.jpg',
-            }
-          ]
-        }
-      },
-    ],
+    color : {
+      color_id : 101,
+      name: 'طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی'
+    },
+    thumbnail : '11.jpeg',
+    discount : '',
+    instances : [{
+      instance_id : 14,
+      size : 6.5,
+      quantity : [7],
+      discount : ''
+    }, {
+      instance_id : 15,
+      size : 7,
+      quantity : [5],
+      discount : ''
+    }, {
+      instance_id : 16,
+      size : 8,
+      qantity : [7],
+      discount : ''
+    }]
   };
+
   total_price = null;
   constructor() { }
 
