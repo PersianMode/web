@@ -16,24 +16,18 @@ import {RemovingConfirmComponent} from './components/removing-confirm/removing-c
 import {BidiModule} from '@angular/cdk/bidi';
 import {PanelsComponent} from './components/panels/panels.component';
 import {RouterModule} from '@angular/router';
+import {UploaderComponent} from './components/uploader/uploader.component';
+import {FileUploadModule} from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
-    // CollectionHeaderComponent,
-    // FilteringPanelComponent,
-    // FooterComponent,
-    // GenDialogComponent,
-    // HeaderComponent,
-    // MobileHeaderComponent,
-    // ProductGridItemComponent,
-    // SizeOptionsComponent,
-    // SlidingHeaderComponent,
     SearchFieldsComponent,
     SuggestionComponent,
     SearchFieldsComponent,
     AbstractSearchComponent,
     RemovingConfirmComponent,
     PanelsComponent,
+    UploaderComponent,
   ],
   imports: [
     FormsModule,
@@ -53,13 +47,14 @@ import {RouterModule} from '@angular/router';
     BidiModule,
     MatIconModule,
     MatCheckboxModule,
-
+    FileUploadModule
   ],
   entryComponents: [RemovingConfirmComponent],
   exports: [SuggestionComponent,
     SearchFieldsComponent,
     RemovingConfirmComponent,
     PanelsComponent,
+    UploaderComponent,
   ]
 })
 export class SharedModule {

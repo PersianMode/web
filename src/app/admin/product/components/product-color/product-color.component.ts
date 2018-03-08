@@ -1,7 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IColor} from '../../interfaces/icolor';
-import {IProductColor} from '../../interfaces/iproduct-color';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
@@ -16,32 +15,17 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 export class ProductColorComponent implements OnInit {
 
   productColorForm: FormGroup;
-  colors: IColor[] = [
-    {
-      _id: '5a8402148a4c831e60ce8cc4',
-      name: 'سبز',
-      color_id: '101'
-    },
-    {
-      _id: '5a84022d8a4c831e60ce8cc5',
-      name: 'قرمز',
-      color_id: '102'
-    },
-    {
-      _id: '5a8402498a4c831e60ce8cc6',
-      name: 'صورتی',
-      color_id: '103'
-    },
-    {
-      _id: '5a8402628a4c831e60ce8cc7',
-      name: 'بنفش',
-      color_id: '104'
-    }];
 
-  productColors: IProductColor[] = [];
-  selectedColorId: string = null;
 
-  @Input () productId;
+  @Input() productColors: any;
+  @Output() onProductColorChanged = new EventEmitter<any>();
+  @Input() colors: IColor[];
+
+  selectedColor = {};
+  is_thumbnail = false;
+
+  @Input() productId;
+
   constructor(private httpService: HttpService,
               private sanitizer: DomSanitizer, private dialog: MatDialog,
               private progressService: ProgressService, private snackBar: MatSnackBar) {
@@ -49,27 +33,15 @@ export class ProductColorComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.getProductColors();
   }
 
   initForm() {
-    this.productColorForm = new FormBuilder().group({
-        proColor: [null, [
-          Validators.required,
-        ]],
-      },
-    );
-  }
-
-  getProductColors() {
-    this.httpService.get(`product/color/${this.productId}`).subscribe(res => {
-      this.productColors = [];
-      res.colors.forEach(color => {
-        this.productColors.push(color);
-      });
-    }, err => {
-      console.error();
-    });
+    // this.productColorForm = new FormBuilder().group({
+        // proColor: [null, [
+        //   Validators.required,
+        // ]],
+      // },
+    // );
   }
 
   removeImg(color_id: string) {
@@ -82,11 +54,15 @@ export class ProductColorComponent implements OnInit {
           this.progressService.enable();
           this.httpService.delete(`/product/color/${this.productId}/${color_id}`).subscribe(
             (data) => {
-              this.snackBar.open('Product images for this color deleted successfully', null, {
+              this.snackBar.open('Product OnCompleted for this color deleted successfully', null, {
                 duration: 2000,
               });
               this.progressService.disable();
-              this.getProductColors();
+
+              this.productColors = this.productColors.filter(pc => pc.info._id !== color_id);
+
+              this.onProductColorChanged.emit(this.productColors);
+
             },
             (error) => {
               this.snackBar.open('Cannot delete this product. Please try again', null, {
@@ -105,21 +81,35 @@ export class ProductColorComponent implements OnInit {
   }
 
   addToTable(images: any) {
-    const pc = this.productColors.filter(x => x.info._id === this.selectedColorId)[0];
-
-    if (pc) {
-      pc.images = pc.images.concat(images);
-    } else {
-      const newProductColor: IProductColor = {
-        images: images,
-        info: this.colors.filter(x => x._id === this.selectedColorId)[0],
-        _id: null
-      };
-      this.productColors.push(newProductColor);
+    if (images.length > 0) {
+      const pc = this.productColors.filter(x => x.info._id === this.selectedColor['_id'])[0];
+      if (pc) {
+        if (!this.is_thumbnail)
+          pc['image']['angles'] = pc['image']['angles'].concat(images);
+        else
+          pc['image']['thumbnail'] = images[images.length - 1];
+      } else {
+        const newProductColor = {
+          image: {
+            thumbnail: this.is_thumbnail ? images[images.length - 1] : '',
+            angles: this.is_thumbnail ? [] : images
+          },
+          info: this.colors.filter(x => x._id === this.selectedColor['_id'])[0],
+          _id: null
+        };
+        this.productColors.push(newProductColor);
+        this.onProductColorChanged.emit(this.productColors);
+      }
     }
+
+    this.is_thumbnail = false;
   }
 
   getURL(path) {
     return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+  }
+
+  setColor($event) {
+    this.selectedColor = $event;
   }
 }

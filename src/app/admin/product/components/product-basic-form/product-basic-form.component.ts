@@ -7,6 +7,8 @@ import {ActivatedRoute} from '@angular/router';
 import {Router} from '@angular/router';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {IBrand} from '../../interfaces/ibrand';
+import {IType} from '../../interfaces/itype';
 
 
 @Component({
@@ -16,59 +18,40 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 })
 export class ProductBasicFormComponent implements OnInit, OnDestroy {
   productBasicForm: FormGroup;
-  types = [
-    {text: 'عینک', value: '5a813ae66760822bb8329a2b'},
-    {text: 'تی شرت', value: '5a813ad56760822bb8329a2a'},
-    {text: 'شلوار', value: '5a813ac86760822bb8329a29'},
-    {text: 'کفش', value: '5a813b066760822bb8329a2c'},
-  ];
-  brands = [
-    {text: 'نایک', value: '5a8138696760822bb8329a25'},
-    {text: 'آدیداس', value: '5a81387d6760822bb8329a26'},
-    {text: 'پلیس', value: '5a8138a56760822bb8329a28'},
-    {text: 'گپ', value: '5a81388d6760822bb8329a27'},
-  ];
   upsertBtnShouldDisabled = false;
   deleteBtnShouldDisabled = false;
-  // productId: string = null;
   anyChanges = false;
   product: any = {};
   loadedValue: any = {};
 
-  productId: string = null;
+  @Input() productId: string;
+  @Input() brands: IBrand[];
+  @Input() types: IType[];
 
   @Output() productIdEvent = new EventEmitter<string>();
 
-  constructor(private httpService: HttpService, private snackBar: MatSnackBar,
-              private route: ActivatedRoute, private router: Router,
+  constructor(private httpService: HttpService, private snackBar: MatSnackBar, private router: Router,
               public dialog: MatDialog, private progressService: ProgressService) {
   }
 
   ngOnInit() {
     this.initForm();
-    this.route.params.subscribe(
-      (params) => {
-        this.productId = params['id'];
-        if (this.productId) {
-          this.progressService.enable();
-          this.httpService.get(`/product/${this.productId}`).subscribe(
-            (data) => {
-              this.product = data[0];
-              this.loadedValue = data[0];
-              this.progressService.disable();
-              this.initForm();
-            },
-            (err) => {
-              this.progressService.disable();
-              console.error('Cannot get product info... Error: ', err);
-            }
-          );
+    if (this.productId) {
+      this.progressService.enable();
+      this.httpService.get(`/product/${this.productId}`).subscribe(
+        (data) => {
+          this.product = data[0];
+          this.loadedValue = data[0];
+          this.progressService.disable();
+          this.initForm();
+        },
+        (err) => {
+          this.progressService.disable();
+          console.error('Cannot get product info... Error: ', err);
         }
-        else {
-          this.productId = null;
-        }
-      });
-    this.productIdEvent.emit(this.productId);
+      );
+    }
+
   }
 
   initForm() {
@@ -79,7 +62,8 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
         base_price: [(Object.keys(this.loadedValue).length && this.loadedValue.base_price) ? this.loadedValue.base_price : null, [
           Validators.required,
         ]],
-        product_type: [(Object.keys(this.loadedValue).length && this.loadedValue.product_type._id) ? this.loadedValue.product_type._id : null, [
+        product_type: [(Object.keys(this.loadedValue).length && this.loadedValue.product_type._id) ?
+          this.loadedValue.product_type._id : null, [
           Validators.required,
         ]],
         brand: [(Object.keys(this.loadedValue).length && this.loadedValue.brand._id) ? this.loadedValue.brand._id : null, [
@@ -88,6 +72,7 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
         desc: [(Object.keys(this.loadedValue).length && this.loadedValue.desc) ? this.loadedValue.desc : null, [
           Validators.maxLength(50),
         ]]
+      // TODO: 'details' field should be added here, and some other places :D
       },
       {
         validator: this.basicInfoValidation
@@ -111,63 +96,36 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
     if (!this.productId) {
       delete productBasicInfo.id;
     }
-    this.upsertBtnShouldDisabled = true;
-    this.deleteBtnShouldDisabled = true;
-    if (!this.productId) {
-      this.httpService.put('product', productBasicInfo).subscribe(
-        (data) => {
-          this.snackBar.open('Product is added', null, {
-            duration: 2300,
-          });
-          this.productBasicForm.reset();
-          this.upsertBtnShouldDisabled = true;
-          this.deleteBtnShouldDisabled = true;
-          this.initForm();
-          this.anyChanges = false;
+    this.upsertBtnShouldDisabled = false;
+    this.deleteBtnShouldDisabled = false;
+
+
+    const exec = this.productId ? this.httpService.post('product', productBasicInfo) : this.httpService.put('product', productBasicInfo);
+
+    exec.subscribe(
+      (data) => {
+        this.snackBar.open(`Product is ${this.productId ? 'updated' : 'added' }`, null, {
+          duration: 2300,
+        });
+
+        this.upsertBtnShouldDisabled = true;
+        this.deleteBtnShouldDisabled = true;
+        this.anyChanges = false;
+
+        if (!this.productId) {
           this.productId = data._id;
           this.productIdEvent.emit(this.productId);
-        },
-        (err) => {
-          console.error();
-          this.snackBar.open('Cannot add this product. Try again', null, {
-            duration: 3200,
-          });
-          this.upsertBtnShouldDisabled = false;
-          this.deleteBtnShouldDisabled = false;
         }
-      );
-    }
-    else {
-      if (this.productId) {
-        this.httpService.post('product', productBasicInfo).subscribe(
-          (data) => {
-            this.snackBar.open('Product is updated', null, {
-              duration: 2300,
-            });
-            this.upsertBtnShouldDisabled = false;
-            this.deleteBtnShouldDisabled = false;
-            this.anyChanges = false;
-            this.productIdEvent.emit(this.productId);
-          },
-          (err) => {
-            console.error();
-            this.snackBar.open('Cannot update this product. Try again', null, {
-              duration: 3200,
-            });
-            this.upsertBtnShouldDisabled = false;
-            this.deleteBtnShouldDisabled = false;
-          }
-        );
+      },
+      (err) => {
+        console.error();
+        this.snackBar.open(`Cannot ${this.productId ? 'update' : 'add' } this product. Try again`, null, {
+          duration: 3200,
+        });
+        this.upsertBtnShouldDisabled = true;
+        this.deleteBtnShouldDisabled = true;
       }
-    }
-  }
-
-  openView(id: string = null) {
-    if (id) {
-      this.router.navigate([`/agent/products/${id}`]);
-    }
-    else
-      this.router.navigate(['agent/products']);
+    );
   }
 
   deleteProduct(id: string = null): void {
@@ -203,15 +161,18 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
   }
 
   fieldChanged() {
-    if (!this.loadedValue || !Object.keys(this.loadedValue))
+    if (!this.loadedValue || !Object.keys(this.loadedValue) || !Object.keys(this.loadedValue).length)
       return;
+
     this.anyChanges = false;
     Object.keys(this.productBasicForm.controls).forEach(el => {
       const tempValue = this.loadedValue[el]._id ? this.loadedValue[el]._id : this.loadedValue[el];
-      if (this.productBasicForm.controls[el].value !== tempValue ) {
+      if (this.productBasicForm.controls[el].value !== tempValue) {
         this.anyChanges = true;
       }
     });
+
+    // TODO: changes should be captured here
   }
 
   basicInfoValidation(Ac: AbstractControl) {

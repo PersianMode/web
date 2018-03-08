@@ -1,0 +1,43 @@
+.check-box-text{
+    font-size: 13px;
+    margin-right: 10px;
+    opacity: 1 !important;
+}
+
+.check-box-text:hover {
+    color: gray;
+}
+
+i {
+  top: -27px;
+  right: 6px;
+  font-size: 13px;
+  position: relative;
+}
+
+.color-span {
+  width: 26px;
+  overflow: hidden;
+  height: 26px;
+  display: inline-block;
+  margin: 0 0 10px 10px;
+}
+
+.fit-check-box {
+    margin-right: -10px
+}
+
+.fit-check-box-mobile {
+    margin-right: -5px
+}
+
+.set-size-mobile {
+    font-size: xx-small;
+}
+.checkbox-title {
+  font-weight: bold;
+  padding-bottom: 5px;
+  display: inline-block;
+  font-size: 14px;
+  font-family: irankharazmi;
+}

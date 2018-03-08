@@ -37,7 +37,6 @@ h1 {
   display: table;
   position: absolute;
   top: -1px;
-  right: 0px;
   height: 39px;
 }
 
@@ -208,14 +207,18 @@ nav {
 .search-bar input {
   border: 0;
   outline: none;
-  padding: 2px;
+  padding: 2px 0px;
   margin: 0px 4px 5px 2px;
   font-family: iranyekan,sans-serif;
+  font-size: 14px;
 }
 
 .search-bar input::placeholder{
   color: #cbcbcb;
-  font-size: 12pt;
+  font-size: 16px;
+  padding:0px 0px 10px;
+  margin:0;
+  line-height: 16px;
 }
 input, button {
   font-family: iranyekan,sans-serif;
@@ -471,8 +474,26 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 .innerScroll {
   overflow-y: scroll;
+  height: calc(100% - 51px);
 }
-
+.ui-sidebar {
+  background: #fff;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  width: calc(100% - 40px) !important;
+  padding: 0px 4px 0px 10px  !important;
+}
+.ui-sidebar-close {
+  visibility: hidden;
+  width: 0px;
+  height: 0px;
+}
+.ui-sidebar-mask {
+  background: rgba(0,0,0,.2);
+}
+.ui-datascroller .ui-datascroller-content {
+  padding: 0 !important;
+}
 .mat-button-toggle-label-content {
   font-family: iranyekan !important;
   width: 79px;
@@ -481,11 +502,19 @@ dp-date-picker.dp-material .dp-picker-input {
   border: 1px rgba(221,221,221,.7) solid;
   color: black;
 }
+.filter-size .mat-button-toggle-label-content {
+  width: 42px !important;
+  font-size: 14px !important;
+}
 .mat-button-toggle-label-content:hover {
   border: 1px black solid;
   z-index: 10;
 }
 .mat-button-toggle-group {
+  box-shadow: none !important;
+  margin-bottom: -1px;
+}
+.mat-button-toggle-standalone {
   box-shadow: none !important;
   margin-bottom: -1px;
 }
@@ -626,3 +655,16 @@ mat-panel-title {
 .full-width {
   width: 100%;
 }
+
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background: gray !important;
+}
+
+.mat-checkbox {
+  font-family: iranyekan !important;
+  font-weight: 200 !important;
+}
+.mat-checkbox-frame {
+  border: 1px #ccc solid !important;
+}
+

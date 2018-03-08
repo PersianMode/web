@@ -7,6 +7,10 @@ import {CommonModule} from '@angular/common';
 import {FilteringPanelComponent} from '../../shared/components/filtering-panel/filtering-panel.component';
 import {ProductGridItemComponent} from '../../shared/components/product-grid-item/product-grid-item.component';
 import {SharedModule} from '../../shared/shared.module';
+import {DataScrollerModule} from 'primeng/datascroller';
+import {SidebarModule} from 'primeng/sidebar';
+import {MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatExpansionModule} from '@angular/material';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,7 +23,14 @@ import {SharedModule} from '../../shared/shared.module';
   imports: [
     CollectionRouting,
     CommonModule,
+    FormsModule,
     SharedModule,
+    DataScrollerModule,
+    SidebarModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatExpansionModule,
   ],
 })
 export class CollectionModule {
