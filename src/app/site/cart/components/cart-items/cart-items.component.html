@@ -1,9 +1,9 @@
-<mat-card style="width: 40%;margin-top: 15px; margin-right: 15px">
+<mat-card style="width: 35%;margin-top: 15px; margin-right: 15px">
     <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column">
-            <div fxFlex="25" style="text-align: center">
+            <div fxFlex="25" style="text-align: right">
                 <a [routerLink]="['/', 'product', product.id, product.colors[0].color_id]">
-                    <img src="assets/pictures/product-small/{{product.colors[0].images.thumbnail}}" style="width: 80%; height:100%; cursor: pointer">
+                    <img src="assets/pictures/product-small/{{product.colors[0].images.thumbnail}}" style="width: 90%; height:100%; cursor: pointer;">
                 </a>
             </div>
             <div fxFlex="75" style="text-align: right; font-family: iranyekan;">
