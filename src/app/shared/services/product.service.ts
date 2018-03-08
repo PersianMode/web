@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class ProductService {
@@ -15,12 +16,10 @@ export class ProductService {
   private filterInput: IFilter[];
   private sortInput = '';
 
-  constructor(private httpService: HttpService) {
+  constructor(private httpService: HttpService, private http: HttpClient) {
   }
 
   extractFilters() {
-
-
     const types: string[] = Array.from(new Set(this.filteredProducts.map(x => x['product_type'].name)));
 
     let colors: string[] = [];
@@ -32,8 +31,7 @@ export class ProductService {
 
     let sizes: string[] = this.filteredProducts.map(x => x['size']);
     sizes = Array.from(new Set([].concat.apply([], sizes)));
-
-
+    let maxPrice = max(this.filteredProducts)
     const filter: IFilter[] = [];
 
     if (types.length > 1) filter.push({name: 'نوع', values: types});
@@ -45,7 +43,9 @@ export class ProductService {
   }
 
   loadProducts(collection_id) {
-    this.httpService.get('collection/' + collection_id).subscribe(
+    this.httpService.get('collection/' + collection_id)
+    //this.http.get('/assets/products.json')
+      .subscribe(
       (data) => {
 
         if (data.name) {
@@ -55,8 +55,6 @@ export class ProductService {
         }
         if (data.products) {
           this.products = data.products;
-
-          console.log('-> ', this.products);
 
           this.filteredProducts = this.products.slice();
 
@@ -71,10 +69,8 @@ export class ProductService {
     );
   }
 
-  setFilter(data: IFilter[]) {
+  setFilter(name, value) {
 
-    this.filterInput = data;
-    this.filterSortProducts();
   }
 
   setSort(data) {
@@ -84,30 +80,30 @@ export class ProductService {
 
 
   private filterSortProducts() {
-    this.sortProducts();
     this.filterProducts();
+    this.sortProducts();
     this.extractFilters();
     this.productList$.next(this.filteredProducts);
   }
 
   private filterProducts() {
-    this.filteredProducts = [];
     if (this.filterInput) {
+      this.filteredProducts = [];
       this.filterInput.forEach(item => {
 
         switch (item.name) {
           case 'نوع' :
-            this.filteredProducts.concat(this.products.filter(product => item.values.includes(product.product_type.name)));
+            this.filteredProducts = this.filteredProducts.concat(this.products.filter(product => item.values.includes(product.product_type.name)));
             break;
           case 'رنگ':
-            this.filteredProducts.concat(this.products.filter(product => {
+            this.filteredProducts = this.filteredProducts.concat(this.products.filter(product => {
               const colors = [].concat.apply([], product.colors.map(color => color.name.split('/')));
               const duplicated: string[] = Array.from(new Set(colors));
               return duplicated.some(r => item.values.includes(r));
             }));
             break;
           case 'سایز':
-            this.filteredProducts.concat(this.products.filter(product => {
+            this.filteredProducts = this.filteredProducts.concat(this.products.filter(product => {
               const productSizes: string[] = Array.from(new Set(product.sizes));
               return productSizes.some(r => item.values.includes(r));
             }));
@@ -116,7 +112,6 @@ export class ProductService {
         }
       });
     }
-    return this.products;
   }
 
   private sortProducts() {

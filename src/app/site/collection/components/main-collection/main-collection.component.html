@@ -13,7 +13,7 @@
   <app-panels></app-panels>
   <div class="gridwall-wrapper">
     <div *ngIf="!isMobile" class="gridwall-title">
-      <h1>{{collection.collectionNameFa}} <span>({{collection.set.length.toLocaleString('fa')}})</span></h1>
+      <h1>{{collection.collectionNameFa}} <span>({{collection.products.length.toLocaleString('fa')}})</span></h1>
       <div class="sorter-row">
       <div class="sorter" (click)="sortPanel.toggle($event)">ترتیب نمایش<span *ngIf="sortedBy"> با {{sortedBy.fa}}</span> <i class="fa" [ngClass]="sortPanel.visible ? 'fa-chevron-up' : 'fa-chevron-down'"></i></div>
         <p-overlayPanel #sortPanel>
@@ -26,12 +26,12 @@
     <div *ngIf="isMobile" class="mobileGridwallTitle">
       <h1>{{collection.collectionNameFa}}</h1>
       <div>
-        <span>{{collection.set.length.toLocaleString('fa')}} مورد</span>
+        <span>{{collection.products.length.toLocaleString('fa')}} مورد</span>
         <p><i class="fa fa-cog" (click)="displayFilter=!displayFilter"></i> فیلتر</p>
       </div>
     </div>
     <div class="gridwall-content">
-      <p-dataScroller [value]="collection.set" [rows]="10">
+      <p-dataScroller [value]="collection.products" [rows]="10">
         <ng-template let-item pTemplate="item">
           <app-product-grid-item [data]="item" [width]="gridWidth" [height]="gridHeight"></app-product-grid-item>
         </ng-template>

@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
 import {priceFormatter} from '../../lib/priceFormatter';
+import {ProductService} from '../../services/product.service';
+import {colorConverter} from './colorConverter';
 
 @Component({
   selector: 'app-filtering-panel',
@@ -28,7 +30,7 @@ export class FilteringPanelComponent implements OnInit {
     },
     {
       name: 'رنگ',
-      values: ['#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
+      values: ['#f8f8f8', '#f0f0f0', '#fffff0', '#ffe0ff', '#efefef', '#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
     }
   ];
   current_filter_state = [];
@@ -39,40 +41,59 @@ export class FilteringPanelComponent implements OnInit {
   @Output() sortedByChange = new EventEmitter<any>();
   isChecked: any = {};
   oppositeColor: any = {};
+  needsBorder: any = {};
   expanded: any = {};
   rangeValues: any;
   minPrice = 5e5;
   maxPrice = 2.5e6;
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
-  constructor(private responsiveService: ResponsiveService) {
+  constructor(private responsiveService: ResponsiveService, private productService: ProductService) {
   }
 
   ngOnInit() {
-    this.filter_options.forEach(el => {
+    this.productService.filtering$.subscribe(r => {
+      this.filter_options = r;
+      this.filter_options.forEach(el => {
       const tempObj = {name: '', values: []};
       tempObj.name = el.name;
       this.current_filter_state.push(tempObj);
       this.isChecked[el.name] = {};
       for (const key of el.values) {
-          this.isChecked[el.name][key] = false;
+        this.isChecked[el.name][key] = false;
       }
     });
 
-    for (const color in this.isChecked['رنگ']) {
-      this.oppositeColor[color] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
+    for (const col in this.isChecked['رنگ']) {
+      let color;
+      try {
+        color = colorConverter(col);
+      } catch (e) {
+        console.log(col, e);
+      }
+      if (color) {
+        this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
+        let red = color.substring(1, 3);
+        let green = color.substring(3, 5);
+        let blue = color.substring(5, 7);
+        let colors = [red, green, blue];
+        this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
+      }
     }
+  })
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
-    let sizes = this.filter_options.filter( r => r.name === 'سایز')[0];
-    sizes.values = sizes.values.map( s => (+s).toLocaleString('fa'));
+    let sizes = this.filter_options.filter(r => r.name === 'سایز')[0];
+    sizes.values = sizes.values.map(s => (+s).toLocaleString('fa'));
     this.priceRangeChange();
+
   }
   priceRangeChange() {
     if (!this.rangeValues) {
       this.rangeValues = [this.minPrice, this.maxPrice];
     }
     this.rangeValues = this.rangeValues.map(r => Math.round(r / 1000 ) * 1000);
+    this.current_filter_state.find(r => r.name === 'قیمت').values = this.rangeValues;
     this.selectedMinPriceFormatted = priceFormatter(this.rangeValues[0]);
     this.selectedMaxPriceFormatted = priceFormatter(this.rangeValues[1]);
   }
@@ -91,7 +112,6 @@ export class FilteringPanelComponent implements OnInit {
       }
     });
     this.clear_box = null;
-     console.log('===>', this.current_filter_state);
   }
 
   clearFilters() {
