@@ -8,16 +8,11 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
   styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent implements OnInit {
-  // @Input() private subTotal;
-  // @Input() private total;
-  // @Input() private discount;
-  // @Input() private balance;
-  // @Input() private loyalty;
-  loyalty = 30;
-  balance = 20;
-  subTotal = 55;
-  discount = 35;
-  total = 20;
+  @Input() private subTotal = 300000;
+  @Input() private total = 100000;
+  @Input() private discount = 20000;
+  @Input() private balance = 20000;
+  @Input() private loyalty = 15;
   subTotalValue: any;
   discountValue: any;
   balanceValue: any;
