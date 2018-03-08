@@ -17,10 +17,12 @@ export class CartItemsComponent implements OnInit {
     * **رنگ نمایش داده شده**: طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی
     * **سبک**: AH2287-700`,
     price: 599000,
-    size: '6.5',
+    size: 6.5,
+    quantity : 3,
     colors: [
       {
         color_id : 101,
+        color_name : 'طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی',
         images: {
           thumbnail : '11.jpeg',
           angles : [{
@@ -44,13 +46,15 @@ export class CartItemsComponent implements OnInit {
       },
     ],
   };
-  price_fa: string = null;
-  size_fa: string = null;
+  total_price = null;
   constructor() { }
 
   ngOnInit() {
-    this.price_fa = priceFormatter(this.product.price);
-    this.size_fa = this.product.size.toLocaleString('fa');
+    this.total_price = this.product.quantity * this.product.price;
+    this.total_price = priceFormatter(this.total_price);
+    this.product.price = priceFormatter(this.product.price);
+    this.product.size = this.product.size.toLocaleString('fa');
+    this.product.quantity = this.product.quantity.toLocaleString('fa');
   }
   deleteProduct() {
   }
