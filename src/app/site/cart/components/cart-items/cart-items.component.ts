@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
+import {EditOrderComponent} from '../edit-order/edit-order.component';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-cart-items',
@@ -18,7 +20,7 @@ export class CartItemsComponent implements OnInit {
       color_id : 101,
       name: 'طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی'
     },
-    thumbnail : '11.jpeg',
+    thumbnail : '30.png',
     discount : '',
     instances : [{
       instance_id : 14,
@@ -39,7 +41,7 @@ export class CartItemsComponent implements OnInit {
   };
 
   total_price = null;
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
     this.total_price = this.product.quantity * this.product.price;
@@ -51,5 +53,11 @@ export class CartItemsComponent implements OnInit {
   deleteProduct() {
   }
   editOrder() {
+    const rmDialog = this.dialog.open(EditOrderComponent, {
+      width: '850px',
+      data: {
+        dialog_product: this.product,
+      }
+    });
   }
 }
