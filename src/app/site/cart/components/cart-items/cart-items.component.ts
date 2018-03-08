@@ -58,6 +58,6 @@ export class CartItemsComponent implements OnInit {
   }
   deleteProduct() {
   }
-  openForm() {
+  editOrder() {
   }
 }
