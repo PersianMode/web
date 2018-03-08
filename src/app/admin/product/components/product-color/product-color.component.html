@@ -1,59 +1,61 @@
 <mat-card class="card-view">
-    <mat-card-content>
-        <form (ngSubmit)="modifyColor()" [formGroup]="productColorForm">
-            <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
-                 fxLayoutAlign.xs="center center" dir="rtl">
-                <div style="text-align: right" fxFlex="100" class="field-container">
-                    <mat-form-field style="text-align:right;">
-                        <mat-select placeholder="رنگ محصول" formControlName="proColor" role="proColor"
-                                    [(ngModel)]="selectedColorId">
-                            <mat-option *ngFor="let color of colors" style="text-align:right" [value]="color._id">
-                                {{color.name}}
-                            </mat-option>
-                        </mat-select>
-                        <mat-hint>رنگ محصول را انتخاب کنید</mat-hint>
-                        <mat-error *ngIf="productColorForm.controls['proColor'].hasError('required')">
-                            وارد کردن رنگ محصول الزامی است
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-                <app-uploader fxFlex="100" *ngIf="selectedColorId"
-                              [url]="'product/image/'+ productId + '/' + selectedColorId"
-                              (OnCompleted)="addToTable($event)"></app-uploader>
-
-            </div>
-        </form>
-        <div dir="rtl" style="width:100%">
-            <mat-card>
-                <div class="rs-table" style="width: 100%">
-                    <table style="width: 100%">
-                        <thead>
-                        <td style="width: 10%"><b>ردیف</b></td>
-                        <td style="width: 10%"><b>رنگ</b></td>
-                        <td style="width: 70%; text-align: center"><b>تصاویر</b></td>
-                        <td style="width: 10%"><b>حذف</b></td>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let pc of productColors; let i = index">
-                            <td>{{i+1}}</td>
-                            <td>{{pc.info.name}}</td>
-                            <td>
-                                <div style="text-align: center">
-                                    <div *ngFor="let image of pc.images" style="width: 10% ;height: 10%; display: inline-block;text-align: center;">
-                                        <img style="width: 80% ;" [src]="getURL(image)">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <button mat-icon-button (click)="removeImg(pc.info._id)" color="warn">
-                                    <mat-icon aria-label="clear">delete</mat-icon>
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </mat-card>
+  <mat-card-content>
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+         fxLayoutAlign.xs="center center" dir="rtl">
+      <div style="text-align: right" fxFlex="70" class="field-container">
+        <div class="little-right-margin right-alignment">
+          <app-suggestion [name]="'Color'" [currentIds]="[0]" [placeholder]="selectedColor?.name || 'نام رنگ'"
+                          (add)="setColor($event)"></app-suggestion>
+          <br>
+          <mat-checkbox name="is_thumbnail" [(ngModel)]="is_thumbnail" role="is_thumbnail">
+            تصویر بندانگشتی
+          </mat-checkbox>
         </div>
-    </mat-card-content>
+      </div>
+      <app-uploader fxFlex="100" *ngIf="selectedColor?._id"
+                    [url]="'product/image/'+ productId + '/' + selectedColor?._id + '/' + is_thumbnail"
+                    (OnCompleted)="addToTable($event)"></app-uploader>
+    </div>
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+         fxLayoutAlign.xs="center center" dir="rtl">
+    </div>
+    <br>
+    <div dir="rtl" class="field">
+      <mat-card>
+        <div class="rs-table field">
+          <table class="field">
+            <thead>
+            <td class="field"><b>ردیف</b></td>
+            <td class="field"><b>رنگ</b></td>
+            <td class="field" style="text-align: center; margin: 0 10px;"><b>تصویر بندانگشتی</b></td>
+            <td style="width: 70%; text-align: center;"><b>تصاویر</b></td>
+            <td class="field"><b>حذف</b></td>
+            </thead>
+            <tbody>
+            <tr *ngFor="let pc of productColors; let i = index">
+              <td>{{i+1}}</td>
+              <td>{{pc.info?.name}}</td>
+              <td>
+                <img style="width: 80%; margin: 0 10px;" [src]="getURL(pc.image.thumbnail)">
+              </td>
+              <td>
+                <div style="text-align: center">
+                  <div *ngFor="let image of pc.image.angles"
+                       style="width: 10% ;height: 10%; display: inline-block;text-align: center;">
+                    <img style="width: 80% ;" [src]="getURL(image)">
+                  </div>
+                </div>
+              </td>
+              <td>
+                <button mat-icon-button (click)="removeImg(pc.info._id)" color="warn">
+                  <mat-icon aria-label="clear">delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card-content>
 </mat-card>
