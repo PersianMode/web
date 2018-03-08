@@ -23,21 +23,21 @@ export class CartItemsComponent implements OnInit {
     instances : [{
       instance_id : 14,
       size : 6.5,
-      existQuantity : [7],
+      quantity : [7],
       discount : ''
-    },{
+    }, {
       instance_id : 15,
       size : 7,
-      existQuantity : [5],
+      quantity : [5],
       discount : ''
     }, {
       instance_id : 16,
       size : 8,
-      existQuantity : [7],
+      qantity : [7],
       discount : ''
     }]
   };
-  
+
   total_price = null;
   constructor() { }
 
