@@ -21,6 +21,11 @@ export class CartItemsComponent implements OnInit {
     thumbnail : '11.jpeg',
     discount : '',
     instances : [{
+      instance_id : 14,
+      size : 6.5,
+      existQuantity : [7],
+      discount : ''
+    },{
       instance_id : 15,
       size : 7,
       existQuantity : [5],
