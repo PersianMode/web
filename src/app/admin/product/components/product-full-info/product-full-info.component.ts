@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
-import {IProductColor} from '../../interfaces/iproduct-color';
+// TODO: // import {IProductColor} from '../../interfaces/iproduct-color';
 import {IType} from '../../interfaces/itype';
 import {IColor} from '../../interfaces/icolor';
 import {IBrand} from '../../interfaces/ibrand';
@@ -16,7 +16,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
 
   productId: string;
   product: any = {};
-  productColors: IProductColor[];
+  productColors: any;
   types: IType[];
   colors: IColor[];
   brands: IBrand[];
@@ -46,11 +46,13 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
 
   getProductColors() {
     this.httpService.get(`product/color/${this.productId}`).subscribe(res => {
+      // console.log(this.productId);
       this.productColors = res.colors;
     }, err => {
       console.error();
     });
   }
+
   getColors() {
     this.httpService.get(`color`).subscribe(res => {
       this.colors = res;
@@ -58,6 +60,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
       console.error();
     });
   }
+
   getTypes() {
     this.httpService.get(`productType`).subscribe(res => {
       this.types = res;
@@ -65,6 +68,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
       console.error();
     });
   }
+
   getBrands() {
     this.httpService.get(`brand`).subscribe(res => {
       this.brands = res;
@@ -85,7 +89,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  setProductColors(productColors: IProductColor[]) {
+  setProductColors(productColors: any) {
     this.productColors = productColors;
   }
 }
