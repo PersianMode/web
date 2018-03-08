@@ -1,0 +1,34 @@
+.basket-div {
+  background-color: #eee;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin: 10px 10px -10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 15px;
+  font-size: 20px;
+}
+
+.menu-item {
+  display: inline-block;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: 8px;
+}
+
+.shop-again {
+  display: inline-block;
+  width: 50%;
+  text-align: left;
+  margin-top: 8px;
+}
+
+.signUp-div {
+  background-color: #eee;
+  margin: 10px 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 15px;
+  font-color: #fa5400;
+  font-size: 15px;
+}
