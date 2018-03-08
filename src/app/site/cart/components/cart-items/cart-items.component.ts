@@ -37,6 +37,7 @@ export class CartItemsComponent implements OnInit {
       discount : ''
     }]
   };
+  
   total_price = null;
   constructor() { }
 
