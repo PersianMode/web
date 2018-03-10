@@ -13,52 +13,53 @@ export class EditOrderComponent implements OnInit {
   qtyArray = [];
   sizesArray = [];
   editObj = {
-    newSize:null,
-    newQuantity:null
+    newSize: null,
+    newQuantity: null
   };
   selectedQuantityArray = null;
-  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
+
+  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
+
   ngOnInit() {
     this.name = (this.data && this.data.name) ? this.data.name : null;
     this.product = this.data.dialog_product;
-    this.product.instances.forEach(el => this.sizesArray.push({value: el.size, name: el.size.toLocaleString('fa')}));
+    this.product.instances.forEach(el => this.sizesArray.push({value: el.size, name: el.size.toLocaleString('fa'), quantity: el.quantity}));
     this.editObj.newQuantity = this.product.quantity.value;
     this.editObj.newSize = this.product.size.value;
     this.sizesArray.forEach(el => {
-      const tempObj = {
-        size : null,
-        qtyArray : []
+        const tempObj: any = {
+          qtyArray: [],
+          size: null
+        };
+        for (let i = 1; i <= el.quantity; i++) {
+          tempObj.qtyArray.push({
+            value: i,
+            name: i.toLocaleString('fa')
+          });
+        }
+        tempObj.size = el;
+        this.qtyArray.push(tempObj);
       }
-      let maxCount = this.product.instances.filter(item => item.size === +el.value);
-      maxCount = maxCount[0].quantity;
-      for (let i = 1; i <= maxCount ; i++) {
-        tempObj.qtyArray.push({
-          value : i,
-          name : i.toLocaleString('fa')
-      })
-      }
-      tempObj.size = el;
-      this.qtyArray.push(tempObj);
-    }
-  );
-    this.selectedQuantityArray = this.qtyArray.filter(el => el.size.value === this.product.size.value)[0];
-    this.selectedQuantityArray = this.selectedQuantityArray.qtyArray;
-    console.log(this.selectedQuantityArray);
+    );
+
+    this.selectedQuantityArray = this.qtyArray.find(el => el.size.value === this.product.size.value).qtyArray;
   }
+
   closeDialog() {
     this.dialogRef.close();
   }
 
   applyEdit() {
-    console.log('editObj', this.editObj);
     this.dialogRef.close(this.editObj);
   }
+
   setNewSize(newSize) {
     this.editObj.newSize = +newSize;
-    this.selectedQuantityArray = this.qtyArray.filter(el => el.size.value === +newSize);
-    this.selectedQuantityArray = this.selectedQuantityArray[0].qtyArray;
-    console.log(this.selectedQuantityArray);
+    this.product.quantity.value = null;
+    this.selectedQuantityArray = this.qtyArray.find(el => el.size.value === +newSize).qtyArray;
   }
+
   setNewQty(newQty) {
     this.editObj.newQuantity = +newQty;
   }

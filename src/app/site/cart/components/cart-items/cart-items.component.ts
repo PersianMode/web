@@ -32,7 +32,6 @@ export class CartItemsComponent implements OnInit {
     });
     rmDialog.afterClosed().subscribe(
       (data) => {
-        console.log('recived Obj : ', data);
         this.product.size = {value: data.newSize, name: data.newSize.toLocaleString('fa')};
         this.product.quantity = {value: data.newQuantity, name: data.newQuantity.toLocaleString('fa')};
         this.product.price = {value: this.product.price.value, name: priceFormatter(this.product.price.value)};
