@@ -7,39 +7,39 @@
 <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column"
      style="width: 100%; text-align: center">
     <div fxFlex="55" style="text-align: right">
-        <a href="#">
+        <a href="/product/{{product.product_id}}/{{product.color.color_id}}">
             <img src="assets/pictures/product-small/{{product.thumbnail}}"
                  style="width:100%; height:100%; cursor: pointer;">
         </a>
     </div>
     <div fxFlex="45" style="text-align: right;margin-right: 25px;">
-        <div style="height: 45%;">
-            <div style="width: 100%; display: inline-block; margin-top: 25px;  font-family:irankharazmi, sans-serif;">
+        <div style="height: 45%; width: 60%">
+            <div style="width: 100%; display: inline-block; margin-top: 25px;  font-family:irankharazmi;">
                 <div style="display: inline-block; font-size: large">{{product.name}}{{' '}}</div>
-                <div *ngFor="let t of product.tags"
-                     style="display: inline-block;font-size: large; margin-right: 3px">{{''}}{{t}}{{''}}
-                </div>
             </div>
             <div style="width: 100%; font-family:irankharazmi;">
                 <h4>{{product.price}}{{' '}}{{'تومان'}}</h4>
             </div>
         </div>
-        <div style="height: 5%;">
-            <a href="" class="view-detail">مشاهده جزییات محصول</a>
+        <div style="height: 7.5%; width: 60%">
+            <a href="/product/{{product.product_id}}/{{product.color.color_id}}" class="view-detail">مشاهده جزییات محصول</a>
         </div>
-        <div style="height: 50%;">
-            <div style="height: 25%; display: inline-block">
-                <div style="text-align: right;  display: inline-block">
+        <div style="height: 42.5%;">
+            <div style="height: 20%; display: inline-block;">
+                <div class="style-select-wrapper">
                     <select class="select-style">
                         <option>سایز</option>
-                        <option *ngFor="let i of product.instances">{{i.size}}</option>
+                        <option *ngFor="let i of product.instances" selected="product.size">{{i.size}}</option>
                     </select>
                 </div>
-                <div style="text-align: right;  display: inline-block">
-                    <select class="select-style"></select>
+                <div class="style-select-wrapper">
+                    <select class="select-style">
+                        <option>تعداد</option>
+                        <option value="qty" *ngFor="let i of qtyArray" selected="product.quantity">{{i}}</option>
+                    </select>
                 </div>
             </div>
-            <div style="height: 35%;">
+            <div style="height: 35%; margin-top: 10px">
                 <button class="btn-style">ویرایش محصول</button>
             </div>
         </div>

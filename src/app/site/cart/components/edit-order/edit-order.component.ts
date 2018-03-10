@@ -10,8 +10,9 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 export class EditOrderComponent implements OnInit {
   name = null;
   product: any = {
+    product_id : 0,
     instance_id: 14,
-    name: 'کایری ۳ مدل What The',
+    name: 'رونالدینیو دیوید بکهام کایری ۳ مدل What The',
     tags: ['کفش', 'بسکتبال', 'نوجوانان'],
     price: 599000,
     size: 6.5,
@@ -40,8 +41,11 @@ export class EditOrderComponent implements OnInit {
     }]
   };
   total_price = null;
+  qtyArray = [];
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
   ngOnInit() {
+    for (let i = 1; i < 10; i++)
+      this.qtyArray.push(i);
     console.log('recieved data :  ', this.data.dialog_product);
     this.name = (this.data && this.data.name) ? this.data.name : null;
     this.total_price = this.product.quantity * this.product.price;
