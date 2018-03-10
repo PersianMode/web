@@ -36,7 +36,7 @@ export class CartComponent implements OnInit {
       }, {
         instance_id: 16,
         size: 8,
-        qantity: [7],
+        quantity: [7],
         discount: ''
       }]
     },
@@ -59,17 +59,24 @@ export class CartComponent implements OnInit {
         size: 9.5,
         quantity: [7],
         discount: ''
-      }, {
+      },
+        {
         instance_id: 15,
         size: 7.5,
         quantity: [5],
         discount: ''
-      }, {
+      },
+      {
         instance_id: 16,
         size: 16,
-        qantity: [7],
+        quantity: [7],
         discount: ''
-      }]
+      },      {
+          instance_id: 16,
+          size: 19,
+          quantity: [3],
+          discount: ''
+        }]
     }];
   numberOfProducts: String;
   constructor(@Inject(WINDOW) private window) {
