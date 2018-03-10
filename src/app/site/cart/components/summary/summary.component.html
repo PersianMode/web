@@ -1,3 +1,34 @@
-<p>
-  summary works!
-</p>
+<div class="summary">
+  <div class="rows">
+    <div class="right-text total-payment"> خلاصه</div>
+  </div>
+  <hr class="hr-style">
+  <div class="rows">
+    <span class="right-text"> امتیاز :</span>
+    <span class="left-text">{{loyaltyPoint}}</span>
+  </div>
+  <hr class="hr-style">
+  <div class="rows">
+    <span class="right-text"> موجودی :</span>
+    <span class="left-text">{{balanceValue}}  تومان</span>
+  </div>
+  <hr class="hr-style">
+  <div class="rows">
+    <span class="right-text">جمع قیمت :</span>
+    <span class="left-text">{{subTotalValue}}  تومان</span>
+  </div>
+  <hr class="hr-style">
+  <div class="rows">
+    <span class="right-text">تخفیف : </span>
+    <span class="left-text">{{discountValue}} تومان </span>
+  </div>
+  <hr class="hr-style">
+  <div class="rows">
+    <span class="right-text total-payment">قیمت نهایی : </span>
+    <span class="left-text total-payment  ">{{totalPrice}}  تومان</span>
+  </div>
+  <hr class="hr-style">
+  <div>
+    <button class="payment-button"> پرداخت</button>
+  </div>
+</div>

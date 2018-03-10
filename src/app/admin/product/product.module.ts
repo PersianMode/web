@@ -41,6 +41,7 @@ import {SharedModule} from '../../shared/shared.module';
     MatDialogModule,
     MatSelectModule,
     MatTabsModule,
+    MatCheckboxModule,
     MatPaginatorModule,
     SharedModule,
     MatCheckboxModule,
