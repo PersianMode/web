@@ -58,7 +58,7 @@ export class SizePickerComponent implements OnInit {
       value: 27,
     },
     {
-      value:28,
+      value: 28,
     },
     {
       value: 29,
@@ -74,7 +74,9 @@ export class SizePickerComponent implements OnInit {
   sizeses = [];
   @Output('value') value = new EventEmitter();
   val = 0;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit() {
     while (this.sizes.length) {

@@ -2,7 +2,7 @@ import {Component, HostListener, Inject, Input, OnInit, ViewChild} from '@angula
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
-import {priceFormatter} from '../../../../shared/lib/priceFormatter';
+import {CartService} from '../../../../shared/services/cart.service';
 
 @Component({
   selector: 'app-desktop-product',
@@ -23,9 +23,10 @@ export class DesktopProductComponent implements OnInit {
   innerHeight = 0;
   innerScroll = false;
   size: number;
-  selected_product_color = [];
+  selected_product_color: any;
 
-  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
+  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
+              private cartService: CartService) {
   }
 
   ngOnInit() {
@@ -36,6 +37,23 @@ export class DesktopProductComponent implements OnInit {
     this.router.navigate(['product', +this.id + 1]);
   }
 
+  saveToCart() {
+    // check form size and id undefined
+    const object: any = {};
+    object.name = this.product.name;
+    object.instance_id = this.product.id;
+    object.tags = this.product.tags;
+    object.price = this.product.price;
+    object.size = (!this.size ? 0 : this.size);
+    object.thumbnail = this.selected_product_color.images.thumbnail;
+    object.quantity = 1;
+    object.color = {};
+    object.color.color_id = (!this.id ? 0 : this.id);
+    // object.color.name= this.product.colorText;
+    object.discount = '';
+    object.instances = []; // instances not available
+    this.cartService.saveItem(object);
+  }
 
   showAngles(colorId) {
     this.selected_product_color = this.product.colors.filter(el => el.color_id === colorId)[0];
@@ -52,7 +70,7 @@ export class DesktopProductComponent implements OnInit {
     this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
     this.bottomScroll = docHeight - offset - height < 180;
     this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && !this.bottomScroll
-                                  && filterHeight - offset < height && offset >= 65;
+      && filterHeight - offset < height && offset >= 65;
     this.topDist = height - filterHeight + 209;
   }
 
