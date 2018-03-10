@@ -19,11 +19,6 @@
             </mat-error>
           </mat-input-container>
         </div>
-        <div fxFlex="33" style="text-align:center; margin-top: 15px" click="addPic()">
-          <mat-checkbox name="is_smart" [ngModel]="" formControlName="is_smart" role="is-smart">
-            Is Smart
-          </mat-checkbox>
-        </div>
         <div fxFlex="20" role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"
                   [disabled]="upsertBtnShouldDisabled || (!collectionForm.valid || (collectionId && !anyChanges))"

@@ -67,8 +67,8 @@
             <table style="width: 100%">
               <thead>
               <td style="width: 10%"><b>ردیف</b></td>
-              <td style="width: 10%"><b>رنگ</b></td>
-              <td style="width: 70%; text-align: center"><b>تصاویر</b></td>
+              <td style="width: 30%"><b>رنگ</b></td>
+              <td style="width: 50%; text-align: center"><b>تصاویر</b></td>
               <td style="width: 10%"><b>حذف</b></td>
               </thead>
               <tbody>
@@ -77,7 +77,7 @@
                 <td>{{pc.info?.name}}</td>
                 <td>
                   <div style="text-align: center">
-                    <div *ngFor="let image of pc.image.angles"
+                    <div *ngFor="let image of pc.image?.angles"
                          style="width: 10% ;height: 10%; display: inline-block;text-align: center;">
 
                     </div>

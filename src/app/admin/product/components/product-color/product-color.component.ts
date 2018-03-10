@@ -94,6 +94,7 @@ export class ProductColorComponent implements OnInit {
   }
 
   getURL(path) {
+    if(path)
     return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }
 

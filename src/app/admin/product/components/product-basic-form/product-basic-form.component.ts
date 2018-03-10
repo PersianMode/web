@@ -80,7 +80,7 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
 
     this.productBasicForm.valueChanges.subscribe(
       (dt) => this.fieldChanged(),
-      (er) => console.error('Error when subscribing on form valueChanges: ', er)
+      (er) => console.error('Error when subscribing on collection-basic-form valueChanges: ', er)
     );
   }
 

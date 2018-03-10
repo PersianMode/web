@@ -1,0 +1,39 @@
+<div fxLayout="row">
+  <mat-card fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
+
+    <mat-card-content>
+      <div class="rs-table">
+        <div class="little-right-margin right-alignment">
+          <br/>
+          <app-suggestion [name]="'ProductType'" [currentIds]="[0]" [placeholder]="'نام دسته'"
+                          (add)="addType($event)"></app-suggestion>
+        </div>
+        <br/>
+        <table class="table little-right-margin" style="float: right;">
+          <thead>
+          <td>حذف</td>
+          <td>نمایش</td>
+          <td>نام</td>
+          <td>شماره</td>
+          </thead>
+          <tbody>
+          <tr *ngFor="let t of types; let i = index">
+            <td>
+              <button mat-icon-button (click)="removeTag(t._id)" color="warn">
+                <mat-icon aria-label="delete">delete</mat-icon>
+              </button>
+            </td>
+            <td>
+              <button mat-icon-button (click)="viewTag(t._id)" color="primary">
+                <mat-icon aria-label="view">visibility</mat-icon>
+              </button>
+            </td>
+            <td>{{t.name}}</td>
+            <td>{{i+1}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

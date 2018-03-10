@@ -46,7 +46,7 @@ export class ProductService {
   }
 
   loadProducts(collection_id) {
-    this.httpService.get('collection/' + collection_id).subscribe(
+    this.httpService.get('collection/products' + collection_id).subscribe(
       (data) => {
 
         if (data.name) {
