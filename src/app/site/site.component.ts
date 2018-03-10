@@ -50,8 +50,8 @@ export class SiteComponent implements OnInit {
     }
   }
 
-  isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {
-    return width < 960;
-  }
+    isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {
+      return width < 960;
+    }
 }
 

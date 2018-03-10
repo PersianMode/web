@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {EditOrderComponent} from '../edit-order/edit-order.component';
 import {MatDialog} from '@angular/material';
@@ -40,6 +40,7 @@ export class CartItemsComponent implements OnInit {
     }]
   };
 
+  // @Input() private product = null;
   total_price = null;
   constructor(private dialog: MatDialog) { }
 
