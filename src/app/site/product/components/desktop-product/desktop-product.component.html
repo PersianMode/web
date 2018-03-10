@@ -18,7 +18,7 @@
             <img [style.opacity]="item.color_id === productColorSelected.color_id ? 1 : .5" src="{{item.image.thumbnail}}">
         </a>
     </div>
-    <app-size-picker [sizes]="productSize" (value)="size = $event"></app-size-picker>
+    <app-size-picker [sizes]="productSize"   (value)="size = $event"></app-size-picker>
     <button class="cart">در سبد بگذار</button>
     <button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>
     <div class="description-md" Markdown>

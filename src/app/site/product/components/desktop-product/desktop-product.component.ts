@@ -1,4 +1,4 @@
-import {Component, HostListener, Inject, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, HostListener, Inject, Input, OnInit, Output, ViewChild,EventEmitter} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
@@ -33,23 +33,17 @@ export class DesktopProductComponent implements OnInit {
   innerHeight = 0;
   innerScroll = false;
   size: number;
-  productSize ;
-  // selected_product_color = [];
+  productSize;
   @Input() productColorSelected;
-  _product :any = {};
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
   }
 
   ngOnInit() {
-    this._product = this.product
-    // this.selected_product_color = this.id ? this.product.colors.filter(el => el.color_id === this.id) : this.product.colors[0];
-    // console.log("selected_product_color______",this.selected_product_color);
-
   }
 
   up() {
-    this.router.navigate(['product', +this.id + 1]);
+    // this.router.navigate(['product', +this.id + 1]);
   }
 
 
@@ -59,7 +53,7 @@ export class DesktopProductComponent implements OnInit {
     this.productColorSelected = this.product.colors.filter(el => el.color_id === colorId)[0];
 
 
-    this.productSize = this._product.instances.map(instance => {
+    this.productSize = this.product.instances.map(instance => {
       let _sized = {value: instance.size, color_id: instance.product_color_id};
       instance.inventory.forEach(inner_el => {
         if (instance.product_color_id === colorId && inner_el.count <= 0) {
@@ -68,7 +62,6 @@ export class DesktopProductComponent implements OnInit {
       });
       return _sized;
     });
-    console.log("____productSize",this.productSize);
   }
 
   @HostListener('window:scroll', [])
