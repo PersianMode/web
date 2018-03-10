@@ -29,13 +29,13 @@
                 <div class="style-select-wrapper">
                     <select class="select-style">
                         <option>سایز</option>
-                        <option *ngFor="let i of product.instances" selected="product.size">{{i.size}}</option>
+                        <option *ngFor="let i of sizesArray" [selected]="(i===product.size) ? true : false">{{i}}</option>
                     </select>
                 </div>
                 <div class="style-select-wrapper">
                     <select class="select-style">
                         <option>تعداد</option>
-                        <option value="qty" *ngFor="let i of qtyArray" selected="product.quantity">{{i}}</option>
+                        <option value="qty" *ngFor="let i of qtyArray" [selected]="(i == product.quantity) ? true : false">{{i}}</option>
                     </select>
                 </div>
             </div>
