@@ -12,6 +12,7 @@ import {AuthService} from '../../shared/services/auth.service';
 export class CartComponent implements OnInit, OnDestroy {
   // products = [
   //   {
+  //     product_id: 0,
   //     instance_id: 14,
   //     name: 'کایری ۳ مدل What The',
   //     tags: ['کفش', 'بسکتبال', 'نوجوانان'],
@@ -42,6 +43,7 @@ export class CartComponent implements OnInit, OnDestroy {
   //     }]
   //   },
   //   {
+  //     product_id: 0,
   //     instance_id: 12,
   //     name: 'mock data 2',
   //     tags: ['کفش', 'بسکتبال', 'نوجوانان'],

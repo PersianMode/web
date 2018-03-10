@@ -16,20 +16,20 @@
               <b><a *ngFor="let t of product.tags" style="text-decoration : underline">{{t}}{{' '}}</a></b>
             </div>
             <div fxFlex="30" style="margin-top: 5px;display: inline-block; text-align: left;">
-              <span style="color: #fa5400; font-size: small">{{total_price}}{{' '}}{{'تومان'}}</span>
+              <span style="color: #fa5400; font-size: small">{{total_price.name}}{{' '}}{{'تومان'}}</span>
             </div>
           </div>
         </div>
         <div style="height: 60%;">
           <div style="display: inline-block;">
             <b style="display: inline-block;">سایز : </b>
-            <div style="color: gray; display: inline-block;">{{' '}}{{product.size}}</div>
+            <div style="color: gray; display: inline-block;">{{' '}}{{product.size.name}}</div>
           </div>
           <br>
           <div style=" display: inline-block;">
             <b style=" display: inline-block;">تعداد : </b>
-            <div style="color: gray;display: inline-block;">{{' '}} {{product.quantity}} {{'عدد'}}{{' '}}</div>
-            <div style=" display: inline-block; color: #fa5400; margin-right: 8px">{{product.price}}{{'@'}}</div>
+            <div style="color: gray;display: inline-block;">{{' '}} {{product.quantity.name}} {{'عدد'}}{{' '}}</div>
+            <div style=" display: inline-block; color: #fa5400; margin-right: 8px">{{product.price.name}}{{'@'}}</div>
           </div>
           <br>
           <div style=" display: inline-block;">
@@ -40,7 +40,7 @@
         <div fxLayout="row" fxLayoutAlign="center center" fxLayout.xs="column"
              style="height: 10%;">
           <button fxFlex="30" (click)="deleteProduct()" class="btn-style">حذف</button>
-          <button fxFlex="30" (click)="editOrder()" class="btn-style">ویرایش</button>
+          <button fxFlex="30" (click)="openEditOrder()" class="btn-style">ویرایش</button>
         </div>
       </div>
     </div>
