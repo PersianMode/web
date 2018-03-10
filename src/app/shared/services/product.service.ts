@@ -121,20 +121,20 @@ export class ProductService {
   }
 
   private sortProducts() {
-    if (this.sortInput) {
-      switch (this.sortInput) {
-        case SortOptions.newest: {
-          return this.filteredProducts.sort(this.newestSort);
-        }
-        case SortOptions.lowerPrice: {
-          return this.filteredProducts.sort((a, b) => this.priceSort(a, b, true));
-        }
-        case SortOptions.highestPrice: {
-          return this.filteredProducts.sort((a, b) => this.priceSort(a, b, false));
-        }
-      }
-    }
-    return this.filteredProducts;
+    // if (this.sortInput) {
+    //   switch (this.sortInput) {
+    //     case SortOptions.newest: {
+    //       return this.filteredProducts.sort(this.newestSort);
+    //     }
+    //     case SortOptions.lowerPrice: {
+    //       return this.filteredProducts.sort((a, b) => this.priceSort(a, b, true));
+    //     }
+    //     case SortOptions.highestPrice: {
+    //       return this.filteredProducts.sort((a, b) => this.priceSort(a, b, false));
+    //     }
+    //   }
+    // }
+    // return this.filteredProducts;
   }
 
   private newestSort(a, b) {
