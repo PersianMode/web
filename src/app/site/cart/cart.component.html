@@ -1,29 +1,29 @@
-<div *ngIf="!isMobile">
-  <div style="display: inline-block; width:100%;">
-    <div style="display: inline-block; width:48%;">
-      <div class="menu-item"><b><a href="#">بازخوردهای
-        شما</a></b></div>
-      <div class="menu-item"><b><a href="#">تماس با
-        ما</a></b></div>
-      <div class="menu-item"><b><a href="#">ارتباط
-        آنلاین</a></b></div>
-    </div>
-    <div class="shop-again">
-      <b><a href="#">خرید مجدد</a></b>
-      <span style="font-weight: bolder"><i class="fa fa-angle-double-left"></i></span>
-    </div>
-    <div fxLayout="row" fxLayoutAlign="center center">
-      <div  style="padding-top: 50px;">
+<div style="display: inline-block; width:100%;">
+  <div style="display: inline-block; width:48%;">
+    <div class="menu-item"><b><a href="#">بازخوردهای
+      شما</a></b></div>
+    <div class="menu-item"><b><a href="#">تماس با
+      ما</a></b></div>
+    <div class="menu-item"><b><a href="#">ارتباط
+      آنلاین</a></b></div>
+  </div>
+  <div class="shop-again">
+    <b><a href="#">خرید مجدد</a></b>
+    <span style="font-weight: bolder"><i class="fa fa-angle-double-left"></i></span>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" class="main">
+      <div class="main-divs">
         <app-summary></app-summary>
       </div>
-      <div fxFlex="80" style=" padding-left: 50px;">
+      <div class="main-divs">
         <div class="signUp-div">
           اگر عضو نیستید عضو شوید
         </div>
         <div class="basket-div">
-          سبد خرید شما
+          سبد خرید شما({{numberOfProducts}})
         </div>
-        <div *ngFor="let product of products" style="margin: 10px;">
+        <div *ngFor="let product of products" style="margin-bottom: 10px;">
           <app-cart-items [product]="product"></app-cart-items>
         </div>
       </div>
