@@ -34,7 +34,7 @@ export class CollectionTypeComponent implements OnInit {
 
 
 
-  viewTag(tid) {
+  viewType(tid) {
     this.router.navigate([`agent/type/${tid}`]);
   }
 

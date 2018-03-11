@@ -60,12 +60,12 @@ export class CollectionTagComponent implements OnInit {
       (data) => {
         this.tags = this.tags.filter(x => x._id !== tid);
         this.progressService.disable();
-        this.snackBar.open('tag added to collection successfully.', null, {
+        this.snackBar.open('tag removed to collection successfully.', null, {
           duration: 3200
         });
       }, err => {
         this.progressService.disable();
-        this.snackBar.open('could not add tag to collection.', null, {
+        this.snackBar.open('could not remove tag to collection.', null, {
           duration: 3200
         });
       }
