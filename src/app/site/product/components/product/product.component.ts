@@ -26,10 +26,10 @@ export class ProductComponent implements OnInit {
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.route.paramMap.subscribe(params => {
-      //todo get ProductId
+      // todo: get ProductId
       let productId = params.get('product_id');
       productId = '5a9cf71d2cc256bd21576eb0';
-      let colorIdParam = params.get('color');
+      const colorIdParam = params.get('color');
       this.httpService.get(`product/${productId}`).subscribe(data => {
         this.product.id = data[0]._id;
         this.product.name = data[0].name;
@@ -39,11 +39,11 @@ export class ProductComponent implements OnInit {
         this.product.instances = data[0].instances;
 
         this.product.colors = data[0].colors.map(color => {
-          let anglesArr = [];
+          const anglesArr = [];
           color['image'].angles.forEach(item => {
-            let anglesObj = {url: item};
+            const anglesObj = {url: item};
             if (item.split('.').pop(-1) === 'webm') {
-              anglesObj['type'] = 'video'
+              anglesObj['type'] = 'video';
             }
             anglesArr.push(anglesObj);
           });
@@ -51,12 +51,12 @@ export class ProductComponent implements OnInit {
           return color;
         });
         this.product.sizes = this.product.instances.map(instance => {
-          let _sized = {value: instance.size, color_id: instance.product_color_id};
+          const _sized = {value: instance.size, color_id: instance.product_color_id};
           instance.inventory.forEach(inner_el => {
             if (instance.product_color_id === colorIdParam && inner_el.count <= 0) {
-              _sized['disabled'] = true
-            }else if(instance.product_color_id === this.product.colors[0].color_id && inner_el.count <= 0){
-              _sized['disabled'] = true
+              _sized['disabled'] = true;
+            }else if (instance.product_color_id === this.product.colors[0].color_id && inner_el.count <= 0){
+              _sized['disabled'] = true;
             }
           });
           return _sized;
