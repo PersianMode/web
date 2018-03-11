@@ -10,9 +10,12 @@
         {{item.name}} ({{item.product_type}} | {{item.brand}})
       </span>
       <span *ngIf="name == targetEnum.tag.toString()">
-        {{item.name}}
+        {{item.name + ' - ' + item.tg_name }}
       </span>
       <span *ngIf="name == targetEnum.color.toString()">
+        {{item.name}}
+      </span>
+      <span *ngIf="name == targetEnum.type .toString()">
         {{item.name}}
       </span>
     </mat-option>

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormComponent } from './page-basic-info.component';
+import { CollectionTypeComponent } from './collection-type.component';
 
-describe('CollectionBasicFormComponent', () => {
-  let component: FormComponent;
-  let fixture: ComponentFixture<FormComponent>;
+describe('CollectionTypeComponent', () => {
+  let component: CollectionTypeComponent;
+  let fixture: ComponentFixture<CollectionTypeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FormComponent ]
+      declarations: [ CollectionTypeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FormComponent);
+    fixture = TestBed.createComponent(CollectionTypeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

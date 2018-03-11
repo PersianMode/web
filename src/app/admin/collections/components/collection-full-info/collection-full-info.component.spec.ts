@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewComponent } from './view.component';
+import { CollectionFullInfoComponent } from './collection-full-info.component';
 
-describe('ViewComponent', () => {
-  let component: ViewComponent;
-  let fixture: ComponentFixture<ViewComponent>;
+describe('CollectionFullInfoComponent', () => {
+  let component: CollectionFullInfoComponent;
+  let fixture: ComponentFixture<CollectionFullInfoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewComponent ]
+      declarations: [ CollectionFullInfoComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewComponent);
+    fixture = TestBed.createComponent(CollectionFullInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
