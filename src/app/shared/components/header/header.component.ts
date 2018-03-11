@@ -1,26 +1,30 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
+import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
 import {AuthService} from '../../services/auth.service';
 import {PageService} from '../../services/page.service';
-import {Router} from '@angular/router';
 import {WINDOW} from '../../services/window.service';
+import {CartService} from '../../services/cart.service';
+import {priceFormatter} from '../../lib/priceFormatter';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   logos = [];
   dialogEnum = DialogEnum;
   isLoggedIn = false;
   isVerified = false;
+  cartNumbers = '';
+  itemSubs;
 
   constructor(public dialog: MatDialog, private authService: AuthService,
               private pageService: PageService, private router: Router,
-              @Inject(WINDOW) private window) {
+              @Inject(WINDOW) private window, private cartService: CartService) {
   }
 
   ngOnInit() {
@@ -38,6 +42,7 @@ export class HeaderComponent implements OnInit {
         this.isVerified = false;
       }
     );
+    this.itemSubs = this.cartService.cartItems.subscribe(data => this.cartNumbers = priceFormatter(data.length));
     this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
       this.logos = [];
       data = data.sort((x, y) => x.info.column - y.info.column);
@@ -87,5 +92,9 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  ngOnDestroy() {
+    this.itemSubs.unsubscribe();
   }
 }
