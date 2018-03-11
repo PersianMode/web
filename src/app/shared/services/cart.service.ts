@@ -21,7 +21,7 @@ export class CartService {
   }
 
   saveItem(item) {
-    if (this.authService.isLoggedIn._getNow()) {
+    if (this.authService.isLoggedIn.getValue()) {
       // Update order in server
     } else {
       // Save data on storage
@@ -30,7 +30,7 @@ export class CartService {
   }
 
   getCartItems() {
-    if (!this.authService.isLoggedIn._getNow()) {
+    if (!this.authService.isLoggedIn.getValue()) {
       this.getCartFromStorage();
     }
 
@@ -38,12 +38,14 @@ export class CartService {
   }
 
   private getCartFromStorage() {
-    return JSON.parse(localStorage.getItem('cart'));
+    return JSON.parse(localStorage.getItem('cart')) === null ? [] : JSON.parse(localStorage.getItem('cart'));
   }
 
   private saveItemOnStorage(item) {
-    const data = JSON.parse(this.getCartFromStorage());
+    const data = this.getCartFromStorage();
     data.push(item);
     localStorage.setItem('cart', JSON.stringify(data));
+    this.cartItems.next(data);
+
   }
 }
