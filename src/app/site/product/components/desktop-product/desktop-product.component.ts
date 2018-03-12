@@ -28,6 +28,7 @@ export class DesktopProductComponent implements OnInit {
   size: number;
   selected_product_color: any;
   cartNumbers = null;
+  addCardBtnDisabled = true;
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
               private cartService: CartService, private dialog: MatDialog) {
   }
@@ -41,6 +42,7 @@ export class DesktopProductComponent implements OnInit {
   }
 
   saveToCart() {
+    console.log('btnDisabled : ', this.addCardBtnDisabled);
     // check form size and id undefined
     const object: any = {};
     object.name = this.product.name;
@@ -74,7 +76,10 @@ export class DesktopProductComponent implements OnInit {
       }
     );
   }
-
+  newSize($event) {
+    this.size = $event;
+    this.addCardBtnDisabled = false;
+  }
   showAngles(colorId) {
     this.selected_product_color = this.product.colors.filter(el => el.color_id === colorId)[0];
   }

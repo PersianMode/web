@@ -18,8 +18,8 @@
             <img [style.opacity]="item.color_id === id ? 1 : .5" src="assets/pictures/product-small/{{item.images.thumbnail}}">
         </a>
     </div>
-    <app-size-picker (value)="size = $event"></app-size-picker>
-    <button class="cart" (click)="saveToCart()">در سبد بگذار</button>
+    <app-size-picker (value)="newSize($event)"></app-size-picker>
+    <button class="cart" [disabled]="addCardBtnDisabled" (click)="saveToCart()">در سبد بگذار</button>
     <button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>
     <div class="description-md" Markdown>
         {{product.desc}}

@@ -46,6 +46,5 @@ export class CartService {
     data.push(item);
     localStorage.setItem('cart', JSON.stringify(data));
     this.cartItems.next(data);
-
   }
 }
