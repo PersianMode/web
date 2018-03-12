@@ -1,4 +1,4 @@
-import {Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -12,7 +12,8 @@ import {ResponsiveService} from '../../../../shared/services/responsive.service'
   templateUrl: './main-collection.component.html',
   styleUrls: ['./main-collection.component.css']
 })
-export class MainCollectionComponent implements OnInit {
+export class MainCollectionComponent implements OnInit, OnDestroy {
+
   collection: any = {
     collectionName: '',
     set: [
@@ -196,6 +197,7 @@ export class MainCollectionComponent implements OnInit {
       },
     ]
   };
+
   @ViewChild('filterPane') filterPane;
   @ViewChild('gridwall') gridwall;
   topFixedFilterPanel = false;
@@ -204,7 +206,6 @@ export class MainCollectionComponent implements OnInit {
   topDist = 0;
   innerHeight = 0;
   innerScroll = false;
-  pageName = '';
   curWidth: number;
   curHeight: number;
   displayFilter = false;
@@ -212,6 +213,13 @@ export class MainCollectionComponent implements OnInit {
   gridHeight: number;
   isMobile = false;
 
+  pageName = '';
+  collectionName = '';
+  products: any[] = [];
+
+  page$: any;
+  product$: any;
+  collectionInfo$: any;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
               private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService) {
@@ -219,19 +227,35 @@ export class MainCollectionComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
+
       this.pageName = 'collection/' + params.get('typeName');
       this.pageService.getPage(this.pageName);
-      this.pageService.pageInfo$.subscribe(res => {
+
+      this.page$ = this.pageService.pageInfo$.subscribe(res => {
           if (res && res['collection_id']) {
             this.productService.loadProducts(res['collection_id']);
           } else {
-            console.error('-> ', `${this.pageName} is getting empty data for page`);
+            console.error('-> ', 'collection id is not defined for this page');
           }
         },
         err => {
+          console.error('-> ', `${this.pageName} is getting empty data for page`);
         }
       );
       setTimeout(() => this.onWindowScroll(), 1000);
+    });
+
+    this.product$ = this.productService.productList$.subscribe(res => {
+      this.products = res;
+      console.log('-> ', this.products);
+    }, err => {
+      console.error('-> ', `cannot get products form product service`);
+    });
+
+    this.collectionInfo$ = this.productService.collectionInfo$.subscribe(res => {
+      this.collectionName = res;
+    }, err => {
+      console.error('-> ', `cannot get collection info from products service`);
     });
 
     this.calcWidth();
@@ -274,4 +298,10 @@ export class MainCollectionComponent implements OnInit {
   setDispalyFilter($event) {
     this.displayFilter = $event;
   }
+
+  ngOnDestroy(): void {
+    this.product$.unsubscribe();
+    this.page$.unsubscribe();
+  }
+
 }

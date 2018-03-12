@@ -77,15 +77,16 @@ export class CartComponent implements OnInit, OnDestroy {
   numberOfProducts: String;
 
   subs: any;
+
   constructor(@Inject(WINDOW) private window, private cartService: CartService, private authService: AuthService) {
   }
 
   ngOnInit() {
-    if (!this.authService.isLoggedIn.getValue())
-       this.subs = this.cartService.cartItems.subscribe(data => {
-          this.products = data;
-        }
-      )
+    this.authService.isLoggedIn.subscribe(res => {
+      this.subs = this.cartService.cartItems.subscribe(data => {
+        this.products = data;
+      });
+    });
     this.numberOfProducts = priceFormatter(this.products.length);
   }
 
