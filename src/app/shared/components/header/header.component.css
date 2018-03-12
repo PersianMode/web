@@ -1,7 +1,13 @@
 .badge-icon {
-  font-size: 20px;
-  color: #ffffff;
-  margin-left: -20px;
-  margin-top: -50px;
-
+  /*font-size: 20px;*/
+  margin-left: -5px;
+  margin-top: 5px;
+  width: 19px;
+  height: 19px;
+  background :rgb(250, 84, 0);
+  /*text-align: center;*/
+  border-radius: 50%;
+  display: inline-block;
+  z-index: 1000;
+  /*vertical-align: top;*/
 }

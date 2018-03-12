@@ -75,7 +75,6 @@ export class CartComponent implements OnInit, OnDestroy {
   //   }];
   products = [];
   numberOfProducts: String;
-
   subs: any;
   constructor(@Inject(WINDOW) private window, private cartService: CartService, private authService: AuthService) {
   }
@@ -84,6 +83,7 @@ export class CartComponent implements OnInit, OnDestroy {
     if (!this.authService.isLoggedIn.getValue())
        this.subs = this.cartService.cartItems.subscribe(data => {
           this.products = data;
+          console.log('*****', data);
         }
       )
     this.numberOfProducts = priceFormatter(this.products.length);
