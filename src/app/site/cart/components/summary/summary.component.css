@@ -1,0 +1,44 @@
+.summary {
+
+  min-width: 300px;
+  background-color: #191919;
+  border-radius: 2px;
+  font-size: 14px;
+}
+
+.left-text {
+  float: left;
+  padding-left: 10px;
+  color: #efefef;
+}
+
+.right-text {
+  color: #efefef;
+}
+
+.payment-button {
+  background-color: #FA5400;
+  color: #fff;
+  text-align: center;
+  border: 0;
+  padding: 5px 10px;
+  height: 38px;
+  width: calc(100% - 60px);
+  margin: 10px 30px;
+  border-radius: 2px;
+}
+
+.total-payment {
+  font-size: 20px;
+}
+
+.rows {
+  padding: 20px;
+  position: center;
+  margin-top: auto;
+}
+
+.hr-style {
+  border: 0.5px solid #555;
+  margin: 0 0;
+}

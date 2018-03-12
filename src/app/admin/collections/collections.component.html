@@ -15,10 +15,6 @@
           <mat-card-title>
             <label class="name">{{c.name}}</label>
           </mat-card-title>
-          <mat-card-subtitle class="is_smart">
-            <label class="smart" *ngIf="c.is_smart">Smart</label>
-            <label class="manual" *ngIf="!c.is_smart">Manual</label>
-          </mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions style="text-align: left" *ngIf="c._id == selectedId">
           <button mat-icon-button (click)="deleteCollection(c._id)" color="warn">

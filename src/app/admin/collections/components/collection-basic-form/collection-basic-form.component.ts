@@ -1,19 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
-import {AuthService} from '../../../../shared/services/auth.service';
 import {isUndefined} from 'util';
 import {MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
-  selector: 'app-form',
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css']
+  selector: 'app-collection-basic-form',
+  templateUrl: './collection-basic-form.component.html',
+  styleUrls: ['./collection-basic-form.component.css']
 })
-export class FormComponent implements OnInit {
-  collectionId: string = null;
+export class CollectionBasicFormComponent implements OnInit {
+  @Input() collectionId: string;
+  @Output() onCollectionIdChanged = new EventEmitter<string>();
   originalCollection: any = null;
   collectionForm: FormGroup;
 
@@ -48,7 +48,6 @@ export class FormComponent implements OnInit {
       colName: [null, [
         Validators.required,
       ]],
-      is_smart: [null, []],
     }, {
       validator: this.basicInfoValidation
     });
@@ -63,16 +62,13 @@ export class FormComponent implements OnInit {
 
     this.progressService.enable();
     this.upsertBtnShouldDisabled = true;
+
     this.httpService.get(`collection/${this.collectionId}`).subscribe(
       (data) => {
-        data = data[0];
-
         this.collectionForm.controls['colName'].setValue(data.name);
-        this.collectionForm.controls['is_smart'].setValue(data.is_smart);
         this.originalCollection = {
           _id: data._id,
           name: data.name,
-          is_smart: data.is_smart
         };
 
         this.progressService.disable();
@@ -92,39 +88,34 @@ export class FormComponent implements OnInit {
 
   submitCollection() {
     const sendingData = {
-      _id: this.collectionId,
       name: this.collectionForm.controls['colName'].value,
-      is_smart: this.collectionForm.controls['is_smart'].value,
     };
     // if(this.collectionId)
     //   data['_id'] = this.collectionId;
 
     this.progressService.enable();
     this.upsertBtnShouldDisabled = true;
-    this.httpService.put(`collection`, sendingData).subscribe(
+
+    const exec = this.collectionId ?
+      this.httpService.post(`collection/${this.collectionId}`, sendingData) :
+      this.httpService.put('collection', sendingData);
+
+    exec.subscribe(
       data => {
-        let isCreating = false;
-        if (data._id) {
-          isCreating = true;
-        }
         this.snackBar.open('Collection is ' + (this.collectionId ? 'updated' : 'added'), null, {
           duration: 2300,
         });
 
         this.anyChanges = false;
-        if (isCreating) {
-          this.collectionId = data._id;
-          this.originalCollection = Object.assign({_id: data._id}, data);
-          this.collectionForm.reset();
-        }
-        // else {
-        // this.collectionId = data._id;
-        // this.originalCollection = Object.assign({_id: data._id}, data);
-        // this.originalCollection.name = this.collectionForm.controls['colName'].value;
-        // }
-
+        this.collectionId = data._id;
+        this.originalCollection = Object.assign({_id: data._id}, data);
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
+
+        this.collectionId = data._id;
+        this.onCollectionIdChanged.emit(this.collectionId);
+
+
       },
       error => {
         this.snackBar.open('Cannot ' + (this.collectionId ? 'update' : 'add') + ' this collection. Try again', null, {
@@ -133,7 +124,6 @@ export class FormComponent implements OnInit {
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
-        // console.log(error);
       }
     );
   }
@@ -150,12 +140,7 @@ export class FormComponent implements OnInit {
     let orig_colName = this.originalCollection.name;
     orig_colName = orig_colName.trim();
 
-    const is_smart = (this.collectionForm.controls['is_smart'].value === null ||
-      isUndefined(this.collectionForm.controls['is_smart'].value)) ? '' : this.collectionForm.controls['is_smart'].value;
-    const orig_is_smart = this.originalCollection.is_smart;
-
-    if ((colName !== orig_colName && (colName !== '' || orig_colName !== null)) ||
-      ((is_smart !== orig_is_smart && (is_smart !== '' || orig_is_smart !== null)))) {
+    if ((colName !== orig_colName && (colName !== '' || orig_colName !== null))) {
       this.anyChanges = true;
     }
   }

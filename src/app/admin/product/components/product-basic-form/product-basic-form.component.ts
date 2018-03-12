@@ -62,7 +62,8 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
         base_price: [(Object.keys(this.loadedValue).length && this.loadedValue.base_price) ? this.loadedValue.base_price : null, [
           Validators.required,
         ]],
-        product_type: [(Object.keys(this.loadedValue).length && this.loadedValue.product_type._id) ? this.loadedValue.product_type._id : null, [
+        product_type: [(Object.keys(this.loadedValue).length && this.loadedValue.product_type._id) ?
+          this.loadedValue.product_type._id : null, [
           Validators.required,
         ]],
         brand: [(Object.keys(this.loadedValue).length && this.loadedValue.brand._id) ? this.loadedValue.brand._id : null, [
@@ -71,6 +72,7 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
         desc: [(Object.keys(this.loadedValue).length && this.loadedValue.desc) ? this.loadedValue.desc : null, [
           Validators.maxLength(50),
         ]]
+      // TODO: 'details' field should be added here, and some other places :D
       },
       {
         validator: this.basicInfoValidation
@@ -78,7 +80,7 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
 
     this.productBasicForm.valueChanges.subscribe(
       (dt) => this.fieldChanged(),
-      (er) => console.error('Error when subscribing on form valueChanges: ', er)
+      (er) => console.error('Error when subscribing on collection-basic-form valueChanges: ', er)
     );
   }
 
@@ -169,6 +171,8 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
         this.anyChanges = true;
       }
     });
+
+    // TODO: changes should be captured here
   }
 
   basicInfoValidation(Ac: AbstractControl) {

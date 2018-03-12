@@ -8,8 +8,20 @@
     </li>
   </ul>
   <ul class="right-bar">
-    <li><a href="#" class="faWrapper" aria-label="Shopping Bag"><i
-      class="fa fa-shopping-bag fa-flip-horizontal"></i></a>
+    <li>
+      <a [routerLink]="'/cart'" class="faWrapper" aria-label="Shopping Bag">
+        <span class="badge-icon">
+          {{cartNumbers}}
+        </span>
+        <span>
+          <svg height="20" width="20">
+            <circle cx="10" cy="10" r="10"  fill="#FA5400"/>
+          </svg>
+        </span>
+        <i
+          class="fa fa-shopping-bag fa-flip-horizontal" style="margin-right: -10px;">
+        </i>
+      </a>
     <li *ngIf="!isLoggedIn || !isVerified">
       <a (click)="login()" class="faWrapper clickable-link" aria-label="Sign In or Register"><i
         class="fa fa-sign-in fa-flip-horizontal loginIcon"></i></a>
