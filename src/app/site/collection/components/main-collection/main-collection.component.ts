@@ -1,4 +1,4 @@
-import {Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
 import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -12,7 +12,7 @@ import {ResponsiveService} from '../../../../shared/services/responsive.service'
   templateUrl: './main-collection.component.html',
   styleUrls: ['./main-collection.component.css']
 })
-export class MainCollectionComponent implements OnInit {
+export class MainCollectionComponent implements OnInit, AfterContentChecked {
   collection: any = {
     products: [],
     collectionNameFa: '',
@@ -71,7 +71,6 @@ export class MainCollectionComponent implements OnInit {
         err => {
         }
       );
-      setTimeout(() => this.onWindowScroll(), 1000);
     });
     this.productService.collectionInfo$.subscribe(r => this.collection.collectionName = r);
     this.productService.productList$.subscribe(r => this.collection.products = r);
@@ -81,6 +80,10 @@ export class MainCollectionComponent implements OnInit {
     });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+  }
+
+  ngAfterContentChecked() {
+    this.calcAfterScroll();
   }
 
   private calcWidth() {
@@ -97,7 +100,7 @@ export class MainCollectionComponent implements OnInit {
   }
 
   calcAfterScroll() {
-    if (!this.isMobile) {
+    if (!this.isMobile && this.filterPane && this.gridwall) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
       const height = this.window.innerHeight - 209;
       const filterHeight = this.filterPane.nativeElement.scrollHeight;
