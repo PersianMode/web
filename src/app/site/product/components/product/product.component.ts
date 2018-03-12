@@ -163,6 +163,11 @@ export class ProductComponent implements OnInit {
   constructor(private route: ActivatedRoute, @Inject(WINDOW) private window, private responsiveService: ResponsiveService) {
   }
 
+  // this component we need to have a product data by this format :
+  // productId and colorId or colorName all exist sizes of this colorId
+  // all thumbnail of all colorIds, and just angle pictures of that special colorId that is showing in the browser,
+  // i think we do not need to have all angle pic of all colorIds,
+  // in every switch to thumbnails we need to have angles pictures to show in browser
   ngOnInit() {
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
