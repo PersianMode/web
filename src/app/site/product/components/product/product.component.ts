@@ -38,19 +38,19 @@ export class ProductComponent implements OnInit {
           this.product.desc = data[0].desc;
           this.product.tags = data[0].tags.map(t => t.name).join(' ');
           this.product.instances = data[0].instances;
-
-          this.product.colors = data[0].colors.map(color => {
-            const anglesArr = [];
-            color['image'].angles.forEach(item => {
-              const anglesObj = {url: item};
-              if (item.split('.').pop(-1) === 'webm') {
-                anglesObj['type'] = 'video';
+          data[0].colors.forEach(item => {
+            let angles = [];
+            item.image.angles.forEach(r => {
+              if (!r.url) {
+                const temp = {url: r, type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
+                angles.push(temp);
+              } else {
+                angles.push(r);
               }
-              anglesArr.push(anglesObj);
             });
-            color['image']['angles'] = anglesArr;
-            return color;
+            item.image.angles = angles;
           });
+          this.product.colors = data[0].colors;
           this.product.sizes = this.product.instances.map(instance => {
             const _sized = {value: instance.size, color_id: instance.product_color_id};
             instance.inventory.forEach(inner_el => {
