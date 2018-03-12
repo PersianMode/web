@@ -34,49 +34,37 @@ export class DesktopProductComponent implements OnInit {
   innerScroll = false;
   size: number;
   productSize;
-  @Input() productColorSelected;
-
+  @Input()
+  set selectedProductColorID(id) {
+    if (id) {
+      this.selectedProductColor = this.product.colors.find(r => r.color._id === id);
+    }
+  };
+  selectedProductColor: any = {};
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
   }
 
   ngOnInit() {
+
   }
 
-  up() {
-    // this.router.navigate(['product', +this.id + 1]);
-  }
-
-
-  showAngles(colorId) {
-    this.productColorSelected = [];
-    this.productSize = [];
-    this.productColorSelected = this.product.colors.filter(el => el.color_id === colorId)[0];
-
-
-    this.productSize = this.product.instances.map(instance => {
-      let _sized = {value: instance.size, color_id: instance.product_color_id};
-      instance.inventory.forEach(inner_el => {
-        if (instance.product_color_id === colorId && inner_el.count <= 0) {
-          _sized['disabled'] = true
-        }
-      });
-      return _sized;
-    });
+  changeProductColor(colorId) {
+    this.router.navigate(['/', 'product', this.product.id, colorId]);
   }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
-    const height = this.window.innerHeight - 209;
-    const filterHeight = this.descPane.nativeElement.scrollHeight;
-    const docHeight = this.photosDiv.nativeElement.scrollHeight + 209;
-    this.innerScroll = docHeight - filterHeight < 0;
-    this.innerHeight = docHeight - 261;
-    this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
-    this.bottomScroll = docHeight - offset - height < 180;
-    this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && !this.bottomScroll
-      && filterHeight - offset < height && offset >= 65;
-    this.topDist = height - filterHeight + 209;
+      const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
+      const height = this.window.innerHeight - 209;
+      const filterHeight = this.descPane.nativeElement.scrollHeight;
+      const docHeight = this.photosDiv.nativeElement.scrollHeight + 209;
+      this.innerScroll = docHeight - filterHeight < 100;
+      this.innerHeight = docHeight - 209;
+      this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
+      this.bottomScroll = !this.innerScroll && offset >= 65 && (docHeight - offset - height < 180);
+      this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= 65 &&
+        !this.bottomScroll && filterHeight - offset < height - 209;
+      this.topDist = height - filterHeight + 209;
   }
 
 }

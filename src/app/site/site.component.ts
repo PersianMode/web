@@ -27,6 +27,7 @@ export class SiteComponent implements OnInit {
     this.isMobile = this.isMobileCalc();
     this.updateResponsiveService();
     this.authService.checkValidation(this.router.url);
+    this.loadInitialPlacements();
   }
 
   private updateResponsiveService() {
@@ -46,11 +47,15 @@ export class SiteComponent implements OnInit {
       this.responsiveService.switch$.next(this.isMobileCalc(w, h));
       this.isMobile = this.isMobileCalc(w, h);
       this.responsiveService.isMobile = this.isMobile;
-      setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
+      this.loadInitialPlacements();
     }
   }
 
-    isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {
+  private loadInitialPlacements() {
+    setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
+  }
+
+  isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {
       return width < 960;
     }
 }

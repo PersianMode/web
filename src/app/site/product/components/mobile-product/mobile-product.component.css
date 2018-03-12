@@ -3,6 +3,7 @@ h1, h4 {
 }
 h4 span {
   margin: 0 24px 0 0 !important;
+  display: inline-block;
 }
 div img,video {
   width: 100%;

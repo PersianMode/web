@@ -3,6 +3,7 @@ import {HttpService} from './http.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
 import {HttpClient} from '@angular/common/http';
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class ProductService {
@@ -12,6 +13,7 @@ export class ProductService {
   collectionInfo$: ReplaySubject<any> = new ReplaySubject<any>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
+  product$: Subject<any> = new Subject<any>();
 
   private filterInput: IFilter[];
   private sortInput = '';
@@ -31,7 +33,7 @@ export class ProductService {
 
     let sizes: string[] = this.filteredProducts.map(x => x['size']);
     sizes = Array.from(new Set([].concat.apply([], sizes)));
-    let maxPrice = max(this.filteredProducts)
+    //let maxPrice = max(this.filteredProducts)
     const filter: IFilter[] = [];
 
     if (types.length > 1) filter.push({name: 'نوع', values: types});
@@ -42,8 +44,23 @@ export class ProductService {
 
   }
 
+  getProduct(productId) {
+    let found = this.products.findIndex(r => r._id === productId);
+    if (found >= 0 && this.products[found].detailed) {
+      this.product$.next(this.products[found]);
+    } else {
+      this.httpService.get(`product/${productId}`).subscribe(res => {
+        res.detailed = true;
+        if (found >= 0) {
+          this.products[found] = res;
+        }
+        this.product$.next(res);
+      });
+    }
+  }
+
   loadProducts(collection_id) {
-    this.httpService.get('collection/' + collection_id)
+    this.httpService.get('collection/product/' + collection_id)
     //this.http.get('/assets/products.json')
       .subscribe(
       (data) => {
