@@ -3,33 +3,32 @@
     <li *ngFor="let logo of logos" [ngStyle]="{width: (logo.width ? logo.width + 'px' : 'initial')}">
       <a href="#" class="gnav-member-bar" [title]="logo.brand">
         <img
-          src="assets/logos/{{logo.filename}}" class="general"
-          [ngStyle]="{top: (logo.top ? -logo.top : 0)+ 'px', right: (logo.right ? -logo.right : 0) + 'px', height: (logo.height ? logo.height : 29) + 'px'}"></a>
+                src="assets/logos/{{logo.filename}}" class="general"
+                [ngStyle]="{top: (logo.top ? -logo.top : 0)+ 'px', right: (logo.right ? -logo.right : 0) + 'px', height: (logo.height ? logo.height : 29) + 'px'}"></a>
     </li>
   </ul>
-  <ul class="right-bar" style="display: inline-block">
-    <li style="display: inline-block;">
+  <ul class="right-bar">
+    <li>
       <a [routerLink]="'/cart'" class="faWrapper" aria-label="Shopping Bag">
-        <div class="badge-icon">
-          <div style="width: 100%; height: 100%; color: black; font-size: medium; vertical-align : middle; ">{{cartNumbers}}</div>
-        </div>
-        <!--<span>-->
-          <!--<svg height="20" width="20">-->
-            <!--<circle cx="10" cy="10" r="10"  fill="#FA5400"/>-->
-          <!--</svg>-->
-        <!--</span>-->
+        <span class="badge-icon">
+          {{cartNumbers}}
+        </span>
+        <span>
+          <svg height="20" width="20">
+            <circle cx="10" cy="10" r="10"  fill="#FA5400"/>
+          </svg>
+        </span>
         <i
-          class="fa fa-shopping-bag fa-flip-horizontal" style="margin-right: -10px;">
+                class="fa fa-shopping-bag fa-flip-horizontal" style="margin-right: -10px;">
         </i>
       </a>
-    </li>
-    <li *ngIf="!isLoggedIn || !isVerified" style="display: inline-block">
+    <li *ngIf="!isLoggedIn || !isVerified">
       <a (click)="login()" class="faWrapper clickable-link" aria-label="Sign In or Register"><i
-        class="fa fa-sign-in fa-flip-horizontal loginIcon"></i></a>
+              class="fa fa-sign-in fa-flip-horizontal loginIcon"></i></a>
     </li>
-    <li *ngIf="isLoggedIn && isVerified" style="display: inline-block">
+    <li *ngIf="isLoggedIn && isVerified">
       <a (click)="logout()" class="faWrapper clickable-link" aria-label="Sign Out"><i
-        class="fa fa-sign-out loginIcon"></i></a>
+              class="fa fa-sign-out loginIcon"></i></a>
     </li>
   </ul>
 </nav>
