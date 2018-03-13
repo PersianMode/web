@@ -2,8 +2,10 @@
   <div class="main" [class.on]="on">
   <span>
     <div class="imgWrapper" (mouseover)="turnOn()" (mouseout)="turnOff()">
-      <img src="assets/pictures/product-small/{{data.colors[pos].url}}"
+      <img src="assets/pictures/product-small/{{images[pos]}}"
+           (click)="openProduct()"
            [style.right]="(220 * data.colors[pos].position) +'px'" (click)="openProduct()">
+
     </div>
     <div *ngIf="on && data.colors.length > 1" class="sliderWrapper" (mouseover)="turnOn(2, 0)" (mouseout)="turnOff()"
          #slider>
@@ -27,7 +29,7 @@
   <span>
     <div [class.imgWrapper]="!isMobile" [class.imgWrapperMobile]="isMobile" (mouseover)="turnOn()" (mouseout)="turnOff()"
          [ngStyle]="isMobile ? {'width.px': width - 2, 'max-height.px': width - 2} : {}">
-      <img src="assets/pictures/product-small/{{data.colors[pos].url}}"
+      <img src="assets/pictures/product-small/{{images[0]}}"
             (click)="openProduct()" [style.right.px]="(width * data.colors[pos].position)"
            [ngStyle]="isMobile ? {'height.px': width - 2} : {}">
     </div>

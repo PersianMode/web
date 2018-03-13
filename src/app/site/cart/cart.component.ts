@@ -75,21 +75,18 @@ export class CartComponent implements OnInit, OnDestroy {
   //   }];
   products = [];
   numberOfProducts: String;
+
   subs: any;
+
   constructor(@Inject(WINDOW) private window, private cartService: CartService, private authService: AuthService) {
   }
 
   ngOnInit() {
-    //cart service should deliver a data in format like above comment out products data
-    //the item of array products are all datas that customer have selected and put in his/her bascket
-    // (this component dot nedd to have angle pictures of every product, but we horriblynedd to have productId,
-    // and instanceId and colorId or colorName and have exist sizes of a special color of a productId)
-    if (!this.authService.isLoggedIn.getValue())
-       this.subs = this.cartService.cartItems.subscribe(data => {
-          this.products = data;
-        }
-      )
-    this.numberOfProducts = priceFormatter(this.products.length);
+    this.authService.isLoggedIn.subscribe(res => {
+      this.subs = this.cartService.cartItems.subscribe(data => {
+        this.products = data;
+      });
+    });
   }
 
   ngOnDestroy() {

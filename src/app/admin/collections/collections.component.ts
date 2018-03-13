@@ -16,7 +16,7 @@ export class CollectionsComponent extends AbstractSearchComponent implements OnI
   }
 
   openForm(id: string = null) {
-    this.router.navigate([`/agent/collections/form/${id}`]);
+    this.router.navigate([`/agent/collections/form/${id ? id : '' }`]);
   }
 
   openView(id: string = null) {

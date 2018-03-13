@@ -2,7 +2,9 @@ import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
+import {HttpService} from '../../../../shared/services/http.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
+import {ProductService} from '../../../../shared/services/product.service';
 
 @Component({
   selector: 'app-product',
@@ -10,157 +12,15 @@ import {ResponsiveService} from '../../../../shared/services/responsive.service'
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit {
-  id;
+  selectedProductColor;
   colorId;
-  product: any = {
-    id: 14,
-    name: 'کایری ۳ مدل What The',
-    tags: ['کفش', 'بسکتبال', 'نوجوانان'],
-    desc: `# راحت
-    *کایری ۳ مدل What The* کمک می‌کند به سرعت در هر جهتی حرکت کنید چون پاشنه‌های مدور منحصر به فردی دارد.
-     
-    * **رنگ نمایش داده شده**: طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی
-    * **سبک**: AH2287-700`,
-    price: 599000,
-    sizes: [
-      {
-        size: 20,
-      },
-      {
-        size: 22,
-      },
-      {
-        size: 24,
-      },
-      {
-        size: 28,
-        oos: true,
-      },
-      {
-        size: 30,
-        oos: true,
-      },
-      {
-        size: 32,
-      },
-      {
-        size: 34,
-      }
-    ],
-    colors: [
-      {
-        color_id : 101,
-        images: {
-          thumbnail : '11.jpeg',
-          angles : [{
-            type: 'video',
-            url: 'assets/pictures/products/video.webm',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_020.jpg',
-            }
-            ]
-        }
-      },
-      {
-        color_id : 102,
-        images: {
-          thumbnail : '12.jpeg',
-          angles : [{
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              type: 'video',
-              url: 'assets/pictures/products/video.webm',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            }
-          ]
-        }
-      },
-      {
-        color_id : 103,
-        images: {
-          thumbnail : '13.jpeg',
-          angles : [{
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_020.jpg',
-            },
-            {
-              type: 'video',
-              url: 'assets/pictures/products/video.webm',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_021.jpg',
-            }
-            ]
-        }
-      },
-      {
-        color_id : 104,
-        images: {
-          thumbnail : '14.jpeg',
-          angles : [
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg',
-            },
-            {
-              type: 'video',
-              url: 'assets/pictures/products/video.webm',
-            }]
-        }
-      },
-      {
-        color_id : 105,
-        images: {
-          thumbnail : '11.jpeg',
-          angles : [
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            ]
-        }
-      },
-    ],
-  };
+  product: any = {};
   joinedTags = '';
   formattedPrice = '';
   isMobile = false;
 
-  constructor(private route: ActivatedRoute, @Inject(WINDOW) private window, private responsiveService: ResponsiveService) {
+  constructor(public httpService: HttpService, private route: ActivatedRoute, @Inject(WINDOW) private window,
+              private responsiveService: ResponsiveService, private productService: ProductService) {
   }
 
   // this component we need to have a product data by this format :
@@ -172,57 +32,50 @@ export class ProductComponent implements OnInit {
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.route.paramMap.subscribe(params => {
-      this.id = +params.get('product_id');
-      this.product.id = this.id;
-      this.colorId =  params.get('color') ? +params.get('color')
-        : this.product.colors && this.product.colors.length ? this.product.colors.map(r => r.pcid)[0]
-          : NaN;
-      // TODO: remove below lines - it is just for making a working mock
-      if (this.colorId === 10) {
-        this.product.images = [
-          {
-            type: 'video',
-            url: 'assets/pictures/products/video.webm',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_020.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_021.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_022.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg',
-          },
-        ];
+      const productId = params.get('product_id');
+      const colorIdParam = params.get('color');
+      if (!this.product || this.product.id !== productId) {
+        this.productService.getProduct(productId);
+        this.productService.product$.subscribe(data => {
+          this.product.id = data[0]._id;
+          this.product.name = data[0].name;
+          this.product.price = data[0].base_price;
+          this.product.desc = data[0].desc;
+          this.product.tags = data[0].tags.map(t => t.name).join(' ');
+          this.product.instances = data[0].instances;
+          data[0].colors.forEach(item => {
+            let angles = [];
+            item.image.angles.forEach(r => {
+              if (!r.url) {
+                const temp = {url: r, type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
+                angles.push(temp);
+              } else {
+                angles.push(r);
+              }
+            });
+            item.image.angles = angles;
+          });
+          this.product.colors = data[0].colors;
+          this.product.sizes = this.product.instances.map(instance => {
+            const _sized = {value: instance.size, color_id: instance.product_color_id};
+            instance.inventory.forEach(inner_el => {
+              if (instance.product_color_id === colorIdParam && inner_el.count <= 0) {
+                _sized['disabled'] = true;
+              } else if (instance.product_color_id === this.product.colors[0].color_id && inner_el.count <= 0) {
+                _sized['disabled'] = true;
+              }
+            });
+            return _sized;
+          });
+          this.formattedPrice = priceFormatter(data[0].base_price);
+          // Todo Duplicate Tags
+          this.joinedTags = data[0].tags.map(t => t.name).join(' ');
+          this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
+        });
       } else {
-        this.product.images = [
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg'
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_022.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-          },
-        ];
+        this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
       }
-      // TODO: remove above lines - it is just for making a working mock
     });
-    this.joinedTags = this.product.tags.join(' ');
-    this.formattedPrice = priceFormatter(this.product.price);
   }
 
   @HostListener('window:resize', ['$event'])

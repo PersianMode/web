@@ -1,24 +1,36 @@
-<div style="height: 60px;" [ngClass]="isMobile ? 'set-size-mobile' : null">
+<div [ngClass]="isMobile ? 'set-size-mobile' : null">
   <h1>فیلترها</h1>
 </div>
 <mat-accordion multi="true">
-  <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null">
+  <mat-expansion-panel *ngIf="isMobile">
+    <mat-expansion-panel-header>
+      <div class="checkbox-title">ترتیب نمایش</div>
+    </mat-expansion-panel-header>
+    <div *ngFor="let sortOption of sortOptions;let i=index" (click)="selectSortOption(i)" class="sorter">
+     {{sortOption.fa}}  <i *ngIf="sortedBy && (sortedBy.value === sortOption.value)" class="fa fa-check sort"></i>
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null" [expanded]="expanded[fo]">
     <mat-expansion-panel-header>
       <div class="checkbox-title">{{fo.name}}</div>
     </mat-expansion-panel-header>
     <div *ngFor="let v of filter_options[i].values" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
-      <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز'" style="opacity: 0.8"
+      <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز' && fo.name !=='قیمت'"
                     (click)="getValue(fo.name, v)" [checked]="clear_box">
         <span class="check-box-text">{{v}}</span>
       </mat-checkbox>
     </div>
+    <div *ngIf="fo.name==='قیمت'">
+      <p-slider [(ngModel)]="rangeValues" [range]="true" [min]="minPrice" [max]="maxPrice" (onChange)="priceRangeChange()"></p-slider>
+      <span style="float:left">{{selectedMinPriceFormatted}} تومان</span><span>{{selectedMaxPriceFormatted}} تومان</span>
+    </div>
     <span *ngIf="fo.name === 'رنگ'">
       <span *ngFor="let v of filter_options[i].values; let j = index" class="color-span" (click)="getValue(fo.name, v)"
             style="cursor: pointer;">
-        <svg height="26" width="26">
-         <circle cx="13" cy="13" r="13" stroke="black" stroke-width="0" attr.fill="{{v}}"></circle>
+        <svg height="26" width="26" >
+         <circle cx="13" cy="13" r="12" [attr.stroke]="needsBorder[v] ? '#ccc' : 'transparent'" stroke-width="1" attr.fill="{{v}}"></circle>
         </svg>
-        <i *ngIf="isChecked[fo.name][v]" class="fa fa-check" [style.color]="oppositeColor[v]"></i>
+        <i *ngIf="isChecked[fo.name][v]" class="fa fa-check circle" [style.color]="oppositeColor[v]"></i>
       </span>
   </span>
     <span *ngIf="fo.name === 'سایز'">
@@ -29,19 +41,7 @@
     </span>
   </mat-expansion-panel>
 </mat-accordion>
-<br>
-<div *ngIf="!isMobile" style="width: 100%; text-align: center">
-  <button (click)="clearFilters()">برداشتن تمام فیلترها</button>
-</div>
-<div *ngIf="isMobile" style="width: 100%;" class="set-size-mobile">
-  <table style="width: 100%">
-    <tr width="100">
-      <td width="50" style="text-align: center">
-        <button (click)="changeDisplayFilter()">اعمال فیلترها</button>
-      </td>
-      <td width="50" style="text-align: center">
-        <button (click)="clearFilters()">برداشتن تمام فیلترها</button>
-      </td>
-    </tr>
-  </table>
+<div class="actions">
+  <button mat-button *ngIf="isMobile" (click)="changeDisplayFilter()">اعمال فیلترها</button>
+  <button mat-button (click)="clearFilters()">برداشتن تمام فیلترها</button>
 </div>

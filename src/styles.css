@@ -548,6 +548,7 @@ dp-date-picker.dp-material .dp-picker-input {
 mat-expansion-panel {
   box-shadow: none !important;
   border-top: 1px solid rgba(221,221,221,.7);
+  padding: 0px 10px !important;
 }
 .mat-expansion-panel-header:hover {
   background: transparent !important;
@@ -581,6 +582,7 @@ mat-panel-title {
   background-color: #191919;
   clear: both;
   margin-top: 60px;
+  height: 210px;
 }
 
 .hr-setting{
@@ -651,6 +653,9 @@ mat-panel-title {
     border: 1px rgba(221,221,221,.7) solid;
     color: black;
   }
+  .ui-slider {
+    margin: 0px 10px !important;
+  }
 }
 
 .full-width {
@@ -658,7 +663,7 @@ mat-panel-title {
 }
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background: gray !important;
+  background: #999999 !important;
 }
 
 .mat-checkbox {
@@ -666,6 +671,45 @@ mat-panel-title {
   font-weight: 200 !important;
 }
 .mat-checkbox-frame {
-  border: 1px #ccc solid !important;
+  border: 1px #999999 solid !important;
+}
+.mat-ripple-element {
+  background-color: rgba(160,160,160, .26) !important;
+}
+.ui-overlaypanel {
+  display: block;
+  z-index: 999 !important;
+  top: unset !important;
+  left: 15.9531px;
+  opacity: 1;
+  padding: 0px !important;
+  text-align: right;
+}
+.ui-overlaypanel-content {
+  padding: 0px 1px !important;
+  background-color: #fff;
+}
+.ui-overlaypanel-content div {
+  padding: 10px 38px;
+  cursor: pointer;
+}
+.mat-button-wrapper {
+  font-family: iranyekan, sans-serif !Important;
 }
 
+.ui-slider-handle {
+  background: black;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+.ui-slider {
+  border: 1px solid black;
+
+}
+
+.ui-slider-range {
+  background: #999999;
+}
+.mat-content {
+  flex: .98 !important;
+}

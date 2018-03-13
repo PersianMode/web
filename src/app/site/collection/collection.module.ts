@@ -11,6 +11,8 @@ import {DataScrollerModule} from 'primeng/datascroller';
 import {SidebarModule} from 'primeng/sidebar';
 import {MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatExpansionModule} from '@angular/material';
 import {FormsModule} from '@angular/forms';
+import {OverlayPanelModule} from 'primeng/overlaypanel';
+import {SliderModule} from 'primeng/slider';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import {FormsModule} from '@angular/forms';
     MatButtonModule,
     MatButtonToggleModule,
     MatExpansionModule,
+    OverlayPanelModule,
+    SliderModule,
   ],
 })
 export class CollectionModule {

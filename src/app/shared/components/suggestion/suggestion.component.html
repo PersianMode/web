@@ -1,18 +1,21 @@
-<mat-input-container class="field">
-  <input matInput type="text" placeholder="{{placeholder}}" [matAutocomplete]="auto" [formControl]="suggestionCtrl"/>
-  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addItem($event)">
-    <mat-option *ngFor="let item of filteredItems" [value]="item._id" class="farsi">
+<mat-input-container class="field" style="direction: ltr;">
+  <input matInput type="text" placeholder="{{placeholder}}" [matAutocomplete]="auto" [formControl]="suggestionCtrl" style="direction: ltr"/>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addItem($event)" >
+    <mat-option *ngFor="let item of filteredItems" [value]="item._id"  style="text-align: left">
 
-      <span *ngIf="name === targetEnum.collection.toString()">
+      <span *ngIf="name === targetEnum.collection.toString()" style="direction: ltr; text-align: left;">
         {{item.name}}
       </span>
-      <span *ngIf="name == targetEnum.product.toString()">
+      <span *ngIf="name == targetEnum.product.toString()" style="direction: ltr; text-align: left;">
         {{item.name}} ({{item.product_type}} | {{item.brand}})
       </span>
-      <span *ngIf="name == targetEnum.tag.toString()">
+      <span *ngIf="name == targetEnum.tag.toString()" style="direction: ltr; text-align: left;">
+        {{item.name + ' - ' + item.tg_name }}
+      </span>
+      <span *ngIf="name == targetEnum.color.toString()" style="direction: ltr; text-align: left;">
         {{item.name}}
       </span>
-      <span *ngIf="name == targetEnum.color.toString()">
+      <span *ngIf="name == targetEnum.type .toString()" style="direction: ltr; text-align: left;">
         {{item.name}}
       </span>
     </mat-option>

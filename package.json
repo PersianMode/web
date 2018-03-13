@@ -28,6 +28,7 @@
     "angular2-markdown": "^2.2.3",
     "bootstrap": "^4.0.0",
     "core-js": "^2.4.1",
+    "css-color-converter": "^1.1.0",
     "font-awesome": "^4.7.0",
     "jalali-moment": "^3.0.10",
     "material-design-icons": "^3.0.1",
