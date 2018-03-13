@@ -34,15 +34,15 @@
             <tbody>
             <tr *ngFor="let pc of productColors; let i = index">
               <td>{{i+1}}</td>
-              <td style="direction: ltr">{{pc.info?.name}}</td>
+              <td style="direction: ltr">{{pc.name}}</td>
               <td>
                 <img style="width: 80%; margin: 0 10px;" [src]="getURL(pc.image?.thumbnail)">
               </td>
               <td>
                 <div style="text-align: center">
-                  <div *ngFor="let image of pc.image?.angles"
+                  <div *ngFor="let angle of pc.image?.angles"
                        style="width: 10% ;height: 10%; display: inline-block;text-align: center;">
-                    <img style="width: 80% ;" [src]="getURL(image)">
+                    <img style="width: 80% ;" [src]="getURL(angle)">
                   </div>
                 </div>
               </td>

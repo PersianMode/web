@@ -83,7 +83,6 @@ export class FilteringPanelComponent implements OnInit {
     }
     const sizes: any = this.filter_options.filter(r => r.name === 'سایز')[0];
     sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
-    // sizes.values = sizes.values.map(+s => );
     this.priceRangeChange();
     // });
     this.isMobile = this.responsiveService.isMobile;
