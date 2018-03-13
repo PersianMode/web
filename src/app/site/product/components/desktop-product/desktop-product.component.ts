@@ -1,8 +1,8 @@
-import {Component, HostListener, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, Inject, Input, OnInit, Output, ViewChild,EventEmitter} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
-import {CartService} from '../../../../shared/services/cart.service';
+import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 
 @Component({
   selector: 'app-desktop-product',
@@ -13,7 +13,17 @@ export class DesktopProductComponent implements OnInit {
   @Input() product;
   @Input() price;
   @Input() sub;
-  @Input() id;
+
+  @Input()
+  set id(value) {
+    this._id = value;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  private _id;
   @ViewChild('descPane') descPane;
   @ViewChild('photosDiv') photosDiv;
   topFixedFilterPanel = false;
@@ -23,40 +33,35 @@ export class DesktopProductComponent implements OnInit {
   innerHeight = 0;
   innerScroll = false;
   size: number;
-  selected_product_color: any;
+  productSize;
+  @Input() productColorSelected;
 
-  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-              private cartService: CartService) {
+  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
   }
 
   ngOnInit() {
-    this.selected_product_color = this.product.colors[0];
   }
 
   up() {
-    this.router.navigate(['product', +this.id + 1]);
+    // this.router.navigate(['product', +this.id + 1]);
   }
 
-  saveToCart() {
-    // check form size and id undefined
-    const object: any = {};
-    object.name = this.product.name;
-    object.instance_id = this.product.id;
-    object.tags = this.product.tags;
-    object.price = this.product.price;
-    object.size = (!this.size ? 0 : this.size);
-    object.thumbnail = this.selected_product_color.images.thumbnail;
-    object.quantity = 1;
-    object.color = {};
-    object.color.color_id = (!this.id ? 0 : this.id);
-    // object.color.name= this.product.colorText;
-    object.discount = '';
-    object.instances = []; // instances not available
-    this.cartService.saveItem(object);
-  }
 
   showAngles(colorId) {
-    this.selected_product_color = this.product.colors.filter(el => el.color_id === colorId)[0];
+    this.productColorSelected = [];
+    this.productSize = [];
+    this.productColorSelected = this.product.colors.filter(el => el.color_id === colorId)[0];
+
+
+    this.productSize = this.product.instances.map(instance => {
+      let _sized = {value: instance.size, color_id: instance.product_color_id};
+      instance.inventory.forEach(inner_el => {
+        if (instance.product_color_id === colorId && inner_el.count <= 0) {
+          _sized['disabled'] = true
+        }
+      });
+      return _sized;
+    });
   }
 
   @HostListener('window:scroll', [])

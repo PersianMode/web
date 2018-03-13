@@ -1,2 +1,2 @@
-<app-desktop-product *ngIf="!isMobile" [id]="colorId" [product]="product" [sub]="joinedTags" [price]="formattedPrice"></app-desktop-product>
+<app-desktop-product *ngIf="!isMobile" [productColorSelected]="selectedProductColor" [product]="product" [sub]="joinedTags" [price]="formattedPrice"></app-desktop-product>
 <app-mobile-product *ngIf="isMobile" [id]="colorId" [product]="product" [sub]="joinedTags" [price]="formattedPrice"></app-mobile-product>

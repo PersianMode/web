@@ -4,4 +4,5 @@ export enum TargetEnum {
   page = 'Page',
   tag = 'Tag',
   color = 'Color',
+  type = 'ProductType',
 }

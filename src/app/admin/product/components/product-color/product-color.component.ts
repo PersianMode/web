@@ -14,9 +14,6 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 })
 export class ProductColorComponent implements OnInit {
 
-  productColorForm: FormGroup;
-
-
   @Input() productColors: any;
   @Output() onProductColorChanged = new EventEmitter<any>();
   @Input() colors: IColor[];
@@ -32,17 +29,8 @@ export class ProductColorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initForm();
   }
 
-  initForm() {
-    // this.productColorForm = new FormBuilder().group({
-        // proColor: [null, [
-        //   Validators.required,
-        // ]],
-      // },
-    // );
-  }
 
   removeImg(color_id: string) {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
@@ -106,6 +94,7 @@ export class ProductColorComponent implements OnInit {
   }
 
   getURL(path) {
+    if(path)
     return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }
 

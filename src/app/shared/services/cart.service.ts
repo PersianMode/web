@@ -21,18 +21,18 @@ export class CartService {
   }
 
   saveItem(item) {
-    if (this.authService.isLoggedIn.getValue()) {
-      // Update order in server
-    } else {
-      // Save data on storage
-      this.saveItemOnStorage(item);
-    }
+    //  if (this.authService.isLoggedIn.getValue()) {
+    //   // Update order in server
+    // } else {
+    //   // Save data on storage
+    //   this.saveItemOnStorage(item);
+    // }
   }
 
   getCartItems() {
-    if (!this.authService.isLoggedIn.getValue()) {
-      this.getCartFromStorage();
-    }
+    // if (!this.authService.isLoggedIn.getValue()) {
+    //   this.getCartFromStorage();
+    // }
 
     // Get order-line details or all order details
   }

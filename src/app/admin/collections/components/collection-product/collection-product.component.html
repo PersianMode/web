@@ -1,0 +1,43 @@
+<div fxLayout="row">
+  <mat-card fxFlex="100" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
+    <mat-card-content>
+      <div class="rs-table">
+        <div class="little-right-margin right-alignment">
+          <br/>
+          <app-suggestion [name]="'Product'" [currentIds]="[0]" [placeholder]="'نام محصول'"
+                          (add)="addProduct($event)"></app-suggestion>
+        </div>
+        <br/>
+        <table class="table little-right-margin" style="float: right;">
+          <thead>
+          <td>حذف</td>
+          <td>نمایش</td>
+          <td>برند</td>
+          <td>نوع</td>
+          <td>نام</td>
+          <td>شماره</td>
+          </thead>
+          <tbody>
+          <tr *ngFor="let p of products; let i = index">
+            <td>
+              <button mat-icon-button (click)="removeProduct(p._id)" color="warn">
+                <mat-icon aria-label="delete">delete</mat-icon>
+              </button>
+            </td>
+            <td>
+              <button mat-icon-button (click)="viewProduct(p._id)" color="primary">
+                <mat-icon aria-label="view">visibility</mat-icon>
+              </button>
+            </td>
+            <td>{{p.brand}}</td>
+            <td>{{p.product_type}}</td>
+            <td>{{p.name}}</td>
+            <td>{{i+1}}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
