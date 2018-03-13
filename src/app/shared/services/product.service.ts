@@ -191,5 +191,5 @@ export class ProductService {
   private mapColors() {
 
 
-
+  }
 }
