@@ -47,7 +47,8 @@ import {FileUploadModule} from 'ng2-file-upload';
     BidiModule,
     MatIconModule,
     MatCheckboxModule,
-    FileUploadModule
+    FileUploadModule,
+    // MatBadgeIconModule
   ],
   entryComponents: [RemovingConfirmComponent],
   exports: [SuggestionComponent,
