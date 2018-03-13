@@ -36,12 +36,18 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   innerHeight = 0;
   innerScroll = false;
   size: number;
-  productSize;
+  productSize = [];
 
   @Input()
   set selectedProductColorID(id) {
     if (id) {
       this.selectedProductColor = this.product.colors.find(r => r.color._id === id);
+      this.productSize = this.product.instances.filter(r => r.product_color_id === this.selectedProductColor._id).map(r => {
+        return {
+          value: r.size,
+          disabled: r.inventory.reduce((x, y) => x.count + y.count, 0) <= 0,
+        };
+      });
     }
   };
 

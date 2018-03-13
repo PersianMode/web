@@ -17,7 +17,7 @@
       </div>
       <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
     </div>
-    <p>{{data.colors.length.toLocaleString('fa')}} رنگ</p>
+    <p>{{data.colors.length.toLocaleString('fa')}} رنگ <span *ngIf="soldOut" class="soldOut">موجود نیست</span></p>
     <h2>{{data.name}}</h2>
     <h3>{{desc}}</h3>
     <h4>{{price}} تومان</h4>
@@ -27,8 +27,8 @@
 <div *ngIf="isMobile">
   <div [class.main]="!isMobile" [class.mainMobile]="isMobile" [ngStyle]="isMobile ? {'width.px': width, 'height.px': height} : {}">
   <span>
-    <div [class.imgWrapper]="!isMobile" [class.imgWrapperMobile]="isMobile" (mouseover)="turnOn()" (mouseout)="turnOff()"
-         [ngStyle]="isMobile ? {'width.px': width - 2, 'max-height.px': width - 2} : {}">
+    <div [class.imgWrapper]="!isMobile" [class.imgWrapperMobile]="isMobile"
+         [ngStyle]="isMobile ? {'width.px': width - 2, 'height.px': width - 2} : {}">
       <img src="assets/pictures/product-small/{{images[0]}}"
             (click)="openProduct()" [style.right.px]="(width * data.colors[pos].position)"
            [ngStyle]="isMobile ? {'height.px': width - 2} : {}">

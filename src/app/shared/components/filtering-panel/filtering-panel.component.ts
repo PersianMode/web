@@ -2,7 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
 import {priceFormatter} from '../../lib/priceFormatter';
 import {ProductService} from '../../services/product.service';
-import {colorConverter} from './colorConverter';
+import {colorConverter} from '../../services/colorConverter';
+import {DictionaryService} from '../../services/dictionary.service';
 
 @Component({
   selector: 'app-filtering-panel',
@@ -30,7 +31,7 @@ export class FilteringPanelComponent implements OnInit {
     },
     {
       name: 'رنگ',
-      values: ['#f8f8f8', '#f0f0f0', '#fffff0', '#ffe0ff', '#efefef', '#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
+      values: ['anthracite', 'university red', '#fffff0', '#ffe0ff', '#efefef', '#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
     }
   ];
   current_filter_state = [];
@@ -49,7 +50,7 @@ export class FilteringPanelComponent implements OnInit {
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
 
-  constructor(private responsiveService: ResponsiveService, private productService: ProductService) {
+  constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
@@ -67,11 +68,7 @@ export class FilteringPanelComponent implements OnInit {
 
       for (const col in this.isChecked['رنگ']) {
         let color;
-        try {
-          color = colorConverter(col);
-        } catch (e) {
-          console.log(col, e);
-        }
+        color = this.dict.convertColor(col);
         if (color) {
           this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
           let red = color.substring(1, 3);

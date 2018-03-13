@@ -5,6 +5,7 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {ProductService} from '../../../../shared/services/product.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
 @Component({
   selector: 'app-product',
@@ -20,7 +21,8 @@ export class ProductComponent implements OnInit {
   isMobile = false;
 
   constructor(public httpService: HttpService, private route: ActivatedRoute, @Inject(WINDOW) private window,
-              private responsiveService: ResponsiveService, private productService: ProductService) {
+              private responsiveService: ResponsiveService, private productService: ProductService,
+              private dict: DictionaryService) {
   }
 
   ngOnInit() {
@@ -49,22 +51,15 @@ export class ProductComponent implements OnInit {
               }
             });
             item.image.angles = angles;
+            item.soldOut = data[0].instances
+              .filter(r => r.product_color_id === item._id)
+              .map(r => r.inventory)
+              .map(r => r.count ? r.count : 0)
+              .reduce((x, y) => x + y, 0) <= 0;
           });
           this.product.colors = data[0].colors;
-          this.product.sizes = this.product.instances.map(instance => {
-            const _sized = {value: instance.size, color_id: instance.product_color_id};
-            instance.inventory.forEach(inner_el => {
-              if (instance.product_color_id === colorIdParam && inner_el.count <= 0) {
-                _sized['disabled'] = true;
-              } else if (instance.product_color_id === this.product.colors[0].color_id && inner_el.count <= 0) {
-                _sized['disabled'] = true;
-              }
-            });
-            return _sized;
-          });
           this.formattedPrice = priceFormatter(data[0].base_price);
-          // Todo Duplicate Tags
-          this.joinedTags = data[0].tags.map(t => t.name).join(' ');
+          this.joinedTags = Array.from(new Set([... data[0].tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
           this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
         });
       } else {
