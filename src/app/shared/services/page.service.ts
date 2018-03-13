@@ -37,14 +37,11 @@ export class PageService {
 
   private emitPlacements(placements) {
     let components, dataSplit;
-    [components, dataSplit] = placements;
+    [components, dataSplit] = placements.placement;
     components.forEach((c, i) => {
       this.placement$.next([c, dataSplit[i]]);
     });
-  }
-
-  private emitPageInfo(info: IPageInfo) {
-    this.pageInfo$.next(info);
+    this.pageInfo$.next(placements.page_info);
   }
 
   getPage(pageName, emit = true) {
@@ -67,16 +64,14 @@ export class PageService {
                 });
               }
               if (emit) {
-                this.emitPlacements(this.cache[pageName].placement);
-                this.emitPageInfo(this.cache[pageName].page_info);
+                this.emitPlacements(this.cache[pageName]);
               }
             }, err => {
               console.log('err: ', err);
             }
           );
         } else if (emit) {
-          this.emitPlacements(this.cache[pageName].placement);
-          this.emitPageInfo(this.cache[pageName].page_info);
+          this.emitPlacements(this.cache[pageName]);
         }
       }
     }, 500);

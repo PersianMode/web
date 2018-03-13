@@ -1,24 +1,24 @@
 <div class="photos" #photosDiv>
-<span>
-<div *ngFor="let item of productColorSelected?.image.angles">
-  <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1"><source src="{{item.url}}" type="video/webm"></video>
-  <img *ngIf="item.type !== 'video'" src="{{item.url}}">
+<span *ngIf="selectedProductColor">
+<div *ngFor="let item of selectedProductColor?.image?.angles">
+  <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1"><source src="assets/pictures/products/{{item.url}}" type="video/webm"></video>
+  <img *ngIf="item.type !== 'video'" src="assets/pictures/products/{{item.url}}">
 </div>
 </span>
 </div>
 <div class="description" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
      [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll"
-     [style.height]="innerScroll ? innerHeight + 'px' : 'fit-content'"
-     [style.top]="(bottomFixedFilterPanel ? topDist : 0) + 'px'" #descPane>
+     [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
+     'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}" #descPane>
     <h1>{{product.name}}</h1>
     <h4>{{sub}} <span>{{price}} تومان</span></h4>
     <div *ngIf="product?.colors" class="colors">
       <!--[routerLink]="['/', 'product', product.id, item.color_id]"-->
-      <a *ngFor="let item of product.colors" (click)="showAngles(item.color_id)">
-            <img [style.opacity]="item.color_id === productColorSelected.color_id ? 1 : .5" src="{{item.image.thumbnail}}">
+      <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item.color._id]">
+            <img [style.opacity]="selectedProductColor && item._id === selectedProductColor._id ? 1 : .5" src="assets/pictures/product-small/{{item.image.thumbnail}}">
         </a>
     </div>
-    <app-size-picker [sizes]="productSize"   (value)="size = $event"></app-size-picker>
+    <app-size-picker *ngIf="productSize && productSize.length" [sizes]="productSize" (value)="size = $event"></app-size-picker>
     <button class="cart">در سبد بگذار</button>
     <button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>
     <div class="description-md" Markdown>

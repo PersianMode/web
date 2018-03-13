@@ -3,10 +3,10 @@
   display: inline-block;
   text-align: right;
   width: 244px;
-  height: 314px;
+  height: 334px;
   overflow: hidden;
   float: right;
-  margin-bottom: 34px;
+  margin-bottom: 14px;
   background: #fff;
   vertical-align: top;
   font-size: 11px;
@@ -18,7 +18,7 @@
   position: relative;
   display: inline-block;
   text-align: right;
-  overflow: hidden;
+  /*overflow: hidden;*/
   float: right;
   margin-bottom: 20px;
   background: #fff;
@@ -154,5 +154,5 @@
 .slider img {
   height: 60px;
   display: inline-block;
-  transform: scaleX(-1);
+  /*transform: scaleX(-1);*/
 }

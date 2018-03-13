@@ -16,37 +16,23 @@ import {log} from 'util';
   templateUrl: './size-picker.component.html',
   styleUrls: ['./size-picker.component.css']
 })
-export class SizePickerComponent implements OnInit, OnChanges {
+export class SizePickerComponent implements OnInit {
   @Input() sizes;
 
   private _sizes;
   sizeses = [];
   @Output('value') value = new EventEmitter();
   val = 0;
-
-  constructor() {
-  }
+  constructor() { }
 
   ngOnInit() {
-
+    while (this.sizes.length) {
+      this.sizeses.push(this.sizes.splice(0, 5));
+    }
   }
 
-  onchange(e) {
+  onChange(e) {
     this.value.emit(+e.value);
     this.val = +e.value;
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-
-    const sizes: SimpleChange = changes.sizes;
-
-    this.sizeses = [];
-    if (changes.sizes.currentValue.length > 0) {
-      let _sizeArr = changes.sizes.currentValue;
-      for (let i = 0; i < _sizeArr.length; i++) {
-        this.sizeses.push(_sizeArr.splice(0, 5))
-      }
-    }
-
   }
 }
