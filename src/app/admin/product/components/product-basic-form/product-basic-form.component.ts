@@ -21,8 +21,8 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
   upsertBtnShouldDisabled = false;
   deleteBtnShouldDisabled = false;
   anyChanges = false;
-  product: any = {};
-  loadedValue: any = {};
+  originalProduct: any = {};
+
 
   @Input() productId: string;
   @Input() brands: IBrand[];
@@ -40,10 +40,15 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
       this.progressService.enable();
       this.httpService.get(`/product/${this.productId}`).subscribe(
         (data) => {
-          this.product = data[0];
-          this.loadedValue = data[0];
+
+          this.originalProduct = data;
+
+          this.productBasicForm.controls['name'].setValue(data.name);
+          this.productBasicForm.controls['base_price'].setValue(data.base_price);
+          this.productBasicForm.controls['product_type'].setValue(data.product_type.product_type_id);
+          this.productBasicForm.controls['brand'].setValue(data.brand.brand_id);
+
           this.progressService.disable();
-          this.initForm();
         },
         (err) => {
           this.progressService.disable();
@@ -56,23 +61,21 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.productBasicForm = new FormBuilder().group({
-        name: [(Object.keys(this.loadedValue).length && this.loadedValue.name) ? this.loadedValue.name : null, [
+        name: [null, [
           Validators.required,
         ]],
-        base_price: [(Object.keys(this.loadedValue).length && this.loadedValue.base_price) ? this.loadedValue.base_price : null, [
+        base_price: [null, [
           Validators.required,
         ]],
-        product_type: [(Object.keys(this.loadedValue).length && this.loadedValue.product_type._id) ?
-          this.loadedValue.product_type._id : null, [
+        product_type: [ null, [
           Validators.required,
         ]],
-        brand: [(Object.keys(this.loadedValue).length && this.loadedValue.brand._id) ? this.loadedValue.brand._id : null, [
+        brand: [null, [
           Validators.required,
         ]],
-        desc: [(Object.keys(this.loadedValue).length && this.loadedValue.desc) ? this.loadedValue.desc : null, [
+        desc: [null, [
           Validators.maxLength(50),
         ]]
-      // TODO: 'details' field should be added here, and some other places :D
       },
       {
         validator: this.basicInfoValidation
@@ -161,18 +164,27 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
   }
 
   fieldChanged() {
-    if (!this.loadedValue || !Object.keys(this.loadedValue) || !Object.keys(this.loadedValue).length)
+    if (!this.originalProduct) {
       return;
-
+    }
     this.anyChanges = false;
-    Object.keys(this.productBasicForm.controls).forEach(el => {
-      const tempValue = this.loadedValue[el]._id ? this.loadedValue[el]._id : this.loadedValue[el];
-      if (this.productBasicForm.controls[el].value !== tempValue) {
-        this.anyChanges = true;
-      }
-    });
+    let name = (this.productBasicForm.controls['name'].value === null ||
+      isUndefined(this.productBasicForm.controls['name'].value)) ? '' : this.productBasicForm.controls['name'].value;
+    name = name.trim();
 
-    // TODO: changes should be captured here
+    const base_price = (this.productBasicForm.controls['base_price'].value === null ||
+      isUndefined(this.productBasicForm.controls['base_price'].value)) ? '' : this.productBasicForm.controls['base_price'].value;
+
+    let orig_name = this.originalProduct.name;
+    orig_name = orig_name.trim();
+
+    let orig_base_price = this.originalProduct.base_price;
+    orig_base_price = orig_name.trim();
+
+    if ((name !== orig_name && (name !== '' || orig_name !== null)) ||
+      (base_price !== orig_base_price && (base_price !== '' || orig_base_price !== null))) {
+      this.anyChanges = true;
+    }
   }
 
   basicInfoValidation(Ac: AbstractControl) {
