@@ -60,6 +60,7 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.pageName = 'collection/' + params.get('typeName');
+      console.log('page name : ', this.pageName);
       this.pageService.getPage(this.pageName);
       this.pageService.pageInfo$.subscribe(res => {
           if (res && res['collection_id']) {
@@ -73,9 +74,11 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
       );
     });
     this.productService.collectionInfo$.subscribe(r => {
+      // console.log('collection name : ', this.collection.collectionName);
       this.collection.collectionName = r;
     });
     this.productService.productList$.subscribe(r => {
+      // console.log('products array : ', this.collection.products);
       this.collection.products = r;
     });
     this.calcWidth();
