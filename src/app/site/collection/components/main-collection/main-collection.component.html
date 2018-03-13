@@ -5,28 +5,33 @@
   <app-filtering-panel (scrollChange)="calcAfterScroll()"></app-filtering-panel>
 </div>
 <p-sidebar *ngIf="isMobile" [(visible)]="displayFilter" position="right" [blockScroll]="true">
-  <div class="innerScroll">
-    <app-filtering-panel (displayFilterEvent)="setDispalyFilter($event)"></app-filtering-panel>
+  <div class="mobileScroll">
+    <app-filtering-panel (displayFilterEvent)="setDispalyFilter($event)" [sortOptions]="sortOptions" (sortedByChange)="sortedBy=$event"></app-filtering-panel>
   </div>
 </p-sidebar>
 <div [class.gridwall]="!isMobile" [class.mobileGridwall]="isMobile" #gridwall>
   <app-panels></app-panels>
   <div class="gridwall-wrapper">
     <div *ngIf="!isMobile" class="gridwall-title">
-      <h1>{{collectionName}} <span>({{products.length.toLocaleString('fa')}})</span></h1>
+      <h1>{{collection.collectionNameFa}} <span>({{collection.products.length.toLocaleString('fa')}})</span></h1>
       <div class="sorter-row">
-        <div class="sorter">ترتیب نمایش</div>
+      <div class="sorter" (click)="sortPanel.toggle($event)">ترتیب نمایش<span *ngIf="sortedBy"> با {{sortedBy.fa}}</span> <i class="fa" [ngClass]="sortPanel.visible ? 'fa-chevron-up' : 'fa-chevron-down'"></i></div>
+        <p-overlayPanel #sortPanel>
+          <div *ngFor="let sortOption of sortOptions;let i=index" (click)="selectSortOption(sortPanel,i)" [style.borderRight]="sortedBy && (sortedBy.value === sortOption.value) ? 'black 4px solid':'transparent 4px solid'">
+            {{sortOption.fa}}
+          </div>
+        </p-overlayPanel>
       </div>
     </div>
     <div *ngIf="isMobile" class="mobileGridwallTitle">
-      <h1>{{collectionName}}</h1>
+      <h1>{{collection.collectionNameFa}}</h1>
       <div>
-        <span>{{products.length.toLocaleString('fa')}} مورد</span>
+        <span>{{collection.products.length.toLocaleString('fa')}} مورد</span>
         <p><i class="fa fa-cog" (click)="displayFilter=!displayFilter"></i> فیلتر</p>
       </div>
     </div>
     <div class="gridwall-content">
-      <p-dataScroller [value]="products" [rows]="10">
+      <p-dataScroller [value]="collection.products" [rows]="10">
         <ng-template let-item pTemplate="item">
           <app-product-grid-item [data]="item" [width]="gridWidth" [height]="gridHeight"></app-product-grid-item>
         </ng-template>
