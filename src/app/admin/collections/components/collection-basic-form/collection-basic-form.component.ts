@@ -45,7 +45,10 @@ export class CollectionBasicFormComponent implements OnInit {
 
   initForm() {
     this.collectionForm = new FormBuilder().group({
-      colName: [null, [
+      name: [null, [
+        Validators.required,
+      ]],
+      name_fa: [null, [
         Validators.required,
       ]],
     }, {
@@ -65,10 +68,12 @@ export class CollectionBasicFormComponent implements OnInit {
 
     this.httpService.get(`collection/${this.collectionId}`).subscribe(
       (data) => {
-        this.collectionForm.controls['colName'].setValue(data.name);
+        this.collectionForm.controls['name'].setValue(data.name);
+        this.collectionForm.controls['name_fa'].setValue(data.name_fa);
         this.originalCollection = {
           _id: data._id,
           name: data.name,
+          name_fa: data.name_fa
         };
 
         this.progressService.disable();
@@ -88,7 +93,8 @@ export class CollectionBasicFormComponent implements OnInit {
 
   submitCollection() {
     const sendingData = {
-      name: this.collectionForm.controls['colName'].value,
+      name: this.collectionForm.controls['name'].value,
+      name_fa: this.collectionForm.controls['name_fa'].value,
     };
     // if(this.collectionId)
     //   data['_id'] = this.collectionId;
@@ -133,14 +139,22 @@ export class CollectionBasicFormComponent implements OnInit {
       return;
     }
     this.anyChanges = false;
-    let colName = (this.collectionForm.controls['colName'].value === null ||
-      isUndefined(this.collectionForm.controls['colName'].value)) ? '' : this.collectionForm.controls['colName'].value;
-    colName = colName.trim();
+    let name = (this.collectionForm.controls['name'].value === null ||
+      isUndefined(this.collectionForm.controls['name'].value)) ? '' : this.collectionForm.controls['name'].value;
+    name = name.trim();
 
-    let orig_colName = this.originalCollection.name;
-    orig_colName = orig_colName.trim();
+    let name_fa = (this.collectionForm.controls['name_fa'].value === null ||
+      isUndefined(this.collectionForm.controls['name_fa'].value)) ? '' : this.collectionForm.controls['name_fa'].value;
+    name_fa = name_fa.trim();
 
-    if ((colName !== orig_colName && (colName !== '' || orig_colName !== null))) {
+    let orig_name = this.originalCollection.name;
+    orig_name = orig_name.trim();
+
+    let orig_name_fa = this.originalCollection.name_fa;
+    orig_name_fa = orig_name.trim();
+
+    if ((name !== orig_name && (name !== '' || orig_name !== null)) ||
+      (name_fa !== orig_name_fa && (name_fa !== '' || orig_name_fa !== null))) {
       this.anyChanges = true;
     }
   }
