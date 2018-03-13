@@ -44,6 +44,7 @@ export class ProductGridItemComponent implements OnInit {
     this.slidesNum = Math.ceil(this.data.colors.length / 3);
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    console.log('data : ', this.data);
   }
 
   turnOn(e, time) {

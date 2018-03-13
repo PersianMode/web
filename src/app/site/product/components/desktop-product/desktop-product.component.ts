@@ -58,8 +58,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
 
   ngOnInit() {
   }
-
-
   saveToCart() {
     console.log('btnDisabled : ', this.addCardBtnDisabled);
     // check form size and id undefined
@@ -69,7 +67,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     object.tags = this.product.tags;
     object.price = this.product.price;
     object.size = (!this.size ? 0 : this.size);
-    object.thumbnail = this.selected_product_color.images.thumbnail;
+    object.thumbnail = this.selectedProductColor.images.thumbnail;
     object.quantity = 1;
     object.color = {};
     object.color.color_id = (!this.id ? 0 : this.id);
@@ -100,7 +98,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     this.addCardBtnDisabled = false;
   }
   showAngles(colorId) {
-    this.selected_product_color = this.product.colors.filter(el => el.color_id === colorId)[0];
+    this.selectedProductColor = this.product.colors.filter(el => el.color_id === colorId)[0];
   }
   ngAfterContentChecked() {
     this.onScroll();

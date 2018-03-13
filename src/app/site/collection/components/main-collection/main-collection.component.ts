@@ -72,8 +72,12 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
         }
       );
     });
-    this.productService.collectionInfo$.subscribe(r => this.collection.collectionName = r);
-    this.productService.productList$.subscribe(r => this.collection.products = r);
+    this.productService.collectionInfo$.subscribe(r => {
+      this.collection.collectionName = r;
+    });
+    this.productService.productList$.subscribe(r => {
+      this.collection.products = r;
+    });
     this.calcWidth();
     this.responsiveService.resize$.subscribe(r => {
       this.calcWidth();

@@ -19,6 +19,7 @@ export class ProductService {
   private sortInput = '';
 
   constructor(private httpService: HttpService, private http: HttpClient) {
+
   }
 
   extractFilters() {
@@ -33,7 +34,7 @@ export class ProductService {
 
     let sizes: string[] = this.filteredProducts.map(x => x['size']);
     sizes = Array.from(new Set([].concat.apply([], sizes)));
-    //let maxPrice = max(this.filteredProducts)
+    // let maxPrice = max(this.filteredProducts)
     const filter: IFilter[] = [];
 
     if (types.length > 1) filter.push({name: 'نوع', values: types});
@@ -61,7 +62,7 @@ export class ProductService {
 
   loadProducts(collection_id) {
     this.httpService.get('collection/product/' + collection_id)
-    //this.http.get('/assets/products.json')
+    // this.http.get('/assets/products.json')
       .subscribe(
       (data) => {
 
