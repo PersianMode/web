@@ -13,6 +13,7 @@ export class AddToCardConfirmComponent implements OnInit {
   cartNumbers = null;
   selectedSize = null;
   farsiPrice = null;
+  count = 1;
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<AddToCardConfirmComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
   ngOnInit() {
     this.cartNumbers = 0;
@@ -21,7 +22,6 @@ export class AddToCardConfirmComponent implements OnInit {
     this.cartNumbers = this.data.cartNumbers;
     this.selectedSize = this.data.selectedSize;
     this.farsiPrice = priceFormatter(this.product.price);
-    console.log(this.product);
   }
 
   closeDialog() {
