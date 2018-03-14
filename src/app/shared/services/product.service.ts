@@ -23,25 +23,25 @@ export class ProductService {
   }
 
   extractFilters() {
-    const types: string[] = Array.from(new Set(this.filteredProducts.map(x => x['product_type'].name)));
-
-    let colors: string[] = [];
-    let _colors: string[] = this.filteredProducts.map(x => x['colors']);
-    _colors = [].concat.apply([], _colors).map(x => x.name);
-    _colors.forEach(c => c.split('/').map(x => x.trim()).forEach(x => colors.push(x)));
-    colors = Array.from(new Set(colors));
-
-
-    let sizes: string[] = this.filteredProducts.map(x => x['size']);
-    sizes = Array.from(new Set([].concat.apply([], sizes)));
-    // let maxPrice = max(this.filteredProducts)
-    const filter: IFilter[] = [];
-
-    if (types.length > 1) filter.push({name: 'نوع', values: types});
-    if (colors.length > 1) filter.push({name: 'رنگ', values: colors});
-    if (sizes.length > 1) filter.push({name: 'سایز', values: sizes});
-
-    this.filtering$.next(filter);
+    // const types: string[] = Array.from(new Set(this.filteredProducts.map(x => x['product_type'].name)));
+    //
+    // let colors: string[] = [];
+    // let _colors: string[] = this.filteredProducts.map(x => x['colors']);
+    // _colors = [].concat.apply([], _colors).map(x => x.name);
+    // _colors.forEach(c => c.split('/').map(x => x.trim()).forEach(x => colors.push(x)));
+    // colors = Array.from(new Set(colors));
+    //
+    //
+    // let sizes: string[] = this.filteredProducts.map(x => x['size']);
+    // sizes = Array.from(new Set([].concat.apply([], sizes)));
+    // // let maxPrice = max(this.filteredProducts)
+    // const filter: IFilter[] = [];
+    //
+    // if (types.length > 1) filter.push({name: 'نوع', values: types});
+    // if (colors.length > 1) filter.push({name: 'رنگ', values: colors});
+    // if (sizes.length > 1) filter.push({name: 'سایز', values: sizes});
+    //
+    // this.filtering$.next(filter);
 
   }
 
