@@ -3,7 +3,7 @@ import {HttpService} from './http.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
 import {HttpClient} from '@angular/common/http';
-import {Subject} from 'rxjs/Subject';
+import {DictionaryService} from './dictionary.service';
 
 @Injectable()
 export class ProductService {
@@ -13,35 +13,31 @@ export class ProductService {
   collectionNameFa$: ReplaySubject<any> = new ReplaySubject<any>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
-  product$: Subject<any> = new Subject<any>();
+  product$: ReplaySubject<any> = new ReplaySubject<any>();
 
   private filterInput: IFilter[];
   private sortInput = '';
+  private collectionId;
 
-  constructor(private httpService: HttpService, private http: HttpClient) {
+  constructor(private httpService: HttpService, private http: HttpClient, private dict: DictionaryService) {
   }
 
   extractFilters() {
-    // const types: string[] = Array.from(new Set(this.filteredProducts.map(x => x['product_type'].name)));
-    //
-    // let colors: string[] = [];
-    // let _colors: string[] = this.filteredProducts.map(x => x['colors']);
-    // _colors = [].concat.apply([], _colors).map(x => x.name);
-    // _colors.forEach(c => c.split('/').map(x => x.trim()).forEach(x => colors.push(x)));
-    // colors = Array.from(new Set(colors));
-    //
-    //
-    // let sizes: string[] = this.filteredProducts.map(x => x['size']);
-    // sizes = Array.from(new Set([].concat.apply([], sizes)));
-    // //let maxPrice = max(this.filteredProducts)
-    // const filter: IFilter[] = [];
-    //
-    // if (types.length > 1) filter.push({name: 'نوع', values: types});
-    // if (colors.length > 1) filter.push({name: 'رنگ', values: colors});
-    // if (sizes.length > 1) filter.push({name: 'سایز', values: sizes});
-    //
-    // this.filtering$.next(filter);
-
+    const brands = Array.from(new Set([... this.products.map(r => r.brand)]));
+    const types = Array.from(new Set([... this.products.map(r => r.product_type)]));
+    const prices = this.products.map(r => r.base_price);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    const sizes = Array.from(new Set(...this.products.map(r => Object.keys(r.sizesInventory)).reduce((x, y) => x.concat(y), []).sort()));
+    const colors = Array.from(new Set(...this.products.map(r => r.colors.map(c => c.name ? c.name.split('/') : []).reduce((x, y) => x.concat(y), []))));
+    const tags = {};
+    this.products.forEach(p => p.tags.forEach( tag => {
+      const tagGroupName = this.dict.translateWord(tag.tg_name);
+      if (!tags[tagGroupName]) {
+        tags[tagGroupName] = new Set();
+      }
+      tags[tagGroupName].add(this.dict.translateWord(tag.name));
+    }));
   }
 
   getProduct(productId) {
@@ -50,40 +46,7 @@ export class ProductService {
       this.product$.next(this.products[found]);
     } else {
       this.httpService.get(`product/${productId}`).subscribe(data => {
-        data.detailed = true;
-        data.id = data._id;
-        data.price = data.base_price;
-        data.sizes = {};
-        data.colors.forEach(item => {
-          const angles = [];
-          item.image.angles.forEach(r => {
-            if (!r.url) {
-              const temp = {url: HttpService.Host + r, type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
-              angles.push(temp);
-            } else {
-              angles.push(r);
-            }
-          });
-          item.image.angles = angles;
-          if (item.image.thumbnail) {
-            item.image.thumbnail = HttpService.Host + item.image.thumbnail;
-          }
-          item.soldOut = data.instances
-            .filter(r => r.product_color_id === item._id)
-            .map(r => r.inventory)
-            .map(r => r.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0))
-            .reduce((x, y) => x + y, 0) <= 0;
-
-          data.sizes[item._id] = data.instances
-            .filter(r => r.product_color_id === item._id)
-            .map(r => {
-              return {
-                value: r.size,
-                disabled: r.inventory.reduce((x, y) => x.count + y.count, 0) <= 0,
-              };
-            });
-        });
-
+        this.enrichProductData(data);
         if (found >= 0) {
           this.products[found] = data;
         }
@@ -92,38 +55,85 @@ export class ProductService {
     }
   }
 
-  loadProducts(collection_id) {
-    this.httpService.get('collection/product/' + collection_id)
-      .subscribe(
-        (data) => {
-          if (data.name_fa) {
-            this.collectionName = data.name_fa;
-            this.collectionNameFa$.next(data.name_fa);
-
-          }
-          if (data.products) {
-            data.products.forEach((product, prodInd) => product.colors.forEach((color, colInd, colors) => {
-              if (color.image.thumbnail) {
-                data.products[prodInd].colors[colInd].image.thumbnail = HttpService.Host + color.image.thumbnail;
-              }
-              if (color.angles) {
-                colors[colInd].angles.forEach((angle, angleId, angles) => {
-                  data.products[prodInd].colors[colInd].angles[angleId] = HttpService.Host + angle;
-                });
-              }
-            }));
-            this.products = data.products;
-            this.filteredProducts = this.products.slice();
-
-            this.extractFilters();
-
-            this.filterSortProducts();
-          }
-        },
-        (err) => {
-          console.error('Cannot get products of collection: ', err);
+  private enrichProductData(data) {
+    data.id = data._id;
+    data.price = data.base_price;
+    data.sizesByColor = {};
+    data.sizesInventory = {};
+    data.colors.forEach(item => {
+      const angles = [];
+      item.image.angles.forEach(r => {
+        if (!r.url) {
+          const temp = {url: HttpService.Host + r, type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
+          angles.push(temp);
+        } else {
+          angles.push(r);
         }
-      );
+      });
+      item.image.angles = angles;
+      if (item.image.thumbnail) {
+        item.image.thumbnail = HttpService.Host + item.image.thumbnail;
+      }
+      if (data.instances) {
+        data.detailed = true;
+        item.soldOut = data.instances
+          .filter(r => r.product_color_id === item._id)
+          .map(r => r.inventory)
+          .map(r => r.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0))
+          .reduce((x, y) => x + y, 0) <= 0;
+
+        data.sizesByColor[item._id] = data.instances
+          .filter(r => r.product_color_id === item._id)
+          .map(r => {
+            const inventory = r.inventory.reduce((x, y) => x.count + y.count, 0);
+            if (inventory) {
+              if (!data.sizesInventory[r.size]) {
+                data.sizesInventory[r.size] = {};
+              }
+              data.sizesInventory[r.size][item._id] = inventory;
+            }
+            return {
+              value: r.size,
+              disabled: inventory <= 0,
+            };
+          });
+      } else {
+        data.detailed = false;
+      }
+    });
+  }
+
+  loadProducts(collection_id) {
+    if (this.collectionId === collection_id && this.products.length) {
+      this.productList$.next(this.filteredProducts);
+      this.collectionNameFa$.next(this.collectionName);
+    } else {
+      this.httpService.get('collection/product/' + collection_id)
+        .subscribe(
+          (data) => {
+            if (data.name_fa) {
+              this.collectionName = data.name_fa;
+              this.collectionNameFa$.next(data.name_fa);
+
+            }
+            if (data.products) {
+              for (const product of data.products) {
+                this.enrichProductData(product);
+              }
+              this.collectionId = collection_id;
+              this.products = data.products;
+              this.filteredProducts = this.products.slice();
+
+              this.extractFilters();
+              this.productList$.next(this.filteredProducts);
+              //this.filterSortProducts();
+            }
+          },
+          (err) => {
+            console.error('Cannot get products of collection: ', err);
+          }
+        );
+    }
   }
 
   setFilter(name, value) {
@@ -140,7 +150,7 @@ export class ProductService {
     this.filterProducts();
     this.sortProducts();
     this.extractFilters();
-    this.productList$.next(this.filteredProducts);
+
   }
 
   private filterProducts() {

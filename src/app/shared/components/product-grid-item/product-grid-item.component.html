@@ -12,7 +12,7 @@
       <i *ngIf="slidesNum > 1 && slide > 0" (click)="prevSlide()" class="fa fa-chevron-right"></i>
       <div class="sliderBlind">
         <div class="slider" [style.right]="(-slide * 180) + 'px'">
-          <img *ngFor="let img of images" src="{{img}}">
+          <img *ngFor="let img of images" src="{{img}}" (click)="openProduct()">
         </div>
       </div>
       <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
