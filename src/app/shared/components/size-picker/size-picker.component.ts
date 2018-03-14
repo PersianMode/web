@@ -17,18 +17,22 @@ import {log} from 'util';
   styleUrls: ['./size-picker.component.css']
 })
 export class SizePickerComponent implements OnInit {
-  @Input() sizes;
-
-  private _sizes;
-  sizeses = [];
+  sizeSplits = [];
+  @Input()
+  set sizes(productSizes) {
+    this.sizeSplits = []
+    while (productSizes.length) {
+      this.sizeSplits.push(productSizes.splice(0, 5));
+    }
+  }
   @Output('value') value = new EventEmitter();
   val = 0;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit() {
-    while (this.sizes.length) {
-      this.sizeses.push(this.sizes.splice(0, 5));
-    }
+
   }
 
   onChange(e) {

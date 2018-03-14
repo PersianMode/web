@@ -5,6 +5,7 @@ import {priceFormatter} from '../../lib/priceFormatter';
 import {ResponsiveService} from '../../services/responsive.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
+import {DictionaryService} from '../../services/dictionary.service';
 
 @Component({
   selector: 'app-product-grid-item',
@@ -26,17 +27,18 @@ export class ProductGridItemComponent implements OnInit {
   slidesNum = 0;
   rect;
   isMobile = false;
-
+  soldOut = false;
 
   constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router,
-              private responsiveService: ResponsiveService, private sanitizer: DomSanitizer) {
+              private responsiveService: ResponsiveService, private sanitizer: DomSanitizer,
+              private dict: DictionaryService) {
     this.zone.runOutsideAngular(() => {
       this.window.document.addEventListener('mousemove', this.mouseMove.bind(this));
     });
   }
 
   ngOnInit() {
-    this.desc = this.data.tags.map(x => x.name).join(' ');
+    this.desc = Array.from(new Set([... this.data.tags.map(x => this.dict.translateWord(x.name.trim()))])).join(' ');
     this.price = priceFormatter(this.data.base_price);
 
     const arrImages = this.data.colors.map(r => r.image.thumbnail);
@@ -44,6 +46,7 @@ export class ProductGridItemComponent implements OnInit {
     this.slidesNum = Math.ceil(this.data.colors.length / 3);
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    this.soldOut = this.data.soldOut;
   }
 
   turnOn(e, time) {
@@ -83,7 +86,7 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   openProduct() {
-    this.router.navigate(['product', this.data._id, this.data.colors[this.pos].id]);
+    this.router.navigate(['product', this.data._id, this.data.colors[this.pos].color_id]);
   }
 
   getURL(url) {

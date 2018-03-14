@@ -5,6 +5,9 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
+import {CartService} from '../../../../shared/services/cart.service';
+import {MatDialog} from '@angular/material';
+import {AddToCardConfirmComponent} from '../add-to-card-confirm/add-to-card-confirm.component';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 
 @Component({
@@ -37,22 +40,72 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   innerScroll = false;
   size: number;
   productSize;
+  cartNumbers = null;
+  addCardBtnDisabled = true;
 
   @Input()
   set selectedProductColorID(id) {
     if (id) {
-      this.selectedProductColor = this.product.colors.find(r => r.color._id === id);
+      this.selectedProductColor = this.product.colors.find(r => r.color_id === id);
+      this.productSize = this.product.instances.filter(r => r.product_color_id === this.selectedProductColor.color_id).map(r => {
+        return {
+          value: r.size,
+          disabled: r.inventory.reduce((x, y) => x.count + y.count, 0) <= 0,
+        };
+      });
     }
   };
 
   selectedProductColor: any = {};
 
-  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
+  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
+              private cartService: CartService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
   }
-
+  saveToCart() {
+    console.log('btnDisabled : ', this.addCardBtnDisabled);
+    // check form size and id undefined
+    const object: any = {};
+    object.name = this.product.name;
+    object.instance_id = this.product.id;
+    object.tags = this.product.tags;
+    object.price = this.product.price;
+    object.size = (!this.size ? 0 : this.size);
+    object.thumbnail = this.selectedProductColor.images.thumbnail;
+    object.quantity = 1;
+    object.color = {};
+    object.color.color_id = (!this.id ? 0 : this.id);
+    // object.color.name= this.product.colorText;
+    object.discount = '';
+    object.instances = []; // instances not available
+    this.cartService.saveItem(object);
+    this.cartService.cartItems.subscribe(data => this.cartNumbers = priceFormatter(data.length));
+    const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
+      position: {top: '5.5%', left: '20%'},
+      width: '450px',
+      data: {
+        dialog_product: this.product,
+        cartNumbers : this.cartNumbers,
+        selectedSize : this.size,
+      }
+    });
+    rmDialog.afterClosed().subscribe(
+      (data) => {
+      },
+      (err) => {
+        console.error('Error in dialog: ', err);
+      }
+    );
+  }
+  newSize($event) {
+    this.size = $event;
+    this.addCardBtnDisabled = false;
+  }
+  showAngles(colorId) {
+    this.selectedProductColor = this.product.colors.filter(el => el.color_id === colorId)[0];
+  }
   ngAfterContentChecked() {
     this.onScroll();
   }

@@ -1,6 +1,5 @@
 import {Component, Inject, Input, EventEmitter, OnInit, Output} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
-import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 
 @Component({
   selector: 'app-edit-order',
