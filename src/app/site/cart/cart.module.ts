@@ -25,8 +25,6 @@ import { EditOrderComponent } from './components/edit-order/edit-order.component
     SharedModule,
     CommonModule,
     MatButtonModule,
-    MatIconModule,
-    FlexLayoutModule,
     FormsModule,
     FlexLayoutModule,
     MatCardModule,

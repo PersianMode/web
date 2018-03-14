@@ -1,48 +1,55 @@
 <div class="center" style="direction: rtl">
     <div style="text-align: right;">
-    <b>
-        <mat-icon aria-label="no" (click)="closeDialog()" style="cursor: pointer">clear</mat-icon>
-    </b>
-</div>
-<div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column"
-     style="width: 100%; text-align: center">
-    <div fxFlex="55" style="text-align: right">
-        <a href="/product/{{product.product_id}}/{{product.color.color_id}}">
-            <img src="assets/pictures/product-small/{{product.thumbnail}}"
-                 style="width:100%; height:100%; cursor: pointer;">
-        </a>
+        <b>
+            <mat-icon aria-label="no" (click)="closeDialog()" style="cursor: pointer">clear</mat-icon>
+        </b>
     </div>
-    <div fxFlex="45" style="text-align: right;margin-right: 25px;">
-        <div style="height: 45%; width: 60%">
-            <div style="width: 100%; display: inline-block; margin-top: 25px;  font-family:irankharazmi;">
-                <div style="display: inline-block; font-size: large">{{product.name}}{{' '}}</div>
-            </div>
-            <div style="width: 100%; font-family:irankharazmi;">
-                <h4>{{product.price.name}}{{' '}}{{'تومان'}}</h4>
-            </div>
+    <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column"
+         style="width: 100%; text-align: center">
+        <div fxFlex="55" style="text-align: right">
+            <a href="/product/{{product.product_id}}/{{product.color.color_id}}">
+                <img src="assets/pictures/product-small/{{product.thumbnail}}"
+                     style="width:100%; height:100%; cursor: pointer;">
+            </a>
         </div>
-        <div style="height: 7.5%; width: 60%">
-            <a href="/product/{{product.product_id}}/{{product.color.color_id}}" class="view-detail">مشاهده جزییات محصول</a>
-        </div>
-        <div style="height: 42.5%;">
-            <div style="height: 20%; display: inline-block;">
-                <div class="style-select-wrapper">
-                    <select class="select-style" (change)="setNewSize($event.target.value)">
-                        <option>سایز</option>
-                        <option *ngFor="let i of sizesArray" [selected]="(i.value === product.size.value) ? true : false" [value]="i.value">{{i.name}}</option>
-                    </select>
+        <div fxFlex="45" style="text-align: right;margin-right: 25px;">
+            <div style="height: 45%; width: 60%">
+                <div style="width: 100%; display: inline-block; margin-top: 25px;  font-family:irankharazmi;">
+                    <div style="display: inline-block; font-size: large">{{product.name}}{{' '}}</div>
                 </div>
-                <div class="style-select-wrapper">
-                    <select class="select-style" (change)="setNewQty($event.target.value)">
-                        <option>تعداد</option>
-                        <option *ngFor="let i of selectedQuantityArray" [selected]="(i.value == product.quantity.value) ? true : false" [value]="i.value" >{{i.name}}</option>
-                    </select>
+                <div style="width: 100%; font-family:irankharazmi;">
+                    <h4>{{product.price.name}}{{' '}}{{'تومان'}}</h4>
                 </div>
             </div>
-            <div style="height: 35%; margin-top: 10px">
-                <button class="btn-style" (click)="applyEdit()">ویرایش محصول</button>
+            <div style="height: 7.5%; width: 60%">
+                <a href="/product/{{product.product_id}}/{{product.color.color_id}}" class="view-detail">مشاهده جزییات
+                    محصول</a>
+            </div>
+            <div style="height: 42.5%;">
+                <div style="height: 20%; display: inline-block;">
+                    <div class="style-select-wrapper">
+                        <select class="select-style" (change)="setNewSize($event.target.value)">
+                            <option>سایز</option>
+                            <option *ngFor="let i of sizesArray"
+                                    [selected]="(i.value === product.size.value) ? true : false" [value]="i.value">
+                                {{i.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="style-select-wrapper">
+                        <select class="select-style" (change)="setNewQty($event.target.value)">
+                            <option>تعداد</option>
+                            <option *ngFor="let i of selectedQuantityArray"
+                                    [selected]="(i.value == product.quantity.value) ? true : false" [value]="i.value">
+                                {{i.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div style="height: 35%; margin-top: 10px">
+                    <button class="btn-style" (click)="applyEdit()">ویرایش محصول</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
