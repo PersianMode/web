@@ -34,7 +34,7 @@ export class ProductService {
     //
     // let sizes: string[] = this.filteredProducts.map(x => x['size']);
     // sizes = Array.from(new Set([].concat.apply([], sizes)));
-    // // let maxPrice = max(this.filteredProducts)
+    // //let maxPrice = max(this.filteredProducts)
     // const filter: IFilter[] = [];
     //
     // if (types.length > 1) filter.push({name: 'نوع', values: types});
@@ -50,19 +50,40 @@ export class ProductService {
     if (found >= 0 && this.products[found].detailed) {
       this.product$.next(this.products[found]);
     } else {
-      this.httpService.get(`product/${productId}`).subscribe(res => {
-        res.detailed = true;
+      this.httpService.get(`product/${productId}`).subscribe(data => {
+        data.detailed = true;
+        data.id = data._id;
+        data.price = data.base_price;
+        data.colors.forEach(item => {
+          let angles = [];
+          item.image.angles.forEach(r => {
+            if (!r.url) {
+              const temp = {url: HttpService.Host + r, type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
+              angles.push(temp);
+            } else {
+              angles.push(r);
+            }
+          });
+          item.image.angles = angles;
+          if (item.image.thumbnail) {
+            item.image.thumbnail = HttpService.Host + item.image.thumbnail;
+          }
+          item.soldOut = data.instances
+            .filter(r => r.product_color_id === item.color_id)
+            .map(r => r.inventory)
+            .map(r => r.count ? r.count : 0)
+            .reduce((x, y) => x + y, 0) <= 0;
+        });
         if (found >= 0) {
-          this.products[found] = res;
+          this.products[found] = data;
         }
-        this.product$.next(res);
+        this.product$.next(data);
       });
     }
   }
 
   loadProducts(collection_id) {
     this.httpService.get('collection/product/' + collection_id)
-    // this.http.get('/assets/products.json')
       .subscribe(
       (data) => {
 
@@ -72,8 +93,17 @@ export class ProductService {
 
         }
         if (data.products) {
+          data.products.forEach((product, prodInd) => product.colors.forEach( (color, colInd, colors) => {
+            if (color.image.thumbnail) {
+              data.products[prodInd].colors[colInd].image.thumbnail = HttpService.Host + color.image.thumbnail;
+            }
+            if (color.angles) {
+              colors[colInd].angles.forEach((angle, angleId, angles) => {
+                data.products[prodInd].colors[colInd].angles[angleId] = HttpService.Host + angle;
+              });
+            }
+          }));
           this.products = data.products;
-
           this.filteredProducts = this.products.slice();
 
           this.extractFilters();

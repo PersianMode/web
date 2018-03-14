@@ -2,7 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
 import {priceFormatter} from '../../lib/priceFormatter';
 import {ProductService} from '../../services/product.service';
-import {colorConverter} from './colorConverter';
+import {colorConverter} from '../../services/colorConverter';
+import {DictionaryService} from '../../services/dictionary.service';
 
 @Component({
   selector: 'app-filtering-panel',
@@ -30,7 +31,7 @@ export class FilteringPanelComponent implements OnInit {
     },
     {
       name: 'رنگ',
-      values: ['#f8f8f8', '#f0f0f0', '#fffff0', '#ffe0ff', '#efefef', '#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
+      values: ['anthracite', 'university red', '#fffff0', '#ffe0ff', '#efefef', '#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
     }
   ];
   current_filter_state = [];
@@ -49,42 +50,38 @@ export class FilteringPanelComponent implements OnInit {
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
 
-  constructor(private responsiveService: ResponsiveService, private productService: ProductService) {
+  constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
-    //  this.productService.filtering$.subscribe(r => {
-    // this.filter_options = r;
-    this.filter_options.forEach(el => {
-      const tempObj = {name: '', values: []};
-      tempObj.name = el.name;
-      this.current_filter_state.push(tempObj);
-      this.isChecked[el.name] = {};
-      for (const key of el.values) {
-        this.isChecked[el.name][key] = false;
-      }
-    });
+  //  this.productService.filtering$.subscribe(r => {
+      // this.filter_options = r;
+      this.filter_options.forEach(el => {
+        const tempObj = {name: '', values: []};
+        tempObj.name = el.name;
+        this.current_filter_state.push(tempObj);
+        this.isChecked[el.name] = {};
+        for (const key of el.values) {
+          this.isChecked[el.name][key] = false;
+        }
+      });
 
-    for (const col in this.isChecked['رنگ']) {
-      let color;
-      try {
-        color = colorConverter(col);
-      } catch (e) {
-        console.log(col, e);
+      for (const col in this.isChecked['رنگ']) {
+        let color;
+        color = this.dict.convertColor(col);
+        if (color) {
+          this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
+          let red = color.substring(1, 3);
+          let green = color.substring(3, 5);
+          let blue = color.substring(5, 7);
+          let colors = [red, green, blue];
+          this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
+        }
       }
-      if (color) {
-        this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
-        const red = color.substring(1, 3);
-        const green = color.substring(3, 5);
-        const blue = color.substring(5, 7);
-        const colors = [red, green, blue];
-        this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
-      }
-    }
-    const sizes: any = this.filter_options.filter(r => r.name === 'سایز')[0];
-    sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
-    this.priceRangeChange();
-    // });
+      let sizes: any = this.filter_options.filter(r => r.name === 'سایز')[0];
+      sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
+      this.priceRangeChange();
+   // });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
 

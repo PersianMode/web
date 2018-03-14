@@ -2,9 +2,9 @@
 <h4>{{sub}} <span>{{price}} تومان</span></h4>
 <swiper *ngIf="selectedProductColor" [config]="config" [(index)]="index">
   <div *ngFor="let item of selectedProductColor?.image?.angles">
-    <img *ngIf="item.type !== 'video'" src="assets/pictures/products/{{item.url}}">
+    <img *ngIf="item.type !== 'video'" src="{{item.url}}">
     <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
-      <source src="assets/pictures/products/{{item.url}}" type="video/webm">
+      <source src="{{item.url}}" type="video/webm">
     </video>
   </div>
 </swiper>
@@ -12,7 +12,7 @@
   <div [style.width]="(product.colors.length * 131) + 'px'">
     <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item.color._id]"><img
             [style.opacity]="selectedProductColor && item._id === selectedProductColor._id ? 1 : .5"
-            src="assets/pictures/product-small/{{item.image.thumbnail}}"></a>
+            src="{{item.image.thumbnail}}"></a>
   </div>
 </div>
 <div class="container">
