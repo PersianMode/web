@@ -21,8 +21,6 @@ export class EditOrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('DATA: ', this.data);
-
     this.product = this.data.dialog_product;
     this.product.instances.forEach(el => {
       if (el.quantity > 0) {
@@ -34,8 +32,6 @@ export class EditOrderComponent implements OnInit {
         });
       }
     });
-
-    console.log(this.sizesArray);
 
     this.sizesArray = Array.from(new Set(this.sizesArray));
 
@@ -54,7 +50,8 @@ export class EditOrderComponent implements OnInit {
       }
     );
 
-    this.selectedQuantityArray = this.qtyArray.find(el => el.size.value === this.product.size.value).qtyArray;
+    const tempObj = this.qtyArray.find(el => el.size.value === this.product.size.value);
+    this.selectedQuantityArray = tempObj ? tempObj.qtyArray : null;
   }
 
   closeDialog() {

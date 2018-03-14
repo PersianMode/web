@@ -29,6 +29,7 @@ export class CartItemsComponent implements OnInit {
   }
 
   deleteProduct() {
+    this.updateProduct.emit({type: 'delete'});
   }
 
   openEditOrder() {
@@ -41,7 +42,7 @@ export class CartItemsComponent implements OnInit {
     rmDialog.afterClosed().subscribe(
       (data) => {
         if (data) {
-          this.updateProduct.emit(data);
+          this.updateProduct.emit({type: 'update', value: data});
 
           this.product.size = {value: data.newSize, name: data.newSize.toLocaleString('fa')};
           this.product.quantity = {value: data.newQuantity, name: data.newQuantity.toLocaleString('fa')};

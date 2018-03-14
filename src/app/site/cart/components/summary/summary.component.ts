@@ -45,6 +45,7 @@ export class SummaryComponent implements OnInit {
   balanceValue: any = 0;
   loyaltyPoint: any = 0;
   finalTotal: any = 0;
+  coupon_code = null;
 
   constructor(private cartService: CartService, private authService: AuthService) {
   }

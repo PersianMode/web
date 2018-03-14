@@ -6,6 +6,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 @Injectable()
 export class CartService {
   cartItems: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  private localStorageKey = 'cart';
 
   constructor(private httpService: HttpService, private authService: AuthService) {
     this.authService.isLoggedIn.subscribe(
@@ -15,24 +16,57 @@ export class CartService {
           const items = this.getItemsFromStorage();
 
           if (items && items.length > 0) {
+            const promiseList = [];
+
             items.forEach(el => {
-              this.httpService.post('order', {
+              promiseList.push(this.httpService.post('order', {
                 product_id: el.product_id,
                 product_instance_id: el.product_instance_id,
-                number: items.number,
-              }).subscribe(
-                dt => {
-
-                },
-                err => {
-
-                }
-              );
+                number: el.number ? el.number : 1,
+              }).toPromise());
             });
+
+            Promise.all(promiseList)
+              .then(res => {
+                localStorage.removeItem(this.localStorageKey);
+              })
+              .catch(err => {
+                console.log('Cannot delete all items from localStorage: ', err);
+              });
           }
         }
       }
     );
+  }
+
+  removeItem(value) {
+    if (this.authService.isLoggedIn.getValue()) {
+      // Update server
+      this.httpService.post('order/delete', {
+        product_instance_id: value.instance_id,
+      }).subscribe(
+        (data) => {
+          this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id.toString() !== value.instance_id.toString()));
+        },
+        (err) => {
+          console.error('Cannot delete item from cart: ', err);
+        });
+    } else {
+      // Update local storage
+      let tempItems = this.getItemsFromStorage();
+      tempItems = tempItems.filter(el => el.product_id.toString() !== value.product_id.toString()
+      && el.instance_id.toString() !== value.instance_id.toString());
+
+      localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
+    }
+  }
+
+  updateItem(value) {
+    if (this.authService.isLoggedIn.getValue()) {
+
+    } else {
+
+    }
   }
 
   saveItem(item) {
@@ -106,7 +140,7 @@ export class CartService {
   }
 
   private getItemsFromStorage() {
-    return JSON.parse(localStorage.getItem('cart')) === null ? [] : JSON.parse(localStorage.getItem('cart'));
+    return JSON.parse(localStorage.getItem(this.localStorageKey)) === null ? [] : JSON.parse(localStorage.getItem(this.localStorageKey));
   }
 
   private saveItemToServer(item) {
@@ -130,14 +164,12 @@ export class CartService {
   private saveItemToStorage(item) {
     const data = this.getItemsFromStorage();
     data.push(item);
-    localStorage.setItem('cart', JSON.stringify(data));
+    localStorage.setItem(this.localStorageKey, JSON.stringify(data));
     this.cartItems.next(this.cartItems.getValue().concat([Object.assign({quantity: item.number}, item)]));
   }
 
   getLoyaltyBalance() {
     return new Promise((resolve, reject) => {
-      console.log(this.authService.userDetails);
-
       this.httpService.get(`customer/${this.authService.userDetails.userId}/balance`).subscribe(
         (data) => {
           resolve(data);

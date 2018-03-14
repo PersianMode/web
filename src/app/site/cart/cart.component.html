@@ -17,7 +17,7 @@
         <app-summary [discount]="discountValue" [total]="totalPrice"></app-summary>
       </div>
       <div class="main-divs">
-        <div class="signUp-div">
+        <div class="signUp-div" *ngIf="!isLoggedIn">
           عضویت رایگان
           <span style="padding-left : 10px"><a href="#" class="membership-style">عضو شوید</a></span>
         </div>
