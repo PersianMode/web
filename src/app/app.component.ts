@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {DictionaryService} from './shared/services/dictionary.service';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +6,5 @@ import {DictionaryService} from './shared/services/dictionary.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-
-  constructor(private dictionaryService: DictionaryService) {
-
-  }
 
 }

@@ -23,14 +23,15 @@ export class ProductService {
 
   extractFilters() {
     // brands
-    const brands: string[] = Array.from(new Set(this.filteredProducts.map(x => x['brand'].name)));
+    const brands: string[] = Array.from(new Set(this.filteredProducts.map(x => x['brand'])));
 
     // types
-    const types: string[] = Array.from(new Set(this.filteredProducts.map(x => x['product_type'].name)));
+    const types: string[] = Array.from(new Set(this.filteredProducts.map(x => x['product_type'])));
 
     // colors
     let colors: string[] = [];
-    const _colors: string[] = this.filteredProducts.map(x => x['colors']).map(x => x.name);
+    let _colors: string[] = [].concat.apply([], this.filteredProducts.map(x => x['colors']));
+    _colors = _colors.map(x => x['name']);
     _colors.forEach(c => {
       c.split('/').map(x => x.trim()).forEach(x => {
         colors.push(x.replace(/[^\w\s]/gi, ''));
