@@ -47,7 +47,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   set selectedProductColorID(id) {
     if (id) {
       this.selectedProductColor = this.product.colors.find(r => r.color_id === id);
-      this.productSize = this.product.instances.filter(r => r.product_color_id === this.selectedProductColor.color_id).map(r => {
+      this.productSize = this.product.instances.filter(r => r.product_color_id === this.selectedProductColor._id).map(r => {
         return {
           value: r.size,
           disabled: r.inventory.reduce((x, y) => x.count + y.count, 0) <= 0,

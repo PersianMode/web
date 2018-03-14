@@ -23,9 +23,9 @@
     </a>
   </div>
   <!--<span *ngIf="productSize.length > 1">-->
-    <app-size-picker [sizes]="productSize" (value)="size = $event"></app-size-picker>
+    <app-size-picker [sizes]="productSize" (value)="newSize($event)"></app-size-picker>
   <!--</span>-->
-  <button class="cart">در سبد بگذار</button>
+  <button class="cart"  [disabled]="addCardBtnDisabled" (click)="saveToCart()">در سبد بگذار</button>
   <button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>
   <div class="description-md" Markdown>
     {{product.desc}}
