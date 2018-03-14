@@ -11,10 +11,7 @@ export class CartService {
     this.authService.isLoggedIn.subscribe(
       (data) => {
         if (data) {
-          // Get data from server
-        } else {
-          // Get data from storage
-          this.cartItems.next(this.getCartFromStorage());
+          // Read data from localStorage and save in server
         }
       }
     );
@@ -30,11 +27,24 @@ export class CartService {
   }
 
   getCartItems() {
-    // if (!this.authService.isLoggedIn.getValue()) {
-    //   this.getCartFromStorage();
-    // }
+    this.authService.isLoggedIn.subscribe(
+      (data) => {
+        let cartData = null;
+        if (!data)
+          cartData = this.cartItems.next(this.getCartFromStorage());
 
-    // Get order-line details or all order details
+        if (data || cartData.length > 0)
+          this.httpService.post('cart/items', {data: cartData}).subscribe(
+            (rs) => {
+              console.log('Received results: ', rs);
+              this.cartItems = rs;
+            },
+            (err) => {
+              console.error('Cannot fetch cart items: ', err);
+            }
+          );
+      }
+    );
   }
 
   private getCartFromStorage() {
@@ -46,6 +56,5 @@ export class CartService {
     data.push(item);
     localStorage.setItem('cart', JSON.stringify(data));
     this.cartItems.next(data);
-
   }
 }

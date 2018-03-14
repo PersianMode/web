@@ -10,7 +10,7 @@ import {reject} from 'q';
 @Injectable()
 export class AuthService {
   private defaultDisplayName = 'Anonymous user';
-  isLoggedIn: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+  isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isVerified: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   userDetails = {
     isAgent: null,
