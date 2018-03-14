@@ -46,7 +46,7 @@ export class ProductService {
   }
 
   getProduct(productId) {
-    let found = this.products.findIndex(r => r._id === productId);
+    const found = this.products.findIndex(r => r._id === productId);
     if (found >= 0 && this.products[found].detailed) {
       this.product$.next(this.products[found]);
     } else {
