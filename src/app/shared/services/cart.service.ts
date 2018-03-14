@@ -1,29 +1,48 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
 import {AuthService} from './auth.service';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class CartService {
-  cartItems: ReplaySubject<any> = new ReplaySubject<any>();
+  cartItems: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
   constructor(private httpService: HttpService, private authService: AuthService) {
     this.authService.isLoggedIn.subscribe(
       (data) => {
         if (data) {
-          // Read data from localStorage and save in server
+          // Read data from localStorage and save in server if any data is exist in localStorage
+          const items = this.getItemsFromStorage();
+
+          if (items && items.length > 0) {
+            items.forEach(el => {
+              this.httpService.post('order', {
+                product_id: el.product_id,
+                product_instance_id: el.product_instance_id,
+                number: items.number,
+              }).subscribe(
+                dt => {
+
+                },
+                err => {
+
+                }
+              );
+            });
+          }
         }
       }
     );
   }
 
   saveItem(item) {
-    //  if (this.authService.isLoggedIn.getValue()) {
-    //   // Update order in server
-    // } else {
-    //   // Save data on storage
-    //   this.saveItemOnStorage(item);
-    // }
+    if (this.authService.isLoggedIn.getValue()) {
+      // Update order in server
+      this.saveItemToServer(item);
+    } else {
+      // Save data on storage
+      this.saveItemToStorage(item);
+    }
   }
 
   getCartItems() {
@@ -31,30 +50,87 @@ export class CartService {
       (data) => {
         let cartData = null;
         if (!data)
-          cartData = this.cartItems.next(this.getCartFromStorage());
+          cartData = this.cartItems.next(this.getItemsFromStorage());
 
-        if (data || cartData.length > 0)
-          this.httpService.post('cart/items', {data: cartData}).subscribe(
-            (rs) => {
-              console.log('Received results: ', rs);
-              this.cartItems = rs;
-            },
-            (err) => {
+        if (data || cartData && cartData.length > 0)
+          this.getItemsDetail(cartData)
+            .then(res => {
+              this.setCartItem(res, false);
+            })
+            .catch(err => {
               console.error('Cannot fetch cart items: ', err);
-            }
-          );
+            });
       }
     );
   }
 
-  private getCartFromStorage() {
+  getItemsDetail(items) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('cart/items', {data: items}).subscribe(
+        (rs: any) => {
+          resolve(rs);
+        },
+        (err) => {
+          reject(err);
+        });
+    });
+  }
+
+  private setCartItem(items, isUpdate = true) {
+    const itemList = [];
+
+    items.forEach((el: any) => {
+      const objItem: any = {};
+
+      objItem.product_id = el.product_id;
+      objItem.instance_id = el.instance_id;
+      objItem.name = el.name;
+      objItem.color = el.color;
+      objItem.size = el.size;
+      objItem.quantity = el.quantity;
+      objItem.tags = el.tags;
+      objItem.count = el.count;
+      objItem.thumbnail = el.thumbnail;
+      objItem.instances = el.instances;
+      objItem.price = el.instance_price ? el.instance_price : el.base_price;
+      objItem.discount = (el.discount && el.discount.length > 0) ?
+        (objItem.price - (el.discount.reduce((a, b) => a * b) * objItem.price)) : 0;
+
+      itemList.push(objItem);
+    });
+
+    if (isUpdate)
+      this.cartItems.next(this.cartItems.getValue().concat(itemList));
+    else
+      this.cartItems.next(itemList);
+  }
+
+  private getItemsFromStorage() {
     return JSON.parse(localStorage.getItem('cart')) === null ? [] : JSON.parse(localStorage.getItem('cart'));
   }
 
-  private saveItemOnStorage(item) {
-    const data = this.getCartFromStorage();
+  private saveItemToServer(item) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('order', {
+        product_id: item.product_id,
+        product_instance_id: item.product_instance_id,
+        number: item.number,
+      }).subscribe(
+        data => {
+          this.cartItems.next(this.cartItems.getValue().concat([Object.assign({quantity: item.number}, item)]));
+          resolve(data);
+        },
+        err => {
+          console.error('Cannot save item to server: ', err);
+          reject(err);
+        });
+    });
+  }
+
+  private saveItemToStorage(item) {
+    const data = this.getItemsFromStorage();
     data.push(item);
     localStorage.setItem('cart', JSON.stringify(data));
-    this.cartItems.next(data);
+    this.cartItems.next(this.cartItems.getValue().concat([Object.assign({quantity: item.number}, item)]));
   }
 }

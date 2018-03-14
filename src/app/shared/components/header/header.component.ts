@@ -43,7 +43,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isVerified = false;
       }
     );
-    this.itemSubs = this.cartService.cartItems.subscribe(data => this.cartNumbers = priceFormatter(data.length));
+    this.itemSubs = this.cartService.cartItems.subscribe(
+      data => {
+        data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => a + b) : 0;
+        this.cartNumbers = priceFormatter(data);
+      });
     this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
       this.logos = [];
       data = data.sort((x, y) => x.info.column - y.info.column);

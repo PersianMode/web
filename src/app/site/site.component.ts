@@ -4,6 +4,7 @@ import {AuthService} from '../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {PageService} from '../shared/services/page.service';
 import {ResponsiveService} from '../shared/services/responsive.service';
+import {CartService} from '../shared/services/cart.service';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class SiteComponent implements OnInit {
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
-              private router: Router, private pageService: PageService) {
+              private router: Router, private pageService: PageService,
+              private cartService: CartService) {
   }
 
   ngOnInit() {
@@ -28,6 +30,8 @@ export class SiteComponent implements OnInit {
     this.updateResponsiveService();
     this.authService.checkValidation(this.router.url);
     this.loadInitialPlacements();
+
+    this.cartService.getCartItems();
   }
 
   private updateResponsiveService() {

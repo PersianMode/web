@@ -21,6 +21,8 @@ export class EditOrderComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('DATA: ', this.data);
+
     this.name = (this.data && this.data.name) ? this.data.name : null;
     this.product = this.data.dialog_product;
     this.product.instances.forEach(el => this.sizesArray.push({value: el.size, name: el.size.toLocaleString('fa'), quantity: el.quantity}));
