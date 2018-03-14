@@ -10,7 +10,7 @@ export class ProductService {
   private collectionName: string;
   private products = [];
   private filteredProducts = [];
-  collectionInfo$: ReplaySubject<any> = new ReplaySubject<any>(1);
+  collectionNameFa$: ReplaySubject<any> = new ReplaySubject<any>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
   product$: Subject<any> = new Subject<any>();
@@ -96,10 +96,9 @@ export class ProductService {
     this.httpService.get('collection/product/' + collection_id)
       .subscribe(
         (data) => {
-
-          if (data.name) {
-            this.collectionName = data.name;
-            this.collectionInfo$.next(data.name);
+          if (data.name_fa) {
+            this.collectionName = data.name_fa;
+            this.collectionNameFa$.next(data.name_fa);
 
           }
           if (data.products) {
