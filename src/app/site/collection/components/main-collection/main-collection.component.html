@@ -13,7 +13,7 @@
   <app-panels></app-panels>
   <div class="gridwall-wrapper">
     <div *ngIf="!isMobile" class="gridwall-title">
-      <h1>{{collection.collectionNameFa}} <span>({{collection.products.length.toLocaleString('fa')}})</span></h1>
+      <h1>{{collectionNameFa}} <span>({{collection.products.length.toLocaleString('fa')}})</span></h1>
       <div class="sorter-row">
       <div class="sorter" (click)="sortPanel.toggle($event)">ترتیب نمایش<span *ngIf="sortedBy"> با {{sortedBy.fa}}</span> <i class="fa" [ngClass]="sortPanel.visible ? 'fa-chevron-up' : 'fa-chevron-down'"></i></div>
         <p-overlayPanel #sortPanel>

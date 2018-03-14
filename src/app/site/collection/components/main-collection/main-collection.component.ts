@@ -52,6 +52,7 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
     }
   ];
   sortedBy: any;
+  collectionNameFa = '';
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
               private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService) {
@@ -61,8 +62,7 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
     this.route.paramMap.subscribe(params => {
       this.pageName = 'collection/' + params.get('typeName');
       console.log('page name : ', this.pageName);
-      this.pageService.getPage(this.pageName);
-      this.pageService.pageInfo$.subscribe(res => {
+      this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
           if (res && res['collection_id']) {
             this.productService.loadProducts(res['collection_id']);
           } else {
@@ -73,12 +73,10 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
         }
       );
     });
-    this.productService.collectionInfo$.subscribe(r => {
-      // console.log('collection name : ', this.collection.collectionName);
-      this.collection.collectionName = r;
+    this.productService.collectionNameFa$.subscribe(r => {
+      this.collectionNameFa = r;
     });
     this.productService.productList$.subscribe(r => {
-      // console.log('products array : ', this.collection.products);
       this.collection.products = r;
     });
     this.calcWidth();
