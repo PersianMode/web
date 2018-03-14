@@ -10,6 +10,7 @@ import {
   SimpleChange
 } from '@angular/core';
 import {log} from 'util';
+import {DictionaryService} from '../../services/dictionary.service';
 
 @Component({
   selector: 'app-size-picker',
@@ -20,15 +21,20 @@ export class SizePickerComponent implements OnInit {
   sizeSplits = [];
   @Input()
   set sizes(productSizes) {
-    this.sizeSplits = []
-    while (productSizes.length) {
+    if (productSizes && productSizes.length) {
+      productSizes.forEach((p, pi) => {
+        productSizes[pi].displayValue = this.dict.translateWord(p.value);
+      });
+    }
+    this.sizeSplits = [];
+    while (productSizes && productSizes.length) {
       this.sizeSplits.push(productSizes.splice(0, 5));
     }
   }
   @Output('value') value = new EventEmitter();
   val = 0;
 
-  constructor() {
+  constructor(private dict: DictionaryService) {
   }
 
   ngOnInit() {

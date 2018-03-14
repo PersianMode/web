@@ -13,6 +13,7 @@ export class DictionaryService {
     'DUFFEL BAGS': 'کوله خمره‌ای',
     MENS: 'مردانه',
     BAGS: 'کوله',
+    MISC: 'متفرقه',
   };
   colorDictionary = {
     'UNIVERSITY RED': 'darkred',
