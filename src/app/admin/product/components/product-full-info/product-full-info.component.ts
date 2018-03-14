@@ -18,7 +18,6 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
   product: any = {};
   productColors: any;
   types: IType[];
-  colors: IColor[];
   brands: IBrand[];
   warehouses: IWarehouse[];
 
@@ -38,7 +37,6 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
           this.getProductColors();
       });
 
-    this.getColors();
     this.getTypes();
     this.getBrands();
     this.getWarehouses();
@@ -53,13 +51,6 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
     });
   }
 
-  getColors() {
-    this.httpService.get(`color`).subscribe(res => {
-      this.colors = res;
-    }, err => {
-      console.error();
-    });
-  }
 
   getTypes() {
     this.httpService.get(`productType`).subscribe(res => {

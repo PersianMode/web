@@ -16,7 +16,6 @@ export class ProductColorComponent implements OnInit {
 
   @Input() productColors: any;
   @Output() onProductColorChanged = new EventEmitter<any>();
-  @Input() colors: IColor[];
 
   selectedColor = {};
   is_thumbnail = false;
@@ -82,7 +81,7 @@ export class ProductColorComponent implements OnInit {
             thumbnail: this.is_thumbnail ? images[images.length - 1] : '',
             angles: this.is_thumbnail ? [] : images
           },
-          info: this.colors.filter(x => x._id === this.selectedColor['_id'])[0],
+          info: this.selectedColor['_id'],
           _id: null
         };
         this.productColors.push(newProductColor);

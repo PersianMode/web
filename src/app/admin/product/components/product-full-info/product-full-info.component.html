@@ -5,7 +5,7 @@
         <app-product-basic-form [productId]="productId" (productIdEvent)="setProductId($event)" [types]="types" [brands]="brands"></app-product-basic-form>
       </mat-tab>
       <mat-tab *ngIf="productId" label="رنگ های موجود">
-        <app-product-color [productId]="productId" [productColors]="productColors" [colors]="colors" (onProductColorChanged)="setProductColors($event)"></app-product-color>
+        <app-product-color [productId]="productId" [productColors]="productColors" (onProductColorChanged)="setProductColors($event)"></app-product-color>
       </mat-tab>
       <mat-tab *ngIf="productId" label="سایزهای موجود" >
         <app-product-instance [productId]="productId" [productColors]="productColors" [warehouses]="warehouses"></app-product-instance>
