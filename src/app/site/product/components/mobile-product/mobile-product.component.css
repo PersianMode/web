@@ -61,3 +61,12 @@ button:focus{
 .colors img:hover {
   opacity: 1 !important;
 }
+.soldOut {
+  color: #d00000;
+  position: absolute;
+  transform: rotate(-45deg) translateY(17px);
+  width: auto;
+  font-weight: 400;
+  font-size: 22px;
+  display: inline-block;
+}
