@@ -9,6 +9,7 @@ import {WINDOW} from '../../services/window.service';
 import {CartService} from '../../services/cart.service';
 import {priceFormatter} from '../../lib/priceFormatter';
 
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

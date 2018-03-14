@@ -87,7 +87,6 @@ export class CartComponent implements OnInit, OnDestroy {
         this.products = data;
       });
     });
-    this.numberOfProducts = priceFormatter(this.products.length);
   }
 
   ngOnDestroy() {
