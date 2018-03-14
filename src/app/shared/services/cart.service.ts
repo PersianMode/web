@@ -133,4 +133,19 @@ export class CartService {
     localStorage.setItem('cart', JSON.stringify(data));
     this.cartItems.next(this.cartItems.getValue().concat([Object.assign({quantity: item.number}, item)]));
   }
+
+  getLoyaltyBalance() {
+    return new Promise((resolve, reject) => {
+      console.log(this.authService.userDetails);
+
+      this.httpService.get(`customer/${this.authService.userDetails.userId}/balance`).subscribe(
+        (data) => {
+          resolve(data);
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+    });
+  }
 }

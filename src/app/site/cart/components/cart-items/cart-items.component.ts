@@ -13,11 +13,14 @@ export class CartItemsComponent implements OnInit {
   @Output() updateProduct = new EventEmitter();
 
   total_price = null;
+  notExist = false;
 
   constructor(private dialog: MatDialog) {
   }
 
   ngOnInit() {
+    this.notExist = this.product.count && this.product.quantity <= this.product.count ? false : true;
+
     this.product.size = {value: this.product.size, name: this.product.size.toLocaleString('fa')};
     this.product.quantity = {value: this.product.quantity, name: this.product.quantity.toLocaleString('fa')};
     this.product.price = {value: this.product.price, name: priceFormatter(this.product.price)};

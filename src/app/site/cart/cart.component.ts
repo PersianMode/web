@@ -10,6 +10,8 @@ import {CartService} from '../../shared/services/cart.service';
 export class CartComponent implements OnInit, OnDestroy {
   products = [];
   numberOfProducts: String;
+  totalPrice: any;
+  discountValue: any;
 
   subs: any;
 
@@ -19,6 +21,16 @@ export class CartComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs = this.cartService.cartItems.subscribe(data => {
       this.products = data;
+
+      console.log(this.products);
+
+      if (this.products.length > 0) {
+        this.totalPrice = this.products
+          .filter(el => el.count && el.quantity <= el.count)
+          .map(el => el.price * el.quantity)
+          .reduce((a, b) => a + b);
+        this.discountValue = this.products.map(el => el.discount).reduce((a, b) => a + b);
+      }
     });
   }
 
