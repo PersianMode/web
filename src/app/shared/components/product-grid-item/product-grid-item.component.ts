@@ -86,7 +86,7 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   openProduct() {
-    this.router.navigate(['product', this.data._id, this.data.colors[this.pos].color_id]);
+    this.router.navigate(['product', this.data._id, this.data.colors[this.pos]._id]);
   }
 
   getURL(url) {

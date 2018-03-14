@@ -10,7 +10,7 @@ export class ProductService {
   private collectionName: string;
   private products = [];
   private filteredProducts = [];
-  collectionInfo$: ReplaySubject<any> = new ReplaySubject<any>(1);
+  collectionNameFa$: ReplaySubject<any> = new ReplaySubject<any>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
   product$: Subject<any> = new Subject<any>();
@@ -76,6 +76,7 @@ export class ProductService {
         data.detailed = true;
         data.id = data._id;
         data.price = data.base_price;
+        data.sizes = {};
         data.colors.forEach(item => {
           const angles = [];
           item.image.angles.forEach(r => {
@@ -91,11 +92,21 @@ export class ProductService {
             item.image.thumbnail = HttpService.Host + item.image.thumbnail;
           }
           item.soldOut = data.instances
-            .filter(r => r.product_color_id === item.color_id)
+            .filter(r => r.product_color_id === item._id)
             .map(r => r.inventory)
-            .map(r => r.count ? r.count : 0)
+            .map(r => r.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0))
             .reduce((x, y) => x + y, 0) <= 0;
+
+          data.sizes[item._id] = data.instances
+            .filter(r => r.product_color_id === item._id)
+            .map(r => {
+              return {
+                value: r.size,
+                disabled: r.inventory.reduce((x, y) => x.count + y.count, 0) <= 0,
+              };
+            });
         });
+
         if (found >= 0) {
           this.products[found] = data;
         }
@@ -108,10 +119,9 @@ export class ProductService {
     this.httpService.get('collection/product/' + collection_id)
       .subscribe(
         (data) => {
-
-          if (data.name) {
-            this.collectionName = data.name;
-            this.collectionInfo$.next(data.name);
+          if (data.name_fa) {
+            this.collectionName = data.name_fa;
+            this.collectionNameFa$.next(data.name_fa);
 
           }
           if (data.products) {

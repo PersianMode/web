@@ -526,9 +526,11 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .mat-button-toggle-disabled div {
-  color: rgb(221, 221, 221) !important;
+  color: rgb(99, 99, 99) !important;
 }
-
+.mat-button-toggle-disabled div:hover {
+  border: rgb(221, 221, 221) 1px solid;
+}
 .mat-tooltip {
   font-family: iranyekan !important;
   font-weight: 200;
