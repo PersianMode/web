@@ -2,8 +2,8 @@
 <span *ngIf="selectedProductColor">
 <div *ngFor="let item of selectedProductColor?.image?.angles">
   <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1"><source
-    src="assets/pictures/products/{{item.url}}" type="video/webm"></video>
-  <img *ngIf="item.type !== 'video'" src="assets/pictures/products/{{item.url}}">
+    src="{{item.url}}" type="video/webm"></video>
+  <img *ngIf="item.type !== 'video'" src="{{item.url}}">
 </div>
 </span>
 </div>
@@ -14,11 +14,11 @@
   <h1 *ngIf="product">{{product.name}}</h1>
   <h4>{{sub}} <span>{{price}} تومان</span></h4>
   <div *ngIf="product?.colors" class="colors">
-    <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item.color._id]">
+    <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item.color_id]">
       <span style="margin:0;">
         <p *ngIf="item.soldOut" class="soldOut">موجود نیست</p>
       <img [style.opacity]="selectedProductColor && item._id === selectedProductColor._id ? 1 : .5"
-           src="assets/pictures/product-small/{{item.image.thumbnail}}">
+           src="{{item.image.thumbnail}}">
       </span>
     </a>
   </div>

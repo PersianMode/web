@@ -34,36 +34,13 @@ export class ProductComponent implements OnInit {
       if (!this.product || this.product.id !== productId) {
         this.productService.getProduct(productId);
         this.productService.product$.subscribe(data => {
-          this.product.id = data[0]._id;
-          this.product.name = data[0].name;
-          this.product.price = data[0].base_price;
-          this.product.desc = data[0].desc;
-          this.product.tags = data[0].tags.map(t => t.name).join(' ');
-          this.product.instances = data[0].instances;
-          data[0].colors.forEach(item => {
-            let angles = [];
-            item.image.angles.forEach(r => {
-              if (!r.url) {
-                const temp = {url: r, type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
-                angles.push(temp);
-              } else {
-                angles.push(r);
-              }
-            });
-            item.image.angles = angles;
-            item.soldOut = data[0].instances
-              .filter(r => r.product_color_id === item._id)
-              .map(r => r.inventory)
-              .map(r => r.count ? r.count : 0)
-              .reduce((x, y) => x + y, 0) <= 0;
-          });
-          this.product.colors = data[0].colors;
-          this.formattedPrice = priceFormatter(data[0].base_price);
-          this.joinedTags = Array.from(new Set([... data[0].tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
-          this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
+          this.product = data;
+          this.formattedPrice = priceFormatter(this.product.base_price);
+          this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
+          this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0].color_id;
         });
       } else {
-        this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
+        this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0].color_id;
       }
     });
   }

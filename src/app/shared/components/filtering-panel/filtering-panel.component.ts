@@ -78,7 +78,7 @@ export class FilteringPanelComponent implements OnInit {
           this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
         }
       }
-      let sizes = this.filter_options.filter(r => r.name === 'سایز')[0];
+      let sizes: any = this.filter_options.filter(r => r.name === 'سایز')[0];
       sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
       this.priceRangeChange();
    // });
