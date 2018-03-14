@@ -10,7 +10,7 @@ export class PageService {
   private cache: any = {};
   private homeComponents: any = {};
   placement$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  pageInfo$: ReplaySubject<IPageInfo> = new ReplaySubject<IPageInfo>(1);
+  pageInfo$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
 
   constructor(private httpService: HttpService) {
     this.getPage('home', false);
@@ -35,13 +35,13 @@ export class PageService {
     return [components, dataSplit];
   }
 
-  private emitPlacements(placements) {
+  private emitPlacements(pageName, placements) {
     let components, dataSplit;
     [components, dataSplit] = placements.placement;
     components.forEach((c, i) => {
       this.placement$.next([c, dataSplit[i]]);
     });
-    this.pageInfo$.next(placements.page_info);
+    this.pageInfo$.next([pageName, placements.page_info]);
   }
 
   getPage(pageName, emit = true) {
@@ -64,14 +64,14 @@ export class PageService {
                 });
               }
               if (emit) {
-                this.emitPlacements(this.cache[pageName]);
+                this.emitPlacements(pageName, this.cache[pageName]);
               }
             }, err => {
               console.log('err: ', err);
             }
           );
         } else if (emit) {
-          this.emitPlacements(this.cache[pageName]);
+          this.emitPlacements(pageName, this.cache[pageName]);
         }
       }
     }, 500);
