@@ -13,10 +13,11 @@ export class MobileProductComponent implements OnInit {
   @Input()
   set selectedProductColorID(id) {
     if (id) {
-      this.selectedProductColor = this.product.colors.find(r => r.color._id === id);
+      this.selectedProductColor = this.product.colors.find(r => r._id === id);
+      this.productSize = this.product.sizes[id];
     }
   };
-  @Input() productSize;
+  productSize = [];
   selectedProductColor: any = {};
   constructor() { }
 

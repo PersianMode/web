@@ -1,7 +1,7 @@
 <h2>انتخاب اندازه</h2>
 <mat-button-toggle-group *ngFor="let subSizes of sizeSplits">
   <mat-button-toggle *ngFor="let size of subSizes" value="{{size.value}}" (change)="onChange($event)" [disabled]="!!size.disabled" [checked]="size.value === val">
-   {{size.value.toLocaleString('fa')}}
+   {{size.displayValue}}
   </mat-button-toggle>
 </mat-button-toggle-group>
 

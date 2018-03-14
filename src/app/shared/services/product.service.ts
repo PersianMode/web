@@ -54,8 +54,9 @@ export class ProductService {
         data.detailed = true;
         data.id = data._id;
         data.price = data.base_price;
+        data.sizes = {};
         data.colors.forEach(item => {
-          let angles = [];
+          const angles = [];
           item.image.angles.forEach(r => {
             if (!r.url) {
               const temp = {url: HttpService.Host + r, type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
@@ -69,11 +70,21 @@ export class ProductService {
             item.image.thumbnail = HttpService.Host + item.image.thumbnail;
           }
           item.soldOut = data.instances
-            .filter(r => r.product_color_id === item.color_id)
+            .filter(r => r.product_color_id === item._id)
             .map(r => r.inventory)
-            .map(r => r.count ? r.count : 0)
+            .map(r => r.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0))
             .reduce((x, y) => x + y, 0) <= 0;
+
+          data.sizes[item._id] = data.instances
+            .filter(r => r.product_color_id === item._id)
+            .map(r => {
+              return {
+                value: r.size,
+                disabled: r.inventory.reduce((x, y) => x.count + y.count, 0) <= 0,
+              };
+            });
         });
+
         if (found >= 0) {
           this.products[found] = data;
         }
@@ -85,36 +96,36 @@ export class ProductService {
   loadProducts(collection_id) {
     this.httpService.get('collection/product/' + collection_id)
       .subscribe(
-      (data) => {
+        (data) => {
 
-        if (data.name) {
-          this.collectionName = data.name;
-          this.collectionInfo$.next(data.name);
+          if (data.name) {
+            this.collectionName = data.name;
+            this.collectionInfo$.next(data.name);
 
+          }
+          if (data.products) {
+            data.products.forEach((product, prodInd) => product.colors.forEach((color, colInd, colors) => {
+              if (color.image.thumbnail) {
+                data.products[prodInd].colors[colInd].image.thumbnail = HttpService.Host + color.image.thumbnail;
+              }
+              if (color.angles) {
+                colors[colInd].angles.forEach((angle, angleId, angles) => {
+                  data.products[prodInd].colors[colInd].angles[angleId] = HttpService.Host + angle;
+                });
+              }
+            }));
+            this.products = data.products;
+            this.filteredProducts = this.products.slice();
+
+            this.extractFilters();
+
+            this.filterSortProducts();
+          }
+        },
+        (err) => {
+          console.error('Cannot get products of collection: ', err);
         }
-        if (data.products) {
-          data.products.forEach((product, prodInd) => product.colors.forEach( (color, colInd, colors) => {
-            if (color.image.thumbnail) {
-              data.products[prodInd].colors[colInd].image.thumbnail = HttpService.Host + color.image.thumbnail;
-            }
-            if (color.angles) {
-              colors[colInd].angles.forEach((angle, angleId, angles) => {
-                data.products[prodInd].colors[colInd].angles[angleId] = HttpService.Host + angle;
-              });
-            }
-          }));
-          this.products = data.products;
-          this.filteredProducts = this.products.slice();
-
-          this.extractFilters();
-
-          this.filterSortProducts();
-        }
-      },
-      (err) => {
-        console.error('Cannot get products of collection: ', err);
-      }
-    );
+      );
   }
 
   setFilter(name, value) {
