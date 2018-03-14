@@ -42,17 +42,13 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   productSize;
   cartNumbers = null;
   addCardBtnDisabled = true;
+  focused: any = {};
 
   @Input()
   set selectedProductColorID(id) {
     if (id) {
-      this.selectedProductColor = this.product.colors.find(r => r.color_id === id);
-      this.productSize = this.product.instances.filter(r => r.product_color_id === this.selectedProductColor.color_id).map(r => {
-        return {
-          value: r.size,
-          disabled: r.inventory.reduce((x, y) => x.count + y.count, 0) <= 0,
-        };
-      });
+      this.selectedProductColor = this.product.colors.find(r => r._id === id);
+      this.productSize = this.product.sizes[id];
     }
   };
 
@@ -103,9 +99,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     this.size = $event;
     this.addCardBtnDisabled = false;
   }
-  showAngles(colorId) {
-    this.selectedProductColor = this.product.colors.filter(el => el.color_id === colorId)[0];
-  }
+
   ngAfterContentChecked() {
     this.onScroll();
   }
