@@ -37,9 +37,9 @@ export class ProductService {
     const maxPrice = Math.max(...price);
     price = [minPrice, maxPrice];
     const size = Array.from(new Set(...products.map(r => Object.keys(r.sizesInventory)).reduce((x, y) => x.concat(y), []).sort()));
-    const color = Array.from(new Set(...products.map(r => r.color
-      .map(c => c.name ? c.name.split('/') : [])
-      .reduce((x, y) => x.concat(y), []))));
+    const color = Array.from(new Set(...products.map(r => {
+      return r.colors.map(c => c.name ? c.name.split('/') : []).reduce((x, y) => x.concat(y), []);
+    })));
 
     tags = {brand, type, price, size, color};
 
