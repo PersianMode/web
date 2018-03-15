@@ -20,8 +20,6 @@ export class DictionaryService {
     'ANTHRACITE': 'silver',
   };
 
-  wordDictionary: any = {};
-  colorDictionary: any = {};
 
   constructor(httpService: HttpService) {
 
