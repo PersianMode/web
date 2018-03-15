@@ -38,7 +38,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   topDist = 0;
   innerHeight = 0;
   innerScroll = false;
-  size: number;
+  size: any;
   productSize;
   cartNumbers = null;
   addCardBtnDisabled = true;
@@ -59,6 +59,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
+
   }
 
   saveToCart() {

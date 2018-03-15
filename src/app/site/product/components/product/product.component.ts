@@ -14,7 +14,6 @@ import {DictionaryService} from '../../../../shared/services/dictionary.service'
 })
 export class ProductComponent implements OnInit {
   selectedProductColor;
-  colorId;
   product: any = {};
   joinedTags = '';
   formattedPrice = '';

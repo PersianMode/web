@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
 import {priceFormatter} from '../../lib/priceFormatter';
 import {ProductService} from '../../services/product.service';
@@ -10,29 +10,30 @@ import {DictionaryService} from '../../services/dictionary.service';
   templateUrl: './filtering-panel.component.html',
   styleUrls: ['./filtering-panel.component.css']
 })
-export class FilteringPanelComponent implements OnInit {
+export class FilteringPanelComponent implements OnInit, OnDestroy {
+
   @Input() sortOptions;
   filter_options = [
-    {
-      name: 'برند',
-      values: ['آدیداس', 'پلیس', 'نایک', 'گپ'],
-    },
-    {
-      name: 'نوع',
-      values: ['کفش', 'لباس', 'عینک', 'کوله ورزشی'],
-    },
-    {
-      name: 'قیمت',
-      values: [95e3, 5e6],
-    },
-    {
-      name: 'سایز',
-      values: ['6', '6.5', '7', '8', '8.5', '9', '10', '10.5', '11', '12', '12.5', '13', '13.5', '5', '14'],
-    },
-    {
-      name: 'رنگ',
-      values: ['anthracite', 'university red', '#fffff0', '#ffe0ff', '#efefef', '#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
-    }
+    // {
+    //   name: 'برند',
+    //   values: ['آدیداس', 'پلیس', 'نایک', 'گپ'],
+    // },
+    // {
+    //   name: 'نوع',
+    //   values: ['کفش', 'لباس', 'عینک', 'کوله ورزشی'],
+    // },
+    // {
+    //   name: 'قیمت',
+    //   values: [95e3, 5e6],
+    // },
+    // {
+    //   name: 'سایز',
+    //   values: ['6', '6.5', '7', '8', '8.5', '9', '10', '10.5', '11', '12', '12.5', '13', '13.5', '5', '14'],
+    // },
+    // {
+    //   name: 'رنگ',
+    //   values: ['anthracite', 'university red', '#fffff0', '#ffe0ff', '#efefef', '#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
+    // }
   ];
   current_filter_state = [];
   clear_box = null;
@@ -50,12 +51,23 @@ export class FilteringPanelComponent implements OnInit {
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
 
+  filter_options$: any;
+
+
   constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
-    //  this.productService.filtering$.subscribe(r => {
-    // this.filter_options = r;
+
+    this.filter_options$ = this.productService.filtering$.subscribe(res => {
+      this.filter_options = res;
+      this.initFilters();
+    });
+
+  }
+
+  initFilters() {
+
     this.filter_options.forEach(el => {
       const tempObj = {name: '', values: []};
       tempObj.name = el.name;
@@ -66,26 +78,26 @@ export class FilteringPanelComponent implements OnInit {
       }
     });
 
-      for (const col in this.isChecked['رنگ']) {
-        let color;
-        color = this.dict.convertColor(col);
-        if (color) {
-          this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
-          let red = color.substring(1, 3);
-          let green = color.substring(3, 5);
-          let blue = color.substring(5, 7);
-          let colors = [red, green, blue];
-          this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
-        }
+    for (const col in this.isChecked['رنگ']) {
+      let color;
+      color = this.dict.convertColor(col);
+      if (color) {
+        this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
+        const red = color.substring(1, 3);
+        const green = color.substring(3, 5);
+        const blue = color.substring(5, 7);
+        const colors = [red, green, blue];
+        this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
       }
-      let sizes: any = this.filter_options.filter(r => r.name === 'سایز')[0];
-      sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
-      this.priceRangeChange();
-   // });
+    }
+    const sizes: any = this.filter_options.filter(r => r.name === 'سایز')[0];
+    sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
+    this.priceRangeChange();
+    // });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
-
   }
+
 
   priceRangeChange() {
     if (!this.rangeValues) {
@@ -141,4 +153,8 @@ export class FilteringPanelComponent implements OnInit {
     }
     this.sortedByChange.emit(this.sortedBy);
   }
+  ngOnDestroy(): void {
+    this.filter_options$.unsubscribe();
+  }
+
 }

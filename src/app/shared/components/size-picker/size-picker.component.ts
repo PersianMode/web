@@ -9,7 +9,7 @@ import {
   SimpleChanges,
   SimpleChange
 } from '@angular/core';
-import {log} from 'util';
+import {isUndefined, log} from 'util';
 import {DictionaryService} from '../../services/dictionary.service';
 
 @Component({
@@ -19,6 +19,7 @@ import {DictionaryService} from '../../services/dictionary.service';
 })
 export class SizePickerComponent implements OnInit {
   sizeSplits = [];
+
   @Input()
   set sizes(productSizes) {
     if (productSizes && productSizes.length) {
@@ -31,6 +32,7 @@ export class SizePickerComponent implements OnInit {
       this.sizeSplits.push(productSizes.splice(0, 5));
     }
   }
+
   @Output('value') value = new EventEmitter();
   val = 0;
 
@@ -38,7 +40,6 @@ export class SizePickerComponent implements OnInit {
   }
 
   ngOnInit() {
-
   }
 
   onChange(e) {

@@ -220,15 +220,17 @@ export class PageBasicInfoComponent implements OnInit {
       (result) => {
 
         this.placements = [];
-        result.placement.forEach(p => {
-          this.placements.push({
-            _id: p._id,
-            component_name: p.component_name
+
+        if (result.placement) {
+          result.placement.forEach(p => {
+            this.placements.push({
+              _id: p._id,
+              component_name: p.component_name
+            });
           });
-        });
 
-        this.alignRow();
-
+          this.alignRow();
+        }
         this.progressService.disable();
       },
       (error) => {
