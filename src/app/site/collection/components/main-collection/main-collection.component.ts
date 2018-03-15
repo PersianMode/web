@@ -66,6 +66,9 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
           if (res && res['collection_id']) {
             this.productService.loadProducts(res['collection_id']);
           } else {
+            this.collection.products = [];
+            this.collectionNameFa = '';
+            this.productService.emptyFilters();
             console.error('-> ', `${this.pageName} is getting empty data for page`);
           }
         },

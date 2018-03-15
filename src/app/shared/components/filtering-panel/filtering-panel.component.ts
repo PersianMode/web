@@ -12,28 +12,7 @@ import {DictionaryService} from '../../services/dictionary.service';
 })
 export class FilteringPanelComponent implements OnInit {
   @Input() sortOptions;
-  filter_options = [
-    {
-      name: 'برند',
-      values: ['آدیداس', 'پلیس', 'نایک', 'گپ'],
-    },
-    {
-      name: 'نوع',
-      values: ['کفش', 'لباس', 'عینک', 'کوله ورزشی'],
-    },
-    {
-      name: 'قیمت',
-      values: [95e3, 5e6],
-    },
-    {
-      name: 'سایز',
-      values: ['6', '6.5', '7', '8', '8.5', '9', '10', '10.5', '11', '12', '12.5', '13', '13.5', '5', '14'],
-    },
-    {
-      name: 'رنگ',
-      values: ['anthracite', 'university red', '#fffff0', '#ffe0ff', '#efefef', '#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
-    }
-  ];
+  filter_options: any;
   current_filter_state = [];
   clear_box = null;
   isMobile = false;

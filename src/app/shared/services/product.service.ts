@@ -70,6 +70,10 @@ export class ProductService {
     this.filtering$.next(emittedValue);
   }
 
+  emptyFilters() {
+    this.filtering$.next([]);
+  }
+
   getProduct(productId) {
     let found = this.products.findIndex(r => r._id === productId);
     if (found >= 0 && this.products[found].detailed) {

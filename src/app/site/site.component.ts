@@ -52,7 +52,7 @@ export class SiteComponent implements OnInit {
   }
 
   private loadInitialPlacements() {
-    setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
+     setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
   }
 
   isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {
