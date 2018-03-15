@@ -10,7 +10,7 @@ export class ProductService {
   private collectionName: string;
   private products = [];
   private filteredProducts = [];
-  collectionInfo$: ReplaySubject<any> = new ReplaySubject<any>(1);
+  collectionNameFa$: ReplaySubject<any> = new ReplaySubject<any>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
   product$: Subject<any> = new Subject<any>();
@@ -22,30 +22,54 @@ export class ProductService {
   }
 
   extractFilters() {
-    // const types: string[] = Array.from(new Set(this.filteredProducts.map(x => x['product_type'].name)));
-    //
-    // let colors: string[] = [];
-    // let _colors: string[] = this.filteredProducts.map(x => x['colors']);
-    // _colors = [].concat.apply([], _colors).map(x => x.name);
-    // _colors.forEach(c => c.split('/').map(x => x.trim()).forEach(x => colors.push(x)));
-    // colors = Array.from(new Set(colors));
-    //
-    //
-    // let sizes: string[] = this.filteredProducts.map(x => x['size']);
-    // sizes = Array.from(new Set([].concat.apply([], sizes)));
-    // //let maxPrice = max(this.filteredProducts)
-    // const filter: IFilter[] = [];
-    //
-    // if (types.length > 1) filter.push({name: 'نوع', values: types});
-    // if (colors.length > 1) filter.push({name: 'رنگ', values: colors});
-    // if (sizes.length > 1) filter.push({name: 'سایز', values: sizes});
-    //
-    // this.filtering$.next(filter);
+    // brands
+    const brands: string[] = Array.from(new Set(this.filteredProducts.map(x => x['brand'])));
+
+    // types
+    const types: string[] = Array.from(new Set(this.filteredProducts.map(x => x['product_type'])));
+
+    // colors
+    let colors: string[] = [];
+    let _colors: string[] = [].concat.apply([], this.filteredProducts.map(x => x['colors']));
+    _colors = _colors.map(x => x['name']);
+    _colors.forEach(c => {
+      c.split('/').map(x => x.trim()).forEach(x => {
+        colors.push(x.replace(/[^\w\s]/gi, ''));
+      });
+    });
+    colors = Array.from(new Set(colors));
+
+    // sizes
+    let sizes: string[] = this.filteredProducts.map(x => x['size']);
+    sizes = Array.from(new Set([].concat.apply([], sizes)));
+
+    // prices
+
+    const prices: number[] = this.filteredProducts.map(x => {
+      if (x.discount && x.discount.length) {
+        let price = +x.base_price;
+        x.discount.forEach(d => {
+          price *= +d;
+        });
+        return price;
+      } else
+        return +x.base_price;
+    });
+
+    const filter: IFilter[] = [];
+
+    if (brands.length > 1) filter.push({name: 'برند', values: brands});
+    if (types.length > 1) filter.push({name: 'نوع', values: types});
+    if (colors.length > 1) filter.push({name: 'رنگ', values: colors});
+    if (sizes.length > 1) filter.push({name: 'سایز', values: sizes});
+    if (prices.length > 1) filter.push({name: 'قیمت', values: prices});
+
+    this.filtering$.next(filter);
 
   }
 
   getProduct(productId) {
-    let found = this.products.findIndex(r => r._id === productId);
+    const found = this.products.findIndex(r => r._id === productId);
     if (found >= 0 && this.products[found].detailed) {
       this.product$.next(this.products[found]);
     } else {
@@ -96,10 +120,9 @@ export class ProductService {
     this.httpService.get('collection/product/' + collection_id)
       .subscribe(
         (data) => {
-
-          if (data.name) {
-            this.collectionName = data.name;
-            this.collectionInfo$.next(data.name);
+          if (data.name_fa) {
+            this.collectionName = data.name_fa;
+            this.collectionNameFa$.next(data.name_fa);
 
           }
           if (data.products) {

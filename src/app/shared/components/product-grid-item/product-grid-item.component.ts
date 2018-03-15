@@ -90,7 +90,7 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   getURL(url) {
-   return HttpService.Host + url;
+    return HttpService.Host + url;
   }
 
 }
