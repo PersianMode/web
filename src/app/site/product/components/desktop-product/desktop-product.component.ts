@@ -38,7 +38,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   topDist = 0;
   innerHeight = 0;
   innerScroll = false;
-  size: number;
+  size: any;
   productSize;
   cartNumbers = null;
   addCardBtnDisabled = true;
@@ -59,39 +59,42 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
-  }
 
+  }
   saveToCart() {
     // check form size and id undefined
-    const instance = this.product.instances.find(el => el.product_color_id.equals(this.id) && el.size === this.size);
-
-    if (instance) {
-      const object = {
-        product_id: this.product._id,
-        instance_id: instance._id,
-      };
-
-      this.cartService.saveItem(object);
-      this.cartService.cartItems.subscribe(data => this.cartNumbers = priceFormatter(data.length));
-      const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
-        position: {top: '5.5%', left: '20%'},
-        width: '450px',
-        data: {
-          dialog_product: this.product,
-          cartNumbers: this.cartNumbers,
-          selectedSize: this.size,
-        }
-      });
-      rmDialog.afterClosed().subscribe(
-        (data) => {
-        },
-        (err) => {
-          console.error('Error in dialog: ', err);
-        }
-      );
-    }
+    const object: any = {};
+    object.name = this.product.name;
+    object.instance_id = this.product.id;
+    object.tags = this.product.tags;
+    object.price = this.product.price;
+    object.size = (!this.size ? 0 : this.size);
+    object.thumbnail = this.selectedProductColor.image.thumbnail;
+    object.quantity = 1;
+    object.color = {};
+    object.color.color_id = (!this.id ? 0 : this.id);
+    // object.color.name= this.product.colorText;
+    object.discount = '';
+    object.instances = []; // instances not available
+    this.cartService.saveItem(object);
+    this.cartService.cartItems.subscribe(data => this.cartNumbers = priceFormatter(data.length));
+    const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
+      position: {top: '5.5%', left: '20%'},
+      width: '450px',
+      data: {
+        dialog_product: this.product,
+        cartNumbers : this.cartNumbers,
+        selectedSize : this.size,
+      }
+    });
+    rmDialog.afterClosed().subscribe(
+      (data) => {
+      },
+      (err) => {
+        console.error('Error in dialog: ', err);
+      }
+    );
   }
-
   newSize($event) {
     this.size = $event;
     this.addCardBtnDisabled = false;

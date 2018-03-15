@@ -19,6 +19,7 @@ export class ProductService {
   private sortInput = '';
 
   constructor(private httpService: HttpService, private http: HttpClient) {
+
   }
 
   extractFilters() {
