@@ -45,8 +45,8 @@ export class FilteringPanelComponent implements OnInit {
   needsBorder: any = {};
   expanded: any = {};
   rangeValues: any;
-  minPrice = 5e5;
-  maxPrice = 2.5e6;
+  minPrice = '0';
+  maxPrice = '0';
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
 
@@ -54,8 +54,8 @@ export class FilteringPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-  //  this.productService.filtering$.subscribe(r => {
-      // this.filter_options = r;
+    this.productService.filtering$.subscribe(r => {
+      this.filter_options = r;
       this.filter_options.forEach(el => {
         const tempObj = {name: '', values: []};
         tempObj.name = el.name;
@@ -65,8 +65,14 @@ export class FilteringPanelComponent implements OnInit {
           this.isChecked[el.name][key] = false;
         }
       });
+      const prices = r.find(fo => fo.name === 'price');
+      if (prices) {
+        this.minPrice = prices.values[0];
+        this.maxPrice = prices.values[1];
+        this.priceRangeChange();
+      }
 
-      for (const col in this.isChecked['رنگ']) {
+      for (const col in this.isChecked.size) {
         let color;
         color = this.dict.convertColor(col);
         if (color) {
@@ -78,10 +84,11 @@ export class FilteringPanelComponent implements OnInit {
           this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
         }
       }
-      let sizes: any = this.filter_options.filter(r => r.name === 'سایز')[0];
-      sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
-      this.priceRangeChange();
-   // });
+      let sizes: any = this.filter_options.find(r => r.name === 'size');
+      if (sizes) {
+        sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
+      }
+    });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
 
@@ -92,7 +99,7 @@ export class FilteringPanelComponent implements OnInit {
       this.rangeValues = [this.minPrice, this.maxPrice];
     }
     this.rangeValues = this.rangeValues.map(r => Math.round(r / 1000) * 1000);
-    this.current_filter_state.find(r => r.name === 'قیمت').values = this.rangeValues;
+    this.current_filter_state.find(r => r.name === 'price').values = this.rangeValues;
     this.selectedMinPriceFormatted = priceFormatter(this.rangeValues[0]);
     this.selectedMaxPriceFormatted = priceFormatter(this.rangeValues[1]);
   }

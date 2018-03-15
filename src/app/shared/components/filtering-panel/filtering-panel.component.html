@@ -12,19 +12,19 @@
   </mat-expansion-panel>
   <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null" [expanded]="expanded[fo]">
     <mat-expansion-panel-header>
-      <div class="checkbox-title">{{fo.name}}</div>
+      <div class="checkbox-title">{{fo.name_fa}}</div>
     </mat-expansion-panel-header>
     <div *ngFor="let v of filter_options[i].values" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
-      <mat-checkbox *ngIf="fo.name !== 'رنگ' && fo.name !== 'سایز' && fo.name !=='قیمت'"
+      <mat-checkbox *ngIf="fo.name !== 'color' && fo.name !== 'size' && fo.name !=='price'"
                     (click)="getValue(fo.name, v)" [checked]="clear_box">
         <span class="check-box-text">{{v}}</span>
       </mat-checkbox>
     </div>
-    <div *ngIf="fo.name==='قیمت'">
+    <div *ngIf="fo.name==='price'">
       <p-slider [(ngModel)]="rangeValues" [range]="true" [min]="minPrice" [max]="maxPrice" (onChange)="priceRangeChange()"></p-slider>
       <span style="float:left">{{selectedMinPriceFormatted}} تومان</span><span>{{selectedMaxPriceFormatted}} تومان</span>
     </div>
-    <span *ngIf="fo.name === 'رنگ'">
+    <span *ngIf="fo.name === 'color'">
       <span *ngFor="let v of filter_options[i].values; let j = index" class="color-span" (click)="getValue(fo.name, v)"
             style="cursor: pointer;">
         <svg height="26" width="26" >
@@ -33,7 +33,7 @@
         <i *ngIf="isChecked[fo.name][v]" class="fa fa-check circle" [style.color]="oppositeColor[v]"></i>
       </span>
   </span>
-    <span *ngIf="fo.name === 'سایز'">
+    <span *ngIf="fo.name === 'size'">
       <mat-button-toggle *ngFor="let v of filter_options[i].values" class="filter-size"
                          (click)="getValue(fo.name, v)" [checked]="clear_box">
           {{v}}

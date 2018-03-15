@@ -18,6 +18,7 @@ export class DictionaryService {
   colorDictionary = {
     'UNIVERSITY RED': 'darkred',
     'ANTHRACITE': 'silver',
+    'BLACK ANTHRACITE': '#999999',
   };
 
   constructor() {

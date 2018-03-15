@@ -14,6 +14,8 @@ export class ProductService {
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
   product$: ReplaySubject<any> = new ReplaySubject<any>();
+  collectionTags: any = {};
+  collectionTagsAfterFilter: any = {};
 
   private filterInput: IFilter[];
   private sortInput = '';
@@ -22,22 +24,50 @@ export class ProductService {
   constructor(private httpService: HttpService, private http: HttpClient, private dict: DictionaryService) {
   }
 
-  extractFilters() {
-    const brands = Array.from(new Set([... this.products.map(r => r.brand)]));
-    const types = Array.from(new Set([... this.products.map(r => r.product_type)]));
-    const prices = this.products.map(r => r.base_price);
-    const minPrice = Math.min(...prices);
-    const maxPrice = Math.max(...prices);
-    const sizes = Array.from(new Set(...this.products.map(r => Object.keys(r.sizesInventory)).reduce((x, y) => x.concat(y), []).sort()));
-    const colors = Array.from(new Set(...this.products.map(r => r.colors.map(c => c.name ? c.name.split('/') : []).reduce((x, y) => x.concat(y), []))));
-    const tags = {};
-    this.products.forEach(p => p.tags.forEach( tag => {
-      const tagGroupName = this.dict.translateWord(tag.tg_name);
+  extractFilters(trigger = '') {
+    let products = this.products, tags = this.collectionTags;
+    if (trigger) {
+      products = this.filteredProducts;
+      tags = this.collectionTagsAfterFilter;
+    }
+    const brand = Array.from(new Set([... products.map(r => r.brand)]));
+    const type = Array.from(new Set([... products.map(r => r.product_type)]));
+    let price = [4e3, 446e3, 2e3, 354e2, 999e3, 9e5, 3e6]; // products.map(r => r.base_price);
+    const minPrice = Math.min(...price);
+    const maxPrice = Math.max(...price);
+    price = [minPrice, maxPrice];
+    const size = Array.from(new Set(...products.map(r => Object.keys(r.sizesInventory)).reduce((x, y) => x.concat(y), []).sort()));
+    const color = Array.from(new Set(...products.map(r => r.colors.map(c => c.name ? c.name.split('/') : []).reduce((x, y) => x.concat(y), []))));
+
+    tags = {brand, type, price, size, color};
+
+    if (trigger) {
+      tags[trigger] = this.collectionTags[trigger] ? this.collectionTags[trigger] : [];
+    }
+
+    products.forEach(p => p.tags.forEach( tag => {
+      const tagGroupName = tag.tg_name;
       if (!tags[tagGroupName]) {
         tags[tagGroupName] = new Set();
       }
-      tags[tagGroupName].add(this.dict.translateWord(tag.name));
+      tags[tagGroupName].add(tag.name);
     }));
+
+    const emittedValue = [];
+    for (const name in tags) {
+      if (tags.hasOwnProperty(name)) {
+        const values = Array.from(tags[name]);
+        if (values.length > 1) {
+          emittedValue.push({
+            name: name,
+            name_fa: this.dict.translateWord(name),
+            values,
+            values_fa: values.map((r: string | number) => this.dict.translateWord(r))
+          });
+        }
+      }
+    }
+    this.filtering$.next(emittedValue);
   }
 
   getProduct(productId) {
