@@ -58,14 +58,82 @@ export class CartService {
       && el.instance_id.toString() !== value.instance_id.toString());
 
       localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
+
+      this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id.toString() !== value.instance_id.toString()));
     }
   }
 
   updateItem(value) {
-    if (this.authService.isLoggedIn.getValue()) {
+    // Check for update or delete and add new item
+    const item = this.cartItems.getValue().find(el => el.product_id.toString() === value.product_id.toString() &&
+    el.instance_id.toString() === value.instance_id.toString());
 
+    if (item) {
+      // Should modify
+      if (this.authService.isLoggedIn.getValue()) {
+        // Modify in server
+        const diff = (item.quantity || 1) - (value.number || 1);
+
+        this.httpService.post('order' + (diff > 0 ? '/delete' : ''), {
+          product_id: item.product_id,
+          product_instance_id: item.instance_id,
+          number: Math.abs(diff),
+        }).subscribe(
+          (data) => {
+            item.quantity = value.number || 1;
+            this.cartItems.next(this.cartItems.getValue());
+          },
+          (err) => {
+            console.error('Cannot update (reduce quantity) in server: ', err);
+          }
+        );
+      } else {
+        // Modify in localStorage
+        item.quantity = value.number || 1;
+        localStorage.setItem(this.localStorageKey, JSON.stringify(this.cartItems.getValue()));
+        this.cartItems.next(this.cartItems.getValue());
+      }
     } else {
+      // Should delete and add new product's instance
+      if (this.authService.isLoggedIn.getValue()) {
+        // Change in server
+        this.httpService.post('order/delete', {
+          product_instance_id: value.pre_instance_id,
+        }).subscribe(
+          (data) => {
+            this.httpService.post('order', {
+              product_id: value.product_id,
+              product_instance_id: value.instance_id,
+              number: value.number
+            }).subscribe(
+              (dt) => {
+                this.getCartItems();
+              },
+              (err) => {
+                console.error('Cannot add new order-line to order in server: ', err);
+              }
+            );
+          },
+          (err) => {
+            console.error('Cannot delete the specific product instance in server: ', err);
+          }
+        );
+      } else {
+        // Change in localStorage
+        let ls_items = this.getItemsFromStorage();
+        ls_items = ls_items.filter(el =>
+        el.product_id.toString() !== value.product_id.toString() ||
+        el.instance_id.toString() !== value.pre_instance_id.toString());
 
+        for (let counter = 0; counter < value.number; counter++)
+          ls_items.push({
+            product_id: value.product_id,
+            instance_id: value.instance_id,
+          });
+
+        localStorage.setItem(this.localStorageKey, JSON.stringify(ls_items));
+        this.getCartItems();
+      }
     }
   }
 
@@ -84,7 +152,7 @@ export class CartService {
       (data) => {
         let cartData = null;
         if (!data)
-          cartData = this.cartItems.next(this.getItemsFromStorage());
+          cartData = this.getItemsFromStorage();
 
         if (data || cartData && cartData.length > 0)
           this.getItemsDetail(cartData)
@@ -170,7 +238,7 @@ export class CartService {
 
   getLoyaltyBalance() {
     return new Promise((resolve, reject) => {
-      this.httpService.get(`customer/${this.authService.userDetails.userId}/balance`).subscribe(
+      this.httpService.get(`customer/balance`).subscribe(
         (data) => {
           resolve(data);
         },

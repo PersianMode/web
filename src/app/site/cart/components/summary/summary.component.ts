@@ -47,21 +47,17 @@ export class SummaryComponent implements OnInit {
   finalTotal: any = 0;
   coupon_code = null;
 
-  constructor(private cartService: CartService, private authService: AuthService) {
+  constructor(private cartService: CartService) {
   }
 
   ngOnInit() {
-    this.authService.isLoggedIn.subscribe(
-      (data) => {
-        if (data)
-          this.cartService.getLoyaltyBalance()
-            .then((res: any) => {
-              this.balanceValue = priceFormatter(res.balance);
-              this.loyaltyPoint = priceFormatter(res.loyalty_points);
-            })
-            .catch(err => {
-              console.error('Cannot get user balance and loyalty: ', err);
-            });
+    this.cartService.getLoyaltyBalance()
+      .then((res: any) => {
+        this.balanceValue = priceFormatter(res.balance);
+        this.loyaltyPoint = priceFormatter(res.loyalty_points);
+      })
+      .catch(err => {
+        console.error('Cannot get user balance and loyalty: ', err);
       });
   }
 

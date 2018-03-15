@@ -33,7 +33,7 @@
               <select class="select-style" (change)="setNewSize($event.target.value)">
                 <option>سایز</option>
                 <option *ngFor="let i of sizesArray"
-                        [selected]="(i.value === product.size.value) ? true : false" [value]="i.value">
+                        [selected]="(i.value === product.size) ? true : false" [value]="i.value">
                   {{i.name}}
                 </option>
               </select>
@@ -42,7 +42,7 @@
               <select class="select-style" (change)="setNewQty($event.target.value)">
                 <option>تعداد</option>
                 <option *ngFor="let i of selectedQuantityArray"
-                        [selected]="(i.value == product.quantity.value) ? true : false" [value]="i.value">
+                        [selected]="(i.value == product.quantity) ? true : false" [value]="i.value">
                   {{i.name}}
                 </option>
               </select>

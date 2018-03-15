@@ -51,11 +51,21 @@ export class CartComponent implements OnInit, OnDestroy {
       case 'delete': {
         this.cartService.removeItem({instance_id: currentProduct.instance_id, product_id: currentProduct.product_id});
       }
-      break;
+        break;
       case 'update': {
+        if (!data.value.newQuantity)
+          return;
 
+        const tempInstance = currentProduct.instances.find(el => el.size === data.value.newSize);
+
+        this.cartService.updateItem({
+          pre_instance_id: currentProduct.instance_id,
+          instance_id: tempInstance ? tempInstance.instance_id : currentProduct.instance_id,
+          product_id: currentProduct.product_id,
+          number: data.value.newQuantity,
+        });
       }
-      break;
+        break;
     }
   }
 }

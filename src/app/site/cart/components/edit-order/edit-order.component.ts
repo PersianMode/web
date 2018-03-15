@@ -50,7 +50,7 @@ export class EditOrderComponent implements OnInit {
       }
     );
 
-    const tempObj = this.qtyArray.find(el => el.size.value === this.product.size.value);
+    const tempObj = this.qtyArray.find(el => el.size.value === this.product.size);
     this.selectedQuantityArray = tempObj ? tempObj.qtyArray : null;
   }
 
@@ -63,9 +63,8 @@ export class EditOrderComponent implements OnInit {
   }
 
   setNewSize(newSize) {
-    this.editObj.newSize = +newSize;
-    this.product.quantity.value = null;
-    this.selectedQuantityArray = this.qtyArray.find(el => el.size.value === +newSize).qtyArray;
+    this.editObj.newSize = newSize;
+    this.selectedQuantityArray = this.qtyArray.find(el => el.size.value === this.editObj.newSize).qtyArray;
   }
 
   setNewQty(newQty) {

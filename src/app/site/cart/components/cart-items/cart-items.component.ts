@@ -12,8 +12,11 @@ export class CartItemsComponent implements OnInit {
   @Input() product = null;
   @Output() updateProduct = new EventEmitter();
 
-  total_price = null;
   notExist = false;
+  displaySize = null;
+  displayQuantity = null;
+  displayPrice = null;
+  displayTotalPrice = null;
 
   constructor(private dialog: MatDialog) {
   }
@@ -21,11 +24,10 @@ export class CartItemsComponent implements OnInit {
   ngOnInit() {
     this.notExist = this.product.count && this.product.quantity <= this.product.count ? false : true;
 
-    this.product.size = {value: this.product.size, name: this.product.size.toLocaleString('fa')};
-    this.product.quantity = {value: this.product.quantity, name: this.product.quantity.toLocaleString('fa')};
-    this.product.price = {value: this.product.price, name: priceFormatter(this.product.price)};
-    this.total_price = this.product.quantity.value * this.product.price.value;
-    this.total_price = {value: this.total_price, name: priceFormatter(this.total_price)};
+    this.displaySize = this.product.size.toLocaleString('fa');
+    this.displayQuantity = this.product.quantity.toLocaleString('fa');
+    this.displayPrice = priceFormatter(this.product.price);
+    this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price);
   }
 
   deleteProduct() {
@@ -44,11 +46,10 @@ export class CartItemsComponent implements OnInit {
         if (data) {
           this.updateProduct.emit({type: 'update', value: data});
 
-          this.product.size = {value: data.newSize, name: data.newSize.toLocaleString('fa')};
-          this.product.quantity = {value: data.newQuantity, name: data.newQuantity.toLocaleString('fa')};
-          this.product.price = {value: this.product.price.value, name: priceFormatter(this.product.price.value)};
-          this.total_price = this.product.quantity.value * this.product.price.value;
-          this.total_price = {value: this.total_price, name: priceFormatter(this.total_price)};
+          this.displaySize = (data.newSize ? data.newSize : this.product.size).toLocaleString('fa');
+          this.displayQuantity = (data.newQuantity ? data.newQuantity : this.product.quantity).toLocaleString('fa');
+          this.displayPrice = priceFormatter(this.product.price);
+          this.displayTotalPrice = priceFormatter((data.newQuantity ? data.newQuantity : this.product.quantity) * this.product.price);
         }
       },
       (err) => {
