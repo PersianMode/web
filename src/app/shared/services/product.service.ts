@@ -4,7 +4,9 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
 import {HttpClient} from '@angular/common/http';
 import {DictionaryService} from './dictionary.service';
-
+const productColorMap = function(r) {
+  return r.colors.map(c => c.name ? c.name.split('/') : []);
+}
 @Injectable()
 export class ProductService {
   private collectionName: string;
@@ -24,22 +26,16 @@ export class ProductService {
   constructor(private httpService: HttpService, private http: HttpClient, private dict: DictionaryService) {
   }
 
-  extractFilters(trigger = '') {
-    let products = this.products, tags = this.collectionTags;
-    if (trigger) {
-      products = this.filteredProducts;
-      tags = this.collectionTagsAfterFilter;
-    }
+  extractFilters(filters = [], trigger = '') {
+    let products = trigger ? this.filteredProducts : this.products, tags: any = {};
     const brand = Array.from(new Set([... products.map(r => r.brand)]));
     const type = Array.from(new Set([... products.map(r => r.product_type)]));
     let price = [4e3, 446e3, 2e3, 354e2, 999e3, 9e5, 3e6]; // products.map(r => r.base_price);
     const minPrice = Math.min(...price);
     const maxPrice = Math.max(...price);
     price = [minPrice, maxPrice];
-    const size = Array.from(new Set(...products.map(r => Object.keys(r.sizesInventory)).reduce((x, y) => x.concat(y), []).sort()));
-    const color = Array.from(new Set(...products.map(r => {
-      return r.colors.map(c => c.name ? c.name.split('/') : []).reduce((x, y) => x.concat(y), []);
-    })));
+    const size = Array.from(new Set([...products.map(r => Object.keys(r.sizesInventory)).reduce((x, y) => x.concat(y), []).sort()]));
+    const color = Array.from(new Set([...products.map(productColorMap).reduce((x, y) => x.concat(y), []).reduce((x, y) => x.concat(y), [])]));
 
     tags = {brand, type, price, size, color};
 
@@ -55,11 +51,18 @@ export class ProductService {
       tags[tagGroupName].add(tag.name);
     }));
 
+    if (trigger) {
+      this.collectionTagsAfterFilter = tags;
+    } else {
+      this.collectionTags = tags;
+    }
+
     const emittedValue = [];
     for (const name in tags) {
       if (tags.hasOwnProperty(name)) {
         const values = Array.from(tags[name]);
-        if (values.length > 1) {
+        const found = filters.find(r => r.name === name);
+        if (values.length > 1 || (found && found.values.length)) {
           emittedValue.push({
             name: name,
             name_fa: this.dict.translateWord(name),
@@ -74,6 +77,27 @@ export class ProductService {
 
   emptyFilters() {
     this.filtering$.next([]);
+  }
+
+  applyFilters(filters, trigger) {
+    this.filteredProducts = this.products;
+    filters.forEach(f => { if (f.values.length) {
+      if (['brand', 'type'].includes(f.name)) {
+        console.log(f)
+        this.filteredProducts = this.filteredProducts.filter(r => Array.from(f.values).includes(r[f.name]));
+      } else if (f.name === 'color') {
+        this.filteredProducts = this.filteredProducts.filter( p => Array.from(f.values).filter(v => productColorMap(p).reduce((x, y) => x.concat(y), []).includes(v)).length);
+        this.filteredProducts.forEach((p, pi) => p.colors.forEach((c, ci) => {
+          if (!Array.from(f.values).filter(v => c.name.split('/').includes(v)).length) {
+            this.filteredProducts[pi].colors.splice(ci, 1);
+            this.enrichProductData(this.filteredProducts[pi]);
+          }
+        }));
+      } else if (f.name === 'size') {
+        this.filteredProducts = this.filteredProducts.filter(p => Object.keys(p.sizesInventory).filter(s => Array.from(f.values).includes(s)).length);
+    }});
+    this.productList$.next(this.filteredProducts);
+    this.extractFilters(filters, trigger);
   }
 
   getProduct(productId) {
@@ -93,6 +117,7 @@ export class ProductService {
 
   private enrichProductData(data) {
     data.id = data._id;
+    data.type = data.product_type;
     data.price = data.base_price;
     data.sizesByColor = {};
     data.sizesInventory = {};
@@ -121,7 +146,7 @@ export class ProductService {
         data.sizesByColor[item._id] = data.instances
           .filter(r => r.product_color_id === item._id)
           .map(r => {
-            const inventory = r.inventory.reduce((x, y) => x.count + y.count, 0);
+            const inventory = r.inventory.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0);
             if (inventory) {
               if (!data.sizesInventory[r.size]) {
                 data.sizesInventory[r.size] = {};

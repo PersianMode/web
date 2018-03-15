@@ -36,12 +36,15 @@ export class FilteringPanelComponent implements OnInit {
     this.productService.filtering$.subscribe(r => {
       this.filter_options = r;
       this.filter_options.forEach(el => {
-        const tempObj = {name: '', values: []};
-        tempObj.name = el.name;
-        this.current_filter_state.push(tempObj);
-        this.isChecked[el.name] = {};
-        for (const key of el.values) {
-          this.isChecked[el.name][key] = false;
+        const found = this.current_filter_state.find(cfs => cfs.name === el.name);
+        if (!found) {
+          this.current_filter_state.push({name: el.name, values: []});
+        }
+        if (!this.isChecked[el.name]) {
+          this.isChecked[el.name] = {};
+          for (const key of el.values) {
+            this.isChecked[el.name][key] = false;
+          }
         }
       });
       const prices = r.find(fo => fo.name === 'price');
@@ -77,17 +80,29 @@ export class FilteringPanelComponent implements OnInit {
   }
 
   priceRangeChange() {
+    let changed = false;
     if (!this.rangeValues) {
       this.rangeValues = [this.minPrice, this.maxPrice];
+    } else {
+      if (this.rangeValues[0] !== this.minPrice || this.rangeValues[1] !== this.maxPrice)
+        changed = true;
     }
     this.rangeValues = this.rangeValues.map(r => Math.round(r / 1000) * 1000);
     this.current_filter_state.find(r => r.name === 'price').values = this.rangeValues;
     this.selectedMinPriceFormatted = priceFormatter(this.rangeValues[0]);
     this.selectedMaxPriceFormatted = priceFormatter(this.rangeValues[1]);
+    if (changed) {
+      this.productService.applyFilters(this.current_filter_state, 'price');
+      this.expanded.price = true;
+    }
   }
 
   getValue(name, value) {
     this.isChecked[name][value] = !this.isChecked[name][value];
+    this.expanded[name] = Object.keys(this.isChecked[name])
+      .map(k => this.isChecked[name][k])
+      .reduce((x, y) => x || y, false);
+
     this.current_filter_state.forEach(el => {
       if (el.name === name) {
         if (el.values.length === 0 || el.values.findIndex(i => i === value) === -1)
@@ -100,6 +115,8 @@ export class FilteringPanelComponent implements OnInit {
       }
     });
     this.clear_box = null;
+
+    this.productService.applyFilters(this.current_filter_state, name);
   }
 
   clearFilters() {

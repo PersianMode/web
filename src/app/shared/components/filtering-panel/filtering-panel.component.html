@@ -2,7 +2,7 @@
   <h1>فیلترها</h1>
 </div>
 <mat-accordion multi="true">
-  <mat-expansion-panel *ngIf="isMobile">
+  <mat-expansion-panel *ngIf="isMobile" [expanded]="expanded.sort">
     <mat-expansion-panel-header>
       <div class="checkbox-title">ترتیب نمایش</div>
     </mat-expansion-panel-header>
@@ -10,13 +10,13 @@
      {{sortOption.fa}}  <i *ngIf="sortedBy && (sortedBy.value === sortOption.value)" class="fa fa-check sort"></i>
     </div>
   </mat-expansion-panel>
-  <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null" [expanded]="expanded[fo]">
+  <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null" [expanded]="expanded[fo.name]">
     <mat-expansion-panel-header>
       <div class="checkbox-title">{{fo.name_fa}}</div>
     </mat-expansion-panel-header>
     <div *ngFor="let v of filter_options[i].values;let j=index" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
       <mat-checkbox *ngIf="fo.name !== 'color' && fo.name !== 'size' && fo.name !=='price'"
-                    (click)="getValue(fo.name, v)" [checked]="clear_box">
+                    (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
         <span class="check-box-text">{{filter_options[i].values_fa[j]}}</span>
       </mat-checkbox>
     </div>
@@ -35,7 +35,7 @@
   </span>
     <span *ngIf="fo.name === 'size'">
       <mat-button-toggle *ngFor="let v of filter_options[i].values" class="filter-size"
-                         (click)="getValue(fo.name, v)" [checked]="clear_box">
+                         (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
           {{v}}
       </mat-button-toggle>
     </span>
