@@ -20,10 +20,9 @@ export class DictionaryService {
     'ANTHRACITE': 'silver',
   };
 
-
   constructor(httpService: HttpService) {
 
-    httpService.get('dictionary').subscribe(res => {
+    httpService.get('dictionary').subscribe((res: any) => {
 
       res.forEach(x => {
         if (x.type === 'tag') {

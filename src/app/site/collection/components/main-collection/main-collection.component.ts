@@ -62,6 +62,8 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
     this.route.paramMap.subscribe(params => {
       this.pageName = 'collection/' + params.get('typeName');
       console.log('page name : ', this.pageName);
+      setTimeout(() => this.pageService.getPage(this.pageName), 100);
+
       this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
           if (res && res['collection_id']) {
             this.productService.loadProducts(res['collection_id']);
