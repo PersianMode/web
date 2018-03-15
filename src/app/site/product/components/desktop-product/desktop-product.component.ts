@@ -61,7 +61,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   ngOnInit() {
 
   }
-
   saveToCart() {
     // check form size and id undefined
     const instance = this.product.instances.find(el => el.product_color_id.equals(this.id) && el.size === this.size);

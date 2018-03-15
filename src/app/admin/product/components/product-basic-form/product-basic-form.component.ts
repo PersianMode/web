@@ -29,6 +29,7 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
   @Input() types: IType[];
 
   @Output() productIdEvent = new EventEmitter<string>();
+  @Output() productTags = new EventEmitter<string>();
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar, private router: Router,
               public dialog: MatDialog, private progressService: ProgressService) {
@@ -40,14 +41,12 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
       this.progressService.enable();
       this.httpService.get(`/product/${this.productId}`).subscribe(
         (data) => {
-
+          this.productTags.emit(data.tags);
           this.originalProduct = data;
-
           this.productBasicForm.controls['name'].setValue(data.name);
           this.productBasicForm.controls['base_price'].setValue(data.base_price);
           this.productBasicForm.controls['product_type'].setValue(data.product_type.product_type_id);
           this.productBasicForm.controls['brand'].setValue(data.brand.brand_id);
-
           this.progressService.disable();
         },
         (err) => {
@@ -67,7 +66,7 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
         base_price: [null, [
           Validators.required,
         ]],
-        product_type: [ null, [
+        product_type: [null, [
           Validators.required,
         ]],
         brand: [null, [

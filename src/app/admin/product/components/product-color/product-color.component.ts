@@ -64,7 +64,6 @@ export class ProductColorComponent implements OnInit {
         console.log('Error in dialog: ', err);
       }
     );
-
   }
 
   addToTable(images: any) {
@@ -93,8 +92,8 @@ export class ProductColorComponent implements OnInit {
   }
 
   getURL(path) {
-    if(path)
-    return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    if (path)
+      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }
 
   setColor($event) {
