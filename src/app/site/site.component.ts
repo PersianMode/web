@@ -19,7 +19,7 @@ export class SiteComponent implements OnInit {
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
-              private router: Router, private pageService: PageService, private dictionaryService: DictionaryService) {
+              private router: Router, private pageService: PageService, private dictionaryService: DictionaryService ) {
   }
 
   ngOnInit() {
