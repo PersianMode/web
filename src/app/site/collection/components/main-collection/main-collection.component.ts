@@ -1,10 +1,13 @@
-import {AfterContentChecked, Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, AfterContentInit, Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
 import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
 import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+import {throttleTime} from 'rxjs/operator/throttleTime';
 
 
 @Component({
@@ -12,7 +15,7 @@ import {ResponsiveService} from '../../../../shared/services/responsive.service'
   templateUrl: './main-collection.component.html',
   styleUrls: ['./main-collection.component.css']
 })
-export class MainCollectionComponent implements OnInit, AfterContentChecked {
+export class MainCollectionComponent implements OnInit, AfterContentInit {
   collection: any = {
     products: [],
     collectionNameFa: '',
@@ -33,6 +36,7 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
   gridWidth: number;
   gridHeight: number;
   isMobile = false;
+  scroll$ = new Subject();
   sortOptions = [
     {
       value: 'newest',
@@ -53,6 +57,7 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
   ];
   sortedBy: any;
   collectionNameFa = '';
+  count = 0;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
               private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService) {
@@ -88,10 +93,12 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
     });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+
+    this.scroll$.subscribe(() => this.calcAfterScroll());
   }
 
-  ngAfterContentChecked() {
-    this.calcAfterScroll();
+  ngAfterContentInit() {
+    this.scroll$.next();
   }
 
   private calcWidth() {
@@ -104,7 +111,7 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.calcAfterScroll();
+    this.scroll$.next();
   }
 
   calcAfterScroll() {

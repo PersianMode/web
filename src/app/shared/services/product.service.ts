@@ -37,7 +37,9 @@ export class ProductService {
     const maxPrice = Math.max(...price);
     price = [minPrice, maxPrice];
     const size = Array.from(new Set(...products.map(r => Object.keys(r.sizesInventory)).reduce((x, y) => x.concat(y), []).sort()));
-    const color = Array.from(new Set(...products.map(r => r.colors.map(c => c.name ? c.name.split('/') : []).reduce((x, y) => x.concat(y), []))));
+    const color = Array.from(new Set(...products.map(r => r.color
+      .map(c => c.name ? c.name.split('/') : [])
+      .reduce((x, y) => x.concat(y), []))));
 
     tags = {brand, type, price, size, color};
 
@@ -45,7 +47,7 @@ export class ProductService {
       tags[trigger] = this.collectionTags[trigger] ? this.collectionTags[trigger] : [];
     }
 
-    products.forEach(p => p.tags.forEach( tag => {
+    products.forEach(p => p.tags.forEach(tag => {
       const tagGroupName = tag.tg_name;
       if (!tags[tagGroupName]) {
         tags[tagGroupName] = new Set();
@@ -62,7 +64,7 @@ export class ProductService {
             name: name,
             name_fa: this.dict.translateWord(name),
             values,
-            values_fa: values.map((r: string | number) => this.dict.translateWord(r))
+            values_fa: values.map((r: string | number) => name !== 'color' ? this.dict.translateWord(r) : this.dict.convertColor(r + ''))
           });
         }
       }
@@ -75,7 +77,7 @@ export class ProductService {
   }
 
   getProduct(productId) {
-    let found = this.products.findIndex(r => r._id === productId);
+    const found = this.products.findIndex(r => r._id === productId);
     if (found >= 0 && this.products[found].detailed) {
       this.product$.next(this.products[found]);
     } else {
@@ -138,36 +140,31 @@ export class ProductService {
   }
 
   loadProducts(collection_id) {
-    if (this.collectionId === collection_id && this.products.length) {
-      this.productList$.next(this.filteredProducts);
-      this.collectionNameFa$.next(this.collectionName);
-    } else {
-      this.httpService.get('collection/product/' + collection_id)
-        .subscribe(
-          (data) => {
-            if (data.name_fa) {
-              this.collectionName = data.name_fa;
-              this.collectionNameFa$.next(data.name_fa);
+    this.httpService.get('collection/product/' + collection_id)
+      .subscribe(
+        (data) => {
+          if (data.name_fa) {
+            this.collectionName = data.name_fa;
+            this.collectionNameFa$.next(data.name_fa);
 
-            }
-            if (data.products) {
-              for (const product of data.products) {
-                this.enrichProductData(product);
-              }
-              this.collectionId = collection_id;
-              this.products = data.products;
-              this.filteredProducts = this.products.slice();
-
-              this.extractFilters();
-              this.productList$.next(this.filteredProducts);
-              //this.filterSortProducts();
-            }
-          },
-          (err) => {
-            console.error('Cannot get products of collection: ', err);
           }
-        );
-    }
+          if (data.products) {
+            for (const product of data.products) {
+              this.enrichProductData(product);
+            }
+            this.collectionId = collection_id;
+            this.products = data.products;
+            this.filteredProducts = this.products.slice();
+
+            this.extractFilters();
+            this.productList$.next(this.filteredProducts);
+            // this.filterSortProducts();
+          }
+        },
+        (err) => {
+          console.error('Cannot get products of collection: ', err);
+        }
+      );
   }
 
   setFilter(name, value) {
@@ -194,7 +191,8 @@ export class ProductService {
 
         switch (item.name) {
           case 'نوع' :
-            this.filteredProducts = this.filteredProducts.concat(this.products.filter(product => item.values.includes(product.product_type.name)));
+            this.filteredProducts = this.filteredProducts
+              .concat(this.products.filter(product => item.values.includes(product.product_type.name)));
             break;
           case 'رنگ':
             this.filteredProducts = this.filteredProducts.concat(this.products.filter(product => {

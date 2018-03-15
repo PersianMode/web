@@ -51,7 +51,7 @@ export class FilteringPanelComponent implements OnInit {
         this.priceRangeChange();
       }
 
-      for (const col in this.isChecked.size) {
+      for (const col in this.isChecked.color) {
         let color;
         color = this.dict.convertColor(col);
         if (color) {
@@ -61,6 +61,9 @@ export class FilteringPanelComponent implements OnInit {
           let blue = color.substring(5, 7);
           let colors = [red, green, blue];
           this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
+        } else {
+          const delInd = this.filter_options.color.findIndex(c => c.name === col);
+          this.filter_options.color.splice(delInd, 1);
         }
       }
       let sizes: any = this.filter_options.find(r => r.name === 'size');
