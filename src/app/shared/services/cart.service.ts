@@ -31,7 +31,7 @@ export class CartService {
                 localStorage.removeItem(this.localStorageKey);
               })
               .catch(err => {
-                console.log('Cannot delete all items from localStorage: ', err);
+                console.error('Cannot delete all items from localStorage: ', err);
               });
           }
         }

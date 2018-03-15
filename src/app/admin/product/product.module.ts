@@ -14,7 +14,7 @@ import {ProductFullInfoComponent} from './components/product-full-info/product-f
 import {ProductColorComponent} from './components/product-color/product-color.component';
 import {ProductInstanceComponent} from './components/product-instance/product-instance.component';
 import {SharedModule} from '../../shared/shared.module';
-import {ProductTagComponent} from './components/product-tag/product-tag.component';
+// import {ProductTagComponent} from './components/product-tag/product-tag.component';
 
 @NgModule({
   declarations: [
