@@ -10,7 +10,7 @@ import {reject} from 'q';
 @Injectable()
 export class AuthService {
   private defaultDisplayName = 'Anonymous user';
-  isLoggedIn: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+  isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isVerified: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   userDetails = {
     isAgent: null,
@@ -29,7 +29,7 @@ export class AuthService {
         (data) => {
           this.userDetails = {
             isAgent: data.personType === 'agent',
-            userId: data.pid,
+            userId: data.id,
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
             username: data.username,
@@ -65,7 +65,7 @@ export class AuthService {
           this.isVerified.next(data.is_verified ? data.is_verified : false);
           this.userDetails = {
             isAgent: data.personType === 'agent',
-            userId: data.pid,
+            userId: data.id,
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
             username: data.username,
