@@ -4,6 +4,7 @@ import {AuthService} from '../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {PageService} from '../shared/services/page.service';
 import {ResponsiveService} from '../shared/services/responsive.service';
+import {DictionaryService} from '../shared/services/dictionary.service';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class SiteComponent implements OnInit {
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
-              private router: Router, private pageService: PageService) {
+              private router: Router, private pageService: PageService, private dictionaryService: DictionaryService ) {
   }
 
   ngOnInit() {

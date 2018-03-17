@@ -1,14 +1,11 @@
-import {AfterContentChecked, AfterContentInit, Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
 import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
 import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
-import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-import {throttleTime} from 'rxjs/operator/throttleTime';
-
 
 @Component({
   selector: 'app-main-collection',
@@ -54,7 +51,6 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   sortedBy: any = {value: null};
   collectionName = '';
   collectionNameFa = '';
-  count = 0;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
               private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService) {

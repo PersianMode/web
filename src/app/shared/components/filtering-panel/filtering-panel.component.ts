@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
 import {priceFormatter} from '../../lib/priceFormatter';
 import {ProductService} from '../../services/product.service';
@@ -10,7 +10,7 @@ import {DictionaryService} from '../../services/dictionary.service';
   templateUrl: './filtering-panel.component.html',
   styleUrls: ['./filtering-panel.component.css']
 })
-export class FilteringPanelComponent implements OnInit {
+export class FilteringPanelComponent implements OnInit, OnDestroy {
   @Input() sortOptions;
   filter_options: any;
   current_filter_state = [];
@@ -29,11 +29,14 @@ export class FilteringPanelComponent implements OnInit {
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
 
+  filter_options$: any;
+
+
   constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
-    this.productService.filtering$.subscribe(r => {
+    this.filter_options$ =  this.productService.filtering$.subscribe(r => {
       this.filter_options = r;
       this.filter_options.forEach(el => {
         const found = this.current_filter_state.find(cfs => cfs.name === el.name);
@@ -63,10 +66,10 @@ export class FilteringPanelComponent implements OnInit {
         color = this.dict.convertColor(col);
         if (color) {
           this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
-          let red = color.substring(1, 3);
-          let green = color.substring(3, 5);
-          let blue = color.substring(5, 7);
-          let colors = [red, green, blue];
+          const red = color.substring(1, 3);
+          const green = color.substring(3, 5);
+          const blue = color.substring(5, 7);
+          const colors = [red, green, blue];
           this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
         } else {
           this.oppositeColor[col] = 'white';
@@ -75,7 +78,6 @@ export class FilteringPanelComponent implements OnInit {
     });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
-
   }
 
   formatPrices() {
@@ -147,4 +149,8 @@ export class FilteringPanelComponent implements OnInit {
     }
     this.sortedByChange.emit(this.sortedBy);
   }
+  ngOnDestroy(): void {
+    this.filter_options$.unsubscribe();
+  }
+
 }

@@ -15,7 +15,6 @@ import {Subscription} from 'rxjs/Subscription';
 })
 export class ProductComponent implements OnInit, OnDestroy {
   selectedProductColor;
-  colorId;
   product: any = {};
   joinedTags = '';
   formattedPrice = '';

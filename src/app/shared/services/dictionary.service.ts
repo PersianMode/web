@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {colorConverter} from './colorConverter';
+import {HttpService} from './http.service';
 
 @Injectable()
 export class DictionaryService {
@@ -13,7 +14,6 @@ export class DictionaryService {
     'DUFFEL BAGS': 'کوله خمره‌ای',
     MENS: 'مردانه',
     BAGS: 'کوله',
-    MISC: 'متفرقه',
   };
   colorDictionary = {
     'UNIVERSITY RED': 'darkred',
@@ -21,10 +21,21 @@ export class DictionaryService {
     'BLACK-ANTHRACITE': '#999999',
   };
 
-  constructor() {
+  constructor(httpService: HttpService) {
+
+    httpService.get('dictionary').subscribe((res: any) => {
+
+      res.forEach(x => {
+        if (x.type === 'tag') {
+          this.wordDictionary[x.name] = x.value;
+        } else if (x.type === 'color') {
+          this.colorDictionary[x.name] = x.value;
+        }
+      });
+    });
   }
 
-  translateWord(word: string|number): string {
+  translateWord(word: string | number): string {
     const translation = this.wordDictionary[(word + '').toUpperCase()];
     if (translation)
       return translation;
