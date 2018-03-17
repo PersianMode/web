@@ -1,23 +1,19 @@
-import {AfterContentChecked, Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
 import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
 import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
-
+import {Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'app-main-collection',
   templateUrl: './main-collection.component.html',
   styleUrls: ['./main-collection.component.css']
 })
-export class MainCollectionComponent implements OnInit, AfterContentChecked {
-  collection: any = {
-    products: [],
-    collectionNameFa: '',
-    collectionName: '',
-  };
+export class MainCollectionComponent implements OnInit, AfterContentInit {
+  products = [];
   @ViewChild('filterPane') filterPane;
   @ViewChild('gridwall') gridwall;
   topFixedFilterPanel = false;
@@ -33,6 +29,7 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
   gridWidth: number;
   gridHeight: number;
   isMobile = false;
+  scroll$ = new Subject();
   sortOptions = [
     {
       value: 'newest',
@@ -51,7 +48,8 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
       fa: 'گران‌ترین‌ها',
     }
   ];
-  sortedBy: any;
+  sortedBy: any = {value: null};
+  collectionName = '';
   collectionNameFa = '';
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
@@ -61,13 +59,14 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.pageName = 'collection/' + params.get('typeName');
-      console.log('page name : ', this.pageName);
-      setTimeout(() => this.pageService.getPage(this.pageName), 100);
-
+      this.pageService.getPage(this.pageName);
       this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
           if (res && res['collection_id']) {
             this.productService.loadProducts(res['collection_id']);
           } else {
+            this.products = [];
+            this.collectionNameFa = '';
+            this.productService.emptyFilters();
             console.error('-> ', `${this.pageName} is getting empty data for page`);
           }
         },
@@ -79,7 +78,9 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
       this.collectionNameFa = r;
     });
     this.productService.productList$.subscribe(r => {
-      this.collection.products = r;
+      this.products = r;
+      this.sortedBy = {value: null};
+      setTimeout(() => this.calcAfterScroll(), 1000);
     });
     this.calcWidth();
     this.responsiveService.resize$.subscribe(r => {
@@ -87,23 +88,25 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
     });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+
+    this.scroll$.subscribe(() => this.calcAfterScroll());
   }
 
-  ngAfterContentChecked() {
-    this.calcAfterScroll();
+  ngAfterContentInit() {
+    this.scroll$.next();
   }
 
   private calcWidth() {
     this.curWidth = this.responsiveService.curWidth;
     this.curHeight = this.responsiveService.curHeight;
     this.gridWidth = (this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10;
-    this.gridHeight = this.gridWidth + 76;
+    this.gridHeight = this.gridWidth + 90;
     setTimeout(() => this.calcAfterScroll(), 1000);
   }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.calcAfterScroll();
+    this.scroll$.next();
   }
 
   calcAfterScroll() {
@@ -125,10 +128,20 @@ export class MainCollectionComponent implements OnInit, AfterContentChecked {
   selectSortOption(sortPanel, index) {
     sortPanel.hide();
     if (this.sortedBy && this.sortedBy.value === this.sortOptions[index].value) {
-      this.sortedBy = null;
+      this.sortedBy = {value: null};
     } else {
       this.sortedBy = this.sortOptions[index];
     }
+    this.emitSortedBy();
+  }
+
+  mobileSortOptionChange(sortedBy) {
+    this.sortedBy = sortedBy;
+    this.emitSortedBy();
+  }
+
+  emitSortedBy() {
+    this.productService.setSort(this.sortedBy.value);
   }
 
   setDispalyFilter($event) {

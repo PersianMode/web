@@ -11,34 +11,12 @@ import {DictionaryService} from '../../services/dictionary.service';
   styleUrls: ['./filtering-panel.component.css']
 })
 export class FilteringPanelComponent implements OnInit, OnDestroy {
-
   @Input() sortOptions;
-  filter_options = [
-    // {
-    //   name: 'برند',
-    //   values: ['آدیداس', 'پلیس', 'نایک', 'گپ'],
-    // },
-    // {
-    //   name: 'نوع',
-    //   values: ['کفش', 'لباس', 'عینک', 'کوله ورزشی'],
-    // },
-    // {
-    //   name: 'قیمت',
-    //   values: [95e3, 5e6],
-    // },
-    // {
-    //   name: 'سایز',
-    //   values: ['6', '6.5', '7', '8', '8.5', '9', '10', '10.5', '11', '12', '12.5', '13', '13.5', '5', '14'],
-    // },
-    // {
-    //   name: 'رنگ',
-    //   values: ['anthracite', 'university red', '#fffff0', '#ffe0ff', '#efefef', '#254867', '#101215', '#FFD72E', '#7CFF1B', '#FF7912', '#FFC3A8', '#FFC300', '#FFC344', '#FF00A8', '#1155A8', '#778F1B', '#FF7AD2', '#FFC322', '#5FC300', '#3FC344', '#FFAAA8', '#1003A8']
-    // }
-  ];
+  filter_options: any;
   current_filter_state = [];
   clear_box = null;
   isMobile = false;
-  sortedBy: any;
+  sortedBy: any = {value: null};
   @Output() displayFilterEvent = new EventEmitter<any>();
   @Output() sortedByChange = new EventEmitter<any>();
   isChecked: any = {};
@@ -46,8 +24,8 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   needsBorder: any = {};
   expanded: any = {};
   rangeValues: any;
-  minPrice = 5e5;
-  maxPrice = 2.5e6;
+  minPrice;
+  maxPrice;
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
 
@@ -58,59 +36,72 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.filter_options$ =  this.productService.filtering$.subscribe(r => {
+      this.filter_options = r;
+      this.filter_options.forEach(el => {
+        const found = this.current_filter_state.find(cfs => cfs.name === el.name);
+        if (!found) {
+          this.current_filter_state.push({name: el.name, values: []});
+        }
+        if (!this.isChecked[el.name]) {
+          this.isChecked[el.name] = {};
+          for (const key of el.values) {
+            this.isChecked[el.name][key] = false;
+          }
+        }
+      });
+      const prices = r.find(fo => fo.name === 'price');
+      if (prices && prices.values.length) {
+        if (!this.minPrice)
+          this.minPrice = prices.values[0];
+        if (!this.maxPrice)
+          this.maxPrice = prices.values[1];
 
-    this.filter_options$ = this.productService.filtering$.subscribe(res => {
-      this.filter_options = res;
-      this.initFilters();
-    });
+        this.rangeValues = [prices.values[0], prices.values[1]];
+        this.formatPrices();
+      }
 
-  }
-
-  initFilters() {
-
-    this.filter_options.forEach(el => {
-      const tempObj = {name: '', values: []};
-      tempObj.name = el.name;
-      this.current_filter_state.push(tempObj);
-      this.isChecked[el.name] = {};
-      for (const key of el.values) {
-        this.isChecked[el.name][key] = false;
+      for (const col in this.isChecked.color) {
+        let color;
+        color = this.dict.convertColor(col);
+        if (color) {
+          this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
+          const red = color.substring(1, 3);
+          const green = color.substring(3, 5);
+          const blue = color.substring(5, 7);
+          const colors = [red, green, blue];
+          this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
+        } else {
+          this.oppositeColor[col] = 'white';
+        }
       }
     });
-
-    for (const col in this.isChecked['رنگ']) {
-      let color;
-      color = this.dict.convertColor(col);
-      if (color) {
-        this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
-        const red = color.substring(1, 3);
-        const green = color.substring(3, 5);
-        const blue = color.substring(5, 7);
-        const colors = [red, green, blue];
-        this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
-      }
-    }
-    const sizes: any = this.filter_options.filter(r => r.name === 'سایز')[0];
-    sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
-    this.priceRangeChange();
-    // });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }
 
+  formatPrices() {
+    [this.selectedMinPriceFormatted, this.selectedMaxPriceFormatted] = this.rangeValues.map(priceFormatter);
+  }
 
   priceRangeChange() {
-    if (!this.rangeValues) {
-      this.rangeValues = [this.minPrice, this.maxPrice];
-    }
     this.rangeValues = this.rangeValues.map(r => Math.round(r / 1000) * 1000);
-    this.current_filter_state.find(r => r.name === 'قیمت').values = this.rangeValues;
-    this.selectedMinPriceFormatted = priceFormatter(this.rangeValues[0]);
-    this.selectedMaxPriceFormatted = priceFormatter(this.rangeValues[1]);
+    this.current_filter_state.find(r => r.name === 'price').values = this.rangeValues;
+    this.formatPrices();
+    this.productService.applyFilters(this.current_filter_state, 'price');
+    this.expanded.price = true;
+
   }
 
   getValue(name, value) {
     this.isChecked[name][value] = !this.isChecked[name][value];
+    this.expanded[name] = true;
+    Object.keys(this.isChecked).filter(r => r !== name && r !== 'price').forEach(k => {
+      if (!Object.keys(this.isChecked[k]).map(r => this.isChecked[k][r]).reduce((x, y) => x || y, false)) {
+        this.expanded[k] = false;
+      }
+    })
+
     this.current_filter_state.forEach(el => {
       if (el.name === name) {
         if (el.values.length === 0 || el.values.findIndex(i => i === value) === -1)
@@ -123,6 +114,8 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       }
     });
     this.clear_box = null;
+
+    this.productService.applyFilters(this.current_filter_state, name);
   }
 
   clearFilters() {
@@ -132,6 +125,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.clear_box = false;
 
     for (const name in this.isChecked) {
+      this.expanded[name] = false;
       for (const value in this.isChecked[name]) {
         this.isChecked[name][value] = false;
       }
@@ -139,6 +133,8 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
     this.sortedBy = null;
     this.sortedByChange.emit(this.sortedBy);
+
+    this.productService.applyFilters(this.current_filter_state, '');
   }
 
   changeDisplayFilter() {
@@ -147,7 +143,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   selectSortOption(index) {
     if (this.sortedBy && this.sortedBy.value === this.sortOptions[index].value) {
-      this.sortedBy = null;
+      this.sortedBy = {value: null};
     } else {
       this.sortedBy = this.sortOptions[index];
     }

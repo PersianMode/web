@@ -18,6 +18,7 @@ export class DictionaryService {
   colorDictionary = {
     'UNIVERSITY RED': 'darkred',
     'ANTHRACITE': 'silver',
+    'BLACK-ANTHRACITE': '#999999',
   };
 
   constructor(httpService: HttpService) {
@@ -53,7 +54,7 @@ export class DictionaryService {
     try {
       convertedColor = colorConverter(convertedColor);
     } catch (e) {
-      console.log('error converting color: ' + color, e);
+      return null;
     }
 
     return convertedColor;

@@ -14,7 +14,7 @@ export class MobileProductComponent implements OnInit {
   set selectedProductColorID(id) {
     if (id) {
       this.selectedProductColor = this.product.colors.find(r => r._id === id);
-      this.productSize = this.product.sizes[id];
+      this.productSize = this.product.sizesByColor[id];
     }
   };
   productSize = [];
