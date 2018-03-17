@@ -717,3 +717,7 @@ mat-panel-title {
 .mat-content {
   flex: .98 !important;
 }
+
+.mat-tooltip {
+  font-family: iranyekan, Roboto, sans-serif !important;
+}

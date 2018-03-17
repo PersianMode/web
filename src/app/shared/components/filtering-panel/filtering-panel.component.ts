@@ -16,7 +16,7 @@ export class FilteringPanelComponent implements OnInit {
   current_filter_state = [];
   clear_box = null;
   isMobile = false;
-  sortedBy: any;
+  sortedBy: any = {value: null};
   @Output() displayFilterEvent = new EventEmitter<any>();
   @Output() sortedByChange = new EventEmitter<any>();
   isChecked: any = {};
@@ -24,8 +24,8 @@ export class FilteringPanelComponent implements OnInit {
   needsBorder: any = {};
   expanded: any = {};
   rangeValues: any;
-  minPrice = '0';
-  maxPrice = '0';
+  minPrice;
+  maxPrice;
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
 
@@ -48,10 +48,14 @@ export class FilteringPanelComponent implements OnInit {
         }
       });
       const prices = r.find(fo => fo.name === 'price');
-      if (prices) {
-        this.minPrice = prices.values[0];
-        this.maxPrice = prices.values[1];
-        this.priceRangeChange();
+      if (prices && prices.values.length) {
+        if (!this.minPrice)
+          this.minPrice = prices.values[0];
+        if (!this.maxPrice)
+          this.maxPrice = prices.values[1];
+
+        this.rangeValues = [prices.values[0], prices.values[1]];
+        this.formatPrices();
       }
 
       for (const col in this.isChecked.color) {
@@ -65,13 +69,8 @@ export class FilteringPanelComponent implements OnInit {
           let colors = [red, green, blue];
           this.needsBorder[col] = colors.map(c => parseInt('ff', 16) - parseInt(c, 16) < 16).reduce((x, y) => x && y);
         } else {
-          const delInd = this.filter_options.color.findIndex(c => c.name === col);
-          this.filter_options.color.splice(delInd, 1);
+          this.oppositeColor[col] = 'white';
         }
-      }
-      let sizes: any = this.filter_options.find(r => r.name === 'size');
-      if (sizes) {
-        sizes.values = sizes.values.map(s => +s ? (+s).toLocaleString('fa') : s);
       }
     });
     this.isMobile = this.responsiveService.isMobile;
@@ -79,29 +78,27 @@ export class FilteringPanelComponent implements OnInit {
 
   }
 
+  formatPrices() {
+    [this.selectedMinPriceFormatted, this.selectedMaxPriceFormatted] = this.rangeValues.map(priceFormatter);
+  }
+
   priceRangeChange() {
-    let changed = false;
-    if (!this.rangeValues) {
-      this.rangeValues = [this.minPrice, this.maxPrice];
-    } else {
-      if (this.rangeValues[0] !== this.minPrice || this.rangeValues[1] !== this.maxPrice)
-        changed = true;
-    }
     this.rangeValues = this.rangeValues.map(r => Math.round(r / 1000) * 1000);
     this.current_filter_state.find(r => r.name === 'price').values = this.rangeValues;
-    this.selectedMinPriceFormatted = priceFormatter(this.rangeValues[0]);
-    this.selectedMaxPriceFormatted = priceFormatter(this.rangeValues[1]);
-    if (changed) {
-      this.productService.applyFilters(this.current_filter_state, 'price');
-      this.expanded.price = true;
-    }
+    this.formatPrices();
+    this.productService.applyFilters(this.current_filter_state, 'price');
+    this.expanded.price = true;
+
   }
 
   getValue(name, value) {
     this.isChecked[name][value] = !this.isChecked[name][value];
-    this.expanded[name] = Object.keys(this.isChecked[name])
-      .map(k => this.isChecked[name][k])
-      .reduce((x, y) => x || y, false);
+    this.expanded[name] = true;
+    Object.keys(this.isChecked).filter(r => r !== name && r !== 'price').forEach(k => {
+      if (!Object.keys(this.isChecked[k]).map(r => this.isChecked[k][r]).reduce((x, y) => x || y, false)) {
+        this.expanded[k] = false;
+      }
+    })
 
     this.current_filter_state.forEach(el => {
       if (el.name === name) {
@@ -126,6 +123,7 @@ export class FilteringPanelComponent implements OnInit {
     this.clear_box = false;
 
     for (const name in this.isChecked) {
+      this.expanded[name] = false;
       for (const value in this.isChecked[name]) {
         this.isChecked[name][value] = false;
       }
@@ -133,6 +131,8 @@ export class FilteringPanelComponent implements OnInit {
 
     this.sortedBy = null;
     this.sortedByChange.emit(this.sortedBy);
+
+    this.productService.applyFilters(this.current_filter_state, '');
   }
 
   changeDisplayFilter() {
@@ -141,7 +141,7 @@ export class FilteringPanelComponent implements OnInit {
 
   selectSortOption(index) {
     if (this.sortedBy && this.sortedBy.value === this.sortOptions[index].value) {
-      this.sortedBy = null;
+      this.sortedBy = {value: null};
     } else {
       this.sortedBy = this.sortOptions[index];
     }

@@ -10,7 +10,7 @@
      {{sortOption.fa}}  <i *ngIf="sortedBy && (sortedBy.value === sortOption.value)" class="fa fa-check sort"></i>
     </div>
   </mat-expansion-panel>
-  <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null" [expanded]="expanded[fo.name]">
+  <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null" [expanded]="expanded[fo.name]" (opened)="expanded[fo.name]=true" (closed)="expanded[fo.name]=false">
     <mat-expansion-panel-header>
       <div class="checkbox-title">{{fo.name_fa}}</div>
     </mat-expansion-panel-header>
@@ -21,12 +21,12 @@
       </mat-checkbox>
     </div>
     <div *ngIf="fo.name==='price'">
-      <p-slider [(ngModel)]="rangeValues" [range]="true" [min]="minPrice" [max]="maxPrice" (onChange)="priceRangeChange()"></p-slider>
+      <p-slider [(ngModel)]="rangeValues" [range]="true" [min]="minPrice" [max]="maxPrice" (onChange)="formatPrices()" (onSlideEnd)="priceRangeChange()"></p-slider>
       <span style="float:left">{{selectedMinPriceFormatted}} تومان</span><span>{{selectedMaxPriceFormatted}} تومان</span>
     </div>
     <span *ngIf="fo.name === 'color'">
       <span *ngFor="let v of filter_options[i].values; let j = index" class="color-span" (click)="getValue(fo.name, v)"
-            style="cursor: pointer;">
+            style="cursor: pointer;" matTooltip="{{v.toLowerCase()}}" matTooltipShowDelay="500">
         <svg height="26" width="26" >
          <circle cx="13" cy="13" r="12" [attr.stroke]="needsBorder[v] ? '#ccc' : 'transparent'" stroke-width="1" attr.fill="{{filter_options[i].values_fa[j]}}"></circle>
         </svg>
@@ -34,9 +34,9 @@
       </span>
   </span>
     <span *ngIf="fo.name === 'size'">
-      <mat-button-toggle *ngFor="let v of filter_options[i].values" class="filter-size"
+      <mat-button-toggle *ngFor="let v of filter_options[i].values; let j = index" class="filter-size"
                          (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
-          {{v}}
+          {{filter_options[i].values_fa[j]}}
       </mat-button-toggle>
     </span>
   </mat-expansion-panel>

@@ -43,7 +43,7 @@ export class DictionaryService {
     try {
       convertedColor = colorConverter(convertedColor);
     } catch (e) {
-      console.log('error converting color: ' + color, e);
+      return null;
     }
 
     return convertedColor;
