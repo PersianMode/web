@@ -5,7 +5,9 @@ import {IFilter} from '../interfaces/ifilter.interface';
 import {DictionaryService} from './dictionary.service';
 
 const productColorMap = function (r) {
-  return r.colors.map(c => c.name ? c.name.split('/') : []);
+  return r.colors.map(c => c.name ? c.name.split('/')
+      .map(x => x.replace(/\W/g, '')) // remove all non alpha-numeric chars from color name
+    : []);
 };
 
 const addHost = function (r) {
@@ -56,7 +58,6 @@ export class ProductService {
   collectionTags: any = {};
   collectionTagsAfterFilter: any = {};
 
-  private filterInput: IFilter[];
   private sortInput;
   private collectionId;
 
