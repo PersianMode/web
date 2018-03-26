@@ -87,6 +87,7 @@
   display: inline-block;
   text-align: center;
   width: 100%;
+  min-height: 600px;
 }
 
 .gridwall-wrapper {

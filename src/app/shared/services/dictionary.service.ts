@@ -18,6 +18,7 @@ export class DictionaryService {
   colorDictionary = {
     'UNIVERSITY RED': 'darkred',
     'ANTHRACITE': 'silver',
+    'BLACK-ANTHRACITE': '#999999',
   };
 
   // wordDictionary: any = {};
@@ -25,7 +26,7 @@ export class DictionaryService {
 
   constructor(httpService: HttpService) {
 
-    httpService.get('dictionary').subscribe(res => {
+    httpService.get('dictionary').subscribe((res: any) => {
 
       res.forEach(x => {
         if (x.type === 'tag') {
@@ -56,7 +57,7 @@ export class DictionaryService {
     try {
       convertedColor = colorConverter(convertedColor);
     } catch (e) {
-      console.log('error converting color: ' + color, e);
+      return null;
     }
 
     return convertedColor;

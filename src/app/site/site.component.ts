@@ -4,6 +4,7 @@ import {AuthService} from '../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {PageService} from '../shared/services/page.service';
 import {ResponsiveService} from '../shared/services/responsive.service';
+import {CartService} from '../shared/services/cart.service';
 import {DictionaryService} from '../shared/services/dictionary.service';
 
 
@@ -19,7 +20,8 @@ export class SiteComponent implements OnInit {
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
-              private router: Router, private pageService: PageService, private dictionaryService: DictionaryService) {
+              private router: Router, private pageService: PageService,
+              private cartService: CartService, private dictionaryService: DictionaryService) {
   }
 
   ngOnInit() {
@@ -29,6 +31,8 @@ export class SiteComponent implements OnInit {
     this.updateResponsiveService();
     this.authService.checkValidation(this.router.url);
     this.loadInitialPlacements();
+
+    this.cartService.getCartItems();
   }
 
   private updateResponsiveService() {
@@ -53,11 +57,11 @@ export class SiteComponent implements OnInit {
   }
 
   private loadInitialPlacements() {
-    setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
+     setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
   }
 
   isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {
-      return width < 960;
-    }
+    return width < 960;
+  }
 }
 

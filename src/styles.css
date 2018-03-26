@@ -700,12 +700,14 @@ mat-panel-title {
 }
 
 .ui-slider-handle {
-  background: black;
-  border-radius: 10px;
-  border: 1px solid black;
+  background: white;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  height: 1.6em !important;
+  top: -.5em !important;
 }
 .ui-slider {
-  border: 1px solid black;
+  background: #ccc;
 
 }
 
@@ -714,4 +716,8 @@ mat-panel-title {
 }
 .mat-content {
   flex: .98 !important;
+}
+
+.mat-tooltip {
+  font-family: iranyekan, Roboto, sans-serif !important;
 }

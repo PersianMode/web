@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {EditOrderComponent} from '../edit-order/edit-order.component';
 import {MatDialog} from '@angular/material';
@@ -9,20 +9,31 @@ import {MatDialog} from '@angular/material';
   styleUrls: ['./cart-items.component.css']
 })
 export class CartItemsComponent implements OnInit {
-  @Input() private product = null;
+  @Input() product = null;
+  @Output() updateProduct = new EventEmitter();
 
-  total_price = null;
-  constructor(private dialog: MatDialog) { }
+  notExist = false;
+  displaySize = null;
+  displayQuantity = null;
+  displayPrice = null;
+  displayTotalPrice = null;
+
+  constructor(private dialog: MatDialog) {
+  }
 
   ngOnInit() {
-    this.product.size = {value: this.product.size, name: this.product.size.toLocaleString('fa')};
-    this.product.quantity = {value: this.product.quantity, name: this.product.quantity.toLocaleString('fa')};
-    this.product.price = {value: this.product.price, name: priceFormatter(this.product.price)};
-    this.total_price = this.product.quantity.value * this.product.price.value;
-    this.total_price = {value: this.total_price, name: priceFormatter(this.total_price)};
+    this.notExist = this.product.count && this.product.quantity <= this.product.count ? false : true;
+
+    this.displaySize = this.product.size.toLocaleString('fa');
+    this.displayQuantity = this.product.quantity.toLocaleString('fa');
+    this.displayPrice = priceFormatter(this.product.price);
+    this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price);
   }
+
   deleteProduct() {
+    this.updateProduct.emit({type: 'delete'});
   }
+
   openEditOrder() {
     const rmDialog = this.dialog.open(EditOrderComponent, {
       width: '850px',
@@ -32,12 +43,13 @@ export class CartItemsComponent implements OnInit {
     });
     rmDialog.afterClosed().subscribe(
       (data) => {
-        this.product.size = {value: data.newSize, name: data.newSize.toLocaleString('fa')};
-        this.product.quantity = {value: data.newQuantity, name: data.newQuantity.toLocaleString('fa')};
-        this.product.price = {value: this.product.price.value, name: priceFormatter(this.product.price.value)};
-        this.total_price = this.product.quantity.value * this.product.price.value;
-        this.total_price = {value: this.total_price, name: priceFormatter(this.total_price)};
         if (data) {
+          this.updateProduct.emit({type: 'update', value: data});
+
+          this.displaySize = (data.newSize ? data.newSize : this.product.size).toLocaleString('fa');
+          this.displayQuantity = (data.newQuantity ? data.newQuantity : this.product.quantity).toLocaleString('fa');
+          this.displayPrice = priceFormatter(this.product.price);
+          this.displayTotalPrice = priceFormatter((data.newQuantity ? data.newQuantity : this.product.quantity) * this.product.price);
         }
       },
       (err) => {

@@ -9,7 +9,10 @@ import {ProductGridItemComponent} from '../../shared/components/product-grid-ite
 import {SharedModule} from '../../shared/shared.module';
 import {DataScrollerModule} from 'primeng/datascroller';
 import {SidebarModule} from 'primeng/sidebar';
-import {MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatExpansionModule} from '@angular/material';
+import {
+  MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatExpansionModule,
+  MatTooltipModule
+} from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {SliderModule} from 'primeng/slider';
@@ -33,6 +36,7 @@ import {SliderModule} from 'primeng/slider';
     MatButtonModule,
     MatButtonToggleModule,
     MatExpansionModule,
+    MatTooltipModule,
     OverlayPanelModule,
     SliderModule,
   ],

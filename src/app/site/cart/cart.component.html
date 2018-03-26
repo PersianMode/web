@@ -14,10 +14,10 @@
   <div fxLayout="row" fxLayoutAlign="center center">
     <div fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" class="main">
       <div class="main-divs">
-        <app-summary></app-summary>
+        <app-summary [discount]="discountValue" [total]="totalPrice"></app-summary>
       </div>
       <div class="main-divs">
-        <div class="signUp-div">
+        <div class="signUp-div" *ngIf="!isLoggedIn">
           عضویت رایگان
           <span style="padding-left : 10px"><a href="#" class="membership-style">عضو شوید</a></span>
         </div>
@@ -25,7 +25,7 @@
           سبد خرید شما ({{numberOfProducts}})
         </div>
         <div *ngFor="let product of products" style="margin-bottom: 10px;">
-          <app-cart-items [product]="product"></app-cart-items>
+          <app-cart-items [product]="product" (updateProduct)="updateProduct($event, product)"></app-cart-items>
         </div>
       </div>
     </div>

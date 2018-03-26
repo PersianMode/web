@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IPageInfo} from '../../admin/page/interfaces/IPageInfo.interface';
+import {Subject} from 'rxjs/Subject';
 
 const defaultComponents = ['menu', 'slider', 'logos'];
 
@@ -9,8 +10,8 @@ const defaultComponents = ['menu', 'slider', 'logos'];
 export class PageService {
   private cache: any = {};
   private homeComponents: any = {};
-  placement$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  pageInfo$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  placement$: Subject<any[]> = new Subject<any[]>();
+  pageInfo$: Subject<any[]> = new Subject<any[]>();
 
   constructor(private httpService: HttpService) {
     this.getPage('home', false);
@@ -51,13 +52,16 @@ export class PageService {
         if ( !this.cache[pageName]) {
           this.httpService.post('page', {address: pageName}).subscribe(
             (data: any) => {
-              if (data && data.placement) {
+              if (data && data.placement && data.placement.length) {
                 this.cache[pageName] = {
                   placement: this.classifyPlacements(pageName, data.placement),
                   page_info: data.page_info
                 };
               } else {
-                this.cache[pageName] = {placement: [['main'], [[]]]};
+                this.cache[pageName] = {
+                  placement: [['main'], [[]]],
+                  page_info: data.page_info,
+                };
                 defaultComponents.forEach(r => {
                   this.cache[pageName].placement[0].push(r);
                   this.cache[pageName].placement[1].push(this.homeComponents[r]);
