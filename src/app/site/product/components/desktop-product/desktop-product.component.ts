@@ -86,13 +86,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
       setTimeout(function(){
         rmDialog.close();
       }, 3000);
-      // rmDialog.afterClosed().subscribe(
-      //   (data) => {
-      //   },
-      //   (err) => {
-      //     console.error('Error in dialog: ', err);
-      //   }
-      // );
     }
   }
 
