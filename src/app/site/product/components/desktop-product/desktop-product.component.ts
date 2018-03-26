@@ -9,6 +9,7 @@ import {CartService} from '../../../../shared/services/cart.service';
 import {MatDialog} from '@angular/material';
 import {AddToCardConfirmComponent} from '../add-to-card-confirm/add-to-card-confirm.component';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
+import {$} from 'protractor';
 
 @Component({
   selector: 'app-desktop-product',
@@ -82,15 +83,20 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
           selectedSize: this.size,
         }
       });
-      rmDialog.afterClosed().subscribe(
-        (data) => {
-        },
-        (err) => {
-          console.error('Error in dialog: ', err);
-        }
-      );
+      setTimeout(function(){
+        rmDialog.close();
+      }, 3000);
+      // rmDialog.afterClosed().subscribe(
+      //   (data) => {
+      //   },
+      //   (err) => {
+      //     console.error('Error in dialog: ', err);
+      //   }
+      // );
     }
   }
+
+
 
   newSize($event) {
     this.size = $event;
