@@ -23,7 +23,7 @@ import {SharedModule} from '../../shared/shared.module';
     ProductFullInfoComponent,
     ProductColorComponent,
     ProductInstanceComponent,
-    ProductTagComponent,
+    // ProductTagComponent,
   ],
   imports: [
     ProductRouting,
