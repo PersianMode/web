@@ -59,7 +59,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
-
+    console.log(this.product);
   }
   saveToCart() {
     // check form size and id undefined
