@@ -44,7 +44,7 @@ export class SummaryComponent implements OnInit {
   balanceValue: any = 0;
   loyaltyPoint: any = 0;
   finalTotal: any = 0;
-  coupon_code = null;
+  coupon_code = '';
   show_coupon_area = false;
   isLoggedIn = false;
 
