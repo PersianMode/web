@@ -1,0 +1,95 @@
+<div style="direction: rtl">
+    <div style=" width: 100%; height: 10%;">
+        <div style="display: inline-block; text-align: right; width: 90%; margin-bottom: 5px">
+            <div style="background-color: forestgreen;display: inline-block; text-align: center; padding: 3px; border-radius: 50%">
+                <i class="fa fa-check" style="color:white"></i></div>
+            <div style="font-family: iranyekan; display: inline-block; width: 90%; margin-right: 5px; font-weight: bold; margin-bottom: 5px;">
+                {{dialogTitle}}
+            </div>
+        </div>
+        <div style="text-align: left; display: inline-block; width: 7%;">
+            <mat-icon aria-label="no" (click)="closeDialog()" style="cursor: pointer">clear</mat-icon>
+        </div>
+    </div>
+    <div>
+        <form (ngSubmit)="submitAddress()" [formGroup]="addressForm">
+            <mat-card>
+                <mat-card-title style="font-size: medium; font-weight: bold">مشخصات تحویل گیرنده</mat-card-title>
+                <mat-card-content>
+                    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+                        <div fxFlex="32">
+                            <mat-input-container  style="width: 100%;">
+                                <input matInput type="text" placeholder="نام" formControlName="name"/>
+                            </mat-input-container>
+                        </div>
+                        <div fxFlex="32" style="margin-right: 15px">
+                            <mat-input-container  style="width: 100%;">
+                                <input matInput type="text" placeholder="نام خانوادگی" formControlName="family"/>
+                            </mat-input-container>
+                        </div>
+                        <div fxFlex="32" style="margin-right: 15px">
+                            <mat-input-container style="width: 100%;">
+                                <input matInput type="text" placeholder="شماره ملی" formControlName="nationalCode"/>
+                            </mat-input-container>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card>
+                <mat-card-title style="font-size: medium; font-weight: bold">آدرس</mat-card-title>
+                <mat-card-content>
+                    <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column">
+                        <div fxFlex="50" style="height: 20%; display: inline-block;">
+                            <div class="style-select-wrapper">
+                                <select class="select-style" formControlName="selectOstan"
+                                        (change)="setNewOstan($event.target.value)">
+                                    <option>استان</option>
+                                    <option *ngFor="let o of ostanArray" [value]="o.value">
+                                        {{o.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div fxFlex="50">
+                            <div class="style-select-wrapper">
+                                <select class="select-style" formControlName="selectCity">
+                                    <option>شهر</option>
+                                    <option *ngFor="let c of cityArray">
+                                        {{c}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div dir="rtl" class="field-container">
+                        <mat-input-container class="field">
+                            <textarea matInput placeholder="آدرس" formControlName="address"></textarea>
+                            <mat-hint style="margin-bottom: 4px;">حداکثر از 500 حرف استفاده شود</mat-hint>
+                            <mat-error style="margin-bottom: 4px;"
+                                       *ngIf="addressForm.controls['address'].hasError('maxlength')">لطفا حداکثر
+                                از 500 حرف استفاده کنید
+                            </mat-error>
+                        </mat-input-container>
+                    </div>
+                    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+                        <div fxFlex="32">
+                            <mat-input-container style="width: 100%;">
+                                <input matInput type="text" placeholder="پلاک" formControlName="pelak"/>
+                            </mat-input-container>
+                        </div>
+                        <div fxFlex="32" style="margin-right: 15px">
+                            <mat-input-container style="width: 100%">
+                                <input matInput type="text" placeholder="واحد" formControlName="unit_no"/>
+                            </mat-input-container>
+                        </div>
+                        <div fxFlex="32" style="margin-right: 15px">
+                            <mat-input-container style="width: 100%;">
+                                <input matInput type="text" placeholder="کدپستی" formControlName="post_code"/>
+                            </mat-input-container>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </form>
+    </div>
+</div>

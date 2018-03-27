@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-address-table',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddressTableComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
   }
 
+  openAddressDialog() {
+    const rmDialog = this.dialog.open(UpsertAddressComponent, {
+      width: '600px',
+      data: {
+        addressId: null,
+        dialog_address: 'test',
+      }
+    });
+  }
 }

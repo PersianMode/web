@@ -73,7 +73,7 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
           Validators.required,
         ]],
         desc: [null, [
-          Validators.maxLength(50),
+          Validators.maxLength(500),
         ]]
       },
       {

@@ -406,6 +406,12 @@ input {
   vertical-align: middle;
 }
 
+
+.field-container{
+  width: 100%;
+  margin: 5px;
+}
+
 .btn-field {
   padding: 5px 0px 5px 5px;
   width: 100%;
@@ -450,6 +456,10 @@ dp-date-picker.dp-material .dp-picker-input {
 
 .dp-material {
   width: 100% !important;
+}
+
+.farsi{
+  direction:rtl;
 }
 
 .dp-picker-input {
