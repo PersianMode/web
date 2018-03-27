@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {CartService} from '../../../../shared/services/cart.service';
 import {AuthService} from '../../../../shared/services/auth.service';
-import {isNullOrUndefined} from 'util';
 
 
 @Component({
@@ -46,11 +45,20 @@ export class SummaryComponent implements OnInit {
   loyaltyPoint: any = 0;
   finalTotal: any = 0;
   coupon_code = null;
+  show_coupon_area = false;
+  isLoggedIn = false;
 
-  constructor(private cartService: CartService) {
+  constructor(private cartService: CartService, private authService: AuthService) {
   }
 
   ngOnInit() {
+    this.authService.isLoggedIn.subscribe(
+      (data) => this.isLoggedIn = data,
+      (err) => {
+        console.error('Cannot subscribe to isLoggedIn in authService: ', err);
+      }
+    );
+
     this.cartService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = priceFormatter(res.balance);
@@ -61,4 +69,17 @@ export class SummaryComponent implements OnInit {
       });
   }
 
+  changeCouponVisibility() {
+    this.show_coupon_area = !this.show_coupon_area;
+  }
+
+  applyCoupon() {
+    this.cartService.applyCoupon(this.coupon_code)
+      .then(res => {
+        this.discount += res;
+      })
+      .catch(err => {
+        console.error('Error when validating coupon code: ', err);
+      });
+  }
 }

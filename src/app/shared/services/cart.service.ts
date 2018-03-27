@@ -7,6 +7,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 export class CartService {
   cartItems: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private localStorageKey = 'cart';
+  coupon_discount = 0;
 
   constructor(private httpService: HttpService, private authService: AuthService) {
     this.authService.isLoggedIn.subscribe(
@@ -246,6 +247,36 @@ export class CartService {
           reject(err);
         }
       );
+    });
+  }
+
+  applyCoupon(coupon_code = '') {
+    if (!this.authService.isLoggedIn.getValue())
+      return Promise.reject(403);
+
+    if (coupon_code.length <= 0)
+      return Promise.resolve(this.coupon_discount * -1);
+
+    return new Promise((resolve, reject) => {
+      if (this.cartItems && this.cartItems.getValue().length > 0)
+        this.httpService.post('coupon/code/valid', {
+          product_ids: Array.from(new Set(this.cartItems.getValue().map(el => el.product_id))),
+          coupon_code: coupon_code,
+        }).subscribe(
+          (data) => {
+            data = data[0];
+            console.log(this.cartItems.getValue());
+            const someItems = this.cartItems.getValue().filter(el => el.product_id.toString() === data.product_id.toString());
+            if (someItems && someItems.length > 0) {
+              const semiTotalPrice = someItems.map(el => el.price).reduce((a, b) => a + b);
+              this.coupon_discount = semiTotalPrice - (semiTotalPrice * data.discount);
+              resolve(this.coupon_discount);
+            } else
+              reject({});
+          },
+          (err) => {
+            reject(err);
+          });
     });
   }
 }
