@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {WINDOW} from '../../../shared/services/window.service';
 
 @Component({
   selector: 'app-address-table',
@@ -7,9 +8,44 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddressTableComponent implements OnInit {
 
-  constructor() { }
+  selectedAddress = -1;
+  addresses = [{
+    'ostan': 'تهران',
+    'city': 'تهران',
+    'street': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت کوچه شهریور ',
+    'no': '۵',
+    'unit': '۱',
+    'socialNumber': '0021625018',
+    'takerName': 'علی میرجهانی',
+    'phoneNumber': '021625018'
+  }, {
+    'ostan': 'تهران',
+    'city': 'تهران',
+    'street': 'میدان فاطمی خیابان هشت بهشت',
+    'no': '۵',
+    'unit': '۱',
+    'socialNumber': '0021625018',
+    'takerName': 'علی میرجهانی',
+    'phoneNumber': '021625018'
+  }];
+  curHeight: number;
+  curWidth: number;
+
+  constructor(@Inject(WINDOW) private window) {
+    this.curWidth = this.window.innerWidth;
+    this.curHeight = this.window.innerHeight;
+  }
+
+  setAddress(i: number) {
+    if (i === this.selectedAddress)
+      this.selectedAddress = -1;
+    else
+      this.selectedAddress = i;
+  }
+
 
   ngOnInit() {
+    // make request and
   }
 
 }
