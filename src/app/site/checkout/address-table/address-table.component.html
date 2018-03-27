@@ -1,47 +1,81 @@
 <h1 style="margin-right: 5%">آدرس</h1>
 <div *ngIf="addresses.length!=0">
   <div *ngIf="curWidth>960" class="rs-table field">
-    <table class="field" style="margin-right:10%; margin-left: 10%; padding: 5px;">
-      <thead>
-      <td style="width: 5%"><b>ردیف</b></td>
-      <td style="min-width: 40%"><b>آدرس</b></td>
-      <td style=" width: 30%"><b>مشخصات تحویل گیرنده</b></td>
-      <td style=" width: 5%">check box</td>
-      </thead>
-      <tbody>
-      <tr *ngFor="let address of addresses; let i = index" style="padding:5px">
-        <hr class="hr-style">
-        <td>{{i}}</td>
-        <td>
-          استان {{address.country}} شهر {{address.city}}
-          <br>
-          {{address.address}} پلاک {{address.no}} واحد
-          {{address.unit}}
-        </td>
-        <td>
-          نام تحویل گیرنده : <b>{{address.takerName}}</b>
-          <br>
-          کدملی تحویل گیرنده : <b>{{address.meli}}</b>
-          <br>
-          شماره تلفن تحویل گیرنده : <b>{{address.phoneNumber}}</b>
-        </td>
-        <td>
-          <input type="checkbox" [checked]="selectedAddress==i" (click)="setAddress(i)">
-        </td>
-      </tr>
+    <mat-table class="field table" style="margin-right:10%; margin-left: 10%; padding: 5px;">
+      <mat-table-header>
+        <mat-table- style="width: 5%"><b>ردیف</b></mat-table->
+        <mat-header-cell style="min-width: 40%"><b>آدرس</b></mat-header-cell>
+        <mat-header-cell style=" width: 30%"><b>مشخصات تحویل گیرنده</b></mat-header-cell>
+        <mat-header-cell style=" width: 5%">check box</mat-header-cell>
+      </mat-table-header>
+      <tbody style="border: 0.5px solid #555;">
+      <mat-row *ngFor="let address of addresses; let i = index" style="padding:5px;">
+        <!--<mat-table>-->
+            <td> {{i}}</td>
+            <td>
+              استان {{address.country}} شهر {{address.city}}
+              <br>
+              {{address.street}} پلاک {{address.no}} واحد
+              {{address.unit}}
+            </td>
+            <td>
+              نام تحویل گیرنده : <b>{{address.takerName}}</b>
+              <br>
+              کدملی تحویل گیرنده : <b>{{address.socialNumber}}</b>
+              <br>
+              شماره تلفن تحویل گیرنده : <b>{{address.phoneNumber}}</b>
+            </td>
+            <td>
+              <input type="checkbox" [checked]="selectedAddress==i" (click)="setAddress(i)">
+            </td>
+        <!--</mat-table>-->
+      </mat-row>
       </tbody>
-    </table>
+    </mat-table>
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort>
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="weight">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Weight </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="symbol">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Symbol </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.symbol}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
   </div>
   <div *ngIf="curWidth<960" style="margin:5%">
     <div *ngFor="let address of addresses; let i = index">
-      <!--<div>-->
-      <!--<span> ردیف : </span><span>{{i}}</span>-->
-      <!--</div>-->
-      <div>
-        <span> آدرس : </span>
-        <span>استان {{address.country}} شهر {{address.city}} {{address.address}} پلاک {{address.no}} واحد {{address.unit}}</span>
-      </div>
-      <div>
+      <mat-card>
+        <mat-card-content>
+          <!--<div>-->
+          <!--<span> ردیف : </span><span>{{i}}</span>-->
+          <!--</div>-->
+          <div>
+            <span> آدرس : </span>
+            <span>استان {{address.country}} شهر {{address.city}} {{address.street}} پلاک {{address.no}} واحد {{address.unit}}</span>
+          </div>
+          <div>
         <span>
           نام تحویل گیرنده : <b>{{address.takerName}}</b>
           <br>
@@ -49,11 +83,13 @@
           <br>
           شماره تلفن تحویل گیرنده : <b>{{address.phoneNumber}}</b>
         </span>
-      </div>
-      <div>
-        <input type="checkbox" [checked]="selectedAddress==i" (click)="setAddress(i)">
-      </div>
-      <br>
+          </div>
+          <div>
+            <input type="checkbox" [checked]="selectedAddress==i" (click)="setAddress(i)">
+          </div>
+          <br>
+        </mat-card-content>
+      </mat-card>
     </div>
     <hr class="hr-style">
   </div>

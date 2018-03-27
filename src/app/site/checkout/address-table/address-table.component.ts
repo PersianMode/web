@@ -10,7 +10,7 @@ export class AddressTableComponent implements OnInit {
 
   selectedAddress = -1;
   addresses = [{
-    'ostan': 'تهران',
+    'country': 'تهران',
     'city': 'تهران',
     'street': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت کوچه شهریور ',
     'no': '۵',
@@ -19,7 +19,7 @@ export class AddressTableComponent implements OnInit {
     'takerName': 'علی میرجهانی',
     'phoneNumber': '021625018'
   }, {
-    'ostan': 'تهران',
+    'country': 'تهران',
     'city': 'تهران',
     'street': 'میدان فاطمی خیابان هشت بهشت',
     'no': '۵',
