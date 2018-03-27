@@ -59,3 +59,11 @@
 .btn-style:hover {
     opacity: 0.75;
 }
+
+.btn-area {
+  margin-top: 10px;
+}
+
+.not-exist{
+  color: #FA5400;
+}

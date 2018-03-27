@@ -2,7 +2,7 @@
   <mat-card-content>
     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column">
       <div fxFlex="25" style="text-align: right">
-        <a [routerLink]="['/', 'product', product.id, product.color.color_id]">
+        <a [routerLink]="['/', 'product', product._id, product.color.color_id]">
           <img src="assets/pictures/product-small/{{product.thumbnail}}"
                style="width: 90%; height:100%; cursor: pointer;">
         </a>
@@ -12,24 +12,25 @@
           <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column"
                style=" display: inline-block;">
             <div fxFlex="70" style="margin-top: 5px; display: inline-block; cursor: pointer">
-              <b><a style="text-decoration : underline">{{product.name}}{{' '}}</a></b>
-              <b><a *ngFor="let t of product.tags" style="text-decoration : underline">{{t}}{{' '}}</a></b>
+              <b><a style="text-decoration : none" [routerLink]="['/', 'product', product._id, product.color.color_id]">{{product.name}}{{' '}}</a></b>
+              <b><a *ngFor="let t of product.tags" style="text-decoration : underline">{{t.name}}{{' '}}</a></b>
             </div>
             <div fxFlex="30" style="margin-top: 5px;display: inline-block; text-align: left;">
-              <span style="color: #fa5400; font-size: small">{{total_price.name}}{{' '}}{{'تومان'}}</span>
+              <span style="color: #fa5400; font-size: small" *ngIf="!notExist">{{displayTotalPrice}}{{' '}}{{'تومان'}}</span>
+              <span style="color: #fa5400; font-size: small" *ngIf="notExist">ناموجود</span>
             </div>
           </div>
         </div>
         <div style="height: 60%;">
           <div style="display: inline-block;">
             <b style="display: inline-block;">سایز : </b>
-            <div style="color: gray; display: inline-block;">{{' '}}{{product.size.name}}</div>
+            <div style="color: gray; display: inline-block;">{{' '}}{{displaySize}}</div>
           </div>
           <br>
           <div style=" display: inline-block;">
             <b style=" display: inline-block;">تعداد : </b>
-            <div style="color: gray;display: inline-block;">{{' '}} {{product.quantity.name}} {{'عدد'}}{{' '}}</div>
-            <div style=" display: inline-block; color: #fa5400; margin-right: 8px">{{product.price.name}}{{'@'}}</div>
+            <div style="color: gray;display: inline-block;">{{' '}} {{displayQuantity}} {{'عدد'}}{{' '}}</div>
+            <div style=" display: inline-block; color: #fa5400; margin-right: 8px">{{displayPrice}}{{'@'}}</div>
           </div>
           <br>
           <div style=" display: inline-block;">
