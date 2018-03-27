@@ -44,32 +44,36 @@ export class SizePickerComponent implements OnInit {
   }
 
   onChange(e) {
-    if ( +e.value > 0 ) {
-      this.val = +e.value;
-      this.value.emit(+e.value);
-    }
-    else {
-      this.val = e.value;
-      // this.value.emit(e.value);
-      let tempEmitValue = e.value;
-      switch (e.value) {
-        case 'XS' :
-          tempEmitValue = sizeOptionsEnum.XS;
-          break;
-        case 'S' :
-          tempEmitValue = sizeOptionsEnum.S;
-          break;
-        case 'M' :
-          tempEmitValue = sizeOptionsEnum.M;
-          break;
-        case 'L' :
-          tempEmitValue = sizeOptionsEnum.L;
-          break;
-        case 'XL' :
-          tempEmitValue = sizeOptionsEnum.XL;
-          break;
-      }
-      this.value.emit(tempEmitValue);
-    }
+    const sizeFirstCharCode = e.value.charCodeAt(0);
+    this.val = (sizeFirstCharCode >= 48 && sizeFirstCharCode <= 57) ? +e.value : e.value;
+    this.value.emit(this.val);
+
+    // if ( +e.value > 0 ) {
+    //   this.val = +e.value;
+    //   this.value.emit(+e.value);
+    // }
+    // else {
+    //   this.val = e.value;
+    //   // this.value.emit(e.value);
+    //   let tempEmitValue = e.value;
+    //   switch (e.value) {
+    //     case 'XS' :
+    //       tempEmitValue = sizeOptionsEnum.XS;
+    //       break;
+    //     case 'S' :
+    //       tempEmitValue = sizeOptionsEnum.S;
+    //       break;
+    //     case 'M' :
+    //       tempEmitValue = sizeOptionsEnum.M;
+    //       break;
+    //     case 'L' :
+    //       tempEmitValue = sizeOptionsEnum.L;
+    //       break;
+    //     case 'XL' :
+    //       tempEmitValue = sizeOptionsEnum.XL;
+    //       break;
+    //   }
+    //   this.value.emit(tempEmitValue);
+    // }
   }
 }

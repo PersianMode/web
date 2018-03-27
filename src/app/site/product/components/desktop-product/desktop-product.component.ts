@@ -64,7 +64,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
   saveToCart() {
     // check form size and id undefined
-    const instance = this.product.instances.filter(el => el.product_color_id === this.id && el.size === this.size);
+    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor._id && el.size === this.size);
 
     if (instance) {
       const object = {
