@@ -265,7 +265,6 @@ export class CartService {
         }).subscribe(
           (data) => {
             data = data[0];
-            console.log(this.cartItems.getValue());
             const someItems = this.cartItems.getValue().filter(el => el.product_id.toString() === data.product_id.toString());
             if (someItems && someItems.length > 0) {
               const semiTotalPrice = someItems.map(el => el.price).reduce((a, b) => a + b);
