@@ -74,7 +74,7 @@ export class SummaryComponent implements OnInit {
   }
 
   applyCoupon() {
-    this.cartService.applyCoupon(this.coupon_code)
+    this.cartService.addCoupon(this.coupon_code)
       .then(res => {
         this.discount += res;
       })

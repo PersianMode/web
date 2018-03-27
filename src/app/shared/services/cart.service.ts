@@ -250,7 +250,7 @@ export class CartService {
     });
   }
 
-  applyCoupon(coupon_code = '') {
+  addCoupon(coupon_code = '') {
     if (!this.authService.isLoggedIn.getValue())
       return Promise.reject(403);
 
