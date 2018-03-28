@@ -93,10 +93,7 @@ export class AddressTableComponent implements OnInit {
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
     const fullEdit = (!(id || id === 0));
-    console.log(tempAddress);
-    console.log(fullEdit);
-    console.log(partEdit);
-    // const rmDialog = this.dialog.open(UpsertAddressComponent, {
+    // let rmDialog = this.dialog.open(UpsertAddressComponent, {
     //   width: '600px',
     //   data: {
     //     addressId: tempAddressId,
@@ -104,6 +101,9 @@ export class AddressTableComponent implements OnInit {
     //     fullEdit: fullEdit,
     //     dialog_address: tempAddress,
     //   }
+    // });
+    // rmDialog.afterClosed().subscribe(result => {
+    //   this.getAddresses();
     // });
   }
 }
