@@ -33,10 +33,10 @@
             <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
           </td>
           <td *ngIf="withDelivery">
-            <input type="checkbox" [checked]="selectedCustomerAddresses==i" (click)="setAddress(i)">
+            <input type="checkbox" class="check-box" [checked]="selectedCustomerAddresses==i" (click)="setAddress(i)">
           </td>
           <td *ngIf="!withDelivery">
-            <input type="checkbox" [checked]="selectedWareHouseAddresses==i" (click)="setAddress(i)">
+            <input type="checkbox" class="check-box" [checked]="selectedWareHouseAddresses==i" (click)="setAddress(i)">
           </td>
         </tr>
         </tbody>

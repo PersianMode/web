@@ -159,6 +159,5 @@ export class AddressTableComponent implements OnInit {
       this.addresses = this.customerAddresses;
     else
       this.addresses = this.wareHouseAddresses;
-    console.log(this.withDelivery);
   }
 }
