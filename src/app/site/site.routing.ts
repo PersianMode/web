@@ -5,6 +5,7 @@ import {LoginComponent} from './login/components/login/login.component';
 import {RegisterComponent} from './register/components/register/register.component';
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
+import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 
 const Site_ROUTES: Routes = [
   {
@@ -19,6 +20,7 @@ const Site_ROUTES: Routes = [
     {path: 'login/oauth', component: OauthHandlerComponent},
     {path: 'login/oauth/other/:status', component: OtherDetailsComponent},
     {path: 'checkout', loadChildren: 'app/site/checkout/checkout.module#CheckoutModule'},
+    {path: 'checkout/address', component: UpsertAddressComponent},
   ]
   }
 ];

@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {CartService} from '../../../../shared/services/cart.service';
 import {AuthService} from '../../../../shared/services/auth.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -49,7 +50,8 @@ export class SummaryComponent implements OnInit {
   show_coupon_area = false;
   isLoggedIn = false;
 
-  constructor(private cartService: CartService, private authService: AuthService) {
+  constructor(private cartService: CartService, private authService: AuthService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -82,5 +84,9 @@ export class SummaryComponent implements OnInit {
       .catch(err => {
         console.error('Error when validating coupon code: ', err);
       });
+  }
+
+  goToCheckoutPage() {
+    this.router.navigate(['/checkout']);
   }
 }

@@ -3,6 +3,10 @@ import {WINDOW} from '../../../shared/services/window.service';
 import {HttpService} from '../../../shared/services/http.service';
 import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
 import {MatDialog} from '@angular/material';
+import {ResponsiveService} from '../../../shared/services/responsive.service';
+import {Router} from '@angular/router';
+import {GenDialogComponent} from "../../../shared/components/gen-dialog/gen-dialog.component";
+import {DialogEnum} from "../../../shared/enum/dialog.components.enum";
 
 
 @Component({
@@ -16,47 +20,48 @@ export class AddressTableComponent implements OnInit {
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
 
-  // addresses = [
-  //   {
-  //   'province': 'تهران',
-  //   'city': 'تهران',
-  //   'street': ' کوچه شهریور ',
-  //   'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-  //   'no': '۵',
-  //   'unit': '۱',
-  //   'recipient_national_id': '0021625018',
-  //   'recipient_name': 'علی میرجهانی',
-  //   'recipient_mobile_no': '09391022382'
-  // },
-  //   {
-  //   'province': 'تهران',
-  //   'city': 'تهران',
-  //   'street': ' کوچه شهریور ',
-  //   'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-  //   'no': '۵',
-  //   'unit': '۱',
-  //   'recipient_national_id': '0021625018',
-  //   'recipient_name': 'علی میرجهانی',
-  //   'recipient_mobile_no': '09391022382'
-  // },
-  //   {
-  //   'province': 'تهران',
-  //   'city': 'تهران',
-  //   'street': ' کوچه شهریور ',
-  //   'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-  //   'no': '۵',
-  //   'unit': '۱',
-  //   'recipient_national_id': '0021625018',
-  //   'recipient_name': 'علی میرجهانی',
-  //   'recipient_mobile_no': '09391022382'
-  // }];
-  addresses = [];
+  addresses = [
+    {
+      'province': 'تهران',
+      'city': 'تهران',
+      'street': ' کوچه شهریور ',
+      'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
+      'no': '۵',
+      'unit': '۱',
+      'recipient_national_id': '0021625018',
+      'recipient_name': 'علی میرجهانی',
+      'recipient_mobile_no': '09391022382'
+    },
+    {
+      'province': 'تهران',
+      'city': 'تهران',
+      'street': ' کوچه شهریور ',
+      'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
+      'no': '۵',
+      'unit': '۱',
+      'recipient_national_id': '0021625018',
+      'recipient_name': 'علی میرجهانی',
+      'recipient_mobile_no': '09391022382'
+    },
+    {
+      'province': 'تهران',
+      'city': 'تهران',
+      'street': ' کوچه شهریور ',
+      'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
+      'no': '۵',
+      'unit': '۱',
+      'recipient_national_id': '0021625018',
+      'recipient_name': 'علی میرجهانی',
+      'recipient_mobile_no': '09391022382'
+    }];
+  // addresses = [];
   customerAddresses = [];
   wareHouseAddresses = [];
   curHeight: number;
   curWidth: number;
 
-  constructor(@Inject(WINDOW) private window, private httpService: HttpService, private dialog: MatDialog) {
+  constructor(@Inject(WINDOW) private window, private httpService: HttpService, private dialog: MatDialog,
+              private responsiveService: ResponsiveService, private router: Router) {
     this.curWidth = this.window.innerWidth;
     this.curHeight = this.window.innerHeight;
   }
@@ -135,22 +140,31 @@ export class AddressTableComponent implements OnInit {
 
   editAddress(id) {
     // const tempAddressId = (id || id === 0) ? this.addresses[id].addressId : null;
+    console.log('mobileness: ', this.responsiveService.isMobile);
     const tempAddressId = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
     const fullEdit = (!(id || id === 0));
-    const rmDialog = this.dialog.open(UpsertAddressComponent, {
-      width: '600px',
-      data: {
-        addressId: tempAddressId,
-        partEdit: partEdit,
-        fullEdit: fullEdit,
-        dialog_address: tempAddress,
-      }
-    });
-    rmDialog.afterClosed().subscribe(result => {
-      this.getCustomerAddresses();
-    });
+
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/checkout/address`]);
+    } else {
+      const rmDialog = this.dialog.open(GenDialogComponent, {
+        width: '600px',
+        data: {
+          componentName: DialogEnum.upsertAddress,
+          extraData: {
+            addressId: tempAddressId,
+            partEdit: partEdit,
+            fullEdit: fullEdit,
+            dialog_address: tempAddress,
+          }
+        },
+      });
+      rmDialog.afterClosed().subscribe(result => {
+        this.getCustomerAddresses();
+      });
+    }
   }
 
   changeWithDelivery() {

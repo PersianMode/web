@@ -48,7 +48,7 @@
     <div *ngFor="let address of addresses; let i = index">
       <mat-card>
         <mat-card-content>
-          <div >
+          <div>
             <span> آدرس : </span>
             <span>استان {{address.province}} شهر{{address.city}} {{address.district}} {{address.street}} پلاک {{makePersianNumber(address.no)}} واحد {{ makePersianNumber(address.unit)}}</span>
           </div>
@@ -65,7 +65,7 @@
             تغییر
             <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
           </div>
-          <div>
+          <div style="margin-top: 20px;">
             انتخاب آدرس
             <input *ngIf="withDelivery" type="checkbox" class="check-box" [checked]="selectedCustomerAddresses==i"
                    (click)="setAddress(i)">

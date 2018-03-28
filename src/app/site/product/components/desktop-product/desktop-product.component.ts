@@ -62,6 +62,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   ngOnInit() {
     console.log(this.product);
   }
+
   saveToCart() {
     // check form size and id undefined
     const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor._id && el.size === this.size);
@@ -83,12 +84,11 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
           selectedSize: this.size,
         }
       });
-      setTimeout(function(){
+      setTimeout(function () {
         rmDialog.close();
       }, 3000);
     }
   }
-
 
 
   newSize($event) {

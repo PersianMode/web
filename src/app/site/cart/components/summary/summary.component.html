@@ -40,12 +40,12 @@
     <span class="left-text">{{discountValue}} تومان </span>
   </div>
   <hr class="hr-style">
-  <div class="rows">
+  <div class="rows nowrap-row-tp">
     <span class="right-text total-payment">قیمت نهایی : </span>
     <span class="left-text total-payment">{{finalTotal}}  تومان</span>
   </div>
   <hr class="hr-style">
   <div>
-    <button class="payment-button"> پرداخت</button>
+    <button class="payment-button" (click)="goToCheckoutPage()"> پرداخت</button>
   </div>
 </div>
