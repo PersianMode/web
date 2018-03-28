@@ -736,3 +736,9 @@ mat-panel-title {
 .mat-tooltip {
   font-family: iranyekan, Roboto, sans-serif !important;
 }
+
+.mat-form-field-label {
+  font-family: iranyekan, sans-serif !important;
+  font-size: 75% !important;
+  line-height: 136% !important;
+}

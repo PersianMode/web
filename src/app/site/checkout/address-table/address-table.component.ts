@@ -17,7 +17,7 @@ export class AddressTableComponent implements OnInit {
     unit: 1,
     postal_code: 1044940912,
     loc: {
-      long: 35.817191,
+      long: 50.817191,
       lat: 51.427251,
     },
     recipient_name: 'علی علوی',
@@ -25,7 +25,7 @@ export class AddressTableComponent implements OnInit {
     recipient_national_id: '06423442',
     recipient_title: 'm',
     district: 'خیابان سوم'
-  }
+  };
   constructor(private dialog: MatDialog, private authService: AuthService) { }
 
   ngOnInit() {

@@ -14,13 +14,14 @@ export class UpsertAddressComponent implements OnInit {
   dialogTitle;
   buttonTitle;
   partEdit;
-  addressData:any;
+  addressData: any;
   addressForm: FormGroup;
   cityArray = ['آبش احمد'];
   ostanArray: any;
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<UpsertAddressComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService, private http: HttpClient, private httpService: HttpService) {
+              @Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
+              private http: HttpClient, private httpService: HttpService) {
   }
 
   ngOnInit() {
@@ -64,7 +65,7 @@ export class UpsertAddressComponent implements OnInit {
         Validators.required,
         Validators.pattern(/^\d+$/)
       ]],
-      latitude: [this.data.addressId ? this.addressData.loc.lat : 40.696491],
+      latitude: [this.data.addressId ? this.addressData.loc.lat : 35.696491],
       longitude: [this.data.addressId ? this.addressData.loc.long : 51.379926],
       street: [this.data.addressId ? this.addressData.street : null],
     });
