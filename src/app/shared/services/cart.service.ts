@@ -7,6 +7,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 export class CartService {
   cartItems: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private localStorageKey = 'cart';
+  coupon_discount = 0;
 
   constructor(private httpService: HttpService, private authService: AuthService) {
     this.authService.isLoggedIn.subscribe(
@@ -195,8 +196,9 @@ export class CartService {
       objItem.thumbnail = el.thumbnail;
       objItem.instances = el.instances;
       objItem.price = el.instance_price ? el.instance_price : el.base_price;
-      objItem.discount = (el.discount && el.discount.length > 0) ?
-        (objItem.price - (el.discount.reduce((a, b) => a * b) * objItem.price)) : 0;
+      objItem.discount = el.discount;
+      // objItem.discount = (el.discount && el.discount.length > 0) ?
+      //   (objItem.price - (el.discount.reduce((a, b) => a * b) * objItem.price)) : 0;
 
       itemList.push(objItem);
     });
@@ -246,6 +248,36 @@ export class CartService {
           reject(err);
         }
       );
+    });
+  }
+
+  addCoupon(coupon_code = '') {
+    if (!this.authService.isLoggedIn.getValue())
+      return Promise.reject(403);
+
+    if (coupon_code.length <= 0)
+      return Promise.resolve(false);
+
+    return new Promise((resolve, reject) => {
+      if (this.cartItems && this.cartItems.getValue().length > 0)
+        this.httpService.post('coupon/code/valid', {
+          product_ids: Array.from(new Set(this.cartItems.getValue().map(el => el.product_id))),
+          coupon_code: coupon_code,
+        }).subscribe(
+          (data) => {
+            data = data[0];
+            const someItems = this.cartItems.getValue().filter(el => el.product_id.toString() === data.product_id.toString());
+            if (someItems && someItems.length > 0) {
+              someItems.forEach(el => {
+                el['coupon_discount'] = 1 - data.discount;
+              });
+              resolve(true);
+            } else
+              reject({});
+          },
+          (err) => {
+            reject(err);
+          });
     });
   }
 }
