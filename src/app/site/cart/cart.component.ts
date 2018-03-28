@@ -37,7 +37,12 @@ export class CartComponent implements OnInit, OnDestroy {
           .filter(el => el.count && el.quantity <= el.count)
           .map(el => el.price * el.quantity)
           .reduce((a, b) => a + b);
-        this.discountValue = this.products.map(el => el.discount).reduce((a, b) => a + b);
+
+        this.discountValue = 0;
+
+        this.products.forEach(el => {
+          this.discountValue += (el.price - el.discount.reduce((a, b) => a * b) * el.price) * el.quantity;
+        });
       }
     });
   }
