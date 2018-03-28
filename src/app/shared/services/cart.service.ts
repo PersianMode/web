@@ -196,8 +196,9 @@ export class CartService {
       objItem.thumbnail = el.thumbnail;
       objItem.instances = el.instances;
       objItem.price = el.instance_price ? el.instance_price : el.base_price;
-      objItem.discount = (el.discount && el.discount.length > 0) ?
-        (objItem.price - (el.discount.reduce((a, b) => a * b) * objItem.price)) : 0;
+      objItem.discount = el.discount;
+      // objItem.discount = (el.discount && el.discount.length > 0) ?
+      //   (objItem.price - (el.discount.reduce((a, b) => a * b) * objItem.price)) : 0;
 
       itemList.push(objItem);
     });
@@ -255,7 +256,7 @@ export class CartService {
       return Promise.reject(403);
 
     if (coupon_code.length <= 0)
-      return Promise.resolve(this.coupon_discount * -1);
+      return Promise.resolve(false);
 
     return new Promise((resolve, reject) => {
       if (this.cartItems && this.cartItems.getValue().length > 0)
@@ -267,9 +268,10 @@ export class CartService {
             data = data[0];
             const someItems = this.cartItems.getValue().filter(el => el.product_id.toString() === data.product_id.toString());
             if (someItems && someItems.length > 0) {
-              const semiTotalPrice = someItems.map(el => el.price).reduce((a, b) => a + b);
-              this.coupon_discount = semiTotalPrice - (semiTotalPrice * data.discount);
-              resolve(this.coupon_discount);
+              someItems.forEach(el => {
+                el['coupon_discount'] = 1 - data.discount;
+              });
+              resolve(true);
             } else
               reject({});
           },

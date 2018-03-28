@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {CartService} from '../../../../shared/services/cart.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -37,6 +37,7 @@ export class SummaryComponent implements OnInit {
     return this._discount;
   }
 
+  @Output() recalculateDiscount = new EventEmitter();
   private _total: any;
   private _discount: any = 0;
   discountValue: any = 0;
@@ -76,7 +77,7 @@ export class SummaryComponent implements OnInit {
   applyCoupon() {
     this.cartService.addCoupon(this.coupon_code)
       .then(res => {
-        this.discount += res;
+        this.recalculateDiscount.emit(res);
       })
       .catch(err => {
         console.error('Error when validating coupon code: ', err);
