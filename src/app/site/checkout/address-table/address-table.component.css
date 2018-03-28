@@ -39,17 +39,24 @@ th {
 }
 
 mat-card {
+  margin-top: 20px;
   font-family: iranyekan, sans-serif;
 }
 
 .check-box-div {
   margin-right: 10%;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   padding: 20px;
   width: 100px;
-  height: 30px ;
+  height: 30px;
 }
-.check-box{
+
+.check-box {
   width: 20px;
   height: 20px;
+}
+
+.newAddressButton {
+  margin-right: 10%;
+  margin-top: 20px;
 }

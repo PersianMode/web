@@ -1,7 +1,6 @@
 <h1 style="margin-right: 5%">آدرس</h1>
 <span class="check-box-div">
-  <input type="checkbox" class="check-box" [checked]="!withDelivery" (click)="changeWithDelivery(false)">تحویل حضوری
-  <input type="checkbox" class="check-box" [checked]="withDelivery" (click)="changeWithDelivery(true)"> ارسال با پیک
+  <input type="checkbox" class="check-box" (change)="withDelivery===true" [checked]="!withDelivery" (click)="changeWithDelivery()">تحویل حضوری
 </span>
 <div *ngIf="addresses.length!=0">
   <div *ngIf="curWidth>960" style="margin-right:10%;margin-left:10%" class="rs-table field">
@@ -12,7 +11,7 @@
         <th style="min-width: 40%"><b>آدرس</b></th>
         <th *ngIf="withDelivery" style=" width: 30%"><b>مشخصات تحویل گیرنده</b></th>
         <th *ngIf="withDelivery" style=" width: 5%"></th>
-        <th *ngIf="withDelivery" style=" width: 5%"></th>
+        <th  style=" width: 5%"></th>
         </thead>
         <tbody>
         <tr *ngFor="let address of addresses; let i = index">
@@ -34,7 +33,10 @@
             <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
           </td>
           <td *ngIf="withDelivery">
-            <input type="checkbox" [checked]="selectedAddress==i" (click)="setAddress(i)">
+            <input type="checkbox" [checked]="selectedCustomerAddresses==i" (click)="setAddress(i)">
+          </td>
+          <td *ngIf="!withDelivery">
+            <input type="checkbox" [checked]="selectedWareHouseAddresses==i" (click)="setAddress(i)">
           </td>
         </tr>
         </tbody>
@@ -63,7 +65,7 @@
           </div>
           <div>
             انتخاب آدرس
-            <input type="checkbox" [checked]="selectedAddress==i" (click)="setAddress(i)">
+            <input type="checkbox" [checked]="selectedCustomerAddresses==i" (click)="setAddress(i)">
           </div>
           <br>
         </mat-card-content>
@@ -72,6 +74,6 @@
     </div>
   </div>
 </div>
-<div>
-  <button style="margin-right: 10px;" (click)="editAddress()">افزودن آدرس جدید</button>
+<div *ngIf="withDelivery">
+  <button (click)="editAddress()" class="newAddressButton">افزودن آدرس جدید</button>
 </div>

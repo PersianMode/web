@@ -13,7 +13,9 @@ import {MatDialog} from '@angular/material';
 export class AddressTableComponent implements OnInit {
 
   withDelivery = true;
-  selectedAddress = -1;
+  selectedCustomerAddresses = -1;
+  selectedWareHouseAddresses = -1;
+
   // addresses = [
   //   {
   //   'province': 'تهران',
@@ -60,23 +62,30 @@ export class AddressTableComponent implements OnInit {
   }
 
   setAddress(i: number) {
-    if (i === this.selectedAddress)
-      this.selectedAddress = -1;
-    else
-      this.selectedAddress = i;
+    if (this.withDelivery) {
+      if (i === this.selectedCustomerAddresses)
+        this.selectedCustomerAddresses = -1;
+      else
+        this.selectedCustomerAddresses = i;
+    }
+    else {
+      if (i === this.selectedWareHouseAddresses)
+        this.selectedWareHouseAddresses = -1;
+      else
+        this.selectedWareHouseAddresses = i;
+    }
   }
 
   getCustomerAddresses() {
     this.httpService.get(`customer/address`).subscribe(res => {
       if (this.withDelivery) {
         if (this.addresses.length === res.addresses.length - 1)
-          this.selectedAddress = res.addresses.length - 1;
+          this.selectedCustomerAddresses = res.addresses.length - 1;
         else if (res.addresses.length === 1)
-          this.selectedAddress = 0;
+          this.selectedCustomerAddresses = 0;
         this.addresses = res.addresses;
       }
       this.customerAddresses = res.addresses;
-      console.log(res);
     }, err => {
       console.error(err);
     });
@@ -120,6 +129,7 @@ export class AddressTableComponent implements OnInit {
 
   ngOnInit() {
     this.getCustomerAddresses();
+    this.getWareHouseAddresses();
   }
 
 
@@ -140,15 +150,15 @@ export class AddressTableComponent implements OnInit {
     });
     rmDialog.afterClosed().subscribe(result => {
       this.getCustomerAddresses();
-      this.getWareHouseAddresses();
     });
   }
 
-  changeWithDelivery(b: boolean) {
-    this.withDelivery = b;
-    if (b)
+  changeWithDelivery() {
+    this.withDelivery = !this.withDelivery;
+    if (this.withDelivery)
       this.addresses = this.customerAddresses;
     else
       this.addresses = this.wareHouseAddresses;
+    console.log(this.withDelivery);
   }
 }
