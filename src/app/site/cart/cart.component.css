@@ -44,6 +44,8 @@
 }
 .membership-style:hover{
   color : black;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .main {

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PanelsComponent } from './panels.component';
+import { UpsertAddressComponent } from './upsert-address.component';
 
-describe('PanelComponent', () => {
-  let component: PanelsComponent;
-  let fixture: ComponentFixture<PanelsComponent>;
+describe('UpsertAddressComponent', () => {
+  let component: UpsertAddressComponent;
+  let fixture: ComponentFixture<UpsertAddressComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PanelsComponent ]
+      declarations: [ UpsertAddressComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PanelsComponent);
+    fixture = TestBed.createComponent(UpsertAddressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

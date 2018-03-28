@@ -1,0 +1,63 @@
+.hr-style {
+  border: 0.5px solid #555;
+  margin: 0 0;
+}
+
+tr {
+  border-top: 1px solid #ccc;
+}
+
+tr:first-child {
+  border-top: 1px solid black;
+  margin-top: 5%;
+}
+
+table {
+  border-collapse: collapse;
+  border: 0;
+  width: 100%;
+  font-family: iranyekan, sans-serif;
+}
+
+tbody {
+  border: 0;
+}
+
+td {
+  padding: 10px;
+}
+
+th {
+  text-align: justify;
+  padding-bottom: 10px;
+}
+
+.new-Address {
+  margin-right: 5%;
+  margin-top: 30px;
+  color: #00a4e4;
+}
+
+mat-card {
+  margin-top: 20px;
+  font-family: iranyekan, sans-serif;
+}
+
+.check-box-div {
+  margin-right: 10%;
+  margin-bottom: 50px;
+  padding: 20px;
+  width: 100px;
+  height: 30px;
+}
+
+.check-box {
+  width: 20px;
+  height: 20px;
+  margin-up : 10px;
+}
+
+.newAddressButton {
+  margin-right: 10%;
+  margin-top: 20px;
+}
