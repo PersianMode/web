@@ -10,7 +10,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class UpsertAddressComponent implements OnInit {
   dialogTitle;
   buttonTitle;
-  addressData:any;
+  addressData: any;
   addressForm: FormGroup;
   cityArray = [];
   ostanArray = [
@@ -39,19 +39,20 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   initForm() {
+    console.log(this.data.addressId);
     this.addressForm = new FormBuilder().group({
-      name:  [this.data.addressId ? this.addressData.recipient_name : 'logged in user', [
+      name: [this.data.addressId ? this.addressData.recipient_name : 'logged in user', [
         Validators.required,
       ]],
-      family:  [this.data.addressId ? this.addressData.recipient_name : 'loged in user', [
+      family: [this.data.addressId ? this.addressData.recipient_name : 'loged in user', [
         Validators.required,
       ]],
-      nationalCode :  [this.data.addressId ? this.addressData.recipient_national_id : 'test code', [
+      nationalCode: [this.data.addressId ? this.addressData.recipient_national_id : 'test code', [
         Validators.required,
         Validators.maxLength(10),
         Validators.pattern(/^\d+$/)
       ]],
-      selectOstan : [null],
+      selectOstan: [null],
       selectCity: [null],
       pelak: [this.data.addressId ? this.addressData.no : null],
       unit_no: [this.data.addressId ? this.addressData.unit : null],
@@ -87,10 +88,12 @@ export class UpsertAddressComponent implements OnInit {
   getLongitude() {
     return this.addressForm.controls['longitude'].value;
   }
+
   setMarker(data) {
     this.addressForm.controls['latitude'].setValue(data.coords.lat);
     this.addressForm.controls['longitude'].setValue(data.coords.lng);
   }
+
   addAddress() {
   }
 }

@@ -12,6 +12,7 @@ import {MatDialog} from '@angular/material';
 })
 export class AddressTableComponent implements OnInit {
 
+  withDelivery = true;
   selectedAddress = -1;
   // addresses = [
   //   {
@@ -48,9 +49,10 @@ export class AddressTableComponent implements OnInit {
   //   'recipient_mobile_no': '09391022382'
   // }];
   addresses = [];
+  customerAddresses = [];
+  wareHouseAddresses = [];
   curHeight: number;
   curWidth: number;
-  private addr: null;
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService, private dialog: MatDialog) {
     this.curWidth = this.window.innerWidth;
@@ -64,17 +66,50 @@ export class AddressTableComponent implements OnInit {
       this.selectedAddress = i;
   }
 
-  getAddresses() {
+  getCustomerAddresses() {
     this.httpService.get(`customer/address`).subscribe(res => {
-      if (this.addresses.length === res.addresses.length - 1)
-        this.selectedAddress = res.addresses.length - 1;
-      else if (res.addresses.length === 1)
-        this.selectedAddress = 0;
-      this.addresses = res.addresses;
+      if (this.withDelivery) {
+        if (this.addresses.length === res.addresses.length - 1)
+          this.selectedAddress = res.addresses.length - 1;
+        else if (res.addresses.length === 1)
+          this.selectedAddress = 0;
+        this.addresses = res.addresses;
+      }
+      this.customerAddresses = res.addresses;
+      console.log(res);
     }, err => {
       console.error(err);
     });
 
+  }
+
+  getWareHouseAddresses() {
+    // make request
+    this.wareHouseAddresses = [
+      {
+        'province': 'تهران',
+        'city': 'تهران',
+        'street': ' کوچه شهریور ',
+        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
+        'no': '۵',
+        'unit': '۱',
+      },
+      {
+        'province': 'تهران',
+        'city': 'تهران',
+        'street': ' کوچه شهریور ',
+        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
+        'no': '۵',
+        'unit': '۱',
+      },
+      {
+        'province': 'تهران',
+        'city': 'تهران',
+        'street': ' کوچه شهریور ',
+        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
+        'no': '۵',
+        'unit': '۱',
+      }];
   }
 
   makePersianNumber(a: string) {
@@ -84,12 +119,13 @@ export class AddressTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAddresses();
+    this.getCustomerAddresses();
   }
 
 
   editAddress(id) {
-    const tempAddressId = (id || id === 0) ? id : null;
+    // const tempAddressId = (id || id === 0) ? this.addresses[id].addressId : null;
+    const tempAddressId = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
     const fullEdit = (!(id || id === 0));
@@ -103,7 +139,16 @@ export class AddressTableComponent implements OnInit {
       }
     });
     rmDialog.afterClosed().subscribe(result => {
-      this.getAddresses();
+      this.getCustomerAddresses();
+      this.getWareHouseAddresses();
     });
+  }
+
+  changeWithDelivery(b: boolean) {
+    this.withDelivery = b;
+    if (b)
+      this.addresses = this.customerAddresses;
+    else
+      this.addresses = this.wareHouseAddresses;
   }
 }
