@@ -1,0 +1,48 @@
+.style-select-wrapper {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    height: 30px;
+    text-align: right;
+}
+.select-style {
+    width: 220px;
+    height: 30px;
+    vertical-align: baseline;
+    border: 0 !important;
+    outline: 0;
+    /*-moz-appearance: none;*/
+    /*-webkit-appearance: none;*/
+    /*appearance: none;*/
+    background: 0 0;
+    z-index: 3;
+    border-radius: 2px;
+    background-color: black;
+    color: #fff;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 8px;
+    font-family:iranyekan;
+}
+
+.field-container{
+    width: 98%;
+    margin: 5px;
+}
+
+.field{
+    width: 100%;
+}
+
+.btn-style {
+    min-width: 150px;
+    padding: 6px;
+    cursor: pointer;
+    border: 0px solid #E5E5E5;
+    border-radius: 2px;
+    color : #fff;
+    height: 35px;
+    font-size: 14px;
+    font-family:iranyekan;
+    background-color: black;
+}

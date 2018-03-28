@@ -21,6 +21,9 @@ export class DictionaryService {
     'BLACK-ANTHRACITE': '#999999',
   };
 
+  // wordDictionary: any = {};
+  // colorDictionary: any = {};
+
   constructor(httpService: HttpService) {
 
     httpService.get('dictionary').subscribe((res: any) => {

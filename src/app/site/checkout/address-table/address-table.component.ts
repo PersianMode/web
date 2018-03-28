@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../../shared/services/window.service';
 import {HttpService} from '../../../shared/services/http.service';
-// import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
+import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
 import {MatDialog} from '@angular/material';
 
 
@@ -93,17 +93,17 @@ export class AddressTableComponent implements OnInit {
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
     const fullEdit = (!(id || id === 0));
-    // let rmDialog = this.dialog.open(UpsertAddressComponent, {
-    //   width: '600px',
-    //   data: {
-    //     addressId: tempAddressId,
-    //     partEdit: partEdit,
-    //     fullEdit: fullEdit,
-    //     dialog_address: tempAddress,
-    //   }
-    // });
-    // rmDialog.afterClosed().subscribe(result => {
-    //   this.getAddresses();
-    // });
+    const rmDialog = this.dialog.open(UpsertAddressComponent, {
+      width: '600px',
+      data: {
+        addressId: tempAddressId,
+        partEdit: partEdit,
+        fullEdit: fullEdit,
+        dialog_address: tempAddress,
+      }
+    });
+    rmDialog.afterClosed().subscribe(result => {
+      this.getAddresses();
+    });
   }
 }
