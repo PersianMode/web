@@ -10,7 +10,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class UpsertAddressComponent implements OnInit {
   dialogTitle;
   buttonTitle;
-  addressData: object = {};
+  addressData:any;
   addressForm: FormGroup;
   cityArray = [];
   ostanArray = [
@@ -31,39 +31,41 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dialogTitle = this.data.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
-    this.buttonTitle = this.data.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
+    this.dialogTitle = this.data.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
+    this.buttonTitle = this.data.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
     this.addressData = this.data.dialog_address;
+    console.log(this.addressData);
     this.initForm();
   }
 
   initForm() {
     this.addressForm = new FormBuilder().group({
-      name:  [null, [
+      name:  [this.data.addressId ? this.addressData.recipient_name : 'logged in user', [
         Validators.required,
       ]],
-      family:  [null, [
+      family:  [this.data.addressId ? this.addressData.recipient_name : 'loged in user', [
         Validators.required,
       ]],
-      nationalCode :  [null, [
+      nationalCode :  [this.data.addressId ? this.addressData.recipient_national_id : 'test code', [
         Validators.required,
         Validators.maxLength(10),
         Validators.pattern(/^\d+$/)
       ]],
       selectOstan : [null],
       selectCity: [null],
-      pelak: [null],
-      unit_no: [null],
-      post_code: [null],
+      pelak: [this.data.addressId ? this.addressData.no : null],
+      unit_no: [this.data.addressId ? this.addressData.unit : null],
+      post_code: [this.data.addressId ? this.addressData.postal_code : null],
       address: [null, [
-        Validators.maxLength(500),
+        Validators.maxLength(15),
       ]],
-      phoneNumber: [null, [
+      phoneNumber: [this.data.addressId ? this.addressData.recipient_mobile_no : 'test phone number', [
         Validators.required,
         Validators.pattern(/^\d+$/)
       ]],
-      latitude: [35.696491],
-      longitude: [51.379926],
+      latitude: [this.data.addressId ? this.addressData.loc.lat : 35.696491],
+      longitude: [this.data.addressId ? this.addressData.loc.long : 51.379926],
+      street: [this.data.addressId ? this.addressData.street : null]
     });
   }
 

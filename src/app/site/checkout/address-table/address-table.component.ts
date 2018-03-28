@@ -8,18 +8,40 @@ import {MatDialog} from '@angular/material';
   styleUrls: ['./address-table.component.css']
 })
 export class AddressTableComponent implements OnInit {
-
+  address = {
+    province: 'Tehran',
+    city: 'Shemiran',
+    street: 'Darband',
+    no: 14,
+    unit: 1,
+    postal_code: 1044940912,
+    loc: {
+      long: 35.817191,
+      lat: 51.427251,
+    },
+    recipient_name: 'علی علوی',
+    recipient_mobile_no: '09121212121',
+    recipient_national_id: '06423442',
+    recipient_title: 'm',
+  }
   constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
   }
 
-  openAddressDialog() {
+  openAddressDialog(id?) {
+    const tempAddressId = id ? id : null;
+    const tempAddress = id ? this.address : null;
+    const partEdit = id ? true : false;
+    const fullEdit = id ? false : true;
+    console.log(tempAddressId);
     const rmDialog = this.dialog.open(UpsertAddressComponent, {
       width: '600px',
       data: {
-        addressId: null,
-        dialog_address: 'test',
+        addressId: tempAddressId,
+        partEdit: partEdit,
+        fullEdit: fullEdit,
+        dialog_address: tempAddress,
       }
     });
   }

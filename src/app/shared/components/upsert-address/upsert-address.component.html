@@ -72,7 +72,7 @@
                             <div class="style-select-wrapper">
                                 <select class="select-style" formControlName="selectOstan"
                                         (change)="setNewOstan($event.target.value)">
-                                    <option>استان</option>
+                                    <option selected>استان</option>
                                     <option *ngFor="let o of ostanArray" [value]="o.value">
                                         {{o.name}}
                                     </option>
@@ -101,17 +101,22 @@
                         </mat-input-container>
                     </div>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-                        <div fxFlex="32">
+                        <div fxFlex="25">
                             <mat-input-container style="width: 92%;">
+                                <input matInput type="text" placeholder="خیابان" formControlName="street"/>
+                            </mat-input-container>
+                        </div>
+                        <div fxFlex="25">
+                            <mat-input-container style="width: 92%; margin-right: 5px">
                                 <input matInput type="text" placeholder="پلاک" formControlName="pelak"/>
                             </mat-input-container>
                         </div>
-                        <div fxFlex="32" style="margin-right: 15px">
+                        <div fxFlex="25" style="margin-right: 5px">
                             <mat-input-container style="width: 92%">
                                 <input matInput type="text" placeholder="واحد" formControlName="unit_no"/>
                             </mat-input-container>
                         </div>
-                        <div fxFlex="32" style="margin-right: 15px">
+                        <div fxFlex="25" style="margin-right: 5px">
                             <mat-input-container style="width: 92%;">
                                 <input matInput type="text" placeholder="کدپستی" formControlName="post_code"/>
                             </mat-input-container>
