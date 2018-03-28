@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
 import {MatDialog} from '@angular/material';
+import {AuthService} from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-address-table',
@@ -23,18 +24,19 @@ export class AddressTableComponent implements OnInit {
     recipient_mobile_no: '09121212121',
     recipient_national_id: '06423442',
     recipient_title: 'm',
+    district: 'خیابان سوم'
   }
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private authService: AuthService) { }
 
   ngOnInit() {
   }
 
-  openAddressDialog(id?) {
+  openAddressDialog(id) {
+    console.log(id);
     const tempAddressId = id ? id : null;
     const tempAddress = id ? this.address : null;
     const partEdit = id ? true : false;
     const fullEdit = id ? false : true;
-    console.log(tempAddressId);
     const rmDialog = this.dialog.open(UpsertAddressComponent, {
       width: '600px',
       data: {

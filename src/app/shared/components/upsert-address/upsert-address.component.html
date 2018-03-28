@@ -1,4 +1,4 @@
-<div style="direction: rtl">
+<div style="direction: rtl; font-family">
     <div style=" width: 100%; height: 10%;">
         <div style="display: inline-block; text-align: right; width: 90%; margin-bottom: 5px">
             <div style="background-color: forestgreen;display: inline-block; text-align: center; padding: 3px; border-radius: 50%">
@@ -14,7 +14,7 @@
     <div>
         <form (ngSubmit)="submitAddress()" [formGroup]="addressForm">
             <mat-card>
-                <mat-card-title style="font-size: medium; font-weight: bold">مشخصات تحویل گیرنده</mat-card-title>
+                <mat-card-title style="font-size: medium; font-weight: bold; font-family: iranyekan">مشخصات تحویل گیرنده</mat-card-title>
                 <mat-card-content>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
                         <div fxFlex="50">
@@ -65,15 +65,14 @@
                 </mat-card-content>
             </mat-card>
             <mat-card style="margin-top: 5px">
-                <mat-card-title style="font-size: medium; font-weight: bold">آدرس</mat-card-title>
+                <mat-card-title style="font-size: medium; font-weight: bold; font-family: iranyekan">آدرس</mat-card-title>
                 <mat-card-content>
                     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column">
                         <div fxFlex="50" style="height: 20%; display: inline-block;">
                             <div class="style-select-wrapper">
                                 <select class="select-style" formControlName="selectOstan"
                                         (change)="setNewOstan($event.target.value)">
-                                    <option selected>استان</option>
-                                    <option *ngFor="let o of ostanArray" [value]="o.value">
+                                    <option *ngFor="let o of ostanArray">
                                         {{o.name}}
                                     </option>
                                 </select>
@@ -82,7 +81,6 @@
                         <div fxFlex="50">
                             <div class="style-select-wrapper">
                                 <select class="select-style" formControlName="selectCity">
-                                    <option>شهر</option>
                                     <option *ngFor="let c of cityArray">
                                         {{c}}
                                     </option>
@@ -92,7 +90,7 @@
                     </div>
                     <div dir="rtl" class="field-container">
                         <mat-input-container class="field">
-                            <textarea matInput placeholder="آدرس" formControlName="address"></textarea>
+                            <textarea matInput placeholder="آدرس" formControlName="address" readonly="{{partEdit}}"></textarea>
                             <mat-hint style="margin-bottom: 4px;">حداکثر از 500 حرف استفاده شود</mat-hint>
                             <mat-error style="margin-bottom: 4px;"
                                        *ngIf="addressForm.controls['address'].hasError('maxlength')">لطفا حداکثر
@@ -103,22 +101,22 @@
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
                         <div fxFlex="25">
                             <mat-input-container style="width: 92%;">
-                                <input matInput type="text" placeholder="خیابان" formControlName="street"/>
+                                <input matInput type="text" placeholder="خیابان" formControlName="street" readonly="{{partEdit}}"/>
                             </mat-input-container>
                         </div>
                         <div fxFlex="25">
                             <mat-input-container style="width: 92%; margin-right: 5px">
-                                <input matInput type="text" placeholder="پلاک" formControlName="pelak"/>
+                                <input matInput type="text" placeholder="پلاک" formControlName="pelak" readonly="{{partEdit}}"/>
                             </mat-input-container>
                         </div>
                         <div fxFlex="25" style="margin-right: 5px">
                             <mat-input-container style="width: 92%">
-                                <input matInput type="text" placeholder="واحد" formControlName="unit_no"/>
+                                <input matInput type="text" placeholder="واحد" formControlName="unit_no" readonly="{{partEdit}}"/>
                             </mat-input-container>
                         </div>
                         <div fxFlex="25" style="margin-right: 5px">
                             <mat-input-container style="width: 92%;">
-                                <input matInput type="text" placeholder="کدپستی" formControlName="post_code"/>
+                                <input matInput type="text" placeholder="کدپستی" formControlName="post_code" readonly="{{partEdit}}"/>
                             </mat-input-container>
                         </div>
                     </div>
