@@ -54,6 +54,7 @@
         </span>
           </div>
           <div>
+            انتخاب آدرس
             <input type="checkbox" [checked]="selectedAddress==i" (click)="setAddress(i)">
           </div>
           <br>
@@ -63,4 +64,4 @@
     <hr class="hr-style">
   </div>
 </div>
-<div style="margin-right: 5%; margin-top:30px;"> افزودن آدرس جدید</div>
+<div (click)="makeNewAddress()" style="margin-right: 5%; margin-top:30px; color: #00a4e4;"> افزودن آدرس جدید</div>

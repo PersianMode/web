@@ -87,4 +87,7 @@ export class AddressTableComponent implements OnInit {
     this.getAddresses();
   }
 
+  makeNewAddress() {
+    console.log('making new address');
+  }
 }
