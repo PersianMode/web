@@ -1,6 +1,7 @@
 <h1 style="margin-right: 5%">آدرس</h1>
 <span class="check-box-div">
-  <input type="checkbox" class="check-box" (change)="withDelivery===true" [checked]="!withDelivery" (click)="changeWithDelivery()">تحویل حضوری
+  <input type="checkbox" class="check-box" (change)="withDelivery===true" [checked]="!withDelivery"
+         (click)="changeWithDelivery()">تحویل حضوری
 </span>
 <div *ngIf="addresses.length!=0">
   <div *ngIf="curWidth>960" style="margin-right:10%;margin-left:10%" class="rs-table field">
@@ -11,11 +12,11 @@
         <th style="min-width: 40%"><b>آدرس</b></th>
         <th *ngIf="withDelivery" style=" width: 30%"><b>مشخصات تحویل گیرنده</b></th>
         <th *ngIf="withDelivery" style=" width: 5%"></th>
-        <th  style=" width: 5%"></th>
+        <th style=" width: 5%"></th>
         </thead>
         <tbody>
         <tr *ngFor="let address of addresses; let i = index">
-          <td> {{i}}</td>
+          <td> {{makePersianNumber(i)}}</td>
           <td>
             استان {{address.province}} شهر {{address.city}}
             <br>
@@ -47,15 +48,12 @@
     <div *ngFor="let address of addresses; let i = index">
       <mat-card>
         <mat-card-content>
-          <!--<div>-->
-          <!--<span> ردیف : </span><span>{{i}}</span>-->
-          <!--</div>-->
-          <div style="margin: 5%;">
+          <div >
             <span> آدرس : </span>
             <span>استان {{address.province}} شهر{{address.city}} {{address.district}} {{address.street}} پلاک {{makePersianNumber(address.no)}} واحد {{ makePersianNumber(address.unit)}}</span>
           </div>
           <div>
-        <span>
+        <span *ngIf="withDelivery">
           نام تحویل گیرنده : <b>{{address.recipient_name}}</b>
           <br>
           کدملی تحویل گیرنده : <b>{{makePersianNumber( address.recipient_national_id)}}</b>
@@ -63,9 +61,16 @@
           شماره تلفن تحویل گیرنده : <b>{{makePersianNumber(address.recipient_mobile_no)}}</b>
         </span>
           </div>
+          <div *ngIf="withDelivery">
+            تغییر
+            <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
+          </div>
           <div>
             انتخاب آدرس
-            <input type="checkbox" [checked]="selectedCustomerAddresses==i" (click)="setAddress(i)">
+            <input *ngIf="withDelivery" type="checkbox" class="check-box" [checked]="selectedCustomerAddresses==i"
+                   (click)="setAddress(i)">
+            <input *ngIf="!withDelivery" type="checkbox" class="check-box" [checked]="selectedWareHouseAddresses==i"
+                   (click)="setAddress(i)">
           </div>
           <br>
         </mat-card-content>

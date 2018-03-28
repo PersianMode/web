@@ -54,6 +54,7 @@ mat-card {
 .check-box {
   width: 20px;
   height: 20px;
+  margin-up : 10px;
 }
 
 .newAddressButton {
