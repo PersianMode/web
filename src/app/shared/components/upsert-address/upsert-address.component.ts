@@ -39,9 +39,17 @@ export class UpsertAddressComponent implements OnInit {
 
   initForm() {
     this.addressForm = new FormBuilder().group({
-      name: [null],
-      family: [null],
-      nationalCode : [null],
+      name:  [null, [
+        Validators.required,
+      ]],
+      family:  [null, [
+        Validators.required,
+      ]],
+      nationalCode :  [null, [
+        Validators.required,
+        Validators.maxLength(10),
+        Validators.pattern(/^\d+$/)
+      ]],
       selectOstan : [null],
       selectCity: [null],
       pelak: [null],
@@ -49,6 +57,10 @@ export class UpsertAddressComponent implements OnInit {
       post_code: [null],
       address: [null, [
         Validators.maxLength(500),
+      ]],
+      phoneNumber: [null, [
+        Validators.required,
+        Validators.pattern(/^\d+$/)
       ]],
       latitude: [35.696491],
       longitude: [51.379926],

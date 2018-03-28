@@ -17,25 +17,54 @@
                 <mat-card-title style="font-size: medium; font-weight: bold">مشخصات تحویل گیرنده</mat-card-title>
                 <mat-card-content>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-                        <div fxFlex="32">
+                        <div fxFlex="50">
                             <mat-input-container  style="width: 92%;">
                                 <input matInput type="text" placeholder="نام" formControlName="name"/>
+                                <mat-hint style="margin-bottom: 4px;">نام تحویل گیرنده را وارد کنید</mat-hint>
+                                <mat-error style="margin-bottom: 4px;"
+                                           *ngIf="addressForm.controls['name'].hasError('required')">وارد کردن نام تحویل گیرنده الزامی است
+                                </mat-error>
                             </mat-input-container>
                         </div>
-                        <div fxFlex="32" style="margin-right: 15px">
+                        <div fxFlex="50" style="margin-right: 15px">
                             <mat-input-container  style="width: 92%;">
                                 <input matInput type="text" placeholder="نام خانوادگی" formControlName="family"/>
+                                <mat-hint style="margin-bottom: 4px;">نام خانوادگی تحویل گیرنده را وارد کنید</mat-hint>
+                                <mat-error style="margin-bottom: 4px;"
+                                           *ngIf="addressForm.controls['family'].hasError('required')">وارد کردن نام خانوادگی تحویل گیرنده الزامی است
+                                </mat-error>
                             </mat-input-container>
                         </div>
-                        <div fxFlex="32" style="margin-right: 15px">
+                    </div>
+                    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+                        <div fxFlex="50">
                             <mat-input-container style="width: 92%;">
                                 <input matInput type="text" placeholder="شماره ملی" formControlName="nationalCode"/>
+                                <mat-hint style="margin-bottom: 4px;">کد ملی تحویل گیرنده را وارد کنید</mat-hint>
+                                <mat-error style="margin-bottom: 4px;"
+                                           *ngIf="addressForm.controls['nationalCode'].hasError('required')">وارد کردن کد ملی تحویل گیرنده الزامی است
+                                </mat-error>
+                                <mat-error style="margin-bottom: 4px;"
+                                           *ngIf="(addressForm.controls['nationalCode'].hasError('maxlength') || addressForm.controls['nationalCode'].hasError('pattern'))">کد ملی نامعتبر است
+                                </mat-error>
+                            </mat-input-container>
+                        </div>
+                        <div fxFlex="50" style="margin-right: 15px">
+                            <mat-input-container style="width: 92%;">
+                                <input matInput type="text" placeholder="شماره تماس" formControlName="phoneNumber"/>
+                                <mat-hint style="margin-bottom: 4px;">شماره تماس تحویل گیرنده را وارد کنید</mat-hint>
+                                <mat-error style="margin-bottom: 4px;"
+                                           *ngIf="addressForm.controls['phoneNumber'].hasError('required')">وارد کردن شماره تماس تحویل گیرنده الزامی است
+                                </mat-error>
+                                <mat-error style="margin-bottom: 4px;"
+                                           *ngIf="addressForm.controls['phoneNumber'].hasError('pattern')">شماره تماس نامعتبر است
+                                </mat-error>
                             </mat-input-container>
                         </div>
                     </div>
                 </mat-card-content>
             </mat-card>
-            <mat-card>
+            <mat-card style="margin-top: 5px">
                 <mat-card-title style="font-size: medium; font-weight: bold">آدرس</mat-card-title>
                 <mat-card-content>
                     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column">
