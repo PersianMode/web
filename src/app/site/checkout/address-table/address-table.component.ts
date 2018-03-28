@@ -1,7 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../../shared/services/window.service';
 import {HttpService} from '../../../shared/services/http.service';
-import {priceFormatter} from '../../../shared/lib/priceFormatter';
+// import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
+import {MatDialog} from '@angular/material';
 
 
 @Component({
@@ -51,7 +52,7 @@ export class AddressTableComponent implements OnInit {
   curWidth: number;
   private addr: null;
 
-  constructor(@Inject(WINDOW) private window, private httpService: HttpService) {
+  constructor(@Inject(WINDOW) private window, private httpService: HttpService, private dialog: MatDialog) {
     this.curWidth = this.window.innerWidth;
     this.curHeight = this.window.innerHeight;
   }
@@ -70,24 +71,39 @@ export class AddressTableComponent implements OnInit {
       else if (res.addresses.length === 1)
         this.selectedAddress = 0;
       this.addresses = res.addresses;
-      console.log(res);
     }, err => {
       console.error(err);
     });
 
   }
 
-  makePersianPrice(a: string) {
-    console.log(a);
-    return console.log(priceFormatter(a));
-
+  makePersianNumber(a: string) {
+    if (isNaN((+a)))
+      return a;
+    return (+a).toLocaleString('fa', {useGrouping: false});
   }
 
   ngOnInit() {
     this.getAddresses();
   }
 
-  makeNewAddress() {
-    console.log('making new address');
+
+  editAddress(id) {
+    const tempAddressId = (id || id === 0) ? id : null;
+    const tempAddress = (id || id === 0) ? this.addresses[id] : null;
+    const partEdit = !!(id || id === 0);
+    const fullEdit = (!(id || id === 0));
+    console.log(tempAddress);
+    console.log(fullEdit);
+    console.log(partEdit);
+    // const rmDialog = this.dialog.open(UpsertAddressComponent, {
+    //   width: '600px',
+    //   data: {
+    //     addressId: tempAddressId,
+    //     partEdit: partEdit,
+    //     fullEdit: fullEdit,
+    //     dialog_address: tempAddress,
+    //   }
+    // });
   }
 }

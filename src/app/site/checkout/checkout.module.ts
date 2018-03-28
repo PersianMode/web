@@ -3,7 +3,12 @@ import {CommonModule} from '@angular/common';
 import {AddressTableComponent} from './address-table/address-table.component';
 import {CheckoutPageComponent} from './checkout-page/checkout-page.component';
 import {CheckoutRouting} from './checkout.routing';
-import {MatCardModule, MatCheckboxModule, MatDialogModule, MatInputModule, MatTabsModule } from '@angular/material';
+import {
+  MatCardModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule,
+} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatTableModule} from '@angular/material/table';
@@ -13,15 +18,13 @@ import {MatTableModule} from '@angular/material/table';
     CommonModule,
     CheckoutRouting,
     FlexLayoutModule,
-    MatCheckboxModule,
     MatInputModule,
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
     MatTableModule,
-    MatTabsModule,
-    MatTabsModule,
     MatCardModule,
+    MatIconModule,
   ],
   declarations: [
     CheckoutPageComponent,

@@ -2,3 +2,36 @@
   border: 0.5px solid #555;
   margin: 0 0;
 }
+tr {
+  border-top: 1px solid #ccc;
+}
+tr:first-child{
+  border-top: 1px solid black;
+  margin-top: 5%;
+}
+table {
+  border-collapse: collapse;
+  border :0;
+  width: 100%;
+  font-family: iranyekan, sans-serif;
+}
+
+tbody {
+  border: 0;
+}
+td {
+  padding :10px;
+}
+th {
+  text-align: justify;
+  padding-bottom: 10px;
+}
+.new-Address{
+  margin-right: 5%;
+  margin-top:30px;
+  color: #00a4e4;
+}
+
+mat-card{
+  font-family: iranyekan, sans-serif;
+}

@@ -2,30 +2,34 @@
 <div *ngIf="addresses.length!=0">
   <div *ngIf="curWidth>960" style="margin-right:10%;margin-left:10%" class="rs-table field">
     <mat-card>
-      <table class="field table" style="margin-right:10px; margin-left: 10px; padding: 5px;">
+      <table class="field table">
         <thead>
-        <td style="width: 5%"><b>ردیف</b></td>
-        <td style="min-width: 40%"><b>آدرس</b></td>
-        <td style=" width: 30%"><b>مشخصات تحویل گیرنده</b></td>
-        <td style=" width: 5%">آدرس انتخابی</td>
+        <th style="width: 5%"><b>ردیف</b></th>
+        <th style="min-width: 40%"><b>آدرس</b></th>
+        <th style=" width: 30%"><b>مشخصات تحویل گیرنده</b></th>
+        <th style=" width: 5%"></th>
+        <th style=" width: 5%"></th>
         </thead>
-        <tbody style="border: 0.5px solid #555;">
-        <tr *ngFor="let address of addresses; let i = index" style="margin-top: 5%">
-          <td style="padding-bottom: 10px"> {{i}}</td>
-          <td style="padding-bottom: 10px">
+        <tbody>
+        <tr *ngFor="let address of addresses; let i = index">
+          <td> {{i}}</td>
+          <td>
             استان {{address.province}} شهر {{address.city}}
             <br>
-            {{address.district}} {{address.street}} پلاک {{address.no}} واحد
-            {{address.unit}}
+            {{address.district}} {{address.street}} پلاک {{makePersianNumber(address.no)}} واحد
+            {{makePersianNumber(address.unit)}}
           </td>
-          <td style="padding-bottom: 10px">
+          <td>
             نام تحویل گیرنده : <b>{{address.recipient_name}}</b>
             <br>
-            کدملی تحویل گیرنده : <b>{{address.recipient_national_id}}</b>
+            کدملی تحویل گیرنده : <b>{{makePersianNumber(address.recipient_national_id)}}</b>
             <br>
-            شماره تلفن تحویل گیرنده : <b>{{address.recipient_mobile_no}}</b>
+            شماره تلفن تحویل گیرنده : <b>{{makePersianNumber(address.recipient_mobile_no)}}</b>
           </td>
-          <td style="padding-bottom: 10px">
+          <td>
+            <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
+          </td>
+          <td>
             <input type="checkbox" [checked]="selectedAddress==i" (click)="setAddress(i)">
           </td>
         </tr>
@@ -40,17 +44,17 @@
           <!--<div>-->
           <!--<span> ردیف : </span><span>{{i}}</span>-->
           <!--</div>-->
-          <div>
+          <div style="margin: 5%;">
             <span> آدرس : </span>
-            <span>استان {{address.country}} شهر {{address.city}} {{address.street}} پلاک {{address.no}} واحد {{address.unit}}</span>
+            <span>استان {{address.province}} شهر{{address.city}} {{address.district}} {{address.street}} پلاک {{makePersianNumber(address.no)}} واحد {{ makePersianNumber(address.unit)}}</span>
           </div>
           <div>
         <span>
-          نام تحویل گیرنده : <b>{{address.takerName}}</b>
+          نام تحویل گیرنده : <b>{{address.recipient_name}}</b>
           <br>
-          کدملی تحویل گیرنده : <b>{{address.socialNumber}}</b>
+          کدملی تحویل گیرنده : <b>{{makePersianNumber( address.recipient_national_id)}}</b>
           <br>
-          شماره تلفن تحویل گیرنده : <b>{{address.phoneNumber}}</b>
+          شماره تلفن تحویل گیرنده : <b>{{makePersianNumber(address.recipient_mobile_no)}}</b>
         </span>
           </div>
           <div>
@@ -60,8 +64,10 @@
           <br>
         </mat-card-content>
       </mat-card>
+      <br>
     </div>
-    <hr class="hr-style">
   </div>
 </div>
-<div (click)="makeNewAddress()" style="margin-right: 5%; margin-top:30px; color: #00a4e4;"> افزودن آدرس جدید</div>
+<div>
+  <button style="margin-right: 10px;" (click)="editAddress()">افزودن آدرس جدید</button>
+</div>
