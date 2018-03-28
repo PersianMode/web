@@ -19,6 +19,7 @@ import {RouterModule} from '@angular/router';
 import {UploaderComponent} from './components/uploader/uploader.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import { UpsertAddressComponent } from './components/upsert-address/upsert-address.component';
+import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,9 @@ import { UpsertAddressComponent } from './components/upsert-address/upsert-addre
     MatCheckboxModule,
     FileUploadModule,
     MatStepperModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
+    }),
   ],
   entryComponents: [RemovingConfirmComponent, UpsertAddressComponent],
   exports: [SuggestionComponent,

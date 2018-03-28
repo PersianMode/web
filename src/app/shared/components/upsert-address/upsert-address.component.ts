@@ -9,6 +9,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class UpsertAddressComponent implements OnInit {
   dialogTitle;
+  buttonTitle;
   addressData: object = {};
   addressForm: FormGroup;
   cityArray = [];
@@ -21,7 +22,7 @@ export class UpsertAddressComponent implements OnInit {
     {
       'value': 'Qom',
       'name': 'قم',
-      'cityArray': ['پردیسان', 'شکوهیه']
+      'cityArray': ['پردیسان', 'مهدیه']
     }
   ]
 
@@ -31,19 +32,9 @@ export class UpsertAddressComponent implements OnInit {
 
   ngOnInit() {
     this.dialogTitle = this.data.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
+    this.buttonTitle = this.data.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
     this.addressData = this.data.dialog_address;
     this.initForm();
-  }
-
-  closeDialog() {
-    this.dialogRef.close();
-  }
-
-  submitAddress() {
-  }
-
-  setNewOstan(newOstan) {
-    this.cityArray = this.ostanArray.find(el => el.value === newOstan).cityArray;
   }
 
   initForm() {
@@ -59,6 +50,33 @@ export class UpsertAddressComponent implements OnInit {
       address: [null, [
         Validators.maxLength(500),
       ]],
+      latitude: [35.696491],
+      longitude: [51.379926],
     });
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  submitAddress() {
+  }
+
+  setNewOstan(newOstan) {
+    this.cityArray = this.ostanArray.find(el => el.value === newOstan).cityArray;
+  }
+
+  getLatitude() {
+    return this.addressForm.controls['latitude'].value;
+  }
+
+  getLongitude() {
+    return this.addressForm.controls['longitude'].value;
+  }
+  setMarker(data) {
+    this.addressForm.controls['latitude'].setValue(data.coords.lat);
+    this.addressForm.controls['longitude'].setValue(data.coords.lng);
+  }
+  addAddress() {
   }
 }

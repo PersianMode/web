@@ -351,6 +351,11 @@ input, button {
   text-align: left;
 }
 
+.ev-loc{
+  height: 250px;
+}
+
+
 .mat-drawer {
   position: fixed !important;
 }
