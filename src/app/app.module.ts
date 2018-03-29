@@ -18,6 +18,7 @@ import {ProductService} from './shared/services/product.service';
 import {ResponsiveService} from './shared/services/responsive.service';
 import {CartService} from './shared/services/cart.service';
 import {DictionaryService} from './shared/services/dictionary.service';
+import {CheckoutService} from './shared/services/checkout.service';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import {DictionaryService} from './shared/services/dictionary.service';
     ResponsiveService,
     CartService,
     DictionaryService,
+    CheckoutService,
   ],
   bootstrap: [AppComponent]
 })
