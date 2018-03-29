@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { AddressTableComponent } from './address-table/address-table.component';
 import { CheckoutPageComponent } from './checkout-page/checkout-page.component';
 import {CheckoutRouting} from './checkout.routing';
-import {MatCheckboxModule, MatDialogModule, MatInputModule} from '@angular/material';
+import {MatCheckboxModule, MatDialogModule, MatInputModule, MatRadioModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import { PaymentTypeComponent } from './payment-type/payment-type.component';
+import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.component';
 
 @NgModule({
   imports: [
@@ -17,10 +19,13 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatRadioModule,
   ],
   declarations: [
     CheckoutPageComponent,
     AddressTableComponent,
+    PaymentTypeComponent,
+    CheckoutSummaryComponent,
   ]
 })
 export class CheckoutModule { }

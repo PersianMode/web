@@ -6,7 +6,7 @@
   src: url('assets/fonts/OneNikeGlyphs.woff');
 }
 
-body {
+body, label{
   margin: 0;
   padding: 0;
   font-family: iranyekan,sans-serif;
@@ -720,4 +720,20 @@ mat-panel-title {
 
 .mat-tooltip {
   font-family: iranyekan, Roboto, sans-serif !important;
+}
+
+.box-area {
+  border-color: #000;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: thin;
+  padding: 5px;
+}
+
+.mat-radio-label-content, .mat-radio-label {
+  width: 100% !important;
+}
+
+.mat-radio-label-content {
+  margin-right: 5px;
 }
