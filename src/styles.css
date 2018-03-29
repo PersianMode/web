@@ -351,6 +351,11 @@ input, button {
   text-align: left;
 }
 
+.ev-loc{
+  height: 250px;
+}
+
+
 .mat-drawer {
   position: fixed !important;
 }
@@ -406,6 +411,12 @@ input {
   vertical-align: middle;
 }
 
+
+.field-container{
+  width: 100%;
+  margin: 5px;
+}
+
 .btn-field {
   padding: 5px 0px 5px 5px;
   width: 100%;
@@ -450,6 +461,10 @@ dp-date-picker.dp-material .dp-picker-input {
 
 .dp-material {
   width: 100% !important;
+}
+
+.farsi{
+  direction:rtl;
 }
 
 .dp-picker-input {
@@ -720,4 +735,10 @@ mat-panel-title {
 
 .mat-tooltip {
   font-family: iranyekan, Roboto, sans-serif !important;
+}
+
+.mat-form-field-label {
+  font-family: iranyekan, sans-serif !important;
+  font-size: 75% !important;
+  line-height: 136% !important;
 }

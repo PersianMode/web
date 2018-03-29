@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
-import {isNumber} from 'util';
 
 @Component({
   selector: 'app-add-to-card-confirm',
@@ -24,9 +23,7 @@ export class AddToCardConfirmComponent implements OnInit {
     this.selectedSize = this.data.selectedSize;
     this.farsiPrice = priceFormatter(this.product.price);
   }
-
   closeDialog() {
     this.dialogRef.close();
   }
-
 }

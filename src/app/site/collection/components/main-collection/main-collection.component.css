@@ -14,7 +14,7 @@
   margin-bottom: 50px;
   margin-right: 299px;
   margin-top: 46px;
-  margin-top: 46px;
+  min-height: 482px;
 }
 .mobileGridwall {
   padding: 10px;
@@ -87,7 +87,6 @@
   display: inline-block;
   text-align: center;
   width: 100%;
-  min-height: 600px;
 }
 
 .gridwall-wrapper {
