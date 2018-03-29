@@ -9,6 +9,7 @@ import {CartService} from '../../../../shared/services/cart.service';
 import {MatDialog} from '@angular/material';
 import {AddToCardConfirmComponent} from '../add-to-card-confirm/add-to-card-confirm.component';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
+import {$} from 'protractor';
 
 @Component({
   selector: 'app-desktop-product',
@@ -59,11 +60,11 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
-
+    console.log(this.product);
   }
   saveToCart() {
     // check form size and id undefined
-    const instance = this.product.instances.find(el => el.product_color_id.equals(this.id) && el.size === this.size);
+    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor._id && el.size === this.size);
 
     if (instance) {
       const object = {
@@ -82,15 +83,13 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
           selectedSize: this.size,
         }
       });
-      rmDialog.afterClosed().subscribe(
-        (data) => {
-        },
-        (err) => {
-          console.error('Error in dialog: ', err);
-        }
-      );
+      setTimeout(function(){
+        rmDialog.close();
+      }, 3000);
     }
   }
+
+
 
   newSize($event) {
     this.size = $event;
