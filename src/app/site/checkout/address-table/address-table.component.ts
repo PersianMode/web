@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
 import {MatDialog} from '@angular/material';
 import {AuthService} from '../../../shared/services/auth.service';
+import {HttpService} from '../../../shared/services/http.service';
 
 @Component({
   selector: 'app-address-table',
@@ -10,9 +11,9 @@ import {AuthService} from '../../../shared/services/auth.service';
 })
 export class AddressTableComponent implements OnInit {
   address = {
-    province: 'Tehran',
-    city: 'Shemiran',
-    street: 'Darband',
+    ostan: 'البرز',
+    city: 'کرج',
+    street: 'دربند',
     no: 14,
     unit: 1,
     postal_code: 1044940912,
@@ -26,15 +27,14 @@ export class AddressTableComponent implements OnInit {
     recipient_title: 'm',
     district: 'خیابان سوم'
   };
-  constructor(private dialog: MatDialog, private authService: AuthService) { }
+  constructor(private dialog: MatDialog, private authService: AuthService, private httpService: HttpService) { }
 
   ngOnInit() {
   }
 
   openAddressDialog(id) {
-    console.log(id);
     const tempAddressId = id ? id : null;
-    const tempAddress = id ? this.address : null;
+    const tempAddress = id ? this.address : {};
     const partEdit = id ? true : false;
     const fullEdit = id ? false : true;
     const rmDialog = this.dialog.open(UpsertAddressComponent, {
@@ -46,5 +46,26 @@ export class AddressTableComponent implements OnInit {
         dialog_address: tempAddress,
       }
     });
+    rmDialog.afterClosed().subscribe(
+      (data) => {
+        if (data) {
+          console.log('*****', data);
+          this.httpService.post('user/address', {
+            username: this.authService.userDetails.username,
+            body: data,
+          }).subscribe(
+            (data) => {
+              console.log('sucsess');
+            },
+            (err) => {
+              console.error('Cannot set address');
+            }
+          );
+        }
+      },
+      (err) => {
+        console.error('Error in dialog: ', err);
+      }
+    );
   }
 }

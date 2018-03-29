@@ -45,7 +45,6 @@ export class CartItemsComponent implements OnInit {
       (data) => {
         if (data) {
           this.updateProduct.emit({type: 'update', value: data});
-
           this.displaySize = (data.newSize ? data.newSize : this.product.size).toLocaleString('fa');
           this.displayQuantity = (data.newQuantity ? data.newQuantity : this.product.quantity).toLocaleString('fa');
           this.displayPrice = priceFormatter(this.product.price);
