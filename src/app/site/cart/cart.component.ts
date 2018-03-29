@@ -3,6 +3,10 @@ import {WINDOW} from '../../shared/services/window.service';
 import {CartService} from '../../shared/services/cart.service';
 import {AuthService} from '../../shared/services/auth.service';
 import {priceFormatter} from '../../shared/lib/priceFormatter';
+import {GenDialogComponent} from '../../shared/components/gen-dialog/gen-dialog.component';
+import {Router} from '@angular/router';
+import {DialogEnum} from '../../shared/enum/dialog.components.enum';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-cart',
@@ -14,12 +18,12 @@ export class CartComponent implements OnInit, OnDestroy {
   numberOfProducts: any;
   totalPrice: any;
   discountValue: any;
-
+  dialogEnum = DialogEnum;
   subs: any;
   isLoggedIn = false;
 
   constructor(@Inject(WINDOW) private window, private cartService: CartService,
-              private authService: AuthService) {
+              private authService: AuthService, private router: Router, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -40,6 +44,19 @@ export class CartComponent implements OnInit, OnDestroy {
         this.discountValue = this.products.map(el => el.discount).reduce((a, b) => a + b);
       }
     });
+  }
+
+  goToRegister() {
+    if (this.window.innerWidth >= 960) {
+      this.dialog.open(GenDialogComponent, {
+        width: '500px',
+        data: {
+          componentName: this.dialogEnum.register,
+        }
+      });
+    } else {
+      this.router.navigate(['register']);
+    }
   }
 
   ngOnDestroy() {

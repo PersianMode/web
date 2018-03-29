@@ -27,7 +27,4 @@ export class HttpService {
   delete(url): Observable<any> {
     return this.http.delete(this.serverAddress + url, {observe: 'response'}).map(data => data.body);
   }
-
-
-
 }

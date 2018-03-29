@@ -4,27 +4,11 @@ import {HttpService} from './http.service';
 
 @Injectable()
 export class DictionaryService {
-  wordDictionary = {
-    CAPS: 'کلاه کپی',
-    'ACTION SPORTS': 'ورزش‌های پرتحرک',
-    UNISEX: 'تک‌جنسه',
-    HEADWEAR: 'سرپوش',
-    HOLI: 'کریسمس',
-    TRAINING: 'ترینینگ',
-    'DUFFEL BAGS': 'کوله خمره‌ای',
-    MENS: 'مردانه',
-    BAGS: 'کوله',
-  };
-  colorDictionary = {
-    'UNIVERSITY RED': 'darkred',
-    'ANTHRACITE': 'silver',
-    'BLACK-ANTHRACITE': '#999999',
-  };
+  wordDictionary: any = {};
+  colorDictionary: any = {};
 
   constructor(httpService: HttpService) {
-
     httpService.get('dictionary').subscribe((res: any) => {
-
       res.forEach(x => {
         if (x.type === 'tag') {
           this.wordDictionary[x.name] = x.value;
