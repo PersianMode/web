@@ -30,6 +30,14 @@ h1 {
   height: 39px;
 }
 
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #000 !important;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #000 !important;
+}
+
 .first-bar ul {
   background: transparent;
   padding: 0;
