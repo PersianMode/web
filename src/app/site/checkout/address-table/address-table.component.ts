@@ -1,12 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../../shared/services/window.service';
 import {HttpService} from '../../../shared/services/http.service';
-import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
 import {MatDialog} from '@angular/material';
 import {ResponsiveService} from '../../../shared/services/responsive.service';
 import {Router} from '@angular/router';
-import {GenDialogComponent} from "../../../shared/components/gen-dialog/gen-dialog.component";
-import {DialogEnum} from "../../../shared/enum/dialog.components.enum";
+import {GenDialogComponent} from '../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../shared/enum/dialog.components.enum';
+import {CheckoutService} from '../../../shared/services/checkout.service';
 
 
 @Component({
@@ -60,7 +60,8 @@ export class AddressTableComponent implements OnInit {
   curHeight: number;
   curWidth: number;
 
-  constructor(@Inject(WINDOW) private window, private httpService: HttpService, private dialog: MatDialog,
+  constructor(@Inject(WINDOW) private window, private httpService: HttpService,
+              private dialog: MatDialog, private checkoutService: CheckoutService,
               private responsiveService: ResponsiveService, private router: Router) {
     this.curWidth = this.window.innerWidth;
     this.curHeight = this.window.innerHeight;
@@ -72,8 +73,7 @@ export class AddressTableComponent implements OnInit {
         this.selectedCustomerAddresses = -1;
       else
         this.selectedCustomerAddresses = i;
-    }
-    else {
+    } else {
       if (i === this.selectedWareHouseAddresses)
         this.selectedWareHouseAddresses = -1;
       else
@@ -141,24 +141,24 @@ export class AddressTableComponent implements OnInit {
   editAddress(id) {
     // const tempAddressId = (id || id === 0) ? this.addresses[id].addressId : null;
     console.log('mobileness: ', this.responsiveService.isMobile);
-    const tempAddressId = (id || id === 0) ? id + 1 : null;
+    const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
     const fullEdit = (!(id || id === 0));
 
+    this.checkoutService.addressData = {
+      addressId: tempAddressId,
+      partEdit: partEdit,
+      fullEdit: fullEdit,
+      dialog_address: tempAddress
+    };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
     } else {
       const rmDialog = this.dialog.open(GenDialogComponent, {
         width: '600px',
         data: {
-          componentName: DialogEnum.upsertAddress,
-          extraData: {
-            addressId: tempAddressId,
-            partEdit: partEdit,
-            fullEdit: fullEdit,
-            dialog_address: tempAddress,
-          }
+          componentName: DialogEnum.upsertAddress
         },
       });
       rmDialog.afterClosed().subscribe(result => {

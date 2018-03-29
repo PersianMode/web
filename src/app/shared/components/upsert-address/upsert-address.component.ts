@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-// import {ResponsiveService} from "../../services/responsive.service";
 import {Router} from '@angular/router';
-import {ResponsiveService} from "../../services/responsive.service";
+import {CheckoutService} from '../../services/checkout.service';
+import {IaddressInfo} from '../../interfaces/iaddressInfo.interface';
 
 @Component({
   selector: 'app-upsert-address',
@@ -31,37 +31,20 @@ export class UpsertAddressComponent implements OnInit {
   ];
   _addressId;
 
-  @Input()
-  set addressId(_addressId) {
-    this._addressId = _addressId;
-    this.dialogTitle = _addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
-    this.buttonTitle = _addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
-  }
-
-  @Input()
-  set partEdit(_pe) {
-  }
-
-  @Input()
-  set fullEdit(_fe) {
-  }
-
-  @Input()
-  set dialog_address(_da) {
-    this.addressData = _da;
-  }
-
   @Input() isNotMobile;
 
-  constructor(private router: Router, private responsiveService: ResponsiveService) {
+  addressInfo: IaddressInfo;
+
+  constructor(private router: Router, private checkoutService: CheckoutService) {
   }
 
   ngOnInit() {
-    if (this.isNotMobile) {
+    if (!this.isNotMobile) {
       // TODO: should scroll up the first time it entered this page
-    } else {
-      // TODO: should read "@Input data"s from checkoutService, which is yet to be created
     }
+
+    this.addressInfo = this.checkoutService.addressData;
+    this.initializeData();
     this.initForm();
   }
 
@@ -71,6 +54,14 @@ export class UpsertAddressComponent implements OnInit {
     } else {
       this.router.navigate(['/checkout']);
     }
+  }
+
+  initializeData() {
+    this._addressId = this.addressInfo.addressId;
+    this.dialogTitle = this.addressInfo.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
+    this.buttonTitle = this.addressInfo.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
+    // this.addressInfo.partEdit && this.addressInfo.fullEdit are also given
+    this.addressData = this.addressInfo.dialog_address;
   }
 
   initForm() {
