@@ -8,14 +8,12 @@ import {Router} from '@angular/router';
 import {GenDialogComponent} from "../../../shared/components/gen-dialog/gen-dialog.component";
 import {DialogEnum} from "../../../shared/enum/dialog.components.enum";
 
-
 @Component({
   selector: 'app-address-table',
   templateUrl: './address-table.component.html',
   styleUrls: ['./address-table.component.css']
 })
 export class AddressTableComponent implements OnInit {
-
   withDelivery = true;
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
@@ -89,12 +87,12 @@ export class AddressTableComponent implements OnInit {
         else if (res.addresses.length === 1)
           this.selectedCustomerAddresses = 0;
         this.addresses = res.addresses;
+
       }
       this.customerAddresses = res.addresses;
     }, err => {
       console.error(err);
     });
-
   }
 
   getWareHouseAddresses() {
