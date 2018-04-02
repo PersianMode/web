@@ -1,12 +1,16 @@
 <div fxLayout="row" style="direction: ltr">
-  <div fxFlex="70" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset="15" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
-    <div fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" fxLayoutAlign="start start" style="direction: rtl">
+  <div fxFlex="80" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset="15" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
+    <div fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" fxLayoutAlign="start center" style="direction: rtl">
       <div fxFlex="30" class="checkout-box" style="margin: 10px">
         <app-checkout-summary [total]="total" [discount]="discount" [usedBalance]="usedBalance"
                               [usedLoyaltyPoint]="usedLoyaltyPoint"></app-checkout-summary>
       </div>
       <div fxFlex="70" class="checkout-box" style="margin: 10px">
         <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint" (selectedType)="changePaymentType($event)"></app-payment-type>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" fxLayoutAlign="start center" style="direction: rtl">
+      <div fxFlex="100">
         <app-address-table></app-address-table>
       </div>
     </div>

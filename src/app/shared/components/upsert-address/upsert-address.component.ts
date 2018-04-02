@@ -128,9 +128,13 @@ export class UpsertAddressComponent implements OnInit {
       });
     }
     // console.log("final address data are : ", this.addressData);
-    // TODO: change checkoutService instead of this
-    this.checkoutService.submitAddresses(this.addressData);
-    // this.dialogRef.close(this.addressData);
+    this.checkoutService.submitAddresses(this.addressData)
+      .then(res => {
+        this.onClose();
+      })
+      .catch(err => {
+        console.error('error occured in submitting address', err);
+      });
   }
 
   setNewProvince(newProvince) {

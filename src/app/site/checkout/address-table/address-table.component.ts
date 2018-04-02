@@ -133,6 +133,7 @@ export class AddressTableComponent implements OnInit {
       partEdit: partEdit,
       dialog_address: tempAddress
     };
+
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
     } else {
@@ -142,25 +143,6 @@ export class AddressTableComponent implements OnInit {
           componentName: DialogEnum.upsertAddress
         },
       });
-      // TODO: move this to checkoutService
-      // rmDialog.afterClosed().subscribe(
-      //   (data) => {
-      //     if (data) {
-      //       console.log('*****', data);
-      //       this.httpService.post('user/address', {
-      //         username: this.authService.userDetails.username,
-      //         body: data,
-      //       }).subscribe(
-      //         (res) => {
-      //           console.log('success');
-      //         },
-      //         (err) => {
-      //           console.error('cannot set address');
-      //         }
-      //       );
-      //       this.getCustomerAddresses();
-      //     }
-      //   });
     }
   }
 

@@ -58,19 +58,21 @@ export class CheckoutService {
   }
 
   submitAddresses(data) {
-    if (data) {
-      console.log('****', data);
+    return new Promise((resolve, reject) => {
+      if (!data)
+        return Promise.reject(false);
+
+      console.log('***', data);
       this.httpService.post('user/address', {
         username: this.authService.userDetails.username,
         body: data,
       }).subscribe(
-        (res) => {
-          console.log('success');
-        },
-        (err) => {
-          console.log('couldn\'t set address');
+        res => {
+          resolve();
+        }, err => {
+          reject(err);
         }
       );
-    }
+    });
   }
 }
