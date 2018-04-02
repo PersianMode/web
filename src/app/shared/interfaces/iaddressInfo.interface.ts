@@ -1,7 +1,6 @@
 
-export interface IaddressInfo {
+export interface IAddressInfo {
   addressId: string;
   partEdit: boolean;
-  fullEdit: boolean;
   dialog_address: any;
 };

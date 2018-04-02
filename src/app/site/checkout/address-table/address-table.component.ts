@@ -3,7 +3,6 @@ import {WINDOW} from '../../../shared/services/window.service';
 import {HttpService} from '../../../shared/services/http.service';
 import {MatDialog} from '@angular/material';
 import {AuthService} from '../../../shared/services/auth.service';
-import {HttpService} from '../../../shared/services/http.service';
 import {ResponsiveService} from '../../../shared/services/responsive.service';
 import {Router} from '@angular/router';
 import {GenDialogComponent} from '../../../shared/components/gen-dialog/gen-dialog.component';
@@ -22,7 +21,7 @@ export class AddressTableComponent implements OnInit {
   selectedWareHouseAddresses = -1;
 
   address = {
-    ostan: 'البرز',
+    province: 'البرز',
     city: 'کرج',
     street: 'دربند',
     no: 14,
@@ -85,7 +84,7 @@ export class AddressTableComponent implements OnInit {
   }
 
   getWareHouseAddresses() {
-    // make request
+    // TODO: this should be changed from hard-coded to a request from server
     this.wareHouseAddresses = [
       {
         'province': 'تهران',
@@ -128,12 +127,10 @@ export class AddressTableComponent implements OnInit {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
-    const fullEdit = (!(id || id === 0));
 
     this.checkoutService.addressData = {
       addressId: tempAddressId,
       partEdit: partEdit,
-      fullEdit: fullEdit,
       dialog_address: tempAddress
     };
     if (this.responsiveService.isMobile) {
@@ -145,24 +142,25 @@ export class AddressTableComponent implements OnInit {
           componentName: DialogEnum.upsertAddress
         },
       });
-      rmDialog.afterClosed().subscribe(
-        (data) => {
-          if (data) {
-            console.log('*****', data);
-            this.httpService.post('user/address', {
-              username: this.authService.userDetails.username,
-              body: data,
-            }).subscribe(
-              (res) => {
-                console.log('success');
-              },
-              (err) => {
-                console.error('cannot set address');
-              }
-            );
-            this.getCustomerAddresses();
-          }
-        });
+      // TODO: move this to checkoutService
+      // rmDialog.afterClosed().subscribe(
+      //   (data) => {
+      //     if (data) {
+      //       console.log('*****', data);
+      //       this.httpService.post('user/address', {
+      //         username: this.authService.userDetails.username,
+      //         body: data,
+      //       }).subscribe(
+      //         (res) => {
+      //           console.log('success');
+      //         },
+      //         (err) => {
+      //           console.error('cannot set address');
+      //         }
+      //       );
+      //       this.getCustomerAddresses();
+      //     }
+      //   });
     }
   }
 
