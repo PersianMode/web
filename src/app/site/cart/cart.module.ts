@@ -34,6 +34,7 @@ import { EditOrderComponent } from './components/edit-order/edit-order.component
     MatIconModule,
     MatDialogModule,
     MatSelectModule,
+    MatSnackBarModule,
   ],
   entryComponents: [EditOrderComponent],
 })

@@ -6,7 +6,7 @@
   src: url('assets/fonts/OneNikeGlyphs.woff');
 }
 
-body {
+body, label{
   margin: 0;
   padding: 0;
   font-family: iranyekan,sans-serif;
@@ -28,6 +28,14 @@ h1 {
   top: 0;
   z-index: 999;
   height: 39px;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #000 !important;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #000 !important;
 }
 
 .first-bar ul {
@@ -351,6 +359,11 @@ input, button {
   text-align: left;
 }
 
+.ev-loc{
+  height: 250px;
+}
+
+
 .mat-drawer {
   position: fixed !important;
 }
@@ -406,6 +419,12 @@ input {
   vertical-align: middle;
 }
 
+
+.field-container{
+  width: 100%;
+  margin: 5px;
+}
+
 .btn-field {
   padding: 5px 0px 5px 5px;
   width: 100%;
@@ -450,6 +469,10 @@ dp-date-picker.dp-material .dp-picker-input {
 
 .dp-material {
   width: 100% !important;
+}
+
+.farsi{
+  direction:rtl;
 }
 
 .dp-picker-input {
@@ -720,4 +743,26 @@ mat-panel-title {
 
 .mat-tooltip {
   font-family: iranyekan, Roboto, sans-serif !important;
+}
+
+.mat-form-field-label {
+  font-family: iranyekan, sans-serif !important;
+  font-size: 75% !important;
+  line-height: 136% !important;
+}
+
+.box-area {
+  border-color: #000;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: thin;
+  padding: 5px;
+}
+
+.mat-radio-label-content, .mat-radio-label {
+  width: 100% !important;
+}
+
+.mat-radio-label-content {
+  margin-right: 5px;
 }

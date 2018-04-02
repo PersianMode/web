@@ -14,12 +14,12 @@
   <div fxLayout="row" fxLayoutAlign="center center">
     <div fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" class="main">
       <div class="main-divs">
-        <app-summary [discount]="discountValue" [total]="totalPrice"></app-summary>
+        <app-summary [discount]="discountValue" [total]="totalPrice" (recalculateDiscount)="calculateDiscount($event)"></app-summary>
       </div>
       <div class="main-divs">
         <div class="signUp-div" *ngIf="!isLoggedIn">
           عضویت رایگان
-          <span style="padding-left : 10px"><a href="#" class="membership-style">عضو شوید</a></span>
+          <span style="padding-left : 10px"><a (click)="goToRegister()" class="membership-style">به ما بپیوندید</a></span>
         </div>
         <div class="basket-div">
           سبد خرید شما ({{numberOfProducts}})

@@ -17,7 +17,8 @@ const Site_ROUTES: Routes = [
     {path: 'cart', loadChildren: 'app/site/cart/cart.module#CartModule'},
     {path: 'product', loadChildren: 'app/site/product/product.module#ProductModule'},
     {path: 'login/oauth', component: OauthHandlerComponent},
-    {path: 'login/oauth/other/:status', component: OtherDetailsComponent}
+    {path: 'login/oauth/other/:status', component: OtherDetailsComponent},
+    {path: 'checkout', loadChildren: 'app/site/checkout/checkout.module#CheckoutModule'},
   ]
   }
 ];

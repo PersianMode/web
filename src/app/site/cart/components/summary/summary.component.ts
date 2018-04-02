@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {CartService} from '../../../../shared/services/cart.service';
 import {AuthService} from '../../../../shared/services/auth.service';
-import {isNullOrUndefined} from 'util';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -38,6 +38,7 @@ export class SummaryComponent implements OnInit {
     return this._discount;
   }
 
+  @Output() recalculateDiscount = new EventEmitter();
   private _total: any;
   private _discount: any = 0;
   discountValue: any = 0;
@@ -45,12 +46,22 @@ export class SummaryComponent implements OnInit {
   balanceValue: any = 0;
   loyaltyPoint: any = 0;
   finalTotal: any = 0;
-  coupon_code = null;
+  coupon_code = '';
+  show_coupon_area = false;
+  isLoggedIn = false;
 
-  constructor(private cartService: CartService) {
+  constructor(private cartService: CartService, private authService: AuthService,
+              private router: Router) {
   }
 
   ngOnInit() {
+    this.authService.isLoggedIn.subscribe(
+      (data) => this.isLoggedIn = data,
+      (err) => {
+        console.error('Cannot subscribe to isLoggedIn in authService: ', err);
+      }
+    );
+
     this.cartService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = priceFormatter(res.balance);
@@ -61,4 +72,27 @@ export class SummaryComponent implements OnInit {
       });
   }
 
+  changeCouponVisibility() {
+    this.show_coupon_area = !this.show_coupon_area;
+  }
+
+  applyCoupon() {
+    this.cartService.addCoupon(this.coupon_code)
+      .then(res => {
+        this.recalculateDiscount.emit(res);
+      })
+      .catch(err => {
+        console.error('Error when validating coupon code: ', err);
+      });
+  }
+
+  pay() {
+    this.cartService.applyCoupon(this.coupon_code)
+      .then(res => {
+        this.router.navigate(['checkout']);
+      })
+      .catch(err => {
+        console.error('Cannot apply coupon code: ', err);
+      });
+  }
 }
