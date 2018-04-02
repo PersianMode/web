@@ -86,6 +86,16 @@ export class SummaryComponent implements OnInit {
       });
   }
 
+  pay() {
+    this.cartService.applyCoupon(this.coupon_code)
+      .then(res => {
+        this.router.navigate(['/checkout']);
+      })
+      .catch(err => {
+        console.error('Cannot apply coupon code: ', err);
+      });
+  }
+
   goToCheckoutPage() {
     this.router.navigate(['/checkout']);
   }
