@@ -2,12 +2,13 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../../shared/services/window.service';
 import {HttpService} from '../../../shared/services/http.service';
 import {MatDialog} from '@angular/material';
+import {AuthService} from '../../../shared/services/auth.service';
+import {HttpService} from '../../../shared/services/http.service';
 import {ResponsiveService} from '../../../shared/services/responsive.service';
 import {Router} from '@angular/router';
 import {GenDialogComponent} from '../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../shared/enum/dialog.components.enum';
 import {CheckoutService} from '../../../shared/services/checkout.service';
-
 
 @Component({
   selector: 'app-address-table',
@@ -20,41 +21,25 @@ export class AddressTableComponent implements OnInit {
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
 
-  addresses = [
-    {
-      'province': 'تهران',
-      'city': 'تهران',
-      'street': ' کوچه شهریور ',
-      'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-      'no': '۵',
-      'unit': '۱',
-      'recipient_national_id': '0021625018',
-      'recipient_name': 'علی میرجهانی',
-      'recipient_mobile_no': '09391022382'
+  address = {
+    ostan: 'البرز',
+    city: 'کرج',
+    street: 'دربند',
+    no: 14,
+    unit: 1,
+    postal_code: 1044940912,
+    loc: {
+      long: 50.817191,
+      lat: 51.427251,
     },
-    {
-      'province': 'تهران',
-      'city': 'تهران',
-      'street': ' کوچه شهریور ',
-      'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-      'no': '۵',
-      'unit': '۱',
-      'recipient_national_id': '0021625018',
-      'recipient_name': 'علی میرجهانی',
-      'recipient_mobile_no': '09391022382'
-    },
-    {
-      'province': 'تهران',
-      'city': 'تهران',
-      'street': ' کوچه شهریور ',
-      'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-      'no': '۵',
-      'unit': '۱',
-      'recipient_national_id': '0021625018',
-      'recipient_name': 'علی میرجهانی',
-      'recipient_mobile_no': '09391022382'
-    }];
-  // addresses = [];
+    recipient_name: 'علی علوی',
+    recipient_mobile_no: '09121212121',
+    recipient_national_id: '06423442',
+    recipient_title: 'm',
+    district: 'خیابان سوم'
+  };
+
+  addresses = [];
   customerAddresses = [];
   wareHouseAddresses = [];
   curHeight: number;
@@ -62,9 +47,11 @@ export class AddressTableComponent implements OnInit {
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
               private dialog: MatDialog, private checkoutService: CheckoutService,
-              private responsiveService: ResponsiveService, private router: Router) {
+              private responsiveService: ResponsiveService, private router: Router,
+              private authService: AuthService) {
     this.curWidth = this.window.innerWidth;
     this.curHeight = this.window.innerHeight;
+    this.addresses.push(this.address);
   }
 
   setAddress(i: number) {
@@ -137,10 +124,7 @@ export class AddressTableComponent implements OnInit {
     this.getWareHouseAddresses();
   }
 
-
   editAddress(id) {
-    // const tempAddressId = (id || id === 0) ? this.addresses[id].addressId : null;
-    console.log('mobileness: ', this.responsiveService.isMobile);
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
@@ -161,9 +145,24 @@ export class AddressTableComponent implements OnInit {
           componentName: DialogEnum.upsertAddress
         },
       });
-      rmDialog.afterClosed().subscribe(result => {
-        this.getCustomerAddresses();
-      });
+      rmDialog.afterClosed().subscribe(
+        (data) => {
+          if (data) {
+            console.log('*****', data);
+            this.httpService.post('user/address', {
+              username: this.authService.userDetails.username,
+              body: data,
+            }).subscribe(
+              (res) => {
+                console.log('success');
+              },
+              (err) => {
+                console.error('cannot set address');
+              }
+            );
+            this.getCustomerAddresses();
+          }
+        });
     }
   }
 

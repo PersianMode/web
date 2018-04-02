@@ -7,13 +7,8 @@ export class DictionaryService {
   wordDictionary = {};
   colorDictionary = {};
 
-  // wordDictionary: any = {};
-  // colorDictionary: any = {};
-
   constructor(httpService: HttpService) {
-
     httpService.get('dictionary').subscribe((res: any) => {
-
       res.forEach(x => {
         if (x.type === 'tag') {
           this.wordDictionary[x.name] = x.value;

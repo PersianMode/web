@@ -18,6 +18,9 @@ export class AuthService {
     userId: null,
     displayName: this.defaultDisplayName,
     username: null,
+    name: null,
+    surname: null,
+    mobile_no: null,
   };
 
   constructor(private httpService: HttpService, private router: Router) {
@@ -33,6 +36,9 @@ export class AuthService {
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
             username: data.username,
+            name: data.name,
+            surname: data.surname,
+            mobile_no: data.mobile_no,
           };
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
@@ -45,6 +51,9 @@ export class AuthService {
             userId: null,
             displayName: this.defaultDisplayName,
             username: null,
+            name: null,
+            surname: null,
+            mobile_no: null,
           };
           this.isLoggedIn.next(false);
           reject();
@@ -69,6 +78,9 @@ export class AuthService {
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
             username: data.username,
+            name: data.name,
+            surname: data.surname,
+            mobile_no: data.mobile_no,
           };
 
           resolve();
@@ -83,6 +95,9 @@ export class AuthService {
             userId: null,
             displayName: this.defaultDisplayName,
             username: null,
+            name: null,
+            surname: null,
+            mobile_no: null,
           };
 
           reject();
@@ -104,7 +119,10 @@ export class AuthService {
             userId: null,
             displayName: this.defaultDisplayName,
             accessLevel: null,
-            username: null
+            username: null,
+            name: null,
+            surname: null,
+            mobile_no: null,
           };
           // this.router.navigate([rt]);
 
