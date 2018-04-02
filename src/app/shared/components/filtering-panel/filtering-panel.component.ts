@@ -100,7 +100,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       if (!Object.keys(this.isChecked[k]).map(r => this.isChecked[k][r]).reduce((x, y) => x || y, false)) {
         this.expanded[k] = false;
       }
-    })
+    });
 
     this.current_filter_state.forEach(el => {
       if (el.name === name) {
