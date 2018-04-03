@@ -4,7 +4,7 @@ import {
   MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatIconModule,
   MatInputModule,
   MatMenuModule,
-  MatOptionModule, MatStepperModule,
+  MatOptionModule, MatSelectModule, MatStepperModule,
   MatToolbarModule
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
@@ -50,6 +50,7 @@ import {AgmCoreModule} from '@agm/core';
     MatButtonModule,
     BidiModule,
     MatIconModule,
+    MatSelectModule,
     MatCheckboxModule,
     FileUploadModule,
     MatStepperModule,

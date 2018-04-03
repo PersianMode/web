@@ -75,9 +75,9 @@
                     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column">
                         <div fxFlex="50">
                             <div class="style-select-wrapper">
-                                <select class="select-style" formControlName="selectOstan"
-                                        (change)="setNewOstan($event.target.value)">
-                                    <option *ngFor="let o of ostanArray" [value]="o.name">
+                                <select class="select-style" formControlName="selectProvince"
+                                        (change)="setNewProvince($event.target.value)">
+                                    <option *ngFor="let o of provinceArray" [value]="o.name" [disabled]="partEdit">
                                         {{o.name}}
                                     </option>
                                 </select>
@@ -86,7 +86,7 @@
                         <div fxFlex="50">
                             <div class="style-select-wrapper">
                                 <select class="select-style" formControlName="selectCity" (change)="setNewCity($event.target.value)">
-                                    <option *ngFor="let c of cityArray" [value]="c">
+                                    <option *ngFor="let c of cityArray" [value]="c" [disabled]="partEdit">
                                         {{c}}
                                     </option>
                                 </select>

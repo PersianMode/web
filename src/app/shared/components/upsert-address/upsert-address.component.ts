@@ -18,9 +18,8 @@ export class UpsertAddressComponent implements OnInit {
   addressData: any;
   addressForm: FormGroup;
   cityArray = [];
-  ostanArray: any;
+  provinceArray: any;
   anyChanges = false;
-  addressId;
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<UpsertAddressComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
@@ -30,10 +29,10 @@ export class UpsertAddressComponent implements OnInit {
   ngOnInit() {
     this.http.get('assets/province.json').subscribe(
       (info: any) => {
-        this.ostanArray = info;
+        this.provinceArray = info;
         if (!this.data.addressId)
-          this.cityArray = this.ostanArray.find(el => el.name === 'آذربایجان شرقی').cities;
-        else this.cityArray = this.ostanArray.find(el => el.name === this.addressData.ostan).cities;
+          this.cityArray = this.provinceArray.find(el => el.name === 'آذربایجان شرقی').cities;
+        else this.cityArray = this.provinceArray.find(el => el.name === this.addressData.province).cities;
       }, err => {
         console.log('err: ', err);
       }
@@ -58,7 +57,7 @@ export class UpsertAddressComponent implements OnInit {
         Validators.maxLength(10),
         Validators.pattern(/^\d+$/)
       ]],
-      selectOstan: [this.data.addressId ? this.addressData.ostan : 'آذربایجان شرقی'],
+      selectProvince: [this.data.addressId ? this.addressData.province : 'آذربایجان شرقی'],
       selectCity: [this.data.addressId ? this.addressData.city : 'آبش احمد'],
       pelak: [this.data.addressId ? this.addressData.no : null, [
         Validators.required,
@@ -101,7 +100,7 @@ export class UpsertAddressComponent implements OnInit {
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
-      this.addressData.ostan = this.addressForm.controls['selectOstan'].value;
+      this.addressData.province = this.addressForm.controls['selectProvince'].value;
       this.addressData.city = this.addressForm.controls['selectCity'].value;
       this.addressData.street = this.addressForm.controls['street'].value;
       this.addressData.no = this.addressForm.controls['pelak'].value;
@@ -113,15 +112,13 @@ export class UpsertAddressComponent implements OnInit {
         lat: this.addressForm.controls['latitude'].value,
       };
     }
-    console.log(!this.addressForm.valid);
-    console.log(this.data.addressId && !this.anyChanges);
     this.dialogRef.close(this.addressData);
 
   }
 
-  setNewOstan(newOstan) {
-    this.cityArray = this.ostanArray.find(el => el.name === newOstan).cities;
-    this.addressData.ostan = newOstan;
+  setNewProvince(newProvince) {
+    this.cityArray = this.provinceArray.find(el => el.name === newProvince).cities;
+    this.addressData.province = newProvince;
   }
 
   setNewCity(newCity) {

@@ -10,51 +10,48 @@ import {HttpService} from '../../../shared/services/http.service';
   styleUrls: ['./address-table.component.css']
 })
 export class AddressTableComponent implements OnInit {
-  address = {
-    ostan: 'البرز',
-    city: 'کرج',
-    street: 'دربند',
-    no: 14,
-    unit: 1,
-    postal_code: 1044940912,
-    loc: {
-      long: 50.817191,
-      lat: 51.427251,
-    },
-    recipient_name: 'علی',
-    recipient_surname: 'علوی'
-    recipient_mobile_no: '09121212121',
-    recipient_national_id: '06423442',
-    recipient_title: 'm',
-    district: 'خیابان سوم'
-  };
+  // address = {
+  //   province: 'البرز',
+  //   city: 'کرج',
+  //   street: 'دربند',
+  //   no: 14,
+  //   unit: 1,
+  //   postal_code: 1044940912,
+  //   loc: {
+  //     long: 50.817191,
+  //     lat: 51.427251,
+  //   },
+  //   recipient_name: 'علی',
+  //   recipient_surname: 'علوی',
+  //   recipient_mobile_no: '09121212121',
+  //   recipient_national_id: '06423442',
+  //   recipient_title: 'm',
+  //   district: 'خیابان سوم'
+  // };
+  addresses = [];
+  tempAddressId;
   constructor(private dialog: MatDialog, private authService: AuthService, private httpService: HttpService) { }
 
   ngOnInit() {
+    this.getCustomerAddresses();
   }
 
-  openAddressDialog(id) {
-    const tempAddressId = id ? id : null;
-    const tempAddress = id ? this.address : {};
+  openAddressDialog(id?) {
+    const tempAddress = id ? this.addresses.find(el => el._id === id) : {};
+    console.log(tempAddress);
     const partEdit = id ? true : false;
-    const fullEdit = id ? false : true;
     const rmDialog = this.dialog.open(UpsertAddressComponent, {
       width: '600px',
       data: {
-        addressId: tempAddressId,
+        addressId: this.tempAddressId,
         partEdit: partEdit,
-        fullEdit: fullEdit,
         dialog_address: tempAddress,
       }
     });
     rmDialog.afterClosed().subscribe(
       (data) => {
         if (data) {
-          console.log('*****', data);
-          this.httpService.post('user/address', {
-            username: this.authService.userDetails.username,
-            body: data,
-          }).subscribe(
+          this.httpService.post('user/address', data).subscribe(
             (data) => {
               console.log('sucsess');
             },
@@ -68,5 +65,14 @@ export class AddressTableComponent implements OnInit {
         console.error('Error in dialog: ', err);
       }
     );
+  }
+
+  getCustomerAddresses() {
+    this.httpService.get('customer/address').subscribe(res => {
+      this.addresses = res.addresses;
+      this.tempAddressId = res.addresses.length ? this.addresses[1]._id : null;
+    }, err => {
+      console.error(err);
+    });
   }
 }
