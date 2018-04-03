@@ -1,8 +1,5 @@
 <div class="box-area">
   <div>
-    <label>نوع پرداخت</label>
-  </div>
-  <div>
     <mat-radio-group [(ngModel)]="selectedPaymentType" (change)="paymentTypeChanged()">
       <mat-radio-button *ngFor="let type of paymentTypes" [value]="type.value" class="payment-type"
                         [disabled]="type.disabled" [color]="danger">

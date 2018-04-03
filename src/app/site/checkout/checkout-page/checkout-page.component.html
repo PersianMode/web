@@ -9,9 +9,21 @@
                               [usedLoyaltyPoint]="usedLoyaltyPoint"></app-checkout-summary>
       </div>
       <div fxFlex="70" class="checkout-box" style="margin: 10px; width: 80%">
-        <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
-                          (selectedType)="changePaymentType($event)"></app-payment-type>
-        <app-address-table></app-address-table>
+        <mat-accordion multi>
+          <mat-expansion-panel expanded hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>نوع پرداخت</mat-panel-title>
+            </mat-expansion-panel-header>
+            <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
+                              (selectedType)="changePaymentType($event)"></app-payment-type>
+          </mat-expansion-panel>
+          <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>آدرس</mat-panel-title>
+            </mat-expansion-panel-header>
+            <app-address-table></app-address-table>
+          </mat-expansion-panel>
+        </mat-accordion>
       </div>
     </div>
   </div>

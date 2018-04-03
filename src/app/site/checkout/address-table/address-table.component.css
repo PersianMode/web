@@ -44,7 +44,6 @@ mat-card {
 }
 
 .check-box-div {
-  margin-right: 5%;
   margin-bottom: 50px;
   padding: 20px;
   width: 100%;
@@ -54,9 +53,10 @@ mat-card {
 .check-box {
   width: 20px;
   height: 20px;
-  margin-top: 10px;
+  margin: 5px;
 }
 
+
 .newAddressButton {
-  margin: 10px 10% 10px 0;
+  margin: 20px 10% 10px 0;
 }

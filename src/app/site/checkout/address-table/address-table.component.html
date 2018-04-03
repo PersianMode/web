@@ -1,10 +1,8 @@
-<h2 style="margin-right: 5%">آدرس</h2>
 <span class="check-box-div">
-  <input type="checkbox" class="check-box" (change)="withDelivery===true" [checked]="!withDelivery"
-         (click)="changeWithDelivery()">تحویل حضوری
+  <mat-checkbox class="check-box" (click)="changeWithDelivery()">&nbsp;تحویل حضوری&nbsp;</mat-checkbox>
 </span>
 <div *ngIf="addresses.length!=0">
-  <div *ngIf="curWidth>960" style="margin-right:10%;margin-left:10%" class="rs-table field">
+  <div *ngIf="curWidth>960">
     <mat-card>
       <table class="field table">
         <thead>
@@ -81,5 +79,5 @@
   </div>
 </div>
 <div *ngIf="withDelivery">
-  <button (click)="editAddress()" class="newAddressButton">افزودن آدرس جدید</button>
+  <button mat-button (click)="editAddress()" class="newAddressButton">افزودن آدرس جدید</button>
 </div>
