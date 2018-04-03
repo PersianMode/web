@@ -21,7 +21,8 @@ export class AddressTableComponent implements OnInit {
       long: 50.817191,
       lat: 51.427251,
     },
-    recipient_name: 'علی علوی',
+    recipient_name: 'علی',
+    recipient_surname: 'علوی'
     recipient_mobile_no: '09121212121',
     recipient_national_id: '06423442',
     recipient_title: 'm',
