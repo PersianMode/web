@@ -1,8 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {HttpService} from '../../services/http.service';
 import {HttpClient} from '@angular/common/http';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-upsert-address',
@@ -10,8 +12,6 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./upsert-address.component.css']
 })
 export class UpsertAddressComponent implements OnInit {
-  @Output() closeDialog = new EventEmitter<boolean>();
-
   dialogTitle;
   buttonTitle;
   partEdit;
@@ -43,14 +43,6 @@ export class UpsertAddressComponent implements OnInit {
     this.addressData = this.data.dialog_address;
     this.partEdit = this.data.partEdit;
     this.initForm();
-  }
-
-  onClose() {
-    if (this.isNotMobile) {
-      this.closeDialog.emit(false);
-    } else {
-      this.router.navigate(['/checkout']);
-    }
   }
 
   initForm() {
@@ -173,7 +165,5 @@ export class UpsertAddressComponent implements OnInit {
         this.anyChanges = true;
       }
     }
-  }
-  addAddress() {
   }
 }

@@ -7,6 +7,7 @@ import {MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInp
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatTableModule} from '@angular/material/table';
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import {MatTableModule} from '@angular/material/table';
     MatTableModule,
     MatCardModule,
     MatIconModule,
+    SharedModule,
   ],
   declarations: [
     CheckoutPageComponent,

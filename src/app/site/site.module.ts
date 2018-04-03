@@ -33,7 +33,7 @@ import {RegisterComponent} from './register/components/register/register.compone
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
 import {SharedModule} from '../shared/shared.module';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
-import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
+// import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 import {RouterModule} from '@angular/router';
 
 @NgModule({
@@ -76,7 +76,7 @@ import {RouterModule} from '@angular/router';
     RegisterComponent,
     GenDialogComponent,
     OtherDetailsComponent,
-    UpsertAddressComponent,
+   // UpsertAddressComponent,
   ],
   entryComponents: [GenDialogComponent],
 })
