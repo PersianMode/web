@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
-import {HttpClient} from '@angular/common/http';
 import {DictionaryService} from './dictionary.service';
 
 const productColorMap = function (r) {
-  return r.colors.map(c => c.name ? c.name.split('/') : []);
+  return r.colors.map(c => c.name ? c.name.split('/')
+      .map(x => x.replace(/\W/g, '')) // remove all non alpha-numeric chars from color name
+    : []);
 };
 
 const addHost = function (r) {
@@ -57,17 +58,23 @@ export class ProductService {
   collectionTags: any = {};
   collectionTagsAfterFilter: any = {};
 
-  private filterInput: IFilter[];
   private sortInput;
   private collectionId;
 
-  constructor(private httpService: HttpService, private http: HttpClient, private dict: DictionaryService) {
+  constructor(private httpService: HttpService, private dict: DictionaryService) {
   }
 
   extractFilters(filters = [], trigger = '') {
-    let products = trigger ? this.filteredProducts : this.products, tags: any = {};
+    const products = trigger ? this.filteredProducts : this.products;
+    let tags: any = {};
+
     const brand = Array.from(new Set([... products.map(r => r.brand)]));
     const type = Array.from(new Set([... products.map(r => r.product_type)]));
+
+    const size = Array.from(new Set([...products.map(r => Object.keys(r.sizesInventory))
+      .reduce((x, y) => x.concat(y), []).sort()]));
+    const color = Array.from(new Set([...products.map(productColorMap)
+      .reduce((x, y) => x.concat(y), []).reduce((x, y) => x.concat(y), [])]));
 
     let price;
     if (trigger === 'price') {
@@ -78,10 +85,6 @@ export class ProductService {
       const maxPrice = Math.max(...price);
       price = [minPrice, maxPrice];
     }
-    const size = Array.from(new Set([...products.map(r => Object.keys(r.sizesInventory))
-      .reduce((x, y) => x.concat(y), []).sort()]));
-    const color = Array.from(new Set([...products.map(productColorMap)
-      .reduce((x, y) => x.concat(y), []).reduce((x, y) => x.concat(y), [])]));
 
     tags = {brand, type, price, size, color};
 

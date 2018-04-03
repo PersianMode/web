@@ -3,7 +3,7 @@ import {WINDOW} from '../../../shared/services/window.service';
 import {HttpService} from '../../../shared/services/http.service';
 import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
 import {MatDialog} from '@angular/material';
-
+import {AuthService} from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-address-table',
@@ -126,6 +126,24 @@ export class AddressTableComponent implements OnInit {
       return a;
     return (+a).toLocaleString('fa', {useGrouping: false});
   }
+  address = {
+    ostan: 'البرز',
+    city: 'کرج',
+    street: 'دربند',
+    no: 14,
+    unit: 1,
+    postal_code: 1044940912,
+    loc: {
+      long: 50.817191,
+      lat: 51.427251,
+    },
+    recipient_name: 'علی علوی',
+    recipient_mobile_no: '09121212121',
+    recipient_national_id: '06423442',
+    recipient_title: 'm',
+    district: 'خیابان سوم'
+  };
+  constructor(private dialog: MatDialog, private authService: AuthService, private httpService: HttpService) { }
 
   ngOnInit() {
     this.getCustomerAddresses();
@@ -139,6 +157,11 @@ export class AddressTableComponent implements OnInit {
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
     const fullEdit = (!(id || id === 0));
+  openAddressDialog(id) {
+    const tempAddressId = id ? id : null;
+    const tempAddress = id ? this.address : {};
+    const partEdit = id ? true : false;
+    const fullEdit = id ? false : true;
     const rmDialog = this.dialog.open(UpsertAddressComponent, {
       width: '600px',
       data: {
@@ -159,5 +182,26 @@ export class AddressTableComponent implements OnInit {
       this.addresses = this.customerAddresses;
     else
       this.addresses = this.wareHouseAddresses;
+    rmDialog.afterClosed().subscribe(
+      (data) => {
+        if (data) {
+          console.log('*****', data);
+          this.httpService.post('user/address', {
+            username: this.authService.userDetails.username,
+            body: data,
+          }).subscribe(
+            (data) => {
+              console.log('sucsess');
+            },
+            (err) => {
+              console.error('Cannot set address');
+            }
+          );
+        }
+      },
+      (err) => {
+        console.error('Error in dialog: ', err);
+      }
+    );
   }
 }

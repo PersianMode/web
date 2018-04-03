@@ -1,5 +1,5 @@
 <div [ngClass]="isMobile ? 'set-size-mobile' : null">
-  <h1 *ngIf="filter_options.length">فیلترها</h1>
+  <h1 *ngIf="filter_options?.length">فیلترها</h1>
 </div>
 <mat-accordion multi="true">
   <mat-expansion-panel *ngIf="isMobile" [expanded]="expanded.sort">
@@ -28,7 +28,7 @@
       <span *ngFor="let v of filter_options[i].values; let j = index" class="color-span" (click)="getValue(fo.name, v)"
             style="cursor: pointer;" matTooltip="{{v.toLowerCase()}}" matTooltipShowDelay="500">
         <svg height="26" width="26" >
-         <circle cx="13" cy="13" r="12" [attr.stroke]="needsBorder[v] ? '#ccc' : 'transparent'" stroke-width="1" attr.fill="{{filter_options[i].values_fa[j]}}"></circle>
+         <circle cx="13" cy="13" r="12" [attr.stroke]="needsBorder[v] ? '#ccc' : 'transparent'" stroke-width="1" attr.fill="{{filter_options[i]?.values_fa[j]}}"></circle>
         </svg>
         <i *ngIf="isChecked[fo.name][v]" class="fa fa-check circle" [style.color]="oppositeColor[v]"></i>
       </span>
@@ -43,5 +43,5 @@
 </mat-accordion>
 <div class="actions">
   <button mat-button *ngIf="isMobile" (click)="changeDisplayFilter()">اعمال فیلترها</button>
-  <button mat-button *ngIf="filter_options.length" (click)="clearFilters()">برداشتن تمام فیلترها</button>
+  <button mat-button *ngIf="filter_options?.length" (click)="clearFilters()">برداشتن تمام فیلترها</button>
 </div>

@@ -46,3 +46,65 @@
     font-family:iranyekan;
     background-color: black;
 }
+
+.top-div{
+    width: 100%;
+    height: 10%;
+}
+
+.add-title-div {
+    display: inline-block;
+    text-align: right;
+    width: 90%;
+    margin-bottom: 5px
+}
+.add-icon {
+    background-color: forestgreen;
+    display: inline-block;
+    text-align: center;
+    padding: 3px;
+    border-radius: 50%
+}
+.dialogTitle {
+    font-family: iranyekan;
+    display: inline-block;
+    width: 90%;
+    margin-right: 5px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.clear-div {
+    text-align: left;
+    display: inline-block;
+    width: 7%;
+}
+.clear-icon {
+    cursor: pointer;
+}
+
+.recipient-info {
+    font-size: medium;
+    font-weight: bold;
+    font-family: iranyekan
+}
+
+.select-ostan {
+    height: 20%;
+    display: inline-block;
+}
+.submit-button {
+    height: 35%;
+    margin-top: 10px;
+}
+
+mat-input-container {
+    width:92%;
+    margin-top: 10px;
+}
+
+mat-error, mat-hint {
+    margin-bottom: 4px;
+    font-family: iranyekan, sans-serif;
+    font-size: 75%;
+}
