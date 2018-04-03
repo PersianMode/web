@@ -40,7 +40,7 @@ export class UpsertAddressComponent implements OnInit {
         else
           this.cityArray = this.provinceArray.find(el => el.name === this.addressData.province).cities;
       }, err => {
-        console.log('err: ', err);
+        console.error('err: ', err);
       }
     );
     // this.addressForm.get('selectProvince').disable();
@@ -60,10 +60,8 @@ export class UpsertAddressComponent implements OnInit {
 
   initializeData() {
     this.addressInfo = this.checkoutService.addressData;
-    // console.log("address info:", this.addressInfo);
     this.title = this.addressInfo.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
     this.addressData = this.addressInfo.dialog_address || {};
-    // console.log("initial address data ", this.addressData);
   }
 
   initForm() {
@@ -127,7 +125,6 @@ export class UpsertAddressComponent implements OnInit {
         }
       });
     }
-    // console.log("final address data are : ", this.addressData);
     this.checkoutService.submitAddresses(this.addressData)
       .then(res => {
         this.onClose();
@@ -157,8 +154,5 @@ export class UpsertAddressComponent implements OnInit {
   setMarker(data) {
     this.addressForm.controls['latitude'].setValue(data.coords.lat);
     this.addressForm.controls['longitude'].setValue(data.coords.lng);
-  }
-
-  addAddress() {
   }
 }

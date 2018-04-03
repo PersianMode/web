@@ -80,7 +80,6 @@ export class AddressTableComponent implements OnInit {
     }, err => {
       console.error(err);
     });
-
   }
 
   getWareHouseAddresses() {

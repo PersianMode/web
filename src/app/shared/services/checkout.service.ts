@@ -58,15 +58,11 @@ export class CheckoutService {
   }
 
   submitAddresses(data) {
-    return new Promise((resolve, reject) => {
-      if (!data)
-        return Promise.reject(false);
+    if (!data)
+      return Promise.reject(false);
 
-      console.log('***', data);
-      this.httpService.post('user/address', {
-        username: this.authService.userDetails.username,
-        body: data,
-      }).subscribe(
+    return new Promise((resolve, reject) => {
+      this.httpService.post('user/address', data).subscribe(
         res => {
           resolve();
         }, err => {

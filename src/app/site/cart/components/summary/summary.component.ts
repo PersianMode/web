@@ -95,8 +95,4 @@ export class SummaryComponent implements OnInit {
         console.error('Cannot apply coupon code: ', err);
       });
   }
-
-  goToCheckoutPage() {
-    this.router.navigate(['/checkout']);
-  }
 }
