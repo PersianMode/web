@@ -1,0 +1,39 @@
+<mat-card class="card-view">
+  <mat-card-content>
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+         fxLayoutAlign.xs="center center" dir="rtl">
+      <div style="text-align: right" fxFlex="70" class="field-container">
+        <div class="little-right-margin right-alignment">
+          <app-suggestion [name]="'Tag'" [currentIds]="[0]" [placeholder]="'نام تگ'"
+                          (add)="addTag($event)"></app-suggestion>
+        </div>
+      </div>
+    </div>
+    <div dir="rtl" class="field">
+      <mat-card>
+        <div class="rs-table field">
+          <table class="field">
+            <thead>
+            <td style="width: 10%"><b>ردیف</b></td>
+            <td style="width: 30%"><b>نام</b></td>
+            <td style="width: 30%; text-align: center; margin: 0 10px;"><b>نام گروه</b></td>
+            </thead>
+            <tbody>
+            <tr *ngFor="let tag of productTags; let i = index ">
+              <td>{{i+1}}</td>
+              <td style="direction: ltr">{{tag.name}}</td>
+              <td style="direction: ltr">{{tag.tg_name}}</td>
+
+              <td>
+                <button mat-icon-button (click)="removeTag(tag.tag_id)" color="warn">
+                  <mat-icon aria-label="clear">delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+  </mat-card-content>
+</mat-card>
