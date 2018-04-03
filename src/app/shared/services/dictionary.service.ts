@@ -4,9 +4,8 @@ import {HttpService} from './http.service';
 
 @Injectable()
 export class DictionaryService {
-
-  wordDictionary: any = {};
-  colorDictionary: any = {};
+  wordDictionary = {};
+  colorDictionary = {};
 
   constructor(httpService: HttpService) {
     httpService.get('dictionary').subscribe((res: any) => {

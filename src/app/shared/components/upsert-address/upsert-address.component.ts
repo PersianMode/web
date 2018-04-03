@@ -19,6 +19,8 @@ export class UpsertAddressComponent implements OnInit {
   addressForm: FormGroup;
   cityArray = [];
   ostanArray: any;
+  anyChanges = false;
+  addressId;
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<UpsertAddressComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
@@ -40,7 +42,6 @@ export class UpsertAddressComponent implements OnInit {
     this.buttonTitle = this.data.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
     this.addressData = this.data.dialog_address;
     this.partEdit = this.data.partEdit;
-    // this.addressForm.get('selectOsatn').disable();
     this.initForm();
   }
 
@@ -53,15 +54,14 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   initForm() {
-    console.log(this._addressId);
     this.addressForm = new FormBuilder().group({
       name: [this.data.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
         Validators.required,
       ]],
-      family: [this.data.addressId ? this.addressData.recipient_name : this.authService.userDetails.surname, [
+      family: [this.data.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
         Validators.required,
       ]],
-      nationalCode: [this.data.addressId ? this.addressData.recipient_national_id : '1234567892', [
+      nationalCode: [this.data.addressId ? this.addressData.recipient_national_id : '', [
         Validators.required,
         Validators.maxLength(10),
         Validators.pattern(/^\d+$/)
@@ -86,16 +86,27 @@ export class UpsertAddressComponent implements OnInit {
         Validators.required,
       ]],
     });
+
+
+    this.addressForm.valueChanges.subscribe(
+      (dt) => this.fieldChanged(),
+      (er) => console.error('Error when subscribing on address form valueChanges: ', er)
+    );
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
   }
 
   submitAddress() {
-    const tempName = this.addressForm.controls['name'].value + ' ' + this.addressForm.controls['family'].value;
     if (this.data.addressId) {
-      this.addressData.recipient_name = tempName;
+      this.addressData.recipient_name = this.addressForm.controls['name'].value ;
+      this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
     } else {
-      this.addressData.recipient_name = tempName;
+      this.addressData.recipient_name = this.addressForm.controls['name'].value ;
+      this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
       this.addressData.ostan = this.addressForm.controls['selectOstan'].value;
@@ -104,13 +115,16 @@ export class UpsertAddressComponent implements OnInit {
       this.addressData.no = this.addressForm.controls['pelak'].value;
       this.addressData.unit = this.addressForm.controls['unit'].value;
       this.addressData.postal_code = this.addressForm.controls['postal_code'].value;
-      this.addressData.distinct = this.addressForm.controls['district'].value;
+      this.addressData.district = this.addressForm.controls['district'].value;
       this.addressData.loc = {
         long: this.addressForm.controls['longitude'].value,
         lat: this.addressForm.controls['latitude'].value,
       };
     }
+    console.log(!this.addressForm.valid);
+    console.log(this.data.addressId && !this.anyChanges);
     this.dialogRef.close(this.addressData);
+
   }
 
   setNewOstan(newOstan) {
@@ -133,6 +147,32 @@ export class UpsertAddressComponent implements OnInit {
   setMarker(data) {
     this.addressForm.controls['latitude'].setValue(data.coords.lat);
     this.addressForm.controls['longitude'].setValue(data.coords.lng);
+  }
+
+  fieldChanged() {
+    this.anyChanges = false;
+    if (this.data.addressId) { //all fields of addressData has values
+      let name = (this.addressForm.controls['name'].value === null ||
+        isUndefined(this.addressForm.controls['name'].value)) ? '' : this.addressForm.controls['name'].value;
+      name = name.trim();
+
+      let family = (this.addressForm.controls['family'].value === null ||
+        isUndefined(this.addressForm.controls['family'].value)) ? '' : this.addressForm.controls['family'].value;
+      family = family.trim();
+
+      let recipient_national_id = (this.addressForm.controls['nationalCode'].value === null ||
+        isUndefined(this.addressForm.controls['nationalCode'].value)) ? '' : this.addressForm.controls['nationalCode'].value;
+
+      let phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
+        isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
+
+      if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
+        (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
+        (recipient_national_id !== this.addressData.recipient_national_id && (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
+      || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))) {
+        this.anyChanges = true;
+      }
+    }
   }
   addAddress() {
   }

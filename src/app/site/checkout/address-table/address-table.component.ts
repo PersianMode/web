@@ -38,7 +38,8 @@ export class AddressTableComponent implements OnInit {
       'no': '۵',
       'unit': '۱',
       'recipient_national_id': '0021625018',
-      'recipient_name': 'علی میرجهانی',
+      'recipient_name': 'علی',
+      recipient_surname: 'علوی',
       'recipient_mobile_no': '09391022382'
     },
     {
