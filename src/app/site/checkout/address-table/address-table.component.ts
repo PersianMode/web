@@ -29,7 +29,7 @@ export class AddressTableComponent implements OnInit {
   //   district: 'خیابان سوم'
   // };
   addresses = [];
-  tempAddressId;
+  tempAddressId = null;
   constructor(private dialog: MatDialog, private authService: AuthService, private httpService: HttpService) { }
 
   ngOnInit() {
@@ -69,9 +69,10 @@ export class AddressTableComponent implements OnInit {
 
   getCustomerAddresses() {
     this.httpService.get('customer/address').subscribe(res => {
-      this.addresses = res.addresses;
-      this.tempAddressId = res.addresses.length ? this.addresses[1]._id : null;
+      this.addresses = res.addresses.length > 0 ? res.addresses : [] ;
+      this.tempAddressId = res.addresses.length ? this.addresses[0]._id : null;
     }, err => {
+
       console.error(err);
     });
   }

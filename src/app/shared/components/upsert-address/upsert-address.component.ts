@@ -14,7 +14,7 @@ import {isUndefined} from 'util';
 export class UpsertAddressComponent implements OnInit {
   dialogTitle;
   buttonTitle;
-  partEdit;
+  partEdit = false;
   addressData: any;
   addressForm: FormGroup;
   cityArray = [];
@@ -31,14 +31,14 @@ export class UpsertAddressComponent implements OnInit {
       (info: any) => {
         this.provinceArray = info;
         if (!this.data.addressId)
-          this.cityArray = this.provinceArray.find(el => el.name === 'آذربایجان شرقی').cities;
+          this.cityArray = this.provinceArray.find(el => el.name === 'تهران').cities;
         else this.cityArray = this.provinceArray.find(el => el.name === this.addressData.province).cities;
       }, err => {
         console.log('err: ', err);
       }
     );
-    this.dialogTitle = this.data.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
-    this.buttonTitle = this.data.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
+    this.dialogTitle = this.data.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
+    this.buttonTitle = 'ثبت اطلاعات';
     this.addressData = this.data.dialog_address;
     this.partEdit = this.data.partEdit;
     this.initForm();
@@ -52,13 +52,13 @@ export class UpsertAddressComponent implements OnInit {
       family: [this.data.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
         Validators.required,
       ]],
-      nationalCode: [this.data.addressId ? this.addressData.recipient_national_id : '', [
+      nationalCode: [this.data.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
         Validators.required,
         Validators.maxLength(10),
         Validators.pattern(/^\d+$/)
       ]],
-      selectProvince: [this.data.addressId ? this.addressData.province : 'آذربایجان شرقی'],
-      selectCity: [this.data.addressId ? this.addressData.city : 'آبش احمد'],
+      selectProvince: [this.data.addressId ? this.addressData.province : 'تهران'],
+      selectCity: [this.data.addressId ? this.addressData.city : 'تهران'],
       pelak: [this.data.addressId ? this.addressData.no : null, [
         Validators.required,
       ]],
@@ -95,11 +95,13 @@ export class UpsertAddressComponent implements OnInit {
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
+      this.addressData.recipient_title = 'f';
     } else {
       this.addressData.recipient_name = this.addressForm.controls['name'].value ;
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
+      this.addressData.recipient_title = 'f';
       this.addressData.province = this.addressForm.controls['selectProvince'].value;
       this.addressData.city = this.addressForm.controls['selectCity'].value;
       this.addressData.street = this.addressForm.controls['street'].value;

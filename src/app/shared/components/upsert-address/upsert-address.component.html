@@ -139,7 +139,7 @@
                                     [latitude]="getLatitude()"
                                     [longitude]="getLongitude()"
                                     [markerClickable]="true"
-                                    [markerDraggable]="true"
+                                    [markerDraggable]="!partEdit"
                                     (dragEnd)="setMarker($event)"
                             ></agm-marker>
                         </agm-map>
