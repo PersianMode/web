@@ -29,13 +29,16 @@ export class LoginComponent implements OnInit {
       password: [null, [
         Validators.required,
       ]],
+      loginAs: [0],
       keep_me_login: [true],
     });
   }
 
   login() {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value)
+      this.authService.login(this.loginForm.controls['email'].value,
+        this.loginForm.controls['password'].value,
+      this.loginForm.controls['loginAs'].value)
         .then(data => {
           this.router.navigate(['/agent/collections']);
         })
@@ -54,4 +57,6 @@ export class LoginComponent implements OnInit {
     this.seen[item] = true;
     this.curFocus = item;
   }
+
+
 }

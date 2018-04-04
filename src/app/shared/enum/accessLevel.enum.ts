@@ -1,5 +1,6 @@
 export enum AccessLevel {
-  Admin = 0,
-  ShippingClerk = 1,
-  DeliveryAgent = 2,
+  ContentManager = 0,
+  SalesManager = 1,
+  ShopClerk = 2,
+  DeliveryAgent = 3
 };
