@@ -80,6 +80,39 @@ export class AddressTableComponent implements OnInit {
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }
 
+  openAddressDialog(id?) {
+    const tempAddress = id ? this.addresses.find(el => el._id === id) : {};
+    const partEdit = id ? true : false;
+    this.checkoutService.addressData = {
+      addressId: tempAddressId,
+      partEdit: partEdit,
+      dialog_address: tempAddress
+    };
+    const rmDialog = this.dialog.open(UpsertAddressComponent, {
+      width: '600px',
+      data: {
+        addressId: this.tempAddressId,
+        partEdit: partEdit,
+        dialog_address: tempAddress,
+      }
+    });
+    rmDialog.afterClosed().subscribe(
+      (data) => {
+        if (data) {
+          this.httpService.post('user/address', data).subscribe(
+            (data) => {
+              console.log('sucsess');
+            },
+            (err) => {
+              console.error('Cannot set address');
+            }
+          );
+        }
+      },
+      (err) => {
+        console.error('Error in dialog: ', err);
+      }
+    );
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;

@@ -31,7 +31,7 @@
             شماره تلفن تحویل گیرنده: <b>{{makePersianNumber(address.recipient_mobile_no)}}</b>
           </td>
           <td *ngIf="withDelivery">
-            <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
+            <mat-icon aria-label="edit" (click)="openAddressDialog(tempAddressId)">edit</mat-icon>
           </td>
           <td *ngIf="withDelivery">
             <input type="checkbox" class="check-box" [checked]="selectedCustomerAddresses==i" (click)="setAddress(i)">
@@ -63,7 +63,7 @@
           </div>
           <div *ngIf="withDelivery">
             تغییر
-            <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
+            <mat-icon aria-label="edit" (click)="openAddressDialog(i)">edit</mat-icon>
           </div>
           <div style="margin-top: 20px;">
             انتخاب آدرس
@@ -80,5 +80,5 @@
   </div>
 </div>
 <div *ngIf="withDelivery">
-  <button (click)="editAddress()" class="newAddressButton">افزودن آدرس جدید</button>
+  <button (click)="openAddressDialog()" class="newAddressButton">افزودن آدرس جدید</button>
 </div>
