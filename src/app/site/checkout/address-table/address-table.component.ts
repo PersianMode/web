@@ -41,15 +41,13 @@ export class AddressTableComponent implements OnInit {
   addresses = [];
   customerAddresses = [];
   wareHouseAddresses = [];
-  curHeight: number;
-  curWidth: number;
+  isMobile = false;
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
               private dialog: MatDialog, private checkoutService: CheckoutService,
               private responsiveService: ResponsiveService, private router: Router,
               private authService: AuthService) {
-    this.curWidth = this.window.innerWidth;
-    this.curHeight = this.window.innerHeight;
+    this.isMobile = this.window.curWidth < 960;
     this.addresses.push(this.address);
   }
 
@@ -120,6 +118,7 @@ export class AddressTableComponent implements OnInit {
   ngOnInit() {
     this.getCustomerAddresses();
     this.getWareHouseAddresses();
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }
 
   editAddress(id) {

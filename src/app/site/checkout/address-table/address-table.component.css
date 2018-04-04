@@ -9,7 +9,7 @@ tr {
 
 tr:first-child {
   border-top: 1px solid black;
-  margin-top: 5%;
+  margin-top: 15px;
 }
 
 table {
@@ -33,7 +33,6 @@ th {
 }
 
 .new-Address {
-  margin-right: 5%;
   margin-top: 30px;
   color: #00a4e4;
 }
@@ -41,12 +40,11 @@ th {
 mat-card {
   margin-top: 20px;
   font-family: iranyekan, sans-serif;
+  margin: 10px;
 }
 
 .check-box-div {
-  margin-right: 5%;
   margin-bottom: 50px;
-  padding: 20px;
   width: 100%;
   height: 30px;
 }
@@ -58,5 +56,10 @@ mat-card {
 }
 
 .newAddressButton {
-  margin: 10px 10% 10px 0;
+  padding: 10px;
+  margin-right: 10px;
+}
+
+h2 {
+  margin-right: 10px;
 }
