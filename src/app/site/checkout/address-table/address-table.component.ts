@@ -20,24 +20,6 @@ export class AddressTableComponent implements OnInit {
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
 
-  address = {
-    province: 'البرز',
-    city: 'کرج',
-    street: 'دربند',
-    no: 14,
-    unit: 1,
-    postal_code: 1044940912,
-    loc: {
-      long: 50.817191,
-      lat: 51.427251,
-    },
-    recipient_name: 'علی علوی',
-    recipient_mobile_no: '09121212121',
-    recipient_national_id: '06423442',
-    recipient_title: 'm',
-    district: 'خیابان سوم'
-  };
-
   addresses = [];
   customerAddresses = [];
   wareHouseAddresses = [];
@@ -48,7 +30,6 @@ export class AddressTableComponent implements OnInit {
               private responsiveService: ResponsiveService, private router: Router,
               private authService: AuthService) {
     this.isMobile = this.window.curWidth < 960;
-    this.addresses.push(this.address);
   }
 
   setAddress(i: number) {
@@ -82,31 +63,9 @@ export class AddressTableComponent implements OnInit {
 
   getWareHouseAddresses() {
     // TODO: this should be changed from hard-coded to a request from server
-    this.wareHouseAddresses = [
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      },
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      },
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      }];
+    this.httpService.get('warehouse').subscribe(res => {
+      this.wareHouseAddresses = res;
+    });
   }
 
   makePersianNumber(a: string) {
