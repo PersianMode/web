@@ -76,21 +76,26 @@ export class UpsertAddressComponent implements OnInit {
       nationalCode: [this.addressInfo.addressId ? this.addressData.recipient_national_id : '', [
         Validators.required,
         Validators.maxLength(10),
-        Validators.pattern(/^\d+$/)
+        Validators.minLength(10),
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/)
       ]],
       selectProvince: [this.addressInfo.addressId ? this.addressData.province : 'تهران'],
       selectCity: [this.addressInfo.addressId ? this.addressData.city : 'تهران'],
       pelak: [this.addressInfo.addressId ? this.addressData.no : null, [
         Validators.required,
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
       ]],
       unit: [this.addressInfo.addressId ? this.addressData.unit : null],
-      postal_code: [this.addressInfo.addressId ? this.addressData.postal_code : null],
+      postal_code: [this.addressInfo.addressId ? this.addressData.postal_code : null, [
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
+      ]],
       district: [this.addressInfo.addressId ? this.addressData.district : null, [
         Validators.maxLength(15),
       ]],
       phoneNumber: [this.addressInfo.addressId ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
         Validators.required,
-        Validators.pattern(/^\d+$/)
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
+        Validators.minLength(8),
       ]],
       latitude: [this.addressInfo.addressId ? this.addressData.loc.lat : 35.696491],
       longitude: [this.addressInfo.addressId ? this.addressData.loc.long : 51.379926],

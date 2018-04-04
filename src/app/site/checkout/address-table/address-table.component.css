@@ -29,7 +29,7 @@ td {
 
 th {
   text-align: justify;
-  padding-bottom: 10px;
+  padding: 0px 10px 10px 0px;
 }
 
 .new-Address {
@@ -44,18 +44,20 @@ mat-card {
 }
 
 .check-box-div {
-  margin-bottom: 50px;
-  width: 100%;
-  height: 30px;
+  line-height: 37px;
+  display: inline-block;
+  width: calc(50% - 10px);
+  padding-right:10px;
 }
 
-.check-box {
-  width: 20px;
-  height: 20px;
-  margin-top: 10px;
+.newAddress {
+  width: calc(49% - 10px);
+  text-align: left;
+  display: inline-block;
+  padding-left: 10px;
 }
 
-.newAddressButton {
+.newAddress button {
   padding: 10px;
   margin-right: 10px;
 }

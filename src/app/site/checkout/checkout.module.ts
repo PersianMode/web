@@ -31,6 +31,7 @@ import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.co
     MatCardModule,
     MatIconModule,
     MatRadioModule,
+    MatCheckboxModule,
   ],
   declarations: [
     CheckoutPageComponent,

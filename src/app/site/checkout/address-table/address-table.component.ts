@@ -29,7 +29,7 @@ export class AddressTableComponent implements OnInit {
               private dialog: MatDialog, private checkoutService: CheckoutService,
               private responsiveService: ResponsiveService, private router: Router,
               private authService: AuthService) {
-    this.isMobile = this.window.curWidth < 960;
+    this.isMobile = this.responsiveService.isMobile;
   }
 
   setAddress(i: number) {
@@ -84,27 +84,25 @@ export class AddressTableComponent implements OnInit {
     const tempAddress = id ? this.addresses.find(el => el._id === id) : {};
     const partEdit = id ? true : false;
     this.checkoutService.addressData = {
-      addressId: tempAddressId,
+      addressId: (id || id === 0) ? id + 1 : null,
       partEdit: partEdit,
       dialog_address: tempAddress
     };
-    const rmDialog = this.dialog.open(UpsertAddressComponent, {
+    const rmDialog = this.dialog.open(GenDialogComponent, {
       width: '600px',
       data: {
-        addressId: this.tempAddressId,
-        partEdit: partEdit,
-        dialog_address: tempAddress,
+        componentName: DialogEnum.upsertAddress,
       }
     });
     rmDialog.afterClosed().subscribe(
       (data) => {
         if (data) {
           this.httpService.post('user/address', data).subscribe(
-            (data) => {
-              console.log('sucsess');
+            () => {
+              console.log('success');
             },
             (err) => {
-              console.error('Cannot set address');
+              console.error('Cannot set address', err);
             }
           );
         }
@@ -113,6 +111,8 @@ export class AddressTableComponent implements OnInit {
         console.error('Error in dialog: ', err);
       }
     );
+  }
+
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
@@ -137,10 +137,9 @@ export class AddressTableComponent implements OnInit {
   }
 
   changeWithDelivery() {
-    this.withDelivery = !this.withDelivery;
     if (this.withDelivery)
       this.addresses = this.customerAddresses;
     else
-      this.addresses = this.wareHouseAddresses;
+      this.addresses = this.wareHouseAddresses.map(r => Object.assign({name: r.name}, r.address));
   }
 }

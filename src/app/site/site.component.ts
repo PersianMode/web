@@ -33,6 +33,7 @@ export class SiteComponent implements OnInit {
     this.loadInitialPlacements();
 
     this.cartService.getCartItems();
+    this.onResize(null, this.curWidth, this.curHeight);
   }
 
   private updateResponsiveService() {
@@ -41,8 +42,8 @@ export class SiteComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    const [w, h] = [event.target.innerWidth, event.target.innerHeight];
+  onResize(event, width?, height?) {
+    const [w, h] = [event ? event.target.innerWidth : width, event ? event.target.innerHeight : height];
     if (this.curWidth !== w || this.curHeight !== h) {
       [this.curWidth, this.curHeight] = [w, h];
       this.updateResponsiveService();
