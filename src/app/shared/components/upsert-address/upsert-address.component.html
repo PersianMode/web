@@ -19,7 +19,7 @@
                 </mat-card-title>
                 <mat-card-content>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-                        <div fxFlex="50">
+                        <div fxFlex="40">
                             <mat-input-container>
                                 <input matInput type="text" placeholder="نام" formControlName ="name" />
                                 <mat-hint>نام تحویل گیرنده را وارد کنید</mat-hint>
@@ -28,7 +28,7 @@
                                 </mat-error>
                             </mat-input-container>
                         </div>
-                        <div fxFlex="50">
+                        <div fxFlex="40">
                             <mat-input-container>
                                 <input matInput type="text" placeholder="نام خانوادگی" formControlName="family"/>
                                 <mat-hint>نام خانوادگی تحویل گیرنده را وارد کنید</mat-hint>
@@ -36,6 +36,15 @@
                                     خانوادگی تحویل گیرنده الزامی است
                                 </mat-error>
                             </mat-input-container>
+                        </div>
+                        <div fxFlex="20" style="margin: 10px">
+                            <mat-radio-group formControlName="selectGender">
+                                <div fxLayout="column" fxLayout.sm="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center">
+                                    <div *ngFor="let g of gender" fxFlex="35" style="margin-bottom: 8px">
+                                        <mat-radio-button [value]="g.value">{{g.name}}</mat-radio-button>
+                                    </div>
+                                </div>
+                            </mat-radio-group>
                         </div>
                     </div>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">

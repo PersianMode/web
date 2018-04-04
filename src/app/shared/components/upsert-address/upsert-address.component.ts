@@ -20,7 +20,13 @@ export class UpsertAddressComponent implements OnInit {
   cityArray = [];
   provinceArray: any;
   anyChanges = false;
-
+  gender = [{
+      name : 'زن',
+      value : 'f'
+    }, {
+      name : 'مرد',
+      value : 'm'
+    }]
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<UpsertAddressComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
               private http: HttpClient, private httpService: HttpService) {
@@ -71,6 +77,8 @@ export class UpsertAddressComponent implements OnInit {
         Validators.required,
         Validators.pattern(/^\d+$/)
       ]],
+      selectGender: [this.data.addressId ? this.addressData.recipient_title : this.authService.userDetails.gender,
+      ],
       latitude: [this.data.addressId ? this.addressData.loc.lat : 35.696491],
       longitude: [this.data.addressId ? this.addressData.loc.long : 51.379926],
       street: [this.data.addressId ? this.addressData.street : null, [
@@ -95,13 +103,13 @@ export class UpsertAddressComponent implements OnInit {
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
-      this.addressData.recipient_title = 'f';
+      this.addressData.recipient_title = this.addressForm.controls['selectGender'].value;
     } else {
       this.addressData.recipient_name = this.addressForm.controls['name'].value ;
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
-      this.addressData.recipient_title = 'f';
+      this.addressData.recipient_title = this.addressForm.controls['selectGender'].value;
       this.addressData.province = this.addressForm.controls['selectProvince'].value;
       this.addressData.city = this.addressForm.controls['selectCity'].value;
       this.addressData.street = this.addressForm.controls['street'].value;
@@ -157,8 +165,12 @@ export class UpsertAddressComponent implements OnInit {
       let phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
         isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
 
+      let selectGender = (this.addressForm.controls['selectGender'].value === null ||
+        isUndefined(this.addressForm.controls['selectGender'].value)) ? '' : this.addressForm.controls['selectGender'].value;
+
       if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
         (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
+        (selectGender !== this.addressData.recipient_title && (selectGender !== '' || this.addressData.recipient_title !== null)) ||
         (recipient_national_id !== this.addressData.recipient_national_id && (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
       || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))) {
         this.anyChanges = true;

@@ -742,3 +742,10 @@ mat-panel-title {
   font-size: 75% !important;
   line-height: 136% !important;
 }
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: gray;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: rgba(0,0,0,.54);
+}
