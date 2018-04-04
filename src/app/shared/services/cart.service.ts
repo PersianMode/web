@@ -251,6 +251,38 @@ export class CartService {
     });
   }
 
+  calculateDiscount(considerCoupon = false) {
+    let discountValue = 0;
+
+    if (this.cartItems.getValue().length > 0) {
+      this.cartItems.getValue().forEach(el => {
+        let tempTotalDiscount = el.discount && el.discount.length > 0 ? el.discount.reduce((a, b) => a * b) : 0;
+
+        if (el.coupon_discount) {
+          if (considerCoupon)
+            tempTotalDiscount *= el.coupon_discount;
+        }
+
+        tempTotalDiscount = Number(tempTotalDiscount.toFixed(5));
+        discountValue += (el.price - tempTotalDiscount * el.price) * el.quantity;
+      });
+    }
+
+    return discountValue;
+  }
+
+  calculateTotal() {
+    if (this.cartItems && this.cartItems.getValue().length > 0) {
+      return this.cartItems.getValue()
+        .filter(el => el.count && el.quantity <= el.count)
+        .map(el => el.price * el.quantity)
+        .reduce((a, b) => a + b);
+
+    }
+
+    return 0;
+  }
+
   addCoupon(coupon_code = '') {
     if (!this.authService.isLoggedIn.getValue())
       return Promise.reject(403);
@@ -278,6 +310,23 @@ export class CartService {
           (err) => {
             reject(err);
           });
+    });
+  }
+
+  applyCoupon(coupon_code): any {
+    if (!coupon_code)
+      return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+      this.httpService.post('coupon/code/apply', {
+        coupon_code: coupon_code,
+      }).subscribe(
+        (data) => {
+          resolve();
+        },
+        (err) => {
+          reject(err);
+        });
     });
   }
 }

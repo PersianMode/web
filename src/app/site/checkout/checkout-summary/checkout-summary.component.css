@@ -1,0 +1,25 @@
+.summary-header {
+  background-color: #e5e5e5;
+  text-align: right;
+  padding: 8px;
+}
+
+.left-text {
+  float: left;
+  padding-left: 10px;
+  color: black;
+}
+
+.right-text {
+  color: black;
+}
+
+.checkout-box {
+  margin: 10px;
+  width: 100%;
+}
+
+.final-price {
+  margin-top: 10px;
+  font-weight: bold;
+}

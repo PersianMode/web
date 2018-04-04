@@ -1,4 +1,4 @@
-<h1 style="margin-right: 5%">آدرس</h1>
+<h2 style="margin-right: 5%">آدرس</h2>
 <span class="check-box-div">
   <input type="checkbox" class="check-box" (change)="withDelivery===true" [checked]="!withDelivery"
          (click)="changeWithDelivery()">تحویل حضوری
@@ -16,7 +16,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let address of addresses; let i = index">
-          <td> {{makePersianNumber(i)}}</td>
+          <td> {{makePersianNumber(i+1)}}</td>
           <td>
             استان {{address.province}} شهر {{address.city}}
             <br>
@@ -53,7 +53,8 @@
             <span>استان {{address.province}} شهر{{address.city}} {{address.district}} {{address.street}} پلاک {{makePersianNumber(address.no)}} واحد {{ makePersianNumber(address.unit)}}</span>
           </div>
           <div>
-        <span *ngIf="withDelivery">
+            <br>
+            <span *ngIf="withDelivery">
           نام تحویل گیرنده : <b>{{address.recipient_name}}</b>
           <br>
           کدملی تحویل گیرنده : <b>{{makePersianNumber( address.recipient_national_id)}}</b>

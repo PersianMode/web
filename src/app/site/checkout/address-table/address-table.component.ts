@@ -1,12 +1,13 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../../shared/services/window.service';
 import {HttpService} from '../../../shared/services/http.service';
-import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
 import {MatDialog} from '@angular/material';
+import {AuthService} from '../../../shared/services/auth.service';
 import {ResponsiveService} from '../../../shared/services/responsive.service';
 import {Router} from '@angular/router';
-import {GenDialogComponent} from "../../../shared/components/gen-dialog/gen-dialog.component";
-import {DialogEnum} from "../../../shared/enum/dialog.components.enum";
+import {GenDialogComponent} from '../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../shared/enum/dialog.components.enum';
+import {CheckoutService} from '../../../shared/services/checkout.service';
 
 @Component({
   selector: 'app-address-table',
@@ -14,6 +15,7 @@ import {DialogEnum} from "../../../shared/enum/dialog.components.enum";
   styleUrls: ['./address-table.component.css']
 })
 export class AddressTableComponent implements OnInit {
+
   withDelivery = true;
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
@@ -53,16 +55,19 @@ export class AddressTableComponent implements OnInit {
       'recipient_name': 'علی میرجهانی',
       'recipient_mobile_no': '09391022382'
     }];
-  // addresses = [];
+
   customerAddresses = [];
   wareHouseAddresses = [];
   curHeight: number;
   curWidth: number;
 
-  constructor(@Inject(WINDOW) private window, private httpService: HttpService, private dialog: MatDialog,
-              private responsiveService: ResponsiveService, private router: Router) {
+  constructor(@Inject(WINDOW) private window, private httpService: HttpService,
+              private dialog: MatDialog, private checkoutService: CheckoutService,
+              private responsiveService: ResponsiveService, private router: Router,
+              private authService: AuthService) {
     this.curWidth = this.window.innerWidth;
     this.curHeight = this.window.innerHeight;
+    this.addresses.push(this.address);
   }
 
   setAddress(i: number) {
@@ -71,8 +76,7 @@ export class AddressTableComponent implements OnInit {
         this.selectedCustomerAddresses = -1;
       else
         this.selectedCustomerAddresses = i;
-    }
-    else {
+    } else {
       if (i === this.selectedWareHouseAddresses)
         this.selectedWareHouseAddresses = -1;
       else
@@ -97,7 +101,7 @@ export class AddressTableComponent implements OnInit {
   }
 
   getWareHouseAddresses() {
-    // make request
+    // TODO: this should be changed from hard-coded to a request from server
     this.wareHouseAddresses = [
       {
         'province': 'تهران',
@@ -136,14 +140,16 @@ export class AddressTableComponent implements OnInit {
     this.getWareHouseAddresses();
   }
 
-
   editAddress(id) {
-    // const tempAddressId = (id || id === 0) ? this.addresses[id].addressId : null;
-    console.log('mobileness: ', this.responsiveService.isMobile);
-    const tempAddressId = (id || id === 0) ? id + 1 : null;
+    const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
-    const fullEdit = (!(id || id === 0));
+
+    this.checkoutService.addressData = {
+      addressId: tempAddressId,
+      partEdit: partEdit,
+      dialog_address: tempAddress
+    };
 
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
@@ -151,13 +157,7 @@ export class AddressTableComponent implements OnInit {
       const rmDialog = this.dialog.open(GenDialogComponent, {
         width: '600px',
         data: {
-          componentName: DialogEnum.upsertAddress,
-          extraData: {
-            addressId: tempAddressId,
-            partEdit: partEdit,
-            fullEdit: fullEdit,
-            dialog_address: tempAddress,
-          }
+          componentName: DialogEnum.upsertAddress
         },
       });
       rmDialog.afterClosed().subscribe(result => {
