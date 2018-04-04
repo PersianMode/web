@@ -20,42 +20,25 @@ export class AddressTableComponent implements OnInit {
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
 
-  addresses = [
-    {
-      'province': 'تهران',
-      'city': 'تهران',
-      'street': ' کوچه شهریور ',
-      'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-      'no': '۵',
-      'unit': '۱',
-      'recipient_national_id': '0021625018',
-      'recipient_name': 'علی میرجهانی',
-      'recipient_mobile_no': '09391022382'
+  address = {
+    province: 'البرز',
+    city: 'کرج',
+    street: 'دربند',
+    no: 14,
+    unit: 1,
+    postal_code: 1044940912,
+    loc: {
+      long: 50.817191,
+      lat: 51.427251,
     },
-    {
-      'province': 'تهران',
-      'city': 'تهران',
-      'street': ' کوچه شهریور ',
-      'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-      'no': '۵',
-      'unit': '۱',
-      'recipient_national_id': '0021625018',
-      'recipient_name': 'علی',
-      recipient_surname: 'علوی',
-      'recipient_mobile_no': '09391022382'
-    },
-    {
-      'province': 'تهران',
-      'city': 'تهران',
-      'street': ' کوچه شهریور ',
-      'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-      'no': '۵',
-      'unit': '۱',
-      'recipient_national_id': '0021625018',
-      'recipient_name': 'علی میرجهانی',
-      'recipient_mobile_no': '09391022382'
-    }];
+    recipient_name: 'علی علوی',
+    recipient_mobile_no: '09121212121',
+    recipient_national_id: '06423442',
+    recipient_title: 'm',
+    district: 'خیابان سوم'
+  };
 
+  addresses = [];
   customerAddresses = [];
   wareHouseAddresses = [];
   curHeight: number;
@@ -92,7 +75,6 @@ export class AddressTableComponent implements OnInit {
         else if (res.addresses.length === 1)
           this.selectedCustomerAddresses = 0;
         this.addresses = res.addresses;
-
       }
       this.customerAddresses = res.addresses;
     }, err => {
@@ -159,9 +141,6 @@ export class AddressTableComponent implements OnInit {
         data: {
           componentName: DialogEnum.upsertAddress
         },
-      });
-      rmDialog.afterClosed().subscribe(result => {
-        this.getCustomerAddresses();
       });
     }
   }
