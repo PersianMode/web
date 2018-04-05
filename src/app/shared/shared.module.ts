@@ -4,7 +4,7 @@ import {
   MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatIconModule,
   MatInputModule,
   MatMenuModule,
-  MatOptionModule, MatStepperModule,
+  MatOptionModule, MatSelectModule, MatStepperModule,
   MatToolbarModule
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
@@ -18,7 +18,6 @@ import {PanelsComponent} from './components/panels/panels.component';
 import {RouterModule} from '@angular/router';
 import {UploaderComponent} from './components/uploader/uploader.component';
 import {FileUploadModule} from 'ng2-file-upload';
-import { UpsertAddressComponent } from './components/upsert-address/upsert-address.component';
 import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
@@ -30,7 +29,6 @@ import {AgmCoreModule} from '@agm/core';
     RemovingConfirmComponent,
     PanelsComponent,
     UploaderComponent,
-    UpsertAddressComponent,
   ],
   imports: [
     FormsModule,
@@ -50,6 +48,7 @@ import {AgmCoreModule} from '@agm/core';
     MatButtonModule,
     BidiModule,
     MatIconModule,
+    MatSelectModule,
     MatCheckboxModule,
     FileUploadModule,
     MatStepperModule,
@@ -57,7 +56,9 @@ import {AgmCoreModule} from '@agm/core';
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),
   ],
-  entryComponents: [RemovingConfirmComponent, UpsertAddressComponent],
+  entryComponents: [
+    RemovingConfirmComponent,
+  ],
   exports: [SuggestionComponent,
     SearchFieldsComponent,
     RemovingConfirmComponent,

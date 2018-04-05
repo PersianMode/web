@@ -1,5 +1,14 @@
 <div>
-  <app-login *ngIf="componentName === dialogEnum.login" (closeDialog)="close()"></app-login>
-  <app-register *ngIf="componentName === dialogEnum.register" (closeDialog)="close()"></app-register>
-  <app-other-details *ngIf="componentName === dialogEnum.oauthOtherDetails" (closeDialog)="close()" [status]="extraData.status"></app-other-details>
+  <app-login *ngIf="componentName === dialogEnum.login"
+             (closeDialog)="close()"></app-login>
+  <app-register *ngIf="componentName === dialogEnum.register"
+                (closeDialog)="close()"></app-register>
+  <app-other-details
+    *ngIf="componentName === dialogEnum.oauthOtherDetails"
+    (closeDialog)="close()"
+    [status]="extraData.status"></app-other-details>
+  <app-upsert-address
+    *ngIf="componentName === dialogEnum.upsertAddress"
+    (closeDialog)="close()"
+    [isNotMobile]="true"></app-upsert-address>
 </div>

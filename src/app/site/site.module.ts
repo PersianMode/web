@@ -7,10 +7,21 @@ import {CollectionHeaderComponent} from '../shared/components/collection-header/
 import {SlidingHeaderComponent} from '../shared/components/sliding-header/sliding-header.component';
 import {MobileHeaderComponent} from '../shared/components/mobile-header/mobile-header.component';
 import {
-  MatButtonModule, MatDialogModule,
+  MatButtonModule,
+  MatDialogModule,
   MatIconModule,
-  MatSidenavModule
+  MatSidenavModule,
+  MatToolbarModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatMenuModule,
+  MatInputModule,
+  MatOptionModule,
+  MatAutocompleteModule,
+  MatCheckboxModule,
+  MatStepperModule,
 } from '@angular/material';
+import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
@@ -22,20 +33,36 @@ import {RegisterComponent} from './register/components/register/register.compone
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
 import {SharedModule} from '../shared/shared.module';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
+import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
     SiteRouting,
     CommonModule,
     FlexLayoutModule,
-    ReactiveFormsModule,
     FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatMenuModule,
+    MatInputModule,
+    MatOptionModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatStepperModule,
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
     DpDatePickerModule,
     SharedModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
+    }),
   ],
   declarations: [
     HeaderComponent,
@@ -49,6 +76,7 @@ import {OtherDetailsComponent} from './login/components/other-details/other-deta
     RegisterComponent,
     GenDialogComponent,
     OtherDetailsComponent,
+    UpsertAddressComponent,
   ],
   entryComponents: [GenDialogComponent],
 })

@@ -1,6 +1,6 @@
 export interface IWarehouse {
   _id: string;
   name: string;
-  address: string;
+  address: any;
   phone: string;
 }

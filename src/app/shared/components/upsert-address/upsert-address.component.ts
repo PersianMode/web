@@ -1,8 +1,9 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {CheckoutService} from '../../services/checkout.service';
+import {IAddressInfo} from '../../interfaces/iaddressInfo.interface';
 import {AuthService} from '../../services/auth.service';
-import {HttpService} from '../../services/http.service';
 import {HttpClient} from '@angular/common/http';
 import {isUndefined} from 'util';
 
@@ -12,69 +13,93 @@ import {isUndefined} from 'util';
   styleUrls: ['./upsert-address.component.css']
 })
 export class UpsertAddressComponent implements OnInit {
+  @Input() isNotMobile;
+  @Output() closeDialog = new EventEmitter<boolean>();
   dialogTitle;
   buttonTitle;
-  partEdit;
-  addressData: any;
   addressForm: FormGroup;
   cityArray = [];
-  ostanArray: any;
+  provinceArray: any;
   anyChanges = false;
-  addressId;
 
-  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<UpsertAddressComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
-              private http: HttpClient, private httpService: HttpService) {
+  title;
+  addressData: any;
+  addressInfo: IAddressInfo;
+
+  constructor(private authService: AuthService, private http: HttpClient,
+              private checkoutService: CheckoutService, private router: Router) {
   }
 
   ngOnInit() {
     this.http.get('assets/province.json').subscribe(
       (info: any) => {
-        this.ostanArray = info;
-        if (!this.data.addressId)
-          this.cityArray = this.ostanArray.find(el => el.name === 'آذربایجان شرقی').cities;
-        else this.cityArray = this.ostanArray.find(el => el.name === this.addressData.ostan).cities;
+        this.provinceArray = info;
+        if (!this.addressInfo.addressId)
+          this.cityArray = this.provinceArray.find(el => el.name === 'تهران').cities;
+        else
+          this.cityArray = this.provinceArray.find(el => el.name === this.addressData.province).cities;
       }, err => {
         console.log('err: ', err);
       }
     );
-    this.dialogTitle = this.data.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
-    this.buttonTitle = this.data.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
-    this.addressData = this.data.dialog_address;
-    this.partEdit = this.data.partEdit;
+    this.addressInfo = this.checkoutService.addressData;
+    this.initializeData();
+    this.dialogTitle = this.addressInfo.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
+    this.buttonTitle = this.addressInfo.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
+    this.addressData = this.addressInfo.dialog_address;
     this.initForm();
+  }
+
+  onClose() {
+    // TODO: guard is needed if any fields have been changed!
+    if (this.isNotMobile) {
+      this.closeDialog.emit(false);
+    } else {
+      this.router.navigate(['/checkout']);
+    }
+  }
+
+  initializeData() {
+    this.addressInfo = this.checkoutService.addressData;
+    this.title = this.addressInfo.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
+    this.addressData = this.addressInfo.dialog_address || {};
   }
 
   initForm() {
     this.addressForm = new FormBuilder().group({
-      name: [this.data.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
+      name: [this.addressInfo.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
         Validators.required,
       ]],
-      family: [this.data.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
+      family: [this.addressInfo.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
         Validators.required,
       ]],
-      nationalCode: [this.data.addressId ? this.addressData.recipient_national_id : '', [
+      nationalCode: [this.addressInfo.addressId ? this.addressData.recipient_national_id : '', [
         Validators.required,
         Validators.maxLength(10),
-        Validators.pattern(/^\d+$/)
+        Validators.minLength(10),
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/)
       ]],
-      selectOstan: [this.data.addressId ? this.addressData.ostan : 'آذربایجان شرقی'],
-      selectCity: [this.data.addressId ? this.addressData.city : 'آبش احمد'],
-      pelak: [this.data.addressId ? this.addressData.no : null, [
+      selectProvince: [this.addressInfo.addressId ? this.addressData.province : 'تهران'],
+      selectCity: [this.addressInfo.addressId ? this.addressData.city : 'تهران'],
+      pelak: [this.addressInfo.addressId ? this.addressData.no : null, [
         Validators.required,
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
       ]],
-      unit: [this.data.addressId ? this.addressData.unit : null],
-      postal_code: [this.data.addressId ? this.addressData.postal_code : null],
-      district: [this.data.addressId ? this.addressData.district : null, [
+      unit: [this.addressInfo.addressId ? this.addressData.unit : null],
+      postal_code: [this.addressInfo.addressId ? this.addressData.postal_code : null, [
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
+      ]],
+      district: [this.addressInfo.addressId ? this.addressData.district : null, [
         Validators.maxLength(15),
       ]],
-      phoneNumber: [this.data.addressId ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
+      phoneNumber: [this.addressInfo.addressId ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
         Validators.required,
-        Validators.pattern(/^\d+$/)
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
+        Validators.minLength(8),
       ]],
-      latitude: [this.data.addressId ? this.addressData.loc.lat : 35.696491],
-      longitude: [this.data.addressId ? this.addressData.loc.long : 51.379926],
-      street: [this.data.addressId ? this.addressData.street : null, [
+      latitude: [this.addressInfo.addressId ? this.addressData.loc.lat : 35.696491],
+      longitude: [this.addressInfo.addressId ? this.addressData.loc.long : 51.379926],
+      street: [this.addressInfo.addressId ? this.addressData.street : null, [
         Validators.required,
       ]],
     });
@@ -86,12 +111,8 @@ export class UpsertAddressComponent implements OnInit {
     );
   }
 
-  closeDialog() {
-    this.dialogRef.close();
-  }
-
   submitAddress() {
-    if (this.data.addressId) {
+    if (this.addressInfo.addressId) {
       this.addressData.recipient_name = this.addressForm.controls['name'].value ;
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
@@ -101,7 +122,7 @@ export class UpsertAddressComponent implements OnInit {
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
-      this.addressData.ostan = this.addressForm.controls['selectOstan'].value;
+      this.addressData.province = this.addressForm.controls['selectProvince'].value;
       this.addressData.city = this.addressForm.controls['selectCity'].value;
       this.addressData.street = this.addressForm.controls['street'].value;
       this.addressData.no = this.addressForm.controls['pelak'].value;
@@ -113,15 +134,18 @@ export class UpsertAddressComponent implements OnInit {
         lat: this.addressForm.controls['latitude'].value,
       };
     }
-    console.log(!this.addressForm.valid);
-    console.log(this.data.addressId && !this.anyChanges);
-    this.dialogRef.close(this.addressData);
-
+    this.checkoutService.submitAddresses(this.addressData)
+      .then(res => {
+        this.onClose();
+      })
+      .catch(err => {
+        console.error('error occured in submitting address', err);
+      });
   }
 
-  setNewOstan(newOstan) {
-    this.cityArray = this.ostanArray.find(el => el.name === newOstan).cities;
-    this.addressData.ostan = newOstan;
+  setNewProvince(newProvince) {
+    this.cityArray = this.provinceArray.find(el => el.name === newProvince).cities;
+    this.addressData.province = newProvince;
   }
 
   setNewCity(newCity) {
