@@ -56,10 +56,6 @@ export class AddressTableComponent implements OnInit {
   curHeight: number;
   curWidth: number;
 
-  constructor(@Inject(WINDOW) private window, private httpService: HttpService, private dialog: MatDialog) {
-    this.curWidth = this.window.innerWidth;
-    this.curHeight = this.window.innerHeight;
-  }
 
   setAddress(i: number) {
     if (this.withDelivery) {
@@ -126,6 +122,9 @@ export class AddressTableComponent implements OnInit {
       return a;
     return (+a).toLocaleString('fa', {useGrouping: false});
   }
+
+  constructor(private dialog: MatDialog, private authService: AuthService, private httpService: HttpService) { }
+
   address = {
     ostan: 'البرز',
     city: 'کرج',
@@ -143,8 +142,6 @@ export class AddressTableComponent implements OnInit {
     recipient_title: 'm',
     district: 'خیابان سوم'
   };
-  constructor(private dialog: MatDialog, private authService: AuthService, private httpService: HttpService) { }
-
   ngOnInit() {
     this.getCustomerAddresses();
     this.getWareHouseAddresses();
@@ -156,13 +153,7 @@ export class AddressTableComponent implements OnInit {
     const tempAddressId = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     const partEdit = !!(id || id === 0);
-    const fullEdit = (!(id || id === 0));
-  openAddressDialog(id) {
-    const tempAddressId = id ? id : null;
-    const tempAddress = id ? this.address : {};
-    const partEdit = id ? true : false;
-    const fullEdit = id ? false : true;
-    const rmDialog = this.dialog.open(UpsertAddressComponent, {
+z    const rmDialog = this.dialog.open(UpsertAddressComponent, {
       width: '600px',
       data: {
         addressId: tempAddressId,
@@ -182,8 +173,7 @@ export class AddressTableComponent implements OnInit {
       this.addresses = this.customerAddresses;
     else
       this.addresses = this.wareHouseAddresses;
-    rmDialog.afterClosed().subscribe(
-      (data) => {
+          (data) => {
         if (data) {
           console.log('*****', data);
           this.httpService.post('user/address', {
