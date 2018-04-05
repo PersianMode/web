@@ -1,7 +1,25 @@
 .badge-icon {
-  font-size: 20px;
+  font-size: 18px;
   color: black;
-  margin-left: -20px;
+  /*margin-left: -23px;*/
   margin-top: -50px;
+  padding-left: 13px;
+}
 
+#header-cart span:nth-child(1) {
+  position: relative;
+  z-index: 2;
+}
+
+#header-cart span:nth-child(2) svg {
+  position: absolute;
+  left: 9px;
+  top: 5px;
+  z-index: 1;
+}
+
+#header-cart span:nth-child(3) {
+  position: absolute;
+  left: -7px;
+  top: -3px;
 }

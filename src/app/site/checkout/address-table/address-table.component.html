@@ -10,7 +10,7 @@
 </span>
 <span *ngIf="withDelivery" class="newAddress">
   <!--TODO-->
-  <button (click)="openAddressDialog()">افزودن آدرس جدید</button>
+  <button (click)="editAddress()">افزودن آدرس جدید</button>
 </span>
 <div *ngIf="addresses.length">
   <div *ngIf="!isMobile" class="rs-table field">
@@ -40,7 +40,7 @@
             </span>
           </td>
           <td *ngIf="withDelivery">
-            <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
+            <mat-icon aria-label="edit" (click)="editAddress(address._id)">edit</mat-icon>
           </td>
           <td *ngIf="!withDelivery">
             <b>{{address.name}}</b>
@@ -84,7 +84,7 @@
           </div>
 
           <div *ngIf="withDelivery">
-            <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
+            <mat-icon aria-label="edit" (click)="editAddress(address._id)">edit</mat-icon>
           </div>
           <div style="margin-top: 20px;">
             انتخاب آدرس
@@ -99,8 +99,4 @@
       <br>
     </div>
   </div>
-</div>
-<!--TODO-->
-<div *ngIf="withDelivery">
-  <button mat-button (click)="editAddress()" class="newAddressButton">افزودن آدرس جدید</button>
 </div>
