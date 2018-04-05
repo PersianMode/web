@@ -15,7 +15,8 @@ import {CheckoutService} from '../../../shared/services/checkout.service';
   styleUrls: ['./address-table.component.css']
 })
 export class AddressTableComponent implements OnInit {
-
+  lat: number;
+  long: number;
   withDelivery = true;
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
@@ -32,6 +33,14 @@ export class AddressTableComponent implements OnInit {
     this.isMobile = this.responsiveService.isMobile;
   }
 
+  getLatitude() {
+    return this.addresses[this.selectedWareHouseAddresses].loc.type.lat;
+  }
+
+  getLongitude() {
+    return this.addresses[this.selectedWareHouseAddresses].loc.type.long;
+  }
+
   setAddress(i: number) {
     if (this.withDelivery) {
       if (i === this.selectedCustomerAddresses)
@@ -41,8 +50,11 @@ export class AddressTableComponent implements OnInit {
     } else {
       if (i === this.selectedWareHouseAddresses)
         this.selectedWareHouseAddresses = -1;
-      else
+      else {
         this.selectedWareHouseAddresses = i;
+        this.lat = 1;
+        this.long = 1;
+      }
     }
   }
 

@@ -55,7 +55,8 @@
             <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddresses===i"></mat-checkbox>
           </td>
           <td *ngIf="!withDelivery">
-            <mat-checkbox class="check-box" [checked]="selectedWareHouseAddresses===i" (change)="setAddress(i)"></mat-checkbox>
+            <mat-checkbox class="check-box" [checked]="selectedWareHouseAddresses===i"
+                          (change)="setAddress(i)"></mat-checkbox>
           </td>
         </tr>
         </tbody>
@@ -88,15 +89,25 @@
           </div>
           <div style="margin-top: 20px;">
             انتخاب آدرس
-            <mat-checkbox *ngIf="withDelivery"  [checked]="selectedCustomerAddresses===i"
-                       (change)="setAddress(i)"></mat-checkbox>
-            <mat-checkbox *ngIf="!withDelivery"  [checked]="selectedWareHouseAddresses===i"
-                       (change)="setAddress(i)"></mat-checkbox>
+            <mat-checkbox *ngIf="withDelivery" [checked]="selectedCustomerAddresses===i"
+                          (change)="setAddress(i)"></mat-checkbox>
+            <mat-checkbox *ngIf="!withDelivery" [checked]="selectedWareHouseAddresses===i"
+                          (change)="setAddress(i)"></mat-checkbox>
           </div>
           <br>
         </mat-card-content>
       </mat-card>
       <br>
     </div>
+  </div>
+  <div *ngIf="!withDelivery && selectedWareHouseAddresses!==-1" class="map-div">
+    <agm-map class="ev-loc" [latitude]="getLatitude()" [longitude]="getLongitude()">
+      <agm-marker
+        [latitude]="getLatitude()"
+        [longitude]="getLongitude()"
+        [markerClickable]="true"
+        [markerDraggable]="false"
+      ></agm-marker>
+    </agm-map>
   </div>
 </div>

@@ -47,7 +47,7 @@ mat-card {
   line-height: 37px;
   display: inline-block;
   width: calc(50% - 10px);
-  padding-right:10px;
+  padding-right: 10px;
 }
 
 .newAddress {
@@ -64,4 +64,8 @@ mat-card {
 
 h2 {
   margin-right: 10px;
+}
+
+.map-div {
+  margin: 10px;
 }

@@ -16,6 +16,7 @@ import {AddressTableComponent} from './address-table/address-table.component';
 import {CheckoutPageComponent} from './checkout-page/checkout-page.component';
 import { PaymentTypeComponent } from './payment-type/payment-type.component';
 import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.component';
+import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
   imports: [
@@ -32,6 +33,9 @@ import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.co
     MatIconModule,
     MatRadioModule,
     MatCheckboxModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
+    }),
   ],
   declarations: [
     CheckoutPageComponent,
