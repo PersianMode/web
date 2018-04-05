@@ -9,7 +9,7 @@ tr {
 
 tr:first-child {
   border-top: 1px solid black;
-  margin-top: 5%;
+  margin-top: 15px;
 }
 
 table {
@@ -29,11 +29,10 @@ td {
 
 th {
   text-align: justify;
-  padding-bottom: 10px;
+  padding: 0px 10px 10px 0px;
 }
 
 .new-Address {
-  margin-right: 5%;
   margin-top: 30px;
   color: #00a4e4;
 }
@@ -41,22 +40,28 @@ th {
 mat-card {
   margin-top: 20px;
   font-family: iranyekan, sans-serif;
+  margin: 10px;
 }
 
 .check-box-div {
-  margin-right: 5%;
-  margin-bottom: 50px;
-  padding: 20px;
-  width: 100%;
-  height: 30px;
+  line-height: 37px;
+  display: inline-block;
+  width: calc(50% - 10px);
+  padding-right:10px;
 }
 
-.check-box {
-  width: 20px;
-  height: 20px;
-  margin-top: 10px;
+.newAddress {
+  width: calc(49% - 10px);
+  text-align: left;
+  display: inline-block;
+  padding-left: 10px;
 }
 
-.newAddressButton {
-  margin: 10px 10% 10px 0;
+.newAddress button {
+  padding: 10px;
+  margin-right: 10px;
+}
+
+h2 {
+  margin-right: 10px;
 }
