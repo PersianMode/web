@@ -21,6 +21,7 @@ export class AuthService {
     name: null,
     surname: null,
     mobile_no: null,
+    warehouse_id: null
   };
 
   constructor(private httpService: HttpService, private router: Router) {
@@ -35,6 +36,7 @@ export class AuthService {
             userId: data.id,
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
+            warehouse_id: data.warehouse_id,
             username: data.username,
             name: data.name,
             surname: data.surname,
@@ -54,6 +56,7 @@ export class AuthService {
             name: null,
             surname: null,
             mobile_no: null,
+            warehouse_id: null,
           };
           this.isLoggedIn.next(false);
           reject();
@@ -62,7 +65,7 @@ export class AuthService {
     });
   }
 
-  login(username, password, loginType = null) {
+  login(username, password, loginType = null, warehouse_id = null) {
 
     const info = {
       username: username,
@@ -70,6 +73,8 @@ export class AuthService {
     };
     if (this.router.url.includes('agent')) {
       info['loginType'] = loginType;
+      if (warehouse_id)
+        info['warehouse_id'] = warehouse_id;
     }
 
     return new Promise((resolve, reject) => {
@@ -87,6 +92,7 @@ export class AuthService {
             name: data.name,
             surname: data.surname,
             mobile_no: data.mobile_no,
+            warehouse_id: data.warehouse_id
           };
 
           resolve();
@@ -104,6 +110,7 @@ export class AuthService {
             name: null,
             surname: null,
             mobile_no: null,
+            warehouse_id: null
           };
 
           reject();
@@ -129,6 +136,7 @@ export class AuthService {
             name: null,
             surname: null,
             mobile_no: null,
+            warehouse_id: null
           };
           // this.router.navigate([rt]);
 

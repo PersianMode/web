@@ -41,11 +41,21 @@
           </div>
           <div fxFlex="50" class="input-container">
             <div class="style-select-wrapper">
-              <select class="select-style" formControlName="loginAs">
+              <select class="select-style" formControlName="loginAs" (change)="onChange($event.target.value)">
                 <option value="0" selected>مسئول محتوا</option>
                 <option value="1">مسئول فروش</option>
                 <option value="2">نماینده فروشگاه</option>
                 <option value="3">مسئول ارسال</option>
+              </select>
+            </div>
+          </div>
+
+          <div fxFlex="50" class="input-container" *ngIf="isShopClerk">
+            <div class="style-select-wrapper">
+              <select class="select-style" formControlName="warehouse_id" >
+                <option *ngFor="let warehouse of warehouses; let i = index" [value]="warehouse._id"
+                        [attr.selected]="i === 0">{{warehouse.name}}
+                </option>
               </select>
             </div>
           </div>

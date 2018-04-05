@@ -38,6 +38,7 @@ import {MarkdownModule} from 'angular2-markdown';
     SwiperModule,
     MatTooltipModule,
     MarkdownModule,
+    MatCheckboxModule,
   ],
   declarations: [
     CheckoutPageComponent,

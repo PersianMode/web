@@ -20,37 +20,16 @@ export class AddressTableComponent implements OnInit {
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
 
-  address = {
-    province: 'البرز',
-    city: 'کرج',
-    street: 'دربند',
-    no: 14,
-    unit: 1,
-    postal_code: 1044940912,
-    loc: {
-      long: 50.817191,
-      lat: 51.427251,
-    },
-    recipient_name: 'علی علوی',
-    recipient_mobile_no: '09121212121',
-    recipient_national_id: '06423442',
-    recipient_title: 'm',
-    district: 'خیابان سوم'
-  };
-
   addresses = [];
   customerAddresses = [];
   wareHouseAddresses = [];
-  curHeight: number;
-  curWidth: number;
+  isMobile = false;
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
               private dialog: MatDialog, private checkoutService: CheckoutService,
               private responsiveService: ResponsiveService, private router: Router,
               private authService: AuthService) {
-    this.curWidth = this.window.innerWidth;
-    this.curHeight = this.window.innerHeight;
-    this.addresses.push(this.address);
+    this.isMobile = this.responsiveService.isMobile;
   }
 
   setAddress(i: number) {
@@ -84,31 +63,9 @@ export class AddressTableComponent implements OnInit {
 
   getWareHouseAddresses() {
     // TODO: this should be changed from hard-coded to a request from server
-    this.wareHouseAddresses = [
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      },
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      },
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      }];
+    this.httpService.get('warehouse').subscribe(res => {
+      this.wareHouseAddresses = res;
+    });
   }
 
   makePersianNumber(a: string) {
@@ -120,6 +77,29 @@ export class AddressTableComponent implements OnInit {
   ngOnInit() {
     this.getCustomerAddresses();
     this.getWareHouseAddresses();
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+  }
+
+  openAddressDialog(id?) {
+    const tempAddress = id ? this.addresses.find(el => el._id === id) : {};
+    const partEdit = id ? true : false;
+    this.checkoutService.addressData = {
+      addressId: (id || id === 0) ? id + 1 : null,
+      partEdit: partEdit,
+      dialog_address: tempAddress
+    };
+    const rmDialog = this.dialog.open(GenDialogComponent, {
+      width: '600px',
+      data: {
+        componentName: DialogEnum.upsertAddress,
+      }
+    });
+    rmDialog.afterClosed().subscribe(
+      () => this.getCustomerAddresses(),
+      (err) => {
+        console.error('Error in dialog: ', err);
+      }
+    );
   }
 
   editAddress(id) {
@@ -146,10 +126,9 @@ export class AddressTableComponent implements OnInit {
   }
 
   changeWithDelivery() {
-    this.withDelivery = !this.withDelivery;
     if (this.withDelivery)
       this.addresses = this.customerAddresses;
     else
-      this.addresses = this.wareHouseAddresses;
+      this.addresses = this.wareHouseAddresses.map(r => Object.assign({name: r.name}, r.address));
   }
 }
