@@ -1,4 +1,7 @@
 import {Injectable} from '@angular/core';
+import {IAddressInfo} from '../interfaces/iaddressInfo.interface';
+import {HttpService} from './http.service';
+import {AuthService} from './auth.service';
 import {CartService} from './cart.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {PaymentType} from '../enum/payment.type.enum';
@@ -14,7 +17,11 @@ export class CheckoutService {
   private loyaltyPointValue = 0;
   private balance = 0;
 
-  constructor(private cartService: CartService) {
+  addressData: IAddressInfo;
+
+  constructor(private cartService: CartService,
+              private httpService: HttpService,
+              private authService: AuthService) {
     this.cartService.cartItems.subscribe(
       (data) => this.dataIsReady.next((data && data.length > 0) ? true : false)
     );
@@ -48,5 +55,20 @@ export class CheckoutService {
       total: this.total,
       discount: this.discount,
     };
+  }
+
+  submitAddresses(data) {
+    if (!data)
+      return Promise.reject(false);
+
+    return new Promise((resolve, reject) => {
+      this.httpService.post('user/address', data).subscribe(
+        res => {
+          resolve();
+        }, err => {
+          reject(err);
+        }
+      );
+    });
   }
 }

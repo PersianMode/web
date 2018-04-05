@@ -1,8 +1,13 @@
 import {Component, Inject, OnInit} from '@angular/core';
+import {WINDOW} from '../../../shared/services/window.service';
 import {HttpService} from '../../../shared/services/http.service';
-import {UpsertAddressComponent} from '../../../shared/components/upsert-address/upsert-address.component';
 import {MatDialog} from '@angular/material';
 import {AuthService} from '../../../shared/services/auth.service';
+import {ResponsiveService} from '../../../shared/services/responsive.service';
+import {Router} from '@angular/router';
+import {GenDialogComponent} from '../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../shared/enum/dialog.components.enum';
+import {CheckoutService} from '../../../shared/services/checkout.service';
 
 @Component({
   selector: 'app-address-table',
@@ -15,65 +20,17 @@ export class AddressTableComponent implements OnInit {
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
 
-  address = {
-    ostan: 'البرز',
-    city: 'کرج',
-    street: 'دربند',
-    no: 14,
-    unit: 1,
-    postal_code: 1044940912,
-    loc: {
-      long: 50.817191,
-      lat: 51.427251,
-    },
-    recipient_name: 'علی',
-    recipient_surname: 'علوی',
-    recipient_mobile_no: '09121212121',
-    recipient_national_id: '06423442',
-    recipient_title: 'm',
-    district: 'خیابان سوم'
-  };
-
-  // addresses = [
-  //   {
-  //   'province': 'تهران',
-  //   'city': 'تهران',
-  //   'street': ' کوچه شهریور ',
-  //   'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-  //   'no': '۵',
-  //   'unit': '۱',
-  //   'recipient_national_id': '0021625018',
-  //   'recipient_name': 'علی میرجهانی',
-  //   'recipient_mobile_no': '09391022382'
-  // },
-  //   {
-  //   'province': 'تهران',
-  //   'city': 'تهران',
-  //   'street': ' کوچه شهریور ',
-  //   'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-  //   'no': '۵',
-  //   'unit': '۱',
-  //   'recipient_national_id': '0021625018',
-  //   'recipient_name': 'علی میرجهانی',
-  //   'recipient_mobile_no': '09391022382'
-  // },
-  //   {
-  //   'province': 'تهران',
-  //   'city': 'تهران',
-  //   'street': ' کوچه شهریور ',
-  //   'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-  //   'no': '۵',
-  //   'unit': '۱',
-  //   'recipient_national_id': '0021625018',
-  //   'recipient_name': 'علی میرجهانی',
-  //   'recipient_mobile_no': '09391022382'
-  // }];
   addresses = [];
   customerAddresses = [];
   wareHouseAddresses = [];
-  curHeight: number;
-  curWidth: number;
+  isMobile = false;
 
+  constructor(@Inject(WINDOW) private window, private httpService: HttpService,
+              private dialog: MatDialog, private checkoutService: CheckoutService,
+              private responsiveService: ResponsiveService, private router: Router,
+              private authService: AuthService) {
+    this.isMobile = this.responsiveService.isMobile;
+  }
 
   setAddress(i: number) {
     if (this.withDelivery) {
@@ -81,8 +38,7 @@ export class AddressTableComponent implements OnInit {
         this.selectedCustomerAddresses = -1;
       else
         this.selectedCustomerAddresses = i;
-    }
-    else {
+    } else {
       if (i === this.selectedWareHouseAddresses)
         this.selectedWareHouseAddresses = -1;
       else
@@ -103,36 +59,13 @@ export class AddressTableComponent implements OnInit {
     }, err => {
       console.error(err);
     });
-
   }
 
   getWareHouseAddresses() {
-    // make request
-    this.wareHouseAddresses = [
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      },
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      },
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      }];
+    // TODO: this should be changed from hard-coded to a request from server
+    this.httpService.get('warehouse').subscribe(res => {
+      this.wareHouseAddresses = res;
+    });
   }
 
   makePersianNumber(a: string) {
@@ -141,60 +74,72 @@ export class AddressTableComponent implements OnInit {
     return (+a).toLocaleString('fa', {useGrouping: false});
   }
 
-  constructor(private dialog: MatDialog, private authService: AuthService, private httpService: HttpService) {
-  }
-
-
   ngOnInit() {
     this.getCustomerAddresses();
     this.getWareHouseAddresses();
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }
 
-
-  editAddress(id) {
-    // const tempAddressId = (id || id === 0) ? this.addresses[id].addressId : null;
-    const tempAddressId = (id || id === 0) ? id + 1 : null;
-    const tempAddress = (id || id === 0) ? this.addresses[id] : null;
-    const partEdit = !!(id || id === 0);
-    const rmDialog = this.dialog.open(UpsertAddressComponent, {
+  openAddressDialog(id?) {
+    const tempAddress = id ? this.addresses.find(el => el._id === id) : {};
+    const partEdit = id ? true : false;
+    this.checkoutService.addressData = {
+      addressId: (id || id === 0) ? id + 1 : null,
+      partEdit: partEdit,
+      dialog_address: tempAddress
+    };
+    const rmDialog = this.dialog.open(GenDialogComponent, {
       width: '600px',
       data: {
-        addressId: tempAddressId,
-        partEdit: partEdit,
-        fullEdit: fullEdit,
-        dialog_address: tempAddress,
+        componentName: DialogEnum.upsertAddress,
       }
     });
-    rmDialog.afterClosed().subscribe(result => {
-      this.getCustomerAddresses();
-    });
-  }
-
-  changeWithDelivery() {
-    this.withDelivery = !this.withDelivery;
-    if (this.withDelivery)
-      this.addresses = this.customerAddresses;
-    else
-      this.addresses = this.wareHouseAddresses;
-    (data) => {
-      if (data) {
-        console.log('*****', data);
-        this.httpService.post('user/address', {
-          username: this.authService.userDetails.username,
-          body: data,
-        }).subscribe(
-          (data) => {
-            console.log('sucsess');
-          },
-          (err) => {
-            console.error('Cannot set address');
-          }
-        );
-      }
-    },
+    rmDialog.afterClosed().subscribe(
+      (data) => {
+        if (data) {
+          this.httpService.post('user/address', data).subscribe(
+            () => {
+              console.log('success');
+            },
+            (err) => {
+              console.error('Cannot set address', err);
+            }
+          );
+        }
+      },
       (err) => {
         console.error('Error in dialog: ', err);
       }
-  );
-}
+    );
+  }
+
+  editAddress(id) {
+    const tempAddressId: string = (id || id === 0) ? id + 1 : null;
+    const tempAddress = (id || id === 0) ? this.addresses[id] : null;
+    const partEdit = !!(id || id === 0);
+
+    this.checkoutService.addressData = {
+      addressId: tempAddressId,
+      partEdit: partEdit,
+      dialog_address: tempAddress
+    };
+
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/checkout/address`]);
+    } else {
+      const rmDialog = this.dialog.open(GenDialogComponent, {
+        width: '600px',
+        data: {
+          componentName: DialogEnum.upsertAddress
+        },
+      });
+    }
+  }
+
+  changeWithDelivery() {
+    if (this.withDelivery)
+      this.addresses = this.customerAddresses;
+    else
+      this.addresses = this.wareHouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+  }
 }

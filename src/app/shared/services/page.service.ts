@@ -55,12 +55,12 @@ export class PageService {
               if (data && data.placement && data.placement.length) {
                 this.cache[pageName] = {
                   placement: this.classifyPlacements(pageName, data.placement),
-                  page_info: data.page_info
+                  page_info: data.page_info ? data.page_info : null,
                 };
               } else {
                 this.cache[pageName] = {
                   placement: [['main'], [[]]],
-                  page_info: data.page_info,
+                  page_info: data && data.page_info ? data.page_info : null,
                 };
                 defaultComponents.forEach(r => {
                   this.cache[pageName].placement[0].push(r);
