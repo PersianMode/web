@@ -4,5 +4,5 @@ const colorConverter = function(col) {
 };
 
 module.exports = {
-  colorConverter: colorConverter,
+  colorConverter: colorConverter
 };
