@@ -22,10 +22,10 @@ export class UpsertAddressComponent implements OnInit {
   provinceArray: any;
   anyChanges = false;
   gender = [{
-      name : 'زن',
+      name : 'خانم',
       value : 'f'
     }, {
-      name : 'مرد',
+      name : 'آقا',
       value : 'm'
     }];
   title;
@@ -97,7 +97,7 @@ export class UpsertAddressComponent implements OnInit {
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
       ]],
       district: [this.addressInfo.addressId ? this.addressData.district : null, [
-        Validators.maxLength(15),
+        Validators.maxLength(500),
       ]],
       phoneNumber: [this.addressInfo.addressId ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
         Validators.required,
