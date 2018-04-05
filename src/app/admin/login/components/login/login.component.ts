@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.restService.get('warehouse').subscribe(res => {
+    this.restService.get('warehouse/all').subscribe(res => {
       this.warehouses = res.filter(x => !x.is_center);
     });
   }
