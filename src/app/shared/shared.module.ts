@@ -50,7 +50,6 @@ import {AgmCoreModule} from '@agm/core';
     MatIconModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatRadioModule,
     FileUploadModule,
     MatStepperModule,
     AgmCoreModule.forRoot({

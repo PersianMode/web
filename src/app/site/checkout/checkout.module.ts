@@ -16,6 +16,7 @@ import {AddressTableComponent} from './address-table/address-table.component';
 import {CheckoutPageComponent} from './checkout-page/checkout-page.component';
 import { PaymentTypeComponent } from './payment-type/payment-type.component';
 import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.component';
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.co
     MatIconModule,
     MatRadioModule,
     MatCheckboxModule,
+    SharedModule,
   ],
   declarations: [
     CheckoutPageComponent,

@@ -31,9 +31,9 @@ export class UpsertAddressComponent implements OnInit {
   title;
   addressData: any;
   addressInfo: IAddressInfo;
-  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<UpsertAddressComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
-              private http: HttpClient, private httpService: HttpService) {
+
+  constructor(private authService: AuthService, private http: HttpClient,
+              private checkoutService: CheckoutService, private router: Router) {
   }
 
 
@@ -104,7 +104,7 @@ export class UpsertAddressComponent implements OnInit {
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
         Validators.minLength(8),
       ]],
-      selectGender: [this.data.addressId ? this.addressData.recipient_title : this.authService.userDetails.gender],
+      selectGender: [this.addressInfo.addressId ? this.addressData.recipient_title : this.authService.userDetails.gender],
       latitude: [this.addressInfo.addressId ? this.addressData.loc.lat : 35.696491],
       longitude: [this.addressInfo.addressId ? this.addressData.loc.long : 51.379926],
       street: [this.addressInfo.addressId ? this.addressData.street : null, [
