@@ -18,6 +18,7 @@ import { PaymentTypeComponent } from './payment-type/payment-type.component';
 import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.component';
 import {SwiperModule} from 'ngx-swiper-wrapper';
 import {MarkdownModule} from 'angular2-markdown';
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import {MarkdownModule} from 'angular2-markdown';
     MatTooltipModule,
     MarkdownModule,
     MatCheckboxModule,
+    SharedModule,
   ],
   declarations: [
     CheckoutPageComponent,

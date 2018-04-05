@@ -12,57 +12,52 @@ export class AuthService {
   private defaultDisplayName = 'Anonymous user';
   isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isVerified: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  userDetails = {
-    isAgent: null,
-    accessLevel: null,
-    userId: null,
-    displayName: this.defaultDisplayName,
-    username: null,
-    name: null,
-    surname: null,
-    mobile_no: null,
-    warehouse_id: null
-  };
+  userDetails: any;
 
   constructor(private httpService: HttpService, private router: Router) {
+    this.populateUserDetails();
   }
 
   checkValidation(url) {
     return new Promise((resolve, reject) => {
       this.httpService.get((url.includes('agent') ? 'agent' : '') + '/validUser').subscribe(
         (data) => {
-          this.userDetails = {
-            isAgent: data.personType === 'agent',
-            userId: data.id,
-            displayName: data.displayName,
-            accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
-            warehouse_id: data.warehouse_id,
-            username: data.username,
-            name: data.name,
-            surname: data.surname,
-            mobile_no: data.mobile_no,
-          };
+          this.populateUserDetails(data);
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
           resolve();
         },
         (err) => {
-          this.userDetails = {
-            isAgent: null,
-            accessLevel: null,
-            userId: null,
-            displayName: this.defaultDisplayName,
-            username: null,
-            name: null,
-            surname: null,
-            mobile_no: null,
-            warehouse_id: null,
-          };
+          this.populateUserDetails();
           this.isLoggedIn.next(false);
           reject();
         });
 
     });
+  }
+
+  private populateUserDetails(data = null) {
+    if (data) {
+      this.userDetails = data;
+      Object.assign(this.userDetails, {
+        isAgent: data.personType === 'agent',
+        userId: data.id,
+        accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
+      });
+    } else {
+      this.userDetails = {
+        isAgent: null,
+        accessLevel: null,
+        userId: null,
+        displayName: this.defaultDisplayName,
+        username: null,
+        name: null,
+        surname: null,
+        mobile_no: null,
+        national_id: null,
+        warehouse_id: null,
+      };
+    }
   }
 
   login(username, password, loginType = null, warehouse_id = null) {
@@ -83,16 +78,11 @@ export class AuthService {
         (data) => {
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
+          this.userDetails = data;
           this.userDetails = {
             isAgent: data.personType === 'agent',
             userId: data.id,
-            displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
-            username: data.username,
-            name: data.name,
-            surname: data.surname,
-            mobile_no: data.mobile_no,
-            warehouse_id: data.warehouse_id
           };
 
           resolve();
@@ -101,17 +91,7 @@ export class AuthService {
           this.isLoggedIn.next(false);
           this.isVerified.next(false);
           console.error('Error in login: ', err);
-          this.userDetails = {
-            isAgent: null,
-            accessLevel: null,
-            userId: null,
-            displayName: this.defaultDisplayName,
-            username: null,
-            name: null,
-            surname: null,
-            mobile_no: null,
-            warehouse_id: null
-          };
+          this.populateUserDetails();
 
           reject();
         }
@@ -127,17 +107,7 @@ export class AuthService {
 
           this.isLoggedIn.next(false);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
-          this.userDetails = {
-            isAgent: null,
-            userId: null,
-            displayName: this.defaultDisplayName,
-            accessLevel: null,
-            username: null,
-            name: null,
-            surname: null,
-            mobile_no: null,
-            warehouse_id: null
-          };
+          this.populateUserDetails();
           // this.router.navigate([rt]);
 
           resolve();
