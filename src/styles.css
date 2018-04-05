@@ -6,7 +6,7 @@
   src: url('assets/fonts/OneNikeGlyphs.woff');
 }
 
-body {
+body, label{
   margin: 0;
   padding: 0;
   font-family: iranyekan,sans-serif;
@@ -28,6 +28,14 @@ h1 {
   top: 0;
   z-index: 999;
   height: 39px;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #000 !important;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #000 !important;
 }
 
 .first-bar ul {
@@ -742,10 +750,19 @@ mat-panel-title {
   font-size: 75% !important;
   line-height: 136% !important;
 }
-.mat-radio-button.mat-accent .mat-radio-inner-circle {
-  background-color: gray;
+
+.box-area {
+  border-color: #000;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: thin;
+  padding: 5px;
 }
 
-.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
-  border-color: rgba(0,0,0,.54);
+.mat-radio-label-content, .mat-radio-label {
+  width: 100% !important;
+}
+
+.mat-radio-label-content {
+  margin-right: 5px;
 }

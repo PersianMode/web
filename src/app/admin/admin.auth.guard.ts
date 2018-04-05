@@ -3,10 +3,11 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '
 import {AuthService} from '../shared/services/auth.service';
 import {AccessLevel} from '../shared/enum/accessLevel.enum';
 import {Observable} from 'rxjs/Observable';
+import {links} from '../shared/lib/links';
 
 @Injectable()
 export class AdminAuthGuard implements CanActivate {
-  accessLevel = AccessLevel;
+
   constructor(private authService: AuthService, private router: Router) {
   }
 
@@ -14,9 +15,12 @@ export class AdminAuthGuard implements CanActivate {
     this.authService.checkValidation(state.url);
 
     return this.authService.isLoggedIn.map((res: boolean) => {
-      if (res && this.authService.userDetails.isAgent && this.authService.userDetails.accessLevel === this.accessLevel.Admin)
-        return true;
+      if (res && this.authService.userDetails.isAgent) {
 
+        const link = links.find(x => state.url.includes(x.address));
+        if (link && link.access === this.authService.userDetails.accessLevel)
+          return true;
+      }
       this.router.navigate(['agent/login']);
       return false;
     });

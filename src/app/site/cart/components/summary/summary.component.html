@@ -16,8 +16,8 @@
   <div class="rows" *ngIf="isLoggedIn">
     <div>
       <label class="right-text coupon_label" (click)="changeCouponVisibility()"> آیا کد تخفیف دارید؟
-        <span *ngIf="!show_coupon_area"><i class="fas fa-angle-down"></i></span>
-        <span *ngIf="show_coupon_area"><i class="fas fa-angle-up"></i></span>
+        <span *ngIf="!show_coupon_area"><i class="open-close-field-sign material-icons">keyboard_arrow_down</i></span>
+        <span *ngIf="show_coupon_area"><i class="open-close-field-sign material-icons">keyboard_arrow_up</i></span>
       </label>
     </div>
     <div class="coupon_area" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" *ngIf="show_coupon_area" >
@@ -40,12 +40,12 @@
     <span class="left-text">{{discountValue}} تومان </span>
   </div>
   <hr class="hr-style">
-  <div class="rows">
+  <div class="rows nowrap-row-tp">
     <span class="right-text total-payment">قیمت نهایی : </span>
     <span class="left-text total-payment">{{finalTotal}}  تومان</span>
   </div>
   <hr class="hr-style">
   <div>
-    <button class="payment-button"> پرداخت</button>
+    <button class="payment-button" (click)="pay()"> پرداخت</button>
   </div>
 </div>

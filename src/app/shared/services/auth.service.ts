@@ -55,17 +55,26 @@ export class AuthService {
         surname: null,
         mobile_no: null,
         national_id: null,
+        warehouse_id: null,
       };
     }
   }
 
-  login(username, password) {
+  login(username, password, loginType = null, warehouse_id = null) {
+
+    const info = {
+      username: username,
+      password: password,
+    };
+    if (this.router.url.includes('agent')) {
+      info['loginType'] = loginType;
+      if (warehouse_id)
+        info['warehouse_id'] = warehouse_id;
+    }
+
     return new Promise((resolve, reject) => {
       this.httpService.post(
-        (this.router.url.includes('agent') ? 'agent/' : '') + 'login', {
-          username: username,
-          password: password
-        }).subscribe(
+        (this.router.url.includes('agent') ? 'agent/' : '') + 'login', info).subscribe(
         (data) => {
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
