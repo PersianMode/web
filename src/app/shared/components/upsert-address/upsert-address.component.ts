@@ -145,6 +145,7 @@ export class UpsertAddressComponent implements OnInit {
 
   setNewProvince(newProvince) {
     this.cityArray = this.provinceArray.find(el => el.name === newProvince).cities;
+    this.addressForm.controls['selectCity'].setValue(this.cityArray[0]);
     this.addressData.province = newProvince;
   }
 
@@ -167,7 +168,7 @@ export class UpsertAddressComponent implements OnInit {
 
   fieldChanged() {
     this.anyChanges = false;
-    if (this.data.addressId) { //all fields of addressData has values
+    if (this.addressInfo.addressId) { //all fields of addressData has values
       let name = (this.addressForm.controls['name'].value === null ||
         isUndefined(this.addressForm.controls['name'].value)) ? '' : this.addressForm.controls['name'].value;
       name = name.trim();
