@@ -107,18 +107,7 @@ export class AddressTableComponent implements OnInit {
       }
     });
     rmDialog.afterClosed().subscribe(
-      (data) => {
-        if (data) {
-          this.httpService.post('user/address', data).subscribe(
-            () => {
-              console.log('success');
-            },
-            (err) => {
-              console.error('Cannot set address', err);
-            }
-          );
-        }
-      },
+      () => this.getCustomerAddresses(),
       (err) => {
         console.error('Error in dialog: ', err);
       }
