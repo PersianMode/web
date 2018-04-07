@@ -56,6 +56,7 @@ export class AddressTableComponent implements OnInit {
         this.addresses = res.addresses;
       }
       this.customerAddresses = res.addresses;
+
     }, err => {
       console.error(err);
     });
@@ -88,18 +89,22 @@ export class AddressTableComponent implements OnInit {
       partEdit: partEdit,
       dialog_address: tempAddress
     };
-    const rmDialog = this.dialog.open(GenDialogComponent, {
-      width: '600px',
-      data: {
-        componentName: DialogEnum.upsertAddress,
-      }
-    });
-    rmDialog.afterClosed().subscribe(
-      () => this.getCustomerAddresses(),
-      (err) => {
-        console.error('Error in dialog: ', err);
-      }
-    );
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/checkout/address`]);
+    } else {
+      const rmDialog = this.dialog.open(GenDialogComponent, {
+        width: '600px',
+        data: {
+          componentName: DialogEnum.upsertAddress,
+        }
+      });
+      rmDialog.afterClosed().subscribe(
+        () => this.getCustomerAddresses(),
+        (err) => {
+          console.error('Error in dialog: ', err);
+        }
+      );
+    }
   }
 
   editAddress(id) {

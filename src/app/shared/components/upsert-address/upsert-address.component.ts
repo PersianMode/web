@@ -21,7 +21,13 @@ export class UpsertAddressComponent implements OnInit {
   cityArray = [];
   provinceArray: any;
   anyChanges = false;
-
+  gender = [{
+      name : 'خانم',
+      value : 'f'
+    }, {
+      name : 'آقا',
+      value : 'm'
+    }];
   title;
   addressData: any;
   addressInfo: IAddressInfo;
@@ -29,6 +35,7 @@ export class UpsertAddressComponent implements OnInit {
   constructor(private authService: AuthService, private http: HttpClient,
               private checkoutService: CheckoutService, private router: Router) {
   }
+
 
   ngOnInit() {
     this.http.get('assets/province.json').subscribe(
@@ -44,8 +51,8 @@ export class UpsertAddressComponent implements OnInit {
     );
     this.addressInfo = this.checkoutService.addressData;
     this.initializeData();
-    this.dialogTitle = this.addressInfo.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
-    this.buttonTitle = this.addressInfo.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
+    this.dialogTitle = this.addressInfo.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
+    this.buttonTitle = 'ثبت اطلاعات';
     this.addressData = this.addressInfo.dialog_address;
     this.initForm();
   }
@@ -73,7 +80,7 @@ export class UpsertAddressComponent implements OnInit {
       family: [this.addressInfo.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
         Validators.required,
       ]],
-      nationalCode: [this.addressInfo.addressId ? this.addressData.recipient_national_id : '', [
+      nationalCode: [this.addressInfo.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
         Validators.required,
         Validators.maxLength(10),
         Validators.minLength(10),
@@ -90,13 +97,14 @@ export class UpsertAddressComponent implements OnInit {
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
       ]],
       district: [this.addressInfo.addressId ? this.addressData.district : null, [
-        Validators.maxLength(15),
+        Validators.maxLength(500),
       ]],
       phoneNumber: [this.addressInfo.addressId ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
         Validators.required,
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
         Validators.minLength(8),
       ]],
+      selectGender: [this.addressInfo.addressId ? this.addressData.recipient_title : this.authService.userDetails.gender],
       latitude: [this.addressInfo.addressId ? this.addressData.loc.lat : 35.696491],
       longitude: [this.addressInfo.addressId ? this.addressData.loc.long : 51.379926],
       street: [this.addressInfo.addressId ? this.addressData.street : null, [
@@ -117,11 +125,13 @@ export class UpsertAddressComponent implements OnInit {
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
+      this.addressData.recipient_title = this.addressForm.controls['selectGender'].value;
     } else {
       this.addressData.recipient_name = this.addressForm.controls['name'].value ;
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
+      this.addressData.recipient_title = this.addressForm.controls['selectGender'].value;
       this.addressData.province = this.addressForm.controls['selectProvince'].value;
       this.addressData.city = this.addressForm.controls['selectCity'].value;
       this.addressData.street = this.addressForm.controls['street'].value;
@@ -168,7 +178,7 @@ export class UpsertAddressComponent implements OnInit {
 
   fieldChanged() {
     this.anyChanges = false;
-    if (this.addressInfo.addressId) { //all fields of addressData has values
+    if (this.addressInfo.addressId) { // all fields of addressData has values
       let name = (this.addressForm.controls['name'].value === null ||
         isUndefined(this.addressForm.controls['name'].value)) ? '' : this.addressForm.controls['name'].value;
       name = name.trim();
@@ -183,8 +193,12 @@ export class UpsertAddressComponent implements OnInit {
       let phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
         isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
 
+      let selectGender = (this.addressForm.controls['selectGender'].value === null ||
+        isUndefined(this.addressForm.controls['selectGender'].value)) ? '' : this.addressForm.controls['selectGender'].value;
+
       if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
         (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
+        (selectGender !== this.addressData.recipient_title && (selectGender !== '' || this.addressData.recipient_title !== null)) ||
         (recipient_national_id !== this.addressData.recipient_national_id && (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
       || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))) {
         this.anyChanges = true;

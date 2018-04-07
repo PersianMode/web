@@ -65,3 +65,7 @@ mat-card {
 h2 {
   margin-right: 10px;
 }
+
+mat-icon {
+  cursor: pointer;
+}
