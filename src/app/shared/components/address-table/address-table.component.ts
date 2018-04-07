@@ -1,13 +1,13 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {WINDOW} from '../../../shared/services/window.service';
-import {HttpService} from '../../../shared/services/http.service';
+import {Component, Inject, Input, OnInit} from '@angular/core';
+import {WINDOW} from '../../services/window.service';
+import {HttpService} from '../../services/http.service';
 import {MatDialog} from '@angular/material';
-import {AuthService} from '../../../shared/services/auth.service';
-import {ResponsiveService} from '../../../shared/services/responsive.service';
+import {AuthService} from '../../services/auth.service';
+import {ResponsiveService} from '../../services/responsive.service';
 import {Router} from '@angular/router';
-import {GenDialogComponent} from '../../../shared/components/gen-dialog/gen-dialog.component';
-import {DialogEnum} from '../../../shared/enum/dialog.components.enum';
-import {CheckoutService} from '../../../shared/services/checkout.service';
+import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../enum/dialog.components.enum';
+import {CheckoutService} from '../../services/checkout.service';
 
 @Component({
   selector: 'app-address-table',
@@ -15,7 +15,9 @@ import {CheckoutService} from '../../../shared/services/checkout.service';
   styleUrls: ['./address-table.component.css']
 })
 export class AddressTableComponent implements OnInit {
-
+  @Input() isProfile = true;
+  lat: number;
+  long: number;
   withDelivery = true;
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
@@ -32,6 +34,14 @@ export class AddressTableComponent implements OnInit {
     this.isMobile = this.responsiveService.isMobile;
   }
 
+  getLatitude() {
+    return this.addresses[this.selectedWareHouseAddresses].loc.type.lat;
+  }
+
+  getLongitude() {
+    return this.addresses[this.selectedWareHouseAddresses].loc.type.long;
+  }
+
   setAddress(i: number) {
     if (this.withDelivery) {
       if (i === this.selectedCustomerAddresses)
@@ -41,8 +51,11 @@ export class AddressTableComponent implements OnInit {
     } else {
       if (i === this.selectedWareHouseAddresses)
         this.selectedWareHouseAddresses = -1;
-      else
+      else {
         this.selectedWareHouseAddresses = i;
+        this.lat = 1;
+        this.long = 1;
+      }
     }
   }
 
@@ -78,6 +91,7 @@ export class AddressTableComponent implements OnInit {
     this.getCustomerAddresses();
     this.getWareHouseAddresses();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    console.log('isProfile', this.isProfile);
   }
 
   editAddress(id?) {

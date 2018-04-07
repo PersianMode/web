@@ -119,7 +119,7 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   submitAddress() {
-    if (this.addressInfo.addressId) {
+    if (this.addressInfo.partEdit) {
       this.addressData.recipient_name = this.addressForm.controls['name'].value;
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
