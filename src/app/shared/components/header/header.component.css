@@ -5,3 +5,17 @@
   margin-top: -50px;
 
 }
+
+.welcome {
+  padding: 0;
+}
+
+.welcome i {
+  font-size: 22px;
+  margin-left: 3px;
+}
+
+.welcome i:hover {
+  color: darkred;
+
+}
