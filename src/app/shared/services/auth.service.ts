@@ -20,7 +20,7 @@ export class AuthService {
 
   checkValidation(url) {
     return new Promise((resolve, reject) => {
-      this.httpService.get((url.includes('agent') ? 'agent' : '') + '/validUser').subscribe(
+      this.httpService.get((url.includes('agent') ? 'agent/' : '') + 'validUser').subscribe(
         (data) => {
           this.populateUserDetails(data);
           this.isLoggedIn.next(true);

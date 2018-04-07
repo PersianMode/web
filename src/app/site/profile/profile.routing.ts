@@ -1,9 +1,9 @@
 import {RouterModule, Routes} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {BasicInfoComponent} from './components/basic-info/basic-info.component';
+import {ProfileComponent} from './components/profile/profile.component';
 
 const Profile_ROUTES: Routes = [
-  {path: '', component: BasicInfoComponent, pathMatch: 'full'},
+  {path: '', component: ProfileComponent, pathMatch: 'full'},
 
 ];
 export const ProfileRouting = RouterModule.forChild(Profile_ROUTES);
