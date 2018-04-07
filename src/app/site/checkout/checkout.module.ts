@@ -15,7 +15,6 @@ import {CheckoutPageComponent} from './checkout-page/checkout-page.component';
 import {PaymentTypeComponent} from './payment-type/payment-type.component';
 import {CheckoutSummaryComponent} from './checkout-summary/checkout-summary.component';
 import {SharedModule} from '../../shared/shared.module';
-import {AddressTableComponent} from '../../shared/components/address-table/address-table.component';
 import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
@@ -42,7 +41,6 @@ import {AgmCoreModule} from '@agm/core';
     CheckoutPageComponent,
     PaymentTypeComponent,
     CheckoutSummaryComponent,
-    AddressTableComponent,
 
   ],
 })

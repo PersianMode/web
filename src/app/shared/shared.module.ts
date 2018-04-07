@@ -30,12 +30,16 @@ import {AddressTableComponent} from './components/address-table/address-table.co
     RemovingConfirmComponent,
     PanelsComponent,
     UploaderComponent,
+    AddressTableComponent,
+
   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
     CommonModule,
+    MatRadioModule,
+
     FlexLayoutModule,
     FormsModule,
     MatToolbarModule,
@@ -66,6 +70,8 @@ import {AddressTableComponent} from './components/address-table/address-table.co
     RemovingConfirmComponent,
     PanelsComponent,
     UploaderComponent,
+    AddressTableComponent,
+
   ]
 })
 export class SharedModule {
