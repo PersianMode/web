@@ -50,7 +50,7 @@
             </div>
           </div>
 
-          <div fxFlex="50" class="input-container" *ngIf="isShopClerk">
+          <div fxFlex="50" class="input-container" *ngIf="needWarehouseId">
             <div class="style-select-wrapper">
               <select class="select-style" formControlName="warehouse_id" >
                 <option *ngFor="let warehouse of warehouses; let i = index" [value]="warehouse._id"

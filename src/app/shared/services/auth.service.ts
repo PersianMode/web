@@ -6,6 +6,7 @@ import {ActivatedRoute, NavigationEnd, Router, RouterStateSnapshot} from '@angul
 import {AccessLevel} from '../enum/accessLevel.enum';
 import {getExpressionLoweringTransformFactory} from '@angular/compiler-cli/src/transformers/lower_expressions';
 import {reject} from 'q';
+import {SocketService} from './socket.service';
 
 @Injectable()
 export class AuthService {
@@ -21,10 +22,10 @@ export class AuthService {
     name: null,
     surname: null,
     mobile_no: null,
-    warehouse_id: null
+    socket_token: null
   };
 
-  constructor(private httpService: HttpService, private router: Router) {
+  constructor(private httpService: HttpService, private router: Router, private socketService: SocketService) {
   }
 
   checkValidation(url) {
@@ -36,7 +37,7 @@ export class AuthService {
             userId: data.id,
             displayName: data.displayName,
             accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
-            warehouse_id: data.warehouse_id,
+            socket_token: data.hasOwnProperty('socket_token') ? data.socket_token : null,
             username: data.username,
             name: data.name,
             surname: data.surname,
@@ -44,6 +45,10 @@ export class AuthService {
           };
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
+
+          if (this.userDetails.socket_token) {
+            this.socketService.init(this.userDetails.socket_token);
+          }
           resolve();
         },
         (err) => {
@@ -56,7 +61,7 @@ export class AuthService {
             name: null,
             surname: null,
             mobile_no: null,
-            warehouse_id: null,
+            socket_token: null,
           };
           this.isLoggedIn.next(false);
           reject();
@@ -92,8 +97,11 @@ export class AuthService {
             name: data.name,
             surname: data.surname,
             mobile_no: data.mobile_no,
-            warehouse_id: data.warehouse_id
+            socket_token: data.hasOwnProperty('socket_token') ? data.socket_token : null,
           };
+          if (this.userDetails.socket_token) {
+            this.socketService.init(this.userDetails.socket_token);
+          }
 
           resolve();
         },
@@ -110,7 +118,7 @@ export class AuthService {
             name: null,
             surname: null,
             mobile_no: null,
-            warehouse_id: null
+            socket_token: null
           };
 
           reject();
@@ -136,8 +144,9 @@ export class AuthService {
             name: null,
             surname: null,
             mobile_no: null,
-            warehouse_id: null
+            socket_token: null
           };
+          this.socketService.disconnect();
           // this.router.navigate([rt]);
 
           resolve();

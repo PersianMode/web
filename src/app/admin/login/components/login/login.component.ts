@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   curFocus = null;
 
   warehouses: any[] = [];
-  isShopClerk = false;
+  needWarehouseId = false;
 
   constructor(private authService: AuthService, private router: Router, private restService: HttpService) {
   }
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
 
       let warehouseId = null;
-      if (this.isShopClerk)
+      if (this.needWarehouseId)
         warehouseId = this.loginForm.controls['warehouse_id'].value;
 
       this.authService.login(this.loginForm.controls['email'].value,
@@ -74,8 +74,8 @@ export class LoginComponent implements OnInit {
   }
 
   onChange(option) {
-    this.isShopClerk = option === AccessLevel.ShopClerk.toString();
-    if (this.isShopClerk && this.warehouses && this.warehouses.length)
+    this.needWarehouseId = (option === AccessLevel.ShopClerk.toString() || option === AccessLevel.SalesManager.toString());
+    if (this.needWarehouseId && this.warehouses && this.warehouses.length)
       this.loginForm.controls['warehouse_id'].setValue(this.warehouses[0]._id);
     else
       this.loginForm.controls['warehouse_id'].setValue(null);
