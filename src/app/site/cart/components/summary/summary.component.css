@@ -36,6 +36,10 @@
   font-size: 20px;
 }
 
+.nowrap-row-tp {
+  display: inline-block;
+}
+
 .rows {
   padding: 20px;
   position: center;
@@ -65,4 +69,8 @@
 
 .coupon_field {
   padding: 3px;
+}
+
+.open-close-field-sign {
+  vertical-align: middle;
 }

@@ -37,11 +37,11 @@ export class CartComponent implements OnInit, OnDestroy {
       if (this.products.length > 0) {
         this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
 
-        this.totalPrice = this.products
-          .filter(el => el.count && el.quantity <= el.count)
-          .map(el => el.price * el.quantity)
-          .reduce((a, b) => a + b);
-
+        // this.totalPrice = this.products
+        //   .filter(el => el.count && el.quantity <= el.count)
+        //   .map(el => el.price * el.quantity)
+        //   .reduce((a, b) => a + b);
+        this.totalPrice = this.cartService.calculateTotal();
         this.calculateDiscount();
       }
     });
@@ -87,19 +87,7 @@ export class CartComponent implements OnInit, OnDestroy {
     }
   }
 
-  calculateDiscount(addCoupon = true) {
-    if (this.products) {
-      this.discountValue = 0;
-      this.products.forEach(el => {
-        let tempTotalDiscount = el.discount && el.discount.length > 0 ? el.discount.reduce((a, b) => a * b) : 0;
-
-        if (el.coupon_discount) {
-          if (addCoupon)
-            tempTotalDiscount *= el.coupon_discount;
-        }
-        tempTotalDiscount = Number(tempTotalDiscount.toFixed(5));
-        this.discountValue += (el.price - tempTotalDiscount * el.price) * el.quantity;
-      });
-    }
+  calculateDiscount(considerCoupon = false) {
+    this.discountValue = this.cartService.calculateDiscount(considerCoupon);
   }
 }

@@ -1,4 +1,22 @@
-<p>
-  checkout-page works!
-</p>
-<app-address-table></app-address-table>
+<div fxLayout="row" style="direction: ltr">
+  <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
+  <div fxFlex="70" fxFlex.sm="80" fxFlex.xs="100">
+    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"
+         fxLayoutAlign="center center" fxLayoutAlign.sm="center center" fxLayoutAlign.xs="start center"
+         style="direction: rtl">
+      <div fxFlex="30" class="checkout-box" style="margin: 10px; width: 95%">
+        <app-checkout-summary [total]="total" [discount]="discount" [usedBalance]="usedBalance"
+                              [usedLoyaltyPoint]="usedLoyaltyPoint"></app-checkout-summary>
+      </div>
+      <div fxFlex="70" class="checkout-box" style="padding: 10px; width: 95%">
+        <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
+                          (selectedType)="changePaymentType($event)"></app-payment-type>
+      </div>
+    </div>
+    <div style="direction: rtl">
+    <app-address-table [isProfile]="true"></app-address-table>
+      <button mat-raised-button style="padding:10px;margin:15px;font-size:12pt;background: black;color:white;width:calc(100% - 30px)">پرداخت</button>
+    </div>
+  </div>
+  <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
+</div>
