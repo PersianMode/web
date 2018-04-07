@@ -12,10 +12,9 @@ import {
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {CheckoutPageComponent} from './checkout-page/checkout-page.component';
-import {PaymentTypeComponent} from './payment-type/payment-type.component';
-import {CheckoutSummaryComponent} from './checkout-summary/checkout-summary.component';
+import { PaymentTypeComponent } from './payment-type/payment-type.component';
+import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.component';
 import {SharedModule} from '../../shared/shared.module';
-import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
   imports: [
@@ -30,18 +29,14 @@ import {AgmCoreModule} from '@agm/core';
     MatTableModule,
     MatCardModule,
     MatIconModule,
-    SharedModule,
-    MatCheckboxModule,
     MatRadioModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
-    }),
+    MatCheckboxModule,
+    SharedModule,
   ],
   declarations: [
     CheckoutPageComponent,
     PaymentTypeComponent,
     CheckoutSummaryComponent,
-
   ],
 })
 export class CheckoutModule {

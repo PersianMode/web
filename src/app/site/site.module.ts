@@ -19,13 +19,12 @@ import {
   MatOptionModule,
   MatAutocompleteModule,
   MatCheckboxModule,
-  MatStepperModule,
+  MatStepperModule, MatRadioModule,
 } from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
-
 import {GenDialogComponent} from '../shared/components/gen-dialog/gen-dialog.component';
 import {LoginComponent} from './login/components/login/login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -33,8 +32,8 @@ import {RegisterComponent} from './register/components/register/register.compone
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
 import {SharedModule} from '../shared/shared.module';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
-import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 import {RouterModule} from '@angular/router';
+import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 
 @NgModule({
   imports: [
@@ -54,6 +53,7 @@ import {RouterModule} from '@angular/router';
     MatIconModule,
     MatCheckboxModule,
     MatStepperModule,
+    MatRadioModule,
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
@@ -74,9 +74,9 @@ import {RouterModule} from '@angular/router';
     LoginComponent,
     OauthHandlerComponent,
     RegisterComponent,
+    UpsertAddressComponent,
     GenDialogComponent,
     OtherDetailsComponent,
-    UpsertAddressComponent,
   ],
   entryComponents: [GenDialogComponent],
 })

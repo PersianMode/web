@@ -30,7 +30,10 @@
         <tr *ngFor="let address of addresses; let i = index">
           <td> {{makePersianNumber(i+1)}}</td>
           <td *ngIf="withDelivery"><span *ngIf="address.recipient_name">
-                       نام تحویل گیرنده: <b>{{address.recipient_name + ' ' + address.recipient_surname}}</b>
+            نام تحویل گیرنده: <b><span *ngIf="address.recipient_title === 'f'"> خانم </span>
+                                 <span *ngIf="address.recipient_title === 'm'"> آقای </span>
+                                  {{address.recipient_name + ' ' + address.recipient_surname}}
+                              </b>
             <br>
           </span>
             <span *ngIf="address.recipient_national_id">

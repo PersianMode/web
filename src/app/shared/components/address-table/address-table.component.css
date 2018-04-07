@@ -73,3 +73,7 @@ h2 {
 .map-div {
   margin: 10px;
 }
+
+mat-icon {
+  cursor: pointer;
+}
