@@ -43,6 +43,7 @@ export class AuthService {
         isAgent: data.personType === 'agent',
         userId: data.id,
         accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
+        displayName: data.name + ' ' + data.surname,
       });
     } else {
       this.userDetails = {
@@ -76,15 +77,9 @@ export class AuthService {
       this.httpService.post(
         (this.router.url.includes('agent') ? 'agent/' : '') + 'login', info).subscribe(
         (data) => {
+          this.populateUserDetails(data);
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
-          this.userDetails = data;
-          this.userDetails = {
-            isAgent: data.personType === 'agent',
-            userId: data.id,
-            accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
-          };
-
           resolve();
         },
         (err) => {
@@ -92,7 +87,6 @@ export class AuthService {
           this.isVerified.next(false);
           console.error('Error in login: ', err);
           this.populateUserDetails();
-
           reject();
         }
       );

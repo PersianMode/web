@@ -21,6 +21,7 @@ const Site_ROUTES: Routes = [
     {path: 'login/oauth/other/:status', component: OtherDetailsComponent},
     {path: 'checkout', loadChildren: 'app/site/checkout/checkout.module#CheckoutModule'},
     {path: 'checkout/address', component: UpsertAddressComponent},
+    {path: 'profile', loadChildren: 'app/site/profile/profile.module#ProfileModule'},
   ]
   }
 ];

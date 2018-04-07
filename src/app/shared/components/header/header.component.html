@@ -27,6 +27,9 @@
               class="fa fa-sign-in fa-flip-horizontal loginIcon"></i></a>
     </li>
     <li *ngIf="isLoggedIn && isVerified">
+      <a [routerLink]="'/profile'"><b>{{display_name}}، خوش آمدید</b></a>
+    </li>
+    <li *ngIf="isLoggedIn && isVerified">
       <a (click)="logout()" class="faWrapper clickable-link" aria-label="Sign Out"><i
               class="fa fa-sign-out loginIcon"></i></a>
     </li>
