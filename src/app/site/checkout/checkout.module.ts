@@ -7,15 +7,15 @@ import {
   MatDialogModule,
   MatInputModule,
   MatTableModule,
-  MatIconModule,
-  MatRadioModule,
+  MatIconModule, MatRadioModule,
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {AddressTableComponent} from './address-table/address-table.component';
 import {CheckoutPageComponent} from './checkout-page/checkout-page.component';
-import { PaymentTypeComponent } from './payment-type/payment-type.component';
-import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.component';
+import {PaymentTypeComponent} from './payment-type/payment-type.component';
+import {CheckoutSummaryComponent} from './checkout-summary/checkout-summary.component';
+import {SharedModule} from '../../shared/shared.module';
+import {AddressTableComponent} from '../../shared/components/address-table/address-table.component';
 import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
@@ -31,17 +31,19 @@ import {AgmCoreModule} from '@agm/core';
     MatTableModule,
     MatCardModule,
     MatIconModule,
-    MatRadioModule,
+    SharedModule,
     MatCheckboxModule,
+    MatRadioModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),
   ],
   declarations: [
     CheckoutPageComponent,
-    AddressTableComponent,
     PaymentTypeComponent,
     CheckoutSummaryComponent,
+    AddressTableComponent,
+
   ],
 })
 export class CheckoutModule {
