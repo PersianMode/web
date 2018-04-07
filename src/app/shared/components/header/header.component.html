@@ -8,6 +8,10 @@
     </li>
   </ul>
   <ul class="right-bar">
+    <li *ngIf="isLoggedIn && isVerified">
+      <a [routerLink]="'/profile'"><b>{{display_name}}، خوش آمدید</b></a>
+      <a [routerLink]="'/profile'"><i class="fas fa-user"></i></a>
+    </li>
     <li>
       <a [routerLink]="'/cart'" class="faWrapper" aria-label="Shopping Bag">
         <span class="badge-icon">
@@ -22,16 +26,14 @@
                 class="fa fa-shopping-bag fa-flip-horizontal" style="margin-right: -10px;">
         </i>
       </a>
+    </li>
     <li *ngIf="!isLoggedIn || !isVerified">
       <a (click)="login()" class="faWrapper clickable-link" aria-label="Sign In or Register"><i
               class="fa fa-sign-in fa-flip-horizontal loginIcon"></i></a>
     </li>
     <li *ngIf="isLoggedIn && isVerified">
-      <a [routerLink]="'/profile'"><b>{{display_name}}، خوش آمدید</b></a>
-    </li>
-    <li *ngIf="isLoggedIn && isVerified">
-      <a (click)="logout()" class="faWrapper clickable-link" aria-label="Sign Out"><i
-              class="fa fa-sign-out loginIcon"></i></a>
+      <a (click)="logout()" class="faWrapper clickable-link" aria-label="Sign Out">
+        <i class ="fa fa-sign-out loginIcon"></i></a>
     </li>
   </ul>
 </nav>
