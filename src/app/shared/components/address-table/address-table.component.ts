@@ -130,7 +130,6 @@ export class AddressTableComponent implements OnInit {
       partEdit: this.isProfile ? false : partEdit,
       dialog_address: tempAddress
     };
-    console.log('partEdit', this.checkoutService.addressData.partEdit);
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
     } else {
