@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isVerified = false;
   cartNumbers = '';
   itemSubs;
+  display_name;
 
   constructor(public dialog: MatDialog, private authService: AuthService,
               private pageService: PageService, private router: Router,
@@ -30,12 +31,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
-      (data) => this.isLoggedIn = data,
+      (data) => {
+        this.isLoggedIn = data;
+        this.display_name = this.authService.userDetails.displayName;
+      },
       (err) => {
         console.error('Cannot subscribe on isLoggedIn: ', err);
         this.isLoggedIn = false;
-      }
-    );
+      });
     this.authService.isVerified.subscribe(
       (data) => this.isVerified = data,
       (err) => {
@@ -65,6 +68,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.logos.push(obj);
       });
     });
+    this.display_name = this.authService.userDetails.displayName;
   }
 
   login() {
@@ -101,5 +105,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.itemSubs.unsubscribe();
+  }
+
+  navigateToProfile() {
+    this.router.navigate( ['/', 'profile']);
   }
 }

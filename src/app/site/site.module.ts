@@ -34,6 +34,7 @@ import {SharedModule} from '../shared/shared.module';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
 import {RouterModule} from '@angular/router';
 import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
+import {AuthGuard} from './auth.guard';
 
 @NgModule({
   imports: [
@@ -79,6 +80,7 @@ import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert
     OtherDetailsComponent,
   ],
   entryComponents: [GenDialogComponent],
+  providers: [AuthGuard]
 })
 export class SiteModule {
 }
