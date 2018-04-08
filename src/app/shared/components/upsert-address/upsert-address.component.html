@@ -98,7 +98,7 @@
             </div>
             <div fxFlex="50">
               <div class="style-select-wrapper" *ngIf="!addressInfo.partEdit">
-                <select class="select-style" formControlName="selectCity" (change)="setNewCity($event.target.value)">
+                <select class="select-style" formControlName="selectCity">
                   <option *ngFor="let c of cityArray" [value]="c" [disabled]="addressInfo.partEdit">
                     {{c}}
                   </option>

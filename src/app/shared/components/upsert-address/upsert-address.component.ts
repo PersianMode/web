@@ -55,9 +55,6 @@ export class UpsertAddressComponent implements OnInit {
     this.buttonTitle = 'ثبت اطلاعات';
     this.addressData = this.addressInfo.dialog_address;
     this.initForm();
-    console.log('partEdit : ', this.addressInfo.partEdit);
-    console.log('anyChanges : ', this.anyChanges);
-    console.log('form valid : ', this.addressForm.valid);
   }
 
   onClose() {
@@ -159,11 +156,6 @@ export class UpsertAddressComponent implements OnInit {
   setNewProvince(newProvince) {
     this.cityArray = this.provinceArray.find(el => el.name === newProvince).cities;
     this.addressForm.controls['selectCity'].setValue(this.cityArray[0]);
-    this.addressData.province = newProvince;
-  }
-
-  setNewCity(newCity) {
-    this.addressData.city = newCity;
   }
 
   getLatitude() {
@@ -186,180 +178,100 @@ export class UpsertAddressComponent implements OnInit {
       return ((!this.addressForm.valid) || (!this.anyChanges));
   }
 
-  // fieldChanged() {
-  //   this.anyChanges = false;
-  //   let name = (this.addressForm.controls['name'].value === null ||
-  //     isUndefined(this.addressForm.controls['name'].value)) ? '' : this.addressForm.controls['name'].value;
-  //   name = name.trim();
-  //
-  //   let family = (this.addressForm.controls['family'].value === null ||
-  //     isUndefined(this.addressForm.controls['family'].value)) ? '' : this.addressForm.controls['family'].value;
-  //   family = family.trim();
-  //
-  //   const recipient_national_id = (this.addressForm.controls['nationalCode'].value === null ||
-  //     isUndefined(this.addressForm.controls['nationalCode'].value)) ? '' : this.addressForm.controls['nationalCode'].value;
-  //
-  //   const phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
-  //     isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
-  //
-  //   const selectGender = (this.addressForm.controls['selectGender'].value === null ||
-  //     isUndefined(this.addressForm.controls['selectGender'].value)) ? '' : this.addressForm.controls['selectGender'].value;
-  //
-  //   if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
-  //     (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
-  //     (selectGender !== this.addressData.recipient_title && (selectGender !== '' || this.addressData.recipient_title !== null)) ||
-  //     (recipient_national_id !== this.addressData.recipient_national_id && (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
-  //     || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))) {
-  //     this.anyChanges = true;
-  //   }
-  // }
-
   fieldChanged() {
-  this.anyChanges = false;
-  if (this.addressInfo.partEdit) {
-    let name = (this.addressForm.controls['name'].value === null ||
-      isUndefined(this.addressForm.controls['name'].value)) ? '' : this.addressForm.controls['name'].value;
-    name = name.trim();
+    this.anyChanges = false;
+    if (this.addressInfo.partEdit) {
+      const name = ((this.addressForm.controls['name'].value === null ||
+        isUndefined(this.addressForm.controls['name'].value)) ? '' : this.addressForm.controls['name'].value).trim();
 
-    let family = (this.addressForm.controls['family'].value === null ||
-      isUndefined(this.addressForm.controls['family'].value)) ? '' : this.addressForm.controls['family'].value;
-    family = family.trim();
+      let family = (this.addressForm.controls['family'].value === null ||
+        isUndefined(this.addressForm.controls['family'].value)) ? '' : this.addressForm.controls['family'].value;
+      family = family.trim();
 
-    let recipient_national_id = (this.addressForm.controls['nationalCode'].value === null ||
-      isUndefined(this.addressForm.controls['nationalCode'].value)) ? '' : this.addressForm.controls['nationalCode'].value;
+      const recipient_national_id = (this.addressForm.controls['nationalCode'].value === null ||
+        isUndefined(this.addressForm.controls['nationalCode'].value)) ? '' : this.addressForm.controls['nationalCode'].value;
 
-    let phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
-      isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
+      const phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
+        isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
 
-    let selectGender = (this.addressForm.controls['selectGender'].value === null ||
-      isUndefined(this.addressForm.controls['selectGender'].value)) ? '' : this.addressForm.controls['selectGender'].value;
+      const selectGender = (this.addressForm.controls['selectGender'].value === null ||
+        isUndefined(this.addressForm.controls['selectGender'].value)) ? '' : this.addressForm.controls['selectGender'].value;
 
-    if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
-      (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
-      (selectGender !== this.addressData.recipient_title && (selectGender !== '' || this.addressData.recipient_title !== null)) ||
-      (recipient_national_id !== this.addressData.recipient_national_id && (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
-      || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))) {
-      this.anyChanges = true;
+      if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
+        (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
+        (selectGender !== this.addressData.recipient_title && (selectGender !== '' || this.addressData.recipient_title !== null)) ||
+        (recipient_national_id !== this.addressData.recipient_national_id &&
+          (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
+        || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))) {
+        this.anyChanges = true;
+      }
+    } else {
+      let name = (this.addressForm.controls['name'].value === null ||
+        isUndefined(this.addressForm.controls['name'].value)) ? '' : this.addressForm.controls['name'].value;
+      name = name.trim();
+
+      let family = (this.addressForm.controls['family'].value === null ||
+        isUndefined(this.addressForm.controls['family'].value)) ? '' : this.addressForm.controls['family'].value;
+      family = family.trim();
+
+      const recipient_national_id = (this.addressForm.controls['nationalCode'].value === null ||
+        isUndefined(this.addressForm.controls['nationalCode'].value)) ? '' : this.addressForm.controls['nationalCode'].value;
+
+      const phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
+        isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
+
+      const selectGender = (this.addressForm.controls['selectGender'].value === null ||
+        isUndefined(this.addressForm.controls['selectGender'].value)) ? '' : this.addressForm.controls['selectGender'].value;
+      const selectProvince = (this.addressForm.controls['selectProvince'].value === null ||
+        isUndefined(this.addressForm.controls['selectProvince'].value)) ? '' : this.addressForm.controls['selectProvince'].value;
+
+      const selectCity = (this.addressForm.controls['selectCity'].value === null ||
+        isUndefined(this.addressForm.controls['selectCity'].value)) ? '' : this.addressForm.controls['selectCity'].value;
+
+      let street = (this.addressForm.controls['street'].value === null ||
+        isUndefined(this.addressForm.controls['street'].value)) ? '' : this.addressForm.controls['street'].value;
+      street = street.trim();
+
+      let no = (this.addressForm.controls['pelak'].value === null ||
+        isUndefined(this.addressForm.controls['pelak'].value)) ? '' : this.addressForm.controls['pelak'].value;
+      no = no.trim();
+
+      let unit = (this.addressForm.controls['unit'].value === null ||
+        isUndefined(this.addressForm.controls['unit'].value)) ? '' : this.addressForm.controls['unit'].value;
+      unit = unit.trim();
+
+      let postal_code = (this.addressForm.controls['postal_code'].value === null ||
+        isUndefined(this.addressForm.controls['postal_code'].value)) ? '' : this.addressForm.controls['postal_code'].value;
+      postal_code = postal_code.trim();
+
+      let district = (this.addressForm.controls['district'].value === null ||
+        isUndefined(this.addressForm.controls['district'].value)) ? '' : this.addressForm.controls['district'].value;
+      district = district.trim();
+
+      const latitude = (this.addressForm.controls['latitude'].value === null ||
+        isUndefined(this.addressForm.controls['latitude'].value)) ? '' : this.addressForm.controls['latitude'].value;
+
+      const longitude = (this.addressForm.controls['longitude'].value === null ||
+        isUndefined(this.addressForm.controls['longitude'].value)) ? '' : this.addressForm.controls['longitude'].value;
+
+      if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
+        (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
+        (selectGender !== this.addressData.recipient_title && (selectGender !== '' || this.addressData.recipient_title !== null)) ||
+        (recipient_national_id !== this.addressData.recipient_national_id &&
+          (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
+        || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))
+        || (selectProvince !== this.addressData.province && (selectProvince !== '' || this.addressData.province !== null))
+        || (selectCity !== this.addressData.city && (selectCity !== '' || this.addressData.city !== null))
+        || (street !== this.addressData.street && (street !== '' || this.addressData.street !== null))
+        || (no !== this.addressData.no && (no !== '' || this.addressData.no !== null))
+        || (district !== this.addressData.district && (district !== '' || this.addressData.district !== null))
+        || (unit !== this.addressData.unit && (unit !== '' || this.addressData.unit !== null))
+        || (postal_code !== this.addressData.postal_code && (postal_code !== '' || this.addressData.postal_code !== null))
+        || (latitude !== this.addressData.loc.lat && (latitude !== '' || this.addressData.loc.lat !== null))
+        || (longitude !== this.addressData.loc.long && (longitude !== '' || this.addressData.loc.long !== null))) {
+            this.anyChanges = true;
+      }
     }
   }
-  else {
-    let name = (this.addressForm.controls['name'].value === null ||
-      isUndefined(this.addressForm.controls['name'].value)) ? '' : this.addressForm.controls['name'].value;
-    name = name.trim();
 
-    let family = (this.addressForm.controls['family'].value === null ||
-      isUndefined(this.addressForm.controls['family'].value)) ? '' : this.addressForm.controls['family'].value;
-    family = family.trim();
-
-    let recipient_national_id = (this.addressForm.controls['nationalCode'].value === null ||
-      isUndefined(this.addressForm.controls['nationalCode'].value)) ? '' : this.addressForm.controls['nationalCode'].value;
-
-    let phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
-      isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
-
-    let selectGender = (this.addressForm.controls['selectGender'].value === null ||
-      isUndefined(this.addressForm.controls['selectGender'].value)) ? '' : this.addressForm.controls['selectGender'].value;
-    let selectProvince = (this.addressForm.controls['selectProvince'].value === null ||
-      isUndefined(this.addressForm.controls['selectProvince'].value)) ? '' : this.addressForm.controls['selectProvince'].value;
-
-    let selectCity = (this.addressForm.controls['selectCity'].value === null ||
-      isUndefined(this.addressForm.controls['selectCity'].value)) ? '' : this.addressForm.controls['selectCity'].value;
-
-    let street = (this.addressForm.controls['street'].value === null ||
-      isUndefined(this.addressForm.controls['street'].value)) ? '' : this.addressForm.controls['street'].value;
-    street = street.trim();
-
-    let no = (this.addressForm.controls['pelak'].value === null ||
-      isUndefined(this.addressForm.controls['pelak'].value)) ? '' : this.addressForm.controls['pelak'].value;
-    no = no.trim();
-
-    let unit = (this.addressForm.controls['unit'].value === null ||
-      isUndefined(this.addressForm.controls['unit'].value)) ? '' : this.addressForm.controls['unit'].value;
-    unit = unit.trim();
-
-    let postal_code = (this.addressForm.controls['postal_code'].value === null ||
-      isUndefined(this.addressForm.controls['postal_code'].value)) ? '' : this.addressForm.controls['postal_code'].value;
-    postal_code = postal_code.trim();
-
-    let district = (this.addressForm.controls['district'].value === null ||
-      isUndefined(this.addressForm.controls['district'].value)) ? '' : this.addressForm.controls['district'].value;
-    district = district.trim();
-
-    if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
-      (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
-      (selectGender !== this.addressData.recipient_title && (selectGender !== '' || this.addressData.recipient_title !== null)) ||
-      (recipient_national_id !== this.addressData.recipient_national_id && (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
-      || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))
-      || (selectProvince !== this.addressData.province && (selectProvince !== '' || this.addressData.province !== null))
-      || (selectCity !== this.addressData.city && (selectCity !== '' || this.addressData.city !== null))
-      || (street !== this.addressData.street && (street !== '' || this.addressData.street !== null))
-      || (no !== this.addressData.no && (no !== '' || this.addressData.no !== null))
-      || (district !== this.addressData.district && (district !== '' || this.addressData.district !== null))
-      || (unit !== this.addressData.unit && (unit !== '' || this.addressData.unit !== null))
-      || (postal_code !== this.addressData.postal_code && (postal_code !== '' || this.addressData.postal_code !== null))) {
-      this.anyChanges = true;
-    }
-  }
-  console.log('*' ,this.anyChanges);
-}
-
-  // fieldChanged() {
-  //   this.anyChanges = false;
-  //   let name = (this.addressForm.controls['name'].value === null ||
-  //     isUndefined(this.addressForm.controls['name'].value)) ? '' : this.addressForm.controls['name'].value;
-  //   name = name.trim();
-  //
-  //   let family = (this.addressForm.controls['family'].value === null ||
-  //     isUndefined(this.addressForm.controls['family'].value)) ? '' : this.addressForm.controls['family'].value;
-  //   family = family.trim();
-  //
-  //   let recipient_national_id = (this.addressForm.controls['nationalCode'].value === null ||
-  //     isUndefined(this.addressForm.controls['nationalCode'].value)) ? '' : this.addressForm.controls['nationalCode'].value;
-  //
-  //   let phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
-  //     isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
-  //
-  //   let selectGender = (this.addressForm.controls['selectGender'].value === null ||
-  //     isUndefined(this.addressForm.controls['selectGender'].value)) ? '' : this.addressForm.controls['selectGender'].value;
-  //
-  //   if (!this.addressInfo.partEdit) {
-  //     var selectProvince = (this.addressForm.controls['selectProvince'].value === null ||
-  //       isUndefined(this.addressForm.controls['selectProvince'].value)) ? '' : this.addressForm.controls['selectProvince'].value;
-  //
-  //     var selectCity = (this.addressForm.controls['selectCity'].value === null ||
-  //       isUndefined(this.addressForm.controls['selectCity'].value)) ? '' : this.addressForm.controls['selectCity'].value;
-  //
-  //     var street = (this.addressForm.controls['street'].value === null ||
-  //       isUndefined(this.addressForm.controls['street'].value)) ? '' : this.addressForm.controls['street'].value;
-  //     street = street.trim();
-  //
-  //     var no = (this.addressForm.controls['pelak'].value === null ||
-  //       isUndefined(this.addressForm.controls['pelak'].value)) ? '' : this.addressForm.controls['pelak'].value;
-  //     no = no.trim();
-  //
-  //     var unit = (this.addressForm.controls['unit'].value === null ||
-  //       isUndefined(this.addressForm.controls['unit'].value)) ? '' : this.addressForm.controls['unit'].value;
-  //     unit = unit.trim();
-  //
-  //     var postal_code = (this.addressForm.controls['postal_code'].value === null ||
-  //       isUndefined(this.addressForm.controls['postal_code'].value)) ? '' : this.addressForm.controls['postal_code'].value;
-  //     postal_code = postal_code.trim();
-  //
-  //     var district = (this.addressForm.controls['district'].value === null ||
-  //       isUndefined(this.addressForm.controls['district'].value)) ? '' : this.addressForm.controls['district'].value;
-  //     district = district.trim();
-  //   }
-  //   if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
-  //     (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
-  //     (selectGender !== this.addressData.recipient_title && (selectGender !== '' || this.addressData.recipient_title !== null)) ||
-  //     (recipient_national_id !== this.addressData.recipient_national_id && (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
-  //     || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))
-  //     || (selectProvince !== this.addressData.selectProvince && (selectProvince !== '' || this.addressData.selectProvince !== null))
-  //     || (selectCity !== this.addressData.selectCity && (selectCity !== '' || this.addressData.selectCity !== null))
-  //     || (street !== this.addressData.street && (street !== '' || this.addressData.street !== null))
-  //     || (no !== this.addressData.pelak && (no !== '' || this.addressData.pelak !== null))
-  //     || (district !== this.addressData.district && (district !== '' || this.addressData.district !== null))) {
-  //         this.anyChanges = true;
-  //   }
-  // }
 }
