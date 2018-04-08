@@ -73,3 +73,28 @@
 .mat-drawer-backdrop.mat-drawer-shown {
   background-color: #E5E5E5 !important;
 }
+
+.badge-icon {
+  font-size: 18px;
+  color: black;
+  margin-left: 0.5px;
+  margin-top: -50px;
+}
+
+#header-cart span:nth-child(1) {
+  position: relative;
+  z-index: 2;
+}
+
+#header-cart span:nth-child(2) svg {
+  position: absolute;
+  left: -3px;
+  top: 3px;
+  z-index: 1;
+}
+
+#header-cart span:nth-child(3) {
+  position: absolute;
+  left: -17px;
+  top: 0;
+}
