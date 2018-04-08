@@ -34,6 +34,13 @@ export class AddressTableComponent implements OnInit {
     this.isMobile = this.responsiveService.isMobile;
   }
 
+  ngOnInit() {
+    this.getCustomerAddresses();
+    this.getWareHouseAddresses();
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    console.log('isProfile', this.isProfile);
+  }
+
   getLatitude() {
     return this.addresses[this.selectedWareHouseAddresses].loc.type.lat;
   }
@@ -88,20 +95,11 @@ export class AddressTableComponent implements OnInit {
     return (+a).toLocaleString('fa', {useGrouping: false});
   }
 
-  ngOnInit() {
-    this.getCustomerAddresses();
-    this.getWareHouseAddresses();
-    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
-    console.log('isProfile', this.isProfile);
-  }
-
-  openAddressDialog(id?) {
-    const tempAddress = id ? this.addresses.find(el => el._id === id) : {};
-    const partEdit = id ? true : false;
+  openAddressDialog() {
     this.checkoutService.addressData = {
-      addressId: (id || id === 0) ? id + 1 : null,
-      partEdit: partEdit,
-      dialog_address: tempAddress
+      addressId: null,
+      partEdit: false,
+      dialog_address: {}
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
@@ -124,7 +122,7 @@ export class AddressTableComponent implements OnInit {
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
-    const partEdit = !!(id || id === 0);
+    const partEdit = true;
     this.checkoutService.addressData = {
       addressId: tempAddressId,
       partEdit: this.isProfile ? false : partEdit,

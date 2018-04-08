@@ -162,8 +162,8 @@
                         </agm-map>
                     </div>
                     <div class="submit-button" dir="ltr">
-                        <button class="btn-style" type="submit" [disabled]="(!addressForm.valid) || (addressInfo.partEdit && !anyChanges)"
-                                [class.btn-disable]="(!addressForm.valid) || (addressInfo.partEdit && !anyChanges)">{{buttonTitle}}</button>
+                        <button class="btn-style" type="submit" [disabled]="setButtonVisibility()"
+                                [class.btn-disable]="setButtonVisibility()">{{buttonTitle}}</button>
                     </div>
                 </mat-card-content>
             </mat-card>
