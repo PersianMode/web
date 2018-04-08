@@ -60,23 +60,21 @@ export class AddressTableComponent implements OnInit {
   }
 
   getCustomerAddresses() {
-    this.httpService.get(`customer/address`).subscribe(res => {
-      if (this.withDelivery) {
-        if (this.addresses.length === res.addresses.length - 1)
-          this.selectedCustomerAddresses = res.addresses.length - 1;
-        else if (res.addresses.length === 1)
-          this.selectedCustomerAddresses = 0;
-        this.addresses = res.addresses;
+    this.checkoutService.addresses$.subscribe(
+      addresses => {
+        if (this.withDelivery) {
+          if (this.addresses.length === addresses.length - 1)
+            this.selectedCustomerAddresses = addresses.length - 1;
+          else if (addresses.length === 1)
+            this.selectedCustomerAddresses = 0;
+          this.addresses = addresses;
+        }
+        this.customerAddresses = addresses;
       }
-      this.customerAddresses = res.addresses;
-
-    }, err => {
-      console.error(err);
-    });
+    );
   }
 
   getWareHouseAddresses() {
-    // TODO: this should be changed from hard-coded to a request from server
     this.httpService.get('warehouse').subscribe(res => {
       this.wareHouseAddresses = res;
     });
@@ -89,47 +87,21 @@ export class AddressTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkoutService.getCustomerAddresses();
     this.getCustomerAddresses();
     this.getWareHouseAddresses();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     console.log('isProfile', this.isProfile);
   }
 
-  openAddressDialog(id?) {
+  editAddress(id?) {
     const tempAddress = id ? this.addresses.find(el => el._id === id) : {};
-    const partEdit = id ? true : false;
     this.checkoutService.addressData = {
       addressId: (id || id === 0) ? id + 1 : null,
-      partEdit: partEdit,
+      partEdit: !!id,
       dialog_address: tempAddress
     };
-    if (this.responsiveService.isMobile) {
-      this.router.navigate([`/checkout/address`]);
-    } else {
-      const rmDialog = this.dialog.open(GenDialogComponent, {
-        width: '600px',
-        data: {
-          componentName: DialogEnum.upsertAddress,
-        }
-      });
-      rmDialog.afterClosed().subscribe(
-        () => this.getCustomerAddresses(),
-        (err) => {
-          console.error('Error in dialog: ', err);
-        }
-      );
-    }
-  }
 
-  editAddress(id) {
-    const tempAddressId: string = (id || id === 0) ? id + 1 : null;
-    const tempAddress = (id || id === 0) ? this.addresses[id] : null;
-    const partEdit = !!(id || id === 0);
-    this.checkoutService.addressData = {
-      addressId: tempAddressId,
-      partEdit: this.isProfile ? false : partEdit,
-      dialog_address: tempAddress
-    };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
     } else {

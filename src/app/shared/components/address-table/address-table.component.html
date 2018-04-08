@@ -1,5 +1,4 @@
-<h3>آدرس</h3>
-<span *ngIf="!isProfile" class="check-box-div">
+<span class="check-box-div">
   <mat-radio-group [(ngModel)]="withDelivery" (change)="changeWithDelivery()">
       <mat-radio-button [value]="true">
         <label>ارسال به آدرس شما</label>
@@ -9,8 +8,8 @@
       </mat-radio-button>
     </mat-radio-group>
 </span>
-<span *ngIf="withDelivery" class="newAddress-checkout" [class.newAddress-profile]="isProfile" >
-  <button (click)="openAddressDialog()">افزودن آدرس جدید</button>
+<span *ngIf="withDelivery" class="newAddress-checkout" [class.newAddress-profile]="isProfile">
+  <button (click)="editAddress()">افزودن آدرس جدید</button>
 </span>
 <div *ngIf="addresses.length">
   <div *ngIf="!isMobile" class="rs-table field">
@@ -93,7 +92,7 @@
           </div>
 
           <div *ngIf="withDelivery">
-            <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
+            <mat-icon aria-label="edit" (click)="editAddress(address._id)">edit</mat-icon>
           </div>
           <div *ngIf="!isProfile" style="margin-top: 20px;">
             انتخاب آدرس

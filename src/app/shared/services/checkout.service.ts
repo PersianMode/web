@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {IAddressInfo} from '../interfaces/iaddressInfo.interface';
 import {HttpService} from './http.service';
-import {AuthService} from './auth.service';
 import {CartService} from './cart.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {PaymentType} from '../enum/payment.type.enum';
@@ -18,10 +17,9 @@ export class CheckoutService {
   private balance = 0;
 
   addressData: IAddressInfo;
+  addresses$: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
-  constructor(private cartService: CartService,
-              private httpService: HttpService,
-              private authService: AuthService) {
+  constructor(private cartService: CartService, private httpService: HttpService) {
     this.cartService.cartItems.subscribe(
       (data) => this.dataIsReady.next((data && data.length > 0) ? true : false)
     );
@@ -70,5 +68,16 @@ export class CheckoutService {
         }
       );
     });
+  }
+
+  getCustomerAddresses() {
+    this.httpService.get(`customer/address`).subscribe(
+      res => {
+        this.addresses$.next(res.addresses);
+      },
+      err => {
+        console.error(err);
+      }
+    );
   }
 }

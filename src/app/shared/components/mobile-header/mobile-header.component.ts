@@ -1,14 +1,16 @@
-import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {WINDOW} from '../../services/window.service';
+import {CartService} from '../../services/cart.service';
+import {priceFormatter} from '../../lib/priceFormatter';
 
 @Component({
   selector: 'app-mobile-header',
   templateUrl: './mobile-header.component.html',
   styleUrls: ['./mobile-header.component.css']
 })
-export class MobileHeaderComponent implements OnInit {
+export class MobileHeaderComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav') sideNav;
   @Input() menuWidth = 100;
   @Input() menuHeight = 100;
@@ -94,8 +96,11 @@ export class MobileHeaderComponent implements OnInit {
     }
   };
 
+  cartNumbers = '';
+  itemSubs;
+
   constructor(private authService: AuthService, private router: Router,
-              @Inject(WINDOW) private window) {
+              @Inject(WINDOW) private window, private cartService: CartService) {
   }
 
   ngOnInit() {
@@ -106,6 +111,12 @@ export class MobileHeaderComponent implements OnInit {
     this.authService.isVerified.subscribe(
       (data) => this.isVerified = data,
       (err) => console.error('Cannot subscribe to isVerified: ', err)
+    );
+    this.itemSubs = this.cartService.cartItems.subscribe(
+      data => {
+        data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => a + b) : 0;
+        this.cartNumbers = priceFormatter(data);
+      }
     );
   }
 
@@ -184,6 +195,10 @@ export class MobileHeaderComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['home']);
     this.sideNav.close();
+  }
+
+  ngOnDestroy () {
+    this.itemSubs.unsubscribe();
   }
 }
 

@@ -22,12 +22,12 @@ export class UpsertAddressComponent implements OnInit {
   provinceArray: any;
   anyChanges = false;
   gender = [{
-      name : 'خانم',
-      value : 'f'
-    }, {
-      name : 'آقا',
-      value : 'm'
-    }];
+    name: 'خانم',
+    value: 'f'
+  }, {
+    name: 'آقا',
+    value: 'm'
+  }];
   title;
   addressData: any;
   addressInfo: IAddressInfo;
@@ -35,7 +35,6 @@ export class UpsertAddressComponent implements OnInit {
   constructor(private authService: AuthService, private http: HttpClient,
               private checkoutService: CheckoutService, private router: Router) {
   }
-
 
   ngOnInit() {
     this.http.get('assets/province.json').subscribe(
@@ -121,13 +120,13 @@ export class UpsertAddressComponent implements OnInit {
 
   submitAddress() {
     if (this.addressInfo.partEdit) {
-      this.addressData.recipient_name = this.addressForm.controls['name'].value ;
+      this.addressData.recipient_name = this.addressForm.controls['name'].value;
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
       this.addressData.recipient_title = this.addressForm.controls['selectGender'].value;
     } else {
-      this.addressData.recipient_name = this.addressForm.controls['name'].value ;
+      this.addressData.recipient_name = this.addressForm.controls['name'].value;
       this.addressData.recipient_surname = this.addressForm.controls['family'].value;
       this.addressData.recipient_mobile_no = this.addressForm.controls['phoneNumber'].value;
       this.addressData.recipient_national_id = this.addressForm.controls['nationalCode'].value;
@@ -146,6 +145,7 @@ export class UpsertAddressComponent implements OnInit {
     }
     this.checkoutService.submitAddresses(this.addressData)
       .then(res => {
+        this.checkoutService.getCustomerAddresses();
         this.onClose();
       })
       .catch(err => {
@@ -187,20 +187,22 @@ export class UpsertAddressComponent implements OnInit {
         isUndefined(this.addressForm.controls['family'].value)) ? '' : this.addressForm.controls['family'].value;
       family = family.trim();
 
-      let recipient_national_id = (this.addressForm.controls['nationalCode'].value === null ||
+      const recipient_national_id = (this.addressForm.controls['nationalCode'].value === null ||
         isUndefined(this.addressForm.controls['nationalCode'].value)) ? '' : this.addressForm.controls['nationalCode'].value;
 
-      let phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
+      const phoneNumber = (this.addressForm.controls['phoneNumber'].value === null ||
         isUndefined(this.addressForm.controls['phoneNumber'].value)) ? '' : this.addressForm.controls['phoneNumber'].value;
 
-      let selectGender = (this.addressForm.controls['selectGender'].value === null ||
+      const selectGender = (this.addressForm.controls['selectGender'].value === null ||
         isUndefined(this.addressForm.controls['selectGender'].value)) ? '' : this.addressForm.controls['selectGender'].value;
 
       if ((name !== this.addressData.recipient_name && (name !== '' || this.addressData.recipient_name !== null)) ||
         (family !== this.addressData.recipient_surname && (family !== '' || this.addressData.recipient_surname !== null)) ||
         (selectGender !== this.addressData.recipient_title && (selectGender !== '' || this.addressData.recipient_title !== null)) ||
-        (recipient_national_id !== this.addressData.recipient_national_id && (recipient_national_id !== '' || this.addressData.recipient_national_id !== null))
-      || (phoneNumber !== this.addressData.recipient_mobile_no && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))) {
+        (recipient_national_id !== this.addressData.recipient_national_id && (recipient_national_id !== ''
+        || this.addressData.recipient_national_id !== null))
+        || (phoneNumber !== this.addressData.recipient_mobile_no
+        && (phoneNumber !== '' || this.addressData.recipient_mobile_no !== null))) {
         this.anyChanges = true;
       }
     }
