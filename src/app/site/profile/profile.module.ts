@@ -6,7 +6,7 @@ import { OrdersComponent } from './components/orders/orders.component';
 import {SharedModule} from '../../shared/shared.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MatCardModule} from '@angular/material';
+import {MatCardModule, MatHeaderRow, MatRow, MatRowDef, MatTableModule} from '@angular/material';
 
 @NgModule({
   imports: [

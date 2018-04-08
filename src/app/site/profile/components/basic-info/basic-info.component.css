@@ -1,0 +1,26 @@
+/*.outer-div {*/
+    /*width: 100%;*/
+/*}*/
+
+/*.outer-div:hover {*/
+
+/*}*/
+
+.info-cell {
+     background-color: rgb(237, 237, 242);
+     padding: 6px;
+ }
+
+.info-cell:hover{
+    background-color: rgb(248, 247, 247);
+}
+
+.cell-info {
+    background-color: rgb(248, 247, 247);
+    padding: 6px;
+}
+
+.cell-info:hover {
+    background-color: rgb(237, 237, 242);
+    padding: 6px;
+}
