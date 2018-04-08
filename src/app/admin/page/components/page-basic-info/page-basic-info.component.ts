@@ -225,7 +225,9 @@ export class PageBasicInfoComponent implements OnInit {
           result.placement.forEach(p => {
             this.placements.push({
               _id: p._id,
-              component_name: p.component_name
+              component_name: p.component_name,
+              variable_name: p.variable_name,
+              info: p.info,
             });
           });
 

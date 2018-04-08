@@ -77,55 +77,57 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf="id" class="card-view" style="margin-top: 10px" dir="ltr">
-  <mat-card-header dir="ltr">
-    <mat-card-title>
-      <h2 dir="ltr">Placements:</h2>
-    </mat-card-title>
-  </mat-card-header>
+<app-placement [isApp]="originalForm ? originalForm.is_app : false" [placements]="placements" [pageId]="id"></app-placement>
 
-  <mat-card-content dir="ltr">
+<!--<mat-card *ngIf="id" class="card-view" style="margin-top: 10px" dir="ltr">-->
+  <!--<mat-card-header dir="ltr">-->
+    <!--<mat-card-title>-->
+      <!--<h2 dir="ltr">Placements:</h2>-->
+    <!--</mat-card-title>-->
+  <!--</mat-card-header>-->
 
-    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+  <!--<mat-card-content dir="ltr">-->
 
-      <div fxFlex="20" class="field-container">
-        <mat-form-field>
-          <mat-select placeholder="Component Name" dir="ltr">
-            <mat-option value="Menu">Logos</mat-option>
-            <mat-option value="Menu">Menu</mat-option>
-            <mat-option value="Slider">Slider</mat-option>
-            <mat-option value="Main">Main</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button mat-fab color="accent" (click)="addPlacement()" style="margin-left: 20px">
-          <mat-icon aria-label="Add new Collection">add</mat-icon>
-        </button>
-      </div>
+    <!--<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">-->
 
-    </div>
+      <!--<div fxFlex="20" class="field-container">-->
+        <!--<mat-form-field>-->
+          <!--<mat-select placeholder="Component Name" dir="ltr">-->
+            <!--<mat-option value="Menu">Logos</mat-option>-->
+            <!--<mat-option value="Menu">Menu</mat-option>-->
+            <!--<mat-option value="Slider">Slider</mat-option>-->
+            <!--<mat-option value="Main">Main</mat-option>-->
+          <!--</mat-select>-->
+        <!--</mat-form-field>-->
+        <!--<button mat-fab color="accent" (click)="addPlacement()" style="margin-left: 20px">-->
+          <!--<mat-icon aria-label="Add new Collection">add</mat-icon>-->
+        <!--</button>-->
+      <!--</div>-->
 
-    <div fxLayout="row" *ngFor="let row of placementRows" fxLayout.xs="column" fxLayoutAlign="start start"
-         fxLayoutAlign.xs="center center" dir="ltr">
-      <div fxFlex="20" *ngFor="let placement of row" class="outer-card" dir="ltr">
-        <mat-card class="card-view" style="margin: 10px">
-          <mat-card-header dir="ltr">
-            <mat-card-title dir="ltr">
-              <h3>{{placement.component_name}}</h3>
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-actions dir="ltr">
-            <button mat-icon-button (click)="editPlacement(placement._id)" color="accent">
-              <mat-icon aria-label="edit">edit</mat-icon>
-            </button>
-            <button mat-icon-button (click)="deletePlacement(placement._id)" color="warn">
-              <mat-icon aria-label="delete">delete</mat-icon>
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
-    </div>
-    <div>
+    <!--</div>-->
 
-    </div>
-  </mat-card-content>
-</mat-card>
+    <!--<div fxLayout="row" *ngFor="let row of placementRows" fxLayout.xs="column" fxLayoutAlign="start start"-->
+         <!--fxLayoutAlign.xs="center center" dir="ltr">-->
+      <!--<div fxFlex="20" *ngFor="let placement of row" class="outer-card" dir="ltr">-->
+        <!--<mat-card class="card-view" style="margin: 10px">-->
+          <!--<mat-card-header dir="ltr">-->
+            <!--<mat-card-title dir="ltr">-->
+              <!--<h3>{{placement.component_name}}</h3>-->
+            <!--</mat-card-title>-->
+          <!--</mat-card-header>-->
+          <!--<mat-card-actions dir="ltr">-->
+            <!--<button mat-icon-button (click)="editPlacement(placement._id)" color="accent">-->
+              <!--<mat-icon aria-label="edit">edit</mat-icon>-->
+            <!--</button>-->
+            <!--<button mat-icon-button (click)="deletePlacement(placement._id)" color="warn">-->
+              <!--<mat-icon aria-label="delete">delete</mat-icon>-->
+            <!--</button>-->
+          <!--</mat-card-actions>-->
+        <!--</mat-card>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<div>-->
+
+    <!--</div>-->
+  <!--</mat-card-content>-->
+<!--</mat-card>-->

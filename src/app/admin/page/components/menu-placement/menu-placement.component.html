@@ -1,0 +1,32 @@
+<div class="inner-placement-div">
+  <div>
+    <mat-input-container>
+      <input matInput type="text" placeholder="عنوان" [(ngModel)]="upsertTopMenuItem.text" (ngModelChange)="changeField($event)"/>
+    </mat-input-container>
+    <mat-input-container dir="ltr">
+      <input matInput type="text" placeholder="آدرس" [(ngModel)]="upsertTopMenuItem.href" (ngModelChange)="changeField($event)"/>
+    </mat-input-container>
+    <button mat-fab color="primary" (click)="modifyItem(upsertTopMenuItem.isEdit)"
+            [disabled]="topMenuApplyDisability()">
+      <mat-icon>
+        <i class="material-icons" *ngIf="upsertTopMenuItem.isEdit">done</i>
+        <i class="material-icons" *ngIf="!upsertTopMenuItem.isEdit">create</i>
+      </mat-icon>
+    </button>
+    <button mat-fab color="primary" (click)="removeItem()" *ngIf="upsertTopMenuItem.isEdit" class="remove">
+      <mat-icon>
+        <i class="material-icons">remove</i>
+      </mat-icon>
+    </button>
+    <button mat-fab color="primary" (click)="clearFields()" *ngIf="upsertTopMenuItem.isEdit">
+      <mat-icon>
+        <i class="material-icons">clear</i>
+      </mat-icon>
+    </button>
+  </div>
+  <div class="demo-list" [dragula]="'top-menu-bag'" [dragulaModel]="topMenuItems">
+    <div *ngFor="let item of topMenuItems; let i = index" [id]="i" class="top-menu-item" (click)="selectItem(item)">
+      <label class="content">{{item.info.text}}</label>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+.demo-list {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.top-menu-item {
+  display: inline-block;
+  padding: 5px;
+  margin: 10px;
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.top-menu-item:hover {
+  background-color: rgba(176,182,180,0.68);
+}
+
+.top-menu-item .content {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.inner-placement-div {
+  margin: 10px;
+}
+
+.remove {
+  color: darkred;
+}
