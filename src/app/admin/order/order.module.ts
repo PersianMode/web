@@ -7,6 +7,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {OrderRouting} from './order.routing';
 import {SharedModule} from '../../shared/shared.module';
 import { OrderService } from './order.service';
+import { OrderTicketComponent } from './components/order-ticket/order-ticket.component';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { OrderService } from './order.service';
   ],
   declarations: [
     OrderComponent,
-    OrderTableComponent
+    OrderTableComponent,
+    OrderTicketComponent
   ],
   providers: [OrderService]
 })
