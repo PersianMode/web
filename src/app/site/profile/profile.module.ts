@@ -6,7 +6,12 @@ import { OrdersComponent } from './components/orders/orders.component';
 import {SharedModule} from '../../shared/shared.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MatCardModule, MatHeaderRow, MatRow, MatRowDef, MatTableModule} from '@angular/material';
+import {
+  MatCardModule, MatFormFieldModule, MatHeaderRow, MatInputModule, MatRadioModule, MatRow, MatRowDef,
+  MatTableModule
+} from '@angular/material';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 
 @NgModule({
   imports: [
@@ -15,6 +20,12 @@ import {MatCardModule, MatHeaderRow, MatRow, MatRowDef, MatTableModule} from '@a
     SharedModule,
     FlexLayoutModule,
     MatCardModule,
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatRadioModule,
+    DpDatePickerModule,
+    ReactiveFormsModule,
   ],
   declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent]
 })

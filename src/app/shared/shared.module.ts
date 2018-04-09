@@ -41,7 +41,6 @@ import {AddressTableComponent} from './components/address-table/address-table.co
     MatRadioModule,
 
     FlexLayoutModule,
-    FormsModule,
     MatToolbarModule,
     MatCardModule,
     MatFormFieldModule,

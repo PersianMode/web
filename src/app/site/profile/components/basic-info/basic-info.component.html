@@ -1,21 +1,139 @@
 <mat-card-content>
-  <mat-card style="margin-top: 5px; font-family: iranyekan">
-    <mat-card-title style="font-size: 18px">اطلاعات مشتری</mat-card-title>
-    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl" class="outer-div">
-      <div fxFlex="48" class="info-cell"><b>نام و نام خانوادگی :</b></div>
-      <div fxFlex="48" class="cell-info"><b>شماره ملی :</b></div>
-    </div>
-    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-      <div fxFlex="48" class="cell-info"><b>تاریخ تولد : </b></div>
-      <div fxFlex="48" class="info-cell"><b>جنسیت :</b></div>
-    </div>
-    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-      <div fxFlex="48" class="info-cell"><b>تلفن همراه :</b></div>
-      <div fxFlex="48" class="cell-info"><b>ایمیل :</b></div>
-    </div>
-    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-      <div fxFlex="48" class="cell-info"><b>تلفن ثابت: </b></div>
-      <div fxFlex="48" class="info-cell"><b>شماره کارت :</b></div>
-    </div>
-  </mat-card>
+    <mat-card style="margin-top: 5px; font-family: iranyekan" *ngIf="!isEdit">
+        <mat-card-title style="font-size: 18px">اطلاعات مشتری</mat-card-title>
+        <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl" class="outer-div">
+            <div fxFlex="50" class="info-cell"><b>نام و نام خانوادگی : {{customerBasicInfo.displayName}}</b></div>
+            <div fxFlex="50" class="cell-info"><b>شماره ملی : {{userNationalId}}</b></div>
+        </div>
+        <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+            <div fxFlex="50" class="cell-info"><b>تاریخ تولد : {{birthDate}}</b></div>
+            <div fxFlex="50" class="info-cell"><b>جنسیت : {{userGender}}</b></div>
+        </div>
+        <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+            <div fxFlex="50" class="info-cell"><b>تلفن همراه : {{customerBasicInfo.mobile_no}}</b></div>
+            <div fxFlex="50" class="cell-info"><b>ایمیل : {{customerBasicInfo.username}}</b></div>
+        </div>
+        <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+            <div fxFlex="50" class="cell-info"><b>تلفن ثابت : {{userTel}}</b></div>
+            <div fxFlex="50" class="info-cell"><b>شماره کارت : {{paymentCartNumber}}</b></div>
+        </div>
+        <div class="yesNo-div"> مایل به دریافت آخرین اخبار از نایک ، <b>{{ yesNo }}</b></div>
+        <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+            <div fxFlex="50" class="edit-button">
+                <button mat-button class="mat-button-style" (click)="goToEditForm()">ویرایش اطلاعات</button>
+            </div>
+            <div fxFlex="50" class="change-pass-button">
+                <button mat-button class="mat-button-style">تغییر رمز عبور</button>
+            </div>
+        </div>
+    </mat-card>
+    <mat-card *ngIf="isEdit" style="font-family: iranyekan; margin-top: 5px;">
+        <h3>ویرایش اطلاعات</h3>
+        <mat-card-content style="width: 100%">
+            <form (ngSubmit)="submitEditInfo()" [formGroup]="userInfoForm">
+                <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
+                     style="width: 70%; text-align: center">
+
+                    <div fxFlex="50" class="input-container">
+                        <input class="input-field" type="text"
+                               formControlName="name"
+
+                               (focus)="setSeen('name')"
+                               (blur)="curFocus = null"
+                               [ngClass]="userInfoForm.controls['name'].hasError('required') && seen['name'] && curFocus !== 'name' ? 'input-error' : null"/>
+                        <label class="field-error"
+                               *ngIf="userInfoForm.controls['name'].hasError('required') && seen['name'] && curFocus !== 'name'">لطفا
+                            نام را وارد کنید</label>
+                    </div>
+
+                    <div fxFlex="50" class="input-container">
+                        <input class="input-field" type="text"
+                               formControlName="surname"
+                               (focus)="setSeen('surname')"
+                               (blur)="curFocus = null"
+                               [ngClass]="userInfoForm.controls['surname'].hasError('required') && seen['surname'] && curFocus !== 'surname' ? 'input-error' : null"/>
+                        <label class="field-error"
+                               *ngIf="userInfoForm.controls['surname'].hasError('required') && seen['surname'] && curFocus !== 'surname'">لطفا
+                            نام خانوادگی را وارد کنید</label>
+                    </div>
+                    
+                </div>
+                <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
+                     style="width: 70%; text-align: center">
+                    <div fxFlex="50" class="input-container">
+                        <dp-date-picker
+                                class="input-field"
+                                (click)="setSeen('dob')"
+                                (blur)="curFocus = null"
+                                formControlName="dob"
+                                mode="day"
+                                [ngClass]="userInfoForm.controls['dob'].hasError('required') && seen['dob'] && curFocus !== 'dob' ? 'input-error' : null"
+                                theme="dp-material">
+                        </dp-date-picker>
+                    </div>
+                    <div fxFlex="50" style="margin-top: 20px" class="input-container">
+                        <mat-radio-group formControlName="gender">
+                            <div fxLayout="row" fxLayout.sm="row" fxLayout.xs="column"
+                                 fxLayoutAlign="start start" fxLayoutAlign.sm="center center">
+                                <div fxFlex="20"><b>جنسیت</b></div>
+                                <div *ngFor="let g of gender" fxFlex="35" style="margin-bottom: 8px">
+                                    <mat-radio-button [value]="g.value" disabled="true"><b>{{g.name}}</b></mat-radio-button>
+                                </div>
+                            </div>
+                        </mat-radio-group>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
+                     style="width: 70%; text-align: center">
+                    <div fxFlex="50" class="input-container">
+                        <input class="input-field left-direction" type="email"
+                               placeholder="{{customerBasicInfo.username}}" formControlName="username"
+                               (focus)="setSeen('username')"
+                               (blur)="curFocus = null"
+                               [ngClass]="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('username')) && seen['username'] && curFocus !== 'username' ? 'input-error' : null"/>
+                        <label class="field-error"
+                               *ngIf="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('username')) && seen['username'] && curFocus !== 'username'">لطفا
+                            ایمیل معتبری وارد کنید</label>
+                    </div>
+                    <div fxFlex="50" class="input-container">
+                        <input class="input-field left-direction"
+                               placeholder="{{customerBasicInfo.mobile_no}}" formControlName="mobile_no"
+                               (focus)="setSeen('mobile_no')"
+                               readonly="true"
+                               (blur)="curFocus = null"
+                               [ngClass]="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('mobile_no')) && seen['mobile_no'] && curFocus !== 'mobile_no' ? 'input-error' : null"/>
+                        <label class="field-error"
+                               *ngIf="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('mobile_no')) && seen['mobile_no'] && curFocus !== 'mobile_no'">لطفا
+                            ایمیل معتبری وارد کنید</label>
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
+                     style="width: 70%; text-align: center">
+                    <div fxFlex="50" class="input-container">
+                        <input class="input-field left-direction"
+                               formControlName="national_id"
+                               (focus)="setSeen('national_id')"
+                               (blur)="curFocus = null"
+                               readonly="{{nationalIdDisabled}}"
+                               [ngClass]="(userInfoForm.controls['national_id'].hasError('required') || userInfoForm.controls['national_id'].hasError('national_id')) && seen['national_id'] && curFocus !== 'national_id' ? 'input-error' : null"/>
+                        <label class="field-error"
+                               *ngIf="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('username')) && seen['username'] && curFocus !== 'username'">لطفا
+                            کد ملی معتبری وارد کنید</label>
+                    </div>
+                    <div fxFlex="50" class="input-container">
+                        <input class="input-field left-direction"
+                               formControlName="userTel"
+                               (focus)="setSeen('userTel')"
+                               placeholder="تلفن ثابت"
+                               (blur)="curFocus = null"
+                               [ngClass]="(userInfoForm.controls['userTel'].hasError('required') || userInfoForm.controls['userTel'].hasError('userTel')) && seen['userTel'] && curFocus !== 'userTel' ? 'input-error' : null"/>
+                        <label class="field-error"
+                               *ngIf="(userInfoForm.controls['userTel'].hasError('required') || userInfoForm.controls['userTel'].hasError('userTel')) && seen['userTel'] && curFocus !== 'userTel'">لطفا
+                           شماره تلفن معتبری وارد کنید</label>
+                    </div>
+                </div>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
 </mat-card-content>

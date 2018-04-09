@@ -77,7 +77,7 @@ export class RegisterComponent implements OnInit {
       let data = {};
       Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
       data['gender'] = this.gender;
-
+      data['dob'] = moment(this.registerForm.controls['dob'].value).format('YYYY-MM-DD');
       this.httpService.put('register', data).subscribe(
         (res) => {
           this.curStatus = this.regStatus.Verify;

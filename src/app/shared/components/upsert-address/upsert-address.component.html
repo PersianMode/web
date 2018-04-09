@@ -1,117 +1,120 @@
 <div style="direction: rtl;">
-  <div class="top-div">
-    <div class="add-title-div">
-      <div class="add-icon">
-        <i class="fa fa-check" style="color:white"></i></div>
-      <div class="dialogTitle">
-        {{dialogTitle}}
-      </div>
+    <div class="top-div">
+        <div class="add-title-div">
+            <div class="add-icon">
+                <i class="fa fa-check" style="color:white"></i></div>
+            <div class="dialogTitle">
+                {{dialogTitle}}
+            </div>
+        </div>
+        <div class="clear-div">
+            <mat-icon aria-label="no" (click)="onClose()" class="clear-icon">clear</mat-icon>
+        </div>
     </div>
-    <div class="clear-div">
-      <mat-icon aria-label="no" (click)="onClose()" class="clear-icon">clear</mat-icon>
-    </div>
-  </div>
-  <div>
-    <form (ngSubmit)="submitAddress()" [formGroup]="addressForm">
-      <mat-card>
-        <mat-card-title class="recipient-info">مشخصات تحویل
-          گیرنده
-        </mat-card-title>
-        <mat-card-content>
-          <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-            <div fxFlex="40">
-              <mat-input-container>
-                <input matInput type="text" placeholder="نام" formControlName="name"/>
-                <mat-hint>نام تحویل‌گیرنده را وارد کنید</mat-hint>
-                <mat-error *ngIf="addressForm.controls['name'].hasError('required')">وارد کردن نام تحویل
-                  گیرنده الزامی است
-                </mat-error>
-              </mat-input-container>
-            </div>
-            <div fxFlex="40">
-              <mat-input-container>
-                <input matInput type="text" placeholder="نام خانوادگی" formControlName="family"/>
-                <mat-hint>نام خانوادگی تحویل‌گیرنده را وارد کنید</mat-hint>
-                <mat-error *ngIf="addressForm.controls['family'].hasError('required')">وارد کردن نام
-                  خانوادگی تحویل‌گیرنده الزامی است
-                </mat-error>
-              </mat-input-container>
-            </div>
-              <div fxFlex="20" style="margin: 10px">
-                  <mat-radio-group formControlName="selectGender">
-                      <div fxLayout="column" fxLayout.sm="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center">
-                          <div *ngFor="let g of gender" fxFlex="35" style="margin-bottom: 8px">
-                              <mat-radio-button [value]="g.value">{{g.name}}</mat-radio-button>
-                          </div>
-                      </div>
-                  </mat-radio-group>
-              </div>
-          </div>
-          <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-            <div fxFlex="50">
-              <mat-input-container>
-                <input matInput type="text" placeholder="شماره ملی" formControlName="nationalCode"/>
-                <mat-hint>کد ملی تحویل‌گیرنده را وارد کنید</mat-hint>
-                <mat-error *ngIf="addressForm.controls['nationalCode'].hasError('required')">وارد کردن
-                  کد ملی تحویل‌گیرنده الزامی است
-                </mat-error>
-                <mat-error
-                  *ngIf="(addressForm.controls['nationalCode'].hasError('maxlength') || addressForm.controls['nationalCode'].hasError('pattern'))">
-                  کد ملی نامعتبر است
-                </mat-error>
-              </mat-input-container>
-            </div>
-            <div fxFlex="50">
-              <mat-input-container>
-                <input matInput type="text" placeholder="شماره تماس" formControlName="phoneNumber"/>
-                <mat-hint>شماره تماس تحویل‌گیرنده را وارد کنید</mat-hint>
-                <mat-error *ngIf="addressForm.controls['phoneNumber'].hasError('required')">وارد کردن
-                  شماره تماس تحویل‌گیرنده الزامی است
-                </mat-error>
-                <mat-error
-                  *ngIf="addressForm.controls['phoneNumber'].hasError('pattern')">شماره تماس
-                  نامعتبر است
-                </mat-error>
-              </mat-input-container>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <mat-card style="margin-top: 5px">
-        <mat-card-title class="recipient-info">آدرس
-        </mat-card-title>
-        <mat-card-content>
-          <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column">
-            <div fxFlex="50">
-              <div class="style-select-wrapper" *ngIf="!addressInfo.partEdit">
-                <select class="select-style" formControlName="selectProvince"
-                        (change)="setNewProvince($event.target.value)">
-                  <option *ngFor="let o of provinceArray" [value]="o.name">
-                    {{o.name}}
-                  </option>
-                </select>
-              </div>
-              <div *ngIf="addressInfo.partEdit" class="style-select-wrapper">
-                  <input type="text" value="{{addressData.province}}" placeholder={{addressData.province}} formControlName="selectProvince"
-                         class="province-city-disabled" readonly="{{addressInfo.partEdit}}">
-              </div>
-            </div>
-            <div fxFlex="50">
-              <div class="style-select-wrapper" *ngIf="!addressInfo.partEdit">
-                <select class="select-style" formControlName="selectCity">
-                  <option *ngFor="let c of cityArray" [value]="c" [disabled]="addressInfo.partEdit">
-                    {{c}}
-                  </option>
-                </select>
-              </div>
-              <div *ngIf="addressInfo.partEdit" class="style-select-wrapper">
-                   <input type="text" value="{{addressData.city}}" placeholder={{addressData.city}} formControlName="selectCity"
-                       class="province-city-disabled" readonly="{{addressInfo.partEdit}}">
-              </div>
-            </div>
-          </div>
-          <div dir="rtl" class="field-container">
-            <mat-input-container class="field">
+    <div>
+        <form (ngSubmit)="submitAddress()" [formGroup]="addressForm">
+            <mat-card>
+                <mat-card-title class="recipient-info">مشخصات تحویل
+                    گیرنده
+                </mat-card-title>
+                <mat-card-content>
+                    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+                        <div fxFlex="40">
+                            <mat-input-container>
+                                <input matInput type="text" placeholder="نام" formControlName="name"/>
+                                <mat-hint>نام تحویل‌گیرنده را وارد کنید</mat-hint>
+                                <mat-error *ngIf="addressForm.controls['name'].hasError('required')">وارد کردن نام تحویل
+                                    گیرنده الزامی است
+                                </mat-error>
+                            </mat-input-container>
+                        </div>
+                        <div fxFlex="40">
+                            <mat-input-container>
+                                <input matInput type="text" placeholder="نام خانوادگی" formControlName="family"/>
+                                <mat-hint>نام خانوادگی تحویل‌گیرنده را وارد کنید</mat-hint>
+                                <mat-error *ngIf="addressForm.controls['family'].hasError('required')">وارد کردن نام
+                                    خانوادگی تحویل‌گیرنده الزامی است
+                                </mat-error>
+                            </mat-input-container>
+                        </div>
+                        <div fxFlex="20" style="margin: 10px">
+                            <mat-radio-group formControlName="selectGender">
+                                <div fxLayout="column" fxLayout.sm="row" fxLayout.xs="column"
+                                     fxLayoutAlign="start start" fxLayoutAlign.sm="center center">
+                                    <div *ngFor="let g of gender" fxFlex="35" style="margin-bottom: 8px">
+                                        <mat-radio-button [value]="g.value">{{g.name}}</mat-radio-button>
+                                    </div>
+                                </div>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+                        <div fxFlex="50">
+                            <mat-input-container>
+                                <input matInput type="text" placeholder="شماره ملی" formControlName="nationalCode"/>
+                                <mat-hint>کد ملی تحویل‌گیرنده را وارد کنید</mat-hint>
+                                <mat-error *ngIf="addressForm.controls['nationalCode'].hasError('required')">وارد کردن
+                                    کد ملی تحویل‌گیرنده الزامی است
+                                </mat-error>
+                                <mat-error
+                                        *ngIf="(addressForm.controls['nationalCode'].hasError('maxlength') || addressForm.controls['nationalCode'].hasError('pattern'))">
+                                    کد ملی نامعتبر است
+                                </mat-error>
+                            </mat-input-container>
+                        </div>
+                        <div fxFlex="50">
+                            <mat-input-container>
+                                <input matInput type="text" placeholder="شماره تماس" formControlName="phoneNumber"/>
+                                <mat-hint>شماره تماس تحویل‌گیرنده را وارد کنید</mat-hint>
+                                <mat-error *ngIf="addressForm.controls['phoneNumber'].hasError('required')">وارد کردن
+                                    شماره تماس تحویل‌گیرنده الزامی است
+                                </mat-error>
+                                <mat-error
+                                        *ngIf="addressForm.controls['phoneNumber'].hasError('pattern')">شماره تماس
+                                    نامعتبر است
+                                </mat-error>
+                            </mat-input-container>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card style="margin-top: 5px">
+                <mat-card-title class="recipient-info">آدرس
+                </mat-card-title>
+                <mat-card-content>
+                    <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column">
+                        <div fxFlex="50">
+                            <div class="style-select-wrapper" *ngIf="!addressInfo.partEdit">
+                                <select class="select-style" formControlName="selectProvince"
+                                        (change)="setNewProvince($event.target.value)">
+                                    <option *ngFor="let o of provinceArray" [value]="o.name">
+                                        {{o.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div *ngIf="addressInfo.partEdit" class="style-select-wrapper">
+                                <input type="text" value="{{addressData.province}}" placeholder={{addressData.province}}
+                                       formControlName="selectProvince"
+                                       class="province-city-disabled" readonly="{{addressInfo.partEdit}}">
+                            </div>
+                        </div>
+                        <div fxFlex="50">
+                            <div class="style-select-wrapper" *ngIf="!addressInfo.partEdit">
+                                <select class="select-style" formControlName="selectCity">
+                                    <option *ngFor="let c of cityArray" [value]="c" [disabled]="addressInfo.partEdit">
+                                        {{c}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div *ngIf="addressInfo.partEdit" class="style-select-wrapper">
+                                <input type="text" value="{{addressData.city}}" placeholder={{addressData.city}}
+                                       formControlName="selectCity"
+                                       class="province-city-disabled" readonly="{{addressInfo.partEdit}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div dir="rtl" class="field-container">
+                        <mat-input-container class="field">
                             <textarea matInput placeholder="آدرس" formControlName="district"
                                       readonly="{{addressInfo.partEdit}}"></textarea>
                             <mat-hint>حداکثر از 500 حرف استفاده شود</mat-hint>
@@ -126,7 +129,8 @@
                                 <input matInput type="text" placeholder="خیابان" formControlName="street"
                                        readonly="{{addressInfo.partEdit}}"/>
                                 <mat-error *ngIf="addressForm.controls['street'].hasError('required')">
-                                نام خیابان را وارد کنید                                </mat-error>
+                                    نام خیابان را وارد کنید
+                                </mat-error>
                             </mat-input-container>
                         </div>
                         <div fxFlex="25">
@@ -134,7 +138,8 @@
                                 <input matInput type="text" placeholder="پلاک" formControlName="pelak"
                                        readonly="{{addressInfo.partEdit}}"/>
                                 <mat-error *ngIf="addressForm.controls['pelak'].hasError('required')">
-                                    پلاک را وارد کنید                                </mat-error>
+                                    پلاک را وارد کنید
+                                </mat-error>
                             </mat-input-container>
                         </div>
                         <div fxFlex="25">
@@ -163,7 +168,8 @@
                     </div>
                     <div class="submit-button" dir="ltr">
                         <button class="btn-style" type="submit" [disabled]="setButtonVisibility()"
-                                [class.btn-disable]="setButtonVisibility()">{{buttonTitle}}</button>
+                                [class.btn-disable]="setButtonVisibility()">{{buttonTitle}}
+                        </button>
                     </div>
                 </mat-card-content>
             </mat-card>
