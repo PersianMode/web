@@ -44,7 +44,7 @@ export class BasicInfoComponent implements OnInit {
 
   initForm() {
     this.userInfoForm = new FormBuilder().group({
-      name: [this.customerBasicInfo.name ? this.customerBasicInfo.name : ' ', [
+      name: [this.customerBasicInfo.name ? this.customerBasicInfo.name : '', [
         Validators.required,
       ]],
       surname: [this.customerBasicInfo.surname ? this.customerBasicInfo.surname : '', [

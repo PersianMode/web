@@ -37,7 +37,7 @@
                     <div fxFlex="50" class="input-container">
                         <input class="input-field" type="text"
                                formControlName="name"
-
+                                placeholder="نام"
                                (focus)="setSeen('name')"
                                (blur)="curFocus = null"
                                [ngClass]="userInfoForm.controls['name'].hasError('required') && seen['name'] && curFocus !== 'name' ? 'input-error' : null"/>
@@ -49,6 +49,7 @@
                     <div fxFlex="50" class="input-container">
                         <input class="input-field" type="text"
                                formControlName="surname"
+                               placeholder="نام خانوادگی"
                                (focus)="setSeen('surname')"
                                (blur)="curFocus = null"
                                [ngClass]="userInfoForm.controls['surname'].hasError('required') && seen['surname'] && curFocus !== 'surname' ? 'input-error' : null"/>
@@ -63,6 +64,7 @@
                     <div fxFlex="50" class="input-container">
                         <dp-date-picker
                                 class="input-field"
+                                placeholder="تاریخ تولد"
                                 (click)="setSeen('dob')"
                                 (blur)="curFocus = null"
                                 formControlName="dob"
@@ -86,8 +88,8 @@
                 <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
                      style="width: 70%; text-align: center">
                     <div fxFlex="50" class="input-container">
-                        <input class="input-field left-direction" type="email"
-                               placeholder="{{customerBasicInfo.username}}" formControlName="username"
+                        <input class="input-field" type="email"
+                               placeholder="نام کاربری (ایمیل)" formControlName="username"
                                (focus)="setSeen('username')"
                                (blur)="curFocus = null"
                                [ngClass]="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('username')) && seen['username'] && curFocus !== 'username' ? 'input-error' : null"/>
@@ -96,24 +98,26 @@
                             ایمیل معتبری وارد کنید</label>
                     </div>
                     <div fxFlex="50" class="input-container">
-                        <input class="input-field left-direction"
-                               placeholder="{{customerBasicInfo.mobile_no}}" formControlName="mobile_no"
+                        <input class="input-field"
+                               formControlName="mobile_no"
                                (focus)="setSeen('mobile_no')"
+                               placeholder="شماره موبایل"
                                readonly="true"
                                (blur)="curFocus = null"
                                [ngClass]="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('mobile_no')) && seen['mobile_no'] && curFocus !== 'mobile_no' ? 'input-error' : null"/>
                         <label class="field-error"
                                *ngIf="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('mobile_no')) && seen['mobile_no'] && curFocus !== 'mobile_no'">لطفا
-                            ایمیل معتبری وارد کنید</label>
+                            شماره موبایل معتبری وارد کنید</label>
                     </div>
                 </div>
                 <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
                      style="width: 70%; text-align: center">
                     <div fxFlex="50" class="input-container">
-                        <input class="input-field left-direction"
+                        <input class="input-field"
                                formControlName="national_id"
                                (focus)="setSeen('national_id')"
                                (blur)="curFocus = null"
+                               placeholder="شماره ملی"
                                readonly="{{nationalIdDisabled}}"
                                [ngClass]="(userInfoForm.controls['national_id'].hasError('required') || userInfoForm.controls['national_id'].hasError('national_id')) && seen['national_id'] && curFocus !== 'national_id' ? 'input-error' : null"/>
                         <label class="field-error"
@@ -121,7 +125,7 @@
                             کد ملی معتبری وارد کنید</label>
                     </div>
                     <div fxFlex="50" class="input-container">
-                        <input class="input-field left-direction"
+                        <input class="input-field"
                                formControlName="userTel"
                                (focus)="setSeen('userTel')"
                                placeholder="تلفن ثابت"
