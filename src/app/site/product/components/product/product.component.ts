@@ -45,7 +45,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.params$ = this.route.paramMap.subscribe(params => {
       const productId = params.get('product_id');
       const colorIdParam = params.get('color');
-      if (!this.product || this.product.id !== productId) {
+      if (!this.product || this.product.id !== productId || this.selectedProductColor !== colorIdParam) {
         this.productService.getProduct(productId);
         this.product$ = this.productService.product$.subscribe(data => {
           this.product = data;
