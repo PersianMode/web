@@ -4,7 +4,7 @@ import {
   MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatIconModule,
   MatInputModule,
   MatMenuModule,
-  MatOptionModule, MatStepperModule,
+  MatOptionModule, MatRadioModule, MatSelectModule, MatStepperModule,
   MatToolbarModule
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
@@ -19,6 +19,7 @@ import {RouterModule} from '@angular/router';
 import {UploaderComponent} from './components/uploader/uploader.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {AgmCoreModule} from '@agm/core';
+import {AddressTableComponent} from './components/address-table/address-table.component';
 
 @NgModule({
   declarations: [
@@ -29,12 +30,16 @@ import {AgmCoreModule} from '@agm/core';
     RemovingConfirmComponent,
     PanelsComponent,
     UploaderComponent,
+    AddressTableComponent,
+
   ],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
     CommonModule,
+    MatRadioModule,
+
     FlexLayoutModule,
     FormsModule,
     MatToolbarModule,
@@ -46,8 +51,10 @@ import {AgmCoreModule} from '@agm/core';
     MatAutocompleteModule,
     MatIconModule,
     MatButtonModule,
+    MatRadioModule,
     BidiModule,
     MatIconModule,
+    MatSelectModule,
     MatCheckboxModule,
     FileUploadModule,
     MatStepperModule,
@@ -63,6 +70,8 @@ import {AgmCoreModule} from '@agm/core';
     RemovingConfirmComponent,
     PanelsComponent,
     UploaderComponent,
+    AddressTableComponent,
+
   ]
 })
 export class SharedModule {

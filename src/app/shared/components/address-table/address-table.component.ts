@@ -1,13 +1,13 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {WINDOW} from '../../../shared/services/window.service';
-import {HttpService} from '../../../shared/services/http.service';
+import {Component, Inject, Input, OnInit} from '@angular/core';
+import {WINDOW} from '../../services/window.service';
+import {HttpService} from '../../services/http.service';
 import {MatDialog} from '@angular/material';
-import {AuthService} from '../../../shared/services/auth.service';
-import {ResponsiveService} from '../../../shared/services/responsive.service';
+import {AuthService} from '../../services/auth.service';
+import {ResponsiveService} from '../../services/responsive.service';
 import {Router} from '@angular/router';
-import {GenDialogComponent} from '../../../shared/components/gen-dialog/gen-dialog.component';
-import {DialogEnum} from '../../../shared/enum/dialog.components.enum';
-import {CheckoutService} from '../../../shared/services/checkout.service';
+import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../enum/dialog.components.enum';
+import {CheckoutService} from '../../services/checkout.service';
 
 @Component({
   selector: 'app-address-table',
@@ -15,42 +15,38 @@ import {CheckoutService} from '../../../shared/services/checkout.service';
   styleUrls: ['./address-table.component.css']
 })
 export class AddressTableComponent implements OnInit {
-
+  @Input() isProfile = true;
+  lat: number;
+  long: number;
   withDelivery = true;
   selectedCustomerAddresses = -1;
   selectedWareHouseAddresses = -1;
 
-  address = {
-    province: 'البرز',
-    city: 'کرج',
-    street: 'دربند',
-    no: 14,
-    unit: 1,
-    postal_code: 1044940912,
-    loc: {
-      long: 50.817191,
-      lat: 51.427251,
-    },
-    recipient_name: 'علی علوی',
-    recipient_mobile_no: '09121212121',
-    recipient_national_id: '06423442',
-    recipient_title: 'm',
-    district: 'خیابان سوم'
-  };
-
   addresses = [];
   customerAddresses = [];
   wareHouseAddresses = [];
-  curHeight: number;
-  curWidth: number;
+  isMobile = false;
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
               private dialog: MatDialog, private checkoutService: CheckoutService,
               private responsiveService: ResponsiveService, private router: Router,
               private authService: AuthService) {
-    this.curWidth = this.window.innerWidth;
-    this.curHeight = this.window.innerHeight;
-    this.addresses.push(this.address);
+    this.isMobile = this.responsiveService.isMobile;
+  }
+
+  ngOnInit() {
+    this.getCustomerAddresses();
+    this.getWareHouseAddresses();
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    console.log('isProfile', this.isProfile);
+  }
+
+  getLatitude() {
+    return this.addresses[this.selectedWareHouseAddresses].loc.type.lat;
+  }
+
+  getLongitude() {
+    return this.addresses[this.selectedWareHouseAddresses].loc.type.long;
   }
 
   setAddress(i: number) {
@@ -62,8 +58,11 @@ export class AddressTableComponent implements OnInit {
     } else {
       if (i === this.selectedWareHouseAddresses)
         this.selectedWareHouseAddresses = -1;
-      else
+      else {
         this.selectedWareHouseAddresses = i;
+        this.lat = 1;
+        this.long = 1;
+      }
     }
   }
 
@@ -77,6 +76,7 @@ export class AddressTableComponent implements OnInit {
         this.addresses = res.addresses;
       }
       this.customerAddresses = res.addresses;
+
     }, err => {
       console.error(err);
     });
@@ -84,31 +84,9 @@ export class AddressTableComponent implements OnInit {
 
   getWareHouseAddresses() {
     // TODO: this should be changed from hard-coded to a request from server
-    this.wareHouseAddresses = [
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      },
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      },
-      {
-        'province': 'تهران',
-        'city': 'تهران',
-        'street': ' کوچه شهریور ',
-        'district': 'میدان فاطمی خیابان فاطمی خیابان هشت بهشت',
-        'no': '۵',
-        'unit': '۱',
-      }];
+    this.httpService.get('warehouse').subscribe(res => {
+      this.wareHouseAddresses = res;
+    });
   }
 
   makePersianNumber(a: string) {
@@ -117,22 +95,39 @@ export class AddressTableComponent implements OnInit {
     return (+a).toLocaleString('fa', {useGrouping: false});
   }
 
-  ngOnInit() {
-    this.getCustomerAddresses();
-    this.getWareHouseAddresses();
+  openAddressDialog() {
+    this.checkoutService.addressData = {
+      addressId: null,
+      partEdit: false,
+      dialog_address: {}
+    };
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/checkout/address`]);
+    } else {
+      const rmDialog = this.dialog.open(GenDialogComponent, {
+        width: '600px',
+        data: {
+          componentName: DialogEnum.upsertAddress,
+        }
+      });
+      rmDialog.afterClosed().subscribe(
+        () => this.getCustomerAddresses(),
+        (err) => {
+          console.error('Error in dialog: ', err);
+        }
+      );
+    }
   }
 
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
-    const partEdit = !!(id || id === 0);
-
+    const partEdit = true;
     this.checkoutService.addressData = {
       addressId: tempAddressId,
-      partEdit: partEdit,
+      partEdit: this.isProfile ? false : partEdit,
       dialog_address: tempAddress
     };
-
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
     } else {
@@ -146,10 +141,9 @@ export class AddressTableComponent implements OnInit {
   }
 
   changeWithDelivery() {
-    this.withDelivery = !this.withDelivery;
     if (this.withDelivery)
       this.addresses = this.customerAddresses;
     else
-      this.addresses = this.wareHouseAddresses;
+      this.addresses = this.wareHouseAddresses.map(r => Object.assign({name: r.name}, r.address));
   }
 }

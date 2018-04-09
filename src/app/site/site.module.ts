@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {SiteRouting} from './site.routing';
 import {CommonModule} from '@angular/common';
-import {SiteComponent } from './site.component';
+import {SiteComponent} from './site.component';
 import {HeaderComponent} from '../shared/components/header/header.component';
 import {CollectionHeaderComponent} from '../shared/components/collection-header/collection-header.component';
 import {SlidingHeaderComponent} from '../shared/components/sliding-header/sliding-header.component';
@@ -19,13 +19,12 @@ import {
   MatOptionModule,
   MatAutocompleteModule,
   MatCheckboxModule,
-  MatStepperModule,
+  MatStepperModule, MatRadioModule,
 } from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
-
 import {GenDialogComponent} from '../shared/components/gen-dialog/gen-dialog.component';
 import {LoginComponent} from './login/components/login/login.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -33,8 +32,9 @@ import {RegisterComponent} from './register/components/register/register.compone
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
 import {SharedModule} from '../shared/shared.module';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
-import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 import {RouterModule} from '@angular/router';
+import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
+import {AuthGuard} from './auth.guard';
 
 @NgModule({
   imports: [
@@ -54,6 +54,7 @@ import {RouterModule} from '@angular/router';
     MatIconModule,
     MatCheckboxModule,
     MatStepperModule,
+    MatRadioModule,
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
@@ -74,11 +75,12 @@ import {RouterModule} from '@angular/router';
     LoginComponent,
     OauthHandlerComponent,
     RegisterComponent,
+    UpsertAddressComponent,
     GenDialogComponent,
     OtherDetailsComponent,
-    UpsertAddressComponent,
   ],
   entryComponents: [GenDialogComponent],
+  providers: [AuthGuard]
 })
 export class SiteModule {
 }
