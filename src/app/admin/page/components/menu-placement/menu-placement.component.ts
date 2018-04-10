@@ -18,8 +18,8 @@ export class MenuPlacementComponent implements OnInit {
     if (value) {
       this.topMenuItems = value.filter(el => el.variable_name.toLowerCase() === 'topmenu');
       this.topMenuItems.sort((a, b) => {
-        a = a.info.order;
-        b = b.info.order;
+        a = a.info.column;
+        b = b.info.column;
 
         if (a > b)
           return 1;
@@ -41,7 +41,7 @@ export class MenuPlacementComponent implements OnInit {
     text: '',
     href: '',
     id: null,
-    order: null,
+    column: null,
     isEdit: false,
   };
   topMenuChanged = false;
@@ -56,7 +56,7 @@ export class MenuPlacementComponent implements OnInit {
     });
 
     this.dragulaService.dropModel.subscribe((value) => {
-      this.changeTopMenuOrder(value.slice(1));
+      this.changeTopMenuColumn(value.slice(1));
     });
   }
 
@@ -79,7 +79,7 @@ export class MenuPlacementComponent implements OnInit {
             text: '',
             href: '',
             id: null,
-            order: null,
+            column: null,
             isEdit: false,
           };
           this.progressService.disable();
@@ -95,19 +95,19 @@ export class MenuPlacementComponent implements OnInit {
       text: value.info.text,
       href: value.info.href,
       id: value._id,
-      order: null,
+      column: null,
       isEdit: true,
     };
   }
 
-  changeTopMenuOrder(args) {
+  changeTopMenuColumn(args) {
     const [element, target, source] = args;
 
     let counter = 0;
     Object.keys(target.children).forEach(child => {
       const obj = this.topMenuItems.find(el => el.info.text === target.children[child].innerText);
       if (obj) {
-        obj.info.order = counter;
+        obj.info.column = counter;
         counter++;
       }
     });
@@ -140,7 +140,7 @@ export class MenuPlacementComponent implements OnInit {
           info: {
             text: this.upsertTopMenuItem.text,
             href: this.upsertTopMenuItem.href,
-            order: this.upsertTopMenuItem.order,
+            column: this.upsertTopMenuItem.column,
           }
         }
       ]
@@ -152,7 +152,7 @@ export class MenuPlacementComponent implements OnInit {
         info: {
           text: this.upsertTopMenuItem.text,
           href: this.upsertTopMenuItem.href,
-          order: Math.max(...this.topMenuItems.map(el => el.info.order)) + 1,
+          column: Math.max(...this.topMenuItems.map(el => el.info.column)) + 1,
         },
       }
     })).subscribe(
@@ -189,7 +189,7 @@ export class MenuPlacementComponent implements OnInit {
       text: '',
       href: '',
       id: null,
-      order: null,
+      column: null,
       isEdit: false,
     };
   }
