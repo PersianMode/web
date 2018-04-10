@@ -14,8 +14,6 @@ export class BasicInfoComponent implements OnInit {
   @Input() isEdit = false;
   customerBasicInfo: any;
   userGender;
-  userTel = '';
-  paymentCartNumber = '';
   userNationalId = '';
   birthDate: any = '';
   yesNo = 'هستید';
@@ -31,8 +29,6 @@ export class BasicInfoComponent implements OnInit {
     this.birthDate = moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD');
     this.userNationalId = this.customerBasicInfo.national_id ? this.customerBasicInfo.national_id : '-';
     this.userGender = this.customerBasicInfo.gender === 'f' ? 'زن' : 'مرد';
-    this.userTel = this.customerBasicInfo.tel ? this.customerBasicInfo.tel : '-';
-    this.paymentCartNumber = this.customerBasicInfo.paymentCartNumber ? this.customerBasicInfo.paymentCartNumber : '-';
     this.yesNo = this.customerBasicInfo.gender === 'f' ? 'هستید' : 'نیستید';
     this.nationalIdDisabled = this.userNationalId === '-' || !this.userNationalId ? false : true;
   }
@@ -117,12 +113,12 @@ export class BasicInfoComponent implements OnInit {
     national_id = national_id.trim();
 
     let dob = (this.userInfoForm.controls['dob'].value === null ||
-      isUndefined(this.userInfoForm.controls['dob'].value)) ? '' : moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD');
+      isUndefined(this.userInfoForm.controls['dob'].value)) ? '' : moment(this.userInfoForm.controls['dob'].value).format('jYYYY-jMM-jDD');
 
     if ((name !== this.customerBasicInfo.name && (name !== '' || this.customerBasicInfo.name !== null))
       || (surname !== this.customerBasicInfo.surname && (surname !== '' || this.customerBasicInfo.surname !== null))
       || (username !== this.customerBasicInfo.username && (username !== '' || this.customerBasicInfo.username !== null))
-      || (dob !== (this.customerBasicInfo.dob))
+      || (dob !== moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD'))
       || ((this.customerBasicInfo.national_id && national_id !== this.customerBasicInfo.national_id) || (isUndefined(this.customerBasicInfo.national_id) && national_id !== '')))
          this.anyChanges = true;
   }
