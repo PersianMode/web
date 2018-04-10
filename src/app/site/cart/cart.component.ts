@@ -43,6 +43,8 @@ export class CartComponent implements OnInit, OnDestroy {
         //   .reduce((a, b) => a + b);
         this.totalPrice = this.cartService.calculateTotal();
         this.calculateDiscount();
+      } else {
+        this.router.navigate(['/']);
       }
     });
   }

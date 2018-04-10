@@ -11,20 +11,20 @@
     <li *ngIf="isLoggedIn && isVerified" class="welcome">
       <button mat-button (click)="navigateToProfile()"><i class="fa fa-user"></i>{{display_name}}، خوش آمدید </button>
     </li>
-    <li>
-      <a [routerLink]="'/cart'" class="faWrapper" aria-label="Shopping Bag" id="header-cart">
-        <span class="badge-icon">
+    <li class="welcome">
+      <button mat-button (click)="navigateToCart()" aria-label="Shopping Bag" id="header-cart"><i class="fa fa-bag"></i>
+        <span *ngIf="cartNumbers" class="badge-icon">
           {{cartNumbers}}
         </span>
-        <span>
-          <svg height="20" width="20">
-            <circle cx="10" cy="10" r="10" fill="#FA5400"/>
+        <span *ngIf="cartNumbers" >
+          <svg height="28" width="28">
+            <circle cx="14" cy="14" r="14" fill="#AA0000"/>
           </svg>
         </span>
         <span>
-          <i class="fa fa-shopping-bag fa-flip-horizontal" style="margin-right: -10px;"></i>
+          <i class="fa fa-shopping-bag fa-flip-horizontal"></i>
         </span>
-      </a>
+      </button>
     </li>
     <li *ngIf="!isLoggedIn || !isVerified">
       <a (click)="login()" class="faWrapper clickable-link" aria-label="Sign In or Register"><i
@@ -32,7 +32,7 @@
     </li>
     <li *ngIf="isLoggedIn && isVerified">
       <a (click)="logout()" class="faWrapper clickable-link" aria-label="Sign Out">
-        <i class="fa fa-sign-out loginIcon"></i></a>
+        <i class="fa fa-sign-out fa-flip-horizontal loginIcon"></i></a>
     </li>
   </ul>
 </nav>
