@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 
 @Component({
@@ -10,6 +10,7 @@ export class PlacementComponent implements OnInit {
   @Input() isApp = false;
   @Input() pageId = null;
   @Input() placements: IPlacement[] = [];
+  @Output() modifyPlacement = new EventEmitter();
 
   constructor() {
   }
@@ -19,5 +20,9 @@ export class PlacementComponent implements OnInit {
 
   getRelatedPlacements(type) {
     return this.placements ? this.placements.filter(el => el.component_name.toLowerCase() === type.toLowerCase()) : [];
+  }
+
+  modify(value) {
+    this.modifyPlacement.emit(value);
   }
 }

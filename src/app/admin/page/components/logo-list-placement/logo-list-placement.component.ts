@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-logo-list-placement',
@@ -7,6 +7,7 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class LogoListPlacementComponent implements OnInit {
   @Input() placements = [];
+  @Output() modifyPlacement = new EventEmitter();
 
   constructor() { }
 

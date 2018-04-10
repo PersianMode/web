@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-page-content-placement',
@@ -7,6 +7,7 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class PageContentPlacementComponent implements OnInit {
   @Input() placements = [];
+  @Output() modifyPlacement = new EventEmitter();
 
   constructor() { }
 

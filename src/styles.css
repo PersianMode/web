@@ -779,3 +779,7 @@ mat-panel-title {
 .mat-radio-label-content {
   margin-right: 5px;
 }
+
+.persian-field {
+  font-family: iranyekan, sans-serif !important;
+}
