@@ -76,9 +76,9 @@
 
 .badge-icon {
   font-size: 18px;
-  color: black;
   margin-left: 0.5px;
-  margin-top: -50px;
+  color: white;
+  font-weight: 200;
 }
 
 #header-cart span:nth-child(1) {
@@ -97,4 +97,11 @@
   position: absolute;
   left: -17px;
   top: 0;
+}
+a{
+  color: black !important;
+}
+
+.first-bar li{
+  background: #fff;
 }
