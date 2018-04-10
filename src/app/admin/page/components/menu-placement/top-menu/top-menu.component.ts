@@ -12,15 +12,17 @@ import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
 })
 export class TopMenuComponent implements OnInit {
   @Input() pageId = null;
+
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
-      this.topMenuItems = value.filter(el => el.variable_name.toLowerCase() === 'topmenu');
+      this.topMenuItems = value;
       this.changeField();
     }
   }
 
   @Output() modifyPlacement = new EventEmitter();
+  @Output() itemSelected = new EventEmitter();
 
   topMenuItems: IPlacement[] = [];
   upsertTopMenuItem = {
@@ -29,6 +31,7 @@ export class TopMenuComponent implements OnInit {
     id: null,
     column: null,
     isEdit: false,
+    section: '',
   };
   topMenuChanged = false;
 
@@ -65,6 +68,7 @@ export class TopMenuComponent implements OnInit {
             text: '',
             href: '',
             id: null,
+            section: '',
             column: null,
             isEdit: false,
           };
@@ -83,7 +87,9 @@ export class TopMenuComponent implements OnInit {
       id: value._id,
       column: null,
       isEdit: true,
+      section: value.info.section,
     };
+    this.itemSelected.emit(this.upsertTopMenuItem.section);
   }
 
   changeTopMenuColumn(args) {
@@ -139,6 +145,7 @@ export class TopMenuComponent implements OnInit {
           text: this.upsertTopMenuItem.text,
           href: this.upsertTopMenuItem.href,
           column: Math.max(...this.topMenuItems.map(el => el.info.column)) + 1,
+          section: this.upsertTopMenuItem.section,
         },
       }
     })).subscribe(
@@ -176,8 +183,11 @@ export class TopMenuComponent implements OnInit {
       href: '',
       id: null,
       column: null,
+      section: '',
       isEdit: false,
     };
+
+    this.itemSelected.emit(null);
   }
 
   changeField() {
@@ -195,7 +205,7 @@ export class TopMenuComponent implements OnInit {
     if (this.upsertTopMenuItem.isEdit) {
       return !this.topMenuChanged || (!this.upsertTopMenuItem.text || !this.upsertTopMenuItem.href);
     } else {
-      return !this.upsertTopMenuItem.text || !this.upsertTopMenuItem.href;
+      return !this.upsertTopMenuItem.text || !this.upsertTopMenuItem.href || !this.upsertTopMenuItem.section;
     }
   }
 }

@@ -8,6 +8,7 @@ import {IPlacement} from '../../interfaces/IPlacement.interface';
 })
 export class MenuPlacementComponent implements OnInit {
   @Input() pageId = null;
+
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -31,6 +32,8 @@ export class MenuPlacementComponent implements OnInit {
   topMenuItems: IPlacement[] = [];
   subMenuItems: IPlacement[] = [];
 
+  selectedSection = null;
+
   constructor() {
   }
 
@@ -39,5 +42,9 @@ export class MenuPlacementComponent implements OnInit {
 
   modify(value) {
     this.modifyPlacement.emit(value);
+  }
+
+  showSubMenu(value) {
+    // this.selectedSection = value || null;
   }
 }

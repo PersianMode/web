@@ -1,3 +1,6 @@
 <div class="inner-placement-div">
-  <app-top-menu [pageId]="pageId" [placements]="topMenuItems" (modifyPlacement)="modify($event)"></app-top-menu>
+  <app-top-menu [pageId]="pageId" [placements]="topMenuItems" (modifyPlacement)="modify($event)" (itemSelected)="showSubMenu($event)"></app-top-menu>
+</div>
+<div *ngIf="selectedSection">
+  <app-sub-menu [pageId]="pageId" [placements]="subMenuItems" (modifyPlacement)="modify($event)" [section]="selectedSection"></app-sub-menu>
 </div>
