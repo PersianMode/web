@@ -18,6 +18,8 @@ import { LogoListPlacementComponent } from './components/logo-list-placement/log
 import { SliderPlacementComponent } from './components/slider-placement/slider-placement.component';
 import { PageContentPlacementComponent } from './components/page-content-placement/page-content-placement.component';
 import {DragulaModule} from 'ng2-dragula';
+import { TopMenuComponent } from './components/menu-placement/top-menu/top-menu.component';
+import { SubMenuComponent } from './components/menu-placement/sub-menu/sub-menu.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import {DragulaModule} from 'ng2-dragula';
     LogoListPlacementComponent,
     SliderPlacementComponent,
     PageContentPlacementComponent,
+    TopMenuComponent,
+    SubMenuComponent,
   ],
   imports: [
     PageRouting,
