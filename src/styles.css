@@ -766,3 +766,6 @@ mat-panel-title {
 .mat-radio-label-content {
   margin-right: 5px;
 }
+.cdk-overlay-pane {
+  max-width: 100% !important;
+}

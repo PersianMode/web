@@ -60,7 +60,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
-    console.log(this.product);
   }
 
   saveToCart() {
