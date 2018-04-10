@@ -36,7 +36,7 @@ export class CartService {
               });
           }
         } else {
-          this.cartItems.next([]);
+          this.cartItems.next([])
         }
       }
     );
@@ -48,7 +48,7 @@ export class CartService {
       this.httpService.post('order/delete', {
         product_instance_id: value.instance_id,
       }).subscribe(
-        (data) => {
+        () => {
           this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id.toString() !== value.instance_id.toString()));
         },
         (err) => {
@@ -58,7 +58,7 @@ export class CartService {
       // Update local storage
       let tempItems = this.getItemsFromStorage();
       tempItems = tempItems.filter(el => el.product_id.toString() !== value.product_id.toString()
-      && el.instance_id.toString() !== value.instance_id.toString());
+        && el.instance_id.toString() !== value.instance_id.toString());
 
       localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
 
@@ -69,7 +69,7 @@ export class CartService {
   updateItem(value) {
     // Check for update or delete and add new item
     const item = this.cartItems.getValue().find(el => el.product_id.toString() === value.product_id.toString() &&
-    el.instance_id.toString() === value.instance_id.toString());
+      el.instance_id.toString() === value.instance_id.toString());
 
     if (item) {
       // Should modify
@@ -125,8 +125,8 @@ export class CartService {
         // Change in localStorage
         let ls_items = this.getItemsFromStorage();
         ls_items = ls_items.filter(el =>
-        el.product_id.toString() !== value.product_id.toString() ||
-        el.instance_id.toString() !== value.pre_instance_id.toString());
+          el.product_id.toString() !== value.product_id.toString() ||
+          el.instance_id.toString() !== value.pre_instance_id.toString());
 
         for (let counter = 0; counter < value.number; counter++)
           ls_items.push({
@@ -195,7 +195,7 @@ export class CartService {
       objItem.quantity = el.quantity;
       objItem.tags = el.tags;
       objItem.count = el.count;
-      objItem.thumbnail = el.thumbnail;
+      objItem.thumbnail = HttpService.Host + el.thumbnail;
       objItem.instances = el.instances;
       objItem.price = el.instance_price ? el.instance_price : el.base_price;
       objItem.discount = el.discount;
@@ -216,21 +216,17 @@ export class CartService {
   }
 
   private saveItemToServer(item) {
-    return new Promise((resolve, reject) => {
-      this.httpService.post('order', {
-        product_id: item.product_id,
-        product_instance_id: item.product_instance_id,
-        number: item.number,
-      }).subscribe(
-        data => {
-          this.cartItems.next(this.cartItems.getValue().concat([Object.assign({quantity: item.number}, item)]));
-          resolve(data);
-        },
-        err => {
-          console.error('Cannot save item to server: ', err);
-          reject(err);
-        });
-    });
+    this.httpService.post('order', {
+      product_id: item.product_id,
+      product_instance_id: item.product_instance_id,
+      number: item.number,
+    }).subscribe(
+      data => {
+        this.cartItems.next(this.cartItems.getValue().concat([Object.assign({quantity: 1}, item)]));
+      },
+      err => {
+        console.error('Cannot save item to server: ', err);
+      });
   }
 
   private saveItemToStorage(item) {
