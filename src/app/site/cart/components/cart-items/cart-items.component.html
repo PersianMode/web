@@ -3,7 +3,7 @@
     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column">
       <div fxFlex="25" style="text-align: right">
         <a [routerLink]="['/', 'product', product._id, product.color.color_id]">
-          <img src="assets/pictures/product-small/{{product.thumbnail}}"
+          <img src="{{product.thumbnail}}"
                style="width: 90%; height:100%; cursor: pointer;">
         </a>
       </div>
