@@ -46,9 +46,9 @@
                    placeholder="ایمیل" formControlName="username"
                    (focus)="setSeen('username')"
                    (blur)="curFocus = null"
-                   [ngClass]="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('username')) && seen['username'] && curFocus !== 'username' ? 'input-error' : null"/>
+                   [ngClass]="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('email')) && seen['username'] && curFocus !== 'username' ? 'input-error' : null"/>
             <label class="field-error"
-                   *ngIf="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('username')) && seen['username'] && curFocus !== 'username'">لطفا
+                   *ngIf="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('email')) && seen['username'] && curFocus !== 'username'">لطفا
               ایمیل معتبری وارد کنید</label>
           </div>
           <div fxFlex="13" class="input-container">
