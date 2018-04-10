@@ -4,7 +4,7 @@ import {OrderComponent} from './order.component';
 import {OrderRouting} from './order.routing';
 import {SharedModule} from '../../shared/shared.module';
 import {
-  MatButtonModule, MatCheckboxModule, MatChipsModule, MatDialogModule, MatDividerModule, MatIconModule, MatPaginatorModule,
+  MatButtonModule, MatCheckboxModule, MatChipsModule, MatDialogModule, MatDividerModule, MatIconModule, MatInputModule, MatPaginatorModule,
   MatProgressSpinnerModule,
   MatRadioModule,
   MatSnackBarModule,
@@ -12,8 +12,9 @@ import {
   MatTableModule,
   MatToolbarModule
 } from '@angular/material';
-import { OrderProcessComponent } from './components/order-process/order-process.component';
-import { OrderAddressComponent } from './components/order-address/order-address.component';
+import {OrderProcessComponent} from './components/order-process/order-process.component';
+import {OrderAddressComponent} from './components/order-address/order-address.component';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { OrderAddressComponent } from './components/order-address/order-address.
   imports: [
     OrderRouting,
     CommonModule,
+    FormsModule,
     SharedModule,
     MatToolbarModule,
     MatButtonModule,
@@ -38,7 +40,8 @@ import { OrderAddressComponent } from './components/order-address/order-address.
     MatSnackBarModule,
     MatDividerModule,
     MatRadioModule,
-    MatIconModule
+    MatIconModule,
+    MatInputModule
   ],
   entryComponents: [OrderAddressComponent, OrderProcessComponent],
 })

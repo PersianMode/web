@@ -118,7 +118,7 @@ export class OrderComponent implements OnInit {
   process(element) {
     const dialogRef = this.dialog.open(OrderProcessComponent, {
       width: '600px',
-      data: {pid: element.product_id, piid: element.instance._id}
+      data: element
     });
 
 

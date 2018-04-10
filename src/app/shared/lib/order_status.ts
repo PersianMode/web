@@ -1,4 +1,4 @@
-import {STATUS} from '../enum/status';
+import {STATUS} from '../enum/status.enum';
 
 export let OrderStatus: any[] = [
   {name: 'تایید پرداخت', status: STATUS.default},
