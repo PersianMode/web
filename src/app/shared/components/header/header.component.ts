@@ -7,8 +7,6 @@ import {AuthService} from '../../services/auth.service';
 import {PageService} from '../../services/page.service';
 import {WINDOW} from '../../services/window.service';
 import {CartService} from '../../services/cart.service';
-import {priceFormatter} from '../../lib/priceFormatter';
-
 
 @Component({
   selector: 'app-header',
@@ -48,8 +46,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
     this.itemSubs = this.cartService.cartItems.subscribe(
       data => {
-        data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => a + b) : 0;
-        this.cartNumbers = priceFormatter(data);
+        data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => (+a) + (+b)) : 0;
+        if (+data) {
+          this.cartNumbers = (+data).toLocaleString( 'fa', {useGrouping: false});
+        } else {
+          this.cartNumbers = '';
+        }
       });
     this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
       this.logos = [];
@@ -108,6 +110,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateToProfile() {
-    this.router.navigate( ['/', 'profile']);
+    this.router.navigate(['/', 'profile']);
+  }
+
+  navigateToCart() {
+    this.router.navigate(['/', 'cart']);
   }
 }

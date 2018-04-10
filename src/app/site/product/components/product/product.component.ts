@@ -7,6 +7,9 @@ import {ResponsiveService} from '../../../../shared/services/responsive.service'
 import {ProductService} from '../../../../shared/services/product.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {Subscription} from 'rxjs/Subscription';
+import {AddToCardConfirmComponent} from '../add-to-card-confirm/add-to-card-confirm.component';
+import {CartService} from '../../../../shared/services/cart.service';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-product',
@@ -19,13 +22,14 @@ export class ProductComponent implements OnInit, OnDestroy {
   joinedTags = '';
   formattedPrice = '';
   isMobile = false;
+  cartNumbers = null;
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
 
   constructor(public httpService: HttpService, private route: ActivatedRoute, @Inject(WINDOW) private window,
               private responsiveService: ResponsiveService, private productService: ProductService,
-              private dict: DictionaryService) {
+              private dict: DictionaryService, private cartService: CartService, private dialog: MatDialog) {
   }
 
   // this component we need to have a product data by this format :
@@ -41,7 +45,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.params$ = this.route.paramMap.subscribe(params => {
       const productId = params.get('product_id');
       const colorIdParam = params.get('color');
-      if (!this.product || this.product.id !== productId) {
+      if (!this.product || this.product.id !== productId || this.selectedProductColor !== colorIdParam) {
         this.productService.getProduct(productId);
         this.product$ = this.productService.product$.subscribe(data => {
           this.product = data;
@@ -58,6 +62,33 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.switch$.unsubscribe();
     this.params$.unsubscribe();
     this.product$.unsubscribe();
+  }
+
+  saveToCart(size) {
+    // check form size and id undefined
+    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
+
+    if (instance) {
+      const object = {
+        product_id: this.product._id,
+        product_instance_id: instance._id,
+      };
+
+      this.cartService.saveItem(object);
+      this.cartService.cartItems.subscribe(data => this.cartNumbers = priceFormatter(data.length));
+      const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
+        position: this.isMobile ? {top: '0px', left: '0px'} : {top: '5.5%', left: '20%'},
+        width: this.isMobile ? '100%' : '450px',
+        data: {
+          dialog_product: this.product,
+          cartNumbers: this.cartNumbers,
+          selectedSize: size,
+        }
+      });
+      setTimeout(function () {
+        rmDialog.close();
+      }, 3000);
+    }
   }
 
   @HostListener('window:resize', ['$event'])

@@ -41,7 +41,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   innerScroll = false;
   size: any;
   productSize;
-  cartNumbers = null;
   addCardBtnDisabled = true;
   focused: any = {};
 
@@ -55,8 +54,9 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
 
   selectedProductColor: any = {};
 
-  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-              private cartService: CartService, private dialog: MatDialog) {
+  @Output() add = new EventEmitter<any>();
+
+  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
   }
 
   ngOnInit() {
@@ -64,36 +64,12 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   saveToCart() {
-    // check form size and id undefined
-    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor._id && el.size === this.size);
-
-    if (instance) {
-      const object = {
-        product_id: this.product._id,
-        instance_id: instance._id,
-      };
-
-      this.cartService.saveItem(object);
-      this.cartService.cartItems.subscribe(data => this.cartNumbers = priceFormatter(data.length));
-      const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
-        position: {top: '5.5%', left: '20%'},
-        width: '450px',
-        data: {
-          dialog_product: this.product,
-          cartNumbers: this.cartNumbers,
-          selectedSize: this.size,
-        }
-      });
-      setTimeout(function () {
-        rmDialog.close();
-      }, 3000);
-    }
+    this.add.emit(this.size);
   }
 
-
-  newSize($event) {
-    this.size = $event;
-    this.addCardBtnDisabled = false;
+  newSize(event) {
+    this.size = event;
+    this.addCardBtnDisabled = !this.size;
   }
 
   ngAfterContentChecked() {

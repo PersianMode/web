@@ -98,7 +98,7 @@
             </div>
             <div fxFlex="50">
               <div class="style-select-wrapper" *ngIf="!addressInfo.partEdit">
-                <select class="select-style" formControlName="selectCity" (change)="setNewCity($event.target.value)">
+                <select class="select-style" formControlName="selectCity">
                   <option *ngFor="let c of cityArray" [value]="c" [disabled]="addressInfo.partEdit">
                     {{c}}
                   </option>
@@ -162,8 +162,8 @@
                         </agm-map>
                     </div>
                     <div class="submit-button" dir="ltr">
-                        <button class="btn-style" type="submit" [disabled]="(!addressForm.valid) || (addressInfo.partEdit && !anyChanges)"
-                                [class.btn-disable]="(!addressForm.valid) || (addressInfo.partEdit && !anyChanges)">{{buttonTitle}}</button>
+                        <button class="btn-style" type="submit" [disabled]="setButtonVisibility()"
+                                [class.btn-disable]="setButtonVisibility()">{{buttonTitle}}</button>
                     </div>
                 </mat-card-content>
             </mat-card>

@@ -38,25 +38,16 @@ th {
 }
 
 mat-card {
-  /*margin-top: 20px;*/
+  margin-top: 20px;
   font-family: iranyekan, sans-serif;
   margin: 10px;
 }
 
 .check-box-div {
-  margin-bottom: 50px;
-  padding: 20px;
-  height: 30px;
   line-height: 37px;
   display: inline-block;
   width: calc(50% - 10px);
   padding-right: 10px;
-}
-
-.check-box {
-  width: 20px;
-  height: 20px;
-  margin: 5px;
 }
 
 .newAddress-checkout {
@@ -68,11 +59,6 @@ mat-card {
 
 .newAddress-profile {
   width: calc(100% - 10px);
-}
-
-
-.newAddressButton {
-  margin: 20px 10% 10px 0;
 }
 
 .newAddress button {

@@ -35,6 +35,8 @@ export class CartService {
                 console.error('Cannot delete all items from localStorage: ', err);
               });
           }
+        } else {
+          this.cartItems.next([]);
         }
       }
     );
@@ -276,7 +278,7 @@ export class CartService {
       return this.cartItems.getValue()
         .filter(el => el.count && el.quantity <= el.count)
         .map(el => el.price * el.quantity)
-        .reduce((a, b) => a + b);
+        .reduce((a, b) => (+a) + (+b), 0);
 
     }
 
