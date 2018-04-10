@@ -1,5 +1,6 @@
 import {Component, Inject, Input, EventEmitter, OnInit, Output} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-edit-order',
@@ -17,7 +18,8 @@ export class EditOrderComponent implements OnInit {
   };
   selectedQuantityArray = null;
 
-  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data: any
+  private router: Router) {
   }
 
   ngOnInit() {
@@ -69,5 +71,10 @@ export class EditOrderComponent implements OnInit {
 
   setNewQty(newQty) {
     this.editObj.newQuantity = +newQty;
+  }
+
+  navigateToProduct() {
+    this.router.navigate(['product', this.product.product_id, this.product.color.id]);
+    this.dialogRef.close();
   }
 }
