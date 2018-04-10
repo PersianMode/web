@@ -27,12 +27,14 @@ export class CartService {
               }).toPromise());
             });
 
+
             Promise.all(promiseList)
               .then(res => {
                 localStorage.removeItem(this.localStorageKey);
               })
               .catch(err => {
-                console.error('Cannot delete all items from localStorage: ', err);
+                localStorage.removeItem(this.localStorageKey);
+                console.error('orders error: ', err);
               });
           }
         }
@@ -56,7 +58,7 @@ export class CartService {
       // Update local storage
       let tempItems = this.getItemsFromStorage();
       tempItems = tempItems.filter(el => el.product_id.toString() !== value.product_id.toString()
-      && el.instance_id.toString() !== value.instance_id.toString());
+        && el.instance_id.toString() !== value.instance_id.toString());
 
       localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
 
@@ -67,7 +69,7 @@ export class CartService {
   updateItem(value) {
     // Check for update or delete and add new item
     const item = this.cartItems.getValue().find(el => el.product_id.toString() === value.product_id.toString() &&
-    el.instance_id.toString() === value.instance_id.toString());
+      el.instance_id.toString() === value.instance_id.toString());
 
     if (item) {
       // Should modify
@@ -123,8 +125,8 @@ export class CartService {
         // Change in localStorage
         let ls_items = this.getItemsFromStorage();
         ls_items = ls_items.filter(el =>
-        el.product_id.toString() !== value.product_id.toString() ||
-        el.instance_id.toString() !== value.pre_instance_id.toString());
+          el.product_id.toString() !== value.product_id.toString() ||
+          el.instance_id.toString() !== value.pre_instance_id.toString());
 
         for (let counter = 0; counter < value.number; counter++)
           ls_items.push({

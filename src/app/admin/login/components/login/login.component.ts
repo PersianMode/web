@@ -15,17 +15,14 @@ export class LoginComponent implements OnInit {
   seen = {};
   curFocus = null;
 
-  warehouses: any[] = [];
-  needWarehouseId = false;
+  showClerkWarehouses = false;
 
-  constructor(private authService: AuthService, private router: Router, private restService: HttpService) {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   ngOnInit() {
     this.initForm();
-    this.restService.get('warehouse/all').subscribe(res => {
-      this.warehouses = res.filter(x => !x.is_center);
-    });
+
   }
 
   initForm() {
@@ -46,9 +43,7 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.loginForm.valid) {
 
-      let warehouseId = null;
-      if (this.needWarehouseId)
-        warehouseId = this.loginForm.controls['warehouse_id'].value;
+      const warehouseId = this.loginForm.controls['warehouse_id'].value;
 
       this.authService.login(this.loginForm.controls['email'].value,
         this.loginForm.controls['password'].value,
@@ -74,9 +69,11 @@ export class LoginComponent implements OnInit {
   }
 
   onChange(option) {
-    this.needWarehouseId = (option === AccessLevel.ShopClerk.toString() || option === AccessLevel.SalesManager.toString());
-    if (this.needWarehouseId && this.warehouses && this.warehouses.length)
-      this.loginForm.controls['warehouse_id'].setValue(this.warehouses[0]._id);
+    this.showClerkWarehouses = (option === AccessLevel.ShopClerk.toString());
+    if (this.showClerkWarehouses && this.authService.warehouses && this.authService.warehouses.length)
+      this.loginForm.controls['warehouse_id'].setValue(this.authService.warehouses.find(x => !x.is_center)._id);
+    else if (option === AccessLevel.SalesManager.toString())
+      this.loginForm.controls['warehouse_id'].setValue(this.authService.warehouses.find(x => x.is_center)._id);
     else
       this.loginForm.controls['warehouse_id'].setValue(null);
   }

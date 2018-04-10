@@ -70,7 +70,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     if (instance) {
       const object = {
         product_id: this.product._id,
-        instance_id: instance._id,
+        product_instance_id: instance._id,
       };
 
       this.cartService.saveItem(object);
