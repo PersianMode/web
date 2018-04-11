@@ -21,7 +21,37 @@
   height: 100%;
   cursor: pointer;
 }
-
+.item-name-and-data {
+  text-align: right;
+  font-family: iranyekan, sans-serif;
+}
+.item-name-and-data a {
+  text-decoration: none;
+  color: black;
+}
+.item-data div {
+  display: inline-block;
+  margin: 0px 0px 6px;
+}
+h4 {
+  font-family: irankharazmi, sans-serif;
+  display: inline-block;
+  margin: 19px 0px 19px 0px;
+}
+.main-price {
+  text-align: left;
+}
+.main-price section {
+  margin: 19px 0px 19px 0px;
+}
+.item-data span {
+  color: grey;
+}
+section {
+  color: #fa5400;
+  margin-right: 8px;
+  display: inline-block;
+}
 @media (min-width: 600px) {
 
   .thumbnail {
@@ -38,6 +68,9 @@
     width: 75%;
     max-width: calc(100% - 240px);
   }
+  .item-name-and-data {
+    max-width: calc(100% - 260px);
+  }
 }
 
 @media (max-width: 599px) {
@@ -46,6 +79,10 @@
   }
 
   .thumbnail img {
+    width: 100%;
+  }
+
+  .item-name-and-data {
     width: 100%;
   }
 }
