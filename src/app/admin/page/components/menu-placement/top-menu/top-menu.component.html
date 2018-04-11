@@ -18,7 +18,8 @@
         </div>
         <div fxFlex="40" style="width: 100%">
           <mat-input-container dir="ltr" class="input-field">
-            <input matInput class="menu-field" placeholder="بخش" [(ngModel)]="upsertTopMenuItem.section" [disabled]="upsertTopMenuItem.isEdit"/>
+            <input matInput class="menu-field" placeholder="بخش" [(ngModel)]="upsertTopMenuItem.section"
+                   [disabled]="upsertTopMenuItem.isEdit"/>
           </mat-input-container>
         </div>
       </div>
@@ -37,9 +38,7 @@
         </mat-icon>
       </button>
       <button mat-mini-fab color="primary" (click)="clearFields()" *ngIf="upsertTopMenuItem.isEdit">
-        <mat-icon>
-          <i class="material-icons">clear</i>
-        </mat-icon>
+        <i class="fa fa-eraser"></i>
       </button>
     </div>
   </div>
