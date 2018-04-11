@@ -74,6 +74,8 @@ export class ProductComponent implements OnInit, OnDestroy {
         product_instance_id: instance._id,
       };
 
+      Object.assign(object, this.product);
+
       this.cartService.saveItem(object);
       this.cartService.cartItems.subscribe(data => this.cartNumbers = priceFormatter(data.length));
       const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
@@ -81,6 +83,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         width: this.isMobile ? '100%' : '450px',
         data: {
           dialog_product: this.product,
+          instance,
           cartNumbers: this.cartNumbers,
           selectedSize: size,
         }

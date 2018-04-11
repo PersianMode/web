@@ -221,10 +221,33 @@ export class CartService {
     this.httpService.post('order', {
       product_id: item.product_id,
       product_instance_id: item.product_instance_id,
-      number: item.number,
     }).subscribe(
       data => {
-        this.cartItems.next(this.cartItems.getValue().concat([Object.assign({quantity: 1}, item)]));
+        const currentValue = this.cartItems.getValue();
+        const object = {
+          product_id: item.product_id,
+          instance_id: item.product_instance_id,
+          quantity: 1,
+        };
+        const found = currentValue.find(r => r.product_id === object.product_id && r.instance_id === object.instance_id);
+        if (found)
+          found.quantity += 1;
+        else {
+          const instance = item.instances.find(r => r._id === object.instance_id);
+          const color = item.colors.find(r => r.id === instance.product_color_id);
+          currentValue.push(Object.assign(object, {
+            size: instance.size,
+            color,
+            count: instance.inventory.map(r => r.count).reduce((x, y) => +x + +y, 0),
+            instances: [instance],
+            tags: [],
+            name: item.name,
+            price: instance.price,
+            discount: [1],
+            thumbnail: color.image.thumbnail,
+          }));
+        }
+        this.cartItems.next(currentValue);
       },
       err => {
         console.error('Cannot save item to server: ', err);
