@@ -43,6 +43,7 @@
   padding: 20px;
   position: center;
   margin-top: auto;
+  width: calc(100% - 40px);
 }
 
 .hr-style {
@@ -67,7 +68,12 @@
 }
 
 .coupon_field {
-  padding: 3px;
+  width: calc(100% - 16px);
+  border: 0;
+  border-radius: 0;
+  color: black;
+  height: 22px;
+  font-size: 14px;
 }
 
 .open-close-field-sign {
