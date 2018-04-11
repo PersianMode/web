@@ -43,7 +43,8 @@
     </div>
   </div>
   <div class="demo-list" [dragula]="'top-menu-bag'" [dragulaModel]="topMenuItems">
-    <div *ngFor="let item of topMenuItems" class="top-menu-item" (click)="selectItem(item)">
+    <div *ngFor="let item of topMenuItems" class="top-menu-item" (click)="selectItem(item)"
+         [ngClass]="{'selected-item': upsertTopMenuItem.id && item._id.toString() === upsertTopMenuItem.id.toString()}">
       <label class="content">{{item.info.text}}</label>
     </div>
   </div>
