@@ -570,6 +570,19 @@ dp-date-picker.dp-material .dp-picker-input {
   padding: 0 !important;
 }
 
+.title {
+  font-family: irankharazmi, sans-serif;
+  font-weight: 200;
+}
+
+.content {
+  font-family: iranyekan, sans-serif;
+}
+
+.mat-tab-label {
+  font-family: iranyekan, sans-serif;
+}
+
 mat-expansion-panel {
   box-shadow: none !important;
   border-top: 1px solid rgba(221,221,221,.7);
@@ -768,4 +781,8 @@ mat-panel-title {
 }
 .cdk-overlay-pane {
   max-width: 100% !important;
+}
+
+.persian-field {
+  font-family: iranyekan, sans-serif !important;
 }
