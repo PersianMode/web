@@ -9,7 +9,13 @@ import {IPlacement} from '../../interfaces/IPlacement.interface';
 export class PlacementComponent implements OnInit {
   @Input() isApp = false;
   @Input() pageId = null;
-  @Input() placements: IPlacement[] = [];
+
+  @Input()
+  set placements(value) {
+    this._placements = value;
+  }
+
+  _placements: IPlacement[] = [];
   @Output() modifyPlacement = new EventEmitter();
 
   constructor() {
@@ -19,7 +25,7 @@ export class PlacementComponent implements OnInit {
   }
 
   getRelatedPlacements(type) {
-    return this.placements ? this.placements.filter(el => el.component_name.toLowerCase() === type.toLowerCase()) : [];
+    return this._placements ? this._placements.filter(el => el.component_name.toLowerCase() === type.toLowerCase()) : [];
   }
 
   modify(value) {

@@ -8,7 +8,7 @@
       <app-logo-list-placement [placements]="getRelatedPlacements('logos')" (modifyPlacement)="modify($event)"></app-logo-list-placement>
     </mat-tab>
     <mat-tab label="اسلایدر" *ngIf="!isApp">
-      <app-slider-placement [placements]="getRelatedPlacements('slider')" (modifyPlacement)="modify($event)"></app-slider-placement>
+      <app-slider-placement [placements]="getRelatedPlacements('slider')" [pageId]="pageId" (modifyPlacement)="modify($event)"></app-slider-placement>
     </mat-tab>
     <mat-tab label="صفحه">
       <app-page-content-placement [placements]="getRelatedPlacements('main')" (modifyPlacement)="modify($event)"></app-page-content-placement>
