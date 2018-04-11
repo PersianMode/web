@@ -1,11 +1,8 @@
 import {Injectable} from '@angular/core';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {HttpService} from './http.service';
-import {ActivatedRoute, NavigationEnd, Router, RouterStateSnapshot} from '@angular/router';
-import {AccessLevel} from '../enum/accessLevel.enum';
-import {getExpressionLoweringTransformFactory} from '@angular/compiler-cli/src/transformers/lower_expressions';
-import {reject} from 'q';
+import {Router} from '@angular/router';
+import {SocketService} from './socket.service';
 
 @Injectable()
 export class AuthService {
@@ -13,18 +10,27 @@ export class AuthService {
   isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isVerified: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   userDetails: any;
+  warehouses: any[] = [];
 
-  constructor(private httpService: HttpService, private router: Router) {
+
+  constructor(private httpService: HttpService, private router: Router, private socketService: SocketService) {
     this.populateUserDetails();
+    this.getWarehouses();
   }
 
   checkValidation(url) {
     return new Promise((resolve, reject) => {
-      this.httpService.get((url.includes('agent') ? 'agent/' : '') + 'validUser').subscribe(
+      const tempUrl = url.toLowerCase();
+
+      this.httpService.get((tempUrl.includes('agent') || tempUrl.includes('?preview') ? 'agent/' : '') + 'validUser').subscribe(
         (data) => {
           this.populateUserDetails(data);
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
+
+          if (this.userDetails.socket_token) {
+            this.socketService.init(this.userDetails.socket_token);
+          }
           resolve();
         },
         (err) => {
@@ -42,8 +48,9 @@ export class AuthService {
       Object.assign(this.userDetails, {
         isAgent: data.personType === 'agent',
         userId: data.id,
-        accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
         displayName: data.name + ' ' + data.surname,
+        accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
+        socket_token: data.hasOwnProperty('socket_token') ? data.socket_token : null,
       });
     } else {
       this.userDetails = {
@@ -57,6 +64,7 @@ export class AuthService {
         mobile_no: null,
         national_id: null,
         warehouse_id: null,
+        socket_token: null
       };
     }
   }
@@ -80,6 +88,9 @@ export class AuthService {
           this.populateUserDetails(data);
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
+          if (this.userDetails.socket_token) {
+            this.socketService.init(this.userDetails.socket_token);
+          }
           resolve();
         },
         (err) => {
@@ -103,7 +114,7 @@ export class AuthService {
           this.isVerified.next(data.is_verified ? data.is_verified : false);
           this.populateUserDetails();
           // this.router.navigate([rt]);
-
+          this.socketService.disconnect();
           resolve();
         },
         (err) => {
@@ -112,6 +123,13 @@ export class AuthService {
           reject();
         }
       );
+    });
+  }
+
+  private getWarehouses() {
+    this.httpService.get('warehouse/all').subscribe(res => {
+      this.warehouses = res;
+      console.log('-> warehouses: ', this.warehouses);
     });
   }
 }

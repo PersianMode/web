@@ -27,12 +27,14 @@ export class CartService {
               }).toPromise());
             });
 
+
             Promise.all(promiseList)
               .then(res => {
                 localStorage.removeItem(this.localStorageKey);
               })
               .catch(err => {
-                console.error('Cannot delete all items from localStorage: ', err);
+                localStorage.removeItem(this.localStorageKey);
+                console.error('orders error: ', err);
               });
           }
         } else {
