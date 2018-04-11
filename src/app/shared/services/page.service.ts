@@ -3,6 +3,7 @@ import {HttpService} from './http.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IPageInfo} from '../../admin/page/interfaces/IPageInfo.interface';
 import {Subject} from 'rxjs/Subject';
+import {AuthService} from './auth.service';
 
 const defaultComponents = ['menu', 'slider', 'logos'];
 
@@ -13,7 +14,7 @@ export class PageService {
   placement$: Subject<any[]> = new Subject<any[]>();
   pageInfo$: Subject<any[]> = new Subject<any[]>();
 
-  constructor(private httpService: HttpService) {
+  constructor(private httpService: HttpService, private authService: AuthService) {
     this.getPage('home', false);
   }
 
@@ -50,7 +51,7 @@ export class PageService {
       if (pageName === 'home' || this.homeComponents.menu) {
         clearInterval(i);
         if ( !this.cache[pageName]) {
-          this.httpService.post('page', {address: pageName}).subscribe(
+          this.httpService.post('page' + (this.authService.userDetails.isAgent ? '/cm/preview' : ''), {address: pageName}).subscribe(
             (data: any) => {
               if (data && data.placement && data.placement.length) {
                 this.cache[pageName] = {

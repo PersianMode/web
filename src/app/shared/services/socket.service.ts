@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {Observable} from 'rxjs/Rx';
+import {HttpService} from './http.service';
 
 @Injectable()
 export class SocketService {
-  private url = 'http://localhost:3000';
   private socketConfig = {
     transports: ['websocket']
   };
@@ -17,10 +17,11 @@ export class SocketService {
     });
   });
 
-  constructor() { }
+  constructor() {
+  }
 
-  public init() {
-    this.orderLineSocket = io(this.url + '/orderline', this.socketConfig);
+  public init(nsp) {
+    this.orderLineSocket = io(HttpService.Host + '/' + nsp, this.socketConfig);
   }
 
   getOrderLineMessage() {
