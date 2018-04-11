@@ -1,17 +1,17 @@
-<mat-card-content>
-    <mat-card style="margin-top: 5px; font-family: iranyekan" *ngIf="!isEdit">
+<mat-card class="customer-data" *ngIf="!isEdit && !isChangePass">
+    <mat-card-content>
         <mat-card-title style="font-size: 18px">اطلاعات مشتری</mat-card-title>
         <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl" class="outer-div">
             <div fxFlex="50" class="info-cell"><b>نام و نام خانوادگی : {{customerBasicInfo.displayName}}</b></div>
-            <div fxFlex="50" class="cell-info"><b>شماره ملی : {{userNationalId}}</b></div>
+            <div fxFlex="50" class="info-cell"><b>شماره ملی : {{userNationalId}}</b></div>
         </div>
         <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-            <div fxFlex="50" class="cell-info"><b>تاریخ تولد : {{birthDate}}</b></div>
+            <div fxFlex="50" class="info-cell"><b>تاریخ تولد : {{birthDate}}</b></div>
             <div fxFlex="50" class="info-cell"><b>جنسیت : {{userGender}}</b></div>
         </div>
         <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
             <div fxFlex="50" class="info-cell"><b>تلفن همراه : {{customerBasicInfo.mobile_no}}</b></div>
-            <div fxFlex="50" class="cell-info"><b>ایمیل : {{customerBasicInfo.username}}</b></div>
+            <div fxFlex="50" class="info-cell"><b>ایمیل : {{customerBasicInfo.username}}</b></div>
         </div>
         <div class="yesNo-div"> مایل به دریافت آخرین اخبار از نایک ، <b>{{ yesNo }}</b></div>
         <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
@@ -19,118 +19,182 @@
                 <button mat-button class="mat-button-style" (click)="goToEditForm()">ویرایش اطلاعات</button>
             </div>
             <div fxFlex="50" class="change-pass-button">
-                <button mat-button class="mat-button-style">تغییر رمز عبور</button>
+                <button mat-button class="mat-button-style" (click)="goToChangePassForm()">تغییر رمز عبور</button>
             </div>
         </div>
-    </mat-card>
-    <mat-card *ngIf="isEdit" style="font-family: iranyekan; margin-top: 5px;">
-        <h3>ویرایش اطلاعات</h3>
-        <mat-card-content style="width: 100%">
-            <form (ngSubmit)="submitEditInfo()" [formGroup]="userInfoForm">
-                <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
-                     style="width: 70%; text-align: center">
+    </mat-card-content>
+</mat-card>
+<mat-card *ngIf="isEdit"
+          style="font-family: iranyekan; margin-top: 5px; text-align: center">
+    <mat-card-content style="width: 100%;">
+        <form (ngSubmit)="submitEditInfo()" [formGroup]="userInfoForm">
+            <div fxLayout="row">
+                <div fxFlex="10" fxFlex.sm="5" fxFlex.xs="0">&nbsp;</div>
+                <div fxLayout="column" fxFlex=80 fxFlex.sm=90 fxFlex.xs=100
+                     dir="rtl">
+                    <h3>ویرایش اطلاعات</h3>
+                    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+                        <div fxFlex="15" class="input-label"><span>نام</span>
+                        </div>
+                        <div fxFlex="35" class="input-container">
 
-                    <div fxFlex="50" class="input-container">
-                        <input class="input-field" type="text"
-                               formControlName="name"
-                                placeholder="نام"
-                               [ngClass]="userInfoForm.controls['name'].hasError('required') ? 'input-error' : null"/>
-                        <label class="field-error"
-                               *ngIf="userInfoForm.controls['name'].hasError('required')">لطفا
-                            نام را وارد کنید</label>
+                            <input class="input-field" type="text"
+                                   formControlName="name"
+                                   placeholder="نام"
+                                   [ngClass]="userInfoForm.controls['name'].hasError('required') ? 'input-error' : null"/>
+                            <label class="field-error"
+                                   *ngIf="userInfoForm.controls['name'].hasError('required')">لطفا
+                                نام را وارد کنید</label>
+                        </div>
+                        <div fxFlex="15" class="input-label"><span>نام خانوادگی</span>
                     </div>
+                        <div fxFlex="35" class="input-container">
+                            <input class="input-field" type="text"
+                                   formControlName="surname"
+                                   placeholder="نام خانوادگی"
+                                   [ngClass]="userInfoForm.controls['surname'].hasError('required') ? 'input-error' : null"/>
+                            <label class="field-error"
+                                   *ngIf="userInfoForm.controls['surname'].hasError('required')">لطفا
+                                نام خانوادگی را وارد کنید</label>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+                        <div fxFlex="15" class="input-label"><span>تاریخ تولد</span>
+                        </div>
+                        <div fxFlex="35" class="input-container">
+                            <dp-date-picker
+                                    class="input-field"
+                                    placeholder="تاریخ تولد"
+                                    formControlName="dob"
+                                    mode="day"
+                                    [ngClass]="userInfoForm.controls['dob'].hasError('required') ? 'input-error' : null"
+                                    theme="dp-material">
+                            </dp-date-picker>
+                            <label class="field-error dp-hint"
+                                   *ngIf="userInfoForm.controls['dob'].hasError('required')">لطفا
+                                تاریخ تولد را وارد کنید</label>
+                        </div>
+                        <div fxFlex="15" class="input-label"><span>شماره ملی</span>
+                        </div>
+                        <div fxFlex="35" class="input-container">
+                            <input class="input-field"
+                                   formControlName="national_id"
+                                   placeholder="شماره ملی"
+                                   [readonly]=nationalIdDisabled
+                                   [ngClass]="(userInfoForm.controls['national_id'].hasError('maxLength') || userInfoForm.controls['national_id'].hasError('minLength') || userInfoForm.controls['national_id'].hasError('pattern')) ? 'input-error' : null"/>
+                            <label class="field-error"
+                                   *ngIf="(userInfoForm.controls['national_id'].hasError('maxLength') || userInfoForm.controls['national_id'].hasError('minLength') || userInfoForm.controls['national_id'].hasError('pattern'))">لطفا
+                                کد ملی معتبری وارد کنید</label>
+                        </div>
 
-                    <div fxFlex="50" class="input-container">
-                        <input class="input-field" type="text"
-                               formControlName="surname"
-                               placeholder="نام خانوادگی"
-                               [ngClass]="userInfoForm.controls['surname'].hasError('required') ? 'input-error' : null"/>
-                        <label class="field-error"
-                               *ngIf="userInfoForm.controls['surname'].hasError('required')">لطفا
-                            نام خانوادگی را وارد کنید</label>
                     </div>
-                    
-                </div>
-                <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
-                     style="width: 70%; text-align: center">
-                    <div fxFlex="50" class="input-container">
-                        <dp-date-picker
-                                class="input-field"
-                                placeholder="تاریخ تولد"
-                                formControlName="dob"
-                                mode="day"
-                                [ngClass]="userInfoForm.controls['dob'].hasError('required') ? 'input-error' : null"
-                                theme="dp-material">
-                        </dp-date-picker>
-                        <label class="field-error dp-hint"
-                               *ngIf="userInfoForm.controls['dob'].hasError('required')">لطفا
-                            تاریخ تولد را وارد کنید</label>
+                    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+                        <div fxFlex="15" class="input-label"><span>ایمیل</span>
+                        </div>
+                        <div fxFlex="35" class="input-container">
+                            <input class="input-field" type="email"
+                                   placeholder="نام کاربری (ایمیل)"
+                                   formControlName="username"
+                                   [ngClass]="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('email')) ? 'input-error' : null"/>
+                            <label class="field-error"
+                                   *ngIf="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('email'))">لطفا
+                                ایمیل معتبری وارد کنید</label>
+                        </div>
+                        <div fxFlex="15" class="input-label"><span>شماره موبایل</span>
+                        </div>
+                        <div fxFlex="35" class="input-container">
+                            <input class="input-field"
+                                   formControlName="mobile_no"
+                                   placeholder="شماره موبایل"
+                                   [readonly]=true
+                                   [ngClass]="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('pattern')) ? 'input-error' : null"/>
+                            <label class="field-error"
+                                   *ngIf="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('pattern'))">لطفا
+                                شماره موبایل معتبری وارد کنید</label>
+                        </div>
                     </div>
-                    <div fxFlex="50" class="input-container">
-                        <input class="input-field"
-                               formControlName="national_id"
-                               placeholder="شماره ملی"
-                               [readonly]= nationalIdDisabled
-                               [ngClass]="(userInfoForm.controls['national_id'].hasError('maxLength') || userInfoForm.controls['national_id'].hasError('minLength') || userInfoForm.controls['national_id'].hasError('pattern')) ? 'input-error' : null"/>
-                        <label class="field-error"
-                               *ngIf="(userInfoForm.controls['national_id'].hasError('maxLength') || userInfoForm.controls['national_id'].hasError('minLength') || userInfoForm.controls['national_id'].hasError('pattern'))">لطفا
-                            کد ملی معتبری وارد کنید</label>
-                    </div>
-
-                </div>
-                <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
-                     style="width: 70%; text-align: center">
-                    <div fxFlex="50" class="input-container">
-                        <input class="input-field" type="email"
-                               placeholder="نام کاربری (ایمیل)"
-                               formControlName="username"
-                               [ngClass]="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('email')) ? 'input-error' : null"/>
-                        <label class="field-error"
-                               *ngIf="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('email'))">لطفا
-                            ایمیل معتبری وارد کنید</label>
-                    </div>
-                    <div fxFlex="50" class="input-container">
-                        <input class="input-field"
-                               formControlName="mobile_no"
-                               placeholder="شماره موبایل"
-                               [readonly] = true
-                               [ngClass]="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('pattern')) ? 'input-error' : null"/>
-                        <label class="field-error"
-                               *ngIf="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('pattern'))">لطفا
-                            شماره موبایل معتبری وارد کنید</label>
-                    </div>
-                </div>
-                <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
-                     style="width: 70%; text-align: center">
-                    <div fxFlex="100" class="input-container">
-                        <div fxLayout="row" fxLayoutAlign="center center">
-                            <div fxFlex="50" style="margin-left: 10px;">
-                                <div class="btn-field div-btn gender-choice"
-                                     [class.selected-gender]="userGender === 'مرد'">
-                                    <label>مرد</label>
-                                    <i *ngIf="userGender === 'مرد'" class="fa fa-check" aria-hidden="true"></i>
+                    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+                        <div fxFlex="100" class="input-container">
+                            <div fxLayout="row" fxLayoutAlign="center center">
+                                <div fxFlex="15">&nbsp;</div>
+                                <div fxFlex="35">
+                                    <div class="btn-field div-btn gender-choice"
+                                         [class.selected-gender]="userGender === 'مرد'">
+                                        <label>مرد</label>
+                                        <i *ngIf="userGender === 'مرد'" class="fa fa-check" aria-hidden="true"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div fxFlex="50" style="margin-right: 10px;">
-                                <div class="btn-field div-btn gender-choice"
-                                     [class.selected-gender]="userGender === 'زن'">
-                                    <label>زن</label>
-                                    <i *ngIf="userGender === 'زن'" class="fa fa-check" aria-hidden="true"></i>
+                                <div fxFlex="35" style="margin-right: 10px;">
+                                    <div class="btn-field div-btn gender-choice"
+                                         [class.selected-gender]="userGender === 'زن'">
+                                        <label>زن</label>
+                                        <i *ngIf="userGender === 'زن'" class="fa fa-check" aria-hidden="true"></i>
+                                    </div>
                                 </div>
+                                <div fxFlex="15">&nbsp;</div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div style="width: 70%; text-align: center">
-                    <label for="subscribe" class="clickable-link">دریافت آخرین اخبار از Nike</label>
-                    <input id="subscribe" type="checkbox" [checked] ="userGender === 'زن'"/>
-                </div>
-                <div class="button-area" style="text-align: center">
-                    <div class="div-btn btn-field inform-btn" style="width: 70%">
-                        <button (click)="submitEditInfo()" [disabled]="!userInfoForm.valid || !anyChanges">ثبت اطلاعات</button>
+                    <div >
+                        <label for="subscribe" class="clickable-link">دریافت آخرین اخبار از Nike</label>
+                        <input id="subscribe" type="checkbox" [checked]="userGender === 'زن'"/>
+                    </div>
+                    <div class="button-area" style="text-align: center">
+                        <div class="div-btn btn-field inform-btn">
+                            <button (click)="submitEditInfo()" [disabled]="!userInfoForm.valid || !anyChanges">ثبت
+                                اطلاعات
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </form>
-        </mat-card-content>
-    </mat-card>
-</mat-card-content>
+                <div fxFlex="10" fxFlex.sm="5" fxFlex.xs="0">&nbsp;</div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+<mat-card *ngIf="isChangePass" style="font-family: iranyekan; margin-top: 5px;">
+    <h3>تغییر کلمه عبور</h3>
+    <mat-card-content>
+        <form (ngSubmit)="submitChangedPassword()" [formGroup]="changePassForm" style="font-family: iranyekan">
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
+                 style="width: 40%;">
+                <div fxFlex="40" style="height: 50%; margin-top: 15px; margin-right: 3px"><b>پسورد فعلی را وارد کنید</b>
+                </div>
+                <div fxFlex="60" class="input-container">
+                    <input class="input-field" type="password" style="width: 100%"
+                           formControlName="oldPass"
+                           [ngClass]="changePassForm.controls['oldPass'].hasError('required') ? 'input-error' : null"/>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
+                 style="width: 40%;">
+                <div fxFlex="40" style="height: 50%; margin-top: 15px; margin-right: 3px"><b>پسورد جدید را وارد کنید</b>
+                </div>
+                <div fxFlex="60" class="input-container">
+                    <mat-input-container>
+                        <input matInput class="input-field" type="password" style="width: 100%"
+                               formControlName="newPass"
+                               [ngClass]="changePassForm.controls['newPass'].hasError('required') ? 'input-error' : null"/>
+                    </mat-input-container>
+
+                </div>
+            </div>
+            <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
+                 style="width: 40%;">
+                <div fxFlex="40" style="height: 50%; margin-top: 15px; margin-right: 3px"><b>پسورد جدید را دوباره وارد
+                    کنید</b></div>
+                <div fxFlex="60" class="input-container">
+                    <input class="input-field" type="password" style="width: 100%"
+                           formControlName="newPass"
+                           [ngClass]="changePassForm.controls['newPass'].hasError('required') ? 'input-error' : null"/>
+                </div>
+            </div>
+            <div class="button-area" style="text-align: center">
+                <div class="div-btn btn-field inform-btn" style="width: 40%">
+                    <button>تغییر پسورد</button>
+                    <button>بازگشت</button>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

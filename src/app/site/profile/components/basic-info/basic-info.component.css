@@ -1,21 +1,6 @@
 .info-cell {
-     background-color: rgb(237, 237, 242);
      padding: 6px;
  }
-
-.info-cell:hover{
-    background-color: rgb(248, 247, 247);
-}
-
-.cell-info {
-    background-color: rgb(248, 247, 247);
-    padding: 6px;
-}
-
-.cell-info:hover {
-    background-color: rgb(237, 237, 242);
-    padding: 6px;
-}
 
 .yesNo-div {
     text-align: center;
@@ -38,4 +23,42 @@
     margin-bottom: 2px;
     width: 120px
 }
+.input-label {
+    font-size: 80%;
+    font-weight: 600;
+    text-align: left;
+    margin: 15px 5px 0px;
+}
+.input-label span {
+    display: block;
+    line-height: 34px;
+    vertical-align: middle;
+}
 
+@media(max-width:959px) {
+    .input-label {
+        text-align: right !important;
+        margin: 2px !important;
+    }
+
+    .input-container {
+        margin: 0px 0px 10px;
+    }
+
+    .customer-data mat-card-content {
+        margin: 0px !important;
+    }
+    .edit-button button{
+        width: 100% !important;
+    }
+
+
+}
+
+.customer-data {
+    margin-top: 5px;
+    font-family: iranyekan
+}
+.customer-data mat-card-content {
+    margin:0px 15%;
+}

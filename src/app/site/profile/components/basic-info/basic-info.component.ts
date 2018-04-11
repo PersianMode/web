@@ -12,12 +12,14 @@ import {HttpService} from '../../../../shared/services/http.service';
 })
 export class BasicInfoComponent implements OnInit {
   @Input() isEdit = false;
+  isChangePass = false;
   customerBasicInfo: any;
   userGender;
   userNationalId = '';
   birthDate: any = '';
   yesNo = 'هستید';
   userInfoForm: FormGroup;
+  changePassForm: FormGroup;
   nationalIdDisabled = false;
   anyChanges = false;
 
@@ -41,7 +43,7 @@ export class BasicInfoComponent implements OnInit {
       surname: [this.customerBasicInfo.surname ? this.customerBasicInfo.surname : '', [
         Validators.required,
       ]],
-      dob: [this.customerBasicInfo.dob  ? moment(this.customerBasicInfo.dob).locale('fa').format('jYYYY-jMM-jDD') : 'تاریخ تولد' , [
+      dob: [this.customerBasicInfo.dob  ? moment(this.customerBasicInfo.dob).format('YYYY-MM-DD') : 'تاریخ تولد' , [
         Validators.required,
       ]],
       username: [this.customerBasicInfo.username, [
@@ -68,7 +70,6 @@ export class BasicInfoComponent implements OnInit {
     this.isEdit = true;
     this.initForm();
   }
-
   submitEditInfo() {
     this.customerBasicInfo.name = this.userInfoForm.controls['name'].value;
     this.customerBasicInfo.surname = this.userInfoForm.controls['surname'].value;
@@ -82,7 +83,6 @@ export class BasicInfoComponent implements OnInit {
     this.authService.userDetails.dob = this.customerBasicInfo.dob;
     this.authService.userDetails.username = this.customerBasicInfo.username;
     this.authService.isLoggedIn.next(true);
-    // console.log(moment(this.userInfoForm.controls['dob'].value, 'jYYYY-jMM-jDD').locale('en'));
     this.httpService.post('editUserBasicInfo', this.customerBasicInfo).subscribe(
       (res) => {
         this.ngOnInit();
@@ -121,5 +121,21 @@ export class BasicInfoComponent implements OnInit {
       || (dob !== moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD'))
       || ((this.customerBasicInfo.national_id && national_id !== this.customerBasicInfo.national_id) || (isUndefined(this.customerBasicInfo.national_id) && national_id !== '')))
          this.anyChanges = true;
+  }
+
+
+  goToChangePassForm() {
+    this.isChangePass = true;
+    this.initChangePassForm();
+  }
+
+  initChangePassForm() {
+    this.changePassForm = new FormBuilder().group({
+      oldPass: [null],
+      newPass: [null]
+    });
+  }
+  submitChangedPassword() {
+
   }
 }
