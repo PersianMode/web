@@ -1,14 +1,13 @@
 <mat-card>
   <mat-card-content>
     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column">
-      <div fxFlex="25" style="text-align: right">
+      <div fxFlex="25" class="thumbnail">
         <a [routerLink]="['/', 'product', product._id, product.color.color_id]">
-          <img src="{{product.thumbnail}}"
-               style="width: 90%; height:100%; cursor: pointer;">
+          <img src="{{product.thumbnail}}">
         </a>
       </div>
-      <div fxFlex="75" style="text-align: right; font-family: iranyekan;">
-        <div style="height: 30%;">
+      <div fxFlex="75" style="text-align: right; font-family: iranyekan; max-width: calc(100% - 260px)">
+        <div>
           <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column"
                style=" display: inline-block;">
             <div fxFlex="70" style="margin-top: 5px; display: inline-block; cursor: pointer">
@@ -16,32 +15,31 @@
               <b><a *ngFor="let t of product.tags" style="text-decoration : underline">{{t.name}}{{' '}}</a></b>
             </div>
             <div fxFlex="30" style="margin-top: 5px;display: inline-block; text-align: left;">
-              <span style="color: #fa5400; font-size: small" *ngIf="!notExist">{{displayTotalPrice}}{{' '}}{{'تومان'}}</span>
+              <span style="color: #fa5400; font-size: small" *ngIf="!notExist">{{displayTotalPrice}}</span>
               <span style="color: #fa5400; font-size: small" *ngIf="notExist">ناموجود</span>
             </div>
           </div>
         </div>
-        <div style="height: 60%;">
+        <div>
           <div style="display: inline-block;">
-            <b style="display: inline-block;">سایز : </b>
-            <div style="color: gray; display: inline-block;">{{' '}}{{displaySize}}</div>
+            <b style="display: inline-block;">سایز: </b>
+            <div style="color: gray; display: inline-block;">{{displaySize}}</div>
           </div>
           <br>
           <div style=" display: inline-block;">
-            <b style=" display: inline-block;">تعداد : </b>
-            <div style="color: gray;display: inline-block;">{{' '}} {{displayQuantity}} {{'عدد'}}{{' '}}</div>
-            <div style=" display: inline-block; color: #fa5400; margin-right: 8px">{{displayPrice}}{{'@'}}</div>
+            <b style=" display: inline-block;">تعداد: </b>
+            <div style="color: gray;display: inline-block;">{{displayQuantity}} {{' عدد'}}</div>
+            <div style=" display: inline-block; color: #fa5400; margin-right: 8px">{{displayPrice}}</div>
           </div>
           <br>
           <div style=" display: inline-block;">
-            <div style=" display: inline-block; font-weight: bold"><b>رنگ : </b></div>
+            <div style=" display: inline-block; font-weight: bold"><b>رنگ: </b></div>
             <div style=" display: inline-block; color: gray;margin-right: 8px;">{{product.color.name}}</div>
           </div>
         </div>
-        <div fxLayout="row" fxLayoutAlign="center center" fxLayout.xs="column"
-             style="height: 10%;">
-          <button fxFlex="30" (click)="deleteProduct()" class="btn-style">حذف</button>
-          <button fxFlex="30" (click)="openEditOrder()" class="btn-style">ویرایش</button>
+        <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+          <button fxFlex="30" fxFlex.xs=50 (click)="deleteProduct()">حذف</button>
+          <button fxFlex="30" fxFlex.xs=50 (click)="openEditOrder()">ویرایش</button>
         </div>
       </div>
     </div>

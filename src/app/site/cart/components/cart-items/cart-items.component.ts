@@ -22,12 +22,12 @@ export class CartItemsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.notExist = this.product.count && this.product.quantity <= this.product.count ? false : true;
+    this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
 
     this.displaySize = this.product.size.toLocaleString('fa');
     this.displayQuantity = this.product.quantity.toLocaleString('fa');
-    this.displayPrice = priceFormatter(this.product.price);
-    this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price);
+    this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
+    this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price) + ' تومان';
   }
 
   deleteProduct() {
@@ -47,8 +47,8 @@ export class CartItemsComponent implements OnInit {
           this.updateProduct.emit({type: 'update', value: data});
           this.displaySize = (data.newSize ? data.newSize : this.product.size).toLocaleString('fa');
           this.displayQuantity = (data.newQuantity ? data.newQuantity : this.product.quantity).toLocaleString('fa');
-          this.displayPrice = priceFormatter(this.product.price);
-          this.displayTotalPrice = priceFormatter((data.newQuantity ? data.newQuantity : this.product.quantity) * this.product.price);
+          this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
+          this.displayTotalPrice = priceFormatter((data.newQuantity ? data.newQuantity : this.product.quantity) * this.product.price)  + ' تومان';
         }
       },
       (err) => {

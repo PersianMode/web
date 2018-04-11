@@ -18,8 +18,8 @@ export class EditOrderComponent implements OnInit {
   };
   selectedQuantityArray = null;
 
-  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, @Inject(MAT_DIALOG_DATA) public data: any
-  private router: Router) {
+  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any,  private router: Router) {
   }
 
   ngOnInit() {
