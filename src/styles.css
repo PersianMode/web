@@ -847,3 +847,9 @@ mat-panel-title {
 .mat-simple-snackbar {
   font-family: iranyekan, sans-serif !important;
 }
+
+.demo-list {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+}

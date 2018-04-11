@@ -1,0 +1,26 @@
+.menu-item {
+  margin: 3px;
+  text-align: right;
+}
+
+.header-container {
+  margin-top: 7px;
+}
+
+.header {
+  font-weight: bold !important;
+}
+
+.menu-area, .menu-column {
+  display: inline-block !important;
+  padding: 10px;
+}
+
+.menu-column {
+  vertical-align: top;
+}
+
+.middle-menu {
+  border-left: 1px solid #E5E5E5;
+  border-right: 1px solid #E5E5E5;
+}

@@ -1,0 +1,37 @@
+<div>
+  <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
+       fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
+
+  </div>
+  <div class="demo-list">
+    <div class="menu-area">
+      <div *ngFor="let column of headerAreaColumns" [dragula]="'sub-menu-header-bag'"
+           [dragulaModel]="headerAreaItems[column]" class="menu-column">
+        <div *ngFor="let item of headerAreaItems[column]" class="menu-item"
+             (click)="selectItem(item, itemArea.Header)">
+          <label class="content header">{{item.info.text}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-area middle-menu">
+      <div *ngFor="let column of middleAreaColumns" [dragula]="'sub-menu-middle-bag'"
+           [dragulaModel]="middleAreaItems[column]" class="menu-column">
+        <div *ngFor="let item of middleAreaItems[column]; first as isFirst" class="menu-item"
+             (click)="selectItem(item, itemArea.Middle)" [class.header-container]="item.info.is_header">
+          <label class="content" [class.header]="isFirst || item.info.is_header">{{item.info.text}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-area">
+      <div *ngFor="let column of leftAreaColumns" [dragula]="'sub-menu-left-bag'"
+           [dragulaModel]="leftAreaItems[column]" class="menu-column">
+        <div *ngFor="let item of leftAreaItems[column]; first as isFirst" class="menu-item"
+             (click)="selectItem(item, itemArea.Left)" [class.header-container]="item.info.is_header">
+          <label class="content" [class.header]="isFirst || item.info.is_header">{{item.info.text}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

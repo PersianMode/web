@@ -22,8 +22,8 @@
     </div>
     <div *ngIf="menu && menu.middleList" class="middle">
       <ul *ngFor="let list of menu.middleList">
-        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst || item.isHeader"
-            [style.marginTop]="(!isFirst && item.isHeader ? 15 : 0 )+ 'px'"><a [routerLink]="item.routerLink">{{item.text}}</a>
+        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst || item.is_header"
+            [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'"><a [routerLink]="item.routerLink">{{item.text}}</a>
         </li>
       </ul>
     </div>

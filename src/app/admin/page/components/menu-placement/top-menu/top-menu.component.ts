@@ -17,6 +17,8 @@ export class TopMenuComponent implements OnInit {
   set placements(value: IPlacement[]) {
     if (value) {
       this.topMenuItems = value;
+
+      console.log(this.topMenuItems);
       this.changeField();
     }
   }
@@ -34,18 +36,20 @@ export class TopMenuComponent implements OnInit {
     section: '',
   };
   topMenuChanged = false;
+  bagList = ['top-menu-bag'];
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
               private progressService: ProgressService) {
   }
 
   ngOnInit() {
-    this.dragulaService.setOptions('top-menu-bag', {
+    this.dragulaService.setOptions(this.bagList.join(' '), {
       direction: 'horizontal',
     });
 
-    this.dragulaService.dropModel.subscribe((value) => {
-      this.changeTopMenuColumn(value.slice(1));
+    this.dragulaService.drop.subscribe((value) => {
+      if (this.bagList.includes(value[0]))
+        this.changeTopMenuColumn(value.slice(2));
     });
   }
 
