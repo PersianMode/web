@@ -1,44 +1,68 @@
+h3 {
+    text-align: right;
+}
 .info-cell {
      padding: 6px;
  }
 
-.yesNo-div {
+.action-button {
     text-align: center;
-    margin-top: 3px;
-    background-color: rgb(248, 247, 247);
+    padding: 3px;
+    background-color: black;
+    color: white;
+    height: 35px !important;
+    border: solid #E5E5E5 thin;
+    border-radius: 5px;
 }
 
-.edit-button {
-    text-align: left;
-    padding: 3px;
-    background-color: rgb(237, 237, 242);
+.edit-card{
+    font-family: iranyekan;
+    margin-top: 5px;
+    text-align: center
 }
-.change-pass-button {
-    text-align: right;
-    padding: 3px;
-    background-color: rgb(237, 237, 242);
-}
-.mat-button-style {
-    margin-top: 2px;
-    margin-bottom: 2px;
-    width: 120px
-}
+
 .input-label {
     font-size: 80%;
     font-weight: 600;
     text-align: left;
     margin: 15px 5px 0px;
 }
+
+.submit-cancel-change-btn {
+    margin-top: 20px;
+    width: 100%;
+}
+.change-pass-input-label {
+    font-weight: bold;
+    text-align: left;
+    margin: 15px 5px 0px;
+}
+
+.change-pass-input-label span {
+    display: block;
+    line-height: 34px;
+    vertical-align: middle;
+}
+
 .input-label span {
     display: block;
     line-height: 34px;
     vertical-align: middle;
+}
+.input-field {
+    padding: 5px 5px 5px 5px;
+    height: 20px;
+    width: 98%;
+    border-radius: 5px;
 }
 
 @media(max-width:959px) {
     .input-label {
         text-align: right !important;
         margin: 2px !important;
+    }
+    .change-pass-input-label {
+        text-align: right !important;
     }
 
     .input-container {
@@ -48,11 +72,9 @@
     .customer-data mat-card-content {
         margin: 0px !important;
     }
-    .edit-button button{
+    .action-button button{
         width: 100% !important;
     }
-
-
 }
 
 .customer-data {
@@ -61,4 +83,9 @@
 }
 .customer-data mat-card-content {
     margin:0px 15%;
+}
+
+.change-pass-card {
+    font-family: iranyekan;
+    margin-top: 5px;
 }

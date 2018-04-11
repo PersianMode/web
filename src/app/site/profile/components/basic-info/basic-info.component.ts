@@ -17,21 +17,21 @@ export class BasicInfoComponent implements OnInit {
   userGender;
   userNationalId = '';
   birthDate: any = '';
-  yesNo = 'هستید';
   userInfoForm: FormGroup;
   changePassForm: FormGroup;
   nationalIdDisabled = false;
   anyChanges = false;
+  formTitle = '';
 
   constructor(private authService: AuthService, private httpService: HttpService) {
   }
 
   ngOnInit() {
+    this.formTitle = 'اطلاعات مشتری';
     this.customerBasicInfo = this.authService.userDetails;
     this.birthDate = moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD');
     this.userNationalId = this.customerBasicInfo.national_id ? this.customerBasicInfo.national_id : '-';
-    this.userGender = this.customerBasicInfo.gender === 'f' ? 'زن' : 'مرد';
-    this.yesNo = this.customerBasicInfo.gender === 'f' ? 'هستید' : 'نیستید';
+    this.userGender = this.customerBasicInfo.gender === 'f' ? 'خانم ' : 'آقای ';
     this.nationalIdDisabled = this.userNationalId === '-' || !this.userNationalId ? false : true;
   }
 
@@ -68,6 +68,7 @@ export class BasicInfoComponent implements OnInit {
 
   goToEditForm() {
     this.isEdit = true;
+    this.formTitle = 'ویرایش اطلاعات';
     this.initForm();
   }
   submitEditInfo() {
@@ -125,17 +126,34 @@ export class BasicInfoComponent implements OnInit {
 
 
   goToChangePassForm() {
+    this.formTitle = 'تغییر کلمه عبور';
     this.isChangePass = true;
     this.initChangePassForm();
   }
 
   initChangePassForm() {
+    this.formTitle = 'تغییر کلمه عبور';
     this.changePassForm = new FormBuilder().group({
       oldPass: [null],
-      newPass: [null]
+      newPass: [null],
+      retypePass: [null],
     });
   }
-  submitChangedPassword() {
-
+  submitNewPass() {
   }
+  cancelEditOrChangePass() {
+    this.ngOnInit();
+    this.isEdit = false;
+    this.isChangePass = false;
+  }
+
+  // showPass() {
+  //   const x = document.getElementById('oldPassword');
+  //   console.log('====>>', x.innerHTML);
+  //   if (x.type === 'password') {
+  //     x.type = 'text';
+  //   } else {
+  //     x.type = 'password';
+  //   }
+  // }
 }
