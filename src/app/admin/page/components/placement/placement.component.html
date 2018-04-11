@@ -1,0 +1,17 @@
+<mat-card dir="rtl">
+  <mat-card-title class="title">چینش و جایگاه عناصر</mat-card-title>
+  <mat-tab-group>
+    <mat-tab label="منو">
+      <app-menu-placement [placements]="getRelatedPlacements('menu')" [pageId]="pageId" (modifyPlacement)="modify($event)"></app-menu-placement>
+    </mat-tab>
+    <mat-tab label="لوگو" *ngIf="!isApp">
+      <app-logo-list-placement [placements]="getRelatedPlacements('logos')" (modifyPlacement)="modify($event)"></app-logo-list-placement>
+    </mat-tab>
+    <mat-tab label="اسلایدر" *ngIf="!isApp">
+      <app-slider-placement [placements]="getRelatedPlacements('slider')" (modifyPlacement)="modify($event)"></app-slider-placement>
+    </mat-tab>
+    <mat-tab label="صفحه">
+      <app-page-content-placement [placements]="getRelatedPlacements('main')" (modifyPlacement)="modify($event)"></app-page-content-placement>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
