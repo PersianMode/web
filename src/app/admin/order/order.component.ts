@@ -11,6 +11,8 @@ import {OrderStatus} from '../../shared/lib/order_status';
 import {AuthService} from '../../shared/services/auth.service';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {OrderProcessComponent} from './components/order-process/order-process.component';
+import {AccessLevel} from '../../shared/enum/accessLevel.enum';
+import {STATUS} from '../../shared/enum/status.enum';
 
 @Component({
   selector: 'app-upload',
@@ -105,6 +107,8 @@ export class OrderComponent implements OnInit {
         return;
       }
       address = warehouse.address;
+    } else {
+      address = element.customer.addresses.find(x => x._id === element.address_id);
     }
 
 
@@ -122,6 +126,14 @@ export class OrderComponent implements OnInit {
     });
 
 
+  }
+
+  isReadyToDeliver(element) {
+    if (this.authService.userDetails.accessLevel === AccessLevel.SalesManager) {
+      return element.tickets.status === STATUS.Invoice;
+    } else if (this.authService.userDetails.accessLevel === AccessLevel.ShopClerk) {
+      return element.tickets.status === STATUS.SCAccepted;
+    }
   }
 
   showDelivery(element) {

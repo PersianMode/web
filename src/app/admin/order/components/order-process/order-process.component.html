@@ -38,10 +38,11 @@
 <mat-divider style="margin-top: 10px;"></mat-divider>
 
 <div class="button-row" style="margin-top: 20px;">
-  <button mat-raised-button color="primary" *ngIf="isSalesManager && invoceButtonActive">صدور فاکتور</button>
-  <button mat-raised-button color="warn" *ngIf="isSalesManager">بازگشت هزینه</button>
-  <button mat-raised-button color="primary" *ngIf="!isSalesManager">تایید</button>
-  <button mat-raised-button color="warn" *ngIf="isSalesManager">عدم تایید</button>
+  <button mat-raised-button color="primary" *ngIf="isSalesManager && invoceButtonActive" (click)="makeInvoice()">صدور فاکتور</button>
+  <button mat-raised-button color="primary" *ngIf="isSalesManager && !invoceButtonActive" (click)="refer()">ارجاع</button>
+  <button mat-raised-button color="warn" *ngIf="isSalesManager" (click)="refund()">بازگشت هزینه</button>
+  <button mat-raised-button color="primary" *ngIf="!isSalesManager" (click)="accept()">تایید</button>
+  <button mat-raised-button color="warn" *ngIf="!isSalesManager" (click)="decline()">عدم تایید</button>
 </div>
 
 

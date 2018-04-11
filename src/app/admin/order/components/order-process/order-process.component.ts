@@ -88,4 +88,24 @@ export class OrderProcessComponent implements OnInit {
       duration: 2000,
     });
   }
+
+  makeInvoice() {
+
+  }
+
+  refer() {
+
+  }
+
+  refund() {
+
+  }
+
+  accept() {
+
+  }
+
+  decline() {
+
+  }
 }
