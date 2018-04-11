@@ -44,6 +44,12 @@ h4 {
 .main-price section {
   margin: 19px 0px 19px 0px;
 }
+.item-data p {
+  display: inline-block;
+  width: 40px;
+  font-weight: bold;
+  margin: 0;
+}
 .item-data span {
   color: grey;
 }
