@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>پردازش سفارش</h1>
+
+<mat-divider></mat-divider>
+
+<div *ngIf="isSalesManager">
+
+  <button mat-icon-button color="primary" (click)="reload()" style="margin-top: 10px;">
+    <mat-icon aria-label="Example icon-button with a heart icon">cached</mat-icon>
+  </button>
+
+  <h3>انتخاب از انبار</h3>
+  <mat-radio-group [(ngModel)]="selectedWarehouseId">
+    <div *ngFor="let inventory of inventories">
+      <mat-radio-button [value]="inventory.warehouse._id" [disabled]="data.is_collect" (change)="onInventoryChange($event.value)">
+        {{' ('+inventory.count+') ' + inventory.warehouse.name}}
+      </mat-radio-button>
+    </div>
+  </mat-radio-group>
+
+  <div *ngIf="!data.is_collect">
+    <mat-divider style="margin-top: 20px;"></mat-divider>
+    <h3>توضیحات ارجاع</h3>
+    <mat-radio-group [(ngModel)]="referralAdvise">
+      <div>
+        <mat-radio-button *ngFor="let ra of ReferralAdvises" [value]="ra.value">
+          {{ra.name}}
+        </mat-radio-button>
+      </div>
+    </mat-radio-group>
+  </div>
+</div>
+
+<mat-divider style="margin-top: 20px;"></mat-divider>
+<mat-form-field class="example-full-width">
+  <textarea matInput placeholder="سایر توضیحات" [(ngModel)]="desc"></textarea>
+</mat-form-field>
+
+<mat-divider style="margin-top: 10px;"></mat-divider>
+
+<div class="button-row" style="margin-top: 20px;">
+  <button mat-raised-button color="primary" *ngIf="isSalesManager && invoceButtonActive" (click)="makeInvoice()">صدور فاکتور</button>
+  <button mat-raised-button color="primary" *ngIf="isSalesManager && !invoceButtonActive" (click)="refer()">ارجاع</button>
+  <button mat-raised-button color="warn" *ngIf="isSalesManager" (click)="refund()">بازگشت هزینه</button>
+  <button mat-raised-button color="primary" *ngIf="!isSalesManager" (click)="accept()">تایید</button>
+  <button mat-raised-button color="warn" *ngIf="!isSalesManager" (click)="decline()">عدم تایید</button>
+</div>
+
+
+

@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>{{data.is_collect ? 'فروشگاه' : 'مشتری'}}</h1>
+<div mat-dialog-content>
+  <h3>
+    <b>استان: </b> {{' ' + data.address.province}}
+  </h3>
+  <h3>
+    <b>شهر: </b> {{' ' + data.address.city}}
+  </h3>
+  <h3 *ngIf="data.address.district">
+    <b>منطقه: </b> {{' ' + data.address.district}}
+  </h3>
+  <h3 *ngIf="data.address.street">
+    <b>خیابان: </b> {{' ' + data.address.street}}
+  </h3>
+  <h3 *ngIf="data.address.unit">
+    <b>واحد: </b> {{' ' + data.address.unit}}
+  </h3>
+  <h3 *ngIf="data.address.no">
+    <b>شماره: </b> {{' ' + data.address.no}}
+  </h3>
+  <h3 *ngIf="data.address.postal_code">
+    <b>کد پستی: </b> {{' ' + data.address.postal_code}}
+  </h3>
+  <h3 *ngIf="data.address.recipient_name">
+    <b>نام گیرنده: </b> {{' ' + data.address.recipient_name}}
+  </h3>
+  <h3 *ngIf="data.address.recipient_surname">
+    <b>نام خانوادگی گیرنده: </b> {{' ' + data.address.recipient_surname}}
+  </h3>
+  <h3 *ngIf="data.address.recipient_national_id">
+    <b>شماره ملی گیرنده: </b> {{' ' + data.address.recipient_national_id}}
+  </h3>
+  <h3 *ngIf="data.address.recipient_mobile_no">
+    <b>شماره موبایل گیرنده: </b> {{' ' + data.address.recipient_mobile_no}}
+  </h3>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="close()">Ok</button>
+</div>
