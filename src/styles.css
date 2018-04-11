@@ -12,6 +12,7 @@ body, label {
   font-family: iranyekan, sans-serif;
   font-weight: 200;
   font-size: 11pt;
+  direction: rtl;
 }
 
 a {
