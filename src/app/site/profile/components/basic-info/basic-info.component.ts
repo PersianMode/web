@@ -32,7 +32,9 @@ export class BasicInfoComponent implements OnInit {
     new_pass: '',
     retype_new_pass: ''
   }
-
+  errorMsgOld = 'رمز عبور فعلی را وارد کنید (حداقل 8 کاراکتر)';
+  errorMsgNew = 'رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)';
+  errorMsgRetype = 'رمز عبور جدید را دوباره وارد کنید (حداقل 8 کاراکتر)'
   constructor(private authService: AuthService, private httpService: HttpService) {
   }
 
@@ -166,6 +168,9 @@ export class BasicInfoComponent implements OnInit {
   }
 
   setSeen(item) {
+    this.errorMsgOld = 'رمز عبور فعلی را وارد کنید (حداقل 8 کاراکتر)';
+    this.errorMsgNew = 'رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)';
+    this.errorMsgRetype = 'رمز عبور جدید را دوباره وارد کنید (حداقل 8 کاراکتر)';
     this.seen[item] = true;
     this.curFocus = item;
   }
@@ -175,6 +180,9 @@ export class BasicInfoComponent implements OnInit {
     this.changeed_pass_obj.new_pass = this.changePassForm.controls['newPass'].value;
     this.changeed_pass_obj.retype_new_pass = this.changePassForm.controls['retypePass'].value;
     if (this.changeed_pass_obj.new_pass !== this.changeed_pass_obj.retype_new_pass) {
+      this.errorMsgOld = 'اطلاعات جهت تغییر کلمه عبور درست وارد نشده است';
+      this.errorMsgNew = this.errorMsgOld;
+      this.errorMsgRetype = this.errorMsgOld;
       Object.keys(this.changePassForm.controls).forEach(el => {
         this.seen[el] = true;
         this.curFocus = null;
@@ -189,6 +197,9 @@ export class BasicInfoComponent implements OnInit {
         this.isChangePass = false;
       },
       (err) => {
+        this.errorMsgOld = 'اطلاعات جهت تغییر کلمه عبور درست وارد نشده است';
+        this.errorMsgNew = this.errorMsgOld;
+        this.errorMsgNew = this.errorMsgOld;
         console.error('Cannot change user pass: ', err);
         Object.keys(this.changePassForm.controls).forEach(el => {
           this.seen[el] = true;

@@ -148,7 +148,7 @@
                                    [ngClass]="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ? 'input-error' : null"/>
                             <label class="field-error"
                                    *ngIf="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ">لطفا
-                                رمز عبور فعلی را وارد کنید (حداقل 8 کاراکتر)</label>
+                                {{errorMsgOld}}</label>
                         </div>
                         <!--<div fxFlex="10" class="input-label">&nbsp;</div>-->
                         <div fxFlex="10" class="change-pass-input-label" style="text-align: right; margin-right: 10px; font-size: 20px"><span (click)="showPass()"><i class="fa fa-eye-slash"></i></span></div>
@@ -165,8 +165,8 @@
                                    #new_pass
                                    [ngClass]="(changePassForm.controls['newPass'].hasError('required') || changePassForm.controls['newPass'].hasError('minlength')) && seen['newPass'] && curFocus !== 'newPass'  ? 'input-error' : null"/>
                             <label class="field-error"
-                                   *ngIf="(changePassForm.controls['newPass'].hasError('required') || changePassForm.controls['newPass'].hasError('minlength'))  && seen['newPass'] && curFocus !== 'newPass'">لطفا
-                                رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)</label>
+                                   *ngIf="(changePassForm.controls['newPass'].hasError('required') || changePassForm.controls['newPass'].hasError('minlength'))  && seen['newPass'] && curFocus !== 'newPass'">
+                               {{errorMsgNew}}</label>
                         </div>
                         <!--<div fxFlex="10" class="input-label">&nbsp;</div>-->
                         <div fxFlex="10" class="change-pass-input-label" style="text-align: right; margin-right: 10px; font-size: 20px"><span (click)="showNewPass()"><i class="fa fa-eye-slash"></i></span></div>
@@ -183,8 +183,8 @@
                                    #retype_pass
                                    [ngClass]="(changePassForm.controls['retypePass'].hasError('required') || changePassForm.controls['retypePass'].hasError('minlength')) && seen['retypePass'] && curFocus !== 'retypePass' ? 'input-error' : null"/>
                             <label class="field-error"
-                                   *ngIf="(changePassForm.controls['retypePass'].hasError('required') || changePassForm.controls['retypePass'].hasError('minlength')) && seen['retypePass'] && curFocus !== 'retypePass'">لطفا
-                                رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)</label>
+                                   *ngIf="(changePassForm.controls['retypePass'].hasError('required') || changePassForm.controls['retypePass'].hasError('minlength')) && seen['retypePass'] && curFocus !== 'retypePass'">
+                               {{errorMsgRetype}}</label>
                         </div>
                         <!--<div fxFlex="10" class="input-label">&nbsp;</div>-->
                         <div fxFlex="10" class="change-pass-input-label" style="text-align: right; margin-right: 10px; font-size: 20px"><span (click)="showRetypePass()"><i class="fa fa-eye-slash"></i></span></div>
