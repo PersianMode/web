@@ -3,12 +3,16 @@ import {IPlacement} from '../../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../../shared/services/progress.service';
+import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatDialog} from '@angular/material';
+import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
 
 enum ItemArea {
   Header,
   Middle,
   Left,
-};
+}
 
 @Component({
   selector: 'app-sub-menu',
@@ -27,6 +31,12 @@ export class SubMenuComponent implements OnInit {
 
   @Input()
   set section(value) {
+    if (value !== this.selectedSection) {
+      this.selectedItem = null;
+      if (this.subMenuForm)
+        this.subMenuForm.reset();
+    }
+
     this.selectedSection = value || null;
     if (value)
       this.getRelatedItems();
@@ -43,27 +53,79 @@ export class SubMenuComponent implements OnInit {
   leftAreaColumns: any[] = [];
   selectedSection: any = null;
   itemArea = ItemArea;
+  bagName = 'sub-menu-bag';
+  areaList = [
+    {
+      name: 'بخش راست',
+      value: this.itemArea.Header,
+    },
+    {
+      name: 'بخش وسط',
+      value: this.itemArea.Middle,
+    },
+    {
+      name: 'بخش چپ',
+      value: this.itemArea.Left,
+    },
+  ];
+  subMenuForm: FormGroup;
+  selectedItem = null;
+  anyChanges = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService) {
+              private progressService: ProgressService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
-    this.dragulaService.setOptions('sub-menu-header-bag sub-menu-middle-bag sub-menu-left-bag', {
-      direction: 'vertical',
-    });
-
-    // this.dragulaService.setOptions('sub-menu-middle-bag', {
-    //   direction: 'vertical',
-    // });
-    //
-    // this.dragulaService.setOptions('sub-menu-left-bag', {
-    //   direction: 'vertical',
-    // });
+    if (!this.dragulaService.find(this.bagName))
+      this.dragulaService.setOptions(this.bagName, {
+        direction: 'vertical',
+      });
 
     this.dragulaService.dropModel.subscribe((value) => {
-      this.changeMenuItemOrder(value.slice(1));
+      if (this.bagName === value[0])
+        this.changeMenuItemOrder();
     });
+
+    this.initForm();
+
+    this.subMenuForm.valueChanges.subscribe(
+      () => this.fieldChanged()
+    );
+  }
+
+  initForm() {
+    this.subMenuForm = new FormBuilder().group({
+      text: [null, [
+        Validators.required,
+      ]],
+      href: [null, [
+        Validators.required,
+      ]],
+      area: [null, [
+        Validators.required,
+      ]],
+      is_header: [false, [
+        Validators.required,
+      ]]
+    });
+  }
+
+  setFormValue(value) {
+    this.subMenuForm.controls['text'].setValue(value.text);
+    this.subMenuForm.controls['href'].setValue(value.href);
+    switch (value.section.toLowerCase().split('/')[1]) {
+      case 'header':
+        this.subMenuForm.controls['area'].setValue(this.itemArea.Header);
+        break;
+      case 'middle':
+        this.subMenuForm.controls['area'].setValue(this.itemArea.Middle);
+        break;
+      case 'left':
+        this.subMenuForm.controls['area'].setValue(this.itemArea.Left);
+        break;
+    }
+    this.subMenuForm.controls['is_header'].setValue(value.is_header ? value.is_header : false);
   }
 
   getRelatedItems() {
@@ -118,24 +180,245 @@ export class SubMenuComponent implements OnInit {
     this.headerAreaColumns = Object.keys(this.headerAreaItems);
     this.middleAreaColumns = Object.keys(this.middleAreaItems);
     this.leftAreaColumns = Object.keys(this.leftAreaItems);
+
+    console.log(this.headerAreaItems);
+    console.log(this.middleAreaItems);
+    console.log(this.leftAreaItems);
   }
 
   private sortColumnItems(list) {
     list.sort((a, b) => {
-      if (a.row > b.row)
+      if (a.info.row > b.info.row)
         return 1;
-      else if (a.row < b.row)
+      else if (a.info.row < b.info.row)
         return -1;
 
       return 0;
     });
   }
 
-  changeMenuItemOrder(data) {
+  changeMenuItemOrder() {
+    console.log(this.headerAreaItems);
+    console.log(this.middleAreaItems);
+    console.log(this.leftAreaItems);
 
+    let placementList = [];
+
+    Object.keys(this.headerAreaItems).forEach(column => {
+      let rowCounter = 1;
+      let orderIsChanged = false;
+      this.headerAreaItems[column].forEach(placement => {
+        if (placement.info.column !== +column || placement.info.row !== rowCounter)
+          orderIsChanged = true;
+
+        placement.info.column = +column;
+        placement.info.row = (rowCounter++);
+        placement.info.section = this.selectedSection + '/header';
+      });
+      // console.log(this.headerAreaItems[column]);
+      if (orderIsChanged)
+        placementList = placementList.concat(this.headerAreaItems[column]);
+    });
+
+    Object.keys(this.middleAreaItems).forEach(column => {
+      let rowCounter = 1;
+      let orderIsChanged = false;
+      this.middleAreaItems[column].forEach(placement => {
+        if (placement.info.column !== +column || placement.info.row !== rowCounter)
+          orderIsChanged = true;
+
+        placement.info.column = +column;
+        placement.info.row = (rowCounter++);
+        placement.info.section = this.selectedSection + '/middle';
+      });
+      // console.log(this.middleAreaItems[column]);
+      if (orderIsChanged)
+        placementList = placementList.concat(this.middleAreaItems[column]);
+    });
+
+    Object.keys(this.leftAreaItems).forEach(column => {
+      let rowCounter = 1;
+      let orderIsChanged = false;
+      this.leftAreaItems[column].forEach(placement => {
+        if (placement.info.column !== +column || placement.info.row !== rowCounter)
+          orderIsChanged = true;
+
+        placement.info.column = +column;
+        placement.info.row = (rowCounter++);
+        placement.info.section = this.selectedSection + '/left';
+      });
+      // console.log(this.leftAreaItems[column]);
+      if (orderIsChanged)
+        placementList = placementList.concat(this.leftAreaItems[column]);
+    });
+
+    console.log(placementList);
+
+    if (placementList.length > 0) {
+      this.progressService.enable();
+      this.httpService.post('placement', {
+        page_id: this.pageId,
+        placements: placementList,
+      }).subscribe(
+        (data) => {
+          this.modifyPlacement.emit({
+            type: PlacementModifyEnum.Modify,
+            placements: placementList,
+          });
+          this.progressService.disable();
+        },
+        (err) => {
+          console.error('Cannot update the placement orders: ', err);
+          this.progressService.disable();
+        }
+      );
+    }
   }
 
-  selectItem() {
+  selectItem(value) {
+    this.selectedItem = value;
+    this.setFormValue(value.info);
+    this.anyChanges = false;
+  }
 
+  modifyItem() {
+    this.progressService.enable();
+    (this.selectedItem ? this.httpService.post('placement', {
+        page_id: this.pageId,
+        placements: [
+          {
+            _id: this.selectedItem._id,
+            info: this.getNewItemInfo(),
+          }
+        ]
+      }) : this.httpService.put('placement', {
+        page_id: this.pageId,
+        placement: {
+          component_name: 'menu',
+          variable_name: 'subMenu',
+          info: this.getNewItemInfo(),
+        }
+      })
+    ).subscribe(
+      (data) => {
+        this.modifyPlacement.emit({
+          type: this.selectedItem ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
+          placement_id: data._id,
+          placements: [this.selectedItem],
+          placement: data.placement,
+        });
+
+        const newInfo = this.getNewItemInfo();
+
+        if (this.selectedItem) {
+          const changedObj = this.subMenuItems.find(el => el._id.toString() === this.selectedItem._id.toString());
+          changedObj.info.text = newInfo.text;
+          changedObj.info.href = newInfo.href;
+          changedObj.info.is_header = newInfo.is_header;
+        } else {
+          this.selectedItem._id = data._id;
+          this.selectedItem.info = newInfo;
+        }
+
+        this.anyChanges = false;
+        this.progressService.disable();
+      },
+      (err) => {
+        console.error('Cannot modify item in server: ', err);
+        this.progressService.disable();
+      }
+    );
+  }
+
+  getNewItemInfo(): any {
+    const res = {
+      text: (this.subMenuForm.controls['text'].value ? this.subMenuForm.controls['text'].value : '').trim(),
+      href: (this.subMenuForm.controls['href'].value ? this.subMenuForm.controls['href'].value : '').trim(),
+      is_header: this.subMenuForm.controls['is_header'].value,
+    };
+
+    switch (this.subMenuForm.controls['area'].value) {
+      case this.itemArea.Header: {
+        if (!this.selectedItem || this.selectedItem.info.section.split('/')[1] !== 'header') {
+          res['column'] = Math.max(...this.headerAreaItems.map(el => el.info.column));
+          res['row'] = Math.max(...this.headerAreaItems.map(el => el.info.row)) + 1;
+          res['section'] = this.selectedSection + '/header';
+        }
+      }
+        break;
+      case this.itemArea.Middle: {
+        if (this.selectedItem || this.selectedItem.info.section.split('/')[1] !== 'middle') {
+          res['column'] = Math.max(...this.middleAreaItems.map(el => el.info.column));
+          res['row'] = Math.max(...this.middleAreaItems.map(el => el.info.row)) + 1;
+          res['section'] = this.selectedSection + '/middle';
+        }
+      }
+        break;
+      case this.itemArea.Left: {
+        if (this.selectedItem || this.selectedItem.info.section.split('/')[1] !== 'left') {
+          res['column'] = Math.max(...this.leftAreaItems.map(el => el.info.column));
+          res['row'] = Math.max(...this.leftAreaItems.map(el => el.info.row)) + 1;
+          res['section'] = this.selectedSection + '/left';
+        }
+      }
+        break;
+    }
+
+    return res;
+  }
+
+  removeItem() {
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+          const index = this.subMenuItems.findIndex(
+            el => el.info.text === this.selectedItem.text && el.info.href === this.selectedItem.href);
+          if (index !== -1)
+            this.httpService.post('placement/delete', {
+              page_id: this.pageId,
+              placement_id: this.subMenuItems[index]._id,
+            }).subscribe(
+              (data) => {
+                this.modifyPlacement.emit({
+                  type: PlacementModifyEnum.Delete,
+                  placement_id: this.subMenuItems[index]._id,
+                });
+                this.selectedItem = null;
+                this.anyChanges = false;
+                this.progressService.disable();
+              },
+              (err) => {
+                console.error('Cannot delete placement item: ', err);
+                this.progressService.disable();
+              });
+        }
+      }
+    );
+  }
+
+  clearFields() {
+    this.subMenuForm.reset();
+    this.selectedItem = null;
+  }
+
+  fieldChanged() {
+    if (!this.selectedItem) {
+      this.anyChanges = true;
+      return;
+    }
+
+    this.anyChanges = false;
+
+    const tempInfo = this.getNewItemInfo();
+    if (tempInfo.text !== this.selectedItem.info.text ||
+      tempInfo.href !== this.selectedItem.info.href ||
+      tempInfo.is_header !== this.selectedItem.info.is_header ||
+      (tempInfo.section && tempInfo.section !== this.selectedItem.info.section))
+      this.anyChanges = true;
   }
 }

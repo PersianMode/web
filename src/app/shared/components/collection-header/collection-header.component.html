@@ -16,20 +16,20 @@
 <div class="genderList" [class.hidden]="hiddenGenderMenu" (mouseenter)="persistList()" (mouseleave)="hideList()">
   <div class="genderListWrapper">
     <div *ngIf="menu && menu.headerList" class="headerList">
-      <ul>
-        <li *ngFor="let item of menu.headerList"><a [routerLink]="item.routerLink">{{item.text}}</a></li>
+      <ul *ngFor="let key of getKeyList(menu.headerList)">
+        <li *ngFor="let item of menu.headerList[key]"><a [routerLink]="item.routerLink">{{item.text}}</a></li>
       </ul>
     </div>
     <div *ngIf="menu && menu.middleList" class="middle">
-      <ul *ngFor="let list of menu.middleList">
-        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst || item.is_header"
+      <ul *ngFor="let key of getKeyList(menu.middleList)">
+        <li *ngFor="let item of menu.middleList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header"
             [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'"><a [routerLink]="item.routerLink">{{item.text}}</a>
         </li>
       </ul>
     </div>
     <div *ngIf="menu && menu.leftList" class="leftColumn">
-      <ul *ngFor="let list of menu.leftList">
-        <li *ngFor="let item of list;first as isFirst" [class.headerItem]="isFirst"><a [routerLink]="item.routerLink">{{item.text}}</a>
+      <ul *ngFor="let key of getKeyList(menu.leftList)">
+        <li *ngFor="let item of menu.leftList[key];first as isFirst" [class.headerItem]="isFirst"><a [routerLink]="item.routerLink">{{item.text}}</a>
         </li>
       </ul>
     </div>

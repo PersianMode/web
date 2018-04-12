@@ -51,6 +51,7 @@ export class PageService {
       if (pageName === 'home' || this.homeComponents.menu) {
         clearInterval(i);
         if ( !this.cache[pageName]) {
+          pageName = pageName.toLowerCase().includes('?preview') ? pageName.substr(0, pageName.indexOf('?preview')) : pageName;
           this.httpService.post('page' + (this.authService.userDetails.isAgent ? '/cm/preview' : ''), {address: pageName}).subscribe(
             (data: any) => {
               if (data && data.placement && data.placement.length) {

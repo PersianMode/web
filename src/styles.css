@@ -848,6 +848,10 @@ mat-panel-title {
   font-family: iranyekan, sans-serif !important;
 }
 
+.menu-field {
+  height: 20px !important;
+}
+
 .demo-list {
   text-align: center;
   width: 100%;

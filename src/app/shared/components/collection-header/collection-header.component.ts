@@ -47,24 +47,12 @@ export class CollectionHeaderComponent implements OnInit {
                 this.placements[path[0] + 'Menu'] = {};
               }
               if (!this.placements[path[0] + 'Menu'][path[1] + 'List']) {
-                this.placements[path[0] + 'Menu'][path[1] + 'List'] = [];
+                this.placements[path[0] + 'Menu'][path[1] + 'List'] = {};
               }
-              if (r.info.column > 1 &&
-                (!this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1] ||
-                  !this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1].length)) {
-                if (r.info.column === 2) {
-                  const temp = [];
-                  this.placements[path[0] + 'Menu'][path[1] + 'List'].forEach(x => temp.push(x));
-                  this.placements[path[0] + 'Menu'][path[1] + 'List'] = [];
-                  this.placements[path[0] + 'Menu'][path[1] + 'List'].push(temp);
-                }
-                this.placements[path[0] + 'Menu'][path[1] + 'List'].push([]);
-              }
-              if (r.info.column > 1) {
-                this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1].push(r.info);
-              } else {
-                this.placements[path[0] + 'Menu'][path[1] + 'List'].push(r.info);
-              }
+              if (!this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column])
+                this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column] = [];
+
+              this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column].push(r.info);
             });
         });
       });
@@ -110,5 +98,9 @@ export class CollectionHeaderComponent implements OnInit {
 
   goToRoot() {
     this.router.navigate(['']);
+  }
+
+  getKeyList(list) {
+    return Object.keys(list);
   }
 }
