@@ -46,6 +46,6 @@
   </div>
   <hr class="hr-style">
   <div>
-    <button class="payment-button" (click)="pay()">پرداخت</button>
+    <button mat-button class="payment-button" [class.disabled]="disabled" (click)="pay()" [disabled]="disabled">پرداخت</button>
   </div>
 </div>

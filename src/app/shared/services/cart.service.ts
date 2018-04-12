@@ -17,25 +17,19 @@ export class CartService {
           const items = this.getItemsFromStorage();
 
           if (items && items.length > 0) {
-            const promiseList = [];
-
-            items.forEach(el => {
-              promiseList.push(this.httpService.post('order', {
+            items.forEach((el, i) => {
+              this.httpService.post('order', {
                 product_id: el.product_id,
-                product_instance_id: el.product_instance_id,
-                number: el.number ? el.number : 1,
-              }).toPromise());
-            });
-
-
-            Promise.all(promiseList)
-              .then(res => {
-                localStorage.removeItem(this.localStorageKey);
+                product_instance_id: el.instance_id,
+                number: el.quantity,
               })
-              .catch(err => {
-                localStorage.removeItem(this.localStorageKey);
-                console.error('orders error: ', err);
-              });
+                .subscribe(() => {
+                    items.splice(i, 1);
+                    localStorage.setItem(this.localStorageKey, JSON.stringify(items));
+                  },
+                  err => console.error('orders error: ', el, err)
+                );
+            });
           }
         } else {
           this.cartItems.next([])
@@ -234,7 +228,7 @@ export class CartService {
     const data = this.getItemsFromStorage();
     const found = data.find(r => r.product_id === item.product_id && r.instance_id === item.product_instance_id);
     if (found)
-      found.quantity ++;
+      found.quantity++;
     else
       data.push({
         quantity: 1,

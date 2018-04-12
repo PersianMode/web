@@ -129,7 +129,6 @@ export class AuthService {
   private getWarehouses() {
     this.httpService.get('warehouse/all').subscribe(res => {
       this.warehouses = res;
-      console.log('-> warehouses: ', this.warehouses);
     });
   }
 }

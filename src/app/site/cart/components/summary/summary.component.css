@@ -25,6 +25,11 @@
   margin: 10px 30px;
   border-radius: 2px;
   cursor: pointer;
+  line-height: normal !important;
+}
+
+.disabled {
+  background-color: #545454;
 }
 
 .payment-button:hover {

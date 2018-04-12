@@ -11,8 +11,10 @@ import {MatDialog} from '@angular/material';
 export class CartItemsComponent implements OnInit {
   @Input() product = null;
   @Output() updateProduct = new EventEmitter();
+  @Output() valid = new EventEmitter();
 
   notExist = false;
+  stock = 0;
   displaySize = null;
   displayQuantity = null;
   displayPrice = null;
@@ -23,7 +25,8 @@ export class CartItemsComponent implements OnInit {
 
   ngOnInit() {
     this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
-
+    this.stock = this.product.count.toLocaleString('fa', {useGrouping: false});
+    this.valid.emit(!this.notExist);
     this.displaySize = this.product.size.toLocaleString('fa');
     this.displayQuantity = this.product.quantity.toLocaleString('fa');
     this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
@@ -49,6 +52,10 @@ export class CartItemsComponent implements OnInit {
           this.displayQuantity = (data.newQuantity ? data.newQuantity : this.product.quantity).toLocaleString('fa');
           this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
           this.displayTotalPrice = priceFormatter((data.newQuantity ? data.newQuantity : this.product.quantity) * this.product.price)  + ' تومان';
+          this.product.quantity = data.newQuantity;
+          this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
+          this.valid.emit(!this.notExist);
+          this.stock = this.product.count.toLocaleString('fa', {useGrouping: false});
         }
       },
       (err) => {
