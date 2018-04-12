@@ -4,6 +4,8 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
+import {Pos} from './slider-preview/slider-preview.component';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-slider-placement',
@@ -16,8 +18,8 @@ export class SliderPlacementComponent implements OnInit {
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
-      // console.log('new placement received!');
       this.sliders = value;
+      this.sliders.sort((a, b) => a.info.column > b.info.column ? 1 : (a.info.column < b.info.column ? -1 : 0));
       this.changeField();
     }
   }
@@ -31,13 +33,15 @@ export class SliderPlacementComponent implements OnInit {
     id: null,
     column: null,
     isEdit: false,
-    //image
+    imgUrl: null,
   };
-;
+
+  pos: Pos; // TODO: this should be sent to server in the 'style' part of 'placement_info'!
+
   sliderChanged = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService) {
+              private progressService: ProgressService, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
@@ -66,7 +70,7 @@ export class SliderPlacementComponent implements OnInit {
         counter++;
       }
     });
-
+    console.log("AFTER CHANGE", this.sliders);
     this.progressService.enable();
     this.httpService.post('placement', {
       page_id: this.pageId,
@@ -87,6 +91,7 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   changeField() {
+    // console.log("text", this.upsertSlider.text);
     // console.log('sliders:', this.sliders);
     // console.log('and upsert:', this.upsertSlider);
     const text = this.upsertSlider ? this.upsertSlider.text.trim().toLowerCase() : '';
@@ -108,19 +113,34 @@ export class SliderPlacementComponent implements OnInit {
       id: null,
       column: null,
       isEdit: false,
-      //image
+      imgUrl: null,
+    };
+
+    this.pos = {
+      // imgHeight: 200,
+      imgWidth: 60,
+      imgMarginLeft: 0,
+      imgMarginTop: 0,
     };
   }
 
+  onImageUploaded(images: any) {
+    console.log('Images:', images);
+    if (images.length > 0) {
+      this.upsertSlider['imgUrl'] = images[0];
+    }
+  }
+
   selectItem(value) {
-    console.log('selected item:', value);
     this.upsertSlider = {
       text: value.info.text,
       href: value.info.href,
       id: value._id,
-      column: null,
+      column: value.info.column,
       isEdit: true,
+      imgUrl: value.info.imgUrl,
     };
+    console.log('selected item:', value, this.sliders, this.upsertSlider);
   }
 
   removeItem() {
@@ -143,6 +163,7 @@ export class SliderPlacementComponent implements OnInit {
             id: null,
             column: null,
             isEdit: false,
+            imgUrl: null,
           };
           this.progressService.disable();
         },
@@ -214,5 +235,22 @@ export class SliderPlacementComponent implements OnInit {
     } else {
       return !this.upsertSlider.text || !this.upsertSlider.href;
     }
+  }
+
+  getThisPlacement() {
+    return this.sliders
+      .filter(e => e._id === this.upsertSlider.id)
+      .map(e => {
+        return {
+          component_name: e.component_name,
+          variable_name: e.variable_name,
+        };
+      })[0];
+  }
+
+  getURL(path) {
+    // return (HttpService.Host + path);
+    if (path)
+      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }
 }

@@ -1,0 +1,31 @@
+.title {
+  font-family: iranyekan !important;
+  text-align: center;
+}
+
+.main-preview {
+  height: 36px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin: 30px 30% 100px 30px;
+  width: 40%;
+  text-align: center;
+  background-color: rgb(247, 247, 247);
+  line-height: 35px;
+  padding: 10px;
+  white-space: nowrap;
+}
+
+.additional-chevron {
+  top:59px;
+  width: 28.5% !important;
+}
+
+.additional-preview {
+  top: 59px;
+  border-bottom: 0;
+}
+
+.additional-preview div {
+  right: -51%;
+}

@@ -1,0 +1,28 @@
+<h3 class="title">
+  پیش نمایش
+</h3>
+<!--<div class="main-preview">-->
+  <!--<div class="persian-field text-preview">{{_text}}</div>-->
+  <!--<img mat-card-image alt=""-->
+       <!--[src]="getURL(_image)"-->
+       <!--[style.width]="_pos.imgWidth + 'px'"-->
+       <!--[style.marginLeft]="_pos.imgMarginLeft"-->
+       <!--[style.marginTop]="_pos.imgMarginTop">-->
+  <!--<div fxLayout="row" fxLayoutAlign="start center">-->
+    <!--<div>-->
+    <!--<input matInput type="number" [(ngModel)]="_pos.imgWidth" (ngModelChange)="change($event)">-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+<div class="chevron-holder left-chevron additional-chevron"><i class="fa fa-chevron-left"></i></div>
+<div class="chevron-holder right-chevron additional-chevron"><i class="fa fa-chevron-right"></i></div>
+<div class="carousel-slider additional-preview">
+  <div>
+    <span [style.width]="'100%'">
+      <img [style.width]="slide.imgWidth? slide.imgWidth + 'px': '40px'"
+           [style.marginLeft]="slide.imgMarginLeft ? slide.imgMarginLeft + 'px' : 0"
+           [style.marginTop]="slide.imgMarginTop ? slide.imgMarginTop + 'px' : 0"
+           [src]="getURL(_image)" alt=""/> {{_text}}
+    </span>
+  </div>
+</div>

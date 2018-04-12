@@ -20,6 +20,7 @@ import { PageContentPlacementComponent } from './components/page-content-placeme
 import {DragulaModule} from 'ng2-dragula';
 import { TopMenuComponent } from './components/menu-placement/top-menu/top-menu.component';
 import { SubMenuComponent } from './components/menu-placement/sub-menu/sub-menu.component';
+import { SliderPreviewComponent } from './components/slider-placement/slider-preview/slider-preview.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { SubMenuComponent } from './components/menu-placement/sub-menu/sub-menu.
     PageContentPlacementComponent,
     TopMenuComponent,
     SubMenuComponent,
+    SliderPreviewComponent,
   ],
   imports: [
     PageRouting,
