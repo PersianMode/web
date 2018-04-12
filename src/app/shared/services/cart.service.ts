@@ -234,7 +234,7 @@ export class CartService {
           found.quantity += 1;
         else {
           const instance = item.instances.find(r => r._id === object.instance_id);
-          const color = item.colors.find(r => r.id === instance.product_color_id);
+          const color = item.colors.find(r => r._id === instance.product_color_id);
           currentValue.push(Object.assign(object, {
             size: instance.size,
             color,
