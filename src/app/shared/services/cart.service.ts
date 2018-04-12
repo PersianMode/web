@@ -51,7 +51,7 @@ export class CartService {
         product_instance_id: value.instance_id,
       }).subscribe(
         () => {
-          this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id.toString() !== value.instance_id.toString()));
+          this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
         },
         (err) => {
           console.error('Cannot delete item from cart: ', err);
@@ -59,19 +59,19 @@ export class CartService {
     } else {
       // Update local storage
       let tempItems = this.getItemsFromStorage();
-      tempItems = tempItems.filter(el => el.product_id.toString() !== value.product_id.toString()
-        && el.instance_id.toString() !== value.instance_id.toString());
+      tempItems = tempItems.filter(el => el.product_id !== value.product_id
+        && el.instance_id !== value.instance_id);
 
       localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
 
-      this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id.toString() !== value.instance_id.toString()));
+      this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
     }
   }
 
   updateItem(value) {
     // Check for update or delete and add new item
-    const item = this.cartItems.getValue().find(el => el.product_id.toString() === value.product_id.toString() &&
-      el.instance_id.toString() === value.instance_id.toString());
+    const item = this.cartItems.getValue().find(el => el.product_id === value.product_id &&
+      el.instance_id === value.instance_id);
 
     if (item) {
       // Should modify
@@ -127,8 +127,8 @@ export class CartService {
         // Change in localStorage
         let ls_items = this.getItemsFromStorage();
         ls_items = ls_items.filter(el =>
-          el.product_id.toString() !== value.product_id.toString() ||
-          el.instance_id.toString() !== value.pre_instance_id.toString());
+          el.product_id !== value.product_id ||
+          el.instance_id !== value.pre_instance_id);
 
         for (let counter = 0; counter < value.number; counter++)
           ls_items.push({
@@ -222,32 +222,8 @@ export class CartService {
       product_id: item.product_id,
       product_instance_id: item.product_instance_id,
     }).subscribe(
-      data => {
-        const currentValue = this.cartItems.getValue();
-        const object = {
-          product_id: item.product_id,
-          instance_id: item.product_instance_id,
-          quantity: 1,
-        };
-        const found = currentValue.find(r => r.product_id === object.product_id && r.instance_id === object.instance_id);
-        if (found)
-          found.quantity += 1;
-        else {
-          const instance = item.instances.find(r => r._id === object.instance_id);
-          const color = item.colors.find(r => r._id === instance.product_color_id);
-          currentValue.push(Object.assign(object, {
-            size: instance.size,
-            color,
-            count: instance.inventory.map(r => r.count).reduce((x, y) => +x + +y, 0),
-            instances: [instance],
-            tags: [],
-            name: item.name,
-            price: instance.price,
-            discount: [1],
-            thumbnail: color.image.thumbnail,
-          }));
-        }
-        this.cartItems.next(currentValue);
+      () => {
+        this.updateCart(item);
       },
       err => {
         console.error('Cannot save item to server: ', err);
@@ -256,9 +232,50 @@ export class CartService {
 
   private saveItemToStorage(item) {
     const data = this.getItemsFromStorage();
-    data.push(item);
-    localStorage.setItem(this.localStorageKey, JSON.stringify(data));
-    this.cartItems.next(this.cartItems.getValue().concat([Object.assign({quantity: item.number}, item)]));
+    const found = data.find(r => r.product_id === item.product_id && r.instance_id === item.product_instance_id);
+    if (found)
+      found.quantity ++;
+    else
+      data.push({
+        quantity: 1,
+        instance_id: item.product_instance_id,
+        product_id: item.product_id,
+      });
+    try {
+      localStorage.setItem(this.localStorageKey, JSON.stringify(data));
+      this.updateCart(item);
+    } catch (e) {
+      console.error('Cannot save item to local storage: ', e);
+    }
+  }
+
+  private updateCart(item) {
+    const currentValue = this.cartItems.getValue();
+    const object = {
+      product_id: item.product_id,
+      instance_id: item.product_instance_id,
+      quantity: 1,
+    };
+    const found = currentValue.find(r => r.product_id === object.product_id && r.instance_id === object.instance_id);
+    if (found)
+      found.quantity += 1;
+    else {
+      const instance = item.instances.find(r => r._id === object.instance_id);
+      const color = item.colors.find(r => r._id === instance.product_color_id);
+      currentValue.push(Object.assign(object, {
+        size: instance.size,
+        color,
+        count: instance.inventory.map(r => r.count).reduce((x, y) => +x + +y, 0),
+        instances: [instance],
+        tags: [],
+        name: item.name,
+        price: instance.price,
+        discount: [1],
+        thumbnail: color.image.thumbnail,
+        product_color_id: instance.product_color_id,
+      }));
+    }
+    this.cartItems.next(currentValue);
   }
 
   getLoyaltyBalance() {
@@ -321,7 +338,7 @@ export class CartService {
         }).subscribe(
           (data) => {
             data = data[0];
-            const someItems = this.cartItems.getValue().filter(el => el.product_id.toString() === data.product_id.toString());
+            const someItems = this.cartItems.getValue().filter(el => el.product_id === data.product_id);
             if (someItems && someItems.length > 0) {
               someItems.forEach(el => {
                 el['coupon_discount'] = 1 - data.discount;

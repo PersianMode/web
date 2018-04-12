@@ -21,6 +21,7 @@ export class MobileProductComponent implements OnInit {
   selectedProductColor: any = {};
   addCardBtnDisabled = true;
   @Output() add = new EventEmitter<any>();
+  @Output() changeSize = new EventEmitter<any>();
   size = '';
 
   constructor() { }
@@ -28,6 +29,7 @@ export class MobileProductComponent implements OnInit {
   newSize(event) {
     this.size = event;
     this.addCardBtnDisabled = !this.size;
+    this.changeSize.emit(this.size);
   }
 
   ngOnInit() {

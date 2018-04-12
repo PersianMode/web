@@ -23,6 +23,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   formattedPrice = '';
   isMobile = false;
   cartNumbers = null;
+  size = '';
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
@@ -49,23 +50,32 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.productService.getProduct(productId);
         this.product$ = this.productService.product$.subscribe(data => {
           this.product = data;
-          this.formattedPrice = priceFormatter(this.product.base_price);
           this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
           this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
+          this.updatePrice();
         });
       } else {
         this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
       }
     });
   }
+
   ngOnDestroy(): void {
     this.switch$.unsubscribe();
     this.params$.unsubscribe();
     this.product$.unsubscribe();
   }
 
+  updatePrice(size = this.size) {
+    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
+    const price = instance && instance.price ? instance.price : this.product.base_price;
+    this.size = size;
+    this.formattedPrice = priceFormatter(price);
+  }
+
   saveToCart(size) {
     // check form size and id undefined
+    this.size = size;
     const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
 
     if (instance) {
