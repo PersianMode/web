@@ -113,8 +113,8 @@
                     </div>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl"
                          class="submit-cancel-change-btn">
-                        <button mat-button fxFlex="50" class="action-button" (click)="submitEditInfo()"
-                                [disabled]="!userInfoForm.valid || !anyChanges">ثبت
+                        <button mat-button fxFlex="50" class="action-button" type="submit"
+                                [disabled]="!userInfoForm.valid || !anyChanges" [class.btn-disable] = "!userInfoForm.valid || !anyChanges" >ثبت
                             اطلاعات
                         </button>
                         <button mat-button fxFlex="50" class="action-button" (click)="cancelEditOrChangePass()">
@@ -142,11 +142,16 @@
 
                             <input class="input-field" type="password"
                                    formControlName="oldPass"
-                                   id="oldPassword"
-                                   [ngClass]="changePassForm.controls['oldPass'].hasError('required') ? 'input-error' : null"/>
+                                   (focus)="setSeen('oldPass')"
+                                   (blur)="curFocus = null"
+                                   #old_pass
+                                   [ngClass]="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ? 'input-error' : null"/>
+                            <label class="field-error"
+                                   *ngIf="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ">لطفا
+                                رمز عبور فعلی را وارد کنید (حداقل 8 کاراکتر)</label>
                         </div>
-                        <div fxFlex="10" class="input-label">&nbsp;</div>
-                        <!--<div fxFlex="10" class="change-pass-input-label" style="text-align: right; margin-right: 10px; font-size: 20px"><span (click)="showPass()"><i class="fa fa-eye-slash"></i></span></div>-->
+                        <!--<div fxFlex="10" class="input-label">&nbsp;</div>-->
+                        <div fxFlex="10" class="change-pass-input-label" style="text-align: right; margin-right: 10px; font-size: 20px"><span (click)="showPass()"><i class="fa fa-eye-slash"></i></span></div>
                     </div>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
                         <div fxFlex="45" class="change-pass-input-label"><span>کلمه عبور جدید را وارد کنید</span>
@@ -155,9 +160,16 @@
 
                             <input class="input-field" type="password"
                                    formControlName="newPass"
-                                   [ngClass]="changePassForm.controls['newPass'].hasError('required') ? 'input-error' : null"/>
+                                   (focus)="setSeen('newPass')"
+                                   (blur)="curFocus = null"
+                                   #new_pass
+                                   [ngClass]="(changePassForm.controls['newPass'].hasError('required') || changePassForm.controls['newPass'].hasError('minlength')) && seen['newPass'] && curFocus !== 'newPass'  ? 'input-error' : null"/>
+                            <label class="field-error"
+                                   *ngIf="(changePassForm.controls['newPass'].hasError('required') || changePassForm.controls['newPass'].hasError('minlength'))  && seen['newPass'] && curFocus !== 'newPass'">لطفا
+                                رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)</label>
                         </div>
-                        <div fxFlex="10" class="input-label">&nbsp;</div>
+                        <!--<div fxFlex="10" class="input-label">&nbsp;</div>-->
+                        <div fxFlex="10" class="change-pass-input-label" style="text-align: right; margin-right: 10px; font-size: 20px"><span (click)="showNewPass()"><i class="fa fa-eye-slash"></i></span></div>
                     </div>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
                         <div fxFlex="45" class="change-pass-input-label"><span>کلمه عبور جدید را دوباره وارد کنید</span>
@@ -166,12 +178,19 @@
 
                             <input class="input-field" type="password"
                                    formControlName="retypePass"
-                                   [ngClass]="changePassForm.controls['retypePass'].hasError('required') ? 'input-error' : null"/>
+                                   (focus)="setSeen('retypePass')"
+                                   (blur)="curFocus = null"
+                                   #retype_pass
+                                   [ngClass]="(changePassForm.controls['retypePass'].hasError('required') || changePassForm.controls['retypePass'].hasError('minlength')) && seen['retypePass'] && curFocus !== 'retypePass' ? 'input-error' : null"/>
+                            <label class="field-error"
+                                   *ngIf="(changePassForm.controls['retypePass'].hasError('required') || changePassForm.controls['retypePass'].hasError('minlength')) && seen['retypePass'] && curFocus !== 'retypePass'">لطفا
+                                رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)</label>
                         </div>
-                        <div fxFlex="10" class="input-label">&nbsp;</div>
+                        <!--<div fxFlex="10" class="input-label">&nbsp;</div>-->
+                        <div fxFlex="10" class="change-pass-input-label" style="text-align: right; margin-right: 10px; font-size: 20px"><span (click)="showRetypePass()"><i class="fa fa-eye-slash"></i></span></div>
                     </div>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl" class="submit-cancel-change-btn">
-                        <button mat-button fxFlex="50" class="action-button" (click)="submitNewPass()">تغییر کلمه عبور
+                        <button mat-button fxFlex="50" class="action-button" type="submit" [disabled]="!changePassForm.valid" [class.btn-disable] = "!changePassForm.valid">تغییر کلمه عبور
                         </button>
                         <button mat-button fxFlex="50" class="action-button" (click)="cancelEditOrChangePass()">
                            بازگشت

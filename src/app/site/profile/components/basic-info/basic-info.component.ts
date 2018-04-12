@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
 import * as moment from 'jalali-moment';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -11,6 +11,9 @@ import {HttpService} from '../../../../shared/services/http.service';
   styleUrls: ['./basic-info.component.css']
 })
 export class BasicInfoComponent implements OnInit {
+  @ViewChild('old_pass') oldPass: ElementRef;
+  @ViewChild('new_pass') newPass: ElementRef;
+  @ViewChild('retype_pass') retypePass: ElementRef;
   @Input() isEdit = false;
   isChangePass = false;
   customerBasicInfo: any;
@@ -22,6 +25,13 @@ export class BasicInfoComponent implements OnInit {
   nationalIdDisabled = false;
   anyChanges = false;
   formTitle = '';
+  seen = {};
+  curFocus = null;
+  changeed_pass_obj = {
+    old_pass: '',
+    new_pass: '',
+    retype_new_pass: ''
+  }
 
   constructor(private authService: AuthService, private httpService: HttpService) {
   }
@@ -43,7 +53,7 @@ export class BasicInfoComponent implements OnInit {
       surname: [this.customerBasicInfo.surname ? this.customerBasicInfo.surname : '', [
         Validators.required,
       ]],
-      dob: [this.customerBasicInfo.dob  ? moment(this.customerBasicInfo.dob).format('YYYY-MM-DD') : 'تاریخ تولد' , [
+      dob: [this.customerBasicInfo.dob ? moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD') : 'تاریخ تولد', [
         Validators.required,
       ]],
       username: [this.customerBasicInfo.username, [
@@ -64,6 +74,7 @@ export class BasicInfoComponent implements OnInit {
       (dt) => this.fieldChanged(),
       (er) => console.error('Error when subscribing on userInfo form valueChanges: ', er)
     );
+    // console.log('--->> :', moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD'));
   };
 
   goToEditForm() {
@@ -71,6 +82,7 @@ export class BasicInfoComponent implements OnInit {
     this.formTitle = 'ویرایش اطلاعات';
     this.initForm();
   }
+
   submitEditInfo() {
     this.customerBasicInfo.name = this.userInfoForm.controls['name'].value;
     this.customerBasicInfo.surname = this.userInfoForm.controls['surname'].value;
@@ -84,6 +96,7 @@ export class BasicInfoComponent implements OnInit {
     this.authService.userDetails.dob = this.customerBasicInfo.dob;
     this.authService.userDetails.username = this.customerBasicInfo.username;
     this.authService.isLoggedIn.next(true);
+    // console.log('***', this.customerBasicInfo);
     this.httpService.post('editUserBasicInfo', this.customerBasicInfo).subscribe(
       (res) => {
         this.ngOnInit();
@@ -121,39 +134,101 @@ export class BasicInfoComponent implements OnInit {
       || (username !== this.customerBasicInfo.username && (username !== '' || this.customerBasicInfo.username !== null))
       || (dob !== moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD'))
       || ((this.customerBasicInfo.national_id && national_id !== this.customerBasicInfo.national_id) || (isUndefined(this.customerBasicInfo.national_id) && national_id !== '')))
-         this.anyChanges = true;
+      this.anyChanges = true;
   }
-
 
   goToChangePassForm() {
     this.formTitle = 'تغییر کلمه عبور';
     this.isChangePass = true;
     this.initChangePassForm();
+    Object.keys(this.changePassForm.controls).forEach(el => {
+      this.seen[el] = false;
+    });
   }
 
   initChangePassForm() {
+    // TODO set form fiels with change_pass_obj if they have value(insted of set null every time)
     this.formTitle = 'تغییر کلمه عبور';
     this.changePassForm = new FormBuilder().group({
-      oldPass: [null],
-      newPass: [null],
-      retypePass: [null],
+      oldPass: [null, [
+        Validators.required,
+        Validators.minLength(8),
+      ]],
+      newPass: [null, [
+        Validators.required,
+        Validators.minLength(8),
+      ]],
+      retypePass: [null, [
+        Validators.required,
+        Validators.minLength(8),
+      ]],
     });
   }
-  submitNewPass() {
+
+  setSeen(item) {
+    this.seen[item] = true;
+    this.curFocus = item;
   }
+
+  submitNewPass() {
+    this.changeed_pass_obj.old_pass = this.changePassForm.controls['oldPass'].value;
+    this.changeed_pass_obj.new_pass = this.changePassForm.controls['newPass'].value;
+    this.changeed_pass_obj.retype_new_pass = this.changePassForm.controls['retypePass'].value;
+    if (this.changeed_pass_obj.new_pass !== this.changeed_pass_obj.retype_new_pass) {
+      Object.keys(this.changePassForm.controls).forEach(el => {
+        this.seen[el] = true;
+        this.curFocus = null;
+      });
+      this.initChangePassForm();
+      console.error('Cannot change user pass, new entered pass are not compatible: ');
+    }
+    this.httpService.post('changePassword', this.changeed_pass_obj).subscribe(
+      (res) => {
+        this.ngOnInit();
+        this.isEdit = false;
+        this.isChangePass = false;
+      },
+      (err) => {
+        console.error('Cannot change user pass: ', err);
+        Object.keys(this.changePassForm.controls).forEach(el => {
+          this.seen[el] = true;
+          this.curFocus = null;
+        });
+        this.initChangePassForm();
+      }
+    );
+  }
+
   cancelEditOrChangePass() {
     this.ngOnInit();
     this.isEdit = false;
     this.isChangePass = false;
+    Object.keys(this.changePassForm.controls).forEach(el => {
+      this.seen[el] = false;
+    });
   }
 
-  // showPass() {
-  //   const x = document.getElementById('oldPassword');
-  //   console.log('====>>', x.innerHTML);
-  //   if (x.type === 'password') {
-  //     x.type = 'text';
-  //   } else {
-  //     x.type = 'password';
-  //   }
-  // }
+  showPass(value) {
+    if (this.oldPass.nativeElement.type === 'password') {
+      this.oldPass.nativeElement.type = 'text';
+    } else {
+      this.oldPass.nativeElement.type = 'password';
+    }
+  }
+
+  showNewPass() {
+    if (this.newPass.nativeElement.type === 'password') {
+      this.newPass.nativeElement.type = 'text';
+    } else {
+      this.newPass.nativeElement.type = 'password';
+    }
+  }
+
+  showRetypePass() {
+    if (this.retypePass.nativeElement.type === 'password') {
+      this.retypePass.nativeElement.type = 'text';
+    } else {
+      this.retypePass.nativeElement.type = 'password';
+    }
+  }
 }
