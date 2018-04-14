@@ -21,6 +21,8 @@ export class CartComponent implements OnInit, OnDestroy {
   dialogEnum = DialogEnum;
   subs: any;
   isLoggedIn = false;
+  valid = [];
+  disabled = false;
 
   constructor(@Inject(WINDOW) private window, private cartService: CartService,
               private authService: AuthService, private router: Router, public dialog: MatDialog) {
@@ -33,6 +35,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.subs = this.cartService.cartItems.subscribe(data => {
       this.products = data;
+      data.forEach(() => this.valid.push(true));
 
       if (this.products.length > 0) {
         this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
@@ -91,5 +94,10 @@ export class CartComponent implements OnInit, OnDestroy {
 
   calculateDiscount(considerCoupon = false) {
     this.discountValue = this.cartService.calculateDiscount(considerCoupon);
+  }
+
+  changeValidation(isValid, i) {
+    this.valid[i] = isValid;
+    this.disabled = !this.valid.reduce((x, y) => x && y, true);
   }
 }

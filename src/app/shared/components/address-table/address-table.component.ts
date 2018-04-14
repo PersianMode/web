@@ -38,7 +38,6 @@ export class AddressTableComponent implements OnInit {
     this.getCustomerAddresses();
     this.getWareHouseAddresses();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
-    console.log('isProfile', this.isProfile);
   }
 
   getLatitude() {
