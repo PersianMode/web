@@ -26,6 +26,7 @@ export class SubMenuComponent implements OnInit {
   set placements(value: IPlacement[]) {
     if (value) {
       this.subMenuItems = value;
+      this.getRelatedItems();
     }
   }
 
@@ -111,27 +112,36 @@ export class SubMenuComponent implements OnInit {
     });
   }
 
-  setFormValue(value) {
-    this.subMenuForm.controls['text'].setValue(value.text);
-    this.subMenuForm.controls['href'].setValue(value.href);
-    switch (value.section.toLowerCase().split('/')[1]) {
-      case 'header':
-        this.subMenuForm.controls['area'].setValue(this.itemArea.Header);
-        break;
-      case 'middle':
-        this.subMenuForm.controls['area'].setValue(this.itemArea.Middle);
-        break;
-      case 'left':
-        this.subMenuForm.controls['area'].setValue(this.itemArea.Left);
-        break;
+  setFormValue(value = null) {
+    if (!value) {
+      this.subMenuForm.reset();
+      this.subMenuForm.controls['area'].enable();
+    } else {
+      this.subMenuForm.controls['text'].setValue(value.text);
+      this.subMenuForm.controls['href'].setValue(value.href);
+      switch (value.section.toLowerCase().split('/')[1]) {
+        case 'header':
+          this.subMenuForm.controls['area'].setValue(this.itemArea.Header);
+          break;
+        case 'middle':
+          this.subMenuForm.controls['area'].setValue(this.itemArea.Middle);
+          break;
+        case 'left':
+          this.subMenuForm.controls['area'].setValue(this.itemArea.Left);
+          break;
+      }
+      this.subMenuForm.controls['area'].disable();
+      this.subMenuForm.controls['is_header'].setValue(value.is_header ? value.is_header : false);
     }
-    this.subMenuForm.controls['is_header'].setValue(value.is_header ? value.is_header : false);
   }
 
   getRelatedItems() {
-    this.headerAreaItems = [];
-    this.middleAreaItems = [];
-    this.leftAreaItems = [];
+    if (!this.selectedSection)
+      return;
+
+    this.headerAreaItems = {};
+    this.middleAreaItems = {};
+    this.leftAreaItems = {};
 
     this.subMenuItems.filter(el => {
       if (el.info.section.split('/')[0].toLowerCase() === this.selectedSection.toLowerCase())
@@ -178,12 +188,20 @@ export class SubMenuComponent implements OnInit {
     });
 
     this.headerAreaColumns = Object.keys(this.headerAreaItems);
+    if (this.headerAreaColumns.length === 0) {
+      this.headerAreaColumns = [0];
+      this.headerAreaItems = {0: []};
+    }
     this.middleAreaColumns = Object.keys(this.middleAreaItems);
+    if (this.middleAreaColumns.length === 0) {
+      this.middleAreaColumns = [0];
+      this.middleAreaItems = {0: []};
+    }
     this.leftAreaColumns = Object.keys(this.leftAreaItems);
-
-    console.log(this.headerAreaItems);
-    console.log(this.middleAreaItems);
-    console.log(this.leftAreaItems);
+    if (this.leftAreaColumns.length === 0) {
+      this.leftAreaColumns = [0];
+      this.leftAreaItems = {0: []};
+    }
   }
 
   private sortColumnItems(list) {
@@ -198,24 +216,19 @@ export class SubMenuComponent implements OnInit {
   }
 
   changeMenuItemOrder() {
-    console.log(this.headerAreaItems);
-    console.log(this.middleAreaItems);
-    console.log(this.leftAreaItems);
-
     let placementList = [];
 
     Object.keys(this.headerAreaItems).forEach(column => {
       let rowCounter = 1;
       let orderIsChanged = false;
       this.headerAreaItems[column].forEach(placement => {
-        if (placement.info.column !== +column || placement.info.row !== rowCounter)
+        if (placement.info.column !== +column || placement.info.row !== rowCounter || placement.info.section.split('/')[1] !== 'header')
           orderIsChanged = true;
 
         placement.info.column = +column;
         placement.info.row = (rowCounter++);
         placement.info.section = this.selectedSection + '/header';
       });
-      // console.log(this.headerAreaItems[column]);
       if (orderIsChanged)
         placementList = placementList.concat(this.headerAreaItems[column]);
     });
@@ -224,14 +237,13 @@ export class SubMenuComponent implements OnInit {
       let rowCounter = 1;
       let orderIsChanged = false;
       this.middleAreaItems[column].forEach(placement => {
-        if (placement.info.column !== +column || placement.info.row !== rowCounter)
+        if (placement.info.column !== +column || placement.info.row !== rowCounter || placement.info.section.split('/')[1] !== 'middle')
           orderIsChanged = true;
 
         placement.info.column = +column;
         placement.info.row = (rowCounter++);
         placement.info.section = this.selectedSection + '/middle';
       });
-      // console.log(this.middleAreaItems[column]);
       if (orderIsChanged)
         placementList = placementList.concat(this.middleAreaItems[column]);
     });
@@ -240,19 +252,16 @@ export class SubMenuComponent implements OnInit {
       let rowCounter = 1;
       let orderIsChanged = false;
       this.leftAreaItems[column].forEach(placement => {
-        if (placement.info.column !== +column || placement.info.row !== rowCounter)
+        if (placement.info.column !== +column || placement.info.row !== rowCounter || placement.info.section.split('/')[1] !== 'left')
           orderIsChanged = true;
 
         placement.info.column = +column;
         placement.info.row = (rowCounter++);
         placement.info.section = this.selectedSection + '/left';
       });
-      // console.log(this.leftAreaItems[column]);
       if (orderIsChanged)
         placementList = placementList.concat(this.leftAreaItems[column]);
     });
-
-    console.log(placementList);
 
     if (placementList.length > 0) {
       this.progressService.enable();
@@ -277,6 +286,7 @@ export class SubMenuComponent implements OnInit {
 
   selectItem(value) {
     this.selectedItem = value;
+    this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
     this.setFormValue(value.info);
     this.anyChanges = false;
   }
@@ -288,7 +298,7 @@ export class SubMenuComponent implements OnInit {
         placements: [
           {
             _id: this.selectedItem._id,
-            info: this.getNewItemInfo(),
+            info: this.getItemInfo(),
           }
         ]
       }) : this.httpService.put('placement', {
@@ -296,28 +306,27 @@ export class SubMenuComponent implements OnInit {
         placement: {
           component_name: 'menu',
           variable_name: 'subMenu',
-          info: this.getNewItemInfo(),
+          info: this.getItemInfo(true),
         }
       })
     ).subscribe(
-      (data) => {
+      (data: any) => {
         this.modifyPlacement.emit({
           type: this.selectedItem ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
-          placement_id: data._id,
+          placement_id: data.placement_id,
           placements: [this.selectedItem],
-          placement: data.placement,
+          placement: data.new_placement,
         });
 
-        const newInfo = this.getNewItemInfo();
-
         if (this.selectedItem) {
+          const newInfo = this.getItemInfo();
           const changedObj = this.subMenuItems.find(el => el._id.toString() === this.selectedItem._id.toString());
           changedObj.info.text = newInfo.text;
           changedObj.info.href = newInfo.href;
           changedObj.info.is_header = newInfo.is_header;
         } else {
-          this.selectedItem._id = data._id;
-          this.selectedItem.info = newInfo;
+          const newInfo = this.getItemInfo(true);
+          this.selectedItem = data.new_placement;
         }
 
         this.anyChanges = false;
@@ -330,38 +339,49 @@ export class SubMenuComponent implements OnInit {
     );
   }
 
-  getNewItemInfo(): any {
+  getItemInfo(isNewItem = false): any {
     const res = {
       text: (this.subMenuForm.controls['text'].value ? this.subMenuForm.controls['text'].value : '').trim(),
       href: (this.subMenuForm.controls['href'].value ? this.subMenuForm.controls['href'].value : '').trim(),
       is_header: this.subMenuForm.controls['is_header'].value,
     };
 
+    let tempSectionName = 'header';
+    let tempColumns = this.headerAreaColumns;
+    let tempItems = this.headerAreaItems;
     switch (this.subMenuForm.controls['area'].value) {
       case this.itemArea.Header: {
-        if (!this.selectedItem || this.selectedItem.info.section.split('/')[1] !== 'header') {
-          res['column'] = Math.max(...this.headerAreaItems.map(el => el.info.column));
-          res['row'] = Math.max(...this.headerAreaItems.map(el => el.info.row)) + 1;
-          res['section'] = this.selectedSection + '/header';
-        }
+        tempSectionName = 'header';
+        tempColumns = this.headerAreaColumns;
+        tempItems = this.headerAreaItems;
       }
         break;
       case this.itemArea.Middle: {
-        if (this.selectedItem || this.selectedItem.info.section.split('/')[1] !== 'middle') {
-          res['column'] = Math.max(...this.middleAreaItems.map(el => el.info.column));
-          res['row'] = Math.max(...this.middleAreaItems.map(el => el.info.row)) + 1;
-          res['section'] = this.selectedSection + '/middle';
-        }
+        tempSectionName = 'middle';
+        tempColumns = this.middleAreaColumns;
+        tempItems = this.middleAreaItems;
       }
         break;
       case this.itemArea.Left: {
-        if (this.selectedItem || this.selectedItem.info.section.split('/')[1] !== 'left') {
-          res['column'] = Math.max(...this.leftAreaItems.map(el => el.info.column));
-          res['row'] = Math.max(...this.leftAreaItems.map(el => el.info.row)) + 1;
-          res['section'] = this.selectedSection + '/left';
-        }
+        tempSectionName = 'left';
+        tempColumns = this.leftAreaColumns;
+        tempItems = this.leftAreaItems;
       }
         break;
+    }
+
+    if (!this.selectedItem || this.selectedItem.info.section.split('/')[1] !== tempSectionName) {
+      if (isNewItem) {
+        res['column'] = tempColumns.length ? Math.max(...tempColumns
+          .map(el => tempItems[el])
+          .reduce((a, b) => (a || []).concat(b || []))
+          .map(el => el.info.column)) : 1;
+        res['row'] = (tempColumns.length ? Math.max(...tempColumns
+          .map(el => tempItems[el])
+          .reduce((a, b) => (a || []).concat(b || []))
+          .map(el => el.info.row)) : 0) + 1;
+      }
+      res['section'] = this.selectedSection + '/' + tempSectionName;
     }
 
     return res;
@@ -377,7 +397,7 @@ export class SubMenuComponent implements OnInit {
         if (status) {
           this.progressService.enable();
           const index = this.subMenuItems.findIndex(
-            el => el.info.text === this.selectedItem.text && el.info.href === this.selectedItem.href);
+            el => el.info.text === this.selectedItem.info.text && el.info.href === this.selectedItem.info.href);
           if (index !== -1)
             this.httpService.post('placement/delete', {
               page_id: this.pageId,
@@ -389,6 +409,7 @@ export class SubMenuComponent implements OnInit {
                   placement_id: this.subMenuItems[index]._id,
                 });
                 this.selectedItem = null;
+                this.setFormValue();
                 this.anyChanges = false;
                 this.progressService.disable();
               },
@@ -414,11 +435,13 @@ export class SubMenuComponent implements OnInit {
 
     this.anyChanges = false;
 
-    const tempInfo = this.getNewItemInfo();
-    if (tempInfo.text !== this.selectedItem.info.text ||
-      tempInfo.href !== this.selectedItem.info.href ||
-      tempInfo.is_header !== this.selectedItem.info.is_header ||
-      (tempInfo.section && tempInfo.section !== this.selectedItem.info.section))
-      this.anyChanges = true;
+    const tempInfo = this.getItemInfo();
+
+    ['text', 'href', 'is_header'].forEach(el => {
+      if (tempInfo[el] !== this.selectedItem.info[el]) {
+        this.anyChanges = true;
+        return;
+      }
+    });
   }
 }

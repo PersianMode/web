@@ -16,7 +16,7 @@
             </mat-input-container>
           </div>
           <div fxFlex="20" class="full-width vertical-align-item sub-item">
-            <mat-select placeholder="بخش" formControlName="area" dir="rtl" class="persian-field" [disabled]="selectedItem">
+            <mat-select placeholder="بخش" formControlName="area" dir="rtl" class="persian-field">
               <mat-option *ngFor="let area of areaList" [value]="area.value" class="persian-field">{{area.name}}</mat-option>
             </mat-select>
           </div>

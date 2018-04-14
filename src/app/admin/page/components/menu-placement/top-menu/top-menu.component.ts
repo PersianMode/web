@@ -169,9 +169,9 @@ export class TopMenuComponent implements OnInit {
       (data) => {
         this.modifyPlacement.emit({
           type: isEdit ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
-          placement_id: data._id,
+          placement_id: data.placement_id,
           placements: [this.upsertTopMenuItem],
-          placement: data.placement,
+          placement: data.new_placement,
         });
 
         if (isEdit) {
