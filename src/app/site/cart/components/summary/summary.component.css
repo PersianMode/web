@@ -1,5 +1,4 @@
 .summary {
-  min-width: 300px;
   background-color: #191919;
   border-radius: 2px;
   font-size: 14px;
@@ -26,6 +25,11 @@
   margin: 10px 30px;
   border-radius: 2px;
   cursor: pointer;
+  line-height: normal !important;
+}
+
+.disabled {
+  background-color: #545454;
 }
 
 .payment-button:hover {
@@ -44,6 +48,7 @@
   padding: 20px;
   position: center;
   margin-top: auto;
+  width: calc(100% - 40px);
 }
 
 .hr-style {
@@ -68,7 +73,12 @@
 }
 
 .coupon_field {
-  padding: 3px;
+  width: calc(100% - 16px);
+  border: 0;
+  border-radius: 0;
+  color: black;
+  height: 22px;
+  font-size: 14px;
 }
 
 .open-close-field-sign {

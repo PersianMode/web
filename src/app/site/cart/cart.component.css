@@ -6,7 +6,7 @@
   padding-bottom: 15px;
   padding-right: 15px;
   font-size: 20px;
-  font-family: iranyekan;
+  font-family: iranyekan, sans-serif;
   font-weight: bold;
 }
 
@@ -32,7 +32,7 @@
   margin-bottom: 10px;
   color: #fa5400;
   font-size: 20px;
-  font-family: iranyekan;
+  font-family: iranyekan, sans-serif;
   font-weight: bold;
 }
 
@@ -53,6 +53,5 @@
 }
 
 .main-divs {
-  margin-left: 7px;
-  margin-right: 7px;
+  padding: 0px 7px;
 }
