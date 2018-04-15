@@ -11,13 +11,15 @@ h3 {
     background-color: black;
     color: white;
     height: 35px !important;
-    border: solid #E5E5E5 thin;
+    /*border: solid #E5E5E5 thin;*/
+    border: 0;
+    margin: 1px;
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .edit-card{
-    font-family: iranyekan;
+    font-family: iranyekan, sans-serif;
     margin-top: 5px;
     text-align: center
 }
@@ -73,14 +75,14 @@ h3 {
 
 .customer-data {
     margin-top: 5px;
-    font-family: iranyekan
+    font-family: iranyekan, sans-serif;
 }
 .customer-data mat-card-content {
     margin:0px 15%;
 }
 
 .change-pass-card {
-    font-family: iranyekan;
+    font-family: iranyekan, sans-serif;
     margin-top: 5px;
 }
 
