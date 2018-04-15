@@ -60,18 +60,18 @@
                         <div fxFlex="15" class="input-label"><span>تاریخ تولد</span>
                         </div>
                         <div fxFlex="35" class="input-container">
-                            <!--<dp-date-picker-->
-                                    <!--class="input-field"-->
-                                    <!--placeholder="تاریخ تولد"-->
-                                    <!--formControlName="dob"-->
-                                    <!--mode="day"-->
-                                    <!--[ngClass]="userInfoForm.controls['dob'].hasError('required') ? 'input-error' : null"-->
-                                    <!--theme="dp-material">-->
-                            <!--</dp-date-picker>-->
-                            <app-dob [date]="customerBasicInfo.dob" (change)="dobChange($event)"></app-dob>
-                            <!--<label class="field-error dp-hint"-->
-                                   <!--*ngIf="userInfoForm.controls['dob'].hasError('required')">لطفا-->
-                                <!--تاریخ تولد را وارد کنید</label>-->
+                            <dp-date-picker
+                                    class="input-field"
+                                    placeholder="تاریخ تولد"
+                                    formControlName="dob"
+                                    mode="day"
+                                    [ngClass]="userInfoForm.controls['dob'].hasError('required') ? 'input-error' : null"
+                                    theme="dp-material">
+                            </dp-date-picker>
+                            <!--<app-dob [date]="customerBasicInfo.dob" (change)="dobChange($event)"></app-dob>-->
+                            <label class="field-error dp-hint"
+                                   *ngIf="userInfoForm.controls['dob'].hasError('required')">لطفا
+                                تاریخ تولد را وارد کنید</label>
                         </div>
                         <div fxFlex="15" class="input-label"><span>شماره ملی</span>
                         </div>
