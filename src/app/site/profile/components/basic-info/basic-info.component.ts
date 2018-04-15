@@ -43,11 +43,22 @@ export class BasicInfoComponent implements OnInit {
     this.formTitle = 'اطلاعات مشتری';
     this.customerBasicInfo = this.authService.userDetails;
     console.log('--->', this.customerBasicInfo.dob);
-    this.birthDate = moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD');
+    this.formatDob();
     console.log('---->', this.birthDate);
     this.userNationalId = this.customerBasicInfo.national_id ? this.customerBasicInfo.national_id : '-';
     this.userGender = this.customerBasicInfo.gender === 'f' ? 'خانم ' : 'آقای ';
     this.nationalIdDisabled = this.userNationalId === '-' || !this.userNationalId ? false : true;
+  }
+
+  private formatDob() {
+    const dob = moment(this.customerBasicInfo.dob);
+    this.birthDate = [dob.jDate(), dob.jMonth() + 1,  dob.jYear()].map(r => r.toLocaleString('fa', {useGrouping: false})).join(' / ');
+  }
+
+  dobChange(dob) {
+    this.anyChanges = true;
+    this.customerBasicInfo.dob = dob;
+    this.formatDob();
   }
 
   initForm() {
@@ -59,9 +70,9 @@ export class BasicInfoComponent implements OnInit {
       surname: [this.customerBasicInfo.surname ? this.customerBasicInfo.surname : '', [
         Validators.required,
       ]],
-      dob: [this.customerBasicInfo.dob ? moment(this.customerBasicInfo.dob).format('YYYY-MM-DD') : 'تاریخ تولد', [
-        Validators.required,
-      ]],
+      // dob: [this.customerBasicInfo.dob ? moment(this.customerBasicInfo.dob).format('YYYY-MM-DD') : 'تاریخ تولد', [
+      //   Validators.required,
+      // ]],
       username: [this.customerBasicInfo.username, [
         Validators.required,
         Validators.email,
@@ -76,9 +87,9 @@ export class BasicInfoComponent implements OnInit {
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/)
       ]],
     });
-    console.log('------->', this.customerBasicInfo.dob);
-    console.log('-------->', moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD'));
-    console.log('--------->', this.userInfoForm.controls['dob'].value);
+    // console.log('------->', this.customerBasicInfo.dob);
+    // console.log('-------->', moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD'));
+    // console.log('--------->', this.userInfoForm.controls['dob'].value);
     this.userInfoForm.valueChanges.subscribe(
       (dt) => this.fieldChanged(),
       (er) => console.error('Error when subscribing on userInfo form valueChanges: ', er)
@@ -96,11 +107,11 @@ export class BasicInfoComponent implements OnInit {
     this.customerBasicInfo.surname = this.userInfoForm.controls['surname'].value;
     this.customerBasicInfo.username = this.userInfoForm.controls['username'].value;
     this.customerBasicInfo.national_id = this.userInfoForm.controls['national_id'].value;
-    this.customerBasicInfo.dob = moment(this.userInfoForm.controls['dob'].value, 'jYYYY-jMM-jDD').locale('en');
+    // this.customerBasicInfo.dob = moment(this.userInfoForm.controls['dob'].value, 'jYYYY-jMM-jDD').locale('en');
     // this.customerBasicInfo.dob = this.userInfoForm.controls['dob'].value;
-    console.log('------->', this.userInfoForm.controls['dob'].value);
-    console.log('--------->', moment(this.userInfoForm.controls['dob'].value, 'jYYYY-jMM-jDD').locale('en'));
-    console.log('----------->', this.customerBasicInfo.dob);
+    // console.log('------->', this.userInfoForm.controls['dob'].value);
+    // console.log('--------->', moment(this.userInfoForm.controls['dob'].value, 'jYYYY-jMM-jDD').locale('en'));
+    // console.log('----------->', this.customerBasicInfo.dob);
     this.authService.userDetails.displayName = this.customerBasicInfo.name + ' ' + this.customerBasicInfo.surname;
     this.authService.userDetails.name = this.customerBasicInfo.name;
     this.authService.userDetails.surname = this.customerBasicInfo.surname;
