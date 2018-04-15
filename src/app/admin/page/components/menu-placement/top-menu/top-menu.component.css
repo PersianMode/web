@@ -1,9 +1,3 @@
-.demo-list {
-  text-align: center;
-  width: 100%;
-  margin: 0 auto;
-}
-
 .top-menu-item {
   display: inline-block;
   padding: 5px;
@@ -27,10 +21,6 @@
 
 .remove {
   color: darkred;
-}
-
-.menu-field {
-  height: 20px !important;
 }
 
 .button-area {

@@ -45,6 +45,6 @@ export class MenuPlacementComponent implements OnInit {
   }
 
   showSubMenu(value) {
-    // this.selectedSection = value || null;
+    this.selectedSection = value || null;
   }
 }

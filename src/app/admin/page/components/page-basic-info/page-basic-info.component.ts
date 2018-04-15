@@ -279,7 +279,7 @@ export class PageBasicInfoComponent implements OnInit {
       }
         break;
       case PlacementModifyEnum.Add: {
-        this.placements = value.placement;
+        this.placements.push(value.placement);
       }
         break;
       case PlacementModifyEnum.Modify: {
