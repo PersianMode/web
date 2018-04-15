@@ -43,6 +43,20 @@ h3 {
     display: block;
     line-height: 34px;
     vertical-align: middle;
+    white-space: nowrap;
+}
+
+.eye-div {
+    margin: 15px 5px 0px;
+    text-align: right;
+    margin-right: 15px;
+    font-size: 20px
+}
+
+.eye-div span {
+    display: block;
+    line-height: 34px;
+    vertical-align: middle;
 }
 
 .input-label span {
@@ -55,6 +69,24 @@ h3 {
     height: 20px;
     width: 98%;
     border-radius: 5px;
+}
+
+.customer-data {
+    margin-top: 5px;
+    font-family: iranyekan
+}
+.customer-data mat-card-content {
+    margin:0px 15%;
+}
+
+.change-pass-card {
+    font-family: iranyekan;
+    margin-top: 5px;
+}
+
+.btn-disable {
+    background-color: #888888;
+    box-shadow: none;
 }
 
 @media(max-width:959px) {
@@ -76,22 +108,15 @@ h3 {
     .action-button button{
         width: 100% !important;
     }
-}
 
-.customer-data {
-    margin-top: 5px;
-    font-family: iranyekan
-}
-.customer-data mat-card-content {
-    margin:0px 15%;
-}
+    .customer-data div{
+        text-align: center;
+    }
+    .customer-data h3{
+        text-align: center;
+    }
+    .eye-div {
+        margin: 0px 15px 5px 5px !important;
+    }
 
-.change-pass-card {
-    font-family: iranyekan;
-    margin-top: 5px;
-}
-
-.btn-disable {
-    background-color: #888888;
-    box-shadow: none;
 }
