@@ -21,7 +21,7 @@
           <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
             <div fxFlex="40">
               <mat-input-container>
-                <input matInput type="text" placeholder="نام" formControlName="name"/>
+                <input matInput type="text" placeholder="نام" formControlName="name" autocomplete="firstname"/>
                 <mat-hint>نام تحویل‌گیرنده را وارد کنید</mat-hint>
                 <mat-error *ngIf="addressForm.controls['name'].hasError('required')">وارد کردن نام تحویل
                   گیرنده الزامی است
@@ -30,7 +30,7 @@
             </div>
             <div fxFlex="40">
               <mat-input-container>
-                <input matInput type="text" placeholder="نام خانوادگی" formControlName="family"/>
+                <input matInput type="text" placeholder="نام خانوادگی" formControlName="family" autocomplete="surname"/>
                 <mat-hint>نام خانوادگی تحویل‌گیرنده را وارد کنید</mat-hint>
                 <mat-error *ngIf="addressForm.controls['family'].hasError('required')">وارد کردن نام
                   خانوادگی تحویل‌گیرنده الزامی است
@@ -50,7 +50,7 @@
           <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
             <div fxFlex="50">
               <mat-input-container>
-                <input matInput type="text" placeholder="شماره ملی" formControlName="nationalCode"/>
+                <input matInput type="text" placeholder="شماره ملی" formControlName="nationalCode" autocomplete="national_id"/>
                 <mat-hint>کد ملی تحویل‌گیرنده را وارد کنید</mat-hint>
                 <mat-error *ngIf="addressForm.controls['nationalCode'].hasError('required')">وارد کردن
                   کد ملی تحویل‌گیرنده الزامی است
@@ -63,7 +63,7 @@
             </div>
             <div fxFlex="50">
               <mat-input-container>
-                <input matInput type="text" placeholder="شماره تماس" formControlName="phoneNumber"/>
+                <input matInput type="text" placeholder="شماره تماس" formControlName="phoneNumber" autocomplete="mobile_number"/>
                 <mat-hint>شماره تماس تحویل‌گیرنده را وارد کنید</mat-hint>
                 <mat-error *ngIf="addressForm.controls['phoneNumber'].hasError('required')">وارد کردن
                   شماره تماس تحویل‌گیرنده الزامی است
@@ -85,7 +85,7 @@
             <div fxFlex="50">
               <div class="style-select-wrapper" *ngIf="!addressInfo.partEdit">
                 <select class="select-style" formControlName="selectProvince"
-                        (change)="setNewProvince($event.target.value)">
+                        (change)="setNewProvince($event.target.value)" autocomplete="province">
                   <option *ngFor="let o of provinceArray" [value]="o.name">
                     {{o.name}}
                   </option>
@@ -98,7 +98,7 @@
             </div>
             <div fxFlex="50">
               <div class="style-select-wrapper" *ngIf="!addressInfo.partEdit">
-                <select class="select-style" formControlName="selectCity">
+                <select class="select-style" formControlName="selectCity" autocomplete="city">
                   <option *ngFor="let c of cityArray" [value]="c" [disabled]="addressInfo.partEdit">
                     {{c}}
                   </option>
@@ -113,7 +113,7 @@
           <div dir="rtl" class="field-container">
             <mat-input-container class="field">
                             <textarea matInput placeholder="آدرس" formControlName="district"
-                                      readonly="{{addressInfo.partEdit}}"></textarea>
+                                      readonly="{{addressInfo.partEdit}}" autocomplete="address_level_2"></textarea>
                             <mat-hint>حداکثر از 500 حرف استفاده شود</mat-hint>
                             <mat-error *ngIf="addressForm.controls['district'].hasError('maxlength')">لطفا حداکثر
                                 از 500 حرف استفاده کنید
@@ -124,7 +124,7 @@
                         <div fxFlex="25">
                             <mat-input-container>
                                 <input matInput type="text" placeholder="خیابان" formControlName="street"
-                                       readonly="{{addressInfo.partEdit}}"/>
+                                       readonly="{{addressInfo.partEdit}}" autocomplete="street"/>
                                 <mat-error *ngIf="addressForm.controls['street'].hasError('required')">
                                 نام خیابان را وارد کنید                                </mat-error>
                             </mat-input-container>
@@ -132,7 +132,7 @@
                         <div fxFlex="25">
                             <mat-input-container>
                                 <input matInput type="text" placeholder="پلاک" formControlName="pelak"
-                                       readonly="{{addressInfo.partEdit}}"/>
+                                       readonly="{{addressInfo.partEdit}}" autocomplete="street_number"/>
                                 <mat-error *ngIf="addressForm.controls['pelak'].hasError('required')">
                                     پلاک را وارد کنید                                </mat-error>
                             </mat-input-container>
@@ -140,13 +140,13 @@
                         <div fxFlex="25">
                             <mat-input-container>
                                 <input matInput type="text" placeholder="واحد" formControlName="unit"
-                                       readonly="{{addressInfo.partEdit}}"/>
+                                       readonly="{{addressInfo.partEdit}}" autocomplete="unit_number"/>
                             </mat-input-container>
                         </div>
                         <div fxFlex="25">
                             <mat-input-container>
                                 <input matInput type="text" placeholder="کدپستی" formControlName="postal_code"
-                                       readonly="{{addressInfo.partEdit}}"/>
+                                       readonly="{{addressInfo.partEdit}}" autocomplete="postcode"/>
                             </mat-input-container>
                         </div>
                     </div>

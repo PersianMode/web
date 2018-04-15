@@ -29,9 +29,11 @@ export class CollectionHeaderComponent implements OnInit {
     this.pageService.placement$.filter(r => r[0] === 'menu').map(r => r[1]).subscribe(
       data => {
         this.topMenu = data.filter(r => r.variable_name === 'topMenu');
-        this.topMenu.forEach(r => {
+        this.topMenu
+          .sort((x, y) => x.column - y.column)
+          .forEach(r => {
           r.routerLink = ['/'].concat(r.info.href.split('/'));
-          r.type = r.routerLink[2];
+          r.type = r.info.section ? r.info.section : r.routerLink[2];
         });
         const subMenu = data.filter(r => r.variable_name === 'subMenu');
         const sections = Array.from(new Set(subMenu.map(r => r.info.section)));
