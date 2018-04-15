@@ -140,6 +140,9 @@ export class BasicInfoComponent implements OnInit {
   }
 
   goToChangePassForm() {
+    this.errorMsgOld = 'رمز عبور فعلی را وارد کنید (حداقل 8 کاراکتر)';
+    this.errorMsgNew = 'رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)';
+    this.errorMsgRetype = 'رمز عبور جدید را دوباره وارد کنید (حداقل 8 کاراکتر)';
     this.formTitle = 'تغییر کلمه عبور';
     this.isChangePass = true;
     this.initChangePassForm();
@@ -189,6 +192,7 @@ export class BasicInfoComponent implements OnInit {
       });
       this.initChangePassForm();
       console.error('Cannot change user pass, new entered pass are not compatible: ');
+      return;
     }
     this.httpService.post('changePassword', this.changeed_pass_obj).subscribe(
       (res) => {
