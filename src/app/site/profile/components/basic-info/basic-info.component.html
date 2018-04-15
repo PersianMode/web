@@ -190,7 +190,7 @@
                         <div fxFlex="10" class="change-pass-input-label" style="text-align: right; margin-right: 10px; font-size: 20px"><span (click)="showRetypePass()"><i class="fa fa-eye-slash"></i></span></div>
                     </div>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl" class="submit-cancel-change-btn">
-                        <button mat-button fxFlex="50" class="action-button" type="submit" [disabled]="!changePassForm.valid" [class.btn-disable] = "!changePassForm.valid">تغییر کلمه عبور
+                        <button mat-button fxFlex="50" class="action-button" type="submit" [disabled]="!changePassForm.valid || !passCampatible " [class.btn-disable] = "!changePassForm.valid || !passCampatible">تغییر کلمه عبور
                         </button>
                         <button mat-button fxFlex="50" class="action-button" (click)="cancelEditOrChangePass()">
                            بازگشت

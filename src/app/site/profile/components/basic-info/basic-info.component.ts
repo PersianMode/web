@@ -34,7 +34,8 @@ export class BasicInfoComponent implements OnInit {
   }
   errorMsgOld = 'رمز عبور فعلی را وارد کنید (حداقل 8 کاراکتر)';
   errorMsgNew = 'رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)';
-  errorMsgRetype = 'رمز عبور جدید را دوباره وارد کنید (حداقل 8 کاراکتر)'
+  errorMsgRetype = 'رمز عبور جدید را دوباره وارد کنید (حداقل 8 کاراکتر)';
+  passCampatible = true;
   constructor(private authService: AuthService, private httpService: HttpService) {
   }
 
@@ -168,6 +169,25 @@ export class BasicInfoComponent implements OnInit {
         Validators.minLength(8),
       ]],
     });
+    this.changePassForm.valueChanges.subscribe(
+      (dt) => this.checkCompatibilityOfNewPass(),
+      (er) => console.error('Error when subscribing on userInfo form valueChanges: ', er)
+    );
+  }
+  checkCompatibilityOfNewPass() {
+    this.passCampatible = true;
+    let newPass = (this.changePassForm.controls['newPass'].value === null ||
+      isUndefined(this.changePassForm.controls['newPass'].value)) ? '' : this.changePassForm.controls['newPass'].value;
+    newPass = newPass.trim();
+
+    let retypePass = (this.changePassForm.controls['retypePass'].value === null ||
+      isUndefined(this.changePassForm.controls['retypePass'].value)) ? '' : this.changePassForm.controls['retypePass'].value;
+    retypePass = retypePass.trim();
+    if ( newPass !== null && retypePass !== null && newPass !== retypePass)
+      this.passCampatible = false;
+    else {
+      this.passCampatible = true;
+    }
   }
 
   setSeen(item) {
