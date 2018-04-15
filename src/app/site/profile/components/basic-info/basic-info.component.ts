@@ -182,7 +182,7 @@ export class BasicInfoComponent implements OnInit {
     this.changeed_pass_obj.old_pass = this.changePassForm.controls['oldPass'].value;
     this.changeed_pass_obj.new_pass = this.changePassForm.controls['newPass'].value;
     this.changeed_pass_obj.retype_new_pass = this.changePassForm.controls['retypePass'].value;
-    if (this.changeed_pass_obj.new_pass !== this.changeed_pass_obj.retype_new_pass) {
+    if ((this.changeed_pass_obj.new_pass !== this.changeed_pass_obj.retype_new_pass) || (this.changeed_pass_obj.old_pass === this.changeed_pass_obj.new_pass)) {
       this.errorMsgOld = 'اطلاعات جهت تغییر کلمه عبور درست وارد نشده است';
       this.errorMsgNew = this.errorMsgOld;
       this.errorMsgRetype = this.errorMsgOld;
@@ -203,7 +203,7 @@ export class BasicInfoComponent implements OnInit {
       (err) => {
         this.errorMsgOld = 'اطلاعات جهت تغییر کلمه عبور درست وارد نشده است';
         this.errorMsgNew = this.errorMsgOld;
-        this.errorMsgNew = this.errorMsgOld;
+        this.errorMsgRetype = this.errorMsgOld;
         console.error('Cannot change user pass: ', err);
         Object.keys(this.changePassForm.controls).forEach(el => {
           this.seen[el] = true;
