@@ -417,8 +417,8 @@ input, button {
 }
 
 .input-error {
-  border-color: red;
-  border-width: 1px;
+  border-color: red !important;
+  border-width: 1px !important;
 }
 
 input {
