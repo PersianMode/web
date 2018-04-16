@@ -29,6 +29,7 @@ export class SocketService {
   }
 
   disconnect() {
-    this.orderLineSocket.disconnect();
+    if (this.orderLineSocket)
+      this.orderLineSocket.disconnect();
   }
 }

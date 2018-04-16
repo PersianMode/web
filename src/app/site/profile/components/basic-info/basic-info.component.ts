@@ -50,6 +50,7 @@ export class BasicInfoComponent implements OnInit {
     this.userNationalId = this.customerBasicInfo.national_id ? this.customerBasicInfo.national_id : '-';
     this.userGender = this.customerBasicInfo.gender === 'f' ? 'خانم ' : 'آقای ';
     this.nationalIdDisabled = this.userNationalId === '-' || !this.userNationalId ? false : true;
+    this.changedDob = this.customerBasicInfo.dob;
   }
 
   private formatDob() {

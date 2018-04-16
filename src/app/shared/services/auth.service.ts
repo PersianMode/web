@@ -36,7 +36,7 @@ export class AuthService {
         (err) => {
           this.populateUserDetails();
           this.isLoggedIn.next(false);
-          reject();
+          reject(err);
         });
 
     });
@@ -98,7 +98,7 @@ export class AuthService {
           this.isVerified.next(false);
           console.error('Error in login: ', err);
           this.populateUserDetails();
-          reject();
+          reject(err);
         }
       );
     });
