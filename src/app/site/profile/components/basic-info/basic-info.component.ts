@@ -60,7 +60,7 @@ export class BasicInfoComponent implements OnInit {
   dobChange(dob) {
     this.changeDobFlag = false;
     this.changedDob = dob;
-    this.formatDob();
+    // this.formatDob();
     if (moment(this.customerBasicInfo.dob).format('YYYY-MM-DD') !== moment(this.changedDob).format('YYYY-MM-DD')) {
       this.changeDobFlag = true;
     }
@@ -97,6 +97,7 @@ export class BasicInfoComponent implements OnInit {
   goToEditForm() {
     this.isEdit = true;
     this.formTitle = 'ویرایش اطلاعات';
+    this.changedDob = '';
     this.initForm();
   }
 
@@ -105,7 +106,7 @@ export class BasicInfoComponent implements OnInit {
     this.customerBasicInfo.surname = this.userInfoForm.controls['surname'].value;
     this.customerBasicInfo.username = this.userInfoForm.controls['username'].value;
     this.customerBasicInfo.national_id = this.userInfoForm.controls['national_id'].value;
-    this.customerBasicInfo.dob = this.changedDob;
+    this.customerBasicInfo.dob = this.changedDob ? this.changedDob : this.customerBasicInfo.dob;
     this.authService.userDetails.displayName = this.customerBasicInfo.name + ' ' + this.customerBasicInfo.surname;
     this.authService.userDetails.name = this.customerBasicInfo.name;
     this.authService.userDetails.surname = this.customerBasicInfo.surname;
@@ -249,6 +250,7 @@ export class BasicInfoComponent implements OnInit {
     this.ngOnInit();
     this.isEdit = false;
     this.isChangePass = false;
+    this.changedDob = '';
     Object.keys(this.changePassForm.controls).forEach(el => {
       this.seen[el] = false;
     });

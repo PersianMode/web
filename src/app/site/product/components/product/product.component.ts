@@ -88,7 +88,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
       this.cartService.saveItem(object);
       const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
-        position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
+        position: this.isMobile ? {top: '50px', left: '0px'} : {top: '15px', left: '0px'},
         width: this.isMobile ? '100%' : '550px',
         data: {
           product: this.product,
