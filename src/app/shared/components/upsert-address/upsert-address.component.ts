@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {Location} from '@angular/common';
 import {CheckoutService} from '../../services/checkout.service';
 import {IAddressInfo} from '../../interfaces/iaddressInfo.interface';
 import {AuthService} from '../../services/auth.service';
@@ -33,7 +34,8 @@ export class UpsertAddressComponent implements OnInit {
   addressInfo: IAddressInfo;
 
   constructor(private authService: AuthService, private http: HttpClient,
-              private checkoutService: CheckoutService, private router: Router) {
+              private checkoutService: CheckoutService, private router: Router,
+              private location: Location) {
   }
 
 
@@ -62,7 +64,7 @@ export class UpsertAddressComponent implements OnInit {
     if (this.isNotMobile) {
       this.closeDialog.emit(false);
     } else {
-      this.router.navigate(['/checkout']);
+      this.location.back();
     }
   }
 
