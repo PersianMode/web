@@ -1,17 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {HttpService} from '../../shared/services/http.service';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
-import {merge} from 'rxjs/observable/merge';
-import {of as observableOf} from 'rxjs/observable/of';
-import {catchError} from 'rxjs/operators/catchError';
-import {map} from 'rxjs/operators/map';
-import {startWith} from 'rxjs/operators/startWith';
-import {switchMap} from 'rxjs/operators/switchMap';
 import {OrderStatus} from '../../shared/lib/order_status';
 import {AuthService} from '../../shared/services/auth.service';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {OrderProcessComponent} from './components/order-process/order-process.component';
-import {AccessLevel} from '../../shared/enum/accessLevel.enum';
 import {STATUS} from '../../shared/enum/status.enum';
 
 @Component({
@@ -21,9 +14,8 @@ import {STATUS} from '../../shared/enum/status.enum';
 })
 export class OrderComponent implements OnInit {
 
-  orderLines: any = [];
 
-  displayedColumns = ['position', 'name', 'color', 'is_collect', 'size', 'barcode', 'price', 'customer', 'address', 'status', 'process', 'delivery'];
+  displayedColumns = ['position', 'name', 'color', 'is_collect', 'size', 'barcode', 'price','used_point','used_balance', 'customer', 'address', 'status', 'process', 'delivery'];
   dataSource = new MatTableDataSource();
 
   resultsLength = 0;
@@ -38,42 +30,31 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    // If the user changes the sort order, reset back to the first page.
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoadingResults = true;
-
-          const options = {
-            sort: this.sort.active,
-            dir: this.sort.direction,
-          };
-          const offset = this.paginator.pageIndex * +this.pageSize;
-          const limit = this.pageSize;
-
-          return this.httpService.post('search/Order', {options, offset, limit});
-        }),
-        map(res => {
-          // Flip flag to show that loading has finished.
-          this.isLoadingResults = false;
-          this.resultsLength = res.total;
-
-          console.log('-> ', res.data);
-
-          return res.data;
-        }),
-        catchError(() => {
-          this.isLoadingResults = false;
-          return observableOf([]);
-        })
-      ).subscribe(data => this.dataSource.data = data);
-
-
+    this.load();
   }
+
+  load() {
+    this.isLoadingResults = true;
+
+    const options = {
+      sort: this.sort.active,
+      dir: this.sort.direction,
+    };
+    const offset = this.paginator.pageIndex * +this.pageSize;
+    const limit = this.pageSize;
+
+    this.httpService.post('search/Order', {options, offset, limit}).subscribe(res => {
+      this.isLoadingResults = false;
+      this.resultsLength = res.total;
+      this.dataSource.data = res.data;
+      console.log('-> ', this.dataSource.data);
+    }, err => {
+      this.isLoadingResults = false;
+      this.resultsLength = 0;
+      this.openSnackBar('خطا در دریافت لیست سفارش ها');
+    });
+  }
+
 
   getIndex(element) {
     return this.dataSource.data.indexOf(element) + 1;
@@ -125,15 +106,16 @@ export class OrderComponent implements OnInit {
       data: element
     });
 
+    dialogRef.afterClosed().subscribe((reload: boolean) => {
+        if (reload)
+          this.load();
+      }
+    );
 
   }
 
   isReadyToDeliver(element) {
-    if (this.authService.userDetails.accessLevel === AccessLevel.SalesManager) {
-      return element.tickets.status === STATUS.Invoice;
-    } else if (this.authService.userDetails.accessLevel === AccessLevel.ShopClerk) {
-      return element.tickets.status === STATUS.SCAccepted;
-    }
+    return element.tickets.status === STATUS.Invoice;
   }
 
   showDelivery(element) {
@@ -144,5 +126,15 @@ export class OrderComponent implements OnInit {
     this.snackBar.open(message, null, {
       duration: 2000,
     });
+  }
+
+  onSortChange($event: any) {
+
+    this.paginator.pageIndex = 0;
+    this.load();
+  }
+
+  onPageChange($event: any) {
+    this.load();
   }
 }

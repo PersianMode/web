@@ -14,7 +14,8 @@
   </div>
 
   <mat-table #table [dataSource]="dataSource" class="example-table"
-             matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
+             matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
+             (matSortChange)="onSortChange($event)">
 
     <ng-container matColumnDef="position">
       <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
@@ -49,8 +50,18 @@
     </ng-container>
 
     <ng-container matColumnDef="price">
-      <mat-header-cell *matHeaderCellDef> قیمت</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> پرداختی</mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.paid_price}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="used_balance">
+      <mat-header-cell *matHeaderCellDef> موجودی</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.used_balance}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="used_point">
+      <mat-header-cell *matHeaderCellDef> امتیار</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.used_point}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="customer">
@@ -77,10 +88,11 @@
       </mat-cell>
     </ng-container>
 
- <ng-container matColumnDef="delivery">
+    <ng-container matColumnDef="delivery">
       <mat-header-cell *matHeaderCellDef>ارسال</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <button mat-button color="primary" (click)="showDelivery(element)" *ngIf="isReadyToDeliver(element)">انتخاب</button>
+        <button mat-button color="primary" (click)="showDelivery(element)" *ngIf="isReadyToDeliver(element)">انتخاب
+        </button>
       </mat-cell>
     </ng-container>
 
@@ -88,5 +100,5 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 
-  <mat-paginator [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
+  <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
 </div>
