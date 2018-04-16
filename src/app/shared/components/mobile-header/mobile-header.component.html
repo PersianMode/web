@@ -8,7 +8,7 @@
         <div *ngIf="!isLoggedIn || !isVerified" class="menu-item menu-title clickable-link" (click)="authentication()">
           وارد/عضو شوید
         </div>
-        <div *ngIf="isLoggedIn || isVerified" class="menu-item menu-title clickable-link" (click)="navigateToProfile()">
+        <div *ngIf="isLoggedIn && isVerified" class="menu-item menu-title clickable-link" (click)="navigateToProfile()">
          {{display_name}}، خوش آمدید <i class="fa fa-user"></i>
         </div>
         <div *ngIf="true" class="menu-item menu-title clickable-link" (click)="navigate(['/'])"><i class="fa fa-home"></i> صفحه اول</div>
