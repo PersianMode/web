@@ -59,19 +59,19 @@
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
                         <div fxFlex="15" class="input-label"><span>تاریخ تولد</span>
                         </div>
-                        <div fxFlex="35" class="input-container">
-                            <dp-date-picker
-                                    class="input-field"
-                                    placeholder="تاریخ تولد"
-                                    formControlName="dob"
-                                    mode="day"
-                                    [ngClass]="userInfoForm.controls['dob'].hasError('required') ? 'input-error' : null"
-                                    theme="dp-material">
-                            </dp-date-picker>
-                            <!--<app-dob [date]="customerBasicInfo.dob" (change)="dobChange($event)"></app-dob>-->
-                            <label class="field-error dp-hint"
-                                   *ngIf="userInfoForm.controls['dob'].hasError('required')">لطفا
-                                تاریخ تولد را وارد کنید</label>
+                        <div fxFlex="35" class="input-container dob-frame">
+                            <!--<dp-date-picker-->
+                                    <!--class="input-field"-->
+                                    <!--placeholder="تاریخ تولد"-->
+                                    <!--formControlName="dob"-->
+                                    <!--mode="day"-->
+                                    <!--[ngClass]="userInfoForm.controls['dob'].hasError('required') ? 'input-error' : null"-->
+                                    <!--theme="dp-material">-->
+                            <!--</dp-date-picker>-->
+                            <app-dob [date]="customerBasicInfo.dob" (change)="dobChange($event)"></app-dob>
+                            <!--<label class="field-error dp-hint"-->
+                                   <!--*ngIf="userInfoForm.controls['dob'].hasError('required')">لطفا-->
+                                <!--تاریخ تولد را وارد کنید</label>-->
                         </div>
                         <div fxFlex="15" class="input-label"><span>شماره ملی</span>
                         </div>
@@ -114,8 +114,8 @@
                     </div>
                     <div fxLayout="row" class="submit-cancel-change-btn">
                         <button mat-button fxFlex="50" class="action-button" type="submit"
-                                [disabled]="!userInfoForm.valid || !anyChanges"
-                                [class.btn-disable]="!userInfoForm.valid || !anyChanges">ثبت
+                                [disabled]="!userInfoForm.valid || (!anyChanges && !changeDobFlag)"
+                                [class.btn-disable]="!userInfoForm.valid || (!anyChanges && !changeDobFlag)">ثبت
                             اطلاعات
                         </button>
                         <button mat-button fxFlex="50" class="action-button" (click)="cancelEditOrChangePass()">
