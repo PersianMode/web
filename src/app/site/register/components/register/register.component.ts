@@ -51,9 +51,9 @@ export class RegisterComponent implements OnInit {
       surname: [null, [
         Validators.required,
       ]],
-      // dob: [null, [
-      //   Validators.required,
-      // ]],
+      dob: [null, [
+        Validators.required,
+      ]],
       mobile_no: [null, [
         Validators.required,
         Validators.pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/),
@@ -100,6 +100,7 @@ export class RegisterComponent implements OnInit {
 
   changeDob(date) {
     this.dob = date;
+    this.registerForm.controls['dob'].setValue(date);
     this.seen.dob = true;
   }
 

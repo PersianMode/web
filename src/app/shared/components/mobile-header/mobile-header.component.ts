@@ -177,7 +177,9 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
           }
         );
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        this.router.navigate(['login']);
+      });
 
     this.sideNav.close();
   }
