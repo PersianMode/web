@@ -102,6 +102,7 @@ export class RegisterComponent implements OnInit {
     this.dob = date;
     this.registerForm.controls['dob'].setValue(date);
     this.seen.dob = true;
+    this.curFocus = 'dob';
   }
 
   resendCode() {
