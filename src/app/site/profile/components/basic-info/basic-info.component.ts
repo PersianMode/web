@@ -31,21 +31,39 @@ export class BasicInfoComponent implements OnInit {
     old_pass: '',
     new_pass: '',
     retype_new_pass: ''
-  }
+  };
   errorMsgOld = 'رمز عبور فعلی را وارد کنید (حداقل 8 کاراکتر)';
   errorMsgNew = 'رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)';
   errorMsgRetype = 'رمز عبور جدید را دوباره وارد کنید (حداقل 8 کاراکتر)';
   passCampatible = true;
+  changedDob;
+  changeDobFlag = false;
   constructor(private authService: AuthService, private httpService: HttpService) {
   }
 
   ngOnInit() {
+    this.anyChanges = false;
+    this.changeDobFlag = false;
     this.formTitle = 'اطلاعات مشتری';
     this.customerBasicInfo = this.authService.userDetails;
-    this.birthDate = moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD');
+    this.formatDob();
     this.userNationalId = this.customerBasicInfo.national_id ? this.customerBasicInfo.national_id : '-';
     this.userGender = this.customerBasicInfo.gender === 'f' ? 'خانم ' : 'آقای ';
     this.nationalIdDisabled = this.userNationalId === '-' || !this.userNationalId ? false : true;
+  }
+
+  private formatDob() {
+    const dob = moment(this.customerBasicInfo.dob);
+    this.birthDate = [dob.jDate(), dob.jMonth() + 1,  dob.jYear()].map(r => r.toLocaleString('fa', {useGrouping: false})).join(' / ');
+  }
+
+  dobChange(dob) {
+    this.changeDobFlag = false;
+    this.changedDob = dob;
+    this.formatDob();
+    if (moment(this.customerBasicInfo.dob).format('YYYY-MM-DD') !== moment(this.changedDob).format('YYYY-MM-DD')) {
+      this.changeDobFlag = true;
+    }
   }
 
   initForm() {
@@ -54,9 +72,6 @@ export class BasicInfoComponent implements OnInit {
         Validators.required,
       ]],
       surname: [this.customerBasicInfo.surname ? this.customerBasicInfo.surname : '', [
-        Validators.required,
-      ]],
-      dob: [this.customerBasicInfo.dob ? moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD') : 'تاریخ تولد', [
         Validators.required,
       ]],
       username: [this.customerBasicInfo.username, [
@@ -77,7 +92,6 @@ export class BasicInfoComponent implements OnInit {
       (dt) => this.fieldChanged(),
       (er) => console.error('Error when subscribing on userInfo form valueChanges: ', er)
     );
-    // console.log('--->> :', moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD'));
   };
 
   goToEditForm() {
@@ -91,7 +105,7 @@ export class BasicInfoComponent implements OnInit {
     this.customerBasicInfo.surname = this.userInfoForm.controls['surname'].value;
     this.customerBasicInfo.username = this.userInfoForm.controls['username'].value;
     this.customerBasicInfo.national_id = this.userInfoForm.controls['national_id'].value;
-    this.customerBasicInfo.dob = moment(this.userInfoForm.controls['dob'].value, 'jYYYY-jMM-jDD').locale('en');
+    this.customerBasicInfo.dob = this.changedDob;
     this.authService.userDetails.displayName = this.customerBasicInfo.name + ' ' + this.customerBasicInfo.surname;
     this.authService.userDetails.name = this.customerBasicInfo.name;
     this.authService.userDetails.surname = this.customerBasicInfo.surname;
@@ -99,7 +113,6 @@ export class BasicInfoComponent implements OnInit {
     this.authService.userDetails.dob = this.customerBasicInfo.dob;
     this.authService.userDetails.username = this.customerBasicInfo.username;
     this.authService.isLoggedIn.next(true);
-    // console.log('***', this.customerBasicInfo);
     this.httpService.post('editUserBasicInfo', this.customerBasicInfo).subscribe(
       (res) => {
         this.ngOnInit();
@@ -129,15 +142,12 @@ export class BasicInfoComponent implements OnInit {
       isUndefined(this.userInfoForm.controls['national_id'].value)) ? '' : this.userInfoForm.controls['national_id'].value;
     national_id = national_id.trim();
 
-    let dob = (this.userInfoForm.controls['dob'].value === null ||
-      isUndefined(this.userInfoForm.controls['dob'].value)) ? '' : moment(this.userInfoForm.controls['dob'].value).format('jYYYY-jMM-jDD');
-
     if ((name !== this.customerBasicInfo.name && (name !== '' || this.customerBasicInfo.name !== null))
       || (surname !== this.customerBasicInfo.surname && (surname !== '' || this.customerBasicInfo.surname !== null))
       || (username !== this.customerBasicInfo.username && (username !== '' || this.customerBasicInfo.username !== null))
-      || (dob !== moment(this.customerBasicInfo.dob).format('jYYYY-jMM-jDD'))
-      || ((this.customerBasicInfo.national_id && national_id !== this.customerBasicInfo.national_id) || (isUndefined(this.customerBasicInfo.national_id) && national_id !== '')))
+      || ((this.customerBasicInfo.national_id && national_id !== this.customerBasicInfo.national_id) || (isUndefined(this.customerBasicInfo.national_id) && national_id !== ''))) {
       this.anyChanges = true;
+    }
   }
 
   goToChangePassForm() {
@@ -212,26 +222,27 @@ export class BasicInfoComponent implements OnInit {
       });
       this.initChangePassForm();
       console.error('Cannot change user pass, new entered pass are not compatible: ');
-      return;
     }
-    this.httpService.post('changePassword', this.changeed_pass_obj).subscribe(
-      (res) => {
-        this.ngOnInit();
-        this.isEdit = false;
-        this.isChangePass = false;
-      },
-      (err) => {
-        this.errorMsgOld = 'اطلاعات جهت تغییر کلمه عبور درست وارد نشده است';
-        this.errorMsgNew = this.errorMsgOld;
-        this.errorMsgRetype = this.errorMsgOld;
-        console.error('Cannot change user pass: ', err);
-        Object.keys(this.changePassForm.controls).forEach(el => {
-          this.seen[el] = true;
-          this.curFocus = null;
-        });
-        this.initChangePassForm();
-      }
-    );
+    else {
+      this.httpService.post('changePassword', this.changeed_pass_obj).subscribe(
+        (res) => {
+          this.ngOnInit();
+          this.isEdit = false;
+          this.isChangePass = false;
+        },
+        (err) => {
+          this.errorMsgOld = 'اطلاعات جهت تغییر کلمه عبور درست وارد نشده است';
+          this.errorMsgNew = this.errorMsgOld;
+          this.errorMsgRetype = this.errorMsgOld;
+          console.error('Cannot change user pass: ', err);
+          Object.keys(this.changePassForm.controls).forEach(el => {
+            this.seen[el] = true;
+            this.curFocus = null;
+          });
+          this.initChangePassForm();
+        }
+      );
+    }
   }
 
   cancelEditOrChangePass() {
