@@ -25,6 +25,7 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   @Output() modifyPlacement = new EventEmitter();
+  @Output() reloadPlacements = new EventEmitter();
 
   sliders: IPlacement[] = [];
   upsertSlider = {
@@ -77,23 +78,21 @@ export class SliderPlacementComponent implements OnInit {
       placements: this.sliders,
     }).subscribe(
       data => {
-        this.modifyPlacement.emit({
-          type: PlacementModifyEnum.Modify,
-          placements: this.sliders,
-        });
+        // this.modifyPlacement.emit({
+        //   type: PlacementModifyEnum.Modify,
+        //   placements: this.sliders,
+        // });
+        this.reloadPlacements.emit();
         this.progressService.disable();
       },
       err => {
         this.progressService.disable();
-        console.log('error occured in changing order', err);
+        console.log('error occurred in changing order', err);
       }
     );
   }
 
   changeField() {
-    // console.log("text", this.upsertSlider.text);
-    // console.log('sliders:', this.sliders);
-    // console.log('and upsert:', this.upsertSlider);
     const text = this.upsertSlider ? this.upsertSlider.text.trim().toLowerCase() : '';
     const href = this.upsertSlider ? this.upsertSlider.href.trim().toLowerCase() : '';
 
@@ -102,11 +101,9 @@ export class SliderPlacementComponent implements OnInit {
       this.sliderChanged = true;
     else
       this.sliderChanged = false;
-    // console.log('final sliderChanged value:', this.sliderChanged);
   }
 
   clearFields() {
-    console.log('cleared up');
     this.upsertSlider = {
       text: '',
       href: '',
@@ -125,9 +122,9 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   onImageUploaded(images: any) {
-    console.log('Images:', images);
     if (images.length > 0) {
       this.upsertSlider['imgUrl'] = images[0];
+      this.reloadPlacements.emit();
     }
   }
 
@@ -140,7 +137,7 @@ export class SliderPlacementComponent implements OnInit {
       isEdit: true,
       imgUrl: value.info.imgUrl,
     };
-    console.log('selected item:', value, this.sliders, this.upsertSlider);
+    // console.log('selected item:', value, this.sliders, this.upsertSlider);
   }
 
   removeItem() {
@@ -153,10 +150,11 @@ export class SliderPlacementComponent implements OnInit {
         placement_id: this.sliders[index]._id,
       }).subscribe(
         data => {
-          this.modifyPlacement.emit({
-            type: PlacementModifyEnum.Delete,
-            placement_id: this.sliders[index]._id,
-          });
+          // this.modifyPlacement.emit({
+          //   type: PlacementModifyEnum.Delete,
+          //   placement_id: this.sliders[index]._id,
+          // });
+          this.reloadPlacements.emit();
           this.upsertSlider = {
             text: '',
             href: '',
@@ -205,19 +203,28 @@ export class SliderPlacementComponent implements OnInit {
       data => {
         console.log('DATA:', data);
 
-        this.modifyPlacement.emit({
-          type: isEdit ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
-          placement_id: data._id,
-          placements: [this.upsertSlider],
-          placement: data.placement,
-        });
+        // this.modifyPlacement.emit({
+        //   type: isEdit ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
+        //   placement_id: data._id,
+        //   placements: [this.upsertSlider],
+        //   placement: data.placement,
+        // });
+        this.reloadPlacements.emit();
+        // this.clearFields();
+        // if (isEdit) {
+        //   const changeObj = this.sliders.find(el => el._id.toString() === this.upsertSlider.id.toString());
+        //   changeObj.info.text = this.upsertSlider ? this.upsertSlider.text : '';
+        //   changeObj.info.href = this.upsertSlider ? this.upsertSlider.href : '';
+        // } else {
+        //   this.upsertSlider.isEdit = true;
+        // }
 
-        if (isEdit) {
-          const changeObj = this.sliders.find(el => el._id.toString() === this.upsertSlider.id.toString());
-          changeObj.info.text = this.upsertSlider ? this.upsertSlider.text : '';
-          changeObj.info.href = this.upsertSlider ? this.upsertSlider.href : '';
-        } else {
+        // TODO: worry that these lines work before the top line
+        if (!isEdit) {
           this.upsertSlider.isEdit = true;
+          this.upsertSlider.id = data.placement
+            .find(el => el.info.text === this.upsertSlider.text &&
+              el.info.href === this.upsertSlider.href)._id;
         }
         this.changeField();
         this.progressService.disable();

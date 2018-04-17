@@ -237,7 +237,7 @@ export class PageBasicInfoComponent implements OnInit {
         this.progressService.disable();
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         this.snackBar.open('Cannot get page placements. Please try again', null, {
           duration: 2500,
         });

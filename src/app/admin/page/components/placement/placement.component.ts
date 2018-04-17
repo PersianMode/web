@@ -42,6 +42,10 @@ export class PlacementComponent implements OnInit {
     this.modifyPlacement.emit(value);
   }
 
+  reload(value) {
+    this.reloadPlacement.emit();
+  }
+
   finalize(shouldFinalize = false) {
     this.finalizeRevertShouldDisabled = true;
     this.previewShouldDisabled = true;
