@@ -11,13 +11,14 @@ h3 {
     background-color: black;
     color: white;
     height: 35px !important;
-    border: solid #E5E5E5 thin;
+    border: 0;
+    margin: 1px;
     border-radius: 5px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .edit-card{
-    font-family: iranyekan;
+    font-family: iranyekan, sans-serif;
     margin-top: 5px;
     text-align: center
 }
@@ -43,6 +44,20 @@ h3 {
     display: block;
     line-height: 34px;
     vertical-align: middle;
+    white-space: nowrap;
+}
+
+.eye-div {
+    margin: 15px 5px 0px;
+    text-align: right;
+    margin-right: 15px;
+    font-size: 20px
+}
+
+.eye-div span {
+    display: block;
+    line-height: 34px;
+    vertical-align: middle;
 }
 
 .input-label span {
@@ -51,10 +66,39 @@ h3 {
     vertical-align: middle;
 }
 .input-field {
-    padding: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 2px;
     height: 20px;
-    width: 98%;
     border-radius: 5px;
+}
+
+.customer-data {
+    margin-top: 5px;
+    font-family: iranyekan, sans-serif;
+}
+.customer-data mat-card-content {
+    margin:0px 15%;
+}
+
+.change-pass-card {
+    font-family: iranyekan, sans-serif;
+    margin-top: 5px;
+}
+
+.btn-disable {
+    background-color: #888888;
+    box-shadow: none;
+}
+
+.dob-frame {
+    padding-top: 7px;
+    border: 2px solid rgb(229,229,229);
+    border-radius: 5px;
+    margin-left: 5px;
+    width: calc(100% - 5px);
+}
+
+.input-container {
+    padding-left: 5px;
 }
 
 @media(max-width:959px) {
@@ -76,22 +120,18 @@ h3 {
     .action-button button{
         width: 100% !important;
     }
-}
 
-.customer-data {
-    margin-top: 5px;
-    font-family: iranyekan
-}
-.customer-data mat-card-content {
-    margin:0px 15%;
-}
+    .customer-data div{
+        text-align: center;
+    }
+    .customer-data h3{
+        text-align: center;
+    }
+    .eye-div {
+        margin: 0px 15px 5px 5px !important;
+    }
+    .dob-frame {
+        line-height: 24px !important;
+    }
 
-.change-pass-card {
-    font-family: iranyekan;
-    margin-top: 5px;
-}
-
-.btn-disable {
-    background-color: #888888;
-    box-shadow: none;
 }
