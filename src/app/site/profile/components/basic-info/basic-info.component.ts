@@ -50,6 +50,7 @@ export class BasicInfoComponent implements OnInit {
     this.userNationalId = this.customerBasicInfo.national_id ? this.customerBasicInfo.national_id : '-';
     this.userGender = this.customerBasicInfo.gender === 'f' ? 'خانم ' : 'آقای ';
     this.nationalIdDisabled = this.userNationalId === '-' || !this.userNationalId ? false : true;
+    this.changedDob = this.customerBasicInfo.dob;
   }
 
   private formatDob() {
@@ -97,7 +98,6 @@ export class BasicInfoComponent implements OnInit {
   goToEditForm() {
     this.isEdit = true;
     this.formTitle = 'ویرایش اطلاعات';
-    this.changedDob = '';
     this.initForm();
   }
 
@@ -106,7 +106,7 @@ export class BasicInfoComponent implements OnInit {
     this.customerBasicInfo.surname = this.userInfoForm.controls['surname'].value;
     this.customerBasicInfo.username = this.userInfoForm.controls['username'].value;
     this.customerBasicInfo.national_id = this.userInfoForm.controls['national_id'].value;
-    this.customerBasicInfo.dob = this.changedDob ? this.changedDob : this.customerBasicInfo.dob;
+    this.customerBasicInfo.dob = this.changedDob;
     this.authService.userDetails.displayName = this.customerBasicInfo.name + ' ' + this.customerBasicInfo.surname;
     this.authService.userDetails.name = this.customerBasicInfo.name;
     this.authService.userDetails.surname = this.customerBasicInfo.surname;
@@ -250,7 +250,6 @@ export class BasicInfoComponent implements OnInit {
     this.ngOnInit();
     this.isEdit = false;
     this.isChangePass = false;
-    this.changedDob = '';
     Object.keys(this.changePassForm.controls).forEach(el => {
       this.seen[el] = false;
     });
