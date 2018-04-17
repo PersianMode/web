@@ -20,6 +20,7 @@ import {UploaderComponent} from './components/uploader/uploader.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {AgmCoreModule} from '@agm/core';
 import {AddressTableComponent} from './components/address-table/address-table.component';
+import { DobComponent } from './components/dob/dob.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {AddressTableComponent} from './components/address-table/address-table.co
     PanelsComponent,
     UploaderComponent,
     AddressTableComponent,
+    DobComponent,
 
   ],
   imports: [
@@ -41,7 +43,6 @@ import {AddressTableComponent} from './components/address-table/address-table.co
     MatRadioModule,
 
     FlexLayoutModule,
-    FormsModule,
     MatToolbarModule,
     MatCardModule,
     MatFormFieldModule,
@@ -71,6 +72,7 @@ import {AddressTableComponent} from './components/address-table/address-table.co
     PanelsComponent,
     UploaderComponent,
     AddressTableComponent,
+    DobComponent,
 
   ]
 })

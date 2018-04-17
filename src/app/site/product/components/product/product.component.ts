@@ -23,6 +23,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   formattedPrice = '';
   isMobile = false;
   cartNumbers = null;
+  size = '';
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
@@ -49,23 +50,32 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.productService.getProduct(productId);
         this.product$ = this.productService.product$.subscribe(data => {
           this.product = data;
-          this.formattedPrice = priceFormatter(this.product.base_price);
           this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
           this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
+          this.updatePrice();
         });
       } else {
         this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
       }
     });
   }
+
   ngOnDestroy(): void {
     this.switch$.unsubscribe();
     this.params$.unsubscribe();
     this.product$.unsubscribe();
   }
 
+  updatePrice(size = this.size) {
+    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
+    const price = instance && instance.price ? instance.price : this.product.base_price;
+    this.size = size;
+    this.formattedPrice = priceFormatter(price);
+  }
+
   saveToCart(size) {
     // check form size and id undefined
+    this.size = size;
     const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
 
     if (instance) {
@@ -74,14 +84,15 @@ export class ProductComponent implements OnInit, OnDestroy {
         product_instance_id: instance._id,
       };
 
+      Object.assign(object, this.product);
+
       this.cartService.saveItem(object);
-      this.cartService.cartItems.subscribe(data => this.cartNumbers = priceFormatter(data.length));
       const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
-        position: this.isMobile ? {top: '0px', left: '0px'} : {top: '5.5%', left: '20%'},
-        width: this.isMobile ? '100%' : '450px',
+        position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
+        width: this.isMobile ? '100%' : '550px',
         data: {
-          dialog_product: this.product,
-          cartNumbers: this.cartNumbers,
+          product: this.product,
+          instance,
           selectedSize: size,
         }
       });

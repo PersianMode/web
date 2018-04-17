@@ -1,0 +1,137 @@
+h3 {
+    text-align: right;
+}
+.info-cell {
+     padding: 6px;
+ }
+
+.action-button {
+    text-align: center;
+    padding: 3px;
+    background-color: black;
+    color: white;
+    height: 35px !important;
+    border: 0;
+    margin: 1px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.edit-card{
+    font-family: iranyekan, sans-serif;
+    margin-top: 5px;
+    text-align: center
+}
+
+.input-label {
+    font-size: 80%;
+    font-weight: 600;
+    text-align: left;
+    margin: 15px 5px 0px;
+}
+
+.submit-cancel-change-btn {
+    margin-top: 20px;
+    width: 100%;
+}
+.change-pass-input-label {
+    font-weight: bold;
+    text-align: left;
+    margin: 15px 5px 0px;
+}
+
+.change-pass-input-label span {
+    display: block;
+    line-height: 34px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.eye-div {
+    margin: 15px 5px 0px;
+    text-align: right;
+    margin-right: 15px;
+    font-size: 20px
+}
+
+.eye-div span {
+    display: block;
+    line-height: 34px;
+    vertical-align: middle;
+}
+
+.input-label span {
+    display: block;
+    line-height: 34px;
+    vertical-align: middle;
+}
+.input-field {
+    padding: 5px 5px 5px 2px;
+    height: 20px;
+    border-radius: 5px;
+}
+
+.customer-data {
+    margin-top: 5px;
+    font-family: iranyekan, sans-serif;
+}
+.customer-data mat-card-content {
+    margin:0px 15%;
+}
+
+.change-pass-card {
+    font-family: iranyekan, sans-serif;
+    margin-top: 5px;
+}
+
+.btn-disable {
+    background-color: #888888;
+    box-shadow: none;
+}
+
+.dob-frame {
+    padding-top: 7px;
+    border: 2px solid rgb(229,229,229);
+    border-radius: 5px;
+    margin-left: 5px;
+    width: calc(100% - 5px);
+}
+
+.input-container {
+    padding-left: 5px;
+}
+
+@media(max-width:959px) {
+    .input-label {
+        text-align: right !important;
+        margin: 2px !important;
+    }
+    .change-pass-input-label {
+        text-align: right !important;
+    }
+
+    .input-container {
+        margin: 0px 0px 10px;
+    }
+
+    .customer-data mat-card-content {
+        margin: 0px !important;
+    }
+    .action-button button{
+        width: 100% !important;
+    }
+
+    .customer-data div{
+        text-align: center;
+    }
+    .customer-data h3{
+        text-align: center;
+    }
+    .eye-div {
+        margin: 0px 15px 5px 5px !important;
+    }
+    .dob-frame {
+        line-height: 24px !important;
+    }
+
+}

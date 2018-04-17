@@ -16,11 +16,11 @@ const Site_ROUTES: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
     {path: 'collection', loadChildren: 'app/site/collection/collection.module#CollectionModule'},
-    {path: 'cart', loadChildren: 'app/site/cart/cart.module#CartModule', canActivate: [AuthGuard]},
+    {path: 'cart', loadChildren: 'app/site/cart/cart.module#CartModule'},
     {path: 'product', loadChildren: 'app/site/product/product.module#ProductModule'},
     {path: 'login/oauth', component: OauthHandlerComponent},
     {path: 'login/oauth/other/:status', component: OtherDetailsComponent},
-    {path: 'checkout', loadChildren: 'app/site/checkout/checkout.module#CheckoutModule', canActivate: [AuthGuard]},
+    {path: 'checkout', loadChildren: 'app/site/checkout/checkout.module#CheckoutModule'},
     {path: 'checkout/address', component: UpsertAddressComponent},
     {path: 'profile', loadChildren: 'app/site/profile/profile.module#ProfileModule', canActivate: [AuthGuard]},
   ]

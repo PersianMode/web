@@ -1,0 +1,11 @@
+<div dir="rtl">
+  <mat-select placeholder="روز" [required]="true" (selectionChange)="onChange()" [(ngModel)]="day" dir="rtl" style="width:40px">
+    <mat-option *ngFor="let day of days" [value]="day.index">{{day.value}}</mat-option>
+  </mat-select>
+  <mat-select placeholder="ماه" dir="rtl" [required]="true" (selectionChange)="onChange()" [(ngModel)]="month" style="width:90px">
+    <mat-option *ngFor="let month of months" [value]="month.index">{{month.value}}</mat-option>
+  </mat-select>
+  <mat-select placeholder="سال" dir="rtl" [required]="true" (selectionChange)="onChange()" [(ngModel)]="year" style="width:50px">
+    <mat-option *ngFor="let year of years" [value]="year.index">{{year.value}}</mat-option>
+  </mat-select>
+</div>

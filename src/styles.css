@@ -12,6 +12,7 @@ body, label {
   font-family: iranyekan, sans-serif;
   font-weight: 200;
   font-size: 11pt;
+  direction: rtl;
 }
 
 a {
@@ -416,8 +417,8 @@ input, button {
 }
 
 .input-error {
-  border-color: red;
-  border-width: 1px;
+  border-color: red !important;
+  border-width: 1px !important;
 }
 
 input {
@@ -436,7 +437,7 @@ input {
 }
 
 .input-container {
-  margin: 5px;
+  margin: 15px 5px 0px;
   width: 100%;
 }
 
@@ -839,6 +840,9 @@ mat-panel-title {
 .mat-radio-label-content {
   margin-right: 5px;
 }
+.cdk-overlay-pane {
+  max-width: 100% !important;
+}
 
 .persian-field {
   font-family: iranyekan, sans-serif !important;
@@ -846,4 +850,14 @@ mat-panel-title {
 
 .mat-simple-snackbar {
   font-family: iranyekan, sans-serif !important;
+}
+
+.menu-field {
+  height: 20px !important;
+}
+
+.demo-list {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
 }

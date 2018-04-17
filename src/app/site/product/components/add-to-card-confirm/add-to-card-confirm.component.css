@@ -1,32 +1,132 @@
 .payment-button {
-    text-align: center;
-    font-weight: bold;
-    margin-right: 5px;
-    height: 50px;
-    background-color: black;
-    color: white;
-    border-radius: 1px
+  text-align: center;
+  font-weight: bold;
+  margin-right: 5px;
+  height: 50px;
+  background-color: black;
+  color: white;
+  border-radius: 1px
 }
+
 .payment-button:hover {
-    opacity: 0.7;
+  opacity: 0.7;
 }
 
 .view-card-button {
-    text-align: center;
-    font-weight: bold;
-    margin-left: 8px;
-    height: 50px;
-    border-radius: 1px;
-    background-color: white;
+  text-align: center;
+  font-weight: bold;
+  margin-left: 8px;
+  height: 50px;
+  border-radius: 1px;
+  background-color: white;
 }
 
 .view-card-button:hover {
-    background-color: #777;
+  background-color: #777;
 }
 
 .color-span {
-    width: 18px;
-    overflow: hidden;
-    height: 18px;
-    display: inline-block;
+  width: 18px;
+  overflow: hidden;
+  height: 18px;
+  display: inline-block;
+}
+
+.header {
+  display: inline-block;
+  text-align: right;
+  margin-bottom: 5px;
+  vertical-align: top;
+  width: 100%;
+}
+
+.header div {
+  margin: 0;
+  width: calc(100% - 32px);
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-heigh: 22px;
+  vertical-align: top;
+}
+
+.header i {
+  color: white;
+  font-size: 20px;
+  border-radius: 12px;
+  padding: 2px;
+  background: forestgreen;
+}
+
+.main {
+  width: 100%;
+  font-family: iranyekan, sans-serif;
+  direction: rtl;
+}
+
+.main div {
+  display: inline-block;
+}
+.item-data {
+  display: block !important;
+}
+.item-data div {
+  display: inline-block;
+  margin: 0px 0px 6px;
+}
+
+h4 {
+  font-family: irankharazmi, sans-serif;
+  display: inline-block;
+  margin: 19px 0px 19px 0px;
+}
+
+.item-data span {
+  display: inline-block;
+  width: 40px;
+  font-weight: bold;
+  margin: 0;
+}
+
+section {
+  color: grey;
+  display: inline-block;
+}
+
+p {
+  color: #fa5400;
+  margin-right: 8px;
+  display: inline;
+}
+@media (min-width: 599px) {
+  img {
+    width: 220px;
+    height: 100%;
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 599px) {
+  img {
+    width: 100%;
+  }
+}
+
+.item-data-and-name {
+  min-width: 200px;
+  padding-right: 15px;
+}
+
+.body {
+  direction: rtl;
+}
+
+.thumbnail {
+  min-width: 220px;
+}
+
+mat-icon {
+  position: relative;
+  top: -5px;
+  left: -15px;
 }

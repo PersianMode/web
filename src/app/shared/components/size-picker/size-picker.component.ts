@@ -23,14 +23,16 @@ export class SizePickerComponent implements OnInit {
 
   @Input()
   set sizes(productSizes) {
+    const temp = [];
+    Object.assign(temp, productSizes);
     if (productSizes && productSizes.length) {
       productSizes.forEach((p, pi) => {
-        productSizes[pi].displayValue = this.dict.translateWord(p.value);
+        temp[pi].displayValue = this.dict.translateWord(p.value);
       });
     }
     this.sizeSplits = [];
-    while (productSizes && productSizes.length) {
-      this.sizeSplits.push(productSizes.splice(0, 5));
+    while (temp && temp.length) {
+      this.sizeSplits.push(temp.splice(0, 5));
     }
   }
 

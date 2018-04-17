@@ -1,0 +1,82 @@
+<div class="sub-menu-area">
+  <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="subMenuForm">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
+         fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
+      <div fxFlex="70">
+        <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+             fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
+          <div fxFlex="30" class="full-width sub-item">
+            <mat-input-container class="full-width">
+              <input matInput type="text" class="persian-field menu-field" placeholder="متن" formControlName="text"/>
+            </mat-input-container>
+          </div>
+          <div fxFlex="30" class="full-width sub-item">
+            <mat-input-container class="full-width" dir="ltr">
+              <input matInput type="text" class="persian-field menu-field" placeholder="آدرس" formControlName="href"/>
+            </mat-input-container>
+          </div>
+          <div fxFlex="20" class="full-width vertical-align-item sub-item">
+            <mat-select placeholder="بخش" formControlName="area" dir="rtl" class="persian-field">
+              <mat-option *ngFor="let area of areaList" [value]="area.value" class="persian-field">{{area.name}}</mat-option>
+            </mat-select>
+          </div>
+          <div fxFlex="20" class="full-width vertical-align-item sub-item">
+            <mat-checkbox formControlName="is_header">
+              <span *ngIf="subMenuForm.controls['is_header'].value">عنوان</span>
+              <span *ngIf="!subMenuForm.controls['is_header'].value">زیر عنوان</span>
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="30">
+        <button mat-mini-fab color="primary"
+                [disabled]="!subMenuForm.valid || !anyChanges">
+          <mat-icon>
+            <i class="material-icons" *ngIf=" selectedItem">create</i>
+            <i class="material-icons" *ngIf="!selectedItem">done</i>
+          </mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" (click)="removeItem()" *ngIf="selectedItem" class="remove">
+          <mat-icon>
+            <i class="material-icons">remove</i>
+          </mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" (click)="clearFields()" *ngIf="selectedItem">
+          <i class="fa fa-eraser"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div class="demo-list">
+    <div class="menu-area">
+      <div *ngFor="let column of headerAreaColumns" [dragula]="'sub-menu-bag'"
+           [dragulaModel]="headerAreaItems[column]" class="menu-column">
+        <div *ngFor="let item of headerAreaItems[column]" class="menu-item"
+             (click)="selectItem(item)"
+             [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString()}">
+          <label class="content header">{{item.info.text}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-area middle-menu">
+      <div *ngFor="let column of middleAreaColumns" [dragula]="'sub-menu-bag'"
+           [dragulaModel]="middleAreaItems[column]" class="menu-column">
+        <div *ngFor="let item of middleAreaItems[column]; first as isFirst" class="menu-item" (click)="selectItem(item)"
+             [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString(), 'header-container': item.info.is_header}">
+          <label class="content" [class.header]="isFirst || item.info.is_header">{{item.info.text}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-area">
+      <div *ngFor="let column of leftAreaColumns" [dragula]="'sub-menu-bag'"
+           [dragulaModel]="leftAreaItems[column]" class="menu-column">
+        <div *ngFor="let item of leftAreaItems[column]; first as isFirst" class="menu-item" (click)="selectItem(item)"
+             [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString(), 'header-container': item.info.is_header}">
+          <label class="content" [class.header]="isFirst || item.info.is_header">{{item.info.text}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
