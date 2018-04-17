@@ -34,16 +34,16 @@ export class CartComponent implements OnInit, OnDestroy {
     );
 
     this.subs = this.cartService.cartItems.subscribe(data => {
-      this.products = data;
-      data.forEach(() => this.valid.push(true));
+      this.products = [];
+      data.forEach(r => {
+        this.valid.push(true);
+        let temp = {};
+        Object.assign(temp, r);
+        this.products.push(temp);
+      });
 
       if (this.products.length > 0) {
         this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
-
-        // this.totalPrice = this.products
-        //   .filter(el => el.count && el.quantity <= el.count)
-        //   .map(el => el.price * el.quantity)
-        //   .reduce((a, b) => a + b);
         this.totalPrice = this.cartService.calculateTotal();
         this.calculateDiscount();
       } else {

@@ -32,7 +32,8 @@ export class EditOrderComponent implements OnInit {
           name: (sizeFirstCharCode >= 48 && sizeFirstCharCode <= 57) ? el.size.toLocaleString('fa') : el.size,
           quantity: el.quantity
         });
-      }
+      };
+      this.editObj.newQuantity = this.product.quantity;
     });
 
     this.sizesArray = Array.from(new Set(this.sizesArray));
