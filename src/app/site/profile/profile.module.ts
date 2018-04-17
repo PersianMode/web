@@ -12,6 +12,7 @@ import {
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
+import {ProfileOrderService} from '../../shared/services/profile-order.service';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import {DpDatePickerModule} from 'ng2-jalali-date-picker';
     DpDatePickerModule,
     ReactiveFormsModule,
   ],
+  providers: [ProfileOrderService],
   declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent]
 })
 export class ProfileModule { }
