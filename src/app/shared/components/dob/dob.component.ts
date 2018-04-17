@@ -15,9 +15,12 @@ export class DobComponent implements OnInit {
   day;
   @Input()
   set date(date: Date){
-    this.day = moment(date).jDate();
-    this.month = moment(date).jMonth() + 1;
-    this.year = moment(date).jYear();
+    if (date) {
+      this.day = moment(date).jDate();
+      this.month = moment(date).jMonth() + 1;
+      this.correctDaysInMonth(moment(date));
+      this.year = moment(date).jYear();
+    }
   }
 
   @Output() change = new EventEmitter();
@@ -44,9 +47,23 @@ export class DobComponent implements OnInit {
   }
 
   onChange() {
-    const x = moment();
-    x.jYear(this.year);
-    x.jMonth(this.month - 1);
+    if (this.year && this.month && this.day) {
+      const x = moment();
+      x.jYear(this.year);
+      x.jMonth(this.month - 1);
+      this.correctDaysInMonth(x);
+      x.jDate(this.day);
+      x.hour(0);
+      x.minute(0);
+      x.second(0);
+      x.millisecond(0);
+      this.change.emit(x.toDate());
+    } else {
+      this.change.emit(null);
+    }
+  }
+
+  private correctDaysInMonth(x: moment.Moment) {
     if (this.month > 6 && this.month < 12)
       this.initDates(30);
     else if (this.month === 12) {
@@ -55,12 +72,5 @@ export class DobComponent implements OnInit {
       else
         this.initDates(29);
     }
-    x.jDate(this.day);
-    x.hour(0);
-    x.minute(0);
-    x.second(0);
-    x.millisecond(0);
-    this.change.emit(x.toDate());
   }
-
 }
