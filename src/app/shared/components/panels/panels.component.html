@@ -1,41 +1,5 @@
 <div *ngIf="curWidth >= 960" class="full-width">
-    <div *ngFor="let item of placements" class="container">
-        <h2 *ngIf="item.topTitle"
-            [style.color]="item.topTitle.color ? item.topTitle.color : null" class="top-title">
-            {{item.topTitle.title}}</h2>
-        <div fxLayout="row"
-             fxLayoutAlign="center center" [style.margin-right]="item.type !== 'full' ? '15px' : null"
-             [style.margin-left]="item.type !== 'full' ? '15px' : null">
-            <div [fxFlex]="100/item.imgs.length" *ngFor="let im of item.imgs">
-                <a [routerLink]="im.href">
-                    <img src="{{im.imgUrl}}" class="full-width"/>
-                </a>
-                <div *ngFor="let ar of im.areas">
-                    <div [style.font-size]="(item.type === 'full' && item.imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
-                         [ngClass]="ar.pos">
-                        <h1 *ngIf="ar.title" [style.color]="ar.color ? ar.color : null">{{ar.title}}</h1>
-                        <div *ngIf="ar.text" [style.color]="ar.color ? ar.color : null"><b>{{ar.text}}</b></div>
-                        <div *ngIf="ar.title" style="margin-top: 5%;">
-                            <button *ngIf="ar.buttonText" mat-raised-button color="accent" class="shop-button">
-                                <b>{{ar.buttonText}}</b>
-                            </button>
-                            <button *ngIf="ar.buttonText === undefined" mat-raised-button color="accent" class="shop-button">
-                                <b>خرید آنلاین</b>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="im.subTitle" [style.color]="im.subTitle.color ? im.subTitle.color : null" class="sub-title">
-                    <b>{{im.subTitle.title}}</b></div>
-                <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null"
-                     class="sub-title">{{im.subTitle.text}}
-                </div>
-            </div>
-        </div>
-        <h2 *ngIf="item.subTitle"
-            [style.color]="item.subTitle.color ? item.subTitle.color : null" class="h2-sub-title">
-            {{item.subTitle.title}}</h2>
-    </div>
+  <app-page-panel [placements]="placements"></app-page-panel>
 </div>
 <div *ngIf="curWidth < 960">
   <div *ngFor="let item of placements" class="container">
@@ -52,7 +16,8 @@
             {{ar.title}}</h2>
         </div>
         <div *ngIf="im.subTitle" class="title-mobile"><b>{{im.subTitle.title}}</b></div>
-        <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px; color: gray;">{{im.subTitle.text}}</div>
+        <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px; color: gray;">{{im.subTitle.text}}
+        </div>
       </div>
     </div>
     <h2 *ngIf="item.subTitle" class="h2-sub-title">

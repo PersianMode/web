@@ -861,3 +861,7 @@ mat-panel-title {
   width: 100%;
   margin: 0 auto;
 }
+
+.inner-placement-div {
+  margin: 10px;
+}
