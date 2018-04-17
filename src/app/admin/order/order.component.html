@@ -84,7 +84,8 @@
     <ng-container matColumnDef="process">
       <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <button mat-button color="primary" (click)="process(element)">انتخاب</button>
+        <button mat-button color="primary" (click)="process(element)" *ngIf="!isReadyToDeliver(element) && !invoiceRequested(element)">انتخاب</button>
+        <button mat-button color="primary" (click)="requestForInvoice(element)" *ngIf="invoiceRequested(element)">صدور مجدد فاکتور</button>
       </mat-cell>
     </ng-container>
 

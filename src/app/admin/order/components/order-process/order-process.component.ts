@@ -38,7 +38,6 @@ export class OrderProcessComponent implements OnInit {
 
   ngOnInit() {
 
-
     this.isSalesManager = this.authService.userDetails.accessLevel === AccessLevel.SalesManager;
     this.reload();
   }

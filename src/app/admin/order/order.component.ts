@@ -6,6 +6,8 @@ import {AuthService} from '../../shared/services/auth.service';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {OrderProcessComponent} from './components/order-process/order-process.component';
 import {STATUS} from '../../shared/enum/status.enum';
+import {SocketService} from '../../shared/services/socket.service';
+import {AccessLevel} from '../../shared/enum/accessLevel.enum';
 
 @Component({
   selector: 'app-upload',
@@ -15,7 +17,7 @@ import {STATUS} from '../../shared/enum/status.enum';
 export class OrderComponent implements OnInit {
 
 
-  displayedColumns = ['position', 'name', 'color', 'is_collect', 'size', 'barcode', 'price','used_point','used_balance', 'customer', 'address', 'status', 'process', 'delivery'];
+  displayedColumns = ['position', 'name', 'color', 'is_collect', 'size', 'barcode', 'price', 'used_point', 'used_balance', 'customer', 'address', 'status', 'process', 'delivery'];
   dataSource = new MatTableDataSource();
 
   resultsLength = 0;
@@ -23,14 +25,27 @@ export class OrderComponent implements OnInit {
 
   pageSize = 20;
 
+  processDialogRef;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private httpService: HttpService, private dialog: MatDialog, private snackBar: MatSnackBar, private  authService: AuthService) {
+  constructor(private httpService: HttpService,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private  authService: AuthService,
+              private  socketService: SocketService) {
   }
 
   ngOnInit() {
     this.load();
+
+    this.socketService.getOrderLineMessage().subscribe(msg => {
+      if (this.processDialogRef)
+        this.processDialogRef.close();
+
+      this.load();
+    });
   }
 
   load() {
@@ -93,7 +108,7 @@ export class OrderComponent implements OnInit {
     }
 
 
-    const dialogRef = this.dialog.open(OrderAddressComponent, {
+    this.processDialogRef = this.dialog.open(OrderAddressComponent, {
       width: '400px',
       data: {address, is_collect: !!element.is_collect}
     });
@@ -114,7 +129,26 @@ export class OrderComponent implements OnInit {
 
   }
 
+  requestForInvoice(element) {
+    this.httpService.post(`order/ticket/offline/requestInvoice`, {
+      orderId: element._id,
+      orderLineId: element.order_line_id
+    }).subscribe(res => {
+      if (res && res.result === 'ok')
+        this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد');
+      else
+        this.openSnackBar('خطا در درخواست صدور فاکتور');
+    }, err => {
+      this.openSnackBar('خطا در درخواست صدور فاکتور');
+    });
+  }
+
+
   isReadyToDeliver(element) {
+    return element.tickets.status === STATUS.ReadyToDeliver;
+  }
+
+  invoiceRequested(element) {
     return element.tickets.status === STATUS.Invoice;
   }
 
@@ -137,4 +171,5 @@ export class OrderComponent implements OnInit {
   onPageChange($event: any) {
     this.load();
   }
+
 }

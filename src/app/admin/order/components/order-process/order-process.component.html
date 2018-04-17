@@ -1,3 +1,5 @@
+
+<div class="main">
 <h1 mat-dialog-title>پردازش سفارش</h1>
 
 <mat-divider></mat-divider>
@@ -59,9 +61,9 @@
           [disabled]="!referButtonActive">ارجاع
   </button>
   <button mat-raised-button color="warn" *ngIf="isSalesManager" (click)="refund()">بازگشت هزینه</button>
-  <button mat-raised-button color="primary" *ngIf="!isSalesManager" (click)="accept()">تایید</button>
+  <button mat-raised-button color="primary" *ngIf="!isSalesManager && data.is_collect" (click)="()">تایید</button>
   <button mat-raised-button color="warn" *ngIf="!isSalesManager" (click)="decline()">عدم تایید</button>
 </div>
 
 
-
+</div>
