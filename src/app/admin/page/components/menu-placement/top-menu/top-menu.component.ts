@@ -4,6 +4,8 @@ import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
+import {MatDialog} from '@angular/material';
+import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-top-menu',
@@ -17,6 +19,7 @@ export class TopMenuComponent implements OnInit {
   set placements(value: IPlacement[]) {
     if (value) {
       this.topMenuItems = value;
+
       this.changeField();
     }
   }
@@ -34,50 +37,63 @@ export class TopMenuComponent implements OnInit {
     section: '',
   };
   topMenuChanged = false;
+  bagName = 'top-menu-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService) {
+              private progressService: ProgressService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
-    this.dragulaService.setOptions('top-menu-bag', {
-      direction: 'horizontal',
-    });
+    if (!this.dragulaService.find(this.bagName))
+      this.dragulaService.setOptions(this.bagName, {
+        direction: 'horizontal',
+      });
 
     this.dragulaService.dropModel.subscribe((value) => {
-      this.changeTopMenuColumn(value.slice(1));
+      if (this.bagName === value[0])
+        this.changeTopMenuColumn(value.slice(2));
     });
   }
 
   removeItem() {
-    this.progressService.enable();
-    const index = this.topMenuItems.findIndex(
-      el => el.info.text === this.upsertTopMenuItem.text && el.info.href === this.upsertTopMenuItem.href);
-    if (index !== -1)
-      this.httpService.post('placement/delete', {
-        page_id: this.pageId,
-        placement_id: this.topMenuItems[index]._id,
-      }).subscribe(
-        (data) => {
-          this.modifyPlacement.emit({
-            type: PlacementModifyEnum.Delete,
-            placement_id: this.topMenuItems[index]._id,
-          });
-          // this.topMenuItems.splice(index, 1);
-          this.upsertTopMenuItem = {
-            text: '',
-            href: '',
-            id: null,
-            section: '',
-            column: null,
-            isEdit: false,
-          };
-          this.progressService.disable();
-        },
-        (err) => {
-          this.progressService.disable();
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+          const index = this.topMenuItems.findIndex(
+            el => el.info.text === this.upsertTopMenuItem.text && el.info.href === this.upsertTopMenuItem.href);
+          if (index !== -1)
+            this.httpService.post('placement/delete', {
+              page_id: this.pageId,
+              placement_id: this.topMenuItems[index]._id,
+            }).subscribe(
+              (data) => {
+                this.modifyPlacement.emit({
+                  type: PlacementModifyEnum.Delete,
+                  placement_id: this.topMenuItems[index]._id,
+                });
+                // this.topMenuItems.splice(index, 1);
+                this.upsertTopMenuItem = {
+                  text: '',
+                  href: '',
+                  id: null,
+                  section: '',
+                  column: null,
+                  isEdit: false,
+                };
+                this.progressService.disable();
+              },
+              (err) => {
+                this.progressService.disable();
+              }
+            );
         }
-      );
+      }
+    );
   }
 
   selectItem(value) {
@@ -117,6 +133,7 @@ export class TopMenuComponent implements OnInit {
         this.progressService.disable();
       },
       (err) => {
+        console.error('Cannot update the placement orders: ', err);
         this.progressService.disable();
       }
     );
@@ -150,13 +167,11 @@ export class TopMenuComponent implements OnInit {
       }
     })).subscribe(
       (data) => {
-        console.log('DATA: ', data);
-
         this.modifyPlacement.emit({
           type: isEdit ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
-          placement_id: data._id,
+          placement_id: data.placement_id,
           placements: [this.upsertTopMenuItem],
-          placement: data.placement,
+          placement: data.new_placement,
         });
 
         if (isEdit) {
@@ -166,6 +181,7 @@ export class TopMenuComponent implements OnInit {
           this.changeField();
         } else {
           this.upsertTopMenuItem.isEdit = true;
+          this.upsertTopMenuItem.id = data._id;
           this.changeField();
         }
 

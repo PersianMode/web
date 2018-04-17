@@ -109,7 +109,6 @@ export class AuthService {
       this.httpService.get('logout').subscribe(
         (data) => {
           // const rt = (this.router.url.includes('admin') ? 'admin/' : '') + 'login';
-
           this.isLoggedIn.next(false);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
           this.populateUserDetails();
@@ -129,7 +128,6 @@ export class AuthService {
   private getWarehouses() {
     this.httpService.get('warehouse/all').subscribe(res => {
       this.warehouses = res;
-      console.log('-> warehouses: ', this.warehouses);
     });
   }
 }

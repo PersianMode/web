@@ -19,7 +19,8 @@
                  (focus)="setSeen('email')"
                  (blur)="curFocus = null"
                  [ngClass]="(loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email' ? 'input-error' : null"
-                 (keypress)="keyPress($event)"/>
+                 (keypress)="keyPress($event)"
+                  autocomplete="email"/>
           <label
             *ngIf="(loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email'"
             class="field-error">لطفا آدرس ایمیل معتبری وارد کنید</label>
@@ -30,7 +31,8 @@
                  (focus)="setSeen('password')"
                  (blur)="curFocus = null"
                  [ngClass]="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus['password'] ? 'input-error' : null"
-                 (keypress)="keyPress($event)"/>
+                 (keypress)="keyPress($event)"
+                 autocomplete="current_password"/>
           <label *ngIf="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus['password']" class="field-error">لطفا رمز عبور را وارد
             کنید</label>
         </div>

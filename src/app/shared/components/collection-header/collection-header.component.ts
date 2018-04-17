@@ -29,9 +29,11 @@ export class CollectionHeaderComponent implements OnInit {
     this.pageService.placement$.filter(r => r[0] === 'menu').map(r => r[1]).subscribe(
       data => {
         this.topMenu = data.filter(r => r.variable_name === 'topMenu');
-        this.topMenu.forEach(r => {
+        this.topMenu
+          .sort((x, y) => x.column - y.column)
+          .forEach(r => {
           r.routerLink = ['/'].concat(r.info.href.split('/'));
-          r.type = r.routerLink[2];
+          r.type = r.info.section ? r.info.section : r.routerLink[2];
         });
         const subMenu = data.filter(r => r.variable_name === 'subMenu');
         const sections = Array.from(new Set(subMenu.map(r => r.info.section)));
@@ -47,24 +49,12 @@ export class CollectionHeaderComponent implements OnInit {
                 this.placements[path[0] + 'Menu'] = {};
               }
               if (!this.placements[path[0] + 'Menu'][path[1] + 'List']) {
-                this.placements[path[0] + 'Menu'][path[1] + 'List'] = [];
+                this.placements[path[0] + 'Menu'][path[1] + 'List'] = {};
               }
-              if (r.info.column > 1 &&
-                (!this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1] ||
-                  !this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1].length)) {
-                if (r.info.column === 2) {
-                  const temp = [];
-                  this.placements[path[0] + 'Menu'][path[1] + 'List'].forEach(x => temp.push(x));
-                  this.placements[path[0] + 'Menu'][path[1] + 'List'] = [];
-                  this.placements[path[0] + 'Menu'][path[1] + 'List'].push(temp);
-                }
-                this.placements[path[0] + 'Menu'][path[1] + 'List'].push([]);
-              }
-              if (r.info.column > 1) {
-                this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column - 1].push(r.info);
-              } else {
-                this.placements[path[0] + 'Menu'][path[1] + 'List'].push(r.info);
-              }
+              if (!this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column])
+                this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column] = [];
+
+              this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column].push(r.info);
             });
         });
       });
@@ -110,5 +100,9 @@ export class CollectionHeaderComponent implements OnInit {
 
   goToRoot() {
     this.router.navigate(['']);
+  }
+
+  getKeyList(list) {
+    return Object.keys(list);
   }
 }

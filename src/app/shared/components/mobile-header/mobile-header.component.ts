@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {WINDOW} from '../../services/window.service';
 import {CartService} from '../../services/cart.service';
 import {priceFormatter} from '../../lib/priceFormatter';
+import {PageService} from '../../services/page.service';
 
 @Component({
   selector: 'app-mobile-header',
@@ -26,81 +27,13 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   secondLevelTitle = null;
   thirdLevelTitle = null;
 
-  menuItems = {
-    'مردانه': {
-      is_title: false,
-      menu: {
-        'محصولات جدید': {
-          is_title: false,
-          url: '',
-        },
-        'کفش': {
-          menu: {
-            'تمام کفش های مردانه': {
-              is_title: false,
-              url: '',
-            },
-            'سبک زندگی': {
-              is_title: false,
-              url: '',
-            },
-          }
-        },
-      }
-    },
-    'زنانه': {
-      is_title: false,
-      menu: {}
-    },
-    'پسرانه': {
-      is_title: false,
-      menu: {}
-    },
-    'دخترانه': {
-      is_title: false,
-      menu: {}
-    },
-    'محصولات جدید': {
-      is_title: false,
-      url: '',
-    },
-    'سفارشی': {
-      is_title: false,
-      url: '',
-    },
-    'باشگاه نایک': {
-      is_title: false,
-      menu: {}
-    },
-    'بر مبنای برند': {
-      is_title: true,
-    },
-    'ست ورزشی': {
-      is_title: false,
-      url: '',
-    },
-    'خدمات': {
-      is_title: true,
-    },
-    'درخواست یاری': {
-      is_title: false,
-      url: '',
-    },
-    'تماس با ما': {
-      is_title: false,
-      url: '',
-    },
-    'کارت هدیه': {
-      is_title: false,
-      url: '',
-    }
-  };
+  menuItems: any = {};
 
   cartNumbers = '';
   itemSubs;
 
   constructor(private authService: AuthService, private router: Router,
-              @Inject(WINDOW) private window, private cartService: CartService) {
+              @Inject(WINDOW) private window, private cartService: CartService, private pageService: PageService) {
   }
 
   ngOnInit() {
@@ -114,10 +47,65 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
     );
     this.itemSubs = this.cartService.cartItems.subscribe(
       data => {
-        data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => a + b) : 0;
-        this.cartNumbers = priceFormatter(data);
+        data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => +a + +b, 0) : 0;
+        if (data)
+          this.cartNumbers = data.toLocaleString('fa', {useGrouping: false})
+        else
+          this.cartNumbers = '';
       }
     );
+    this.pageService.placement$.filter(r => r[0] === 'menu').map(r => r[1]).subscribe(
+      data => {
+        this.menuItems = {};
+        const sectionMenu = {};
+        const topMenu = data.filter(r => r.variable_name === 'topMenu');
+        topMenu.forEach(r => {
+          const routerLink = ['/'].concat(r.info.href.split('/'));
+          this.menuItems[r.info.text] = {
+            menu: {},
+          };
+          this.menuItems[r.info.text].menu['همه ' + r.info.text] = {routerLink};
+          const section = r.info.section ? r.info.section : routerLink[2];
+          sectionMenu[section] = this.menuItems[r.info.text];
+        });
+        const subMenu = data.filter(r => r.variable_name === 'subMenu');
+        let sub = '';
+        subMenu.filter(r => r.info.section.split('/')[1] !== 'header')
+          .map(r => Object.assign(r, {order: r.info.column * 100 + r.info.row + (r.info.section.split('/')[1] === 'left' ? 10000 : 0)}))
+          .sort((x, y) => x.order - y.order)
+          .forEach(r => {
+            const routerLink = ['/'].concat(r.info.href.split('/'));
+            const section = r.info.section.split('/')[0];
+            if (!sub || r.info.row === 1 || r.info.isHeader) {
+              sub = r.info.text;
+              sectionMenu[section].menu[sub] = {
+                menu: {},
+              };
+              sectionMenu[section].menu[sub].menu['همه ' + r.info.text] = {routerLink};
+            } else {
+              sectionMenu[section].menu[sub].menu[r.info.text] = {routerLink};
+            }
+          });
+        subMenu.filter(r => r.info.section.split('/')[1] === 'header')
+          .sort((x, y) => x.row - y.row)
+          .forEach(r => {
+            const routerLink = ['/'].concat(r.info.href.split('/'));
+            sectionMenu[r.info.section.split('/')[0]].menu[r.info.text] = {
+              routerLink
+            };
+          });
+        Object.assign(this.menuItems, {
+          'خدمات': {
+            is_title: true,
+          },
+          'راهنما': {
+            routerLink: ['/', 'help'],
+          },
+          'تماس با ما': {
+            routerLink: ['/', 'contact-us'],
+          },
+        });
+      });
   }
 
   getKeys(object) {
@@ -197,8 +185,13 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
     this.sideNav.close();
   }
 
-  ngOnDestroy () {
+  ngOnDestroy() {
     this.itemSubs.unsubscribe();
+  }
+
+  navigate(arr) {
+    this.router.navigate(arr);
+    this.sideNavIsOpen = false;
   }
 }
 

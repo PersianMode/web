@@ -1,24 +1,25 @@
 <div>
   <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
        fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
-    <div fxFlex="50" style="width: 100%">
+    <div fxFlex="50" class="full-width">
       <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column">
-        <div fxFlex="30" style="width: 100%">
+        <div fxFlex="30" class="full-width">
           <mat-input-container class="input-field">
             <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
                    [(ngModel)]="upsertTopMenuItem.text"
                    (ngModelChange)="changeField($event)"/>
           </mat-input-container>
         </div>
-        <div fxFlex="30" style="width: 100%">
+        <div fxFlex="30" class="full-width">
           <mat-input-container dir="ltr" class="input-field">
             <input matInput type="text" class="menu-field" placeholder="آدرس" [(ngModel)]="upsertTopMenuItem.href"
                    (ngModelChange)="changeField($event)"/>
           </mat-input-container>
         </div>
-        <div fxFlex="40" style="width: 100%">
+        <div fxFlex="40" class="full-width">
           <mat-input-container dir="ltr" class="input-field">
-            <input matInput class="menu-field" placeholder="بخش" [(ngModel)]="upsertTopMenuItem.section" [disabled]="upsertTopMenuItem.isEdit"/>
+            <input matInput class="menu-field" placeholder="بخش" [(ngModel)]="upsertTopMenuItem.section"
+                   [disabled]="upsertTopMenuItem.isEdit"/>
           </mat-input-container>
         </div>
       </div>
@@ -37,14 +38,13 @@
         </mat-icon>
       </button>
       <button mat-mini-fab color="primary" (click)="clearFields()" *ngIf="upsertTopMenuItem.isEdit">
-        <mat-icon>
-          <i class="material-icons">clear</i>
-        </mat-icon>
+        <i class="fa fa-eraser"></i>
       </button>
     </div>
   </div>
   <div class="demo-list" [dragula]="'top-menu-bag'" [dragulaModel]="topMenuItems">
-    <div *ngFor="let item of topMenuItems" class="top-menu-item" (click)="selectItem(item)">
+    <div *ngFor="let item of topMenuItems" class="top-menu-item" (click)="selectItem(item)"
+         [ngClass]="{'selected-item': upsertTopMenuItem.id && item._id.toString() === upsertTopMenuItem.id.toString()}">
       <label class="content">{{item.info.text}}</label>
     </div>
   </div>

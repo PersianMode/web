@@ -1,9 +1,3 @@
-.demo-list {
-  text-align: center;
-  width: 100%;
-  margin: 0 auto;
-}
-
 .top-menu-item {
   display: inline-block;
   padding: 5px;
@@ -29,12 +23,12 @@
   color: darkred;
 }
 
-.menu-field {
-  height: 20px !important;
-}
-
 .button-area {
   margin-top: 10px;
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.selected-item {
+  background-color: rgba(176,182,180,0.68);
 }

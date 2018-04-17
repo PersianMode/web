@@ -217,7 +217,7 @@ export class PageBasicInfoComponent implements OnInit {
     }
 
     this.progressService.enable();
-    this.httpService.post(`page`, {address: this.form.controls['address'].value}).subscribe(
+    this.httpService.post(`page/cm/preview`, {address: this.form.controls['address'].value}).subscribe(
       (result) => {
 
         this.placements = [];
@@ -279,7 +279,7 @@ export class PageBasicInfoComponent implements OnInit {
       }
         break;
       case PlacementModifyEnum.Add: {
-        this.placements = value.placement;
+        this.placements.push(value.placement);
       }
         break;
       case PlacementModifyEnum.Modify: {
