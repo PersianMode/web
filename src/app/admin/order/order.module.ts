@@ -2,8 +2,6 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {OrderComponent} from './order.component';
 import {OrderTableComponent} from './components/order-table/order-table.component';
-import {MatPaginatorModule, MatTableModule, MatSortModule} from '@angular/material';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {OrderRouting} from './order.routing';
 import {SharedModule} from '../../shared/shared.module';
 import { OrderService } from './order.service';
@@ -23,11 +21,6 @@ import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
-  declarations: [
-    OrderComponent,
-    OrderProcessComponent,
-    OrderAddressComponent,
-  ],
   imports: [
     OrderRouting,
     CommonModule,
@@ -42,7 +35,6 @@ import {FormsModule} from '@angular/forms';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressSpinnerModule,
     MatCheckboxModule,
     MatDialogModule,
     MatSnackBarModule,
