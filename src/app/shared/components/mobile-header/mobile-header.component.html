@@ -83,12 +83,12 @@
           <i class="fa fa-bars" aria-hidden="true"></i>
         </a>
         <a class="mobile-header-item" [routerLink]="'/cart'" id="header-cart">
-          <span *ngIf="cartNumbers" class="badge-icon">
+          <span  [style.visibility]="cartNumbers ? 'visible' : 'hidden'" class="badge-number">
           {{cartNumbers}}
           </span>
-          <span *ngIf="cartNumbers">
+          <span [style.visibility]="cartNumbers ? 'visible' : 'hidden'">
             <svg height="20" width="20">
-              <circle cx="10" cy="10" r="10" fill="#AA0000"/>
+              <circle cx="10" cy="10" r="10" fill="#AA0000"></circle>
             </svg>
           </span>
           <span>

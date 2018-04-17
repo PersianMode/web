@@ -83,18 +83,12 @@
               نام خانوادگی را وارد کنید</label>
           </div>
           <div fxFlex="13" class="input-container">
-            <dp-date-picker
-              class="input-field"
-              (click)="setSeen('dob')"
-              (blur)="curFocus = null"
-              formControlName="dob"
-              mode="day"
-              placeholder="تاریخ تولد"
-              [ngClass]="registerForm.controls['dob'].hasError('required') && seen['dob'] && curFocus !== 'dob' ? 'input-error' : null"
-              theme="dp-material">
-            </dp-date-picker>
+            <div class="dob" [class.input-error]="seen.dob && !dob">
+              <span>تاریخ تولد: </span>
+            <app-dob [date]="dob" (change)="changeDob($event)"></app-dob>
+            </div>
             <label class="field-error dp-hint"
-                   *ngIf="registerForm.controls['dob'].hasError('required') && seen['dob'] && curFocus !== 'dob'">لطفا
+                   *ngIf="!dob && seen['dob'] && curFocus !== 'dob'">لطفا
               تاریخ تولد را وارد کنید</label>
           </div>
           <div fxFlex="13" class="input-container">
