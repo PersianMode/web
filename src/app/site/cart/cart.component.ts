@@ -83,7 +83,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
         this.cartService.updateItem({
           pre_instance_id: currentProduct.instance_id,
-          instance_id: tempInstance ? tempInstance.instance_id : currentProduct.instance_id,
+          instance_id: tempInstance ? (tempInstance.instance_id || tempInstance._id) : currentProduct.instance_id,
           product_id: currentProduct.product_id,
           number: data.value.newQuantity,
         });
