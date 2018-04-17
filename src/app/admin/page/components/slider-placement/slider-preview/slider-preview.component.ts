@@ -1,13 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
 
 export interface Pos {
-  // imgHeight: Number;
-  imgWidth: Number;
-  imgMarginTop: Number;
-  // margin_bottom: Number;
-  imgMarginLeft: Number;
+  imgWidth: number;
+  imgMarginTop: number;
+  imgMarginLeft: number;
 }
 
 @Component({
@@ -18,12 +16,17 @@ export interface Pos {
 export class SliderPreviewComponent implements OnInit {
   @Input()
   set text(value) {
+    // if (this._text !== value) {
     this._text = value;
+    // this.slide = Object.assign({}, this._pos);
+    // }
   }
 
   @Input()
   set pos(value: Pos) {
+    // console.log('update please!', value);
     this._pos = value;
+    this.slide = Object.assign({}, this._pos);
   }
 
   @Input()
@@ -31,21 +34,46 @@ export class SliderPreviewComponent implements OnInit {
     this._image = value;
   }
 
+  @Output() imageSettingsChanged = new EventEmitter<any>();
+
   _text;
   _pos: Pos;
   _image;
-  slide;
+  slide: Pos;
+  anyChanges = false;
 
   constructor(private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
-    this.slide = this._pos;
+    // this.slide = Object.assign({}, this._pos);
   }
 
-  // change($event) {
-  //   console.log('changed!', $event, this._pos.imgWidth);
-  // }
+  change($event) {
+    this.changeFields();
+  }
+
+  changeMargin(axis, value) {
+    this.slide[axis] += value;
+    this.changeFields();
+  }
+
+  changeFields() {
+    const widthChange = this._pos['imgWidth'] === this.slide['imgWidth'];
+    const marginLeftChange = this._pos['imgMarginTop'] === this.slide['imgMarginTop'];
+    const marginTopChange = this._pos['imgMarginLeft'] === this.slide['imgMarginLeft'];
+
+    if (widthChange && marginLeftChange && marginTopChange) {
+      this.anyChanges = false;
+    } else {
+      this.anyChanges = true;
+    }
+
+    this.imageSettingsChanged.emit({
+      anyChanges: this.anyChanges,
+      newStyle: this.slide,
+    });
+  }
 
   getURL(path) {
     if (path)

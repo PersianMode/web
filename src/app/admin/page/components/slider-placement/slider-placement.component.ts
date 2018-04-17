@@ -35,10 +35,16 @@ export class SliderPlacementComponent implements OnInit {
     column: null,
     isEdit: false,
     imgUrl: null,
+    style: {
+      imgWidth: 40,
+      imgMarginTop: 0,
+      imgMarginLeft: 0,
+    }
   };
 
-  pos: Pos; // TODO: this should be sent to server in the 'style' part of 'placement_info'!
+  pos: Pos;
 
+  imageChanged = false;
   sliderChanged = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
@@ -46,7 +52,6 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   ngOnInit() {
-    // setTimeout(() => console.log("placements:", this._placements), 2000);
     this.clearFields();
 
     this.dragulaService.setOptions('slider-bag', {
@@ -54,35 +59,34 @@ export class SliderPlacementComponent implements OnInit {
     });
 
     this.dragulaService.dropModel.subscribe(value => {
-      console.log('drag value', value);
       this.changeSliderOrder(value.slice(1));
     });
   }
 
   changeSliderOrder(args) {
-    // console.log('change order detected');
     const [element, target, source] = args;
 
     let counter = 0;
     Object.keys(target.children).forEach(child => {
+      console.log('target:', target.children[child].innerText);
       const obj = this.sliders.find(el => el.info.text === target.children[child].innerText);
       if (obj) {
         obj.info.column = counter;
         counter++;
       }
     });
-    console.log("AFTER CHANGE", this.sliders);
+    // console.log("AFTER CHANGE", this.sliders);
     this.progressService.enable();
     this.httpService.post('placement', {
       page_id: this.pageId,
       placements: this.sliders,
     }).subscribe(
       data => {
-        // this.modifyPlacement.emit({
-        //   type: PlacementModifyEnum.Modify,
-        //   placements: this.sliders,
-        // });
-        this.reloadPlacements.emit();
+        this.modifyPlacement.emit({
+          type: PlacementModifyEnum.Modify,
+          placements: this.sliders,
+        });
+        // this.reloadPlacements.emit();
         this.progressService.disable();
       },
       err => {
@@ -111,14 +115,14 @@ export class SliderPlacementComponent implements OnInit {
       column: null,
       isEdit: false,
       imgUrl: null,
+      style: {
+        imgWidth: 40,
+        imgMarginTop: 0,
+        imgMarginLeft: 0,
+      }
     };
 
-    this.pos = {
-      // imgHeight: 200,
-      imgWidth: 60,
-      imgMarginLeft: 0,
-      imgMarginTop: 0,
-    };
+    this.pos = this.upsertSlider.style;
   }
 
   onImageUploaded(images: any) {
@@ -136,8 +140,14 @@ export class SliderPlacementComponent implements OnInit {
       column: value.info.column,
       isEdit: true,
       imgUrl: value.info.imgUrl,
+      style: value.info.style || {
+        imgWidth: 40,
+        imgMarginLeft: 0,
+        imgMarginTop: 0,
+      },
     };
-    // console.log('selected item:', value, this.sliders, this.upsertSlider);
+    this.pos = Object.assign({}, this.upsertSlider.style);
+    console.log('selected item:', value, this.sliders, this.upsertSlider, this.pos);
   }
 
   removeItem() {
@@ -162,6 +172,11 @@ export class SliderPlacementComponent implements OnInit {
             column: null,
             isEdit: false,
             imgUrl: null,
+            style: {
+              imgWidth: 40,
+              imgMarginLeft: 0,
+              imgMarginTop: 0,
+            }
           };
           this.progressService.disable();
         },
@@ -172,7 +187,7 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   modifyItem(isEdit) {
-    console.log('OnModify, isEdit:', isEdit);
+    console.log('OnModify->isEdit:', isEdit, this.upsertSlider.style);
     this.progressService.enable();
     (isEdit ? this.httpService.post('placement', {
       page_id: this.pageId,
@@ -183,7 +198,7 @@ export class SliderPlacementComponent implements OnInit {
             text: this.upsertSlider.text,
             href: this.upsertSlider.href,
             column: this.upsertSlider.column,
-            //image, styling
+            style: this.upsertSlider.style,
           }
         }
       ]
@@ -196,12 +211,11 @@ export class SliderPlacementComponent implements OnInit {
           text: this.upsertSlider.text,
           href: this.upsertSlider.href,
           column: Math.max(...this.sliders.map(el => el.info.column)) + 1,
-          //image, styling
         }
       }
     })).subscribe(
       data => {
-        console.log('DATA:', data);
+        console.log('DATA:', data, this.upsertSlider.style);
 
         // this.modifyPlacement.emit({
         //   type: isEdit ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
@@ -219,12 +233,16 @@ export class SliderPlacementComponent implements OnInit {
         //   this.upsertSlider.isEdit = true;
         // }
 
-        // TODO: worry that these lines work before the top line
         if (!isEdit) {
           this.upsertSlider.isEdit = true;
           this.upsertSlider.id = data.placement
             .find(el => el.info.text === this.upsertSlider.text &&
               el.info.href === this.upsertSlider.href)._id;
+          // TODO: wondering if I should set styles here or not!
+        } else {
+          this.pos = Object.assign({}, this.upsertSlider.style);
+          console.log('pos after burnet:D:', this.pos);
+          this.imageChanged = false;
         }
         this.changeField();
         this.progressService.disable();
@@ -236,9 +254,21 @@ export class SliderPlacementComponent implements OnInit {
     );
   }
 
+  /**
+   * @param $event
+   *    anyChanges: boolean,
+   *    newStyle: Pos
+   */
+  imageSettingsChanged($event) {
+    // console.log('$event received from preview', $event);
+    this.imageChanged = $event.anyChanges;
+    this.upsertSlider.style = Object.assign({}, $event.newStyle);
+    console.log('emited value received', this.upsertSlider.style);
+  }
+
   sliderApplyDisability() {
     if (this.upsertSlider.isEdit) {
-      return !this.sliderChanged || (!this.upsertSlider.text || !this.upsertSlider.href);
+      return !this.imageChanged && (!this.sliderChanged || (!this.upsertSlider.text || !this.upsertSlider.href));
     } else {
       return !this.upsertSlider.text || !this.upsertSlider.href;
     }
@@ -250,7 +280,7 @@ export class SliderPlacementComponent implements OnInit {
       .map(e => {
         return {
           component_name: e.component_name,
-          variable_name: e.variable_name,
+          variable_name: e.variable_name || 'slider',
         };
       })[0];
   }

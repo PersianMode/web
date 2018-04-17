@@ -1,4 +1,8 @@
-<app-slider-preview [text]="upsertSlider.text" [image]="upsertSlider.imgUrl" [pos]="pos"></app-slider-preview>
+<app-slider-preview *ngIf="upsertSlider.text"
+                    [text]="upsertSlider.text"
+                    [image]="upsertSlider.imgUrl"
+                    [pos]="pos"
+                    (imageSettingsChanged)="imageSettingsChanged($event)"></app-slider-preview>
 <div class="bottom-part">
   <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
        fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
@@ -56,6 +60,7 @@
   </div>
   <div class="demo-list" [dragula]="'slider-bag'" [dragulaModel]="sliders">
     <div *ngFor="let item of sliders" class="top-menu-item" (click)="selectItem(item)">
+      <img [src]="getURL(item.info.imgUrl)" alt="">
       <label class="content">{{item.info.text}}</label>
     </div>
   </div>
