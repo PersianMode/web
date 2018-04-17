@@ -28,7 +28,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   thirdLevelTitle = null;
 
   menuItems: any = {};
-
+  display_name;
   cartNumbers = '';
   itemSubs;
 
@@ -38,9 +38,13 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
-      (data) => this.isLoggedIn = data,
-      (err) => console.error('Cannot subscribe to isloggedIn: ', err)
-    );
+      (data) => {
+        this.isLoggedIn = data;
+        this.display_name = this.authService.userDetails.displayName;
+      },
+      (err) =>  {
+        console.error('Cannot subscribe to isloggedIn: ', err);
+      });
     this.authService.isVerified.subscribe(
       (data) => this.isVerified = data,
       (err) => console.error('Cannot subscribe to isVerified: ', err)
@@ -106,6 +110,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
           },
         });
       });
+    this.display_name = this.authService.userDetails.displayName;
   }
 
   getKeys(object) {
@@ -191,6 +196,11 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
 
   navigate(arr) {
     this.router.navigate(arr);
+    this.sideNavIsOpen = false;
+  }
+
+  navigateToProfile() {
+    this.router.navigate(['/', 'profile']);
     this.sideNavIsOpen = false;
   }
 }
