@@ -4,12 +4,12 @@
     <ng-template mat-tab-label>
       <span>ورودی</span>
 
-      <mat-chip-list>
-        <mat-chip color="accent" selected="true">3</mat-chip>
+      <mat-chip-list *ngIf="newInboxCount">
+        <mat-chip color="accent" selected="true">{{newInboxCount}}</mat-chip>
       </mat-chip-list>
     </ng-template>
 
-<app-order-inbox></app-order-inbox>
+<app-order-inbox (newInboxCount)="newInboxCount = $event"></app-order-inbox>
 
   </mat-tab>
   <mat-tab label="delivery">

@@ -861,3 +861,7 @@ mat-panel-title {
   width: 100%;
   margin: 0 auto;
 }
+
+.mat-chip-list-wrapper {
+  display: inline !important;
+}
