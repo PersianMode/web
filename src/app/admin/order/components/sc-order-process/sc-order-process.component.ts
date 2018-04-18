@@ -7,10 +7,10 @@ import {REFERRAL_ADVICE} from '../../../../shared/enum/referral_advise.enum';
 
 @Component({
   selector: 'app-order-process',
-  templateUrl: './order-process.component.html',
-  styleUrls: ['./order-process.component.css']
+  templateUrl: './sc-order-process.component.html',
+  styleUrls: ['./sc-order-process.component.css']
 })
-export class OrderProcessComponent implements OnInit {
+export class SCOrderProcessComponent implements OnInit {
   isSalesManager = false;
 
   instance: any;
@@ -29,7 +29,7 @@ export class OrderProcessComponent implements OnInit {
     {name: 'ارسال به مشتری', value: REFERRAL_ADVICE.SendToCustomer},
   ];
 
-  constructor(private dialogRef: MatDialogRef<OrderProcessComponent>,
+  constructor(private dialogRef: MatDialogRef<SCOrderProcessComponent>,
               @Inject(MAT_DIALOG_DATA) private data: any,
               private authService: AuthService,
               private httpService: HttpService,
@@ -62,7 +62,8 @@ export class OrderProcessComponent implements OnInit {
       if (foundInventory.count > 0) {
         this.inventories.push({
           warehouse,
-          count: foundInventory.count
+          count: foundInventory.count,
+          reserved: foundInventory.reserved
         });
       }
     });

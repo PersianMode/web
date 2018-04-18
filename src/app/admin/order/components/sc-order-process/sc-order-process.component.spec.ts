@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrderProcessComponent } from './order-process.component';
+import { SCOrderProcessComponent } from './sc-order-process.component';
 
-describe('OrderProcessComponent', () => {
-  let component: OrderProcessComponent;
-  let fixture: ComponentFixture<OrderProcessComponent>;
+describe('SMSCOrderProcessComponent', () => {
+  let component: SCOrderProcessComponent;
+  let fixture: ComponentFixture<SCOrderProcessComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OrderProcessComponent ]
+      declarations: [ SCOrderProcessComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrderProcessComponent);
+    fixture = TestBed.createComponent(SCOrderProcessComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
