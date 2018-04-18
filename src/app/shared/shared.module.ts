@@ -21,6 +21,7 @@ import {FileUploadModule} from 'ng2-file-upload';
 import {AgmCoreModule} from '@agm/core';
 import {AddressTableComponent} from './components/address-table/address-table.component';
 import { DobComponent } from './components/dob/dob.component';
+import {DragulaModule} from 'ng2-dragula';
 
 @NgModule({
   declarations: [
@@ -33,15 +34,13 @@ import { DobComponent } from './components/dob/dob.component';
     UploaderComponent,
     AddressTableComponent,
     DobComponent,
-
-  ],
+],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
     CommonModule,
     MatRadioModule,
-
     FlexLayoutModule,
     MatToolbarModule,
     MatCardModule,
@@ -62,6 +61,7 @@ import { DobComponent } from './components/dob/dob.component';
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),
+    DragulaModule,
   ],
   entryComponents: [
     RemovingConfirmComponent,
@@ -73,7 +73,6 @@ import { DobComponent } from './components/dob/dob.component';
     UploaderComponent,
     AddressTableComponent,
     DobComponent,
-
   ]
 })
 export class SharedModule {
