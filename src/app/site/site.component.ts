@@ -29,7 +29,8 @@ export class SiteComponent implements OnInit {
     this.curHeight = this.window.innerHeight;
     this.isMobile = this.isMobileCalc();
     this.updateResponsiveService();
-    this.authService.checkValidation(this.router.url);
+    this.authService.checkValidation(this.router.url)
+      .then(() => {}).catch(err => console.log(err));
     this.loadInitialPlacements();
 
     this.cartService.getCartItems();

@@ -1,5 +1,6 @@
+<div class="main">
 <h1 mat-dialog-title>{{data.is_collect ? 'فروشگاه' : 'مشتری'}}</h1>
-<div mat-dialog-content>
+<div mat-dialog-content >
   <h3>
     <b>استان: </b> {{' ' + data.address.province}}
   </h3>
@@ -37,4 +38,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="close()">Ok</button>
+</div>
 </div>
