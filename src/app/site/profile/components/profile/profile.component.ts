@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
@@ -11,15 +11,10 @@ import {ProfileOrderService} from '../../../../shared/services/profile-order.ser
 export class ProfileComponent implements OnInit {
 
   isEdit = false;
-  constructor(private authService: AuthService, private router: Router, private profileOrderService: ProfileOrderService) { }
-
-  ngOnInit() {
-    this.authService.isLoggedIn.subscribe(res => {
-      if (!res) {
-        this.router.navigate(['/']);
-      }
-      this.profileOrderService.getAllOrders();
-    });
+  constructor(private authService: AuthService, private router: Router, private profileOrderService: ProfileOrderService) {
   }
 
+  ngOnInit() {
+  }
 }
+
