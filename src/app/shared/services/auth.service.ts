@@ -28,8 +28,8 @@ export class AuthService {
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
 
-          if (this.userDetails.socket_token) {
-            this.socketService.init(this.userDetails.socket_token);
+          if (this.userDetails.warehouse_id) {
+            this.socketService.init(this.userDetails.warehouse_id);
           }
           resolve();
         },
@@ -50,7 +50,6 @@ export class AuthService {
         userId: data.id,
         displayName: data.name + ' ' + data.surname,
         accessLevel: data.hasOwnProperty('access_level') ? data.access_level : null,
-        socket_token: data.hasOwnProperty('socket_token') ? data.socket_token : null,
       });
     } else {
       this.userDetails = {
@@ -88,8 +87,8 @@ export class AuthService {
           this.populateUserDetails(data);
           this.isLoggedIn.next(true);
           this.isVerified.next(data.is_verified ? data.is_verified : false);
-          if (this.userDetails.socket_token) {
-            this.socketService.init(this.userDetails.socket_token);
+          if (this.userDetails.warehouse_id) {
+            this.socketService.init(this.userDetails.warehouse_id);
           }
           resolve();
         },
