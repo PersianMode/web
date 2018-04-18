@@ -21,7 +21,6 @@ import {FileUploadModule} from 'ng2-file-upload';
 import {AgmCoreModule} from '@agm/core';
 import {AddressTableComponent} from './components/address-table/address-table.component';
 import { DobComponent } from './components/dob/dob.component';
-import { PagePanelComponent } from './components/page-panel/page-panel.component';
 import {DragulaModule} from 'ng2-dragula';
 
 @NgModule({
@@ -35,7 +34,6 @@ import {DragulaModule} from 'ng2-dragula';
     UploaderComponent,
     AddressTableComponent,
     DobComponent,
-    PagePanelComponent,
 ],
   imports: [
     FormsModule,

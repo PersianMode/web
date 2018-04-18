@@ -3,6 +3,8 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {DragulaService} from 'ng2-dragula';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
+import {MatDialog} from '@angular/material';
+import {EditPanelComponent} from './edit-panel/edit-panel.component';
 
 @Component({
   selector: 'app-page-content-placement',
@@ -15,7 +17,7 @@ export class PageContentPlacementComponent implements OnInit {
   @Output() modifyPlacement = new EventEmitter();
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
-              private dragulaService: DragulaService) {
+              private dragulaService: DragulaService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -105,5 +107,21 @@ export class PageContentPlacementComponent implements OnInit {
 
   changedField() {
 
+  }
+
+  addItem() {
+    const editDialog = this.dialog.open(EditPanelComponent, {
+      width: '900px',
+      data: {
+        placement: null,
+      },
+      disableClose: true,
+    });
+
+    editDialog.afterClosed().subscribe(
+      (data) => {
+        console.log(data);
+      }
+    );
   }
 }

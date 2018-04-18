@@ -1,5 +1,41 @@
 <div *ngIf="curWidth >= 960" class="full-width">
-  <app-page-panel [placements]="placements"></app-page-panel>
+  <div *ngFor="let item of placements" class="container">
+    <h2 *ngIf="item.topTitle"
+        [style.color]="item.topTitle.titleColor ? item.topTitle.titleColor : null" class="top-title">
+      {{item.topTitle.title}}</h2>
+    <div fxLayout="row"
+         fxLayoutAlign="center center" [style.margin-right]="item.type !== 'full' ? '15px' : null"
+         [style.margin-left]="item.type !== 'full' ? '15px' : null">
+      <div [fxFlex]="100/item.imgs.length" *ngFor="let im of item.imgs">
+        <a [routerLink]="im.href">
+          <img src="{{im.imgUrl}}" class="full-width"/>
+        </a>
+        <div *ngFor="let ar of im.areas">
+          <div [style.font-size]="(item.type === 'full' && item.imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
+               [ngClass]="ar.pos">
+            <h1 *ngIf="ar.title" [style.color]="ar.titleColor ? ar.titleColor : null">{{ar.title}}</h1>
+            <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null"><b>{{ar.text}}</b></div>
+            <div *ngIf="ar.buttonText" style="margin-top: 5%;">
+              <button mat-raised-button class="shop-button" [style.color]="ar.buttonColor ? ar.buttonColor : 'black'"
+                      [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'">
+                <b *ngIf="ar.buttonText">{{ar.buttonText}}</b>
+                <b *ngIf="ar.buttonText === undefined">خرید آنلاین</b>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="im.subTitle" [style.color]="im.subTitle.titleColor ? im.subTitle.titleColor : null"
+             class="sub-title">
+          <b>{{im.subTitle.title}}</b></div>
+        <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null"
+             class="sub-title">{{im.subTitle.text}}
+        </div>
+      </div>
+    </div>
+    <h2 *ngIf="item.subTitle"
+        [style.color]="item.subTitle.titleColor ? item.subTitle.titleColor : null" class="h2-sub-title">
+      {{item.subTitle.title}}</h2>
+  </div>
 </div>
 <div *ngIf="curWidth < 960">
   <div *ngFor="let item of placements" class="container">

@@ -74,6 +74,10 @@
   text-align: right;
 }
 
+.default-color {
+  color: white;
+}
+
 .sub-title {
   white-space: nowrap;
   text-align: right;
@@ -99,7 +103,7 @@
   width: 100%;
 }
 
-.top-title {
+.top-title, .top-text {
   text-align: right;
   margin-right: 35px
 }

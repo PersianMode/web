@@ -37,7 +37,6 @@ export class PanelsComponent implements OnInit {
               return 0;
             }
           })
-          // .sort((x, y) => (x.info.column * 100 + x.info.row) - (y.info.column * 100 + y.info.row))
           .forEach(r => infos.push(r.info));
         for (let i = 0; i < infos.length; i++) {
           let numberOfPicture = 1;
