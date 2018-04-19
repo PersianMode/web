@@ -42,7 +42,6 @@ import {ColorPickerModule} from 'primeng/primeng';
   ],
   imports: [
     PageRouting,
-    SharedModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -55,7 +54,6 @@ import {ColorPickerModule} from 'primeng/primeng';
     MatDialogModule,
     MatSelectModule,
     MatPaginatorModule,
-    MatSelectModule,
     MatTabsModule,
     MatCheckboxModule,
     SharedModule,

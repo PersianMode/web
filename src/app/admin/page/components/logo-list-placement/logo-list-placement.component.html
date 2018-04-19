@@ -1,3 +1,66 @@
-<p>
-  logo-list-placement works!
-</p>
+<!-- PREIVEW SHOULD BE HERE , ALONG WITH THE DRAGULA GUY -->
+<!--<div class="demo-list" [dragula]="'logo-bag'" [dragulaModel]="logos">-->
+<!--<div *ngFor="let item of logos" class="top-menu-item" (click)="selectItem(item)">-->
+<!--<img [src]="getURL(item.info.imgUrl)" alt="{{item.info.text}}" title="{{item.info.text}}">-->
+<!--</div>-->
+<!--</div>-->
+<nav class="first-bar preview-main">
+  <ul [dragula]="'logo-bag'" [dragulaModel]="logos">
+    <li *ngFor="let logo of logos" (click)="selectItem(logo)" class="top-menu-item"
+        [ngStyle]="{width: logo.info.style && logo.info.style.width ? logo.info.style.width + 'px' : 'initial'}">
+      <div class="gnav-member-bar" [title]="logo.info.text">
+        <img [src]="getURL(logo.info.imgUrl)" class="general"
+             [ngStyle]="{
+            top: (logo.info.style && logo.info.style.top ? -logo.info.style.top : 0)+ 'px',
+            right: (logo.info.style && logo.info.style.right ? -logo.info.style.right : 0) + 'px',
+            height: (logo.info.style && logo.info.style.height ? logo.info.style.height : 29) + 'px'
+          }"></div>
+    </li>
+  </ul>
+</nav>
+<div class="bottom-part">
+  <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
+       fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
+    <div fxFlex="40" style="width: 100%">
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column">
+        <div fxFlex="50" style="width: 100%">
+          <mat-input-container class="input-field">
+            <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
+                   [(ngModel)]="upsertLogo.text"
+                   (ngModelChange)="changeField($event)"/>
+          </mat-input-container>
+        </div>
+        <div fxFlex="50" style="width: 100%">
+          <mat-input-container dir="ltr" class="input-field">
+            <input matInput type="text" class="menu-field" placeholder="آدرس" [(ngModel)]="upsertLogo.href"
+                   (ngModelChange)="changeField($event)"/>
+          </mat-input-container>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="30" class="button-area">
+      <button mat-mini-fab color="primary" (click)="modifyItem(upsertLogo.isEdit)"
+              [disabled]="logoApplyDisability()">
+        <mat-icon>
+          <i class="material-icons" *ngIf="upsertLogo.isEdit">create</i>
+          <i class="material-icons" *ngIf="!upsertLogo.isEdit">done</i>
+        </mat-icon>
+      </button>
+      <button mat-mini-fab color="primary" (click)="removeItem()" *ngIf="upsertLogo.isEdit" class="remove">
+        <mat-icon>
+          <i class="material-icons">remove</i>
+        </mat-icon>
+      </button>
+      <button mat-mini-fab color="primary" (click)="clearFields()" *ngIf="upsertLogo.isEdit">
+        <mat-icon>
+          <i class="fa fa-eraser"></i>
+        </mat-icon>
+      </button>
+    </div>
+    <div fxFlex="30">
+      <app-uploader [single]="true"
+                    [url]="'placement/image/' + pageId"
+                    (OnCompleted)="onImageUploaded($event)"></app-uploader>
+    </div>
+  </div>
+</div>

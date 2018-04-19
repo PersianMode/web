@@ -7,7 +7,7 @@
                             (modifyPlacement)="modify($event)"></app-menu-placement>
       </mat-tab>
       <mat-tab label="لوگو" *ngIf="!isApp">
-        <app-logo-list-placement [placements]="getRelatedPlacements('logos')"
+        <app-logo-list-placement [placements]="getRelatedPlacements('logos')" [pageId]="pageId"
                                  (modifyPlacement)="modify($event)"></app-logo-list-placement>
       </mat-tab>
       <mat-tab label="اسلایدر" *ngIf="!isApp">

@@ -126,6 +126,7 @@ export class SliderPlacementComponent implements OnInit {
   onImageUploaded(images: any) {
     if (images.length > 0) {
       this.upsertSlider['imgUrl'] = images[0];
+      // TODO: should not be emitted! instead, the edit button should be enabled!
       this.reloadPlacements.emit();
     }
   }

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
 
@@ -13,13 +13,10 @@ export interface Pos {
   templateUrl: './slider-preview.component.html',
   styleUrls: ['./slider-preview.component.css']
 })
-export class SliderPreviewComponent implements OnInit {
+export class SliderPreviewComponent {
   @Input()
   set text(value) {
-    // if (this._text !== value) {
     this._text = value;
-    // this.slide = Object.assign({}, this._pos);
-    // }
   }
 
   @Input()
@@ -44,10 +41,6 @@ export class SliderPreviewComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) {
   }
 
-  ngOnInit() {
-    // this.slide = Object.assign({}, this._pos);
-  }
-
   change($event) {
     this.changeFields();
   }
@@ -62,11 +55,7 @@ export class SliderPreviewComponent implements OnInit {
     const marginLeftChange = this._pos['imgMarginTop'] === this.slide['imgMarginTop'];
     const marginTopChange = this._pos['imgMarginLeft'] === this.slide['imgMarginLeft'];
 
-    if (widthChange && marginLeftChange && marginTopChange) {
-      this.anyChanges = false;
-    } else {
-      this.anyChanges = true;
-    }
+    this.anyChanges = !(widthChange && marginLeftChange && marginTopChange);
 
     this.imageSettingsChanged.emit({
       anyChanges: this.anyChanges,
