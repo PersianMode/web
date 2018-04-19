@@ -63,7 +63,6 @@ export class EditOrderComponent implements OnInit {
 
   applyEdit() {
     this.dialogRef.close(this.editObj);
-    console.log(this.editObj)
   }
 
   setNewSize(newSize) {
