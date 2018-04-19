@@ -7,6 +7,27 @@
     font-family: iranyekan, sans-serif;
 }
 
+.order-data {
+    margin-top: 5px;
+    font-family: iranyekan, sans-serif;
+}
+
+.order-data div {
+    text-align: right;
+}
+
+.order-data div span:nth-of-type(2) {
+    font-weight: bold;
+}
+
+.info-cell {
+    padding: 6px;
+}
+
+.eye-style {
+    text-align: left !important;
+    font-size: 18px;
+}
 mat-header-cell {
   text-align: center;
   font-size: 13px;

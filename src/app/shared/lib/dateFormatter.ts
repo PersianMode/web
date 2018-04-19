@@ -1,4 +1,5 @@
 import * as moment from 'jalali-moment';
+
 export function dateFormatter(d) {
   const date = moment(d);
   return [

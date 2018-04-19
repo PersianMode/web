@@ -7,7 +7,7 @@ import {SharedModule} from '../../shared/shared.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {
-  MatCardModule, MatFormFieldModule, MatHeaderRow, MatInputModule, MatRadioModule, MatRow, MatRowDef,
+  MatCardModule, MatExpansionModule, MatFormFieldModule, MatHeaderRow, MatInputModule, MatRadioModule, MatRow, MatRowDef,
   MatTableModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -29,6 +29,7 @@ import { OrderLinesComponent } from './components/order-lines/order-lines.compon
     DpDatePickerModule,
     ReactiveFormsModule,
     MatTableModule,
+    MatExpansionModule,
   ],
   providers: [ProfileOrderService],
   declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent, OrderLinesComponent]

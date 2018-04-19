@@ -11,10 +11,17 @@ import {ProfileOrderService} from '../../../../shared/services/profile-order.ser
 export class ProfileComponent implements OnInit {
 
   isEdit = false;
+  headerTitle;
   constructor(private authService: AuthService, private router: Router, private profileOrderService: ProfileOrderService) {
   }
 
   ngOnInit() {
+  }
+  setHeaderTitle(title) {
+    this.headerTitle = title;
+  }
+  setDefaultTitle() {
+    // this.headerTitle = 'اطلاعات مشتری';
   }
 }
 
