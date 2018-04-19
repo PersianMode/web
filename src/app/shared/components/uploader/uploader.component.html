@@ -1,5 +1,5 @@
-<p>صف بارگذاری: {{ uploader?.queue?.length }}</p>
-<table class="table" >
+<p *ngIf="!single">صف بارگذاری: {{ uploader?.queue?.length }}</p>
+<table class="table">
   <thead>
   <tr>
     <th>نام فایل</th>
@@ -38,16 +38,24 @@
       </button>
     </td>
   </tr>
-  <tr><td colspan="5"><div ng2FileDrop
-                           [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-                           (fileOver)="fileOverBase($event)"
-                           [uploader]="uploader"
-                           class="well my-drop-zone">
-  </div></td></tr>
+  <tr>
+    <td colspan="5">
+      <div ng2FileDrop
+           [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+           (fileOver)="fileOverBase($event)"
+           [uploader]="uploader"
+           class="well my-drop-zone"
+           [style.minHeight]="single ? '100px' : '200px'">
+      </div>
+    </td>
+  </tr>
   </tbody>
 </table>
-
-<div >
+<div class="input-uploader">
+  <input type="file" ng2FileSelect [uploader]="uploader" multiple *ngIf="!single">
+  <input type="file" ng2FileSelect [uploader]="uploader" *ngIf="single">
+</div>
+<div>
   <div>
     پیشرفت صف:
     <div class="progress" style="">
@@ -56,14 +64,20 @@
   </div>
   <button type="button" class="btn btn-success btn-s"
           (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-    <span class="fa fa-upload"></span> بارگذاری همه
+    <span class="fa fa-upload"></span>
+    <span *ngIf="!single"> بارگذاری همه</span>
+    <span *ngIf="single">بارگذاری</span>
   </button>
   <button type="button" class="btn btn-warning btn-s"
           (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-    <span class="fa fa-ban"></span> لغو همه
+    <span class="fa fa-ban"></span>
+    <span *ngIf="!single">لغو همه</span>
+    <span *ngIf="single">لغو</span>
   </button>
   <button type="button" class="btn btn-danger btn-s"
           (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-    <span class="fa fa-trash"></span> حذف همه
+    <span class="fa fa-trash"></span>
+    <span *ngIf="!single">حذف همه</span>
+    <span *ngIf="single">حذف</span>
   </button>
 </div>
