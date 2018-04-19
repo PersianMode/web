@@ -1,7 +1,9 @@
-import {Component, HostListener, Inject, Input, OnInit} from '@angular/core';
-import {WINDOW} from '../../services/window.service';
-import {AuthService} from '../../services/auth.service';
-import {PageService} from '../../services/page.service';
+import { Component, HostListener, Inject, Input, OnInit } from '@angular/core';
+import { WINDOW } from '../../services/window.service';
+import { AuthService } from '../../services/auth.service';
+import { PageService } from '../../services/page.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { HttpService } from '../../services/http.service';
 
 
 @Component({
@@ -14,7 +16,8 @@ export class PanelsComponent implements OnInit {
   curHeight = 100;
   placements: any = [];
 
-  constructor(@Inject(WINDOW) private window, private authService: AuthService, private pageService: PageService) {
+  constructor(@Inject(WINDOW) private window, private authService: AuthService,
+    private pageService: PageService, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
@@ -63,7 +66,7 @@ export class PanelsComponent implements OnInit {
                 object.imgs[j - i].areas = infos[j].areas;
               }
               if (infos[j].imgUrl) {
-                object.imgs[j - i].imgUrl = infos[j].imgUrl;
+                object.imgs[j - i].imgUrl = this.getUrl(infos[j].imgUrl);
               }
               if (infos[j].subTitle) {
                 object.imgs[j - i].subTitle = infos[j].subTitle;
@@ -83,5 +86,10 @@ export class PanelsComponent implements OnInit {
   onResize(event) {
     this.curWidth = event.target.innerWidth;
     this.curHeight = event.target.innerHeight;
+  }
+
+  getUrl(url) {
+    if (url)
+      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + (url[0] === '/' ? url : '/' + url));
   }
 }

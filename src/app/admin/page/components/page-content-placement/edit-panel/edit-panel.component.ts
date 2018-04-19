@@ -1,5 +1,6 @@
-import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
+import { PlacementModifyEnum } from '../../../enum/placement.modify.type.enum';
 
 @Component({
   selector: 'app-edit-panel',
@@ -58,12 +59,33 @@ export class EditPanelComponent implements OnInit {
     titleColor: '#000000',
     textColor: '#000000',
   };
+  areas = [];
+  saveButtonShouldBeDisabled = true;
+  urlAddress = '';
+  imageUrl = '';
+  pageId = null;
 
-  constructor(public dialogRef: MatDialogRef<EditPanelComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(public dialogRef: MatDialogRef<EditPanelComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
+    private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
     this.placement = this.data.placement;
+    this.pageId = this.data.pageId;
+    if (this.placement) {
+      this.rowTemplate = this.placement.info.panel_type;
+      this.urlAddress = this.placement.info.href;
+      this.imageUrl = this.placement.info.imageUrl;
+      this.areas = this.placement.info.areas.slice();
+      if (this.placement.info.topTitle) {
+        this.hasTopTitle = true;
+        this.topTitle = this.placement.info.topTitle;
+      }
+      if (this.placement.info.subTitle) {
+        this.hasSubTitle = true;
+        this.subTitle = this.placement.info.subTitle;
+      }
+    }
   }
 
   showImageAreas() {
@@ -77,7 +99,7 @@ export class EditPanelComponent implements OnInit {
   }
 
   haveCurrentArea(pos) {
-    if (this.placement && this.placement.info.areas.find(el => el.pos === pos))
+    if (this.placement && this.areas.find(el => el.pos.toLowerCase() === pos.toLowerCase()))
       return true;
     else
       return false;
@@ -86,7 +108,7 @@ export class EditPanelComponent implements OnInit {
   setArea(pos) {
     let obj = null;
     if (this.placement)
-      obj = this.placement.info.areas.find(el => el.pos.toLowerCase() === pos.toLowerCase());
+      obj = this.areas.find(el => el.pos.toLowerCase() === pos.toLowerCase());
 
     if (this.placement && obj)
       Object.keys(this.selectedArea).forEach(el => this.selectedArea[el] = obj[el]);
@@ -106,15 +128,19 @@ export class EditPanelComponent implements OnInit {
   }
 
   saveArea() {
-    if (!this.placement)
-      this.placement = {info: {}};
-    if (!this.placement.info.areas)
-      this.placement.info.areas = [];
-    this.placement.info.areas.push(Object.assign({}, this.selectedArea));
+    const areaIndex = this.areas.findIndex(el => el.pos.toLowerCase() === this.selectedArea.pos.toLowerCase());
+    if (areaIndex !== -1) {
+      this.areas[areaIndex] = Object.assign({}, this.selectedArea);
+    } else {
+      this.areas.push(Object.assign({}, this.selectedArea));
+    }
+
+    this.changeField();
+    this.areaDoneBtnShouldDisabled = true;
   }
 
   removeArea() {
-    this.placement.info.areas = this.placement.info.areas.filter(el => el.pos.toLowerCase() !== this.selectedArea.pos);
+    this.areas = this.areas.filter(el => el.pos.toLowerCase() !== this.selectedArea.pos);
     this.selectedArea = {
       pos: null,
       title: null,
@@ -130,11 +156,11 @@ export class EditPanelComponent implements OnInit {
   changedArea() {
     let obj = null;
     if (this.placement)
-      obj = this.placement.info.areas.find(el => el.pos.toLowerCase() === this.selectedArea.pos.toLowerCase());
+      obj = this.areas.find(el => el.pos.toLowerCase() === this.selectedArea.pos.toLowerCase());
 
     this.areaDoneBtnShouldDisabled = true;
     if (this.placement && obj) {
-      // This area is exist
+      // This area exists
       Object.keys(this.selectedArea).forEach(el => {
         if (obj[el].toLowerCase() !== this.selectedArea[el].toLowerCase()) {
           this.areaDoneBtnShouldDisabled = false;
@@ -142,7 +168,7 @@ export class EditPanelComponent implements OnInit {
         }
       });
     } else {
-      // This area isn't exist
+      // This area doesn't exist
       let noError = false;
       ['title', 'text', 'buttonText'].forEach(el => {
         if (this.selectedArea[el] && this.selectedArea[el].trim())
@@ -158,14 +184,113 @@ export class EditPanelComponent implements OnInit {
   }
 
   changeField() {
+    this.saveButtonShouldBeDisabled = false;
+    let anyChanges = false;
 
+    if (!this.urlAddress)
+      this.saveButtonShouldBeDisabled = true;
+    else if (!this.placement || this.urlAddress.toLowerCase() !== this.placement.info.href.toLowerCase())
+      anyChanges = true;
+    if (!this.rowTemplate)
+      this.saveButtonShouldBeDisabled = true;
+    else if (!this.placement || this.rowTemplate.toLowerCase() !== this.placement.info.panel_type.toLowerCase())
+      anyChanges = true;
+    // ToDo: Check image
+    if (this.hasTopTitle) {
+      if (!this.topTitle.title && !this.topTitle.text)
+        this.saveButtonShouldBeDisabled = true;
+      else if (!this.topTitle.titleColor || !this.topTitle.textColor)
+        this.saveButtonShouldBeDisabled = true;
+      else {
+        if (!this.placement || !this.placement.info.topTitle)
+          anyChanges = true;
+        else {
+          if ((this.placement.info.topTitle.title !== this.topTitle.title) ||
+            (this.placement.info.topTitle.text !== this.topTitle.text) ||
+            (this.placement.info.topTitle.titlecolor !== this.topTitle.titleColor) ||
+            (this.placement.info.topTitle.textColor !== this.topTitle.textColor))
+            anyChanges = true;
+        }
+      }
+    }
+    if (this.hasSubTitle) {
+      if (!this.subTitle.title && !this.subTitle.text)
+        this.saveButtonShouldBeDisabled = true;
+      else if (!this.subTitle.titleColor || !this.subTitle.textColor)
+        this.saveButtonShouldBeDisabled = true;
+      else {
+        if (!this.placement || !this.placement.info.subTitle)
+          anyChanges = true;
+        else {
+          if ((this.placement.info.subTitle.title !== this.subTitle.title) ||
+            (this.placement.info.subTitle.text !== this.subTitle.text) ||
+            (this.placement.info.subTitle.titlecolor !== this.subTitle.titleColor) ||
+            (this.placement.info.subTitle.textColor !== this.subTitle.textColor))
+            anyChanges = true;
+        }
+      }
+    }
+
+    if (this.saveButtonShouldBeDisabled)
+      return;
+
+    // Check changes
+    if ((!this.placement && this.areas.length) || (this.areas.length !== this.placement.info.areas.length))
+      anyChanges = true;
+    else {
+      if (this.placement)
+        this.areas.forEach(el => {
+          const arObj = this.placement.info.areas.find(i => i.pos.toLowerCase() === el.pos.toLowerCase());
+          if (Object.keys(el).length !== Object.keys(arObj).length)
+            anyChanges = true;
+          else
+            Object.keys(el).forEach(i => {
+              if (el[i].toLowerCase() !== arObj[i].toLowerCase())
+                anyChanges = true;
+            });
+        });
+    }
+
+    if (!anyChanges)
+      this.saveButtonShouldBeDisabled = true;
   }
 
   saveChanges() {
-    this.dialogRef.close(this.placement);
+    this.dialogRef.close({
+      type: this.placement ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
+      placement: {
+        _id: this.placement._id,
+        component_name: 'main',
+        info: {
+          panel_type: this.rowTemplate,
+          // "imgUrl": "/product-pic/shoeSample.png",
+          href: this.urlAddress,
+          areas: this.areas,
+          topTitle: this.hasTopTitle ? this.topTitle : null,
+          subTitle: this.hasSubTitle ? this.subTitle : null,
+        }
+      }
+    });
   }
 
   closeDialog() {
     this.dialogRef.close();
+  }
+
+  imageUploadUrl() {
+    if (this.placement)
+      return `placement/image/${this.pageId}/${this.placement._id}`;
+
+    return `placement/image/${this.pageId}`;
+  }
+
+  imageUploaded(data) {
+    this.snackBar.open('تصویر بارگذاری شد', null, {
+      duration: 2300,
+    });
+
+    console.log(data);
+    
+    this.imageUrl = data.downloadedUrl;
   }
 }

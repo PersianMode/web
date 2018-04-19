@@ -8,7 +8,7 @@
          [style.margin-left]="item.type !== 'full' ? '15px' : null">
       <div [fxFlex]="100/item.imgs.length" *ngFor="let im of item.imgs">
         <a [routerLink]="im.href">
-          <img src="{{im.imgUrl}}" class="full-width"/>
+          <img [src]="im.imgUrl" class="full-width"/>
         </a>
         <div *ngFor="let ar of im.areas">
           <div [style.font-size]="(item.type === 'full' && item.imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
