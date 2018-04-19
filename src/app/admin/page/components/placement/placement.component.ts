@@ -15,12 +15,7 @@ export class PlacementComponent implements OnInit {
   @Input() pageId = null;
   @Input() pageAddress = '';
 
-  @Input()
-  set placements(value) {
-    this._placements = value;
-  }
-
-  _placements: IPlacement[] = [];
+  @Input() placements: IPlacement[] = [];
   @Output() modifyPlacement = new EventEmitter();
   @Output() reloadPlacement = new EventEmitter();
 
@@ -35,7 +30,7 @@ export class PlacementComponent implements OnInit {
   }
 
   getRelatedPlacements(type) {
-    return this._placements ? this._placements.filter(el => el.component_name.toLowerCase() === type.toLowerCase()) : [];
+    return this.placements ? this.placements.filter(el => el.component_name.toLowerCase() === type.toLowerCase()) : [];
   }
 
   modify(value) {
