@@ -1,19 +1,31 @@
-import {Component, HostListener, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  Component, HostListener, Inject, Input, OnInit, Output, ViewChild, EventEmitter,
+  OnDestroy, AfterContentChecked
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
-import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 
 @Component({
   selector: 'app-desktop-product',
   templateUrl: './desktop-product.component.html',
   styleUrls: ['./desktop-product.component.css']
 })
-export class DesktopProductComponent implements OnInit {
+export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input() product;
   @Input() price;
   @Input() sub;
-  @Input() id;
+  @Output() changeSize = new EventEmitter<any>();
+  @Input()
+  set id(value) {
+    this._id = value;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  private _id;
   @ViewChild('descPane') descPane;
   @ViewChild('photosDiv') photosDiv;
   topFixedFilterPanel = false;
@@ -22,37 +34,59 @@ export class DesktopProductComponent implements OnInit {
   topDist = 0;
   innerHeight = 0;
   innerScroll = false;
-  size: number;
-  selected_product_color = [];
+  size: any;
+  productSize;
+  addCardBtnDisabled = true;
+  focused: any = {};
+
+  @Input()
+  set selectedProductColorID(id) {
+    if (id) {
+      this.selectedProductColor = this.product.colors.find(r => r._id === id);
+      this.productSize = this.product.sizesByColor[id];
+    }
+  };
+
+  selectedProductColor: any = {};
+
+  @Output() add = new EventEmitter<any>();
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
   }
 
   ngOnInit() {
-    this.selected_product_color = this.product.colors[0];
   }
 
-  up() {
-    this.router.navigate(['product', +this.id + 1]);
+  saveToCart() {
+    this.add.emit(this.size);
   }
 
+  newSize(event) {
+    this.size = event;
+    this.addCardBtnDisabled = !this.size;
+    this.changeSize.emit(this.size);
+  }
 
-  showAngles(colorId) {
-    this.selected_product_color = this.product.colors.filter(el => el.color_id === colorId)[0];
+  ngAfterContentChecked() {
+    this.onScroll();
   }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
+    this.onScroll();
+  }
+
+  private onScroll() {
     const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
     const height = this.window.innerHeight - 209;
     const filterHeight = this.descPane.nativeElement.scrollHeight;
     const docHeight = this.photosDiv.nativeElement.scrollHeight + 209;
-    this.innerScroll = docHeight - filterHeight < 0;
-    this.innerHeight = docHeight - 261;
+    this.innerScroll = docHeight - filterHeight < 100;
+    this.innerHeight = docHeight - 209;
     this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
-    this.bottomScroll = docHeight - offset - height < 180;
-    this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && !this.bottomScroll
-                                  && filterHeight - offset < height && offset >= 65;
+    this.bottomScroll = !this.innerScroll && offset >= 65 && (docHeight - offset - height < 180);
+    this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= 65 &&
+      !this.bottomScroll && filterHeight - offset < height - 209;
     this.topDist = height - filterHeight + 209;
   }
 

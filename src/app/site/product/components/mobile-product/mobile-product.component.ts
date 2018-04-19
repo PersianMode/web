@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-mobile-product',
@@ -10,13 +10,32 @@ export class MobileProductComponent implements OnInit {
   @Input() price;
   @Input() sub;
   @Input() id;
-  selected_product_color = [];
+  @Input()
+  set selectedProductColorID(id) {
+    if (id) {
+      this.selectedProductColor = this.product.colors.find(r => r._id === id);
+      this.productSize = this.product.sizesByColor[id];
+    }
+  };
+  productSize = [];
+  selectedProductColor: any = {};
+  addCardBtnDisabled = true;
+  @Output() add = new EventEmitter<any>();
+  @Output() changeSize = new EventEmitter<any>();
+  size = '';
+
   constructor() { }
 
-  ngOnInit() {
-    this.selected_product_color = this.product.colors[0];
+  newSize(event) {
+    this.size = event;
+    this.addCardBtnDisabled = !this.size;
+    this.changeSize.emit(this.size);
   }
-  showAngles(colorId) {
-    this.selected_product_color = this.product.colors.filter(el => el.color_id === colorId)[0];
+
+  ngOnInit() {
+  }
+
+  saveToCart() {
+    this.add.emit(this.size);
   }
 }

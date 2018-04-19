@@ -1,7 +1,7 @@
 <h1>{{product.name}}</h1>
 <h4>{{sub}} <span>{{price}} تومان</span></h4>
-<swiper [config]="config" [(index)]="index">
-  <div *ngFor="let item of selected_product_color.images.angles">
+<swiper *ngIf="selectedProductColor" [config]="config" [(index)]="index">
+  <div *ngFor="let item of selectedProductColor?.image?.angles">
     <img *ngIf="item.type !== 'video'" src="{{item.url}}">
     <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
       <source src="{{item.url}}" type="video/webm">
@@ -10,14 +10,20 @@
 </swiper>
 <div *ngIf="product.colors" class="colors">
   <div [style.width]="(product.colors.length * 131) + 'px'">
-    <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item.color_id]" (click)="showAngles(item.color_id)"><img
-            [style.opacity]="item.color_id === id ? 1 : .5"
-            src="assets/pictures/product-small/{{item.images.thumbnail}}"></a>
+    <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
+      <span style="margin:0">
+        <p *ngIf="item.soldOut" class="soldOut">موجود نیست</p>
+        <img [style.opacity]="selectedProductColor && item._id === selectedProductColor._id ? 1 : .5"
+           src="{{item.image.thumbnail}}">
+    </span>
+    </a>
   </div>
 </div>
 <div class="container">
-  <app-size-picker (value)="size = $event"></app-size-picker>
-  <button class="cart">در سبد بگذار</button>
+  <div style="width:100%">
+    <app-size-picker [sizes]="productSize" (value)="newSize($event)"></app-size-picker>
+  </div>
+  <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled">در سبد بگذار</button>
   <button class="wishlist" matTooltip="در آرزوها بگذار"><i class="fa fa-heart"></i></button>
   <div class="description-md" Markdown>
     {{product.desc}}

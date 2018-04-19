@@ -1,4 +1,17 @@
-import {Component, OnInit, Output, ViewChild, EventEmitter} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  ViewChild,
+  EventEmitter,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  SimpleChange
+} from '@angular/core';
+import {isUndefined, log} from 'util';
+import {DictionaryService} from '../../services/dictionary.service';
+import {sizeOptionsEnum} from '../../enum/sizeOptions.enum';
 
 @Component({
   selector: 'app-size-picker',
@@ -6,84 +19,63 @@ import {Component, OnInit, Output, ViewChild, EventEmitter} from '@angular/core'
   styleUrls: ['./size-picker.component.css']
 })
 export class SizePickerComponent implements OnInit {
-  sizes = [
-    {
-      value: 12,
-    },
-    {
-      value: 13,
-    },
-    {
-      value: 14,
-      disabled: true,
-    },
-    {
-      value: 15,
-    },
-    {
-      value: 16,
-    },
-    {
-      value: 17,
-    },
-    {
-      value: 18,
-    },
-    {
-      value: 19,
-    },
-    {
-      value: 20,
-    },
-    {
-      value: 21,
-    },
-    {
-      value: 22,
-    },
-    {
-      value: 23,
-    },
-    {
-      value: 24,
-      disabled: true,
-    },
-    {
-      value: 25,
-    },
-    {
-      value: 26,
-    },
-    {
-      value: 27,
-    },
-    {
-      value:28,
-    },
-    {
-      value: 29,
-    },
-    {
-      value: 30,
-    },
-    {
-      value: 31,
-    },
+  sizeSplits = [];
 
-  ];
-  sizeses = [];
-  @Output('value') value = new EventEmitter();
-  val = 0;
-  constructor() { }
-
-  ngOnInit() {
-    while (this.sizes.length) {
-      this.sizeses.push(this.sizes.splice(0, 5));
+  @Input()
+  set sizes(productSizes) {
+    const temp = [];
+    Object.assign(temp, productSizes);
+    if (productSizes && productSizes.length) {
+      productSizes.forEach((p, pi) => {
+        temp[pi].displayValue = this.dict.translateWord(p.value);
+      });
+    }
+    this.sizeSplits = [];
+    while (temp && temp.length) {
+      this.sizeSplits.push(temp.splice(0, 5));
     }
   }
 
+  @Output('value') value = new EventEmitter();
+  val = 0;
+
+  constructor(private dict: DictionaryService) {
+  }
+
+  ngOnInit() {
+  }
+
   onChange(e) {
-    this.value.emit(+e.value);
-    this.val = +e.value;
+    const sizeFirstCharCode = e.value.charCodeAt(0);
+    this.val = (sizeFirstCharCode >= 48 && sizeFirstCharCode <= 57) ? +e.value : e.value;
+    this.value.emit(this.val);
+
+    // if ( +e.value > 0 ) {
+    //   this.val = +e.value;
+    //   this.value.emit(+e.value);
+    // }
+    // else {
+    //   this.val = e.value;
+    //   // this.value.emit(e.value);
+    //   let tempEmitValue = e.value;
+    //   switch (e.value) {
+    //     case 'XS' :
+    //       tempEmitValue = sizeOptionsEnum.XS;
+    //       break;
+    //     case 'S' :
+    //       tempEmitValue = sizeOptionsEnum.S;
+    //       break;
+    //     case 'M' :
+    //       tempEmitValue = sizeOptionsEnum.M;
+    //       break;
+    //     case 'L' :
+    //       tempEmitValue = sizeOptionsEnum.L;
+    //       break;
+    //     case 'XL' :
+    //       tempEmitValue = sizeOptionsEnum.XL;
+    //       break;
+    //   }
+    //   this.value.emit(tempEmitValue);
+    // }
   }
 }

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
+import {EditOrderComponent} from '../edit-order/edit-order.component';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-cart-items',
@@ -7,57 +9,58 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
   styleUrls: ['./cart-items.component.css']
 })
 export class CartItemsComponent implements OnInit {
-  product: any = {
-    id: 14,
-    name: 'کایری ۳ مدل What The',
-    tags: ['کفش', 'بسکتبال', 'نوجوانان'],
-    desc: `# راحت
-    *کایری ۳ مدل What The* کمک می‌کند به سرعت در هر جهتی حرکت کنید چون پاشنه‌های مدور منحصر به فردی دارد.
-     
-    * **رنگ نمایش داده شده**: طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی
-    * **سبک**: AH2287-700`,
-    price: 599000,
-    size: 6.5,
-    quantity : 3,
-    colors: [
-      {
-        color_id : 101,
-        color_name : 'طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی',
-        images: {
-          thumbnail : '11.jpeg',
-          angles : [{
-            type: 'video',
-            url: 'assets/pictures/products/video.webm',
-          },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_020.jpg',
-            }
-          ]
-        }
-      },
-    ],
-  };
-  total_price = null;
-  constructor() { }
+  @Input() product = null;
+  @Output() updateProduct = new EventEmitter();
+  @Output() valid = new EventEmitter();
+
+  notExist = false;
+  stock = 0;
+  displaySize = null;
+  displayQuantity = null;
+  displayPrice = null;
+  displayTotalPrice = null;
+
+  constructor(private dialog: MatDialog) {
+  }
 
   ngOnInit() {
-    this.total_price = this.product.quantity * this.product.price;
-    this.total_price = priceFormatter(this.total_price);
-    this.product.price = priceFormatter(this.product.price);
-    this.product.size = this.product.size.toLocaleString('fa');
-    this.product.quantity = this.product.quantity.toLocaleString('fa');
+    this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
+    this.stock = this.product.count.toLocaleString('fa', {useGrouping: false});
+    this.valid.emit(!this.notExist);
+    this.displaySize = this.product.size.toLocaleString('fa');
+    this.displayQuantity = this.product.quantity.toLocaleString('fa');
+    this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
+    this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price) + ' تومان';
   }
+
   deleteProduct() {
+    this.updateProduct.emit({type: 'delete'});
   }
-  editOrder() {
+
+  openEditOrder() {
+    const rmDialog = this.dialog.open(EditOrderComponent, {
+      width: '850px',
+      data: {
+        dialog_product: this.product,
+      }
+    });
+    rmDialog.afterClosed().subscribe(
+      (data) => {
+        if (data) {
+          this.updateProduct.emit({type: 'update', value: data});
+          this.displaySize = (data.newSize ? data.newSize : this.product.size).toLocaleString('fa');
+          this.displayQuantity = (data.newQuantity ? data.newQuantity : this.product.quantity).toLocaleString('fa');
+          this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
+          this.displayTotalPrice = priceFormatter((data.newQuantity ? data.newQuantity : this.product.quantity) * this.product.price)  + ' تومان';
+          this.product.quantity = data.newQuantity;
+          this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
+          this.valid.emit(!this.notExist);
+          this.stock = this.product.count.toLocaleString('fa', {useGrouping: false});
+        }
+      },
+      (err) => {
+        console.error('Error in dialog: ', err);
+      }
+    );
   }
 }

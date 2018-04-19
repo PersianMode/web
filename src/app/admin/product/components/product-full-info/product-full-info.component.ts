@@ -1,11 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
-// TODO: // import {IProductColor} from '../../interfaces/iproduct-color';
 import {IType} from '../../interfaces/itype';
 import {IColor} from '../../interfaces/icolor';
 import {IBrand} from '../../interfaces/ibrand';
 import {IWarehouse} from '../../interfaces/iwarehouse';
+
+// TODO: // import {IProductColor} from '../../interfaces/iproduct-color';
 
 @Component({
   selector: 'app-product-full-info',
@@ -18,11 +19,12 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
   product: any = {};
   productColors: any;
   types: IType[];
-  colors: IColor[];
   brands: IBrand[];
   warehouses: IWarehouse[];
+  tags: any;
 
   constructor(private httpService: HttpService, private route: ActivatedRoute) {
+
   }
 
   setProductId($event) {
@@ -30,7 +32,6 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.route.params.subscribe(
       (params) => {
         this.productId = params['id'];
@@ -38,7 +39,6 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
           this.getProductColors();
       });
 
-    this.getColors();
     this.getTypes();
     this.getBrands();
     this.getWarehouses();
@@ -46,20 +46,12 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
 
   getProductColors() {
     this.httpService.get(`product/color/${this.productId}`).subscribe(res => {
-      // console.log(this.productId);
       this.productColors = res.colors;
     }, err => {
       console.error();
     });
   }
 
-  getColors() {
-    this.httpService.get(`color`).subscribe(res => {
-      this.colors = res;
-    }, err => {
-      console.error();
-    });
-  }
 
   getTypes() {
     this.httpService.get(`productType`).subscribe(res => {
@@ -91,5 +83,10 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
 
   setProductColors(productColors: any) {
     this.productColors = productColors;
+  }
+
+  setProductTags(productTags: any) {
+    this.tags = productTags;
+
   }
 }

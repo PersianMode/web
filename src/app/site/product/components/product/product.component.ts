@@ -1,223 +1,105 @@
-import {Component, HostListener, Inject, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
+import {HttpService} from '../../../../shared/services/http.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
+import {ProductService} from '../../../../shared/services/product.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
+import {Subscription} from 'rxjs/Subscription';
+import {AddToCardConfirmComponent} from '../add-to-card-confirm/add-to-card-confirm.component';
+import {CartService} from '../../../../shared/services/cart.service';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
-export class ProductComponent implements OnInit {
-  id;
-  colorId;
-  product: any = {
-    id: 14,
-    name: 'کایری ۳ مدل What The',
-    tags: ['کفش', 'بسکتبال', 'نوجوانان'],
-    desc: `# راحت
-    *کایری ۳ مدل What The* کمک می‌کند به سرعت در هر جهتی حرکت کنید چون پاشنه‌های مدور منحصر به فردی دارد.
-     
-    * **رنگ نمایش داده شده**: طلائی دانشگاهی/سیاه/زبرجدی تند/آبی نفتی
-    * **سبک**: AH2287-700`,
-    price: 599000,
-    sizes: [
-      {
-        size: 20,
-      },
-      {
-        size: 22,
-      },
-      {
-        size: 24,
-      },
-      {
-        size: 28,
-        oos: true,
-      },
-      {
-        size: 30,
-        oos: true,
-      },
-      {
-        size: 32,
-      },
-      {
-        size: 34,
-      }
-    ],
-    colors: [
-      {
-        color_id : 101,
-        images: {
-          thumbnail : '11.jpeg',
-          angles : [{
-            type: 'video',
-            url: 'assets/pictures/products/video.webm',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_020.jpg',
-            }
-            ]
-        }
-      },
-      {
-        color_id : 102,
-        images: {
-          thumbnail : '12.jpeg',
-          angles : [{
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              type: 'video',
-              url: 'assets/pictures/products/video.webm',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            }
-          ]
-        }
-      },
-      {
-        color_id : 103,
-        images: {
-          thumbnail : '13.jpeg',
-          angles : [{
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_020.jpg',
-            },
-            {
-              type: 'video',
-              url: 'assets/pictures/products/video.webm',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_021.jpg',
-            }
-            ]
-        }
-      },
-      {
-        color_id : 104,
-        images: {
-          thumbnail : '14.jpeg',
-          angles : [
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg',
-            },
-            {
-              type: 'video',
-              url: 'assets/pictures/products/video.webm',
-            }]
-        }
-      },
-      {
-        color_id : 105,
-        images: {
-          thumbnail : '11.jpeg',
-          angles : [
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-            },
-            {
-              url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-            },
-            ]
-        }
-      },
-    ],
-  };
+export class ProductComponent implements OnInit, OnDestroy {
+  selectedProductColor;
+  product: any = {};
   joinedTags = '';
   formattedPrice = '';
   isMobile = false;
+  cartNumbers = null;
+  size = '';
+  private switch$: Subscription;
+  private params$: Subscription;
+  private product$: Subscription;
 
-  constructor(private route: ActivatedRoute, @Inject(WINDOW) private window, private responsiveService: ResponsiveService) {
+  constructor(public httpService: HttpService, private route: ActivatedRoute, @Inject(WINDOW) private window,
+              private responsiveService: ResponsiveService, private productService: ProductService,
+              private dict: DictionaryService, private cartService: CartService, private dialog: MatDialog) {
   }
 
+  // this component we need to have a product data by this format :
+  // productId and colorId or colorName all exist sizes of this colorId
+  // all thumbnail of all colorIds, and just angle pictures of that special colorId that is showing in the browser,
+  // i think we do not need to have all angle pic of all colorIds,
+  // in every switch to thumbnails we need to have angles pictures to show in browser
   ngOnInit() {
+    this.product = {};
+    this.selectedProductColor = null;
     this.isMobile = this.responsiveService.isMobile;
-    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
-    this.route.paramMap.subscribe(params => {
-      this.id = +params.get('product_id');
-      this.product.id = this.id;
-      this.colorId =  params.get('color') ? +params.get('color')
-        : this.product.colors && this.product.colors.length ? this.product.colors.map(r => r.pcid)[0]
-          : NaN;
-      // TODO: remove below lines - it is just for making a working mock
-      if (this.colorId === 10) {
-        this.product.images = [
-          {
-            type: 'video',
-            url: 'assets/pictures/products/video.webm',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_009.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_020.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_021.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_022.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg',
-          },
-        ];
+    this.switch$ = this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    this.params$ = this.route.paramMap.subscribe(params => {
+      const productId = params.get('product_id');
+      const colorIdParam = params.get('color');
+      if (!this.product || this.product.id !== productId || this.selectedProductColor !== colorIdParam) {
+        this.productService.getProduct(productId);
+        this.product$ = this.productService.product$.subscribe(data => {
+          this.product = data;
+          this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
+          this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
+          this.updatePrice();
+        });
       } else {
-        this.product.images = [
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_023.jpg'
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_022.jpg',
-          },
-          {
-            url: 'assets/pictures/products/kyrie-3-what-the-big-kids-basketball-shoe-NzRVD2_019.jpg',
-          },
-        ];
+        this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
       }
-      // TODO: remove above lines - it is just for making a working mock
     });
-    this.joinedTags = this.product.tags.join(' ');
-    this.formattedPrice = priceFormatter(this.product.price);
+  }
+
+  ngOnDestroy(): void {
+    this.switch$.unsubscribe();
+    this.params$.unsubscribe();
+    this.product$.unsubscribe();
+  }
+
+  updatePrice(size = this.size) {
+    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
+    const price = instance && instance.price ? instance.price : this.product.base_price;
+    this.size = size;
+    this.formattedPrice = priceFormatter(price);
+  }
+
+  saveToCart(size) {
+    // check form size and id undefined
+    this.size = size;
+    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
+
+    if (instance) {
+      const object = {
+        product_id: this.product._id,
+        product_instance_id: instance._id,
+      };
+
+      Object.assign(object, this.product);
+
+      this.cartService.saveItem(object);
+      const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
+        position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
+        width: this.isMobile ? '100%' : '550px',
+        data: {
+          product: this.product,
+          instance,
+          selectedSize: size,
+        }
+      });
+      setTimeout(function () {
+        rmDialog.close();
+      }, 3000);
+    }
   }
 
   @HostListener('window:resize', ['$event'])

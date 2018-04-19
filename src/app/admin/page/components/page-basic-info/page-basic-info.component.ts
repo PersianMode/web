@@ -8,6 +8,7 @@ import {IPageInfo} from 'app/admin/page/interfaces/IPageInfo.interface';
 import {ICollection} from '../../interfaces/ICollection.interface';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
 
 @Component({
   selector: 'app-page-basic-form',
@@ -216,19 +217,23 @@ export class PageBasicInfoComponent implements OnInit {
     }
 
     this.progressService.enable();
-    this.httpService.post(`page`, {address: this.form.controls['address'].value}).subscribe(
+    this.httpService.post(`page/cm/preview`, {address: this.form.controls['address'].value}).subscribe(
       (result) => {
 
         this.placements = [];
-        result.placement.forEach(p => {
-          this.placements.push({
-            _id: p._id,
-            component_name: p.component_name
+
+        if (result.placement) {
+          result.placement.forEach(p => {
+            this.placements.push({
+              _id: p._id,
+              component_name: p.component_name,
+              variable_name: p.variable_name,
+              info: p.info,
+            });
           });
-        });
 
-        this.alignRow();
-
+          this.alignRow();
+        }
         this.progressService.disable();
       },
       (error) => {
@@ -265,17 +270,26 @@ export class PageBasicInfoComponent implements OnInit {
     }
   }
 
-  addPlacement() {
-
+  modifyPlacement(value) {
+    switch (value.type) {
+      case PlacementModifyEnum.Delete: {
+        const index = this.placements.findIndex(el => el._id.toString() === value.placement_id.toString());
+        if (index !== -1)
+          this.placements.splice(index, 1);
+      }
+        break;
+      case PlacementModifyEnum.Add: {
+        this.placements.push(value.placement);
+      }
+        break;
+      case PlacementModifyEnum.Modify: {
+        value.placements.forEach(item => {
+          const index = this.placements.findIndex(el => el._id.toString() === item._id.toString());
+          if (index !== -1)
+            this.placements[index] = item;
+        });
+      }
+        break;
+    }
   }
-
-  editPlacement(_id: String) {
-
-  }
-
-  deletePlacement(_id: String) {
-
-  }
-
-
 }

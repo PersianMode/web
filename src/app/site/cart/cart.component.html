@@ -1,11 +1,33 @@
 <div style="display: inline-block; width:100%;">
-    <div style="display: inline-block; width:48%;">
-        <div style="display: inline-block; margin-left: 15px; margin-right: 15px; margin-top: 8px"><b><a href="#">بازخوردهای شما</a></b></div>
-        <div style="display: inline-block; margin-left: 15px; margin-right: 15px; margin-top: 8px"><b><a href="#">تماس با ما</a></b></div>
-        <div style="display: inline-block; margin-left: 15px; margin-right: 15px; margin-top: 8px"><b><a href="#">ارتباط آنلاین</a></b></div>
-    </div>
-    <div style="display: inline-block; width:50%; text-align: left; margin-top: 8px;">
-        <b><a href="#">خرید مجدد</a></b>
-        <span style="font-weight: bolder"><i class="fa fa-angle-double-left"></i></span>
+  <!--<div style="display: inline-block; width:48%;">-->
+    <!--<div class="menu-item"><b><a href="#">بازخوردهای-->
+      <!--شما</a></b></div>-->
+    <!--<div class="menu-item"><b><a href="#">تماس با-->
+      <!--ما</a></b></div>-->
+    <!--<div class="menu-item"><b><a href="#">ارتباط-->
+      <!--آنلاین</a></b></div>-->
+  <!--</div>-->
+  <!--<div class="shop-again">-->
+    <!--<b><a href="#">خرید مجدد</a></b>-->
+    <!--<span style="font-weight: bolder"><i class="fa fa-angle-double-left"></i></span>-->
+  <!--</div>-->
+    <div fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" class="main">
+      <div fxFlex=0 fxFlex.lg="10" fxFlex.xl="20">&nbsp;</div>
+      <div class="main-divs" fxFlex="20" fxFlex.md="30">
+        <app-summary [discount]="discountValue" [total]="totalPrice" (recalculateDiscount)="calculateDiscount($event)" [disabled]="disabled"></app-summary>
+      </div>
+      <div class="main-divs" fxFlex=80 fxFlex.md=70 fxFlex.lg="70" fxFlex.xl="60" style="max-width: calc(100% - 350px)">
+        <div class="signUp-div" *ngIf="!isLoggedIn">
+          عضویت رایگان
+          <span style="padding-left : 10px"><a (click)="goToRegister()" class="membership-style">به ما بپیوندید</a></span>
+        </div>
+        <div class="basket-div">
+          سبد خرید شما ({{numberOfProducts}})
+        </div>
+        <div *ngFor="let product of products;let i = index" style="margin-bottom: 10px;">
+          <app-cart-items [product]="product" (updateProduct)="updateProduct($event, product)" (valid)="changeValidation($event, i)"></app-cart-items>
+        </div>
+      </div>
+      <div fxFlex=0 fxFlex.lg="10" fxFlex.xl="20">&nbsp;</div>
     </div>
 </div>

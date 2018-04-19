@@ -4,7 +4,7 @@ import {
   MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatIconModule,
   MatInputModule,
   MatMenuModule,
-  MatOptionModule,
+  MatOptionModule, MatRadioModule, MatSelectModule, MatStepperModule,
   MatToolbarModule
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
@@ -18,6 +18,10 @@ import {PanelsComponent} from './components/panels/panels.component';
 import {RouterModule} from '@angular/router';
 import {UploaderComponent} from './components/uploader/uploader.component';
 import {FileUploadModule} from 'ng2-file-upload';
+import {AgmCoreModule} from '@agm/core';
+import {AddressTableComponent} from './components/address-table/address-table.component';
+import { DobComponent } from './components/dob/dob.component';
+import {DragulaModule} from 'ng2-dragula';
 
 @NgModule({
   declarations: [
@@ -28,12 +32,15 @@ import {FileUploadModule} from 'ng2-file-upload';
     RemovingConfirmComponent,
     PanelsComponent,
     UploaderComponent,
-  ],
+    AddressTableComponent,
+    DobComponent,
+],
   imports: [
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
     CommonModule,
+    MatRadioModule,
     FlexLayoutModule,
     MatToolbarModule,
     MatCardModule,
@@ -44,17 +51,28 @@ import {FileUploadModule} from 'ng2-file-upload';
     MatAutocompleteModule,
     MatIconModule,
     MatButtonModule,
+    MatRadioModule,
     BidiModule,
     MatIconModule,
+    MatSelectModule,
     MatCheckboxModule,
-    FileUploadModule
+    FileUploadModule,
+    MatStepperModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
+    }),
+    DragulaModule,
   ],
-  entryComponents: [RemovingConfirmComponent],
+  entryComponents: [
+    RemovingConfirmComponent,
+  ],
   exports: [SuggestionComponent,
     SearchFieldsComponent,
     RemovingConfirmComponent,
     PanelsComponent,
     UploaderComponent,
+    AddressTableComponent,
+    DobComponent,
   ]
 })
 export class SharedModule {

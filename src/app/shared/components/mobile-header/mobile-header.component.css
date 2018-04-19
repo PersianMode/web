@@ -24,7 +24,7 @@
   font-size: 1.5em;
 }
 .mobile-persian-mode-logo {
-  font-family: nastaliq !Important;
+  font-family: nastaliq, sans-serif !Important;
   font-size: 20px;
   position: absolute;
   top: 8px;
@@ -63,13 +63,43 @@
   background-color: white;
   font-family: irankharazmi;
   padding: 10px;
-}
-
-.ng-star-inserted
-{
   text-align: right !important;
 }
 
 .mat-drawer-backdrop.mat-drawer-shown {
   background-color: #E5E5E5 !important;
+}
+
+.badge-number {
+  font-size: 18px;
+  margin-left: 0.5px;
+  color: white;
+  font-weight: 200;
+}
+
+#header-cart span:nth-child(1) {
+  position: absolute;
+  width: 20px;
+  text-align: center;
+  line-height:20px;
+  right: -3px;
+  font-weight: 200;
+  font-size: 14px;
+  z-index: 4;
+}
+#header-cart span:nth-child(2) {
+  z-index: 3;
+  right: -3px;
+  width: 20px;
+  opacity: .8;
+  position:absolute;
+}
+#header-cart span:nth-child(3) {
+}
+a{
+  color: black !important;
+}
+
+.first-bar li{
+  background: #fff;
 }

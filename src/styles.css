@@ -6,17 +6,18 @@
   src: url('assets/fonts/OneNikeGlyphs.woff');
 }
 
-body {
+body, label {
   margin: 0;
   padding: 0;
-  font-family: iranyekan,sans-serif;
-  font-weight:200;
+  font-family: iranyekan, sans-serif;
+  font-weight: 200;
   font-size: 11pt;
+  direction: rtl;
 }
 
 a {
   text-decoration: none;
-  outline:none;
+  outline: none;
 }
 
 h1 {
@@ -30,14 +31,22 @@ h1 {
   height: 39px;
 }
 
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #000 !important;
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #000 !important;
+}
+
 .first-bar ul {
-  background: transparent;
   padding: 0;
   margin: 0;
   display: table;
   position: absolute;
   top: -1px;
   height: 39px;
+  z-index: 10;
 }
 
 .first-bar li {
@@ -49,13 +58,13 @@ h1 {
   height: 29px;
 }
 
-a:focus img{
+a:focus img {
   background: #E5E5E5;
   outline: none;
 }
 
 .right-bar {
-  left:13px
+  left: 13px
 }
 
 .right-bar li {
@@ -64,7 +73,9 @@ a:focus img{
   padding: 0 12px;
   vertical-align: baseline;
 }
+
 .faWrapper {
+
   font-size: 18pt;
   line-height: 39px;
   padding: 0px;
@@ -79,11 +90,13 @@ a:focus img{
 .faWrapper:hover {
   color: #d23236;
 }
+
 .loginIcon {
   top: 3px;
   font-size: 20pt;
-  position:relative;
+  position: relative;
 }
+
 .general {
   height: 29px;
   position: relative;
@@ -106,6 +119,7 @@ nav {
   line-height: 39px;
   height: 39px;
 }
+
 .persian-mode-logo {
   font-family: nastaliq !Important;
   font-size: 24px;
@@ -117,9 +131,11 @@ nav {
   transition: all .3s ease-in;
   outline: none;
 }
-.persian-mode-logo:hover{
+
+.persian-mode-logo:hover {
   color: #d23236;
 }
+
 .persian-mode-logo span {
   top: -20px;
   right: -16px;
@@ -150,17 +166,19 @@ nav {
   font-weight: bold;
   font-size: 16pt;
   text-align: center;
-  border-bottom:1px solid #E5E5E5;
+  border-bottom: 1px solid #E5E5E5;
   background: #fff;
 }
+
 .second-bar > ul {
   background-color: white;
   text-align: center;
   font-size: 0;
   width: 100%;
   height: 66px;
-  padding:0;
+  padding: 0;
 }
+
 .second-bar li {
   display: inline-block;
   border-bottom: 2px solid transparent;
@@ -169,15 +187,19 @@ nav {
   height: 66px;
   font-family: irankharazmi;
 }
-.second-bar li:hover{
+
+.second-bar li:hover {
   border-bottom: 2px #111 solid;
 }
+
 .selected {
   border-bottom: 2px #111 solid !important;
 }
-.second-bar a:focus{
+
+.second-bar a:focus {
   border-bottom: 2px #111 solid;
 }
+
 .second-bar a {
   text-decoration: none;
   color: black;
@@ -209,98 +231,111 @@ nav {
   outline: none;
   padding: 2px 0px;
   margin: 0px 4px 5px 2px;
-  font-family: iranyekan,sans-serif;
+  font-family: iranyekan, sans-serif;
   font-size: 14px;
 }
 
-.search-bar input::placeholder{
+.search-bar input::placeholder {
   color: #cbcbcb;
   font-size: 16px;
-  padding:0px 0px 10px;
-  margin:0;
+  padding: 0px 0px 10px;
+  margin: 0;
   line-height: 16px;
 }
+
 input, button {
-  font-family: iranyekan,sans-serif;
+  font-family: iranyekan, sans-serif;
 }
 
-.genderList{
+.genderList {
   position: absolute;
   top: 109px;
   width: 100%;
   min-height: 250px;
   font-weight: bold;
   text-align: center;
-  border-bottom:1px solid #E5E5E5;
+  border-bottom: 1px solid #E5E5E5;
   padding-top: 40px;
   background: #fff;
   z-index: 10;
 }
+
 .genderList div {
-  display:inline-block;
+  display: inline-block;
   vertical-align: top;
   white-space: nowrap;
   margin: 0;
 }
-.genderList div.middle{
+
+.genderList div.middle {
   border-left: 1px solid #E5E5E5;
   border-right: 1px solid #E5E5E5;
   text-align: center;
 }
-.genderList ul{
+
+.genderList ul {
   display: inline-block;
   list-style-type: none;
-  padding:0px 15px;
-  text-align:justify !important;
+  padding: 0px 15px;
+  text-align: justify !important;
   vertical-align: top;
-  margin:0;
+  margin: 0;
 }
-.headerList{
+
+.headerList {
   font-weight: bolder !important;
   text-align: left !important;
 }
+
 .leftColumn {
-  text-align:right;
+  text-align: right;
 }
-.headerList li{
+
+.headerList li {
   font-weight: bolder !important;
-  margin-bottom:10px !important;
+  margin-bottom: 10px !important;
 }
+
 .genderList li {
   margin-bottom: 5px;
   font-weight: 200;
 }
-.headerItem{
+
+.headerItem {
   font-weight: bolder !important;
-  margin-bottom:10px !important;
+  margin-bottom: 10px !important;
 }
+
 .genderList a {
   text-decoration: none;
   color: black;
   outline: none;
 }
 
-.genderList a:hover{
+.genderList a:hover {
   color: darkgray;
 }
 
-.genderList a:focus{
+.genderList a:focus {
   color: darkgrey;
 }
-.genderListWrapper{
+
+.genderListWrapper {
   width: 100% !important;
   min-width: 960px;
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
   overflow: hidden;
 }
+
 .hidden {
   visibility: hidden;
-  height: 0px!important;
+  height: 0px !important;
   top: -10px;
   position: absolute;
   z-index: -1 !important;
 }
+
 .carousel-slider {
   width: 100%;
   overflow: hidden;
@@ -311,9 +346,10 @@ input, button {
   top: 109px;
   height: 60px;
   background-color: rgb(247, 247, 247);
-  border-bottom: 1px solid rgb(229,229,229);
+  border-bottom: 1px solid rgb(229, 229, 229);
   white-space: nowrap;
 }
+
 .carousel-slider div {
   width: 200%;
   -webkit-transition: all 1s ease-in-out;
@@ -322,15 +358,18 @@ input, button {
   white-space: nowrap;
   left: 100%;
 }
+
 .carousel-slider span {
   display: inline-block;
-  width:50%;
+  width: 50%;
   text-align: center;
   line-height: 60px;
 }
+
 .carousel-slider img {
   vertical-align: middle;
 }
+
 .chevron-holder {
   position: absolute;
   top: 109px;
@@ -340,6 +379,7 @@ input, button {
   background-color: rgb(247, 247, 247);
   z-index: -1 !important;
 }
+
 .left-chevron {
   left: 0px;
   text-align: right;
@@ -348,6 +388,10 @@ input, button {
 .right-chevron {
   right: 0px;
   text-align: left;
+}
+
+.ev-loc {
+  height: 250px;
 }
 
 .mat-drawer {
@@ -373,8 +417,8 @@ input, button {
 }
 
 .input-error {
-  border-color: red;
-  border-width: 1px;
+  border-color: red !important;
+  border-width: 1px !important;
 }
 
 input {
@@ -393,7 +437,7 @@ input {
 }
 
 .input-container {
-  margin: 5px;
+  margin: 15px 5px 0px;
   width: 100%;
 }
 
@@ -403,6 +447,11 @@ input {
   border-radius: 3px;
   text-align: center;
   vertical-align: middle;
+}
+
+.field-container {
+  width: 100%;
+  margin: 5px;
 }
 
 .btn-field {
@@ -451,6 +500,10 @@ dp-date-picker.dp-material .dp-picker-input {
   width: 100% !important;
 }
 
+.farsi {
+  direction: rtl;
+}
+
 .dp-picker-input {
   width: 100% !important;
 }
@@ -467,65 +520,80 @@ dp-date-picker.dp-material .dp-picker-input {
 .bottomFixed {
   position: fixed !important;
 }
+
 .bottomScroll {
   position: absolute !important;
   bottom: 212px !important;
   top: unset !important;
 }
+
 .innerScroll {
   overflow-y: scroll;
   height: calc(100% - 51px);
 }
+
 .ui-sidebar {
   background: #fff;
   overflow-y: scroll !important;
   overflow-x: hidden !important;
   width: calc(100% - 40px) !important;
-  padding: 0px 4px 0px 10px  !important;
+  padding: 0px 4px 0px 10px !important;
 }
+
 .ui-sidebar-close {
   visibility: hidden;
   width: 0px;
   height: 0px;
 }
+
 .ui-sidebar-mask {
-  background: rgba(0,0,0,.2);
+  background: rgba(0, 0, 0, .2);
 }
+
 .ui-datascroller .ui-datascroller-content {
   padding: 0 !important;
 }
+
 .mat-button-toggle-label-content {
   font-family: iranyekan !important;
   width: 79px;
   padding: 4px 0 !important;
   text-align: center;
-  border: 1px rgba(221,221,221,.7) solid;
+  border: 1px rgba(221, 221, 221, .7) solid;
   color: black;
 }
+
 .filter-size .mat-button-toggle-label-content {
   width: 42px !important;
   font-size: 14px !important;
 }
+
 .mat-button-toggle-label-content:hover {
   border: 1px black solid;
   z-index: 10;
 }
+
 .mat-button-toggle-group {
   box-shadow: none !important;
   margin-bottom: -1px;
 }
+
 .mat-button-toggle-standalone {
   box-shadow: none !important;
   margin-bottom: -1px;
 }
-.mat-button-toggle-checked div
-{
+
+.mat-button-toggle-checked div {
   background: #000;
   color: #fff !important;
 }
 
 .mat-button-toggle-disabled div {
-  color: rgb(221, 221, 221) !important;
+  color: rgb(99, 99, 99) !important;
+}
+
+.mat-button-toggle-disabled div:hover {
+  border: rgb(221, 221, 221) 1px solid;
 }
 
 .mat-tooltip {
@@ -533,24 +601,42 @@ dp-date-picker.dp-material .dp-picker-input {
   font-weight: 200;
   font-size: 12px;
 }
+
 .mat-expansion-panel-header {
   font-family: iranyekan;
   font-weight: 600;
   padding: 0 !important;
 }
-.mat-expansion-panel-body{
+
+.mat-expansion-panel-body {
   font-family: iranyekan;
   font-weight: 200;
   padding: 0 !important;
 }
 
+.title {
+  font-family: irankharazmi, sans-serif;
+  font-weight: 200;
+}
+
+.content {
+  font-family: iranyekan, sans-serif;
+}
+
+.mat-tab-label {
+  font-family: iranyekan, sans-serif;
+}
+
 mat-expansion-panel {
   box-shadow: none !important;
-  border-top: 1px solid rgba(221,221,221,.7);
+  border-top: 1px solid rgba(221, 221, 221, .7);
+  padding: 0px 10px !important;
 }
+
 .mat-expansion-panel-header:hover {
   background: transparent !important;
 }
+
 mat-panel-title {
   margin: 0 !important;
 }
@@ -563,13 +649,14 @@ mat-panel-title {
   height: 25px;
 }
 
-.footer-link-bold{
+.footer-link-bold {
   color: white;
   font-weight: bolder;
   font-size: .875em;
   text-decoration: none;
 }
-.footer-link{
+
+.footer-link {
   color: gray;
   font-size: .688em;
   text-decoration: none;
@@ -580,9 +667,10 @@ mat-panel-title {
   background-color: #191919;
   clear: both;
   margin-top: 60px;
+  height: 210px;
 }
 
-.hr-setting{
+.hr-setting {
   width: 70%;
   border-color: gray;
   border-width: 0.5px;
@@ -607,7 +695,7 @@ mat-panel-title {
   padding: 2px 0px 13px 13px;
 }
 
-.footer-link:hover, .footer-link1:hover, .icons:hover{
+.footer-link:hover, .footer-link1:hover, .icons:hover {
   color: white;
 }
 
@@ -615,16 +703,18 @@ mat-panel-title {
   display: inline-block;
   padding: 2px 12px 13px 13px;
 }
+
 .div-use-case {
   display: inline-block;
   padding: 2px 12px 13px 13px
 }
+
 .div-policy {
   display: inline-block;
   padding: 2px 12px 13px 0px;
 }
 
-.footer-link1{
+.footer-link1 {
   color: lightgray;
 }
 
@@ -633,22 +723,29 @@ mat-panel-title {
   padding-bottom: 25px;
   padding-top: 25px
 }
+
 .mat-drawer-content {
   overflow-x: hidden !important;
   height: 49px !important;
   border-bottom: 1px solid #E5E5E5;
 }
+
 .mat-drawer-container {
   z-index: 10 !important;
   overflow: visible !important;
 }
-@media(max-width:959px) {
+
+@media (max-width: 959px) {
   .mat-button-toggle-label-content {
     width: 50px;
     padding: 4px 0 !important;
     text-align: center;
-    border: 1px rgba(221,221,221,.7) solid;
+    border: 1px rgba(221, 221, 221, .7) solid;
     color: black;
+  }
+
+  .ui-slider {
+    margin: 0px 10px !important;
   }
 }
 
@@ -657,14 +754,114 @@ mat-panel-title {
 }
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background: gray !important;
+  background: #999999 !important;
 }
 
 .mat-checkbox {
   font-family: iranyekan !important;
   font-weight: 200 !important;
 }
+
 .mat-checkbox-frame {
-  border: 1px #ccc solid !important;
+  border: 1px #999999 solid !important;
 }
 
+.mat-ripple-element {
+  background-color: rgba(160, 160, 160, .26) !important;
+}
+
+.ui-overlaypanel {
+  display: block;
+  z-index: 999 !important;
+  top: unset !important;
+  left: 15.9531px;
+  opacity: 1;
+  padding: 0px !important;
+  text-align: right;
+}
+
+.ui-overlaypanel-content {
+  padding: 0px 1px !important;
+  background-color: #fff;
+}
+
+.ui-overlaypanel-content div {
+  padding: 10px 38px;
+  cursor: pointer;
+}
+
+.mat-button-wrapper {
+  font-family: iranyekan, sans-serif !Important;
+}
+
+.ui-slider-handle {
+  background: white;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  height: 1.6em !important;
+  top: -.5em !important;
+}
+
+.ui-slider {
+  background: #ccc;
+
+}
+
+.ui-slider-range {
+  background: #999999;
+}
+
+.mat-content {
+  flex: .98 !important;
+}
+
+.mat-tooltip {
+  font-family: iranyekan, Roboto, sans-serif !important;
+}
+
+.mat-form-field-label {
+  font-family: iranyekan, sans-serif !important;
+  font-size: 75% !important;
+  line-height: 136% !important;
+}
+
+.box-area {
+  border-color: #000;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: thin;
+  padding: 5px;
+}
+
+.mat-radio-label-content, .mat-radio-label {
+  width: 100% !important;
+}
+
+.mat-radio-label-content {
+  margin-right: 5px;
+}
+.cdk-overlay-pane {
+  max-width: 100% !important;
+}
+
+.persian-field {
+  font-family: iranyekan, sans-serif !important;
+}
+
+.mat-simple-snackbar {
+  font-family: iranyekan, sans-serif !important;
+}
+
+.menu-field {
+  height: 20px !important;
+}
+
+.demo-list, .center-content {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.inner-placement-div {
+  margin: 10px;
+}

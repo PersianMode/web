@@ -23,7 +23,21 @@ export class PanelsComponent implements OnInit {
         this.placements = [];
         /* filter by date add be later */
         const infos = [];
-        data.forEach(r => infos.push(r.info));
+        data
+          .sort((x, y) => {
+            if (x.info.row > y.info.row)
+              return 1;
+            else if (x.info.row < y.info.row)
+              return -1;
+            else {
+              if (x.info.column > y.info.column)
+                return 1;
+              else if (x.info.column < y.info.column)
+                return -1;
+              return 0;
+            }
+          })
+          .forEach(r => infos.push(r.info));
         for (let i = 0; i < infos.length; i++) {
           let numberOfPicture = 1;
           if (infos[i].panel_type === 'half') {

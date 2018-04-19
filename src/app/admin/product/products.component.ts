@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {HttpService} from '../../shared/services/http.service';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
 

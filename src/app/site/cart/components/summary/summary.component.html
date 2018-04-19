@@ -1,3 +1,51 @@
-<p>
-  summary works!
-</p>
+<div class="summary">
+  <div class="rows">
+    <div class="right-text total-payment"> خلاصه</div>
+  </div>
+  <hr class="hr-style">
+  <div class="rows">
+    <span class="right-text"> امتیاز :</span>
+    <span class="left-text">{{loyaltyPoint}}</span>
+  </div>
+  <hr class="hr-style">
+  <div class="rows">
+    <span class="right-text"> موجودی :</span>
+    <span class="left-text">{{balanceValue}}  تومان</span>
+  </div>
+  <hr class="hr-style">
+  <div class="rows" *ngIf="isLoggedIn">
+    <div>
+      <label class="right-text coupon_label" (click)="changeCouponVisibility()"> آیا کد تخفیف دارید؟
+        <span *ngIf="!show_coupon_area"><i class="open-close-field-sign material-icons">keyboard_arrow_down</i></span>
+        <span *ngIf="show_coupon_area"><i class="open-close-field-sign material-icons">keyboard_arrow_up</i></span>
+      </label>
+    </div>
+    <div class="coupon_area" fxLayout="row" fxLayoutAlign="start start" *ngIf="show_coupon_area" >
+      <div fxFlex="80">
+        <input class="coupon_field" type="text" [(ngModel)]="coupon_code"/>
+      </div>
+      <div fxFlex="20">
+        <div class="coupon_code_btn" (click)="applyCoupon()">اعمال</div>
+      </div>
+    </div>
+  </div>
+  <hr class="hr-style"/>
+  <div class="rows">
+    <span class="right-text">جمع قیمت:</span>
+    <span class="left-text">{{totalValue}}  تومان</span>
+  </div>
+  <hr class="hr-style">
+  <div class="rows">
+    <span class="right-text">تخفیف:</span>
+    <span class="left-text">{{discountValue}} تومان </span>
+  </div>
+  <hr class="hr-style">
+  <div class="rows nowrap-row-tp">
+    <span class="right-text total-payment">قیمت نهایی:</span>
+    <span class="left-text total-payment">{{finalTotal}}  تومان</span>
+  </div>
+  <hr class="hr-style">
+  <div>
+    <button mat-button class="payment-button" [class.disabled]="disabled" (click)="pay()" [disabled]="disabled">پرداخت</button>
+  </div>
+</div>

@@ -11,20 +11,20 @@ import {
 import {SharedModule} from '../../shared/shared.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule} from '@angular/forms';
+import { EditOrderComponent } from './components/edit-order/edit-order.component';
 
 @NgModule({
   declarations: [
     SummaryComponent,
     CartItemsComponent,
     CartComponent,
+    EditOrderComponent,
   ],
   imports: [
     CartRouting,
     SharedModule,
     CommonModule,
     MatButtonModule,
-    MatIconModule,
-    FlexLayoutModule,
     FormsModule,
     FlexLayoutModule,
     MatCardModule,
@@ -34,8 +34,9 @@ import {FormsModule} from '@angular/forms';
     MatIconModule,
     MatDialogModule,
     MatSelectModule,
-
+    MatSnackBarModule,
   ],
+  entryComponents: [EditOrderComponent],
 })
 export class CartModule {
 }

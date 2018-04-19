@@ -4,6 +4,8 @@ import {AuthService} from '../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {PageService} from '../shared/services/page.service';
 import {ResponsiveService} from '../shared/services/responsive.service';
+import {CartService} from '../shared/services/cart.service';
+import {DictionaryService} from '../shared/services/dictionary.service';
 
 
 @Component({
@@ -18,7 +20,8 @@ export class SiteComponent implements OnInit {
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
-              private router: Router, private pageService: PageService) {
+              private router: Router, private pageService: PageService,
+              private cartService: CartService, private dictionaryService: DictionaryService) {
   }
 
   ngOnInit() {
@@ -26,7 +29,12 @@ export class SiteComponent implements OnInit {
     this.curHeight = this.window.innerHeight;
     this.isMobile = this.isMobileCalc();
     this.updateResponsiveService();
-    this.authService.checkValidation(this.router.url);
+    this.authService.checkValidation(this.router.url)
+      .then(() => {}).catch(err => console.log(err));
+    this.loadInitialPlacements();
+
+    this.cartService.getCartItems();
+    this.onResize(null, this.curWidth, this.curHeight);
   }
 
   private updateResponsiveService() {
@@ -35,8 +43,8 @@ export class SiteComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    const [w, h] = [event.target.innerWidth, event.target.innerHeight];
+  onResize(event, width?, height?) {
+    const [w, h] = [event ? event.target.innerWidth : width, event ? event.target.innerHeight : height];
     if (this.curWidth !== w || this.curHeight !== h) {
       [this.curWidth, this.curHeight] = [w, h];
       this.updateResponsiveService();
@@ -46,8 +54,12 @@ export class SiteComponent implements OnInit {
       this.responsiveService.switch$.next(this.isMobileCalc(w, h));
       this.isMobile = this.isMobileCalc(w, h);
       this.responsiveService.isMobile = this.isMobile;
-      setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
+      this.loadInitialPlacements();
     }
+  }
+
+  private loadInitialPlacements() {
+     setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
   }
 
   isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {

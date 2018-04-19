@@ -1,0 +1,86 @@
+.summary {
+  background-color: #191919;
+  border-radius: 2px;
+  font-size: 14px;
+}
+
+.left-text {
+  float: left;
+  padding-left: 10px;
+  color: #efefef;
+}
+
+.right-text {
+  color: #efefef;
+}
+
+.payment-button {
+  background-color: #FA5400;
+  color: #fff;
+  text-align: center;
+  border: 0;
+  padding: 5px 10px;
+  height: 38px;
+  width: calc(100% - 60px);
+  margin: 10px 30px;
+  border-radius: 2px;
+  cursor: pointer;
+  line-height: normal !important;
+}
+
+.disabled {
+  background-color: #545454;
+}
+
+.payment-button:hover {
+  background: #c87951;
+}
+
+.total-payment {
+  font-size: 20px;
+}
+
+.nowrap-row-tp {
+  display: inline-block;
+}
+
+.rows {
+  padding: 20px;
+  position: center;
+  margin-top: auto;
+  width: calc(100% - 40px);
+}
+
+.hr-style {
+  border: 0.5px solid #555;
+  margin: 0 0;
+}
+
+.coupon_code_btn {
+  padding: 3px;
+  background-color: white;
+  text-align: center;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.coupon_label {
+  cursor: pointer;
+}
+
+.coupon_area {
+  margin-top: 5px;
+}
+
+.coupon_field {
+  width: calc(100% - 16px);
+  border: 0;
+  border-radius: 0;
+  color: black;
+  height: 22px;
+  font-size: 14px;
+}
+
+.open-close-field-sign {
+  vertical-align: middle;
+}

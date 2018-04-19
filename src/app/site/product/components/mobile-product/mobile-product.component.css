@@ -3,6 +3,7 @@ h1, h4 {
 }
 h4 span {
   margin: 0 24px 0 0 !important;
+  display: inline-block;
 }
 div img,video {
   width: 100%;
@@ -59,4 +60,13 @@ button:focus{
 
 .colors img:hover {
   opacity: 1 !important;
+}
+.soldOut {
+  color: #d00000;
+  position: absolute;
+  transform: rotate(-45deg) translateY(17px);
+  width: auto;
+  font-weight: 400;
+  font-size: 22px;
+  display: inline-block;
 }

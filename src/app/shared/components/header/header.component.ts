@@ -1,36 +1,42 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
+import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
 import {AuthService} from '../../services/auth.service';
 import {PageService} from '../../services/page.service';
-import {Router} from '@angular/router';
 import {WINDOW} from '../../services/window.service';
+import {CartService} from '../../services/cart.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   logos = [];
   dialogEnum = DialogEnum;
   isLoggedIn = false;
   isVerified = false;
+  cartNumbers = '';
+  itemSubs;
+  display_name;
 
   constructor(public dialog: MatDialog, private authService: AuthService,
               private pageService: PageService, private router: Router,
-              @Inject(WINDOW) private window) {
+              @Inject(WINDOW) private window, private cartService: CartService) {
   }
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
-      (data) => this.isLoggedIn = data,
+      (data) => {
+        this.isLoggedIn = data;
+        this.display_name = this.authService.userDetails.displayName;
+      },
       (err) => {
         console.error('Cannot subscribe on isLoggedIn: ', err);
         this.isLoggedIn = false;
-      }
-    );
+      });
     this.authService.isVerified.subscribe(
       (data) => this.isVerified = data,
       (err) => {
@@ -38,6 +44,15 @@ export class HeaderComponent implements OnInit {
         this.isVerified = false;
       }
     );
+    this.itemSubs = this.cartService.cartItems.subscribe(
+      data => {
+        data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => (+a) + (+b)) : 0;
+        if (+data) {
+          this.cartNumbers = (+data).toLocaleString( 'fa', {useGrouping: false});
+        } else {
+          this.cartNumbers = '';
+        }
+      });
     this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
       this.logos = [];
       data = data.sort((x, y) => x.info.column - y.info.column);
@@ -55,6 +70,7 @@ export class HeaderComponent implements OnInit {
         this.logos.push(obj);
       });
     });
+    this.display_name = this.authService.userDetails.displayName;
   }
 
   login() {
@@ -87,5 +103,17 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  ngOnDestroy() {
+    this.itemSubs.unsubscribe();
+  }
+
+  navigateToProfile() {
+    this.router.navigate(['/', 'profile']);
+  }
+
+  navigateToCart() {
+    this.router.navigate(['/', 'cart']);
   }
 }

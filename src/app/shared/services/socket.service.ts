@@ -1,33 +1,36 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
 import {Observable} from 'rxjs/Rx';
+import {HttpService} from './http.service';
 
 @Injectable()
 export class SocketService {
-  private url = 'http://localhost:3000';
   private socketConfig = {
     transports: ['websocket']
   };
 
   private orderLineSocket;
 
-  private orderLineObsevable = new Observable(observer => {
-    this.orderLineSocket.on('ans', (data) => {
-      observer.next(data);
+  private orderLineObservable = new Observable(observer => {
+    this.orderLineSocket.on('msg', (message) => {
+      console.log('-> socket message: ', message);
+      observer.next(message);
     });
   });
 
-  constructor() { }
+  constructor() {
+  }
 
-  public init() {
-    this.orderLineSocket = io(this.url + '/orderline', this.socketConfig);
+  public init(nsp) {
+    this.orderLineSocket = io(HttpService.Host + '/' + nsp, this.socketConfig);
   }
 
   getOrderLineMessage() {
-    return this.orderLineObsevable;
+    return this.orderLineObservable;
   }
 
   disconnect() {
-    this.orderLineSocket.disconnect();
+    if (this.orderLineSocket)
+      this.orderLineSocket.disconnect();
   }
 }

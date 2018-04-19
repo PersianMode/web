@@ -1,7 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { AppComponent } from './app.component';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {AppComponent} from './app.component';
 import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -16,6 +16,9 @@ import {SharedModule} from './shared/shared.module';
 import {PageService} from './shared/services/page.service';
 import {ProductService} from './shared/services/product.service';
 import {ResponsiveService} from './shared/services/responsive.service';
+import {CartService} from './shared/services/cart.service';
+import {DictionaryService} from './shared/services/dictionary.service';
+import {CheckoutService} from './shared/services/checkout.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,20 @@ import {ResponsiveService} from './shared/services/responsive.service';
     MatIconModule,
     MatCardModule,
   ],
-  providers: [WINDOW_PROVIDERS, HttpService, SocketService, AuthService, ProgressService, PageService, ProductService, ResponsiveService],
+  providers: [
+    WINDOW_PROVIDERS,
+    HttpService,
+    SocketService,
+    AuthService,
+    ProgressService,
+    PageService,
+    ProductService,
+    ResponsiveService,
+    CartService,
+    DictionaryService,
+    CheckoutService,
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

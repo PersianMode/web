@@ -1,0 +1,28 @@
+<div class="main">
+  <div class="header">
+    <div>
+      <i class="fa fa-check"></i>
+      <span>به سبد خرید افزوده شد:</span>
+    </div>
+    <mat-icon aria-label="close" (click)="closeDialog()" style="cursor: pointer;">clear</mat-icon>
+  </div>
+  <div class="body" fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column">
+    <div class="thumbnail" fxFlex="45">
+      <img src="{{thumbnail}}">
+    </div>
+    <div class="item-data-and-name" fxFlex="55">
+      <h4>
+        <div>{{product.name}}</div>
+      </h4>
+      <div class="item-data">
+        <span>اندازه: </span>
+        <section>{{selectedSize.toLocaleString('fa')}}</section>
+      </div>
+      <div class="item-data">
+        <span>  تعداد:</span>
+        <section>{{countFa}}</section>
+        <p>{{farsiPrice}}</p>
+      </div>
+    </div>
+  </div>
+</div>

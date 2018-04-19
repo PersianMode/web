@@ -2,20 +2,22 @@
   <div class="main" [class.on]="on">
   <span>
     <div class="imgWrapper" (mouseover)="turnOn()" (mouseout)="turnOff()">
-      <img src="assets/pictures/product-small/{{data.colors[pos].url}}"
+      <img src="{{images[pos]}}"
+           (click)="openProduct()"
            [style.right]="(220 * data.colors[pos].position) +'px'" (click)="openProduct()">
+
     </div>
     <div *ngIf="on && data.colors.length > 1" class="sliderWrapper" (mouseover)="turnOn(2, 0)" (mouseout)="turnOff()"
          #slider>
       <i *ngIf="slidesNum > 1 && slide > 0" (click)="prevSlide()" class="fa fa-chevron-right"></i>
       <div class="sliderBlind">
         <div class="slider" [style.right]="(-slide * 180) + 'px'">
-          <img *ngFor="let img of images" src="assets/pictures/product-small/{{img}}">
+          <img *ngFor="let img of images" src="{{img}}" (click)="openProduct()">
         </div>
       </div>
       <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
     </div>
-    <p>{{data.colors.length.toLocaleString('fa')}} رنگ</p>
+    <p>{{data.colors.length.toLocaleString('fa')}} رنگ <span *ngIf="soldOut" class="soldOut">موجود نیست</span></p>
     <h2>{{data.name}}</h2>
     <h3>{{desc}}</h3>
     <h4>{{price}} تومان</h4>
@@ -25,9 +27,9 @@
 <div *ngIf="isMobile">
   <div [class.main]="!isMobile" [class.mainMobile]="isMobile" [ngStyle]="isMobile ? {'width.px': width, 'height.px': height} : {}">
   <span>
-    <div [class.imgWrapper]="!isMobile" [class.imgWrapperMobile]="isMobile" (mouseover)="turnOn()" (mouseout)="turnOff()"
-         [ngStyle]="isMobile ? {'width.px': width - 2, 'max-height.px': width - 2} : {}">
-      <img src="assets/pictures/product-small/{{data.colors[pos].url}}"
+    <div [class.imgWrapper]="!isMobile" [class.imgWrapperMobile]="isMobile"
+         [ngStyle]="isMobile ? {'width.px': width - 2, 'height.px': width - 2} : {}">
+      <img src="{{images[0]}}"
             (click)="openProduct()" [style.right.px]="(width * data.colors[pos].position)"
            [ngStyle]="isMobile ? {'height.px': width - 2} : {}">
     </div>
@@ -37,7 +39,7 @@
     <h2>{{data.name}}</h2>
     <h3>{{desc}}</h3>
     <h4>{{price}} تومان</h4>
-    <p>{{data.colors.length.toLocaleString('fa')}} رنگ</p>
+    <p>{{data.colors.length.toLocaleString('fa')}}رنگ</p>
   </span>
   </div>
 </div>

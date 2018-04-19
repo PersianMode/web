@@ -8,13 +8,12 @@
     color: gray;
 }
 
-i {
+.circle{
   top: -27px;
   right: 6px;
   font-size: 13px;
   position: relative;
 }
-
 .color-span {
   width: 26px;
   overflow: hidden;
@@ -40,4 +39,14 @@ i {
   display: inline-block;
   font-size: 14px;
   font-family: irankharazmi;
+}
+.actions {
+  text-align: center;
+}
+.sort {
+  font-size: 14px;
+  margin-right: 10px;
+}
+.sorter {
+  padding: 10px 0px;
 }

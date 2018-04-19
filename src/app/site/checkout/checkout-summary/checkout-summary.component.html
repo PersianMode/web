@@ -1,0 +1,24 @@
+<div style="width: 100%;">
+  <div>
+    <div>
+      <span class="right-text">جمع قیمت</span>
+      <span class="left-text">{{priceFormatter(total)}}  تومان</span>
+    </div>
+    <div>
+      <span class="right-text">تخفیف</span>
+      <span class="left-text">{{priceFormatter(discount)}}- تومان </span>
+    </div>
+    <div *ngIf="usedBalance">
+      <span class="right-text">موجودی</span>
+      <span class="left-text">{{priceFormatter(usedBalance)}}- تومان </span>
+    </div>
+    <div *ngIf="usedLoyaltyPoint">
+      <span class="right-text">امتیاز وفاداری</span>
+      <span class="left-text">{{priceFormatter(usedLoyaltyPoint)}}- تومان </span>
+    </div>
+    <div class="final-price">
+      <span class="right-text">قیمت نهایی</span>
+      <span class="left-text">{{priceFormatter(finalTotal)}} تومان </span>
+    </div>
+  </div>
+</div>

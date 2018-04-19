@@ -1,0 +1,9 @@
+.payment-type {
+  display: block;
+  margin: 5px;
+  width: 200px;
+}
+
+.payment-type-label {
+  margin: 5px;
+}

@@ -25,6 +25,14 @@
   width: unset;
 }
 
-.box-center input{
+.box-center input {
   text-align: center;
+}
+
+.dob {
+  padding: 5px;
+  border: 2px solid rgb(229, 229, 229);
+  border-radius: 5px;
+  margin-left: 5px;
+  width: calc(100% - 7px);
 }

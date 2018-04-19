@@ -1,0 +1,13 @@
+div {
+  display: inline-block;
+
+}
+mat-select {
+  display: inline-block;
+  font-family: iranyekan, sans-serif !important;
+  text-align: center;
+}
+
+mat-option {
+  font-family: iranyekan, sans-serif !important;
+}

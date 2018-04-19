@@ -1,0 +1,57 @@
+.basket-div {
+  background-color: #eee;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-right: 15px;
+  font-size: 20px;
+  font-family: iranyekan, sans-serif;
+  font-weight: bold;
+}
+
+.menu-item {
+  display: inline-block;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: 8px;
+}
+
+.shop-again {
+  display: inline-block;
+  width: 50%;
+  text-align: left;
+  margin-top: 8px;
+}
+
+.signUp-div {
+  background-color: #eee;
+  padding-top: 15px;
+  padding-right: 10px;
+  padding-bottom: 15px;
+  margin-bottom: 10px;
+  color: #fa5400;
+  font-size: 20px;
+  font-family: iranyekan, sans-serif;
+  font-weight: bold;
+}
+
+.membership-style {
+  margin-right: 10px;
+  font-size: small;
+  text-decoration: underline;
+  color: #666;
+}
+.membership-style:hover{
+  color : black;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.main {
+  margin-top: 30px;
+}
+
+.main-divs {
+  padding: 0px 7px;
+}

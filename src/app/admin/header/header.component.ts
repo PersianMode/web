@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ProgressService} from '../../shared/services/progress.service';
+import {AccessLevel} from '../../shared/enum/accessLevel.enum';
+import {links} from '../../shared/lib/links';
 
 @Component({
   selector: 'app-admin-header',
@@ -10,10 +12,11 @@ import {ProgressService} from '../../shared/services/progress.service';
 })
 export class HeaderComponent implements OnInit {
   navLinks = [
-    {label: 'کلکسیون‌ها', path: '/agent/collections'},
-    {label: 'محصولات', path: '/agent/products'},
-    {label: 'صفحه‌ها', path: '/agent/pages'},
-    {label: 'بارگذاری فایل', path: '/agent/upload'},
+    {label: 'کلکسیون‌ها', path: '/agent/collections', active: false},
+    {label: 'محصولات', path: '/agent/products', active: false},
+    {label: 'صفحه‌ها', path: '/agent/pages', active: false},
+    {label: 'بارگذاری فایل', path: '/agent/uploads', active: false},
+    {label: 'سفارش ها', path: '/agent/orders', active: false},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;
@@ -25,13 +28,20 @@ export class HeaderComponent implements OnInit {
   btnLabel = null;
 
   constructor(private authService: AuthService, private router: Router,
-              private progressService: ProgressService) { }
+              private progressService: ProgressService) {
+  }
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
       (data) => {
         this.isLoggedIn = data;
         this.btnLabel = data ? this.authService.userDetails.displayName : 'Logout';
+
+        this.navLinks.forEach(link => {
+          const foundLink = links.find(x => x.address === link.path);
+          link.active =  this.authService.userDetails.accessLevel === foundLink.access;
+        });
+
       }
     );
 

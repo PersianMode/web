@@ -1,12 +1,11 @@
 import {RouterModule, Routes} from '@angular/router';
 import {CollectionsComponent} from './collections.component';
-import {ViewComponent} from './components/view/view.component';
-import {FormComponent} from './components/form/form.component';
+import {CollectionFullInfoComponent} from './components/collection-full-info/collection-full-info.component';
 
 const Collections_ROUTES: Routes = [
   {path: '', component: CollectionsComponent, pathMatch: 'full'},
-  {path: ':id', component: ViewComponent},
-  {path: 'form/:id', component: FormComponent},
+  {path: 'form/:id', component: CollectionFullInfoComponent},
+  {path: 'form', component: CollectionFullInfoComponent},
 ];
 
 export const CollectionsRouting = RouterModule.forChild(Collections_ROUTES);

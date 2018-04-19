@@ -8,8 +8,7 @@ import {ActivatedRoute} from '@angular/router';
 enum RegStatus {
   Register = 'Register',
   Verify = 'Verify'
-}
-;
+};
 
 @Component({
   selector: 'app-register',
@@ -18,11 +17,11 @@ enum RegStatus {
 })
 export class RegisterComponent implements OnInit {
   @Output() closeDialog = new EventEmitter<boolean>();
-
+  dob = null;
   dateObject = null;
   registerForm: FormGroup;
   gender = null;
-  seen = {};
+  seen: any = {};
   curFocus = null;
   regStatus = RegStatus;
   curStatus = RegStatus.Register;
@@ -74,10 +73,10 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid && this.gender) {
-      let data = {};
+      let data: any = {};
       Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
-      data['gender'] = this.gender;
-
+      data.gender = this.gender;
+      data.dob = this.dob;
       this.httpService.put('register', data).subscribe(
         (res) => {
           this.curStatus = this.regStatus.Verify;
@@ -97,6 +96,13 @@ export class RegisterComponent implements OnInit {
         this.seen['gender'] = true;
       }
     }
+  }
+
+  changeDob(date) {
+    this.dob = date;
+    this.registerForm.controls['dob'].setValue(date);
+    this.seen.dob = true;
+    this.curFocus = 'dob';
   }
 
   resendCode() {

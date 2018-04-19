@@ -1,0 +1,12 @@
+<div class="inner-placement-div">
+  <div>
+    <label>افزودن یک مورد جدید</label>
+    <button mat-icon-button (click)="addItem()">
+      <mat-icon aria-label="Add">add</mat-icon>
+    </button>
+  </div>
+  <div class="demo-area">
+    <app-demo-panel [placements]="placements"></app-demo-panel>
+  </div>
+</div>
+
