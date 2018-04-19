@@ -24,8 +24,6 @@ export class OrdersComponent implements OnInit {
         return;
       this.profileOrder = result;
       this.profileOrder.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.order_time));
-      console.log('--->', this.profileOrder);
-      console.log('--->', this.profileOrder.length);
     });
     this.profileOrderService.getAllOrders();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
