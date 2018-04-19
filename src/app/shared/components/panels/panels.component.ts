@@ -24,7 +24,19 @@ export class PanelsComponent implements OnInit {
         /* filter by date add be later */
         const infos = [];
         data
-          .sort((x, y) => (x.info.column * 100 + x.info.row) - (y.info.column * 100 + y.info.row))
+          .sort((x, y) => {
+            if (x.info.row > y.info.row)
+              return 1;
+            else if (x.info.row < y.info.row)
+              return -1;
+            else {
+              if (x.info.column > y.info.column)
+                return 1;
+              else if (x.info.column < y.info.column)
+                return -1;
+              return 0;
+            }
+          })
           .forEach(r => infos.push(r.info));
         for (let i = 0; i < infos.length; i++) {
           let numberOfPicture = 1;
