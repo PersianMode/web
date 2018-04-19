@@ -11,8 +11,9 @@
                                  (modifyPlacement)="modify($event)"></app-logo-list-placement>
       </mat-tab>
       <mat-tab label="اسلایدر" *ngIf="!isApp">
-        <app-slider-placement [placements]="getRelatedPlacements('slider')"
-                              (modifyPlacement)="modify($event)"></app-slider-placement>
+        <app-slider-placement [placements]="getRelatedPlacements('slider')" [pageId]="pageId"
+                              (modifyPlacement)="modify($event)"
+                              (reloadPlacements)="reload($event)"></app-slider-placement>
       </mat-tab>
       <mat-tab label="صفحه">
         <app-page-content-placement [placements]="getRelatedPlacements('main')" [pageId]="pageId"
@@ -22,7 +23,8 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button (click)="finalize(true)" [disabled]="finalizeRevertShouldDisabled">تثبیت تغییرات</button>
-    <button mat-raised-button (click)="finalize(false)" [disabled]="finalizeRevertShouldDisabled">برگرداندن تغییرات</button>
+    <button mat-raised-button (click)="finalize(false)" [disabled]="finalizeRevertShouldDisabled">برگرداندن تغییرات
+    </button>
     <button mat-raised-button (click)="preview()" [disabled]="previewShouldDisabled">پیش نمایش صفحه</button>
   </mat-card-actions>
 </mat-card>

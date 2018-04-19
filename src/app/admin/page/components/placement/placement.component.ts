@@ -13,8 +13,9 @@ import {Router} from '@angular/router';
 export class PlacementComponent implements OnInit {
   @Input() isApp = false;
   @Input() pageId = null;
-  @Input() placements: IPlacement[] = [];
   @Input() pageAddress = '';
+
+  @Input() placements: IPlacement[] = [];
   @Output() modifyPlacement = new EventEmitter();
   @Output() reloadPlacement = new EventEmitter();
 
@@ -34,6 +35,10 @@ export class PlacementComponent implements OnInit {
 
   modify(value) {
     this.modifyPlacement.emit(value);
+  }
+
+  reload(value) {
+    this.reloadPlacement.emit();
   }
 
   finalize(shouldFinalize = false) {
