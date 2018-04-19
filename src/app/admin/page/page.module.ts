@@ -23,6 +23,7 @@ import { SubMenuComponent } from './components/menu-placement/sub-menu/sub-menu.
 import { DemoPanelComponent } from './components/page-content-placement/demo-panel/demo-panel.component';
 import { EditPanelComponent } from './components/page-content-placement/edit-panel/edit-panel.component';
 import {ColorPickerModule} from 'primeng/primeng';
+import { FooterComponent } from './components/menu-placement/footer/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import {ColorPickerModule} from 'primeng/primeng';
     SubMenuComponent,
     DemoPanelComponent,
     EditPanelComponent,
+    FooterComponent,
   ],
   imports: [
     PageRouting,
