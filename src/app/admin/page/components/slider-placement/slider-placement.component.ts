@@ -68,14 +68,12 @@ export class SliderPlacementComponent implements OnInit {
 
     let counter = 0;
     Object.keys(target.children).forEach(child => {
-      console.log('target:', target.children[child].innerText);
       const obj = this.sliders.find(el => el.info.text === target.children[child].innerText);
       if (obj) {
         obj.info.column = counter;
         counter++;
       }
     });
-    // console.log("AFTER CHANGE", this.sliders);
     this.progressService.enable();
     this.httpService.post('placement', {
       page_id: this.pageId,
@@ -91,7 +89,7 @@ export class SliderPlacementComponent implements OnInit {
       },
       err => {
         this.progressService.disable();
-        console.log('error occurred in changing order', err);
+        console.error('error occurred in changing order', err);
       }
     );
   }
@@ -147,7 +145,7 @@ export class SliderPlacementComponent implements OnInit {
       },
     };
     this.pos = Object.assign({}, this.upsertSlider.style);
-    console.log('selected item:', value, this.sliders, this.upsertSlider, this.pos);
+    // console.log('selected item:', value, this.sliders, this.upsertSlider, this.pos);
   }
 
   removeItem() {
@@ -187,7 +185,6 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   modifyItem(isEdit) {
-    console.log('OnModify->isEdit:', isEdit, this.upsertSlider.style);
     this.progressService.enable();
     (isEdit ? this.httpService.post('placement', {
       page_id: this.pageId,
@@ -215,24 +212,7 @@ export class SliderPlacementComponent implements OnInit {
       }
     })).subscribe(
       data => {
-        console.log('DATA:', data, this.upsertSlider.style);
-
-        // this.modifyPlacement.emit({
-        //   type: isEdit ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
-        //   placement_id: data._id,
-        //   placements: [this.upsertSlider],
-        //   placement: data.placement,
-        // });
         this.reloadPlacements.emit();
-        // this.clearFields();
-        // if (isEdit) {
-        //   const changeObj = this.sliders.find(el => el._id.toString() === this.upsertSlider.id.toString());
-        //   changeObj.info.text = this.upsertSlider ? this.upsertSlider.text : '';
-        //   changeObj.info.href = this.upsertSlider ? this.upsertSlider.href : '';
-        // } else {
-        //   this.upsertSlider.isEdit = true;
-        // }
-
         if (!isEdit) {
           this.upsertSlider.isEdit = true;
           this.upsertSlider.id = data.placement
@@ -241,7 +221,6 @@ export class SliderPlacementComponent implements OnInit {
           // TODO: wondering if I should set styles here or not!
         } else {
           this.pos = Object.assign({}, this.upsertSlider.style);
-          console.log('pos after burnet:D:', this.pos);
           this.imageChanged = false;
         }
         this.changeField();
@@ -260,10 +239,8 @@ export class SliderPlacementComponent implements OnInit {
    *    newStyle: Pos
    */
   imageSettingsChanged($event) {
-    // console.log('$event received from preview', $event);
     this.imageChanged = $event.anyChanges;
     this.upsertSlider.style = Object.assign({}, $event.newStyle);
-    console.log('emited value received', this.upsertSlider.style);
   }
 
   sliderApplyDisability() {
