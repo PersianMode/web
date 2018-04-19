@@ -17,6 +17,7 @@
 <div class="chevron-holder left-chevron additional-chevron"><i class="fa fa-chevron-left"></i></div>
 <div class="chevron-holder right-chevron additional-chevron"><i class="fa fa-chevron-right"></i></div>
 <div class="carousel-slider additional-preview">
+  <!-- TODO: Copied Exactly From Slider-header -> redundancy! -->
   <div>
     <span [style.width]="'100%'">
       <img [style.width]="slide.imgWidth? slide.imgWidth + 'px': '40px'"
@@ -26,7 +27,7 @@
     </span>
   </div>
 </div>
-<div class="image-settings" fxLayout="row" *ngIf="_image">
+<div class="image-settings" fxLayout="row" fxLayout.xs="column" *ngIf="_image">
   <div fxLayout="column" fxFlex="50" class="margin-change-div">
     <div fxLayout="row">
       <div fxFlex="10" fxFlexOffset="40">

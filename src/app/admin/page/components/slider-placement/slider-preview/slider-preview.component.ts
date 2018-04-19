@@ -24,7 +24,6 @@ export class SliderPreviewComponent implements OnInit {
 
   @Input()
   set pos(value: Pos) {
-    // console.log('update please!', value);
     this._pos = value;
     this.slide = Object.assign({}, this._pos);
   }

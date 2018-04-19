@@ -51,7 +51,10 @@
   </tr>
   </tbody>
 </table>
-
+<div class="input-uploader">
+  <input type="file" ng2FileSelect [uploader]="uploader" multiple *ngIf="!single">
+  <input type="file" ng2FileSelect [uploader]="uploader" *ngIf="single">
+</div>
 <div>
   <div>
     پیشرفت صف:

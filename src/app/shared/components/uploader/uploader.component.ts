@@ -18,7 +18,6 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input()
   set additionalData(value) {
-    // console.log('value', value);
     this._additionalData = value;
   };
 
@@ -40,13 +39,11 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     this.uploader.onCompleteAll = () => {
-      console.log('results emited!');
       this.OnCompleted.emit(this.results);
       this.results = [];
     };
 
     this.uploader.onAfterAddingFile = () => {
-      console.log('single checker');
       if (this.single) {
         if (this.uploader.queue.length > 1) {
           this.uploader.removeFromQueue(this.uploader.queue[0]);
@@ -55,8 +52,6 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     this.uploader.onBuildItemForm = (fileItem, form) => {
-      console.log('build form');
-      console.log('additional data:', this._additionalData);
       Object.keys(this._additionalData).forEach(e => {
         form.append(e, this._additionalData[e]);
       });
