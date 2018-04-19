@@ -1,0 +1,42 @@
+.edit-row {
+  margin-top: 10px;
+}
+
+.area-icon {
+  position: relative;
+  top: 30%;
+}
+
+.area-btn {
+  border: solid thin black;
+  display: inline-block;
+  margin: 1px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.selected-area {
+  background-color: rgba(176,182,180,0.68);
+}
+
+.text-field {
+  display: inline-block;
+  width: 300px;
+}
+
+.color-field {
+  display: inline-block;
+}
+
+.part-separator {
+  text-align: center;
+  width: 70%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.color-code-field {
+  width: 60px;
+  direction: ltr;
+}

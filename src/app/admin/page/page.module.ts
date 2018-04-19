@@ -21,6 +21,9 @@ import {DragulaModule} from 'ng2-dragula';
 import { TopMenuComponent } from './components/menu-placement/top-menu/top-menu.component';
 import { SubMenuComponent } from './components/menu-placement/sub-menu/sub-menu.component';
 import { SliderPreviewComponent } from './components/slider-placement/slider-preview/slider-preview.component';
+import { DemoPanelComponent } from './components/page-content-placement/demo-panel/demo-panel.component';
+import { EditPanelComponent } from './components/page-content-placement/edit-panel/edit-panel.component';
+import {ColorPickerModule} from 'primeng/primeng';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,8 @@ import { SliderPreviewComponent } from './components/slider-placement/slider-pre
     TopMenuComponent,
     SubMenuComponent,
     SliderPreviewComponent,
+    DemoPanelComponent,
+    EditPanelComponent,
   ],
   imports: [
     PageRouting,
@@ -60,6 +65,10 @@ import { SliderPreviewComponent } from './components/slider-placement/slider-pre
     SharedModule,
     MarkdownModule.forRoot(),
     DragulaModule,
+    ColorPickerModule,
+  ],
+  entryComponents: [
+    EditPanelComponent,
   ],
 })
 export class PageModule {
