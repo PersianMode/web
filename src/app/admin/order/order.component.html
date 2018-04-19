@@ -1,93 +1,35 @@
-<app-order-table></app-order-table>
-<mat-toolbar dir="rtl" style="margin-bottom: 20px;">
-  <button mat-button>ورودی</button>
-  <mat-chip-list>
-    <mat-chip color="accent" selected="true">{{resultsLength}}</mat-chip>
-  </mat-chip-list>
-  <button mat-button>ارجاعات</button>
-</mat-toolbar>
+<div class="main">
+<mat-tab-group dir="rtl">
+  <mat-tab label="inbox">
+    <ng-template mat-tab-label>
+      <span>ورودی</span>
+
+      <mat-chip-list>
+        <mat-chip color="accent" selected="true">3</mat-chip>
+      </mat-chip-list>
+    </ng-template>
+
+<app-order-inbox></app-order-inbox>
+
+  </mat-tab>
+  <mat-tab label="delivery">
+    <ng-template mat-tab-label>
+      <span>تحویل</span>
+
+      <mat-chip-list>
+        <mat-chip color="accent" selected="true">3</mat-chip>
+      </mat-chip-list>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="outbox">
+    <ng-template mat-tab-label>
+      <span>ارجاعات</span>
+      <mat-chip-list>
+        <mat-chip color="accent" selected="true">3</mat-chip>
+      </mat-chip-list>
+    </ng-template>
+  </mat-tab>
 
 
-<div class="example-container mat-elevation-z8">
-  <div class="example-loading-shade"
-       *ngIf="isLoadingResults">
-    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-  </div>
-
-  <mat-table #table [dataSource]="dataSource" class="example-table"
-             matSort matSortActive="created" matSortDisableClear matSortDirection="asc">
-
-    <ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{getIndex(element)}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> نام</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.product_name}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="color">
-      <mat-header-cell *matHeaderCellDef> رنگ</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{getColor(element)}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="size">
-      <mat-header-cell *matHeaderCellDef> سایز</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.instance.size}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="is_collect">
-      <mat-header-cell *matHeaderCellDef> C&C</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <mat-checkbox [checked]="!!element.is_collect" disabled="true"></mat-checkbox>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="barcode">
-      <mat-header-cell *matHeaderCellDef> بارکد</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.instance.barcode}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="price">
-      <mat-header-cell *matHeaderCellDef> قیمت</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.paid_price}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="customer">
-      <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="true"> خریدار</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.customer.name + ' ' + element.customer.surname}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="address">
-      <mat-header-cell *matHeaderCellDef> آدرس</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <button mat-button color="primary" (click)="showAddress(element)">نمایش</button>
-      </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="status">
-      <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{getStatus(element)}}</mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="process">
-      <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <button mat-button color="primary" (click)="process(element)">انتخاب</button>
-      </mat-cell>
-    </ng-container>
-
- <ng-container matColumnDef="delivery">
-      <mat-header-cell *matHeaderCellDef>ارسال</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <button mat-button color="primary" (click)="showDelivery(element)" *ngIf="isReadyToDeliver(element)">انتخاب</button>
-      </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-
-  <mat-paginator [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
+</mat-tab-group>
 </div>
