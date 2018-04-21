@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
-import * as moment from 'jalali-moment';
 import {Router} from '@angular/router';
 import {dateFormatter} from '../../../../shared/lib/dateFormatter';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-orders',
@@ -14,7 +16,7 @@ export class OrdersComponent implements OnInit {
   profileOrder = [];
   displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'used_point', 'address', 'view_details'];
   isMobile = false;
-  constructor(private profileOrderService: ProfileOrderService, private router: Router, private responsiveService: ResponsiveService) {
+  constructor(private profileOrderService: ProfileOrderService, private router: Router, private responsiveService: ResponsiveService, private dialog: MatDialog) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -24,6 +26,7 @@ export class OrdersComponent implements OnInit {
         return;
       this.profileOrder = result;
       this.profileOrder.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.order_time));
+      console.log('Orders : ', this.profileOrder);
     });
     this.profileOrderService.getAllOrders();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
@@ -36,8 +39,15 @@ export class OrdersComponent implements OnInit {
   }
 
   goToOrderLines() {
-    this.router.navigate([`/profile/orderlines`]);
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/profile/orderlines`]);
+    } else {
+      const rmDialog = this.dialog.open(GenDialogComponent, {
+        width: '600px',
+        data: {
+          componentName: DialogEnum.orderLinesComponent,
+        }
+      });
+    }
   }
-
-
 }

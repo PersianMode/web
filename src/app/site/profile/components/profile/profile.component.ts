@@ -20,8 +20,5 @@ export class ProfileComponent implements OnInit {
   setHeaderTitle(title) {
     this.headerTitle = title;
   }
-  setDefaultTitle() {
-    // this.headerTitle = 'اطلاعات مشتری';
-  }
 }
 

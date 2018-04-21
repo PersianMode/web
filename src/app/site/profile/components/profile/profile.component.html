@@ -2,7 +2,7 @@
     <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
     <div fxFlex="70" fxFlex.sm="80" fxFlex.xs="100">
         <mat-accordion multi>
-            <mat-expansion-panel expanded (closed)="setDefaultTitle()">
+            <mat-expansion-panel expanded>
                 <mat-expansion-panel-header>{{headerTitle}}</mat-expansion-panel-header>
                 <app-basic-info [isEdit]=false (formTitle)="setHeaderTitle($event)"></app-basic-info>
             </mat-expansion-panel>

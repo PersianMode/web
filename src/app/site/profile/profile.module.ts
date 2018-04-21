@@ -13,7 +13,6 @@ import {
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 import {ProfileOrderService} from '../../shared/services/profile-order.service';
-import { OrderLinesComponent } from './components/order-lines/order-lines.component';
 
 @NgModule({
   imports: [
@@ -32,6 +31,6 @@ import { OrderLinesComponent } from './components/order-lines/order-lines.compon
     MatExpansionModule,
   ],
   providers: [ProfileOrderService],
-  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent, OrderLinesComponent]
+  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent]
 })
 export class ProfileModule { }
