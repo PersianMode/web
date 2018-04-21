@@ -19,7 +19,7 @@ import {
   MatOptionModule,
   MatAutocompleteModule,
   MatCheckboxModule,
-  MatStepperModule, MatRadioModule,
+  MatStepperModule, MatRadioModule
 } from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';

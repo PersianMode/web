@@ -1,0 +1,62 @@
+.menu-item {
+  margin: 3px;
+  text-align: right;
+}
+
+.header-container {
+  margin-top: 7px;
+}
+
+.header {
+  font-weight: bold !important;
+}
+
+.menu-area, .menu-column {
+  display: inline-block !important;
+  padding: 10px;
+}
+
+.menu-column {
+  vertical-align: top;
+}
+
+.middle-menu {
+  border-left: 1px solid #E5E5E5;
+  border-right: 1px solid #E5E5E5;
+}
+
+.fields-area {
+  margin-bottom: 20px;
+}
+
+.sub-menu-area {
+  margin-top: 30px;
+}
+
+.vertical-align-item {
+  margin-top: 20px;
+}
+
+.sub-item {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.remove {
+  color: darkred;
+}
+
+.menu-item:hover {
+  background-color: rgba(176,182,180,0.68);
+}
+
+.menu-item .content {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.selected-item {
+  background-color: rgba(176,182,180,0.68);
+}

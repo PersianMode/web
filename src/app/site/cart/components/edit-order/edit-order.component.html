@@ -7,8 +7,8 @@
   <div fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column" fxLayout.xs="column"
        style="width: 100%; text-align: center">
     <div fxFlex="55" style="text-align: right">
-      <a href="/product/{{product.product_id}}/{{product.color.color_id}}">
-        <img src="assets/pictures/product-small/{{product.thumbnail}}"
+      <a (click)="navigateToProduct()">
+        <img src="{{product.thumbnail}}"
              style="width:100%; height:100%; cursor: pointer;">
       </a>
     </div>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div style="margin-top: 10px; width: 60%">
-        <a href="/product/{{product.product_id}}/{{product.color.color_id}}" class="view-detail">مشاهده جزییات
+        <a (click)="navigateToProduct()" class="view-detail">مشاهده جزییات
           محصول</a>
       </div>
       <div class="btn-area">

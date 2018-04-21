@@ -37,7 +37,7 @@ export class SummaryComponent implements OnInit {
   get discount() {
     return this._discount;
   }
-
+  @Input() disabled;
   @Output() recalculateDiscount = new EventEmitter();
   private _total: any;
   private _discount: any = 0;

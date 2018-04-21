@@ -46,9 +46,9 @@
                    placeholder="ایمیل" formControlName="username"
                    (focus)="setSeen('username')"
                    (blur)="curFocus = null"
-                   [ngClass]="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('username')) && seen['username'] && curFocus !== 'username' ? 'input-error' : null"/>
+                   [ngClass]="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('email')) && seen['username'] && curFocus !== 'username' ? 'input-error' : null"/>
             <label class="field-error"
-                   *ngIf="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('username')) && seen['username'] && curFocus !== 'username'">لطفا
+                   *ngIf="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('email')) && seen['username'] && curFocus !== 'username'">لطفا
               ایمیل معتبری وارد کنید</label>
           </div>
           <div fxFlex="13" class="input-container">
@@ -62,6 +62,7 @@
               رمز عبور را وارد کنید (حداقل 8 کاراکتر)</label>
           </div>
           <div fxFlex="13" class="input-container">
+
             <input class="input-field" type="text"
                    placeholder="نام" formControlName="first_name"
                    (focus)="setSeen('first_name')"
@@ -119,10 +120,6 @@
                 تعیین
                 کنید</label>
             </div>
-          </div>
-          <div fxFlex="13">
-            <label for="subscribe" class="clickable-link">دریافت آخرین اخبار از Nike</label>
-            <input id="subscribe" type="checkbox"/>
           </div>
         </div>
         <div class="button-area">

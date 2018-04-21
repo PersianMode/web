@@ -1,47 +1,48 @@
-<mat-card>
+<mat-card [class.dashed]="notExist">
   <mat-card-content>
     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column">
-      <div fxFlex="25" style="text-align: right">
-        <a [routerLink]="['/', 'product', product._id, product.color.color_id]">
-          <img src="assets/pictures/product-small/{{product.thumbnail}}"
-               style="width: 90%; height:100%; cursor: pointer;">
+      <div fxFlex="25" class="thumbnail">
+        <a [routerLink]="['/', 'product', product.product_id, product.color.id]">
+          <span style="margin:0;">
+        <p *ngIf="notExist" class="soldOut">موجود نیست</p>
+          <img src="{{product.thumbnail}}">
+          </span>
         </a>
       </div>
-      <div fxFlex="75" style="text-align: right; font-family: iranyekan;">
-        <div style="height: 30%;">
-          <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column"
-               style=" display: inline-block;">
-            <div fxFlex="70" style="margin-top: 5px; display: inline-block; cursor: pointer">
-              <b><a style="text-decoration : none" [routerLink]="['/', 'product', product._id, product.color.color_id]">{{product.name}}{{' '}}</a></b>
-              <b><a *ngFor="let t of product.tags" style="text-decoration : underline">{{t.name}}{{' '}}</a></b>
+      <div fxFlex="75" class="item-name-and-data">
+        <div>
+          <div fxLayout="row" fxLayoutAlign="center top">
+            <div fxFlex="70">
+              <h4><a [routerLink]="['/', 'product', product.product_id, product.color.id]">{{product.name}}{{' '}}</a>
+              </h4>
             </div>
-            <div fxFlex="30" style="margin-top: 5px;display: inline-block; text-align: left;">
-              <span style="color: #fa5400; font-size: small" *ngIf="!notExist">{{displayTotalPrice}}{{' '}}{{'تومان'}}</span>
-              <span style="color: #fa5400; font-size: small" *ngIf="notExist">ناموجود</span>
+            <div fxFlex="30" class="main-price">
+              <section *ngIf="!notExist">{{displayTotalPrice}}</section>
+              <section *ngIf="notExist && !stock">ناموجود</section>
+              <section *ngIf="notExist && stock">فقط {{stock}} عدد موجود است</section>
             </div>
           </div>
         </div>
-        <div style="height: 60%;">
-          <div style="display: inline-block;">
-            <b style="display: inline-block;">سایز : </b>
-            <div style="color: gray; display: inline-block;">{{' '}}{{displaySize}}</div>
+        <div class="item-data">
+          <div>
+            <p>اندازه:</p>
+            <span>{{displaySize}}</span>
           </div>
           <br>
-          <div style=" display: inline-block;">
-            <b style=" display: inline-block;">تعداد : </b>
-            <div style="color: gray;display: inline-block;">{{' '}} {{displayQuantity}} {{'عدد'}}{{' '}}</div>
-            <div style=" display: inline-block; color: #fa5400; margin-right: 8px">{{displayPrice}}{{'@'}}</div>
+          <div>
+            <p>تعداد:</p>
+            <span>{{displayQuantity}} {{' عدد'}}</span>
+            <section>{{displayPrice}}</section>
           </div>
           <br>
-          <div style=" display: inline-block;">
-            <div style=" display: inline-block; font-weight: bold"><b>رنگ : </b></div>
-            <div style=" display: inline-block; color: gray;margin-right: 8px;">{{product.color.name}}</div>
+          <div>
+            <p>رنگ:</p>
+            <span>{{product.color.name}}</span>
           </div>
         </div>
-        <div fxLayout="row" fxLayoutAlign="center center" fxLayout.xs="column"
-             style="height: 10%;">
-          <button fxFlex="30" (click)="deleteProduct()" class="btn-style">حذف</button>
-          <button fxFlex="30" (click)="openEditOrder()" class="btn-style">ویرایش</button>
+        <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+          <button fxFlex="30" fxFlex.xs=50 (click)="deleteProduct()">حذف</button>
+          <button fxFlex="30" fxFlex.xs=50 (click)="openEditOrder()">ویرایش</button>
         </div>
       </div>
     </div>

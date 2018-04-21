@@ -5,11 +5,6 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
-import {CartService} from '../../../../shared/services/cart.service';
-import {MatDialog} from '@angular/material';
-import {AddToCardConfirmComponent} from '../add-to-card-confirm/add-to-card-confirm.component';
-import {priceFormatter} from '../../../../shared/lib/priceFormatter';
-import {$} from 'protractor';
 
 @Component({
   selector: 'app-desktop-product',
@@ -20,7 +15,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input() product;
   @Input() price;
   @Input() sub;
-
+  @Output() changeSize = new EventEmitter<any>();
   @Input()
   set id(value) {
     this._id = value;
@@ -60,7 +55,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
-    console.log(this.product);
   }
 
   saveToCart() {
@@ -70,6 +64,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   newSize(event) {
     this.size = event;
     this.addCardBtnDisabled = !this.size;
+    this.changeSize.emit(this.size);
   }
 
   ngAfterContentChecked() {
