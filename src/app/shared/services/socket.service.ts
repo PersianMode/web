@@ -11,9 +11,10 @@ export class SocketService {
 
   private orderLineSocket;
 
-  private orderLineObsevable = new Observable(observer => {
-    this.orderLineSocket.on('ans', (data) => {
-      observer.next(data);
+  private orderLineObservable = new Observable(observer => {
+    this.orderLineSocket.on('msg', (message) => {
+      console.log('-> socket message: ', message);
+      observer.next(message);
     });
   });
 
@@ -25,10 +26,11 @@ export class SocketService {
   }
 
   getOrderLineMessage() {
-    return this.orderLineObsevable;
+    return this.orderLineObservable;
   }
 
   disconnect() {
-    this.orderLineSocket.disconnect();
+    if (this.orderLineSocket)
+      this.orderLineSocket.disconnect();
   }
 }

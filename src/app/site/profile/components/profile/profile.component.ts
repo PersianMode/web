@@ -9,6 +9,7 @@ import {Router} from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
+  isEdit = false;
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {

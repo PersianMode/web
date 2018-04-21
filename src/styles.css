@@ -417,8 +417,8 @@ input, button {
 }
 
 .input-error {
-  border-color: red;
-  border-width: 1px;
+  border-color: red !important;
+  border-width: 1px !important;
 }
 
 input {
@@ -856,8 +856,12 @@ mat-panel-title {
   height: 20px !important;
 }
 
-.demo-list {
+.demo-list, .center-content {
   text-align: center;
   width: 100%;
   margin: 0 auto;
+}
+
+.inner-placement-div {
+  margin: 10px;
 }

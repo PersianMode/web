@@ -1,0 +1,60 @@
+.demo-list {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 60px;
+}
+
+.demo-list div img {
+  /*width: 40px;*/
+  height: 40px;
+  margin: 0;
+}
+
+.demo-list div label {
+  position: relative;
+  top: -15px;
+  right: 5px;
+}
+
+.bottom-part {
+  position: relative;
+  margin-top: 100px;
+}
+
+.top-menu-item {
+  /*display: inline-block;*/
+  padding: 5px;
+  margin: 10px;
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+
+  padding: 25px 0 10px 0;
+}
+
+.top-menu-item:hover {
+  background-color: rgba(176,182,180,0.68);
+}
+
+.top-menu-item .content {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.remove {
+  color: darkred;
+}
+
+.menu-field {
+  height: 20px !important;
+}
+
+.button-area {
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}

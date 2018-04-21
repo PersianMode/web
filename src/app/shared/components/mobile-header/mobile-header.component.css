@@ -24,7 +24,7 @@
   font-size: 1.5em;
 }
 .mobile-persian-mode-logo {
-  font-family: nastaliq !Important;
+  font-family: nastaliq, sans-serif !Important;
   font-size: 20px;
   position: absolute;
   top: 8px;
@@ -70,7 +70,7 @@
   background-color: #E5E5E5 !important;
 }
 
-.badge-icon {
+.badge-number {
   font-size: 18px;
   margin-left: 0.5px;
   color: white;

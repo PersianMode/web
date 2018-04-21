@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrderProcessComponent } from './order-process.component';
+import { SliderPreviewComponent } from './slider-preview.component';
 
-describe('OrderProcessComponent', () => {
-  let component: OrderProcessComponent;
-  let fixture: ComponentFixture<OrderProcessComponent>;
+describe('SliderPreviewComponent', () => {
+  let component: SliderPreviewComponent;
+  let fixture: ComponentFixture<SliderPreviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OrderProcessComponent ]
+      declarations: [ SliderPreviewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrderProcessComponent);
+    fixture = TestBed.createComponent(SliderPreviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

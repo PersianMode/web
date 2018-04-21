@@ -12,7 +12,7 @@
           </mat-checkbox>
         </div>
       </div>
-      <app-uploader fxFlex="100" *ngIf="selectedColor?._id"
+      <app-uploader fxFlex="100" *ngIf="selectedColor?._id" [single]="is_thumbnail"
                     [url]="'product/image/'+ productId + '/' +  url  + '/' + is_thumbnail"
                     (OnCompleted)="addToTable($event)"></app-uploader>
     </div>

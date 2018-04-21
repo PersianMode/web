@@ -4,24 +4,31 @@ import {OrderComponent} from './order.component';
 import {OrderRouting} from './order.routing';
 import {SharedModule} from '../../shared/shared.module';
 import {
-  MatButtonModule, MatCheckboxModule, MatChipsModule, MatDialogModule, MatDividerModule, MatIconModule, MatInputModule, MatPaginatorModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDialogModule, MatDividerModule, MatIconModule, MatInputModule,
+  MatPaginatorModule,
   MatProgressSpinnerModule,
   MatRadioModule,
   MatSnackBarModule,
   MatSortModule,
-  MatTableModule,
+  MatTableModule, MatTabsModule,
   MatToolbarModule
 } from '@angular/material';
-import {OrderProcessComponent} from './components/order-process/order-process.component';
+import {SMOrderProcessComponent} from './components/sm-order-process/sm-order-process.component';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule} from '@angular/forms';
+import {SCOrderProcessComponent} from './components/sc-order-process/sc-order-process.component';
+import { InboxComponent } from './components/inbox/inbox.component';
+import { ReferenceComponent } from './components/reference/reference.component';
 
 
 @NgModule({
   declarations: [
     OrderComponent,
-    OrderProcessComponent,
+    SMOrderProcessComponent,
+    SCOrderProcessComponent,
     OrderAddressComponent,
+    InboxComponent,
+    ReferenceComponent,
   ],
   imports: [
     OrderRouting,
@@ -41,9 +48,11 @@ import {FormsModule} from '@angular/forms';
     MatDividerModule,
     MatRadioModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    MatTabsModule,
+    MatCardModule
   ],
-  entryComponents: [OrderAddressComponent, OrderProcessComponent],
+  entryComponents: [OrderAddressComponent, SMOrderProcessComponent, SCOrderProcessComponent],
 })
 export class OrderModule {
 }

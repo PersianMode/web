@@ -30,7 +30,7 @@ export class CollectionHeaderComponent implements OnInit {
       data => {
         this.topMenu = data.filter(r => r.variable_name === 'topMenu');
         this.topMenu
-          .sort((x, y) => x.column - y.column)
+          .sort((x, y) => x.info.column - y.info.column)
           .forEach(r => {
           r.routerLink = ['/'].concat(r.info.href.split('/'));
           r.type = r.info.section ? r.info.section : r.routerLink[2];

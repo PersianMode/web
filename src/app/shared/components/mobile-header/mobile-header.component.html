@@ -8,9 +8,10 @@
         <div *ngIf="!isLoggedIn || !isVerified" class="menu-item menu-title clickable-link" (click)="authentication()">
           وارد/عضو شوید
         </div>
-        <div *ngIf="true" class="menu-item menu-title clickable-link" (click)="navigate(['/'])"><i class="fa fa-home"></i> صفحه اول</div>
-        <div *ngIf="isLoggedIn && isVerified" class="menu-item menu-title clickable-link" (click)="logout()">خارج شوید
+        <div *ngIf="isLoggedIn && isVerified" class="menu-item menu-title clickable-link" (click)="navigateToProfile()">
+         {{display_name}}، خوش آمدید <i class="fa fa-user"></i>
         </div>
+        <div *ngIf="true" class="menu-item menu-title clickable-link" (click)="navigate(['/'])"><i class="fa fa-home"></i> صفحه اول</div>
         <div *ngFor="let first_level of getKeys(menuItems)">
           <div *ngIf="menuItems[first_level].is_title">
             <div class="menu-item menu-static-title">{{first_level}}</div>
@@ -26,6 +27,8 @@
               <span>{{first_level}}</span>
             </div>
           </div>
+        </div>
+        <div *ngIf="isLoggedIn && isVerified" class="menu-item menu-title clickable-link" (click)="logout()">خارج شوید
         </div>
       </div>
       <div *ngIf="isSecondLevel">
@@ -80,12 +83,12 @@
           <i class="fa fa-bars" aria-hidden="true"></i>
         </a>
         <a class="mobile-header-item" [routerLink]="'/cart'" id="header-cart">
-          <span *ngIf="cartNumbers" class="badge-icon">
+          <span  [style.visibility]="cartNumbers ? 'visible' : 'hidden'" class="badge-number">
           {{cartNumbers}}
           </span>
-          <span *ngIf="cartNumbers">
+          <span [style.visibility]="cartNumbers ? 'visible' : 'hidden'">
             <svg height="20" width="20">
-              <circle cx="10" cy="10" r="10" fill="#AA0000"/>
+              <circle cx="10" cy="10" r="10" fill="#AA0000"></circle>
             </svg>
           </span>
           <span>
