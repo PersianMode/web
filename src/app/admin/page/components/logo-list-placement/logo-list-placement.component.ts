@@ -43,11 +43,8 @@ export class LogoListPlacementComponent implements OnInit {
     }
   };
 
-  pos: LogoPos;
-
   logoChanged = false;
   imageChanged = false;
-
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
               private progressService: ProgressService, private sanitizer: DomSanitizer) {
@@ -106,18 +103,29 @@ export class LogoListPlacementComponent implements OnInit {
       isEdit: false,
       imgUrl: null,
       style: {
-        width: 0,
+        width: 60,
         top: 0,
         right: 0,
         height: 29,
       }
     };
-    this.pos = this.upsertLogo.style;
   }
 
   changeField() {
-    const text = this.upsertLogo ? this.upsertLogo.text.trim().toLowerCase() : '';
-    const href = this.upsertLogo ? this.upsertLogo.href.trim().toLowerCase() : '';
+    const text = this.upsertLogo && this.upsertLogo.text ? this.upsertLogo.text.trim().toLowerCase() : '';
+    const href = this.upsertLogo && this.upsertLogo.href ? this.upsertLogo.href.trim().toLowerCase() : '';
+
+    const curLogo = this.logos.find(el => el.info.text === this.upsertLogo.text && el.info.href === this.upsertLogo.href);
+    if (curLogo) {
+      const logoStyle = curLogo.info.style, upsertStyle = this.upsertLogo.style;
+      const widthChange = (logoStyle && logoStyle.width || 60) === upsertStyle.width;
+      const heightChange = (logoStyle && logoStyle.height || 29) === upsertStyle.height;
+      const topChange = (logoStyle && logoStyle.top || 0) === upsertStyle.top;
+      const rightChange = (logoStyle && logoStyle.right || 0) === upsertStyle.right;
+      this.imageChanged = !(widthChange && heightChange && topChange && rightChange);
+    } else {
+      this.imageChanged = false;
+    }
 
     if (this.upsertLogo && this.upsertLogo.isEdit && text && href &&
       this.logos.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1)
@@ -144,21 +152,109 @@ export class LogoListPlacementComponent implements OnInit {
   }
 
   selectItem(value) {
-
+    const style = value.info.style;
+    this.upsertLogo = {
+      text: value.info.text,
+      href: value.info.href,
+      id: value._id,
+      column: value.info.column,
+      isEdit: true,
+      imgUrl: value.info.imgUrl,
+      style: {
+        width: style && typeof style.width !== 'undefined' && style.width !== null ? style.width : 60,
+        height: style && typeof style.height !== 'undefined' && style.height !== null ? style.height : 29,
+        top: style && typeof style.top !== 'undefined' && style.top !== null ? style.top : 0,
+        right: style && typeof style.right !== 'undefined' && style.right !== null ? style.right : 0,
+      }
+    };
   }
 
   modifyItem(isEdit) {
-
+    this.progressService.enable();
+    (isEdit ? this.httpService.post('placement', {
+      page_id: this.pageId,
+      placements: [
+        {
+          _id: this.upsertLogo.id,
+          info: {
+            text: this.upsertLogo.text,
+            href: this.upsertLogo.href,
+            column: this.upsertLogo.column,
+            style: this.upsertLogo.style,
+          }
+        }
+      ]
+    }) : this.httpService.put('placement', {
+      page_id: this.pageId,
+      placement: {
+        component_name: 'logos',
+        variable_name: 'logos',
+        info: {
+          text: this.upsertLogo.text,
+          href: this.upsertLogo.href,
+          column: Math.max(...this.logos.map(el => el.info.column)) + 1,
+          style: this.upsertLogo.style,
+        }
+      }
+    })).subscribe(
+      data => {
+        this.reloadPlacements.emit();
+        if (!isEdit) {
+          this.upsertLogo.isEdit = true;
+          this.upsertLogo.id = data.placement
+            .find(el => el.info.text === this.upsertLogo.text &&
+              el.info.href === this.upsertLogo.href)._id;
+        } else {
+          this.imageChanged = false;
+        }
+        this.changeField();
+        this.progressService.disable();
+      },
+      err => {
+        this.progressService.disable();
+        console.error('error in sending logo placement data', err);
+      }
+    );
   }
 
   removeItem() {
-
+    this.progressService.enable();
+    const index = this.logos.findIndex(
+      el => el.info.text === this.upsertLogo.text && el.info.href === this.upsertLogo.href);
+    if (index !== -1)
+      this.httpService.post('placement/delete', {
+        page_id: this.pageId,
+        placement_id: this.logos[index]._id,
+      }).subscribe(
+        data => {
+          // this.modifyPlacement.emit({
+          //   type: PlacementModifyEnum.Delete,
+          //   placement_id: this.logos[index]._id,
+          // });
+          this.reloadPlacements.emit();
+          this.clearFields();
+          this.progressService.disable();
+        },
+        err => {
+          this.progressService.disable();
+          console.error('something went wrong', err);
+        }
+      );
   }
 
   getURL(path) {
     return `assets/logos/${path}`;
-    if (path)
-      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    // if (path)
+    //   return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+  }
+
+  changePosition(pos, value) {
+    this.upsertLogo.style[pos] += value;
+    this.changeField();
+  }
+
+  change($event) {
+
   }
 
 }

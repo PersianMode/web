@@ -181,6 +181,7 @@ export class SliderPlacementComponent implements OnInit {
         },
         err => {
           this.progressService.disable();
+          console.error('something went wrong', err);
         }
       );
   }

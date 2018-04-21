@@ -8,6 +8,13 @@ export interface LogoPos {
   top: number;
   right: number;
 }
+/*
+* Default LogoPos:
+*   width: 60
+*   height: 29
+*   top: 0
+*   right: 0
+* */
 
 @Component({
   selector: 'app-logo-header',
