@@ -1,5 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PageService} from '../../services/page.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {HttpService} from '../../services/http.service';
 
 const defaultStyle = {
   imgWidth: 40,
@@ -16,7 +18,7 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
   slides = [];
   slider: any;
 
-  constructor(private pageService: PageService) {
+  constructor(private pageService: PageService, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
@@ -25,15 +27,19 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
         this.slides = [];
         for (let i = 0; i < data.length; i++) {
           this.slides.push({});
-          this.slides[i].text = data[i].variable_name;
+          // this.slides[i].text = data[i].variable_name;
+          this.slides[i].text = data[i].info.text;
+          this.slides[i].href = data[i].info.href;
           this.slides[i].imgAddr = data[i].info.imgUrl;
+          this.slides[i].column = data[i].info.column;
           for (const key in defaultStyle) {
             if (defaultStyle.hasOwnProperty(key)) {
               this.slides[i][key] = data[i].info.style && data[i].info.style[key] ? data[i].info.style[key] : defaultStyle[key];
             }
           }
-          this.slides[i].href = data[i].info.href;
         }
+
+        this.slides.sort((a, b) => a.column > b.column ? 1 : (a.column < b.column) ? -1 : 0);
       });
 
 
@@ -57,5 +63,13 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
   prevSlide() {
     this.curSlideIndex--;
     this.initSlider();
+  }
+
+  getURL(path: string) {
+    // TODO: these two lines are only for test! this gets images locally not from server
+    if (path && path.indexOf('assets') !== -1)
+      return path;
+    if (path)
+      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }
 }
