@@ -21,14 +21,14 @@
             <tbody>
               <tr *ngFor="let pc of productColors; let i = index">
                 <td>{{i+1}}</td>
-                <a href="javascript:;" (click)="modalThumbnail()"><td style="direction: ltr">{{pc.name}}</td></a>
+                <td style="direction: ltr"><a href="javascript:;" (click)="modalThumbnail(pc)">{{pc.name}}</a></td>
                 <td>
                   <img style="width: 80%; margin: 0 10px;" [src]="getURL(pc.image?.thumbnail)">
                 </td>
                 <td>
                   <div style="text-align: center">
                     <div *ngFor="let angle of pc.image?.angles" style="width: 10% ;height: 10%; display: inline-block;text-align: center;">
-                      <img style="width: 80% ;" [src]="getURL(angle)">
+                      <a href="javascript:;" (click)="angleDelete(angle)"><img style="width: 80% ;" [src]="getURL(angle)"></a>
                     </div>
                   </div>
                 </td>

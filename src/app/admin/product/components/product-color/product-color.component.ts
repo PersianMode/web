@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {HttpService} from '../../../../shared/services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
-import {ThumbnailComponent} from './components/thumbnail/thumbnail.component';
+import { ThumbnailComponent } from './components/thumbnail/thumbnail.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
 
@@ -20,6 +20,7 @@ export class ProductColorComponent implements OnInit, OnChanges {
   selectedColor = {};
   is_thumbnail = false;
   is_disabled = false;
+  thumbnailDialog;
   url = '';
 
   @Input() productId;
@@ -129,31 +130,45 @@ export class ProductColorComponent implements OnInit, OnChanges {
     }
   }
 
-  modalThumbnail() {
-    const rmDialog = this.dialog.open(ThumbnailComponent, {
-      width: '800px',
+  modalThumbnail(pc) {
+    this.thumbnailDialog = this.dialog.open(ThumbnailComponent, {
+      width: '600px',
+      data: {
+        product_color: pc
+      }
+    });
+    this.thumbnailDialog.afterClosed().subscribe(data => {
+
+    });
+  }
+
+  angleDelete(angle) {
+    angle = angle.substring(angle.lastIndexOf('/') + 1);
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
     });
     rmDialog.afterClosed().subscribe(
       (status) => {
-        // if (status) {
-        //   this.progressService.enable();
-        //   this.httpService.delete(`/product/${id}`).subscribe(
-        //     (data) => {
-        //       this.snackBar.open('Product delete successfully', null, {
-        //         duration: 2000,
-        //       });
-        //       this.progressService.disable();
-        //       this.productId = null;
-        //       this.router.navigate(['agent/products']);
-        //     },
-        //     (error) => {
-        //       this.snackBar.open('Cannot delete this product. Please try again', null, {
-        //         duration: 2700
-        //       });
-        //       this.progressService.disable();
-        //     }
-        //   );
-        // }
+        if (status) {
+          this.progressService.enable();
+          this.httpService.delete(`/product/color/${this.productId}/${angle}`).subscribe(
+            (data) => {
+              this.snackBar.open('this angle deleted successfully', null, {
+                duration: 2000,
+              });
+              this.progressService.disable();
+
+              this.onProductColorChanged.emit(this.productColors);
+
+            },
+            (error) => {
+              this.snackBar.open('Cannot delete this angle. Please try again', null, {
+                duration: 2700
+              });
+              this.progressService.disable();
+            }
+          );
+        }
       },
       (err) => {
         console.log('Error in dialog: ', err);

@@ -24,7 +24,7 @@ import {ThumbnailComponent} from './components/product-color/components/thumbnai
     ProductFullInfoComponent,
     ProductColorComponent,
     ProductInstanceComponent,
-    ThumbnailComponent,
+    ThumbnailComponent
     // ProductTagComponent,
   ],
   imports: [

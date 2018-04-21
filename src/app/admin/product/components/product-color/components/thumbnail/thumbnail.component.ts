@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-thumbnail',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ThumbnailComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dialogRef: MatDialogRef<ThumbnailComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: any) {
+      console.log('data--->', data);
+  }
 
   ngOnInit() {
+    console.log('data', this.data);
   }
 
 }
