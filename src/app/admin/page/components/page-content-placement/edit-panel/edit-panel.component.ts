@@ -231,7 +231,7 @@ export class EditPanelComponent implements OnInit {
       }
     }
 
-    if (this.saveButtonShouldBeDisabled)
+    if (this.saveButtonShouldBeDisabled || anyChanges)
       return;
 
     // Check changes
@@ -281,7 +281,7 @@ export class EditPanelComponent implements OnInit {
     if (this.placement)
       return `placement/image/${this.pageId}/${this.placement._id}`;
 
-    return `placement/image/${this.pageId}`;
+    return `placement/image/${this.pageId}/null`;
   }
 
   imageUploaded(data) {
@@ -290,7 +290,6 @@ export class EditPanelComponent implements OnInit {
     });
 
     console.log(data);
-    
     this.imageUrl = data.downloadedUrl;
   }
 }
