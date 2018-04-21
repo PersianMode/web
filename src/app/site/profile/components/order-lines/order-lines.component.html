@@ -1,3 +1,22 @@
-<p>
-  order-lines works!
-</p>
+<mat-card *ngFor="let ol of orderLines" >
+  <mat-card-content>
+    <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column" dir="rtl">
+      <div fxFlex="25">
+        <a [routerLink]="['/', 'product', ol.product.product_id, ol.product.colors[0].color_id]">
+          <span style="margin:0;">
+          <img src="{{ol.product.colors[0].image.thumbnail}}">
+          </span>
+        </a>
+      </div>
+      <div fxFlex="75" class="item-name-and-data">
+          <div fxLayout="row" fxLayoutAlign="center top">
+            <div fxFlex="70">
+              {{orderInfo.dialog_order.order_lines.length}}
+            </div>
+            <div fxFlex="30" class="main-price">
+            </div>
+          </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

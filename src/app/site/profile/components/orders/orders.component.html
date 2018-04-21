@@ -43,7 +43,7 @@
     <ng-container matColumnDef="view_details">
         <mat-header-cell *matHeaderCellDef mat-sort-header>مشاهده جزییات</mat-header-cell>
         <mat-cell *matCellDef="let order" style=" font-size: 20px"><a class="clickable-link"
-                                                                      (click)="goToOrderLines()" style="color: #000;"><i
+                                                                      (click)="goToOrderLines(order._id)" style="color: #000;"><i
                 class="fa fa-eye"></i></a></mat-cell>
     </ng-container>
 

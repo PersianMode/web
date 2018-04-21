@@ -30,7 +30,6 @@ import {ProfileOrderService} from '../../shared/services/profile-order.service';
     MatTableModule,
     MatExpansionModule,
   ],
-  providers: [ProfileOrderService],
   declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent]
 })
 export class ProfileModule { }
