@@ -265,7 +265,6 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   getURL(path) {
-    // return (HttpService.Host + path);
     if (path)
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }

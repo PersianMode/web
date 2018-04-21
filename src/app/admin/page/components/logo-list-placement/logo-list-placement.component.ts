@@ -136,19 +136,21 @@ export class LogoListPlacementComponent implements OnInit {
 
   logoApplyDisability() {
     if (this.upsertLogo.isEdit) {
-      return !this.imageChanged && (!this.logoChanged || (!this.upsertLogo.text || !this.upsertLogo.href));
+      return !((this.imageChanged || this.logoChanged) && (this.upsertLogo.text && this.upsertLogo.href));
     } else {
-      return !this.upsertLogo.text || !this.upsertLogo.href;
+      return !(this.upsertLogo.text && this.upsertLogo.href);
     }
   }
 
   onImageUploaded(images: any) {
-    if (images.length > 0) {
+    if (this.upsertLogo.isEdit) { // update -> images: string[]
       this.upsertLogo['imgUrl'] = images[0];
-      this.upsertLogo.isEdit = true;
-      // TODO: should not be emitted! instead, the edit button should be enabled!
-      this.reloadPlacements.emit();
+    } else { // add -> images: [{downloadURL, placementId}]
+      this.upsertLogo['imgUrl'] = images[0].downloadURL;
+      this.upsertLogo['id'] = images[0].placementId;
     }
+
+    this.reloadPlacements.emit();
   }
 
   selectItem(value) {
@@ -170,6 +172,20 @@ export class LogoListPlacementComponent implements OnInit {
   }
 
   modifyItem(isEdit) {
+    const newPl = {
+      component_name: 'logos',
+      variable_name: 'logos',
+      info: {
+        text: this.upsertLogo.text,
+        href: this.upsertLogo.href,
+        column: Math.max(...this.logos.map(el => el.info.column)) + 1,
+        style: this.upsertLogo.style,
+      }
+    };
+    if (!isEdit && this.upsertLogo.id) {
+      newPl['_id'] = this.upsertLogo.id;
+      newPl['info']['imgUrl'] = this.upsertLogo.imgUrl;
+    }
     this.progressService.enable();
     (isEdit ? this.httpService.post('placement', {
       page_id: this.pageId,
@@ -179,23 +195,14 @@ export class LogoListPlacementComponent implements OnInit {
           info: {
             text: this.upsertLogo.text,
             href: this.upsertLogo.href,
-            column: this.upsertLogo.column,
+            imgUrl: this.upsertLogo.imgUrl,
             style: this.upsertLogo.style,
           }
         }
       ]
     }) : this.httpService.put('placement', {
       page_id: this.pageId,
-      placement: {
-        component_name: 'logos',
-        variable_name: 'logos',
-        info: {
-          text: this.upsertLogo.text,
-          href: this.upsertLogo.href,
-          column: Math.max(...this.logos.map(el => el.info.column)) + 1,
-          style: this.upsertLogo.style,
-        }
-      }
+      placement: newPl,
     })).subscribe(
       data => {
         this.reloadPlacements.emit();
@@ -243,13 +250,19 @@ export class LogoListPlacementComponent implements OnInit {
   }
 
   getURL(path) {
-    return `assets/logos/${path}`;
-    // if (path)
-    //   return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    if (path)
+      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }
 
   changePosition(pos, value) {
     this.upsertLogo.style[pos] += value;
     this.changeField();
+  }
+
+  getThisPlacement() {
+    return {
+      component_name: 'logos',
+      variable_name: 'logos'
+    };
   }
 }

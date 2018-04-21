@@ -18,7 +18,7 @@
     </li>
   </ul>
 </nav>
-<div class="image-settings" fxLayout="row" fxLayout.xs="column" *ngIf="upsertLogo.id && upsertLogo.imgUrl">
+<div class="image-settings" fxLayout="row" fxLayout.xs="column" *ngIf="upsertLogo.isEdit">
   <div fxLayout="column" fxFlex="50" class="margin-change-div">
     <div fxLayout="row">
       <div fxFlex="10" fxFlexOffset="40">
@@ -103,7 +103,8 @@
     <div fxFlex="30">
       <app-uploader [single]="true"
                     [url]="'placement/image/' + pageId + '/' + upsertLogo.id"
-                    (OnCompleted)="onImageUploaded($event)"></app-uploader>
+                    (OnCompleted)="onImageUploaded($event)"
+                    [additionalData]="getThisPlacement()"></app-uploader>
     </div>
   </div>
 </div>

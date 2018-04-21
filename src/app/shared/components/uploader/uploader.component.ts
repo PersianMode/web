@@ -17,9 +17,9 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() single = false;
 
   @Input() additionalData = {};
-  @Output() OnCompleted = new EventEmitter<string[]>();
+  @Output() OnCompleted = new EventEmitter<any>();
 
-  private results: string[] = [];
+  private results: any = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.url && changes.url.currentValue) {
@@ -28,12 +28,13 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
 
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       const result = JSON.parse(response);
-      if (result.downloadURL)
-        this.results.push(result.downloadURL);
-
+      this.results.push(result);
     };
 
     this.uploader.onCompleteAll = () => {
+      if (Math.max(...this.results.map(el => Object.keys(el).length)) === 1)
+        this.results = this.results.map(el => el.downloadURL);
+
       this.OnCompleted.emit(this.results);
       this.results = [];
     };
