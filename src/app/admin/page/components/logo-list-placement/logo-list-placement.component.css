@@ -32,7 +32,7 @@
 
 .bottom-part {
   position: relative;
-  margin-top: 100px;
+  margin-top: 60px;
 }
 
 .remove {
@@ -52,7 +52,7 @@
 /* FOR IMAGE MANIPULATING */
 .image-settings {
   position: relative;
-  margin-top: 100px;
+  margin-top: 60px;
   border: 1px solid aliceblue;
   border-radius: 100px;
   padding: 10px;
@@ -70,6 +70,7 @@
 }
 
 .fb-centerized-div input {
+  min-width: 100px;
   padding: 5px;
   margin: 0 4px;
   font-size: 1.2em;

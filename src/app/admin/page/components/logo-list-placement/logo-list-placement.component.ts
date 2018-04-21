@@ -252,9 +252,4 @@ export class LogoListPlacementComponent implements OnInit {
     this.upsertLogo.style[pos] += value;
     this.changeField();
   }
-
-  change($event) {
-
-  }
-
 }
