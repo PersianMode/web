@@ -12,6 +12,7 @@ import {
 import {isUndefined, log} from 'util';
 import {DictionaryService} from '../../services/dictionary.service';
 import {sizeOptionsEnum} from '../../enum/sizeOptions.enum';
+import {HttpService} from '../../services/http.service';
 
 @Component({
   selector: 'app-size-picker',
@@ -20,6 +21,10 @@ import {sizeOptionsEnum} from '../../enum/sizeOptions.enum';
 })
 export class SizePickerComponent implements OnInit {
   sizeSplits = [];
+  shoesMap: any;
+  @Input() gender: String = 'MENS';
+  isEU = true;
+
 
   @Input()
   set sizes(productSizes) {
@@ -27,9 +32,14 @@ export class SizePickerComponent implements OnInit {
     Object.assign(temp, productSizes);
     if (productSizes && productSizes.length) {
       productSizes.forEach((p, pi) => {
-        temp[pi].displayValue = this.dict.translateWord(p.value);
+        if (!this.isEU)
+          temp[pi].displayValue = this.dict.translateWord(p.value);
+        else {
+          temp[pi].displayValue = this.dict.translateWord(this.USToEU(p.value));
+        }
       });
     }
+
     this.sizeSplits = [];
     while (temp && temp.length) {
       this.sizeSplits.push(temp.splice(0, 5));
@@ -39,15 +49,14 @@ export class SizePickerComponent implements OnInit {
   @Output('value') value = new EventEmitter();
   val = 0;
 
-  constructor(private dict: DictionaryService) {
+  constructor(private dict: DictionaryService, private httpService: HttpService) {
   }
 
   ngOnInit() {
   }
 
   onChange(e) {
-    const sizeFirstCharCode = e.value.charCodeAt(0);
-    this.val = (sizeFirstCharCode >= 48 && sizeFirstCharCode <= 57) ? +e.value : e.value;
+    this.val = e.value;
     this.value.emit(this.val);
 
     // if ( +e.value > 0 ) {
@@ -77,5 +86,39 @@ export class SizePickerComponent implements OnInit {
     //   }
     //   this.value.emit(tempEmitValue);
     // }
+  }
+
+  USToEU(oldSize) {
+    this.gender = 'WOMENS';
+    // this.gender = 'MENS';
+    // this.gender = undefined;
+    // this.gender = null;
+    if (this.shoesMap === undefined || this.shoesMap === null || this.shoesMap === [])
+      this.getEuroSize();
+    console.log(this.shoesMap);
+    let returnValue: String;
+    if (!this.gender || this.gender === undefined || this.gender.toUpperCase() === 'MENS') {
+      returnValue = this.shoesMap.men.find(size => size.us === oldSize).eu;
+    } else if (this.gender.toUpperCase() === 'WOMENS') {
+      returnValue = this.shoesMap.women.find(size => size.us === oldSize).eu;
+    }
+    if (returnValue === null)
+      return oldSize;
+    return returnValue;
+  }
+
+  getEuroSize() {
+    this.httpService.get('../../../assets/shoesSize.json').subscribe(res => this.shoesMap = res);
+  }
+
+  getUserSizeType() {
+    // get user size type
+    // set isEU
+  }
+
+  changeSizeType() {
+    this.isEU = !this.isEU;
+    console.log('isEU :', this.isEU);
+    // post user size type
   }
 }
