@@ -22,14 +22,13 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   _additionalData = {};
-
   @Output() OnCompleted = new EventEmitter<string[]>();
 
   private results: string[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.url && changes.url.currentValue) {
-      this.uploader = new FileUploader({ url: 'api/' + this.url });
+      this.uploader = new FileUploader({url: 'api/' + this.url});
     }
 
     this.uploader.onSuccessItem = (item, response, status, headers) => {
@@ -55,14 +54,13 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
       Object.keys(this._additionalData).forEach(e => {
         form.append(e, this._additionalData[e]);
       });
-      return { fileItem, form };
+      return {fileItem, form};
     };
   }
 
 
   constructor() {
   }
-
 
   ngOnInit(): void {
     this.uploader = new FileUploader({ url: 'api/' + this.url });
