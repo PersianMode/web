@@ -132,7 +132,7 @@ export class ProductColorComponent implements OnInit, OnChanges {
 
   modalThumbnail(pc) {
     this.thumbnailDialog = this.dialog.open(ThumbnailComponent, {
-      width: '600px',
+      width: '800px',
       data: {
         product_color: pc
       }
