@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {HttpService} from '../../../../shared/services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {ThumbnailComponent} from './components/thumbnail/thumbnail.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
 
@@ -126,5 +127,37 @@ export class ProductColorComponent implements OnInit, OnChanges {
       this.is_thumbnail = true;
       this.is_disabled = true;
     }
+  }
+
+  modalThumbnail() {
+    const rmDialog = this.dialog.open(ThumbnailComponent, {
+      width: '800px',
+    });
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        // if (status) {
+        //   this.progressService.enable();
+        //   this.httpService.delete(`/product/${id}`).subscribe(
+        //     (data) => {
+        //       this.snackBar.open('Product delete successfully', null, {
+        //         duration: 2000,
+        //       });
+        //       this.progressService.disable();
+        //       this.productId = null;
+        //       this.router.navigate(['agent/products']);
+        //     },
+        //     (error) => {
+        //       this.snackBar.open('Cannot delete this product. Please try again', null, {
+        //         duration: 2700
+        //       });
+        //       this.progressService.disable();
+        //     }
+        //   );
+        // }
+      },
+      (err) => {
+        console.log('Error in dialog: ', err);
+      }
+    );
   }
 }
