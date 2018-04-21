@@ -29,6 +29,7 @@ export class ThumbnailComponent implements OnInit {
       (err) => {
         this.progressService.disable();
     });
+    this.dialogRef.close();
   }
 
 }
