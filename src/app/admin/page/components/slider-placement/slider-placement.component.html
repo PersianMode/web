@@ -43,7 +43,7 @@
       </button>
     </div>
     <div fxFlex="30">
-      <app-uploader [single]="true" *ngIf="upsertSlider.isEdit"
+      <app-uploader [single]="true"
                     [url]="'placement/image/' + pageId + '/' + upsertSlider.id"
                     (OnCompleted)="onImageUploaded($event)"
                     [additionalData]="getThisPlacement()"></app-uploader>

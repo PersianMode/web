@@ -124,10 +124,11 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   onImageUploaded(images: any) {
-    if (images.length > 0) {
+    if (this.upsertSlider.isEdit) {
       this.upsertSlider['imgUrl'] = images[0];
-      // TODO: should not be emitted! instead, the edit button should be enabled!
-      this.reloadPlacements.emit();
+    } else {
+      this.upsertSlider['imgUrl'] = images[0].downloadURL;
+      this.upsertSlider['id'] = images[0].placementId;
     }
   }
 
@@ -146,7 +147,6 @@ export class SliderPlacementComponent implements OnInit {
       },
     };
     this.pos = Object.assign({}, this.upsertSlider.style);
-    // console.log('selected item:', value, this.sliders, this.upsertSlider, this.pos);
   }
 
   removeItem() {
@@ -187,6 +187,20 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   modifyItem(isEdit) {
+    const newPl = {
+      component_name: 'slider',
+      variable_name: 'slider',
+      info: {
+        text: this.upsertSlider.text,
+        href: this.upsertSlider.href,
+        column: Math.max(...this.sliders.map(el => el.info.column)) + 1,
+        style: this.upsertSlider.style,
+      }
+    };
+    if (!isEdit && this.upsertSlider.id) {
+      newPl['_id'] = this.upsertSlider.id;
+      newPl['info']['imgUrl'] = this.upsertSlider.imgUrl;
+    }
     this.progressService.enable();
     (isEdit ? this.httpService.post('placement', {
       page_id: this.pageId,
@@ -196,22 +210,14 @@ export class SliderPlacementComponent implements OnInit {
           info: {
             text: this.upsertSlider.text,
             href: this.upsertSlider.href,
-            column: this.upsertSlider.column,
+            imgUrl: this.upsertSlider.imgUrl,
             style: this.upsertSlider.style,
           }
         }
       ]
     }) : this.httpService.put('placement', {
       page_id: this.pageId,
-      placement: {
-        component_name: 'slider',
-        variable_name: 'slider',
-        info: {
-          text: this.upsertSlider.text,
-          href: this.upsertSlider.href,
-          column: Math.max(...this.sliders.map(el => el.info.column)) + 1,
-        }
-      }
+      placement: newPl,
     })).subscribe(
       data => {
         this.reloadPlacements.emit();
@@ -220,7 +226,6 @@ export class SliderPlacementComponent implements OnInit {
           this.upsertSlider.id = data.placement
             .find(el => el.info.text === this.upsertSlider.text &&
               el.info.href === this.upsertSlider.href)._id;
-          // TODO: wondering if I should set styles here or not!
         } else {
           this.pos = Object.assign({}, this.upsertSlider.style);
           this.imageChanged = false;
@@ -247,21 +252,25 @@ export class SliderPlacementComponent implements OnInit {
 
   sliderApplyDisability() {
     if (this.upsertSlider.isEdit) {
-      return !this.imageChanged && (!this.sliderChanged || (!this.upsertSlider.text || !this.upsertSlider.href));
+      return !((this.imageChanged || this.sliderChanged) && (this.upsertSlider.text && this.upsertSlider.href));
     } else {
-      return !this.upsertSlider.text || !this.upsertSlider.href;
+      return !(this.upsertSlider.text && this.upsertSlider.href);
     }
   }
 
   getThisPlacement() {
-    return this.sliders
-      .filter(e => e._id === this.upsertSlider.id)
-      .map(e => {
-        return {
-          component_name: e.component_name,
-          variable_name: e.variable_name || 'slider',
-        };
-      })[0];
+    return {
+      component_name: 'slider',
+      variable_name: 'slider',
+    };
+    // return this.sliders
+    //   .filter(e => e._id === this.upsertSlider.id)
+    //   .map(e => {
+    //     return {
+    //       component_name: e.component_name,
+    //       variable_name: e.variable_name || 'slider',
+    //     };
+    //   })[0];
   }
 
   getURL(path) {
