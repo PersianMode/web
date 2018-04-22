@@ -6,7 +6,8 @@
     </button>
   </div>
   <div class="demo-area center-content">
-    <div *ngFor="let key of getKeyList(modifiedPlacementList)" class="container content">
+    <div *ngFor="let key of getKeyList(modifiedPlacementList)" class="container content"
+    [dragula]="bagName" [dragulaModel]="modifiedPlacementList[key]">
       <div *ngIf="modifiedPlacementList[key][0].info.topTitle">
         <h2 *ngIf="modifiedPlacementList[key][0].info.topTitle.title"
             [style.color]="modifiedPlacementList[key][0].info.topTitle.titleColor ? modifiedPlacementList[key][0].info.topTitle.titleColor : null"
@@ -18,7 +19,7 @@
       </div>
       <div fxLayout="row"
            fxLayoutAlign="start start">
-        <div [fxFlex]="getRowParts(item)" *ngFor="let item of modifiedPlacementList[key]" [dragula]="bagName" [dragulaModel]="modifiedPlacementList[key]">
+        <div [fxFlex]="getRowParts(item)" *ngFor="let item of modifiedPlacementList[key]">
           <div class="controller-area">
             <button mat-icon-button (click)="openEditDialog(item)" class="controller-button">
               <mat-icon aria-label="Edit">create</mat-icon>

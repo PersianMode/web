@@ -41,6 +41,8 @@ export class PageContentPlacementComponent implements OnInit {
       this.dragulaService.setOptions(this.bagName, {});
 
     this.dragulaService.dropModel.subscribe((value) => {
+      console.log(value);
+
       if (this.bagName === value[0])
         this.changePanelItemOrder();
     });
