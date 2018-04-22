@@ -32,7 +32,6 @@ export class ProductColorComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.productColors);
   }
 
   removeImg(color_id: string) {

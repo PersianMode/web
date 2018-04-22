@@ -25,14 +25,15 @@ export class EditOrderComponent implements OnInit {
   ngOnInit() {
     this.product = this.data.dialog_product;
     this.product.instances.forEach(el => {
-      if (el.quantity > 0) {
+      if (el.quantity) {
         const sizeFirstCharCode = el.size.charCodeAt(0);
         this.sizesArray.push({
           value: el.size,
           name: (sizeFirstCharCode >= 48 && sizeFirstCharCode <= 57) ? el.size.toLocaleString('fa') : el.size,
           quantity: el.quantity
         });
-      }
+      };
+      this.editObj.newQuantity = this.product.quantity;
     });
 
     this.sizesArray = Array.from(new Set(this.sizesArray));
