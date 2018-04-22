@@ -14,6 +14,7 @@ import {ProductFullInfoComponent} from './components/product-full-info/product-f
 import {ProductColorComponent} from './components/product-color/product-color.component';
 import {ProductInstanceComponent} from './components/product-instance/product-instance.component';
 import {SharedModule} from '../../shared/shared.module';
+import { ProductColorEditComponent } from './components/product-color-edit/product-color-edit.component';
 // import {ProductTagComponent} from './components/product-tag/product-tag.component';
 
 @NgModule({
@@ -23,7 +24,8 @@ import {SharedModule} from '../../shared/shared.module';
     ProductFullInfoComponent,
     ProductColorComponent,
     ProductInstanceComponent,
-    // ProductTagComponent,
+    ProductColorEditComponent,
+    ProductColorEditComponent
   ],
   imports: [
     ProductRouting,
@@ -48,6 +50,9 @@ import {SharedModule} from '../../shared/shared.module';
     SharedModule,
     MatCheckboxModule,
   ],
+  entryComponents: [
+    ProductColorEditComponent
+  ]
 })
 export class ProductModule {
 }
