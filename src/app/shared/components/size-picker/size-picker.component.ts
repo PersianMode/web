@@ -29,7 +29,6 @@ export class SizePickerComponent implements OnInit {
   @Output('value') value = new EventEmitter();
   val = '';
 
-
   constructor(private dict: DictionaryService, private httpService: HttpService) {
   }
 
@@ -54,7 +53,6 @@ export class SizePickerComponent implements OnInit {
         }
       });
     }
-
     this.sizeSplits = [];
     while (temp && temp.length) {
       this.sizeSplits.push(temp.splice(0, 5));
