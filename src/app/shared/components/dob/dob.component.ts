@@ -27,9 +27,10 @@ export class DobComponent implements OnInit {
 
   constructor() {
     const year = moment().jYear();
-    for (let i = year - 100; i < year + 1; i ++) {
+    for (let i = year - 100; i < year - 17; i ++) {
       this.years.push({index: i, value: i.toLocaleString('fa', {useGrouping: false})});
     }
+    this.years.reverse();
     'فروردین اردیبهشت خرداد تیر مرداد شهریور مهر آبان آذر دی بهمن اسفند'.split(' ').forEach((m, i) =>{
       this.months.push({index: i + 1, value: m});
     });

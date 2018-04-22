@@ -130,3 +130,17 @@ mat-icon {
   top: -5px;
   left: -15px;
 }
+
+.bag-btn {
+  text-align: center;
+  padding-top: 30px;
+  width: 100%;
+}
+.bag-btn button {
+  padding: 10px;
+  font-size: 15px;
+  background: black;
+  color: #fff;
+  outline: none;
+  border-radius: 5px;
+}

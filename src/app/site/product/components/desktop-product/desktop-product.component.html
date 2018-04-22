@@ -17,7 +17,7 @@
     <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
       <span style="margin:0;">
         <p *ngIf="item.soldOut && !focused[item._id]" class="soldOut">موجود نیست</p>
-      <img [style.opacity]="selectedProductColor && item._id === selectedProductColor._id ? 1 : .5"
+      <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id"
            src="{{item.image.thumbnail}}" (mouseenter)="focused[item._id]=true" (mouseout)="focused[item._id]=false">
       </span>
     </a>
