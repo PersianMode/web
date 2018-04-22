@@ -5,7 +5,7 @@
         <a [routerLink]="['/', 'product', product.product_id, product.color.id]">
           <span style="margin:0;">
         <p *ngIf="notExist" class="soldOut">موجود نیست</p>
-          <img src="{{product.thumbnail}}">
+          <img src="{{product?.thumbnail}}">
           </span>
         </a>
       </div>
@@ -13,13 +13,13 @@
         <div>
           <div fxLayout="row" fxLayoutAlign="center top">
             <div fxFlex="70">
-              <h4><a [routerLink]="['/', 'product', product.product_id, product.color.id]">{{product.name}}{{' '}}</a>
+              <h4><a [routerLink]="['/', 'product', product?.product_id, product?.color.id]">{{product?.name}}{{' '}}</a>
               </h4>
             </div>
             <div fxFlex="30" class="main-price">
               <section *ngIf="!notExist">{{displayTotalPrice}}</section>
-              <section *ngIf="notExist && !stock">ناموجود</section>
-              <section *ngIf="notExist && stock">فقط {{stock}} عدد موجود است</section>
+              <section *ngIf="notExist && !product.count">ناموجود</section>
+              <section *ngIf="notExist && product.count">فقط {{stock}} عدد موجود است</section>
             </div>
           </div>
         </div>
@@ -37,7 +37,7 @@
           <br>
           <div>
             <p>رنگ:</p>
-            <span>{{product.color.name}}</span>
+            <span>{{product?.color?.name}}</span>
           </div>
         </div>
         <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">

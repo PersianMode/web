@@ -39,7 +39,7 @@ export class CartItemsComponent implements OnInit {
 
   openEditOrder() {
     const rmDialog = this.dialog.open(EditOrderComponent, {
-      width: '850px',
+      width: '600px',
       data: {
         dialog_product: this.product,
       }
@@ -48,14 +48,6 @@ export class CartItemsComponent implements OnInit {
       (data) => {
         if (data) {
           this.updateProduct.emit({type: 'update', value: data});
-          this.displaySize = (data.newSize ? data.newSize : this.product.size).toLocaleString('fa');
-          this.displayQuantity = (data.newQuantity ? data.newQuantity : this.product.quantity).toLocaleString('fa');
-          this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
-          this.displayTotalPrice = priceFormatter((data.newQuantity ? data.newQuantity : this.product.quantity) * this.product.price)  + ' تومان';
-          this.product.quantity = data.newQuantity;
-          this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
-          this.valid.emit(!this.notExist);
-          this.stock = this.product.count.toLocaleString('fa', {useGrouping: false});
         }
       },
       (err) => {
