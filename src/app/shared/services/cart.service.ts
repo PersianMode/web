@@ -97,12 +97,12 @@ export class CartService {
       ls_items = ls_items.filter(el =>
         el.product_id !== value.product_id ||
         el.instance_id !== value.pre_instance_id);
-
-      for (let counter = 0; counter < value.number; counter++)
-        ls_items.push({
-          product_id: value.product_id,
-          instance_id: value.instance_id,
-        });
+     
+      ls_items.push({
+        product_id: value.product_id,
+        instance_id: value.instance_id,
+        quantity: value.number,
+      });
 
       localStorage.setItem(this.localStorageKey, JSON.stringify(ls_items));
       this.getCartItems();
@@ -164,7 +164,7 @@ export class CartService {
       objItem.quantity = el.quantity;
       objItem.tags = el.tags;
       objItem.count = el.count;
-      objItem.thumbnail = HttpService.Host + el.thumbnail;
+      objItem.thumbnail = el.thumbnail;
       objItem.instances = el.instances;
       objItem.price = el.instance_price ? el.instance_price : el.base_price;
       objItem.discount = el.discount;
@@ -233,7 +233,11 @@ export class CartService {
         size: instance.size,
         color,
         count: instance.inventory.map(r => r.count).reduce((x, y) => +x + +y, 0),
-        instances: item.instances.filter(r => r.product_color_id === color._id).map(r => Object.assign(r, {quantity: r.inventory.map(i => i.count).reduce((a, b) => a + b, 0)})),
+
+        instances: item.instances
+          .filter(r => r.product_color_id === color._id)
+          .map(r => Object.assign(r, {quantity: r.inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b, 0)})),
+       
         tags: [],
         name: item.name,
         price: instance.price,

@@ -18,8 +18,8 @@
             </div>
             <div fxFlex="30" class="main-price">
               <section *ngIf="!notExist">{{displayTotalPrice}}</section>
-              <section *ngIf="notExist && !stock">ناموجود</section>
-              <section *ngIf="notExist && stock">فقط {{stock}} عدد موجود است</section>
+              <section *ngIf="notExist && !product.count">ناموجود</section>
+              <section *ngIf="notExist && product.count">فقط {{stock}} عدد موجود است</section>
             </div>
           </div>
         </div>

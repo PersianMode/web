@@ -188,7 +188,7 @@ export class ProductService {
     data.colors.forEach(item => {
       const angles = [];
       const addHost = function (r) {
-        return r.includes(HttpService.Host) ? r : HttpService.Host + ['', 'images/product-image', data.id, item._id, r].join('/');
+        return r.includes(HttpService.Host) ? r : [HttpService.Host, 'images/product-image', data.id, item._id, r].join('/');
       };
 
       item.image.angles.forEach(r => {

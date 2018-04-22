@@ -7,6 +7,7 @@ import {GenDialogComponent} from '../../shared/components/gen-dialog/gen-dialog.
 import {Router} from '@angular/router';
 import {DialogEnum} from '../../shared/enum/dialog.components.enum';
 import {MatDialog} from '@angular/material';
+import {HttpService} from '../../shared/services/http.service';
 
 @Component({
   selector: 'app-cart',
@@ -37,8 +38,9 @@ export class CartComponent implements OnInit, OnDestroy {
       this.products = [];
       data.forEach(r => {
         this.valid.push(true);
-        let temp = {};
+        const temp: any = {};
         Object.assign(temp, r);
+        temp.thumbnail = temp.thumbnail.includes(HttpService.Host) ? temp.thumbnail : [HttpService.Host, 'images/product-image', temp.product_id, temp.color.id, temp.thumbnail].join('/')
         this.products.push(temp);
       });
 
