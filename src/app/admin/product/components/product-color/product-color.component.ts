@@ -26,10 +26,10 @@ export class ProductColorComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
- }
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
-  
+
   }
 
   openColorEditDialog(pc: any) {
@@ -43,7 +43,7 @@ export class ProductColorComponent implements OnInit, OnChanges {
     });
   }
 
-  removeProudctColor(pc: any) {
+  removeProductColor(pc: any) {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
@@ -51,7 +51,7 @@ export class ProductColorComponent implements OnInit, OnChanges {
       (status) => {
         if (status) {
           this.progressService.enable();
-          this.httpService.delete(`/product/color/${this.productId}/${pc._id}`).subscribe(
+          this.httpService.delete(`/product/color/${this.productId}/${pc.color_id}`).subscribe(
             (data) => {
               this.snackBar.open('this color deleted successfully', null, {
                 duration: 2000,
