@@ -13,7 +13,7 @@
     <div fxFlex="55">
       <div fxLayout="column" fxLayoutAlign.xs="center center" fxLayoutAlign="start start" style="height:100%;min-height:200px">
         <div fxFlex=20 style="font-family:irankharazmi,sans-serif">
-          <h4 (click)="navigateToProduct()">{{product.name}}</h4>
+          <h4 (click)="navigateToProduct()">{{product?.name}}</h4>
         </div>
         <div *ngIf="!sizesArray.length" fxFlex=60 class="not-exist">هیچ اندازه‌ای موجود نیست</div>
         <div *ngIf="sizesArray.length" class="style-select-wrapper" fxFlex="30">
