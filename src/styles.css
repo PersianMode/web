@@ -650,9 +650,9 @@ mat-panel-title {
 }
 
 .footer-link-bold {
-  color: white;
+  color: white !important;
   font-weight: bolder;
-  font-size: .875em;
+  font-size: .875em !important;
   text-decoration: none;
 }
 
@@ -696,7 +696,15 @@ mat-panel-title {
 }
 
 .footer-link:hover, .footer-link1:hover, .icons:hover {
-  color: white;
+  color: lightgray;
+}
+
+@media screen and (max-width: 500px) {
+  .footer-link, .footer-link-bold, .footer-link1, .icons {
+    float: none;
+    display: block;
+    text-align: right;
+  }
 }
 
 .div-guide {
@@ -715,7 +723,7 @@ mat-panel-title {
 }
 
 .footer-link1 {
-  color: lightgray;
+  color: gray;
 }
 
 .div-top {

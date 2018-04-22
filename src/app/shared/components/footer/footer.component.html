@@ -1,18 +1,18 @@
 <div class="footer-wrapper">
   <div class="div-top footer-top-part" fxLayout="row" fxLayoutAlign="center center">
     <div fxFlex="70">
-      <div *ngFor="let column of getKeyList(footerSitelinksItems); first as isFirst"
-       class="footer-column" [ngClass]="{'header': isFirst}">
-        <div *ngFor="let item of footerSitelinksItems[column]; first as rowHeader"class="row-item"
-          [ngClass]="{'footer-link-bold': rowHeader || item.is_header, 'footer-link': !rowHeader && !item.is_header}">
-          <a class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
+      <div *ngFor="let column of getKeyList(footerSiteLinksItems); first as isFirst"
+           class="footer-column">
+        <div *ngFor="let item of footerSiteLinksItems[column]; first as rowHeader" class="row-item">
+          <a [ngClass]="{'footer-link-bold': rowHeader || item.is_header || isFirst, 'footer-link': !rowHeader && !item.is_header}"
+             href="{{item.href}}">{{item.text}}</a>
         </div>
       </div>
     </div>
     <div fxFlex="30" class="icons-outer-div">
       <div class="icons-inner-div">
-        <span *ngFor="let i of footerSocilaNetworkItems" class="icons">
-          <a href="{{i.href}" target="_blank" class="icons">
+        <span *ngFor="let i of footerSocialNetworkItems" class="icons">
+          <a href="{{i.href}}" target="_blank" class="icons">
             <i class="{{i.text}}"></i>
           </a>
         </span>

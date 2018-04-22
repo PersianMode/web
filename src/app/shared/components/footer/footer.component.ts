@@ -11,8 +11,8 @@ import {IPlacement} from '../../../admin/page/interfaces/IPlacement.interface';
 export class FooterComponent implements OnInit {
   curWidth = 100;
   curHeight = 100;
-  footerSitelinksItems: any = {};
-  footerSocilaNetworkItems: any[] = [];
+  footerSiteLinksItems: any = {};
+  footerSocialNetworkItems: any[] = [];
 
   constructor(@Inject(WINDOW) private window, private pageService: PageService) {
   }
@@ -38,12 +38,12 @@ export class FooterComponent implements OnInit {
   }
 
   setFooterTextLinks(list) {
-    this.footerSitelinksItems = {};
+    this.footerSiteLinksItems = {};
     list.forEach(el => {
-      if (!this.footerSitelinksItems[el.info.column])
-        this.footerSitelinksItems[el.info.column] = [];
+      if (!this.footerSiteLinksItems[el.info.column])
+        this.footerSiteLinksItems[el.info.column] = [];
 
-      this.footerSitelinksItems[el.info.column].push({
+      this.footerSiteLinksItems[el.info.column].push({
         text: el.info.text,
         href: el.info.href,
         row: el.info.row,
@@ -52,19 +52,21 @@ export class FooterComponent implements OnInit {
     });
 
     // Sort items
-    Object.keys(this.footerSitelinksItems).forEach(el => {
-      this.footerSitelinksItems[el].sort((a, b) => {
+    Object.keys(this.footerSiteLinksItems).forEach(el => {
+      this.footerSiteLinksItems[el].sort((a, b) => {
         if (a.row > b.row)
           return 1;
         else if (a.row < b.row)
           return -1;
-        return 0
+        return 0;
       });
     });
+
+    console.log(this.footerSiteLinksItems);
   }
 
   setFooterSocialLinks(list) {
-    this.footerSocilaNetworkItems = list.sort((a, b) => {
+    this.footerSocialNetworkItems = list.sort((a, b) => {
       if (a.info.column > b.info.column)
         return 1;
       else if (a.info.column < b.info.column)
@@ -74,7 +76,7 @@ export class FooterComponent implements OnInit {
       return {text: el.info.text + ' icons', href: el.info.href};
     });
 
-    console.log('social links: ', this.footerSocilaNetworkItems);
+    console.log('social links: ', this.footerSocialNetworkItems);
   }
 
   getKeyList(list) {
