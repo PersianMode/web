@@ -192,7 +192,7 @@ export class PageContentPlacementComponent implements OnInit {
 
       if (emptySpace >= this.getRowParts(obj)) {
         obj.info.row = lastRowIndex;
-        obj.info.column = lastRowList.length + 1;
+        obj.info.column = Math.max(...lastRowList.map(el => el.info.column)) + 1;
       } else {
         obj.info.row = lastRowIndex + 1;
         obj.info.column = 1;
@@ -301,7 +301,7 @@ export class PageContentPlacementComponent implements OnInit {
       return;
 
     const prePostRowId = prePostRow[0].info.row;
-    const curRowId = prePostRow[0].info.column;
+    const curRowId = curRow[0].info.row;
 
     prePostRow.forEach(el => {
       el.info.row = curRowId;

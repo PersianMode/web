@@ -126,7 +126,7 @@
                      (ngModelChange)="changedArea()"/>
             </mat-input-container>
             <div class="color-field">
-              <p-colorPicker [(ngModel)]="selectedArea.titleColor"></p-colorPicker>
+              <p-colorPicker [(ngModel)]="selectedArea.titleColor" (ngModelChange)="changedArea()"></p-colorPicker>
               <label>رنگ متن</label>
               <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.titleColor"
                      (ngModelChange)="changedArea()"/>
@@ -138,7 +138,7 @@
                      (ngModelChange)="changedArea()"/>
             </mat-input-container>
             <div class="color-field">
-              <p-colorPicker [(ngModel)]="selectedArea.textColor"></p-colorPicker>
+              <p-colorPicker [(ngModel)]="selectedArea.textColor" (ngModelChange)="changedArea()"></p-colorPicker>
               <label>رنگ متن</label>
               <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.textColor"
                      (ngModelChange)="changedArea()"/>
@@ -150,11 +150,11 @@
                      (ngModelChange)="changedArea()"/>
             </mat-input-container>
             <div class="color-field">
-              <p-colorPicker [(ngModel)]="selectedArea.buttonColor"></p-colorPicker>
+              <p-colorPicker [(ngModel)]="selectedArea.buttonColor" (ngModelChange)="changedArea()"></p-colorPicker>
               <label>رنگ متن</label>
               <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.buttonColor"
                      (ngModelChange)="changedArea()"/>
-              <p-colorPicker [(ngModel)]="selectedArea.buttonBackgroundColor"></p-colorPicker>
+              <p-colorPicker [(ngModel)]="selectedArea.buttonBackgroundColor" (ngModelChange)="changedArea()"></p-colorPicker>
               <label>رنگ پس زمینه</label>
               <input type="text" placeholder="کد" class="color-code-field"
                      [(ngModel)]="selectedArea.buttonBackgroundColor" (ngModelChange)="changedArea()"/>
