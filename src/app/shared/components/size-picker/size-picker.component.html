@@ -1,10 +1,14 @@
-<div>
-  <h2>انتخاب اندازه</h2>
-  <mat-button-toggle [checked]="isEU" (change)="changeSizeType()">
-    سایز اوروپایی
-  </mat-button-toggle>
+<div fxLayout="row">
+  <div fxFlex="50" fxFlex.sm="20" style="align-items: right">
+    <h2 style="display: inline; min-width:50%;">انتخاب اندازه</h2>
+  </div>
+  <div fxFlex="50" fxFlex.sm="80" class="slider">
+    <span>US</span>
+    <mat-slide-toggle [checked]="isEU" (change)="changeSizeType()">
+    </mat-slide-toggle>
+    <span>EU</span>
+  </div>
 </div>
-
 <mat-button-toggle-group *ngFor="let subSizes of sizeSplits">
   <mat-button-toggle *ngFor="let size of subSizes" value="{{size.value}}" (change)="onChange($event)"
                      [disabled]="!!size.disabled" [checked]="size.value === val">
