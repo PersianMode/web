@@ -1,0 +1,52 @@
+<h3 class="title">
+  پیش نمایش
+</h3>
+<div class="chevron-holder left-chevron additional-chevron"><i class="fa fa-chevron-left"></i></div>
+<div class="chevron-holder right-chevron additional-chevron"><i class="fa fa-chevron-right"></i></div>
+<div class="carousel-slider additional-preview">
+  <div>
+    <span [style.width]="'100%'">
+      <img [style.width]="slide.imgWidth? slide.imgWidth + 'px': '40px'"
+           [style.marginLeft]="slide.imgMarginLeft ? slide.imgMarginLeft + 'px' : 0"
+           [style.marginTop]="slide.imgMarginTop ? slide.imgMarginTop + 'px' : 0"
+           [src]="getURL(_image)" alt=""/> {{_text}}
+    </span>
+  </div>
+</div>
+<div class="image-settings" fxLayout="row" fxLayout.xs="column" *ngIf="_image">
+  <div fxLayout="column" fxFlex="50" class="margin-change-div">
+    <div fxLayout="row">
+      <div fxFlex="10" fxFlexOffset="40">
+        <button mat-mini-fab color="primary" (click)="changeMargin('imgMarginTop', -2)">
+          <mat-icon><i class="material-icons">keyboard_arrow_up</i></mat-icon>
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="10" fxFlexOffset="30">
+        <button mat-mini-fab color="primary" (click)="changeMargin('imgMarginLeft', -2)">
+          <mat-icon><i class="material-icons">keyboard_arrow_left</i></mat-icon>
+        </button>
+      </div>
+      <div fxFlex="10" fxFlexOffset="10">
+        <button mat-mini-fab color="primary" (click)="changeMargin('imgMarginLeft', 2)">
+          <mat-icon><i class="material-icons">keyboard_arrow_right</i></mat-icon>
+        </button>
+      </div>
+      <div fxFlex class="fb-centerized-div">
+        <div class="title">موقعیت تصویر:</div>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="10" fxFlexOffset="40">
+        <button mat-mini-fab color="primary" (click)="changeMargin('imgMarginTop', 2)">
+          <mat-icon><i class="material-icons">keyboard_arrow_down</i></mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="50" class="fb-centerized-div">
+    <div class="title">اندازه تصویر:</div>
+    <input type="number" [(ngModel)]="slide.imgWidth" (ngModelChange)="change($event)">
+  </div>
+</div>

@@ -1,0 +1,63 @@
+.title {
+  font-family: iranyekan !important;
+  text-align: center;
+}
+
+/*.main-preview {*/
+  /*height: 36px;*/
+  /*border-top: 1px solid black;*/
+  /*border-bottom: 1px solid black;*/
+  /*margin: 30px 30% 100px 30px;*/
+  /*width: 40%;*/
+  /*text-align: center;*/
+  /*background-color: rgb(247, 247, 247);*/
+  /*line-height: 35px;*/
+  /*padding: 10px;*/
+  /*white-space: nowrap;*/
+/*}*/
+
+.additional-chevron {
+  top:59px;
+  width: 28.5% !important;
+}
+
+.additional-preview {
+  top: 59px;
+  border-bottom: 0;
+  font-family: iranyekan !important;
+  font-weight: 200;
+  text-align: center;
+  font-size: 13px;
+  line-height: 60px;
+  border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+.additional-preview div {
+  right: -51%;
+}
+
+.image-settings {
+  position: relative;
+  margin-top: 100px;
+  border: 1px solid aliceblue;
+  border-radius: 100px;
+  padding: 10px;
+}
+
+.margin-change-div {
+  direction: ltr;
+}
+
+.fb-centerized-div {
+  direction: rtl;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fb-centerized-div input {
+  padding: 5px;
+  margin: 0 4px;
+  font-size: 1.2em;
+  text-align: center;
+}
