@@ -69,7 +69,9 @@
 }
 img {
   max-width: 220px;
+  cursor: pointer;
 }
 h4 {
   margin: 0px 10px;
+  cursor: pointer;
 }
