@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DemoPanelComponent } from './demo-panel.component';
+import { FooterPlacementComponent } from './footer-placement.component';
 
-describe('DemoPanelComponent', () => {
-  let component: DemoPanelComponent;
-  let fixture: ComponentFixture<DemoPanelComponent>;
+describe('FooterPlacementComponent', () => {
+  let component: FooterPlacementComponent;
+  let fixture: ComponentFixture<FooterPlacementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DemoPanelComponent ]
+      declarations: [ FooterPlacementComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DemoPanelComponent);
+    fixture = TestBed.createComponent(FooterPlacementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

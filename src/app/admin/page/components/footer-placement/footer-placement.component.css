@@ -1,0 +1,12 @@
+.icon-link {
+  display: inline-block;
+  margin-left: 7px;
+  margin-right: 7px;
+  cursor: pointer;
+}
+
+.btn-area {
+  margin-top: 10px;
+  margin-left: 6px;
+  margin-right: 6px;
+}
