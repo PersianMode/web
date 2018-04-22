@@ -1,5 +1,6 @@
 .demo-area {
   margin-top: 30px;
+  max-width: 970px;
 }
 
 /* Container holding the image and the text */

@@ -1,9 +1,9 @@
-import { Component, HostListener, Inject, Input, OnInit } from '@angular/core';
-import { WINDOW } from '../../services/window.service';
-import { AuthService } from '../../services/auth.service';
-import { PageService } from '../../services/page.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { HttpService } from '../../services/http.service';
+import {Component, HostListener, Inject, Input, OnInit} from '@angular/core';
+import {WINDOW} from '../../services/window.service';
+import {AuthService} from '../../services/auth.service';
+import {PageService} from '../../services/page.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {HttpService} from '../../services/http.service';
 
 
 @Component({
@@ -23,9 +23,7 @@ export class PanelsComponent implements OnInit {
   ngOnInit() {
     this.pageService.placement$.filter(r => r[0] === 'main').map(r => r[1]).subscribe(
       data => {
-        this.placements = [];
-        /* filter by date add be later */
-        const infos = [];
+        this.placements = {};
         data
           .sort((x, y) => {
             if (x.info.row > y.info.row)
@@ -40,42 +38,21 @@ export class PanelsComponent implements OnInit {
               return 0;
             }
           })
-          .forEach(r => infos.push(r.info));
-        for (let i = 0; i < infos.length; i++) {
-          let numberOfPicture = 1;
-          if (infos[i].panel_type === 'half') {
-            numberOfPicture = 2;
-          } else if (infos[i].panel_type === 'third') {
-            numberOfPicture = 3;
-          } else if (infos[i].panel_type === 'quarter') {
-            numberOfPicture = 4;
-          }
-          const object: any = {};
-          object.type = infos[i].panel_type;
-          object.imgs = [];
-          for (let j = i; j < i + numberOfPicture; j++) {
-            if (infos[j]) {
-              object.imgs.push({});
-              if (infos[j].topTitle) {
-                object.topTitle = infos[i].topTitle;
-              }
-              if (infos[j].href) {
-                object.imgs[j - i].href = '/'.concat(infos[j].href);
-              }
-              if (infos[j].areas) {
-                object.imgs[j - i].areas = infos[j].areas;
-              }
-              if (infos[j].imgUrl) {
-                object.imgs[j - i].imgUrl = this.getUrl(infos[j].imgUrl);
-              }
-              if (infos[j].subTitle) {
-                object.imgs[j - i].subTitle = infos[j].subTitle;
-              }
-            }
-          }
-          this.placements.push(object);
-          i += numberOfPicture - 1;
-        }
+          .forEach(r => {
+            if (!this.placements[r.info.row])
+              this.placements[r.info.row] = {topTitle: null, imgs: []};
+
+            if (r.info.topTitle)
+              this.placements[r.info.row].topTitle = r.info.topTitle;
+            
+            this.placements[r.info.row].imgs.push({
+              href: r.info.href,
+              areas: r.info.areas,
+              imgUrl: this.getUrl(r.info.imgUrl),
+              subTitle: r.info.subTitle,
+              type: r.info.panel_type,
+            });
+          });
       }
     );
     this.curWidth = this.window.innerWidth;
@@ -91,5 +68,18 @@ export class PanelsComponent implements OnInit {
   getUrl(url) {
     if (url)
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + (url[0] === '/' ? url : '/' + url));
+  }
+
+  getRowParts(item) {
+    switch (item.type.toLowerCase()) {
+      case 'full': return 100;
+      case 'half': return 50;
+      case 'third': return 33;
+      case 'quarter': return 25;
+    }
+  }
+
+  getKeyList(list) {
+    return Object.keys(list);
   }
 }

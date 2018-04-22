@@ -29,6 +29,7 @@ export class PageContentPlacementComponent implements OnInit {
 
   _placements = [];
   modifiedPlacementList = {};
+  bagName = 'panel-bag';
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
     private dragulaService: DragulaService, private dialog: MatDialog,
@@ -36,22 +37,33 @@ export class PageContentPlacementComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.dragulaService.find(this.bagName))
+      this.dragulaService.setOptions(this.bagName, {});
+
+    this.dragulaService.dropModel.subscribe((value) => {
+      if (this.bagName === value[0])
+        this.changePanelItemOrder();
+    });
   }
 
-  modifyItem(value) {
-    switch (value.type) {
-      case PlacementModifyEnum.Add:
-        this.upsertItem(value.data, true);
-        break;
-      case PlacementModifyEnum.Modify:
-        this.upsertItem(value.data, false);
-        break;
-      case PlacementModifyEnum.Delete:
-        this.removeItem(value.data);
-        break;
-    }
-    // this.modifyPlacement.emit(value);
+  changePanelItemOrder() {
+    console.log('order is changed');
   }
+
+  // modifyItem(value) {
+  //   switch (value.type) {
+  //     case PlacementModifyEnum.Add:
+  //       this.upsertItem(value.data, true);
+  //       break;
+  //     case PlacementModifyEnum.Modify:
+  //       this.upsertItem(value.data, false);
+  //       break;
+  //     case PlacementModifyEnum.Delete:
+  //       this.removeItem(value.data);
+  //       break;
+  //   }
+  //   // this.modifyPlacement.emit(value);
+  // }
 
   removeItem(value) {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
@@ -218,7 +230,19 @@ export class PageContentPlacementComponent implements OnInit {
 
   arrangePlacements(placementList) {
     this.modifiedPlacementList = {};
-    placementList.forEach(el => {
+    placementList.sort((a, b) => {
+      if (a.info.row > b.info.row)
+        return 1;
+      else if (a.info.row < b.info.row)
+        return -1;
+      else {
+        if (a.info.column > b.info.column)
+          return 1;
+        else if (a.info.column < b.info.column)
+          return -1;
+        return 0;
+      }
+    }).forEach(el => {
       if (!this.modifiedPlacementList[el.info.row])
         this.modifiedPlacementList[el.info.row] = [];
 

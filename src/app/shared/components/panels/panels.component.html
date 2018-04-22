@@ -1,17 +1,16 @@
 <div *ngIf="curWidth >= 960" class="full-width">
-  <div *ngFor="let item of placements" class="container">
-    <h2 *ngIf="item.topTitle"
-        [style.color]="item.topTitle.titleColor ? item.topTitle.titleColor : null" class="top-title">
-      {{item.topTitle.title}}</h2>
+  <div *ngFor="let key of getKeyList(placements)" class="container">
+    <h2 *ngIf="placements[key].topTitle"
+        [style.color]="placements[key].topTitle.titleColor ? placements[key].topTitle.titleColor : null" class="top-title">
+      {{placements[key].topTitle.title}}</h2>
     <div fxLayout="row"
-         fxLayoutAlign="center center" [style.margin-right]="item.type !== 'full' ? '15px' : null"
-         [style.margin-left]="item.type !== 'full' ? '15px' : null">
-      <div [fxFlex]="100/item.imgs.length" *ngFor="let im of item.imgs">
+         fxLayoutAlign="start start">
+      <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs">
         <a [routerLink]="im.href">
           <img [src]="im.imgUrl" class="full-width"/>
         </a>
         <div *ngFor="let ar of im.areas">
-          <div [style.font-size]="(item.type === 'full' && item.imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
+          <div [style.font-size]="(placements[key].type === 'full' && placements[key].imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
                [ngClass]="ar.pos">
             <h1 *ngIf="ar.title" [style.color]="ar.titleColor ? ar.titleColor : null">{{ar.title}}</h1>
             <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null"><b>{{ar.text}}</b></div>
@@ -32,20 +31,17 @@
         </div>
       </div>
     </div>
-    <h2 *ngIf="item.subTitle"
-        [style.color]="item.subTitle.titleColor ? item.subTitle.titleColor : null" class="h2-sub-title">
-      {{item.subTitle.title}}</h2>
   </div>
 </div>
 <div *ngIf="curWidth < 960">
-  <div *ngFor="let item of placements" class="container">
-    <h2 *ngIf="item.topTitle" class="title-mobile"
-        style="margin-bottom: 0px;">{{item.topTitle.title}}</h2>
+  <div *ngFor="let key of getKeyList(placements)" class="container">
+    <h2 *ngIf="placements[key].topTitle" class="title-mobile"
+        style="margin-bottom: 0px;">{{placements[key].topTitle.title}}</h2>
     <div fxLayout="row"
          fxLayoutAlign="center center" fxLayout.sm="column" fxLayout.xs="column">
-      <div [fxFlex]="100" *ngFor="let im of item.imgs">
+      <div [fxFlex]="100" *ngFor="let im of placements[key].imgs">
         <a [routerLink]="im.href">
-          <img src="{{im.imgUrl}}" class="full-width"/>
+          <img [src]="im.imgUrl" class="full-width"/>
         </a>
         <div *ngFor="let ar of im.areas">
           <h2 *ngIf="ar.title" class="title-mobile" style="margin-bottom: 30px;margin-top: 0px;">
@@ -56,8 +52,6 @@
         </div>
       </div>
     </div>
-    <h2 *ngIf="item.subTitle" class="h2-sub-title">
-      {{item.subTitle.title}}</h2>
   </div>
 </div>
 
