@@ -1,0 +1,33 @@
+.total_price {
+    text-align: left;
+    color: #fa5400;
+}
+.total_price section {
+    margin: 19px 0px 19px 0px;
+}
+.btn-container button {
+    background: black;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 2px;
+    padding: 5px;
+    border-width: 0px;
+    margin-left: 8px;
+    outline: none;
+}
+
+.btn-container button:hover {
+    background: #888;
+}
+
+
+@media (min-width: 600px) {
+    .btn-container{
+        position: absolute;
+        bottom: 30px;
+        width: 75%;
+        max-width: calc(100% - 240px);
+        /*margin-top: 5px !important;*/
+    }
+}

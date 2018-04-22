@@ -77,7 +77,7 @@
             {{order.address.district}} {{order.address.street}} پلاک {{makePersianNumber(order.address.no, false)}} واحد
             {{makePersianNumber(order.address.unit, false)}}</span>
                 </div>
-                <div class="eye-style"><a (click)="goToOrderLines()"><i class="fa fa-eye"></i></a></div>
+                <div class="eye-style"><a (click)="goToOrderLines(order._id)"><i class="fa fa-eye"></i></a></div>
             </mat-card-content>
         </mat-card>
     </div>

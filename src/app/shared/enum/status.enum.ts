@@ -11,5 +11,4 @@ export enum STATUS {
   DeliveryFailed = 10,
   Cancel = 11,
   Return = 12
-
 }
