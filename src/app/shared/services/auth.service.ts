@@ -25,13 +25,13 @@ export class AuthService {
       this.httpService.get((tempUrl.includes('agent') || tempUrl.includes('?preview') ? 'agent/' : '') + 'validUser').subscribe(
         (data) => {
           this.populateUserDetails(data);
-          this.isLoggedIn.next(true);
-          this.isVerified.next(data.is_verified ? data.is_verified : false);
+          this.isLoggedIn.next(!!data.username);
+          this.isVerified.next(!!data.is_verified);
 
           if (this.userDetails.warehouse_id) {
             this.socketService.init(this.userDetails.warehouse_id);
           }
-          resolve();
+          data.username ? resolve() : reject();
         },
         (err) => {
           this.populateUserDetails();

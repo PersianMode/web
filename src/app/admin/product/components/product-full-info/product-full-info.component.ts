@@ -45,8 +45,9 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
   }
 
   getProductColors() {
-    this.httpService.get(`product/color/${this.productId}`).subscribe(res => {
+    this.httpService.get(`product/${this.productId}`).subscribe(res => {
       this.productColors = res.colors;
+      this.product = res;
     }, err => {
       console.error();
     });

@@ -10,10 +10,6 @@ const productColorMap = function (r) {
     : []);
 };
 
-const addHost = function (r) {
-  return r.includes(HttpService.Host) ? r : HttpService.Host + r;
-};
-
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
     return (a.year * 8 + a.season) - (b.year * 8 + b.season);
@@ -191,6 +187,10 @@ export class ProductService {
     data.sizesInventory = {};
     data.colors.forEach(item => {
       const angles = [];
+      const addHost = function (r) {
+        return r.includes(HttpService.Host) ? r : [HttpService.Host, 'images/product-image', data.id, item._id, r].join('/');
+      };
+
       item.image.angles.forEach(r => {
         if (!r.url) {
           const temp = {url: addHost(r), type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
