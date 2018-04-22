@@ -1,26 +1,18 @@
 <div class="footer-wrapper">
-  <div class="div-top" fxLayout="row" fxLayoutAlign="center center">
-    <div fxFlex="15">
-      <div *ngFor="let item of footer.headerList">
-        <a class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
+  <div class="div-top footer-top-part" fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex="70">
+      <div *ngFor="let column of getKeyList(footerSitelinksItems); first as isFirst"
+       class="footer-column" [ngClass]="{'header': isFirst}">
+        <div *ngFor="let item of footerSitelinksItems[column]; first as rowHeader"class="row-item"
+          [ngClass]="{'footer-link-bold': rowHeader || item.is_header, 'footer-link': !rowHeader && !item.is_header}">
+          <a class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
+        </div>
       </div>
     </div>
-    <div fxFlex="15">
-      <div *ngFor="let item of footer.middle">
-        <a *ngIf="item.header" class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
-        <a *ngIf="!item.header" class="footer-link" href="{{item.href}}">{{item.text}}</a>
-      </div>
-    </div>
-    <div fxFlex="25">
-      <div *ngFor="let item of footer.leftColumn">
-        <a *ngIf="item.header" class="footer-link-bold" href="{{item.href}}">{{item.text}}</a>
-        <a *ngIf="!item.header" class="footer-link" href="{{item.href}}">{{item.text}}</a>
-      </div>
-    </div>
-    <div fxFlex="15" class="icons-outer-div">
+    <div fxFlex="30" class="icons-outer-div">
       <div class="icons-inner-div">
-        <span *ngFor="let i of footer.icons" class="icons">
-          <a href="#" target="_blank" class="icons">
+        <span *ngFor="let i of footerSocilaNetworkItems" class="icons">
+          <a href="{{i.href}" target="_blank" class="icons">
             <i class="{{i.text}}"></i>
           </a>
         </span>
@@ -30,7 +22,9 @@
   <hr class="hr-setting">
   <div class="div-bottom" fxLayout="row" fxLayoutAlign="center center;">
     <div fxFlex="35" style="text-align: right;">
-      <div class="div-right-reserved-symbol"><span>©</span></div>
+      <div class="div-right-reserved-symbol">
+        <span>©</span>
+      </div>
       <div class="div-right-reserved"> &nbsp; تمامی حقوق این سایت متعلق به پرشین مد می باشد.</div>
     </div>
     <div fxFlex="35" style="text-align: left">
@@ -38,7 +32,7 @@
         <a href="#" class="footer-link1">راهنمای سایت</a>
       </div>
       <div class="div-use-case">
-        <a href="#" class="footer-link1" >موارد استفاده</a>
+        <a href="#" class="footer-link1">موارد استفاده</a>
       </div>
       <div class="div-policy">
         <a href="#" class="footer-link1">منشور&nbsp;حقوقی&nbsp;پرشین مد</a>
@@ -46,4 +40,3 @@
     </div>
   </div>
 </div>
-
