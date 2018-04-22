@@ -2,8 +2,9 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {HttpService} from '../../../../shared/services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar, MatDialogRef} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
+import {ProductColorEditComponent} from '../product-color-edit/product-color-edit.component';
 
 @Component({
   selector: 'app-product-color',
@@ -13,28 +14,36 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 export class ProductColorComponent implements OnInit, OnChanges {
 
 
+  colorEditDialog: MatDialogRef<ProductColorEditComponent, any>;
   @Input() productColors: any;
   @Output() onProductColorChanged = new EventEmitter<any>();
-
-  selectedColor = {};
-  is_thumbnail = false;
-  is_disabled = false;
-  url = '';
-
   @Input() productId;
 
   constructor(private httpService: HttpService,
-              private sanitizer: DomSanitizer, private dialog: MatDialog,
-              private progressService: ProgressService, private snackBar: MatSnackBar) {
+    private sanitizer: DomSanitizer, private dialog: MatDialog,
+    private progressService: ProgressService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+
   }
 
-  removeImg(color_id: string) {
+  openColorEditDialog(pc: any) {
+    this.colorEditDialog = this.dialog.open(ProductColorEditComponent, {
+      width: '800px',
+      height: '640px',
+      data: {
+        productId: this.productId,
+        product_color: pc
+      }
+    });
+  }
+
+  removeProductColor(pc: any) {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
@@ -42,14 +51,14 @@ export class ProductColorComponent implements OnInit, OnChanges {
       (status) => {
         if (status) {
           this.progressService.enable();
-          this.httpService.delete(`/product/color/${this.productId}/${color_id}`).subscribe(
+          this.httpService.delete(`/product/color/${this.productId}/${pc.color_id}`).subscribe(
             (data) => {
               this.snackBar.open('this color deleted successfully', null, {
                 duration: 2000,
               });
               this.progressService.disable();
 
-              this.productColors = this.productColors.filter(pc => pc._id !== color_id);
+              this.productColors = this.productColors.filter(x => x._id !== pc._id);
 
               this.onProductColorChanged.emit(this.productColors);
 
@@ -69,61 +78,13 @@ export class ProductColorComponent implements OnInit, OnChanges {
     );
   }
 
-  addToTable(images: any) {
-    this.is_disabled = false;
-    console.log('add to table called');
-    console.log(this.selectedColor);
-    if (images.length > 0) {
-      const pc = this.productColors.filter(x => x.color_id === this.selectedColor['color_id'])[0];
-      if (pc) {
-        if (!this.is_thumbnail)
-          pc['image']['angles'] = pc['image']['angles'].concat(images);
-        else
-          pc['image']['thumbnail'] = images[images.length - 1];
-      } else {
-        const newProductColor = {
-          image: {
-            thumbnail: this.is_thumbnail ? images[images.length - 1] : '',
-            angles: this.is_thumbnail ? [] : images
-          },
-          color_id: this.selectedColor['_id'],
-          name: this.selectedColor['name'],
-          _id: this.selectedColor['_id'],
-        };
-        console.log(newProductColor);
-        this.productColors.push(newProductColor);
-        this.onProductColorChanged.emit(this.productColors);
-      }
-    }
-    this.is_thumbnail = false;
-    console.log('add to table called finished');
-
-  }
-
-  getURL(path) {
-    if (path)
+  getURL(name, pc) {
+    if (name) {
+      const path = HttpService.PRODUCT_IMAGE_PATH + this.productId + '/' + pc.color_id + '/' + name;
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    } else
+      return '';
   }
 
-  setColor($event) {
-    this.selectedColor = $event;
-    this.url = this.selectedColor['_id'];
-    this.is_thumbnail = false;
-    this.is_disabled = false;
-    if (this.productColors.filter(x => x.color_id === $event.color_id).length === 0) {
-      this.is_thumbnail = true;
-      this.is_disabled = true;
 
-    }
-  }
-
-  edit(_id) {
-    this.selectedColor = this.productColors.filter(x => x._id === _id)[0];
-    this.url = this.selectedColor['color_id'];
-    this.is_disabled = false;
-    if (!this.selectedColor['image']['thumbnail']) {
-      this.is_thumbnail = true;
-      this.is_disabled = true;
-    }
-  }
 }

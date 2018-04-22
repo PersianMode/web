@@ -154,6 +154,7 @@ export class CartService {
     items.forEach((el: any) => {
       const objItem: any = {};
 
+      objItem.order_id = el.order_id;
       objItem.product_id = el.product_id;
       objItem.instance_id = el.instance_id;
       objItem.name = el.name;

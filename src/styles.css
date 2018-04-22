@@ -865,3 +865,7 @@ mat-panel-title {
 .inner-placement-div {
   margin: 10px;
 }
+
+.mat-chip-list-wrapper {
+  display: inline !important;
+}
