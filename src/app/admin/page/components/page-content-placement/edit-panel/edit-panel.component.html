@@ -3,8 +3,8 @@
     <button mat-icon-button (click)="closeDialog()" style="float: left">
       <mat-icon aria-label="Close">close</mat-icon>
     </button>
-    <label *ngIf="!placement || !placement._id">افزودن یک مورد جدید</label>
-    <label *ngIf="placement && placement._id">ویرایش یک مورد</label>
+    <label *ngIf="isAdd">افزودن یک مورد جدید</label>
+    <label *ngIf="!isAdd">ویرایش یک مورد</label>
   </div>
   <mat-dialog-content>
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="center center">
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div fxFlex="70">
-        <app-uploader style="float: left;" [url]="imageUploadUrl()" (onCompleted)="imageUploaded($event)"></app-uploader>
+        <app-uploader style="float: left;" [url]="imageUploadUrl()" [single]="true" (OnCompleted)="imageUploaded($event)"></app-uploader>
       </div>
     </div>
     <div *ngIf="rowTemplate">

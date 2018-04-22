@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FileUploader } from 'ng2-file-upload';
+import {Component, OnInit, OnDestroy, EventEmitter, Output, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {FileUploader} from 'ng2-file-upload';
 
 @Component({
   selector: 'app-uploader',
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.css']
 })
-export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
+export class UploaderComponent implements OnInit, OnDestroy {
 
   public uploader: FileUploader;
   public hasBaseDropZoneOver = true;
@@ -22,22 +22,26 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   _additionalData = {};
-  @Output() OnCompleted = new EventEmitter<string[]>();
+  @Output() OnCompleted = new EventEmitter<any[]>();
 
-  private results: string[] = [];
+  private results: any[] = [];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.url && changes.url.currentValue) {
-      this.uploader = new FileUploader({url: 'api/' + this.url});
-    }
+  constructor() {
+  }
+
+  ngOnInit(): void {
+    this.uploader = new FileUploader({url: 'api/' + this.url});
+    this.enabled = true;
 
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       const result = JSON.parse(response);
-      if (result.downloadURL)
-        this.results.push(result.downloadURL);
+      this.results.push(result);
     };
 
     this.uploader.onCompleteAll = () => {
+      if (Math.max(...this.results.map(el => Object.keys(el).length)) === 1)
+        this.results = this.results.map(el => el.downloadURL);
+
       this.OnCompleted.emit(this.results);
       this.results = [];
     };
@@ -56,15 +60,6 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
       });
       return {fileItem, form};
     };
-  }
-
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-    this.uploader = new FileUploader({ url: 'api/' + this.url });
-    this.enabled = true;
   }
 
   public fileOverBase(e: any): void {

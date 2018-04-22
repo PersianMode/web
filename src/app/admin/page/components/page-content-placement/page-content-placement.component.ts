@@ -1,12 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpService } from '../../../../shared/services/http.service';
-import { ProgressService } from '../../../../shared/services/progress.service';
-import { DragulaService } from 'ng2-dragula';
-import { PlacementModifyEnum } from '../../enum/placement.modify.type.enum';
-import { MatDialog } from '@angular/material';
-import { EditPanelComponent } from './edit-panel/edit-panel.component';
-import { RemovingConfirmComponent } from '../../../../shared/components/removing-confirm/removing-confirm.component';
-import { DomSanitizer } from '@angular/platform-browser';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {HttpService} from '../../../../shared/services/http.service';
+import {ProgressService} from '../../../../shared/services/progress.service';
+import {DragulaService} from 'ng2-dragula';
+import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
+import {MatDialog} from '@angular/material';
+import {EditPanelComponent} from './edit-panel/edit-panel.component';
+import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-page-content-placement',
@@ -148,12 +148,16 @@ export class PageContentPlacementComponent implements OnInit {
         if (data) {
           switch (data.type) {
             case PlacementModifyEnum.Add: {
+              // Set column and row if needed
+              this.setColumnRow(data.placement);
               this.upsertItem(data.placement, true);
             }
               break;
             case PlacementModifyEnum.Modify: {
               const changedObj = this.placements.find(el => el._id === data.placement._id);
+              // Set column and row if needed
               this.setNewValue(changedObj.info, data.placement.info);
+              this.setColumnRow(changedObj);
               this.upsertItem(changedObj, false);
             }
               break;
@@ -161,6 +165,46 @@ export class PageContentPlacementComponent implements OnInit {
         }
       }
     );
+  }
+
+  setColumnRow(obj) {
+    if (obj.info.row) {
+      // Maybe need to change position of item
+      const currentRowIndex = obj.info.row;
+      const currentRowList = this.modifiedPlacementList[currentRowIndex];
+
+      let emptySpace = 100;
+      currentRowList.filter(el => el._id !== obj._id).forEach(el => {
+        emptySpace -= this.getRowParts(el);
+      });
+
+      if (emptySpace < this.getRowParts(obj)) {
+        // Should change item's position
+        const lastRowIndex = Math.max(...Object.keys(this.modifiedPlacementList).map(el => parseInt(el, 10)));
+        const lastRowList = this.modifiedPlacementList[lastRowIndex];
+
+        obj.info.row = lastRowIndex + 1;
+        obj.info.column = 0;
+      }
+
+    } else {
+      // The obj is added newly
+      const lastRowIndex = Math.max(...Object.keys(this.modifiedPlacementList).map(el => parseInt(el, 10)));
+      const lastRowList = this.modifiedPlacementList[lastRowIndex];
+
+      let emptySpace = 100;
+      lastRowList.forEach(el => {
+        emptySpace -= this.getRowParts(el);
+      });
+
+      if (emptySpace >= this.getRowParts(obj)) {
+        obj.info.row = lastRowIndex;
+        obj.info.column = lastRowList.length + 1;
+      } else {
+        obj.info.row = lastRowIndex + 1;
+        obj.info.column = 0;
+      }
+    }
   }
 
   getRowParts(item) {

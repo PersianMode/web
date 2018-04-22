@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSnackBar } from '@angular/material';
-import { PlacementModifyEnum } from '../../../enum/placement.modify.type.enum';
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
 
 @Component({
   selector: 'app-edit-panel',
@@ -64,6 +64,7 @@ export class EditPanelComponent implements OnInit {
   urlAddress = '';
   imageUrl = '';
   pageId = null;
+  isAdd = true;
 
   constructor(public dialogRef: MatDialogRef<EditPanelComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
     private snackBar: MatSnackBar) {
@@ -72,7 +73,8 @@ export class EditPanelComponent implements OnInit {
   ngOnInit() {
     this.placement = this.data.placement;
     this.pageId = this.data.pageId;
-    if (this.placement) {
+    this.isAdd = this.placement ? false : true;
+    if (!this.isAdd) {
       this.rowTemplate = this.placement.info.panel_type;
       this.urlAddress = this.placement.info.href;
       this.imageUrl = this.placement.info.imageUrl;
@@ -99,7 +101,7 @@ export class EditPanelComponent implements OnInit {
   }
 
   haveCurrentArea(pos) {
-    if (this.placement && this.areas.find(el => el.pos.toLowerCase() === pos.toLowerCase()))
+    if (!this.isAdd && this.areas.find(el => el.pos.toLowerCase() === pos.toLowerCase()))
       return true;
     else
       return false;
@@ -107,10 +109,10 @@ export class EditPanelComponent implements OnInit {
 
   setArea(pos) {
     let obj = null;
-    if (this.placement)
+    if (!this.isAdd)
       obj = this.areas.find(el => el.pos.toLowerCase() === pos.toLowerCase());
 
-    if (this.placement && obj)
+    if (!this.isAdd && obj)
       Object.keys(this.selectedArea).forEach(el => this.selectedArea[el] = obj[el]);
     else {
       this.selectedArea = {
@@ -155,11 +157,11 @@ export class EditPanelComponent implements OnInit {
 
   changedArea() {
     let obj = null;
-    if (this.placement)
+    if (!this.isAdd)
       obj = this.areas.find(el => el.pos.toLowerCase() === this.selectedArea.pos.toLowerCase());
 
     this.areaDoneBtnShouldDisabled = true;
-    if (this.placement && obj) {
+    if (!this.isAdd && obj) {
       // This area exists
       Object.keys(this.selectedArea).forEach(el => {
         if (obj[el].toLowerCase() !== this.selectedArea[el].toLowerCase()) {
@@ -189,11 +191,11 @@ export class EditPanelComponent implements OnInit {
 
     if (!this.urlAddress)
       this.saveButtonShouldBeDisabled = true;
-    else if (!this.placement || this.urlAddress.toLowerCase() !== this.placement.info.href.toLowerCase())
+    else if (this.isAdd || this.urlAddress.toLowerCase() !== this.placement.info.href.toLowerCase())
       anyChanges = true;
     if (!this.rowTemplate)
       this.saveButtonShouldBeDisabled = true;
-    else if (!this.placement || this.rowTemplate.toLowerCase() !== this.placement.info.panel_type.toLowerCase())
+    else if (this.isAdd || this.rowTemplate.toLowerCase() !== this.placement.info.panel_type.toLowerCase())
       anyChanges = true;
     // ToDo: Check image
     if (this.hasTopTitle) {
@@ -202,7 +204,7 @@ export class EditPanelComponent implements OnInit {
       else if (!this.topTitle.titleColor || !this.topTitle.textColor)
         this.saveButtonShouldBeDisabled = true;
       else {
-        if (!this.placement || !this.placement.info.topTitle)
+        if (this.isAdd || !this.placement.info.topTitle)
           anyChanges = true;
         else {
           if ((this.placement.info.topTitle.title !== this.topTitle.title) ||
@@ -219,7 +221,7 @@ export class EditPanelComponent implements OnInit {
       else if (!this.subTitle.titleColor || !this.subTitle.textColor)
         this.saveButtonShouldBeDisabled = true;
       else {
-        if (!this.placement || !this.placement.info.subTitle)
+        if (this.isAdd || !this.placement.info.subTitle)
           anyChanges = true;
         else {
           if ((this.placement.info.subTitle.title !== this.subTitle.title) ||
@@ -235,10 +237,10 @@ export class EditPanelComponent implements OnInit {
       return;
 
     // Check changes
-    if ((!this.placement && this.areas.length) || (this.areas.length !== this.placement.info.areas.length))
+    if ((this.isAdd && this.areas.length) || (this.areas.length !== this.placement.info.areas.length))
       anyChanges = true;
     else {
-      if (this.placement)
+      if (!this.isAdd)
         this.areas.forEach(el => {
           const arObj = this.placement.info.areas.find(i => i.pos.toLowerCase() === el.pos.toLowerCase());
           if (Object.keys(el).length !== Object.keys(arObj).length)
@@ -257,13 +259,13 @@ export class EditPanelComponent implements OnInit {
 
   saveChanges() {
     this.dialogRef.close({
-      type: this.placement ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
+      type: !this.isAdd ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
       placement: {
-        _id: this.placement._id,
+        _id: this.placement ? this.placement._id : null,
         component_name: 'main',
         info: {
           panel_type: this.rowTemplate,
-          // "imgUrl": "/product-pic/shoeSample.png",
+          imgUrl: this.placement && this.placement._id ? this.imageUrl : null,
           href: this.urlAddress,
           areas: this.areas,
           topTitle: this.hasTopTitle ? this.topTitle : null,
@@ -278,7 +280,7 @@ export class EditPanelComponent implements OnInit {
   }
 
   imageUploadUrl() {
-    if (this.placement)
+    if (!this.isAdd)
       return `placement/image/${this.pageId}/${this.placement._id}`;
 
     return `placement/image/${this.pageId}/null`;
@@ -289,7 +291,12 @@ export class EditPanelComponent implements OnInit {
       duration: 2300,
     });
 
-    console.log(data);
-    this.imageUrl = data.downloadedUrl;
+
+    if (this.isAdd) {
+      this.imageUrl = data[0].downloadURL;
+      this.placement = {_id: data[0].placementId};
+    } else
+      this.imageUrl = data[0];
+
   }
 }
