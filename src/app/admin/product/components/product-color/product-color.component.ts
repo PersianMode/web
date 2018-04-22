@@ -17,12 +17,6 @@ export class ProductColorComponent implements OnInit, OnChanges {
   colorEditDialog: MatDialogRef<ProductColorEditComponent, any>;
   @Input() productColors: any;
   @Output() onProductColorChanged = new EventEmitter<any>();
-
-  selectedColor = {};
-  is_thumbnail = false;
-  is_disabled = false;
-  url = '';
-
   @Input() productId;
 
   constructor(private httpService: HttpService,
@@ -31,20 +25,21 @@ export class ProductColorComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-  }
+
+ }
 
   ngOnChanges(changes: SimpleChanges): void {
+  
   }
 
   openColorEditDialog(pc: any) {
     this.colorEditDialog = this.dialog.open(ProductColorEditComponent, {
       width: '800px',
+      height: '640px',
       data: {
+        productId: this.productId,
         product_color: pc
       }
-    });
-    this.colorEditDialog.afterClosed().subscribe(data => {
-
     });
   }
 
@@ -83,9 +78,13 @@ export class ProductColorComponent implements OnInit, OnChanges {
     );
   }
 
-  getURL(path) {
-    if (path)
+  getURL(name, pc) {
+    if (name) {
+      const path = HttpService.PRODUCT_IMAGE_PATH + this.productId + '/' + pc.color_id + '/' + name;
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    } else
+      return '';
   }
+
 
 }

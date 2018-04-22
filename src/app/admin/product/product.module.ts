@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
-  MatSnackBarModule, MatTabsModule
+  MatSnackBarModule, MatTabsModule, MatDividerModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ProductRouting} from './product.routing';
@@ -49,6 +49,7 @@ import { ProductColorEditComponent } from './components/product-color-edit/produ
     MatPaginatorModule,
     SharedModule,
     MatCheckboxModule,
+    MatDividerModule
   ],
   entryComponents: [
     ProductColorEditComponent
