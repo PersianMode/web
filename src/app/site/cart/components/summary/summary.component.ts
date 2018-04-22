@@ -14,7 +14,7 @@ export class SummaryComponent implements OnInit {
   @Input()
   set total(value) {
     this._total = value;
-    if (value) {
+    if (value || value === 0) {
       this.totalValue = value ? priceFormatter(value) : null;
       this.finalTotal = value ? priceFormatter(value - this.discount) : null;
     }
