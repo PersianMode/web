@@ -11,38 +11,8 @@ import {IPlacement} from '../../../admin/page/interfaces/IPlacement.interface';
 export class FooterComponent implements OnInit {
   curWidth = 100;
   curHeight = 100;
-  footer = {};
-  placements: any = {};
-  footerItems: IPlacement[] = [];
   footerSitelinksItems: any = {};
-  footerSiteLinkColumns: any[] = [];
-  footerSocilaNetworkItems: any = {};
-  footerSocialNetworkColumns: any[] = [];
-
-
-  getRelatedItems() {
-    this.footerSitelinksItems = {};
-
-    this.footerItems.filter(el => {
-      if (el.info.section.split('/')[0].toLowerCase() === this.selectedSection.toLowerCase())
-        return el;
-    }).forEach(el => {
-      const column = el.info.column;
-          if (!this.footerSitelinksItems[column])
-             this.footerSitelinksItems[column] = [];
-             this.footerSitelinksItems[column].push(el);
-    });
-
-    Object.keys(this.footerSitelinksItems).forEach(el => {
-      this.sortColumnItems(this.footerSitelinksItems[el]);
-    });
-
-    this.footerSiteLinkColumns = Object.keys(this.footerSitelinksItems);
-    if (this.footerSiteLinkColumns.length === 0) {
-      this.footerSiteLinkColumns = [0];
-      this.footerSitelinksItems = {0: []};
-    }
-  }
+  footerSocilaNetworkItems: any[] = [];
 
   constructor(@Inject(WINDOW) private window, private pageService: PageService) {
   }
@@ -57,26 +27,57 @@ export class FooterComponent implements OnInit {
     };
 
     this.pageService.placement$.filter(r => r[0] === 'footer').map(r => r[1]).subscribe(
-      data => {});
-        sections.forEach(s => {
-          subMenu
-            .filter(r => r.info.section === s)
-            .sort((x, y) => (x.info.column * 100 + x.info.row) - (y.info.column * 100 + y.info.row))
-            .forEach(r => {
-              const path = r.info.section.split('/');
-              r.info.routerLink = ['/'].concat(r.info.href.split('/'));
-              if (!this.placements[path[0] + 'Menu']) {
-                this.placements[path[0] + 'Menu'] = {};
-              }
-              if (!this.placements[path[0] + 'Menu'][path[1] + 'List']) {
-                this.placements[path[0] + 'Menu'][path[1] + 'List'] = {};
-              }
-              if (!this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column])
-                this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column] = [];
+      (data) => {
+        this.setFooterTextLinks(data.filter(el => el.variable_name === 'site_link'));
+        this.setFooterSocialLinks(data.filter(el => el.variable_name === 'social_link'));
+      },
+      (err) => {
+        console.error('Cannot get footer placements: ', err);
+      }
+    );
+  }
 
-              this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column].push(r.info);
-            });
-        });
+  setFooterTextLinks(list) {
+    this.footerSitelinksItems = {};
+    list.forEach(el => {
+      if (!this.footerSitelinksItems[el.info.column])
+        this.footerSitelinksItems[el.info.column] = [];
+
+      this.footerSitelinksItems[el.info.column].push({
+        text: el.info.text,
+        href: el.info.href,
+        row: el.info.row,
+        is_header: el.info.is_header,
       });
+    });
+
+    // Sort items
+    Object.keys(this.footerSitelinksItems).forEach(el => {
+      this.footerSitelinksItems[el].sort((a, b) => {
+        if (a.row > b.row)
+          return 1;
+        else if (a.row < b.row)
+          return -1;
+        return 0
+      });
+    });
+  }
+
+  setFooterSocialLinks(list) {
+    this.footerSocilaNetworkItems = list.sort((a, b) => {
+      if (a.info.column > b.info.column)
+        return 1;
+      else if (a.info.column < b.info.column)
+        return -1;
+      return 0;
+    }).map(el => {
+      return {text: el.info.text + ' icons', href: el.info.href};
+    });
+
+    console.log('social links: ', this.footerSocilaNetworkItems);
+  }
+
+  getKeyList(list) {
+    return Object.keys(list);
   }
 }

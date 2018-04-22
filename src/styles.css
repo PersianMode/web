@@ -667,7 +667,7 @@ mat-panel-title {
   background-color: #191919;
   clear: both;
   margin-top: 60px;
-  height: 210px;
+  /* height: 210px; */
 }
 
 .hr-setting {
