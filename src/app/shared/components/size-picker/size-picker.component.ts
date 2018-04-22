@@ -27,7 +27,8 @@ export class SizePickerComponent implements OnInit {
   }
 
   @Output('value') value = new EventEmitter();
-  val = 0;
+  val = '';
+
 
   constructor(private dict: DictionaryService, private httpService: HttpService) {
   }
@@ -59,7 +60,6 @@ export class SizePickerComponent implements OnInit {
       this.sizeSplits.push(temp.splice(0, 5));
     }
   }
-
 
   USToEU(oldSize) {
     let returnValue: String;
