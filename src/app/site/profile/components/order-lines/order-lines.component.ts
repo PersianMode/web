@@ -28,13 +28,14 @@ export class OrderLinesComponent implements OnInit {
     this.orderInfo = this.profileOrderService.orderData;
     this.orderLines = this.orderInfo.dialog_order.order_lines;
     this.removeDuplicates(this.orderLines);
+    this.orderStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
-    console.log('removeDuplicatesArray : ' , this.noDuplicateOrderLine);
+    console.log('removeDuplicatesArray : ', this.noDuplicateOrderLine);
   }
 
   removeDuplicates(arr) {
     const instancArr = [];
-    arr.forEach( el => {
+    arr.forEach(el => {
       if (instancArr.indexOf(el.product_instance._id) === -1) {
         instancArr.push(el.product_instance._id);
         el.quantity = 1;
@@ -46,11 +47,10 @@ export class OrderLinesComponent implements OnInit {
   }
 
   findBoughtColor(arr) {
-    arr.forEach( el => {
-      const boughtColor =  el.product.colors.find( c => c._id === el.product_instance.product_color_id);
+    arr.forEach(el => {
+      const boughtColor = el.product.colors.find(c => c._id === el.product_instance.product_color_id);
       el.boughtColor = boughtColor;
       boughtColor.image.thumbnail = imagePathFixer(boughtColor.image.thumbnail, el.product._id, boughtColor._id);
-      console.log('--->', boughtColor.image.thumbnail);
     });
   }
 
@@ -74,21 +74,36 @@ export class OrderLinesComponent implements OnInit {
     return (+a).toLocaleString('fa', {useGrouping: isPrice});
   }
 
-  orderStatus(orderLine) {
+  orderStatus(arr) {
     let tickets = [];
-
-    tickets = orderLine.tickets;
-    switch (tickets[tickets.length - 1].status) {
-      case 1:
-        this.statusText = 'درحال پردازش'
-        break;
-      case 9:
-        this.statusText = 'تحویل شده'
-        break;
-      default:
-        this.statusText = 'درحال پردازش'
-
-      return this.statusText;
+    let statusText = '';
+    arr.forEach(el => {
+      tickets = el.tickets;
+      switch (tickets[tickets.length - 1].status) {
+        case 1:
+        case 2:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 10:
+          statusText = 'درحال پردازش';
+          break;
+        case 3 :
+          statusText = 'بازگشت هزینه';
+          break;
+        case 9:
+          statusText = 'سفارش تحویل شده';
+          break;
+        case 11:
+          statusText = 'سفارش لغو شده';
+          break;
+        default:
+          statusText = 'درحال پردازش';
+      };
+        el.statusText = statusText;
     }
+    );
   }
 }
