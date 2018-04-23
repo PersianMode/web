@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="gridwall-content">
-      <p-dataScroller [value]="products" [rows]="10">
+      <p-dataScroller [value]="products" [rows]="50">
         <ng-template let-item pTemplate="item">
           <app-product-grid-item [data]="item" [width]="gridWidth" [height]="gridHeight"></app-product-grid-item>
         </ng-template>

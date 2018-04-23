@@ -1,11 +1,6 @@
 <div class="row" fxLayout="row">
   <app-search-fields fxFlex="100" [target]="'Product'" (searching)="search($event)"></app-search-fields>
 </div>
-<div fxLayout="row" class="row">
-    <button mat-fab color="accent" style="margin-top: 15px" (click)="openForm()">
-        <mat-icon aria-label="add new organization">add</mat-icon>
-    </button>
-</div>
 <div *ngFor="let row of rows" dir="rtl">
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
          fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center" class="row">

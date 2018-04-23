@@ -15,6 +15,7 @@ body, label {
   direction: rtl;
 }
 
+
 a {
   text-decoration: none;
   outline: none;
@@ -872,4 +873,19 @@ mat-panel-title {
 
 .inner-placement-div {
   margin: 10px;
+}
+
+.mat-chip-list-wrapper {
+  display: inline !important;
+}
+
+.mat-slide-toggle-bar {
+  background: rgba(99,99,99,.5) !important;
+}
+.mat-slide-toggle-thumb {
+  background: gray !important;
+}
+
+.persian-field input {
+  height: 20px;
 }
