@@ -3,4 +3,5 @@ export enum DialogEnum {
   login,
   oauthOtherDetails,
   upsertAddress,
+  orderLinesComponent,
 };
