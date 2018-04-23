@@ -20,7 +20,6 @@ export class DictionaryService {
     });
     httpService.get('../../../assets/shoesSize.json').subscribe(res => {
       this.shoesSizeMap = res;
-      console.log(res);
     });
   }
 
