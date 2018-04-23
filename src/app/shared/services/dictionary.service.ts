@@ -6,6 +6,7 @@ import {HttpService} from './http.service';
 export class DictionaryService {
   wordDictionary = {};
   colorDictionary = {};
+  shoesSizeMap: any = {};
 
   constructor(httpService: HttpService) {
     httpService.get('dictionary').subscribe((res: any) => {
@@ -16,6 +17,9 @@ export class DictionaryService {
           this.colorDictionary[x.name] = x.value;
         }
       });
+    });
+    httpService.get('../../../assets/shoesSize.json').subscribe(res => {
+      this.shoesSizeMap = res;
     });
   }
 

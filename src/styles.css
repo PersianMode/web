@@ -866,6 +866,13 @@ mat-panel-title {
   margin: 10px;
 }
 
+.mat-slide-toggle-bar {
+  background: rgba(99,99,99,.5) !important;
+}
+.mat-slide-toggle-thumb {
+  background: gray !important;
+}
+
 .persian-field input {
   height: 20px;
 }
