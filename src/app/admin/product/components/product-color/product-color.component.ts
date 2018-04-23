@@ -15,9 +15,7 @@ export class ProductColorComponent implements OnInit, OnChanges {
 
 
   colorEditDialog: MatDialogRef<ProductColorEditComponent, any>;
-  @Input() productColors: any;
-  @Output() onProductColorChanged = new EventEmitter<any>();
-  @Input() productId;
+  @Input() product;
 
   constructor(private httpService: HttpService,
     private sanitizer: DomSanitizer, private dialog: MatDialog,
@@ -37,7 +35,7 @@ export class ProductColorComponent implements OnInit, OnChanges {
       width: '800px',
       height: '640px',
       data: {
-        productId: this.productId,
+        productId: this.product._id,
         product_color: pc
       }
     });
@@ -51,16 +49,16 @@ export class ProductColorComponent implements OnInit, OnChanges {
       (status) => {
         if (status) {
           this.progressService.enable();
-          this.httpService.delete(`/product/color/${this.productId}/${pc.color_id}`).subscribe(
+          this.httpService.delete(`/product/color/${this.product._id}/${pc.color_id}`).subscribe(
             (data) => {
               this.snackBar.open('this color deleted successfully', null, {
                 duration: 2000,
               });
               this.progressService.disable();
 
-              this.productColors = this.productColors.filter(x => x._id !== pc._id);
+              this.product.colors = this.product.colors.filter(x => x._id !== pc._id);
 
-              this.onProductColorChanged.emit(this.productColors);
+              // this.onProductColorChanged.emit(this.product.colors);
 
             },
             (error) => {
@@ -80,7 +78,7 @@ export class ProductColorComponent implements OnInit, OnChanges {
 
   getURL(name, pc) {
     if (name) {
-      const path = HttpService.PRODUCT_IMAGE_PATH + this.productId + '/' + pc.color_id + '/' + name;
+      const path = HttpService.PRODUCT_IMAGE_PATH + this.product._id + '/' + pc.color_id + '/' + name;
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
     } else
       return '';
