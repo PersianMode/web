@@ -78,8 +78,7 @@ export class SizePickerComponent implements OnInit {
 
   changeSizeType() {
     this.isEU = !this.isEU;
-    console.log('isEU :', this.isEU);
     this.setProductSize(this.productSize);
-    // post user size type
+    // TODO: post user size type
   }
 }
