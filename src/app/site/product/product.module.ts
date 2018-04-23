@@ -4,7 +4,7 @@ import { DesktopProductComponent } from './components/desktop-product/desktop-pr
 import {ProductRouting} from './product.routing';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {SizePickerComponent} from '../../shared/components/size-picker/size-picker.component';
-import {MatDialogModule, MatExpansionModule, MatIconModule, MatTooltipModule} from '@angular/material';
+import {MatDialogModule, MatExpansionModule, MatIconModule, MatSlideToggleModule, MatTooltipModule} from '@angular/material';
 import {MarkdownModule} from 'angular2-markdown';
 import { ProductComponent } from './components/product/product.component';
 import { MobileProductComponent } from './components/mobile-product/mobile-product.component';
@@ -31,6 +31,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     SwiperModule,
     MatDialogModule,
     FlexLayoutModule,
+    MatSlideToggleModule,
   ],
   declarations: [
     DesktopProductComponent,

@@ -1,0 +1,34 @@
+<h3 >تصویر بند انگشتی:</h3>
+  
+<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+  <div fxFlex="70">
+    <app-uploader [single]="true" [url]="'product/image/'+ data.productId + '/' +  data.product_color.color_id  + '/' + true" (OnCompleted)="setThumbnail($event)"></app-uploader>
+  </div>
+  <div fxFlex="30">
+    <img *ngIf="thumbnailURL" [src]="thumbnailURL" style="width: 72px; height: 72px;">
+  </div>
+</div>
+<mat-divider style="margin-top: 20px"></mat-divider>
+<h3 >سایر تصاویر:</h3>
+
+<div *ngIf="thumbnailURL">
+    <app-uploader [single]="false" [url]="'product/image/'+ data.productId + '/' +  data.product_color.color_id  + '/' + false" (OnCompleted)="addAngle($event)"></app-uploader>
+  </div>
+
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" >
+    <div *ngFor="let angle of data.product_color.image?.angles" fxFlex="25">
+  
+    <mat-card class="card">
+      <mat-card-content>
+      <img mat-card-image [src]="getURL(angle)">
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-icon-button (click)="removeAngle(angle)">
+          <mat-icon aria-label="remove angle image">delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+ 

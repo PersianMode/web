@@ -31,8 +31,6 @@ export class CartService {
                 );
             });
           }
-        } else {
-          this.cartItems.next([])
         }
       }
     );
@@ -67,72 +65,45 @@ export class CartService {
     const item = this.cartItems.getValue().find(el => el.product_id === value.product_id &&
       el.instance_id === value.instance_id);
 
-    if (item) {
-      // Should modify
-      if (this.authService.isLoggedIn.getValue()) {
-        // Modify in server
-        const diff = (item.quantity || 1) - (value.number || 1);
-
-        this.httpService.post('order' + (diff > 0 ? '/delete' : ''), {
-          product_id: item.product_id,
-          product_instance_id: item.instance_id,
-          number: Math.abs(diff),
-        }).subscribe(
-          (data) => {
-            item.quantity = value.number || 1;
-            this.cartItems.next(this.cartItems.getValue());
-          },
-          (err) => {
-            console.error('Cannot update (reduce quantity) in server: ', err);
-          }
-        );
-      } else {
-        // Modify in localStorage
-        item.quantity = value.number || 1;
-        localStorage.setItem(this.localStorageKey, JSON.stringify(this.cartItems.getValue()));
-        this.cartItems.next(this.cartItems.getValue());
-      }
-    } else {
-      // Should delete and add new product's instance
-      if (this.authService.isLoggedIn.getValue()) {
-        // Change in server
-        this.httpService.post('order/delete', {
-          product_instance_id: value.pre_instance_id,
-        }).subscribe(
-          (data) => {
-            this.httpService.post('order', {
-              product_id: value.product_id,
-              product_instance_id: value.instance_id,
-              number: value.number
-            }).subscribe(
-              (dt) => {
-                this.getCartItems();
-              },
-              (err) => {
-                console.error('Cannot add new order-line to order in server: ', err);
-              }
-            );
-          },
-          (err) => {
-            console.error('Cannot delete the specific product instance in server: ', err);
-          }
-        );
-      } else {
-        // Change in localStorage
-        let ls_items = this.getItemsFromStorage();
-        ls_items = ls_items.filter(el =>
-          el.product_id !== value.product_id ||
-          el.instance_id !== value.pre_instance_id);
-
-        for (let counter = 0; counter < value.number; counter++)
-          ls_items.push({
+    // Should delete and add new product's instance
+    if (this.authService.isLoggedIn.getValue()) {
+      // Change in server
+      this.httpService.post('order/delete', {
+        product_instance_id: value.pre_instance_id,
+      }).subscribe(
+        (data) => {
+          this.httpService.post('order', {
             product_id: value.product_id,
-            instance_id: value.instance_id,
-          });
+            product_instance_id: value.instance_id,
+            number: value.number
+          }).subscribe(
+            (dt) => {
+              this.getCartItems();
+            },
+            (err) => {
+              console.error('Cannot add new order-line to order in server: ', err);
+            }
+          );
+        },
+        (err) => {
+          console.error('Cannot delete the specific product instance in server: ', err);
+        }
+      );
+    } else {
+      // Change in localStorage
+      let ls_items = this.getItemsFromStorage();
+      ls_items = ls_items.filter(el =>
+        el.product_id !== value.product_id ||
+        el.instance_id !== value.pre_instance_id);
+     
+      ls_items.push({
+        product_id: value.product_id,
+        instance_id: value.instance_id,
+        quantity: value.number,
+      });
 
-        localStorage.setItem(this.localStorageKey, JSON.stringify(ls_items));
-        this.getCartItems();
-      }
+      localStorage.setItem(this.localStorageKey, JSON.stringify(ls_items));
+      this.getCartItems();
     }
   }
 
@@ -183,6 +154,7 @@ export class CartService {
     items.forEach((el: any) => {
       const objItem: any = {};
 
+      objItem.order_id = el.order_id;
       objItem.product_id = el.product_id;
       objItem.instance_id = el.instance_id;
       objItem.name = el.name;
@@ -191,7 +163,7 @@ export class CartService {
       objItem.quantity = el.quantity;
       objItem.tags = el.tags;
       objItem.count = el.count;
-      objItem.thumbnail = HttpService.Host + el.thumbnail;
+      objItem.thumbnail = el.thumbnail;
       objItem.instances = el.instances;
       objItem.price = el.instance_price ? el.instance_price : el.base_price;
       objItem.discount = el.discount;
@@ -260,7 +232,11 @@ export class CartService {
         size: instance.size,
         color,
         count: instance.inventory.map(r => r.count).reduce((x, y) => +x + +y, 0),
-        instances: [instance],
+
+        instances: item.instances
+          .filter(r => r.product_color_id === color._id)
+          .map(r => Object.assign(r, {quantity: r.inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b, 0)})),
+       
         tags: [],
         name: item.name,
         price: instance.price,

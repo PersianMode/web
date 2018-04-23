@@ -1,5 +1,19 @@
 h2 {
   font-family: irankharazmi, sans-serif;
   padding: 20px 0px 0px;
-  margin:0
+  margin: 0
+}
+.slider{
+  margin: 10px;
+}
+@media(min-width: 960px) {
+  .slider {
+    text-align: left;
+  }
+}
+
+@media(max-width: 959px){
+  .slider {
+    text-align: right;
+  }
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -17,6 +17,8 @@ import {STATUS} from '../../../../shared/enum/status.enum';
 })
 export class InboxComponent implements OnInit {
 
+
+  @Output() newInboxCount = new EventEmitter();
 
   displayedColumns = [
     'position',
@@ -37,7 +39,6 @@ export class InboxComponent implements OnInit {
 
   dataSource = new MatTableDataSource();
 
-  resultsLength = 0;
   isLoadingResults = true;
 
   pageSize = 20;
@@ -77,12 +78,12 @@ export class InboxComponent implements OnInit {
 
     this.httpService.post('search/Order', {options, offset, limit}).subscribe(res => {
       this.isLoadingResults = false;
-      this.resultsLength = res.total;
+      this.newInboxCount.emit(res.total);
       this.dataSource.data = res.data;
       console.log('-> ', this.dataSource.data);
     }, err => {
       this.isLoadingResults = false;
-      this.resultsLength = 0;
+      this.newInboxCount.emit(0);
       this.openSnackBar('خطا در دریافت لیست سفارش ها');
     });
   }

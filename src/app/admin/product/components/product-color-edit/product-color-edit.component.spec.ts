@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DemoPanelComponent } from './demo-panel.component';
+import { ProductColorEditComponent } from './product-color-edit.component';
 
-describe('DemoPanelComponent', () => {
-  let component: DemoPanelComponent;
-  let fixture: ComponentFixture<DemoPanelComponent>;
+describe('ProductColorEditComponent', () => {
+  let component: ProductColorEditComponent;
+  let fixture: ComponentFixture<ProductColorEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DemoPanelComponent ]
+      declarations: [ ProductColorEditComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DemoPanelComponent);
+    fixture = TestBed.createComponent(ProductColorEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

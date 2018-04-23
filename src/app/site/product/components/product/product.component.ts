@@ -82,6 +82,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       const object = {
         product_id: this.product._id,
         product_instance_id: instance._id,
+        instances: this.product.instances,
       };
 
       Object.assign(object, this.product);

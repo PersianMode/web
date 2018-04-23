@@ -5,7 +5,7 @@ import {IPageInfo} from '../../admin/page/interfaces/IPageInfo.interface';
 import {Subject} from 'rxjs/Subject';
 import {AuthService} from './auth.service';
 
-const defaultComponents = ['menu', 'slider', 'logos'];
+const defaultComponents = ['menu', 'slider', 'logos', 'footer'];
 
 @Injectable()
 export class PageService {
@@ -73,7 +73,7 @@ export class PageService {
                 this.emitPlacements(pageName, this.cache[pageName]);
               }
             }, err => {
-              console.log('err: ', err);
+              console.error('err: ', err);
             }
           );
         } else if (emit) {
