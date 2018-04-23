@@ -320,7 +320,7 @@ export class SubMenuComponent implements OnInit {
 
         if (this.selectedItem) {
           const newInfo = this.getItemInfo();
-          const changedObj = this.subMenuItems.find(el => el._id.toString() === this.selectedItem._id.toString());
+          const changedObj = this.subMenuItems.find(el => el._id === this.selectedItem._id);
           changedObj.info.text = newInfo.text;
           changedObj.info.href = newInfo.href;
           changedObj.info.is_header = newInfo.is_header;

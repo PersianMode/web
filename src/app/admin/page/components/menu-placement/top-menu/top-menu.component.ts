@@ -101,7 +101,7 @@ export class TopMenuComponent implements OnInit {
       text: value.info.text,
       href: value.info.href,
       id: value._id,
-      column: null,
+      column: value.info.column,
       isEdit: true,
       section: value.info.section,
     };
@@ -167,10 +167,16 @@ export class TopMenuComponent implements OnInit {
       }
     })).subscribe(
       (data) => {
+        const tempInfo = Object.assign({}, this.upsertTopMenuItem);
+        delete tempInfo.id;
+
         this.modifyPlacement.emit({
           type: isEdit ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
           placement_id: data.placement_id,
-          placements: [this.upsertTopMenuItem],
+          placements: [{
+            _id: this.upsertTopMenuItem.id,
+            info: tempInfo,
+          }],
           placement: data.new_placement,
         });
 

@@ -10,3 +10,18 @@
   margin-left: 6px;
   margin-right: 6px;
 }
+
+.icons{
+  font-size: 30px;
+  color: #444;
+  padding: 1px 4px 1px 4px;
+}
+
+.demo-area {
+  margin-top: 20px
+}
+
+.selected-icon {
+  border: dotted black thin;
+  border-radius: 5px;
+}

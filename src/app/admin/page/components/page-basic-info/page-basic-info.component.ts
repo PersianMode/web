@@ -286,7 +286,7 @@ export class PageBasicInfoComponent implements OnInit {
         value.placements.forEach(item => {
           const index = this.placements.findIndex(el => el._id.toString() === item._id.toString());
           if (index !== -1)
-            this.placements[index] = item;
+            this.placements[index].info = item.info;
         });
       }
         break;

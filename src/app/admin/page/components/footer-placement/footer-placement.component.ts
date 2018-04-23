@@ -70,6 +70,7 @@ export class FooterPlacementComponent implements OnInit {
     _id: null,
     href: null,
     text: null,
+    column: null,
   };
   socialAnyChanges = false;
 
@@ -110,7 +111,7 @@ export class FooterPlacementComponent implements OnInit {
   }
 
   getNotSelectedIcons() {
-    return this.socialNetworks.filter(el => !this.socialLinkItems.find(i => i.info.text.toLowerCase() !== el.text.toLowerCase()));
+    return this.socialNetworks.filter(el => !this.socialLinkItems.find(i => i.info.text.toLowerCase() === el.text.toLowerCase()));
   }
 
   selectIcon(icon) {
@@ -119,17 +120,68 @@ export class FooterPlacementComponent implements OnInit {
         _id: icon._id,
         href: icon.info.href,
         text: icon.info.text,
+        column: icon.info.column,
       };
     else
       this.selectedSocialNetwork = {
         _id: null,
         href: null,
         text: icon.text,
+        column: null,
       };
   }
 
   modifySocialNetwork() {
+    this.progressService.enable();
+    (this.selectedSocialNetwork._id ? this.httpService.post('placement', {
+      page_id: this.pageId,
+      placement: [
+        {
+          _id: this.selectedSocialNetwork._id,
+          info: {
+            text: this.selectedSocialNetwork.text,
+            href: this.selectedSocialNetwork.href,
+            column: this.selectedSocialNetwork.column,
+          }
+        }
+      ]
+    }) : this.httpService.put('placement', {
+      page_id: this.pageId,
+      placement: {
+        component_name: 'footer',
+        variable_name: 'social_link',
+        info: {
+          text: this.selectedSocialNetwork.text,
+          href: this.selectedSocialNetwork.href,
+          column: Math.max(...this.socialLinkItems.map(el => el.info.column)) + 1,
+        }
+      }
+    })).subscribe(
+      (data: any) => {
+        const tempInfo = Object.assign({}, this.selectedSocialNetwork);
+        delete tempInfo._id;
+        this.modifyPlacement.emit({
+          type: this.selectedSocialNetwork._id ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
+          placement_id: data.placement_id,
+          placements: [{
+            _id: this.selectedSocialNetwork._id,
+            info: tempInfo,
+          }],
+          placement: data.new_placement,
+        });
 
+        // May be we can remove the bellow code
+        if (this.selectedSocialNetwork._id) {
+          const changedObj = this.socialLinkItems.find(el => el._id === this.selectedSocialNetwork._id);
+          changedObj.info.text = this.selectedSocialNetwork.text;
+          changedObj.info.href = this.selectedSocialNetwork.href;
+          this.socialAnyChanges = false;
+        } else {
+          this.selectedSocialNetwork._id = data.placement_id;
+          this.socialAnyChanges = false;
+        }
+      }
+    );
   }
 
   removeSocialNetwork() {
@@ -157,6 +209,7 @@ export class FooterPlacementComponent implements OnInit {
                 _id: null,
                 href: null,
                 text: null,
+                column: null,
               };
               this.socialAnyChanges = false;
               this.progressService.disable();
@@ -169,6 +222,10 @@ export class FooterPlacementComponent implements OnInit {
         }
       }
     )
+  }
+
+  getItemInfo(type, isAdd = false) {
+
   }
 
   checkSocialchanges() {
@@ -188,6 +245,7 @@ export class FooterPlacementComponent implements OnInit {
       _id: null,
       href: null,
       text: null,
+      column: null,
     };
   }
 }

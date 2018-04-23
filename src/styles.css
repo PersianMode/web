@@ -881,3 +881,7 @@ mat-panel-title {
 .persian-field input {
   height: 20px;
 }
+
+.remove {
+  color: darkred;
+}

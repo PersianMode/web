@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
-  MatSnackBarModule, MatTabsModule
+  MatSnackBarModule, MatTabsModule, MatTooltipModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PageRouting} from './page.routing';
@@ -62,6 +62,7 @@ import { FooterPlacementComponent } from './components/footer-placement/footer-p
     MarkdownModule.forRoot(),
     DragulaModule,
     ColorPickerModule,
+    MatTooltipModule,
   ],
   entryComponents: [
     EditPanelComponent,
