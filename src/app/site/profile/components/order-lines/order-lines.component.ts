@@ -4,6 +4,7 @@ import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
 import {MatDialogRef} from '@angular/material';
+import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 
 
 @Component({
@@ -32,14 +33,13 @@ export class OrderLinesComponent implements OnInit {
   }
 
   removeDuplicates(arr) {
-    let instancArr = [];
+    const instancArr = [];
     arr.forEach( el => {
       if (instancArr.indexOf(el.product_instance._id) === -1) {
         instancArr.push(el.product_instance._id);
         el.quantity = 1;
         this.noDuplicateOrderLine.push(el);
-      }
-      else {
+      } else {
         this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
       }
     });
@@ -47,8 +47,9 @@ export class OrderLinesComponent implements OnInit {
 
   findBoughtColor(arr) {
     arr.forEach( el => {
-      let boughtColor =  el.product.colors.find( c => c._id === el.product_instance.product_color_id);
+      const boughtColor =  el.product.colors.find( c => c._id === el.product_instance.product_color_id);
       el.boughtColor = boughtColor;
+      boughtColor.image.thumbnail = imagePathFixer(boughtColor.image.thumbnail, el.product._id, boughtColor._id);
       console.log('--->', boughtColor.image.thumbnail);
     });
   }

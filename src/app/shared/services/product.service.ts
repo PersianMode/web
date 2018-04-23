@@ -3,6 +3,7 @@ import {HttpService} from './http.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
 import {DictionaryService} from './dictionary.service';
+import {imagePathFixer} from '../lib/imagePathFixer';
 
 const productColorMap = function (r) {
   return r.colors.map(c => c.name ? c.name.split('/')
@@ -188,7 +189,7 @@ export class ProductService {
     data.colors.forEach(item => {
       const angles = [];
       const addHost = function (r) {
-        return r.includes(HttpService.Host) ? r : [HttpService.Host, 'images/product-image', data.id, item._id, r].join('/');
+        return imagePathFixer(r, data.id, item._id);
       };
 
       item.image.angles.forEach(r => {

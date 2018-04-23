@@ -8,6 +8,7 @@ import {Router} from '@angular/router';
 import {DialogEnum} from '../../shared/enum/dialog.components.enum';
 import {MatDialog} from '@angular/material';
 import {HttpService} from '../../shared/services/http.service';
+import {imagePathFixer} from '../../shared/lib/imagePathFixer';
 
 @Component({
   selector: 'app-cart',
@@ -41,7 +42,7 @@ export class CartComponent implements OnInit, OnDestroy {
         this.valid.push(true);
         const temp: any = {};
         Object.assign(temp, r);
-        temp.thumbnail = temp.thumbnail.includes(HttpService.Host) ? temp.thumbnail : [HttpService.Host, 'images/product-image', temp.product_id, temp.color.id, temp.thumbnail].join('/')
+        temp.thumbnail = imagePathFixer( temp.thumbnail, temp.product_id, temp.color.id);
         this.products.push(temp);
       });
 
