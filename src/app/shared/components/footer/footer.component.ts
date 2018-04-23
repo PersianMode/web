@@ -1,5 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {WINDOW} from '../../../shared/services/window.service';
+import {PageService} from '../../services/page.service';
+import {IPlacement} from '../../../admin/page/interfaces/IPlacement.interface';
 
 @Component({
   selector: 'app-footer',
@@ -9,114 +11,10 @@ import {WINDOW} from '../../../shared/services/window.service';
 export class FooterComponent implements OnInit {
   curWidth = 100;
   curHeight = 100;
-  footer = {
-    headerList: [
-      {
-        text: 'کارت های هدیه',
-        href: '#',
-      },
-      {
-        text: 'تخفیف های دانش آموزی',
-        href: '#',
-      },
-      {
-        text: 'تخفیف های دانشجویی',
-        href: '#',
-      },
-      {
-        text: 'آدرس شعبه ها',
-        href: '#',
-      },
-      {
-        text: 'عضو شوید',
-        href: '#',
-      },
-      {
-        text: 'فیدبک های اعضا',
-        href: '#',
-      },
-    ],
-    middle: [
-      {
-        header: true,
-        text: 'سوالات متداول',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'وضعیت سفارش',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'خرید و دریافت',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'بازگردادندن کالا',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'آپشن های پرداخت',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'تماس با ما',
-        href: '#',
-      },
-    ],
-    leftColumn: [
-      {
-        header: true,
-        text: 'درباره پرشین مد',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'اخبار',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'حرفه ای ها',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'گفتگو',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'اسپانسرها',
-        href: '#',
-      },
-      {
-        header: false,
-        text: 'ایده های نو',
-        href: '#',
-      },
-    ],
-    icons: [
-      {
-        text: 'fa fa-twitter-square icons'
-      },
-      {
-        text: 'fa fa-facebook-square icons'
-      },
-      {
-        text: 'fa fa-linkedin-square icons'
-      },
-      {
-        text: 'fa fa-instagram icons'
-      }
-    ]
-  };
+  footerSiteLinksItems: any = {};
+  footerSocialNetworkItems: any[] = [];
 
-  constructor(@Inject(WINDOW) private window) {
+  constructor(@Inject(WINDOW) private window, private pageService: PageService) {
   }
 
   ngOnInit() {
@@ -127,5 +25,61 @@ export class FooterComponent implements OnInit {
       this.curWidth = this.window.innerWidth;
       this.curHeight = this.window.innerHeight;
     };
+
+    this.pageService.placement$.filter(r => r[0] === 'footer').map(r => r[1]).subscribe(
+      (data) => {
+        this.setFooterTextLinks(data.filter(el => el.variable_name === 'site_link'));
+        this.setFooterSocialLinks(data.filter(el => el.variable_name === 'social_link'));
+      },
+      (err) => {
+        console.error('Cannot get footer placements: ', err);
+      }
+    );
+  }
+
+  setFooterTextLinks(list) {
+    this.footerSiteLinksItems = {};
+    list.forEach(el => {
+      if (!this.footerSiteLinksItems[el.info.column])
+        this.footerSiteLinksItems[el.info.column] = [];
+
+      this.footerSiteLinksItems[el.info.column].push({
+        text: el.info.text,
+        href: el.info.href,
+        row: el.info.row,
+        is_header: el.info.is_header,
+      });
+    });
+
+    // Sort items
+    Object.keys(this.footerSiteLinksItems).forEach(el => {
+      this.footerSiteLinksItems[el].sort((a, b) => {
+        if (a.row > b.row)
+          return 1;
+        else if (a.row < b.row)
+          return -1;
+        return 0;
+      });
+    });
+
+    console.log(this.footerSiteLinksItems);
+  }
+
+  setFooterSocialLinks(list) {
+    this.footerSocialNetworkItems = list.sort((a, b) => {
+      if (a.info.column > b.info.column)
+        return 1;
+      else if (a.info.column < b.info.column)
+        return -1;
+      return 0;
+    }).map(el => {
+      return {text: el.info.text + ' icons', href: el.info.href};
+    });
+
+    console.log('social links: ', this.footerSocialNetworkItems);
+  }
+
+  getKeyList(list) {
+    return Object.keys(list);
   }
 }
