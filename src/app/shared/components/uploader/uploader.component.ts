@@ -6,7 +6,7 @@ import {FileUploader} from 'ng2-file-upload';
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.css']
 })
-export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
+export class UploaderComponent implements OnInit, OnDestroy {
 
   public uploader: FileUploader;
   public hasBaseDropZoneOver = true;
@@ -22,23 +22,26 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   _additionalData = {};
-  @Output() OnCompleted = new EventEmitter<string[]>();
+  @Output() OnCompleted = new EventEmitter<any[]>();
 
-  private results: string[] = [];
+  private results: any[] = [];
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.url && changes.url.currentValue) {
-      this.uploader = new FileUploader({url: 'api/' + this.url});
-    }
+  constructor() {
+  }
+
+  ngOnInit(): void {
+    this.uploader = new FileUploader({url: 'api/' + this.url});
+    this.enabled = true;
 
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       const result = JSON.parse(response);
-      if (result.downloadURL)
-        this.results.push(result.downloadURL);
-
+      this.results.push(result);
     };
 
     this.uploader.onCompleteAll = () => {
+      if (Math.max(...this.results.map(el => Object.keys(el).length)) === 1)
+        this.results = this.results.map(el => el.downloadURL);
+
       this.OnCompleted.emit(this.results);
       this.results = [];
     };
@@ -57,50 +60,6 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
       });
       return {fileItem, form};
     };
-  }
-
-
-  constructor() {
-  }
-
-
-  ngOnInit(): void {
-
-    this.uploader = new FileUploader({url: 'api/' + this.url});
-
-    this.enabled = true;
-
-    // this.uploader.onSuccessItem = (item, response, status, headers) => {
-    //   const result = JSON.parse(response);
-    //   if (result.downloadURL)
-    //     this.results.push(result.downloadURL);
-    //
-    // };
-    //
-    // this.uploader.onCompleteAll = () => {
-    //   console.log('results emited!');
-    //   this.OnCompleted.emit(this.results);
-    //   this.results = [];
-    // };
-    //
-    // this.uploader.onAfterAddingFile = () => {
-    //   console.log('single checker');
-    //   if (this.single) {
-    //     if (this.uploader.queue.length > 1) {
-    //       this.uploader.removeFromQueue(this.uploader.queue[0]);
-    //     }
-    //   }
-    // };
-    //
-    // this.uploader.onBuildItemForm = (fileItem, form) => {
-    //   console.log('build form');
-    //   console.log('type of additional data:', typeof this._additionalData);
-    //   Object.keys(this._additionalData).forEach(e => {
-    //     form.append(e, this._additionalData[e]);
-    //   });
-    //   return {fileItem, form};
-    // };
-
   }
 
   public fileOverBase(e: any): void {

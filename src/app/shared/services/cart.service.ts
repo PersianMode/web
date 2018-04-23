@@ -31,8 +31,6 @@ export class CartService {
                 );
             });
           }
-        } else {
-          this.cartItems.next([])
         }
       }
     );
