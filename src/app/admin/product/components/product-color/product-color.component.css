@@ -11,32 +11,20 @@
     width: 100%;
 }
 
-.farsi{
-    direction:rtl;
-}
-.rs-table{
-    margin: 10px;
+.thumbnail{
+    display:block;
+    margin:auto;
+    width: 72px;
+    height: 72px;
+
 }
 
-.little-right-margin {
-  margin-right: 20px;
+.angle{
+    width: 72px;
+    height: 72px;
 }
-
-.right-alignment {
-  direction: rtl;
-  text-align: right;
-}
-
-
-.img-title {
-    width: 70%;
-    text-align: center
-}
-.img-style {
-    width: 10% ;
-    height: 10%; display: inline-block;
+td{
     text-align: center;
-}
-.td-width {
-    width: 10%;
+    font-family: iranyekan, sans-serif;
+
 }

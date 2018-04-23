@@ -3,28 +3,12 @@
 
     <form (ngSubmit)="modifyInstance()" [formGroup]="productInstanceForm">
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
-        <div fxFlex="100">
-          <div style="text-align: right" fxFlex="50" class="field-container">
-            <mat-form-field style="text-align:right;">
-              <mat-select placeholder="انبار" formControlName="warehouseId" role="warehouseId">
-                <mat-option *ngFor="let warehouse of warehouses" style="text-align:right" [value]="warehouse._id">
-                  {{warehouse.name}}
-                </mat-option>
-              </mat-select>
-              <mat-hint>انبار مورد نظر را انتخاب کنید</mat-hint>
-              <mat-error *ngIf="productInstanceForm.controls['warehouseId'].hasError('required')">
-                وارد کردن انبار الزامی است
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-      <div fxLayout="row">
-        <div style="text-align: right" fxFlex="50" class="field-container">
+
+        <div style="text-align: right" fxFlex="33" class="field-container">
           <mat-form-field style="text-align:right;">
             <mat-select placeholder="رنگ محصول" formControlName="proColorId" role="proColorId">
               <mat-option *ngFor="let pc of product.colors" style="text-align:right" [value]="pc._id">
-                {{pc?.name}}
+                {{pc.name}}
               </mat-option>
             </mat-select>
             <mat-hint>رنگ محصول را انتخاب کنید</mat-hint>
@@ -33,27 +17,43 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div style="text-align: right" fxFlex="50" class="field-container">
+
+        <div style="text-align: right" fxFlex="33" class="field-container">
           <mat-form-field>
-            <mat-select placeholder="اندازه محصول" formControlName="instanceId" role="proColorId">
-              <mat-option *ngFor="let pc of instances" style="text-align:right" [value]="pc._id">
-                {{pc?.size}}
+            <mat-select placeholder="اندازه محصول" formControlName="size" role="size">
+              <mat-option *ngFor="let instance of instances" style="text-align:right" [value]="instance.size">
+                {{instance.size}}
               </mat-option>
             </mat-select>
             <mat-hint>اندازه محصول را انتخاب کنید</mat-hint>
-            <mat-error *ngIf="productInstanceForm.controls['instanceId'].hasError('required')">
+            <mat-error *ngIf="productInstanceForm.controls['size'].hasError('required')">
               وارد کردن اندازه محصول الزامی است
             </mat-error>
           </mat-form-field>
         </div>
+
+
+        <div style="text-align: right" fxFlex="33" class="field-container">
+          <mat-form-field style="text-align:right;">
+            <mat-select placeholder="انبار" formControlName="warehouseId" role="warehouseId">
+              <mat-option *ngFor="let warehouse of warehouses" style="text-align:right" [value]="warehouse._id">
+                {{warehouse.name}}
+              </mat-option>
+            </mat-select>
+            <mat-hint>انبار مورد نظر را انتخاب کنید</mat-hint>
+            <mat-error *ngIf="productInstanceForm.controls['warehouseId'].hasError('required')">
+              وارد کردن انبار الزامی است
+            </mat-error>
+          </mat-form-field>
+        </div>
+
       </div>
 
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
 
-        <div style="text-align: right" fxFlex="50" class="field-container">
+        <div style="text-align: right" fxFlex="33" class="field-container">
           <mat-input-container class="field">
-            <input matInput type="number" placeholder="تعداد" formControlName="count" role="count" tabindex="2"
-                   dir="ltr">
+            <input matInput type="number" placeholder="تعداد" formControlName="count" role="count" tabindex="2" dir="ltr">
             <mat-hint>تعداد را وارد کنید</mat-hint>
             <mat-error *ngIf="productInstanceForm.controls['count'].hasError('required') && anyChanges">
               وارد کردن تعداد محصول الزامی است
@@ -61,53 +61,31 @@
           </mat-input-container>
 
         </div>
-        <div style="text-align: right" fxFlex="50" class="field-container">
+        
+        <div style="text-align: right" fxFlex="33" class="field-container">
           <mat-input-container class="field">
-            <input matInput type="number" placeholder="قیمت" formControlName="price" role="price" tabindex="2"
-                   dir="ltr">
+            <input matInput type="number" placeholder="تعداد رزرو" formControlName="reserved" role="reserved" tabindex="2" dir="ltr" [readonly]="true">
           </mat-input-container>
 
         </div>
+
+        <div style="text-align: right" fxFlex="33" class="field-container">
+          <mat-input-container class="field">
+            <input matInput type="number" placeholder="قیمت" formControlName="price" role="price" tabindex="2" dir="ltr">
+          </mat-input-container>
+
+        </div>
+
+
       </div>
 
     </form>
 
-    <!--<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl"-->
-    <!--style="margin-top: 20px;">-->
-    <!--<div style="text-align: right" fxFlex="100" class="field-container">-->
+    <mat-card-actions>
+      <button mat-icon-button type="submit" color="accent" (click)="modifyInstance()" [disabled]="submitShouldBeDisabled">
+        <mat-icon aria-label="accept">done</mat-icon>
+      </button>
 
-    <!--<mat-card>-->
-    <!--<div class="rs-table" style="width: 100%">-->
-    <!--<table style="width: 100%">-->
-    <!--<thead>-->
-    <!--<td style="width: 10%"><b>ردیف</b></td>-->
-    <!--<td style="width: 30%"><b>رنگ</b></td>-->
-    <!--<td style="width: 50%; text-align: center"><b>تصاویر</b></td>-->
-    <!--<td style="width: 10%"><b>حذف</b></td>-->
-    <!--</thead>-->
-    <!--<tbody>-->
-    <!--<tr *ngFor="let pc of productColors; let i = index">-->
-    <!--<td>{{i+1}}</td>-->
-    <!--<td>{{pc.info?.name}}</td>-->
-    <!--<td>-->
-    <!--<div style="text-align: center">-->
-    <!--<div *ngFor="let image of pc.image?.angles"-->
-    <!--style="width: 10% ;height: 10%; display: inline-block;text-align: center;">-->
-
-    <!--</div>-->
-    <!--</div>-->
-    <!--</td>-->
-    <!--<td>-->
-    <!--<button mat-icon-button (click)="removeImg(pc.info._id)" color="warn">-->
-    <!--<mat-icon aria-label="clear">delete</mat-icon>-->
-    <!--</button>-->
-    <!--</td>-->
-    <!--</tr>-->
-    <!--</tbody>-->
-    <!--</table>-->
-    <!--</div>-->
-    <!--</mat-card>-->
-    <!--</div>-->
-    <!--</div>-->
+    </mat-card-actions>
   </mat-card-content>
 </mat-card>

@@ -1,0 +1,14 @@
+h3{
+  direction: rtl
+}
+
+.thumbnail{
+    display:block;
+    margin:auto;
+    width: 72px;
+    height: 72px;
+
+}
+.card{
+  margin: 5px;
+}

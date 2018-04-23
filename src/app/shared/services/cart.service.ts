@@ -95,7 +95,7 @@ export class CartService {
       ls_items = ls_items.filter(el =>
         el.product_id !== value.product_id ||
         el.instance_id !== value.pre_instance_id);
-
+     
       ls_items.push({
         product_id: value.product_id,
         instance_id: value.instance_id,
@@ -154,6 +154,7 @@ export class CartService {
     items.forEach((el: any) => {
       const objItem: any = {};
 
+      objItem.order_id = el.order_id;
       objItem.product_id = el.product_id;
       objItem.instance_id = el.instance_id;
       objItem.name = el.name;
@@ -231,9 +232,11 @@ export class CartService {
         size: instance.size,
         color,
         count: instance.inventory.map(r => r.count).reduce((x, y) => +x + +y, 0),
+
         instances: item.instances
           .filter(r => r.product_color_id === color._id)
           .map(r => Object.assign(r, {quantity: r.inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b, 0)})),
+       
         tags: [],
         name: item.name,
         price: instance.price,
