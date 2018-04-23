@@ -51,6 +51,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   sortedBy: any = {value: null};
   collectionName = '';
   collectionNameFa = '';
+  lazyRows = 10;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
               private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService) {
@@ -101,6 +102,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.curHeight = this.responsiveService.curHeight;
     this.gridWidth = (this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10;
     this.gridHeight = this.gridWidth + 90;
+    this.lazyRows = this.isMobile ? 10 : Math.floor(this.gridwall.nativeElement.offsetWidth / 242) * Math.floor((this.window.innerHeight - 105) / 348 ) * 2;
     setTimeout(() => this.calcAfterScroll(), 1000);
   }
 
