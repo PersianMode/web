@@ -66,19 +66,26 @@ export class AddressTableComponent implements OnInit {
   }
 
   getCustomerAddresses() {
-    this.httpService.get(`customer/address`).subscribe(res => {
-      if (this.withDelivery) {
-        if (this.addresses.length === res.addresses.length - 1)
-          this.selectedCustomerAddresses = res.addresses.length - 1;
-        else if (res.addresses.length === 1)
-          this.selectedCustomerAddresses = 0;
-        this.addresses = res.addresses;
-      }
-      this.customerAddresses = res.addresses;
+    if (this.authService.isLoggedIn.getValue()) {
+      this.httpService.get(`customer/address`)
+        .subscribe(res => {
+          if (this.withDelivery) {
+            if (this.addresses.length === res.addresses.length - 1)
+              this.selectedCustomerAddresses = res.addresses.length - 1;
+            else if (res.addresses.length === 1)
+              this.selectedCustomerAddresses = 0;
+            this.addresses = res.addresses;
+          }
+          this.customerAddresses = res.addresses;
 
-    }, err => {
-      console.error(err);
-    });
+        }, err => {
+          console.error(err);
+        });
+    } else {
+      const address = JSON.parse(localStorage.getItem('address'));
+      if (address)
+        this.addresses = [address];
+    }
   }
 
   getWareHouseAddresses() {
@@ -124,7 +131,7 @@ export class AddressTableComponent implements OnInit {
     const partEdit = true;
     this.checkoutService.addressData = {
       addressId: tempAddressId,
-      partEdit: this.isProfile ? false : partEdit,
+      partEdit: this.isProfile || !this.authService.isLoggedIn.getValue() ? false : partEdit,
       dialog_address: tempAddress
     };
     if (this.responsiveService.isMobile) {

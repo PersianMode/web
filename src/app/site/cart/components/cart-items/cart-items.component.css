@@ -78,6 +78,7 @@ section {
   .thumbnail img {
     width: 220px;
     min-height: 220px;
+    border: 1px solid #ccc;
   }
   .btn-container {
     position: absolute;
@@ -100,6 +101,7 @@ section {
 
   .thumbnail img {
     width: 100%;
+    border: 1px solid #ccc;
   }
 
   .item-name-and-data {
@@ -120,4 +122,5 @@ section {
 
 img[src=""] {
   content:url("data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
+
 }

@@ -4,6 +4,7 @@ import {HttpService} from './http.service';
 import {CartService} from './cart.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {PaymentType} from '../enum/payment.type.enum';
+import {AuthService} from './auth.service';
 
 @Injectable()
 export class CheckoutService {
@@ -19,7 +20,8 @@ export class CheckoutService {
   addressData: IAddressInfo;
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
-  constructor(private cartService: CartService, private httpService: HttpService) {
+  constructor(private cartService: CartService, private httpService: HttpService,
+              private authService: AuthService) {
     this.cartService.cartItems.subscribe(
       (data) => this.dataIsReady.next((data && data.length > 0) ? true : false)
     );
@@ -57,17 +59,22 @@ export class CheckoutService {
 
   submitAddresses(data) {
     if (!data)
-      return Promise.reject(false);
+      return Promise.reject('');
 
-    return new Promise((resolve, reject) => {
-      this.httpService.post('user/address', data).subscribe(
-        res => {
-          resolve();
-        }, err => {
-          reject(err);
-        }
-      );
-    });
+    if (this.authService.isLoggedIn.getValue()) {
+      return new Promise((resolve, reject) => {
+        this.httpService.post('user/address', data).subscribe(
+          res => {
+            resolve();
+          }, err => {
+            reject(err);
+          }
+        );
+      });
+    } else {
+      localStorage.setItem('address', JSON.stringify(data));
+      return Promise.resolve();
+    }
   }
 
   getCustomerAddresses() {
