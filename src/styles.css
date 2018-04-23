@@ -870,3 +870,6 @@ mat-panel-title {
 .mat-chip-list-wrapper {
   display: inline !important;
 }
+.persian-field input {
+  height: 20px;
+}

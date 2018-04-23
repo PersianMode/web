@@ -6,7 +6,7 @@ import {FileUploader} from 'ng2-file-upload';
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.css']
 })
-export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
+export class UploaderComponent implements OnInit, OnDestroy {
 
   public uploader: FileUploader;
   public hasBaseDropZoneOver = true;
@@ -75,7 +75,6 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
       return {fileItem, form};
     };
   }
-
 
   public fileOverBase(e: any): void {
     this.hasBaseDropZoneOver = e;
