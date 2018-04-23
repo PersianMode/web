@@ -1,6 +1,61 @@
 <div class="inner-placement-div">
   <div>
     <label class="part-title">لینک های متنی</label>
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
+      fxLayoutAlign.xs="center center">
+      <div fxFlex="30" class="full-width input-item">
+        <mat-input-container class="full-width input-item persian-field">
+          <input matInput type="text" class="input-item" placeholder="متن" [(ngModel)]="selectedTextLink.text" (ngModelChange)="checkTextchanges()"
+          />
+        </mat-input-container>
+      </div>
+      <div fxFlex="30" class="full-width input-item">
+        <mat-input-container class="full-width input-item persian-field">
+          <input matInput type="text" class="input-item" placeholder="آدرس" [(ngModel)]="selectedTextLink.href" (ngModelChange)="checkTextchanges()"
+          />
+        </mat-input-container>
+      </div>
+      <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
+        <mat-checkbox [(ngModel)]="selectedTextLink.is_header">
+          <span *ngIf="selectedTextLink.is_header.value">عنوان</span>
+          <span *ngIf="!selectedTextLink.is_header.value">زیر عنوان</span>
+        </mat-checkbox>
+      </div>
+      <div fxFlex="15">
+        <button mat-mini-fab color="primary" [disabled]="!textAnyChanges" (click)="modifyTextLink()">
+          <mat-icon>
+            <i class="material-icons" *ngIf="selectedTextLink._id">create</i>
+            <i class="material-icons" *ngIf="!selectedTextLink._id">done</i>
+          </mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" (click)="removeTextLink()" *ngIf="selectedTextLink._id" class="remove">
+          <mat-icon>
+            <i class="material-icons">remove</i>
+          </mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" (click)="clearTextLinkField()" *ngIf="selectedTextLink._id">
+          <i class="fa fa-eraser"></i>
+        </button>
+      </div>
+    </div>
+    <div class="demo-list demo-area">
+      <div *ngFor="let columnKey of getKeyList(siteLinkItems); first as isFirst" class="footer-column" [dragula]="textBag" [dragulaModel]="siteLinkItems[columnKey]">
+        <div *ngFor="let item of siteLinkItems[columnKey]; first as rowHeader" class="row-item menu-item" (click)="selectTextItem(item)">
+          <a class="item persian-field" [ngClass]="{'footer-link-bold': rowHeader || item.info.is_header || isFirst, 'footer-link': !rowHeader && !item.info.is_header}">{{item.info.text}}</a>
+        </div>
+      </div>
+      <div *ngIf="hasNewColumn" class="footer-column empty-column" [dragula]="textBag" [dragulaModel]="newEmptyColumn">
+        &nbsp;
+      </div>
+      <div class="footer-column">
+        <button mat-icon-button (click)="addColumn()" [disabled]="addColumnDisability()">
+          <mat-icon aria-label="add column">add_circle_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="center-content">
+    <hr class="divider" />
   </div>
   <div>
     <label class="part-title">لینک های تصویری شبکه های اجتماعی</label>
@@ -8,46 +63,46 @@
       <label>شبکه های اجتماعی انتخاب نشده:</label>
       <div *ngFor="let icon of getNotSelectedIcons()" class="icon-link" (click)="selectIcon(icon)">
         <div class="example-tooltip-host" [matTooltip]="icon.name" [matTooltipPosition]="'above'">
-        <span class="icons">
-          <a class="icons" [ngClass]="{'selected-icon': selectedSocialNetwork.text === icon.text}">
-            <i [class]="icon.text"></i>
-          </a>
-        </span>
+          <span class="icons">
+            <a class="icons" [ngClass]="{'selected-icon': selectedSocialNetwork.text === icon.text}">
+              <i [class]="icon.text"></i>
+            </a>
+          </span>
+        </div>
       </div>
-    </div>
-    <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
-      fxLayoutAlign.xs="center center">
-      <div fxFlex="50" class="full-width">
-        <mat-input-container class="full-width">
-          <input matInput type="text" placeholder="آدرس" [(ngModel)]="selectedSocialNetwork.href" (ngModelChange)="checkSocialchanges()"
-          />
-        </mat-input-container>
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
+        fxLayoutAlign.xs="center center">
+        <div fxFlex="50" class="full-width">
+          <mat-input-container class="full-width">
+            <input matInput type="text" placeholder="آدرس" [(ngModel)]="selectedSocialNetwork.href" (ngModelChange)="checkSocialchanges()"
+            />
+          </mat-input-container>
+        </div>
+        <div fxFlex="50" class="btn-area">
+          <button mat-mini-fab color="primary" [disabled]="!selectedSocialNetwork.href || !socialAnyChanges" (click)="modifySocialNetwork()">
+            <mat-icon>
+              <i class="material-icons" *ngIf="selectedSocialNetwork._id">create</i>
+              <i class="material-icons" *ngIf="!selectedSocialNetwork._id">done</i>
+            </mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" (click)="removeSocialNetwork()" *ngIf="selectedSocialNetwork._id" class="remove">
+            <mat-icon>
+              <i class="material-icons">remove</i>
+            </mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" (click)="clearSocialNetworkField()" *ngIf="selectedSocialNetwork._id">
+            <i class="fa fa-eraser"></i>
+          </button>
+        </div>
       </div>
-      <div fxFlex="50" class="btn-area">
-        <button mat-mini-fab color="primary" [disabled]="!selectedSocialNetwork.href || !socialAnyChanges" (click)="modifySocialNetwork()">
-          <mat-icon>
-            <i class="material-icons" *ngIf="selectedSocialNetwork._id">create</i>
-            <i class="material-icons" *ngIf="!selectedSocialNetwork._id">done</i>
-          </mat-icon>
-        </button>
-        <button mat-mini-fab color="primary" (click)="removeSocialNetwork()" *ngIf="selectedSocialNetwork._id" class="remove">
-          <mat-icon>
-            <i class="material-icons">remove</i>
-          </mat-icon>
-        </button>
-        <button mat-mini-fab color="primary" (click)="clearSocialNetworkField()" *ngIf="selectedSocialNetwork._id">
-          <i class="fa fa-eraser"></i>
-        </button>
-      </div>
-    </div>
-    <div class="demo-list demo-area">
-      <div *ngFor="let icon of socialLinkItems" (click)="selectIcon(icon)" class="icon-link">
-        <span class="icons">
-          <a class="icons" [ngClass]="{'selected-icon': selectedSocialNetwork.text === icon.info.text}">
-            <i [class]="icon.info.text"></i>
-          </a>
-        </span>
+      <div class="demo-list demo-area" [dragula]="socialBag" [dragulaModel]="socialLinkItems">
+        <div *ngFor="let icon of socialLinkItems" (click)="selectIcon(icon)" class="icon-link menu-item">
+          <span class="icons">
+            <a class="icons" [ngClass]="{'selected-icon': selectedSocialNetwork.text === icon.info.text}">
+              <i [class]="icon.info.text"></i>
+            </a>
+          </span>
+        </div>
       </div>
     </div>
   </div>
-</div>

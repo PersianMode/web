@@ -893,3 +893,11 @@ mat-panel-title {
 .remove {
   color: darkred;
 }
+
+.footer-column {
+  display: inline-block;
+  text-align: right;
+  margin-left: 10px;
+  margin-right: 10px;
+  vertical-align: top;
+}
