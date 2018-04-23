@@ -872,3 +872,7 @@ mat-panel-title {
 .mat-slide-toggle-thumb {
   background: gray !important;
 }
+
+.persian-field input {
+  height: 20px;
+}

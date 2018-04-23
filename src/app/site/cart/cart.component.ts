@@ -35,6 +35,7 @@ export class CartComponent implements OnInit, OnDestroy {
     );
 
     this.subs = this.cartService.cartItems.subscribe(data => {
+      const prevProductCount = this.products.length;
       this.products = [];
       data.forEach(r => {
         this.valid.push(true);
@@ -48,7 +49,7 @@ export class CartComponent implements OnInit, OnDestroy {
         this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
         this.totalPrice = this.cartService.calculateTotal();
         this.calculateDiscount();
-      } else {
+      } else if (prevProductCount) {
         this.router.navigate(['/']);
       }
     });
