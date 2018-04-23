@@ -5,7 +5,7 @@ import {DictionaryRouting} from './dictionary.routing';
 import {
   MatCardModule,
   MatCheckboxModule,
-  MatDialogModule,
+  MatDialogModule, MatIconModule,
   MatPaginatorModule,
   MatProgressSpinnerModule, MatSnackBarModule,
   MatTableModule
@@ -21,6 +21,7 @@ import {
     MatCheckboxModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatIconModule,
     MatSnackBarModule,
   ],
   declarations: [DictionaryComponent]

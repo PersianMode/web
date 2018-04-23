@@ -1,8 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
-import {AuthService} from '../../shared/services/auth.service';
 import {HttpService} from '../../shared/services/http.service';
-import {SocketService} from '../../shared/services/socket.service';
 
 @Component({
   selector: 'app-dictionary',
@@ -10,7 +8,7 @@ import {SocketService} from '../../shared/services/socket.service';
   styleUrls: ['./dictionary.component.css']
 })
 export class DictionaryComponent implements OnInit {
-
+  editSelectedIndex = -1;
   displayedColumns = [
     'remove',
     'edit',
@@ -19,51 +17,46 @@ export class DictionaryComponent implements OnInit {
     'type',
     'number',
   ];
+  editElement = { //it is bind to selected row for editing
+    type: '',
+    name: '',
+    value: '',
+  };
   dataSource = new MatTableDataSource();
   resultsLength = 0;
   isLoadingResults = true;
   pageSize = 20;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  processDialogRef;
 
   constructor(private httpService: HttpService,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private  authService: AuthService,
-              private  socketService: SocketService) {
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
     this.load();
-    this.socketService.getOrderLineMessage().subscribe(msg => {
-      if (this.processDialogRef)
-        this.processDialogRef.close();
-
-      this.load();
-    });
   }
 
   load() {
     this.isLoadingResults = true;
-    const options = {
-      output: true,
-      sort: this.sort.active,
-      dir: this.sort.direction,
-    };
-    const offset = this.paginator.pageIndex * +this.pageSize;
-    const limit = this.pageSize;
+    //TODO send get request
+    // this.httpService.get('../../assets/dictionary.json')
+    this.httpService.get('/dictionary')
+      .subscribe(res => {
+        console.log(res);
+        this.isLoadingResults = false;
+        this.resultsLength = res.lenght;
+        this.dataSource.data = res;
+        console.log('-> ', this.dataSource.data);
+      }, err => {
+        this.isLoadingResults = false;
+        this.resultsLength = 0;
+        this.openSnackBar('خطا در دریافت دیکشنری');
+      });
+  }
 
-    this.httpService.post('/Order', {options, offset, limit}).subscribe(res => {
-      this.isLoadingResults = false;
-      this.resultsLength = res.total;
-      this.dataSource.data = res.data;
-      console.log('-> ', this.dataSource.data);
-    }, err => {
-      this.isLoadingResults = false;
-      this.resultsLength = 0;
-      this.openSnackBar('خطا در دریافت دیکشنری');
-    });
+  plusElement() {
   }
 
   getIndex(element) {
@@ -77,7 +70,6 @@ export class DictionaryComponent implements OnInit {
   }
 
   onSortChange($event: any) {
-
     this.paginator.pageIndex = 0;
     this.load();
   }
@@ -86,5 +78,30 @@ export class DictionaryComponent implements OnInit {
     this.load();
   }
 
+  deleteRow(position: number) {
+    //TODO send delete request
+  }
+
+  saveEdit() {//should get data
+    this.editSelectedIndex = -1;
+    //TODO send  post request
+    //sending editElement datas
+
+
+    this.editElement.type = '';
+    this.editElement.name = '';
+    this.editElement.value = '';
+  }
+
+  Edit(element: any) {
+    this.editSelectedIndex = this.dataSource.data.indexOf(element);
+    this.editElement.type = element.type;
+    this.editElement.name = element.name;
+    this.editElement.value = element.value;
+  }
+
+  put() {//should get data
+    //TODO send put request
+  }
 
 }
