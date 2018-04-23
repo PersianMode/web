@@ -60,15 +60,15 @@ export class SizePickerComponent implements OnInit {
   }
 
   USToEU(oldSize) {
-    let returnValue: String;
-    if (!this.gender || this.gender === undefined || this.gender.toUpperCase() === 'MENS') {
-      returnValue = this.dict.shoesSizeMap.men.find(size => size.us === oldSize).eu;
+    let returnValue: any;
+    if (!this.gender || this.gender.toUpperCase() === 'MENS') {
+      returnValue = this.dict.shoesSizeMap.men.find(size => size.us === oldSize);
     } else if (this.gender.toUpperCase() === 'WOMENS') {
-      returnValue = this.dict.shoesSizeMap.women.find(size => size.us === oldSize).eu;
+      returnValue = this.dict.shoesSizeMap.women.find(size => size.us === oldSize);
     }
-    if (returnValue === null)
+    if (!returnValue || !returnValue.eu)
       return oldSize;
-    return returnValue;
+    return returnValue.eu;
   }
 
   getUserSizeType() {
