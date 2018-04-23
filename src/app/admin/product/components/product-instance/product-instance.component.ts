@@ -43,9 +43,6 @@ export class ProductInstanceComponent implements OnInit, OnChanges {
 
       this.changeColor(this.product.colors[0]._id);
 
-      console.log('-> ', this.product);
-
-
     }
 
   }
@@ -63,6 +60,7 @@ export class ProductInstanceComponent implements OnInit, OnChanges {
     this.productInstanceForm.controls['size'].setValue(this.size);
     this.productInstanceForm.controls['warehouseId'].setValue(this.warehouseId);
     this.productInstanceForm.controls['count'].setValue(this.instances[0].inventory[0].count);
+    this.productInstanceForm.controls['reserved'].setValue(this.instances[0].inventory[0].reserved);
     this.productInstanceForm.controls['price'].setValue(this.instances[0].price);
 
   }
@@ -77,6 +75,7 @@ export class ProductInstanceComponent implements OnInit, OnChanges {
     this.productInstanceForm.controls['warehouseId'].setValue(this.warehouseId);
     this.productInstanceForm.controls['count'].setValue(instance.inventory[0].count);
     this.productInstanceForm.controls['price'].setValue(instance.price);
+    this.productInstanceForm.controls['reserved'].setValue(instance.inventory[0].reserved);
 
   }
 
@@ -88,6 +87,7 @@ export class ProductInstanceComponent implements OnInit, OnChanges {
 
     this.productInstanceForm.controls['count'].setValue(instance.inventory.find(x => x.warehouse_id === this.warehouseId).count);
     this.productInstanceForm.controls['price'].setValue(instance.price);
+    this.productInstanceForm.controls['reserved'].setValue(instance.inventory[0].reserved);
 
   }
 
@@ -103,6 +103,9 @@ export class ProductInstanceComponent implements OnInit, OnChanges {
         Validators.required,
       ]],
       count: [null, [
+        Validators.required,
+      ]],
+      reserved: [null, [
         Validators.required,
       ]],
       price: this.product.base_price,
@@ -151,6 +154,10 @@ export class ProductInstanceComponent implements OnInit, OnChanges {
     const foundInstance = this.product.instances.find(x => x.product_color_id === this.proColorId && x.size === this.size);
     const inventory = foundInstance.inventory.find(x => x.warehouse_id === this.warehouseId);
 
+    if (Number.parseInt(this.productInstanceForm.controls['count'].value) < inventory.reserved) {
+      this.openSnackBar('تعداد نمی تواند کمتر از مقدار رزرو شده باشد');
+      return;
+    }
 
     this.submitShouldBeDisabled = true;
     this.progeressService.enable();
