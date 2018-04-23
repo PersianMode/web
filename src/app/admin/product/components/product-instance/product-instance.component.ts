@@ -1,119 +1,197 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import {HttpService} from '../../../../shared/services/http.service';
 // TODO: // import {IProductColor} from '../../interfaces/iproduct-color';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IWarehouse} from '../../interfaces/iwarehouse';
+import {log} from 'util';
+import {ProgressService} from '../../../../shared/services/progress.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-product-instance',
   templateUrl: './product-instance.component.html',
   styleUrls: ['./product-instance.component.css']
 })
-export class ProductInstanceComponent implements OnInit {
+export class ProductInstanceComponent implements OnInit, OnChanges {
 
   @Input() product: any;
-  @Input() productId;
   @Input() warehouses: IWarehouse[];
 
   productInstanceForm: FormGroup;
-  private colorId;
-  private instanceId;
-  private warehouse_id;
-  private inventory;
-  instances = [];
 
-  constructor(private httpService: HttpService) {
+  proColorId: string;
+  instances: any[] = [];
+  size: string;
+  warehouseId: string;
+
+  submitShouldBeDisabled = false;
+
+  constructor(private httpService: HttpService, private progeressService: ProgressService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
     this.initForm();
   }
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if (this.product && this.product._id &&
+      this.product.colors && this.product.colors.length &&
+      this.product.instances && this.product.instances.length) {
+
+      this.productInstanceForm.controls['proColorId'].setValue(this.product.colors[0]._id);
+
+
+      this.changeColor(this.product.colors[0]._id);
+
+    }
+
+  }
+
+
+  changeColor(colorId) {
+
+    this.proColorId = colorId;
+
+    this.instances = this.product.instances.filter(x => x.product_color_id === this.proColorId);
+
+    this.size = this.instances[0].size;
+    this.warehouseId = this.instances[0].inventory[0].warehouse_id;
+
+    this.productInstanceForm.controls['size'].setValue(this.size);
+    this.productInstanceForm.controls['warehouseId'].setValue(this.warehouseId);
+    this.productInstanceForm.controls['count'].setValue(this.instances[0].inventory[0].count);
+    this.productInstanceForm.controls['reserved'].setValue(this.instances[0].inventory[0].reserved);
+    this.productInstanceForm.controls['price'].setValue(this.instances[0].price);
+
+  }
+
+  changeSize(size) {
+
+    this.size = size;
+
+    const instance = this.product.instances.find(x => x.product_color_id === this.proColorId && x.size === this.size);
+    this.warehouseId = instance.inventory[0].warehouse_id;
+
+    this.productInstanceForm.controls['warehouseId'].setValue(this.warehouseId);
+    this.productInstanceForm.controls['count'].setValue(instance.inventory[0].count);
+    this.productInstanceForm.controls['price'].setValue(instance.price);
+    this.productInstanceForm.controls['reserved'].setValue(instance.inventory[0].reserved);
+
+  }
+
+  changeWarehouse(warehouseId) {
+
+    this.warehouseId = warehouseId;
+
+    const instance = this.product.instances.find(x => x.product_color_id === this.proColorId && x.size === this.size);
+
+    this.productInstanceForm.controls['count'].setValue(instance.inventory.find(x => x.warehouse_id === this.warehouseId).count);
+    this.productInstanceForm.controls['price'].setValue(instance.price);
+    this.productInstanceForm.controls['reserved'].setValue(instance.inventory[0].reserved);
+
+  }
 
   initForm() {
     this.productInstanceForm = new FormBuilder().group({
-        proColorId: [null, [
-          Validators.required,
-        ]],
-        instanceId: [null, [
-          Validators.required,
-        ]],
-        warehouseId: [null, [
-          Validators.required,
-        ]],
-        count: [null, [
-          Validators.required,
-        ]],
-        price: this.product.base_price,
-      },
+      proColorId: [null, [
+        Validators.required,
+      ]],
+      size: [null, [
+        Validators.required,
+      ]],
+      warehouseId: [null, [
+        Validators.required,
+      ]],
+      count: [null, [
+        Validators.required,
+      ]],
+      reserved: [null, [
+        Validators.required,
+      ]],
+      price: this.product.base_price,
+    },
     );
     this.productInstanceForm.valueChanges.subscribe(
       data => {
-        console.log(data);
         this.formChange();
       }
     );
   }
 
   private formChange() {
-    const countCtrl = this.productInstanceForm.controls['count'];
-    if (this.colorId !== this.productInstanceForm.controls['proColorId'].value ||
-      this.instanceId !== this.productInstanceForm.controls['instanceId'].value ||
-      this.warehouse_id !== this.productInstanceForm.controls['warehouseId'].value) {
-      [this.colorId, this.instanceId, this.warehouse_id] =
-        ['proColorId', 'instanceId', 'warehouseId'].map(ctrl => this.productInstanceForm.controls[ctrl].value);
-      const prevInstance = this.product.instances.find(r => r._id === this.instanceId);
-      this.instances = this.product.instances.filter(r => r.product_color_id === this.colorId);
-      const tryCurInstance = prevInstance ? this.product.instances
-        .find(r => r.product_color_id === this.colorId && r.size === prevInstance.size) : null;
-      if (tryCurInstance && tryCurInstance._id !== prevInstance._id) {
-        this.instanceId = tryCurInstance._id;
-        this.productInstanceForm.controls['instanceId'].setValue(this.instanceId, {onlySelf: true});
-      }
 
-      if (this.warehouse_id && this.instanceId) {
-        const instance = this.product.instances.find(r => r._id === this.instanceId);
-        this.inventory = instance.inventory.find(r => r.warehouse_id === this.warehouse_id);
-        if (this.inventory) {
-          if (this.instanceId !== prevInstance)
-            countCtrl.setValue(this.inventory.count);
-        } else {
-          this.inventory = {warehouse_id: this.warehouse_id, count: 0, reserved: 0};
-          countCtrl.setValue(0);
-          this.modifyInstance();
-        }
-      }
-    } else if (this.inventory) {
-      if (this.inventory && this.inventory.count !== countCtrl.value) {
-        this.inventory.count = countCtrl.value;
-        this.modifyInstance();
-      }
+
+    if (!this.proColorId || !this.productInstanceForm.controls['proColorId'].value ||
+      !this.size || !this.productInstanceForm.controls['size'].value ||
+      !this.warehouseId || !this.productInstanceForm.controls['warehouseId'].value
+    ) {
+      return;
     }
-  }
 
+
+    if (this.proColorId !== this.productInstanceForm.controls['proColorId'].value) {
+      this.changeColor(this.productInstanceForm.controls['proColorId'].value);
+      return;
+    }
+
+    if (this.size !== this.productInstanceForm.controls['size'].value) {
+
+      this.changeSize(this.productInstanceForm.controls['size'].value);
+      return;
+    }
+
+    if (this.warehouseId !== this.productInstanceForm.controls['warehouseId'].value) {
+
+      this.changeWarehouse(this.productInstanceForm.controls['warehouseId'].value);
+      return;
+    }
+
+
+
+  }
   modifyInstance() {
+
+    const foundInstance = this.product.instances.find(x => x.product_color_id === this.proColorId && x.size === this.size);
+    const inventory = foundInstance.inventory.find(x => x.warehouse_id === this.warehouseId);
+
+    if (Number.parseInt(this.productInstanceForm.controls['count'].value) < inventory.reserved) {
+      this.openSnackBar('تعداد نمی تواند کمتر از مقدار رزرو شده باشد');
+      return;
+    }
+
+    this.submitShouldBeDisabled = true;
+    this.progeressService.enable();
+
     this.httpService.post('product/instance/inventory', {
       id: this.product._id,
-      productInstanceId: this.instanceId,
-      warehouseId: this.warehouse_id,
-      count: this.inventory.count,
-      reserved: this.inventory.reserved,
-      price: this.productInstanceForm.controls['price'].value !== this.product.base_price ? this.productInstanceForm.controls['price'].value : null,
-    })
-      .subscribe(() => {
-          console.log('inventory count changed');
-          const i = this.product.instances.find(r => r._id === this.instanceId);
-          const w = i ? i.inventory.find(r => r.warehouse_id = this.warehouse_id) : null;
-          if (w) {
-            w.count = this.inventory.count;
-          } else if (i) {
-            i.inventory.push({
-              warehouse_id: this.warehouse_id,
-              count: this.inventory.count,
-              reserved: this.inventory.reserved
-            });
-          }
-        },
-        err => console.error(err)
-      );
+      productInstanceId: foundInstance._id,
+      warehouseId: this.warehouseId,
+      count: this.productInstanceForm.controls['count'].value,
+      price: this.productInstanceForm.controls['price'].value
+    }).subscribe(res => {
+
+      inventory.count = this.productInstanceForm.controls['count'].value;
+      foundInstance.price = this.productInstanceForm.controls['price'].value;
+
+      this.submitShouldBeDisabled = false;
+      this.progeressService.disable();
+
+      this.openSnackBar('تغییرات با موفقیت ثبت شد');
+
+    }, err => {
+      this.submitShouldBeDisabled = false;
+      this.progeressService.disable();
+      this.openSnackBar('خطا در ثبت تغییرات');
+
+    });
+
+
+
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 2000,
+    });
   }
 }

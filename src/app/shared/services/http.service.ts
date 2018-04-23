@@ -6,6 +6,7 @@ import {Observable} from 'rxjs/Observable';
 @Injectable()
 export class HttpService {
 
+  public static PRODUCT_IMAGE_PATH = '/images/product-image/';
   public static Host = 'http://localhost:3000';
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {

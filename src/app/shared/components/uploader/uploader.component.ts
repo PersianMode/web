@@ -22,28 +22,42 @@ export class UploaderComponent implements OnInit, OnDestroy {
   };
 
   _additionalData = {};
-  @Output() OnCompleted = new EventEmitter<any[]>();
-
-  private results: any[] = [];
+  @Output() OnCompleted = new EventEmitter<any>();
 
   constructor() {
   }
 
   ngOnInit(): void {
+
     this.uploader = new FileUploader({url: 'api/' + this.url});
+
     this.enabled = true;
 
+    this.setEvents();
+
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.url && changes.url.currentValue) {
+      this.uploader = new FileUploader({url: 'api/' + this.url});
+      this.setEvents();
+    }
+
+  }
+
+  setEvents() {
+
+    let results: string[] = [];
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       const result = JSON.parse(response);
-      this.results.push(result);
+      if (result)
+        results.push(result);
+
     };
 
     this.uploader.onCompleteAll = () => {
-      if (Math.max(...this.results.map(el => Object.keys(el).length)) === 1)
-        this.results = this.results.map(el => el.downloadURL);
-
-      this.OnCompleted.emit(this.results);
-      this.results = [];
+      this.OnCompleted.emit(this.single ? results[0] : results);
+      results = [];
     };
 
     this.uploader.onAfterAddingFile = () => {
@@ -51,7 +65,7 @@ export class UploaderComponent implements OnInit, OnDestroy {
         if (this.uploader.queue.length > 1) {
           this.uploader.removeFromQueue(this.uploader.queue[0]);
         }
-      }
+      } 
     };
 
     this.uploader.onBuildItemForm = (fileItem, form) => {

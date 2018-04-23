@@ -15,6 +15,7 @@ body, label {
   direction: rtl;
 }
 
+
 a {
   text-decoration: none;
   outline: none;
@@ -864,6 +865,10 @@ mat-panel-title {
 
 .inner-placement-div {
   margin: 10px;
+}
+
+.mat-chip-list-wrapper {
+  display: inline !important;
 }
 
 .mat-slide-toggle-bar {
