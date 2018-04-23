@@ -35,6 +35,7 @@ import {OtherDetailsComponent} from './login/components/other-details/other-deta
 import {RouterModule} from '@angular/router';
 import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 import {AuthGuard} from './auth.guard';
+import {OrderLinesComponent} from './profile/components/order-lines/order-lines.component';
 
 @NgModule({
   imports: [
@@ -78,6 +79,7 @@ import {AuthGuard} from './auth.guard';
     UpsertAddressComponent,
     GenDialogComponent,
     OtherDetailsComponent,
+    OrderLinesComponent,
   ],
   entryComponents: [GenDialogComponent],
   providers: [AuthGuard]

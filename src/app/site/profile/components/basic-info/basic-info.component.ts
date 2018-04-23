@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
 import * as moment from 'jalali-moment';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -15,6 +15,7 @@ export class BasicInfoComponent implements OnInit {
   @ViewChild('new_pass') newPass: ElementRef;
   @ViewChild('retype_pass') retypePass: ElementRef;
   @Input() isEdit = false;
+  @Output('formTitle') formTitle = new EventEmitter();
   isChangePass = false;
   customerBasicInfo: any;
   userGender;
@@ -24,7 +25,7 @@ export class BasicInfoComponent implements OnInit {
   changePassForm: FormGroup;
   nationalIdDisabled = false;
   anyChanges = false;
-  formTitle = '';
+  title = '';
   seen = {};
   curFocus = null;
   changeed_pass_obj = {
@@ -44,13 +45,14 @@ export class BasicInfoComponent implements OnInit {
   ngOnInit() {
     this.anyChanges = false;
     this.changeDobFlag = false;
-    this.formTitle = 'اطلاعات مشتری';
     this.customerBasicInfo = this.authService.userDetails;
     this.formatDob();
     this.userNationalId = this.customerBasicInfo.national_id ? this.customerBasicInfo.national_id : '-';
     this.userGender = this.customerBasicInfo.gender === 'f' ? 'خانم ' : 'آقای ';
     this.nationalIdDisabled = this.userNationalId === '-' || !this.userNationalId ? false : true;
     this.changedDob = this.customerBasicInfo.dob;
+    this.title = 'پروفایل کاربری';
+    this.formTitle.emit(this.title);
   }
 
   private formatDob() {
@@ -61,7 +63,7 @@ export class BasicInfoComponent implements OnInit {
   dobChange(dob) {
     this.changeDobFlag = false;
     this.changedDob = dob;
-    this.formatDob();
+    // this.formatDob();
     if (moment(this.customerBasicInfo.dob).format('YYYY-MM-DD') !== moment(this.changedDob).format('YYYY-MM-DD')) {
       this.changeDobFlag = true;
     }
@@ -97,8 +99,9 @@ export class BasicInfoComponent implements OnInit {
 
   goToEditForm() {
     this.isEdit = true;
-    this.formTitle = 'ویرایش اطلاعات';
     this.initForm();
+    this.title = 'ویرایش اطلاعات';
+    this.formTitle.emit(this.title);
   }
 
   submitEditInfo() {
@@ -155,17 +158,19 @@ export class BasicInfoComponent implements OnInit {
     this.errorMsgOld = 'رمز عبور فعلی را وارد کنید (حداقل 8 کاراکتر)';
     this.errorMsgNew = 'رمز عبور جدید را وارد کنید (حداقل 8 کاراکتر)';
     this.errorMsgRetype = 'رمز عبور جدید را دوباره وارد کنید (حداقل 8 کاراکتر)';
-    this.formTitle = 'تغییر کلمه عبور';
     this.isChangePass = true;
     this.initChangePassForm();
     Object.keys(this.changePassForm.controls).forEach(el => {
       this.seen[el] = false;
     });
+    this.title = 'تغییر کلمه عبور';
+    this.formTitle.emit(this.title);
   }
 
   initChangePassForm() {
     // TODO set form fiels with change_pass_obj if they have value(insted of set null every time)
-    this.formTitle = 'تغییر کلمه عبور';
+    // this.title = 'تغییر کلمه عبور < اطلاعات مشتری';
+    // this.formTitle.emit(this.title);
     this.changePassForm = new FormBuilder().group({
       oldPass: [null, [
         Validators.required,
