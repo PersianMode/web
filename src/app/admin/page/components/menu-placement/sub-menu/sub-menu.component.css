@@ -56,3 +56,9 @@
 .selected-item {
   background-color: rgba(176,182,180,0.68);
 }
+
+.empty-column {
+  background-color: rgba(176,182,180,0.68);
+  width: 20px;
+  height: 100px;
+}

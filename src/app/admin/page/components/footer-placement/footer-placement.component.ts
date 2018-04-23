@@ -156,10 +156,10 @@ export class FooterPlacementComponent implements OnInit {
 
     // Check newEmptyColumn
     const virtualColumn = Math.max(...Object.keys(this.siteLinkItems).map(el => parseInt(el, 10))) + 1;
-    let rowCounter = 1;
+    let virtualRowCounter = 1;
     this.newEmptyColumn.forEach(placement => {
       placement.info.column = virtualColumn;
-      placement.info.row = (rowCounter++);
+      placement.info.row = (virtualRowCounter++);
     });
 
     placementList = placementList.concat(this.newEmptyColumn);
@@ -538,6 +538,9 @@ export class FooterPlacementComponent implements OnInit {
   }
 
   addColumnDisability() {
-    return this.hasNewColumn;
+    if (!Object.keys(this.siteLinkItems).length)
+      return true;
+    const lastColumn = Math.max(...Object.keys(this.siteLinkItems).map(el => parseInt(el, 10)));
+    return this.hasNewColumn || !this.siteLinkItems[lastColumn].length;
   }
 }
