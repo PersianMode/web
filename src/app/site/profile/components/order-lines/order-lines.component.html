@@ -8,7 +8,7 @@
         <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column" dir="rtl">
             <div fxFlex="25">
                 <a (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">
-                    <img src="ol.product.colors[0].image.thumbnail"
+                    <img [src]="ol.boughtColor.image.thumbnail"
                          style=" cursor: pointer; width: 100%; height: 100%">
                 </a>
             </div>

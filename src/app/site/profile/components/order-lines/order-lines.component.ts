@@ -49,6 +49,7 @@ export class OrderLinesComponent implements OnInit {
     arr.forEach( el => {
       let boughtColor =  el.product.colors.find( c => c._id === el.product_instance.product_color_id);
       el.boughtColor = boughtColor;
+      console.log('--->', boughtColor.image.thumbnail);
     });
   }
 
