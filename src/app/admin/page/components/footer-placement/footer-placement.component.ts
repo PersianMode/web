@@ -224,10 +224,6 @@ export class FooterPlacementComponent implements OnInit {
     )
   }
 
-  getItemInfo(type, isAdd = false) {
-
-  }
-
   checkSocialchanges() {
     this.socialAnyChanges = false;
 
@@ -235,7 +231,9 @@ export class FooterPlacementComponent implements OnInit {
       this.socialAnyChanges = true;
     if (this.selectedSocialNetwork._id) {
       const socialObj = this.socialLinkItems.find(el => el._id === this.selectedSocialNetwork._id);
-      if (socialObj.href.trim() !== this.selectedSocialNetwork.href.trim())
+      const href1 = socialObj.info.href ? socialObj.info.href.trim() : '';
+      const href2 = this.selectedSocialNetwork.href ? this.selectedSocialNetwork.href.trim() : '';
+      if (href1 !== href2)
         this.socialAnyChanges = true;
     }
   }
