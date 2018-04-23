@@ -21,6 +21,22 @@
     background: #888;
 }
 
+.action-button {
+    text-align: center;
+    padding: 1px;
+    background-color: black;
+    color: white;
+    /*height: 30px !important;*/
+    border: 0;
+    margin: 1px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    line-height: 30px
+}
+
+.submit-cancel-change-btn {
+    width: 100%;
+}
 
 @media (min-width: 600px) {
     .btn-container{

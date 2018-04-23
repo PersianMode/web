@@ -51,7 +51,7 @@ export class BasicInfoComponent implements OnInit {
     this.userGender = this.customerBasicInfo.gender === 'f' ? 'خانم ' : 'آقای ';
     this.nationalIdDisabled = this.userNationalId === '-' || !this.userNationalId ? false : true;
     this.changedDob = this.customerBasicInfo.dob;
-    this.title = 'پروفایل کاربری';
+    this.title = 'اطلاعات کاربر';
     this.formTitle.emit(this.title);
   }
 

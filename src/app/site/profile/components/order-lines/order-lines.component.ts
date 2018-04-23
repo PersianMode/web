@@ -27,6 +27,8 @@ export class OrderLinesComponent implements OnInit {
     this.orderInfo = this.profileOrderService.orderData;
     this.orderLines = this.orderInfo.dialog_order.order_lines;
     this.removeDuplicates(this.orderLines);
+    this.findBoughtColor(this.noDuplicateOrderLine);
+    console.log('removeDuplicatesArray : ' , this.noDuplicateOrderLine);
   }
 
   removeDuplicates(arr) {
@@ -40,6 +42,13 @@ export class OrderLinesComponent implements OnInit {
       else {
         this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
       }
+    });
+  }
+
+  findBoughtColor(arr) {
+    arr.forEach( el => {
+      let boughtColor =  el.product.colors.find( c => c._id === el.product_instance.product_color_id);
+      el.boughtColor = boughtColor;
     });
   }
 
@@ -67,11 +76,11 @@ export class OrderLinesComponent implements OnInit {
     let tickets = [];
 
     tickets = orderLine.tickets;
-    switch (tickets[0].status) {
+    switch (tickets[tickets.length - 1].status) {
       case 1:
         this.statusText = 'درحال پردازش'
         break;
-      case 2:
+      case 9:
         this.statusText = 'تحویل شده'
         break;
       default:
