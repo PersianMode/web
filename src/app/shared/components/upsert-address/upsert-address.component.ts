@@ -147,7 +147,7 @@ export class UpsertAddressComponent implements OnInit {
       };
     }
     this.checkoutService.submitAddresses(this.addressData)
-      .then(res => {
+      .then(() => {
         this.onClose();
       })
       .catch(err => {
@@ -271,7 +271,7 @@ export class UpsertAddressComponent implements OnInit {
         || (postal_code !== this.addressData.postal_code && (postal_code !== '' || this.addressData.postal_code !== null))
         || (latitude !== this.addressData.loc.lat && (latitude !== '' || this.addressData.loc.lat !== null))
         || (longitude !== this.addressData.loc.long && (longitude !== '' || this.addressData.loc.long !== null))) {
-            this.anyChanges = true;
+        this.anyChanges = true;
       }
     }
   }

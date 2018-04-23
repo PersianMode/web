@@ -57,7 +57,7 @@ export class CheckoutService {
     };
   }
 
-  submitAddresses(data) {
+  submitAddresses(data): Promise<any> {
     if (!data)
       return Promise.reject('');
 
