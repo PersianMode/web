@@ -1,8 +1,7 @@
 <mat-card class="card-view">
     <mat-card-header style="direction:rtl">
         <mat-card-title>
-            <div *ngIf="!productId"><b>افزودن محصول جدید</b></div>
-            <div *ngIf="productId"><b>ویرایش محصول</b></div>
+            <div ><b>ویرایش محصول</b></div>
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
@@ -62,19 +61,9 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="field-container" dir="rtl">
-                <mat-input-container class="field">
-                            <textarea matInput placeholder="توضیحات" formControlName="desc" role="desc"
-                                      tabindex="5"></textarea>
-                    <mat-hint>حداکثر تا 500 کاراکتر وارد کنید</mat-hint>
-                    <mat-error *ngIf="productBasicForm.controls['desc'].hasError('maxlength')">تعداد
-                        کاراکترهای وارد شده بیش از تعداد مجاز می باشد
-                    </mat-error>
-                </mat-input-container>
-            </div>
             <div role="submit-button" style="text-align: left">
                 <button mat-icon-button type="submit"
-                        [disabled]="upsertBtnShouldDisabled || (!productBasicForm.valid) || (productId && !anyChanges)"
+                        [disabled]="upsertBtnShouldDisabled || (!productBasicForm.valid) || (product._id && !anyChanges)"
                         tabindex="6" color="accent">
                     <mat-icon aria-label="accept">done</mat-icon>
                 </button>

@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {isUndefined} from 'util';
 import {MatDialog, MatSnackBar} from '@angular/material';
@@ -16,116 +16,106 @@ import {IType} from '../../interfaces/itype';
   templateUrl: './product-basic-form.component.html',
   styleUrls: ['./product-basic-form.component.css']
 })
-export class ProductBasicFormComponent implements OnInit, OnDestroy {
-  productBasicForm: FormGroup;
+export class ProductBasicFormComponent implements OnInit, OnChanges, OnDestroy {
+
+  productBasicForm: FormGroup = null;
   upsertBtnShouldDisabled = false;
   deleteBtnShouldDisabled = false;
   anyChanges = false;
-  originalProduct: any = {};
+  originalProduct: any = null;
 
-
-  @Input() productId: string;
-  @Input() brands: IBrand[];
-  @Input() types: IType[];
-
-  @Output() productIdEvent = new EventEmitter<string>();
-  @Output() productTags = new EventEmitter<string>();
+  @Input() brands: IBrand[] = null;
+  @Input() types: IType[] = null;
+  @Input() product: any = null;
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar, private router: Router,
-              public dialog: MatDialog, private progressService: ProgressService) {
+    public dialog: MatDialog, private progressService: ProgressService) {
   }
 
   ngOnInit() {
     this.initForm();
-    if (this.productId) {
-      this.progressService.enable();
-      this.httpService.get(`/product/${this.productId}`).subscribe(
-        (data) => {
-          this.productTags.emit(data.tags);
-          this.originalProduct = data;
-          this.productBasicForm.controls['name'].setValue(data.name);
-          this.productBasicForm.controls['base_price'].setValue(data.base_price);
-          this.productBasicForm.controls['product_type'].setValue(data.product_type.product_type_id);
-          this.productBasicForm.controls['brand'].setValue(data.brand.brand_id);
-          this.progressService.disable();
-        },
-        (err) => {
-          this.progressService.disable();
-          console.error('Cannot get product info... Error: ', err);
-        }
-      );
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+
+    if (this.product && this.product._id) {
+
+      if (!this.productBasicForm) {
+        this.initForm();
+      }
+
+      this.originalProduct = Object.assign({}, this.product);
+      this.productBasicForm.controls['name'].setValue(this.product.name);
+      this.productBasicForm.controls['base_price'].setValue(this.product.base_price);
+      this.productBasicForm.controls['product_type'].setValue(this.product.product_type.product_type_id);
+      this.productBasicForm.controls['brand'].setValue(this.product.brand.brand_id);
+
     }
 
   }
 
   initForm() {
     this.productBasicForm = new FormBuilder().group({
-        name: [null, [
-          Validators.required,
-        ]],
-        base_price: [null, [
-          Validators.required,
-        ]],
-        product_type: [null, [
-          Validators.required,
-        ]],
-        brand: [null, [
-          Validators.required,
-        ]],
-        desc: [null, [
-          Validators.maxLength(500),
-        ]]
-      },
+      name: [null, [
+        Validators.required,
+      ]],
+      base_price: [null, [
+        Validators.required,
+      ]],
+      product_type: [null, [
+        Validators.required,
+      ]],
+      brand: [null, [
+        Validators.required,
+      ]]
+    },
       {
         validator: this.basicInfoValidation
       });
 
     this.productBasicForm.valueChanges.subscribe(
       (dt) => this.fieldChanged(),
-      (er) => console.error('Error when subscribing on collection-basic-form valueChanges: ', er)
+      (er) => console.error(er)
     );
   }
 
   modifyProduct() {
     const productBasicInfo = {
-      id: this.productId,
+      id: this.product._id,
       name: this.productBasicForm.controls['name'].value,
       base_price: this.productBasicForm.controls['base_price'].value,
       product_type: this.productBasicForm.controls['product_type'].value,
       brand: this.productBasicForm.controls['brand'].value,
-      desc: this.productBasicForm.controls['desc'].value,
     };
-    if (!this.productId) {
-      delete productBasicInfo.id;
-    }
     this.upsertBtnShouldDisabled = false;
     this.deleteBtnShouldDisabled = false;
 
 
-    const exec = this.productId ? this.httpService.post('product', productBasicInfo) : this.httpService.put('product', productBasicInfo);
+    const exec = this.httpService.post('product', productBasicInfo);
 
     exec.subscribe(
       (data) => {
-        this.snackBar.open(`Product is ${this.productId ? 'updated' : 'added' }`, null, {
+        this.snackBar.open(`Product is updated`, null, {
           duration: 2300,
         });
+
+        this.product.name = productBasicInfo.name;
+        this.product.base_price = productBasicInfo.base_price;
+        this.product.brand = this.brands.find(x => x._id === productBasicInfo.brand);
+        this.product.product_type = this.types.find(x => x._id === productBasicInfo.product_type);
 
         this.upsertBtnShouldDisabled = true;
         this.deleteBtnShouldDisabled = true;
         this.anyChanges = false;
 
-        if (!this.productId) {
-          this.productId = data._id;
-          this.productIdEvent.emit(this.productId);
-        }
       },
       (err) => {
         console.error();
-        this.snackBar.open(`Cannot ${this.productId ? 'update' : 'add' } this product. Try again`, null, {
+        this.snackBar.open(`Cannot update this product. Try again`, null, {
           duration: 3200,
         });
         this.upsertBtnShouldDisabled = true;
         this.deleteBtnShouldDisabled = true;
+        this.anyChanges = false;
       }
     );
   }
@@ -144,7 +134,6 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
                 duration: 2000,
               });
               this.progressService.disable();
-              this.productId = null;
               this.router.navigate(['agent/products']);
             },
             (error) => {
@@ -167,21 +156,28 @@ export class ProductBasicFormComponent implements OnInit, OnDestroy {
       return;
     }
     this.anyChanges = false;
-    let name = (this.productBasicForm.controls['name'].value === null ||
-      isUndefined(this.productBasicForm.controls['name'].value)) ? '' : this.productBasicForm.controls['name'].value;
-    name = name.trim();
+    const name = this.productBasicForm.controls['name'].value ? this.productBasicForm.controls['name'].value : '';
+    
+    const base_price = this.productBasicForm.controls['base_price'].value ? this.productBasicForm.controls['base_price'].value : '';
+    
+    const brand_id = this.productBasicForm.controls['brand'].value;
 
-    const base_price = (this.productBasicForm.controls['base_price'].value === null ||
-      isUndefined(this.productBasicForm.controls['base_price'].value)) ? '' : this.productBasicForm.controls['base_price'].value;
+    const product_type_id = this.productBasicForm.controls['product_type'].value;
 
-    let orig_name = this.originalProduct.name;
-    orig_name = orig_name.trim();
+    const orig_name = this.originalProduct.name;
 
-    let orig_base_price = this.originalProduct.base_price;
-    orig_base_price = orig_name.trim();
+    const orig_base_price = this.originalProduct.base_price;
+
+    const orig_product_type_id = this.originalProduct.product_type.product_type_id;
+
+    const orig_brand_id = this.originalProduct.brand.brand_id;
+    
 
     if ((name !== orig_name && (name !== '' || orig_name !== null)) ||
-      (base_price !== orig_base_price && (base_price !== '' || orig_base_price !== null))) {
+      (base_price !== orig_base_price && (base_price !== '' || orig_base_price !== null)) ||
+      (orig_brand_id !== brand_id) ||
+      (orig_product_type_id !== product_type_id)
+    ) {
       this.anyChanges = true;
     }
   }

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PageBasicInfoComponent } from './page-basic-info.component';
+import { ProductColorEditComponent } from './product-color-edit.component';
 
-describe('CollectionBasicFormComponent', () => {
-  let component: PageBasicInfoComponent;
-  let fixture: ComponentFixture<PageBasicInfoComponent>;
+describe('ProductColorEditComponent', () => {
+  let component: ProductColorEditComponent;
+  let fixture: ComponentFixture<ProductColorEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageBasicInfoComponent ]
+      declarations: [ ProductColorEditComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PageBasicInfoComponent);
+    fixture = TestBed.createComponent(ProductColorEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

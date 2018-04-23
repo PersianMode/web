@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {PaymentType} from '../../../shared/enum/payment.type.enum';
 import {CheckoutService} from '../../../shared/services/checkout.service';
+import {HttpService} from '../../../shared/services/http.service';
+import {CartService} from '../../../shared/services/cart.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -16,7 +18,7 @@ export class CheckoutPageComponent implements OnInit {
   loyaltyPoint = 0;
   paymentType = PaymentType;
 
-  constructor(private checkoutService: CheckoutService) {
+  constructor(private checkoutService: CheckoutService, private httpService: HttpService, private cartService: CartService) {
   }
 
   ngOnInit() {
@@ -56,5 +58,14 @@ export class CheckoutPageComponent implements OnInit {
       }
         break;
     }
+  }
+
+  sudoVerify() {
+   this.httpService.post('order/verify', {
+     orderId: this.cartService.cartItems.getValue()[0].order_id,
+     transactionId: '5aca291155b58d09189ab885',
+     usedBalance: this.usedBalance,
+     usedPoints: this.usedLoyaltyPoint
+   });
   }
 }

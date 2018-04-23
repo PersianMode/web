@@ -16,6 +16,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input() price;
   @Input() sub;
   @Output() changeSize = new EventEmitter<any>();
+
   @Input()
   set id(value) {
     this._id = value;
@@ -38,6 +39,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   productSize;
   addCardBtnDisabled = true;
   focused: any = {};
+  gender: String = '';
 
   @Input()
   set selectedProductColorID(id) {
@@ -68,6 +70,9 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked() {
+    if (this.product.id) {
+      this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER');
+    }
     this.onScroll();
   }
 
