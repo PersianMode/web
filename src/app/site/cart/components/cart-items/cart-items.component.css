@@ -117,3 +117,7 @@ section {
   margin: 5px;
   border: rgba(255,0,0,.4) dashed 2px;
 }
+
+img[src=""] {
+  content:url("data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
+}

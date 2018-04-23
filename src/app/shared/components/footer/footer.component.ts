@@ -75,8 +75,6 @@ export class FooterComponent implements OnInit {
     }).map(el => {
       return {text: el.info.text + ' icons', href: el.info.href};
     });
-
-    console.log('social links: ', this.footerSocialNetworkItems);
   }
 
   getKeyList(list) {
