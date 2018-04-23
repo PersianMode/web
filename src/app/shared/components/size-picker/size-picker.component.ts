@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import {DictionaryService} from '../../services/dictionary.service';
 import {HttpService} from '../../services/http.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-size-picker',
@@ -16,6 +17,7 @@ import {HttpService} from '../../services/http.service';
 export class SizePickerComponent implements OnInit {
   sizeSplits = [];
   @Input() gender: String = 'MENS';
+  isShoes = true;
   isEU = true;
   productSize;
 
@@ -23,13 +25,15 @@ export class SizePickerComponent implements OnInit {
   @Input()
   set sizes(productSizes) {
     this.productSize = productSizes;
+    if (this.productSize)
+      this.isShoes = this.productSize[0].value !== this.USToEU(this.productSize[0].value);
     this.setProductSize(productSizes);
   }
 
   @Output('value') value = new EventEmitter();
   val = '';
 
-  constructor(private dict: DictionaryService, private httpService: HttpService) {
+  constructor(private dict: DictionaryService, private httpService: HttpService, private auth: AuthService) {
   }
 
   ngOnInit() {
@@ -72,13 +76,26 @@ export class SizePickerComponent implements OnInit {
   }
 
   getUserSizeType() {
-    // get user size type
-    // set isEU
+    this.httpService.get(`customer/shoesType`).subscribe(res => {
+      if (!res.shoesType) {
+        this.isEU = false;
+      } else {
+        this.isEU = res.shoesType === 'EU';
+      }
+      this.setProductSize(this.productSize);
+    }, err => {
+      console.error(err);
+    });
   }
 
   changeSizeType() {
     this.isEU = !this.isEU;
     this.setProductSize(this.productSize);
-    // TODO: post user size type
+    const shoesType = this.isEU ? 'EU' : 'US';
+    if (this.auth.isLoggedIn.getValue()) {
+      this.httpService.post(`customer/shoesType`, {shoesType})
+        .subscribe(() => {
+        });
+    }
   }
 }
