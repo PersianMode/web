@@ -1,6 +1,5 @@
 <mat-card class="customer-data" *ngIf="!isEdit && !isChangePass">
     <mat-card-content>
-        <h3>{{formTitle}}</h3>
         <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
             <div fxFlex="50" class="info-cell"><b>نام : {{customerBasicInfo.name}}</b></div>
             <div fxFlex="50" class="info-cell"><b>نام خانوادگی: {{customerBasicInfo.surname}}</b></div>
@@ -18,7 +17,7 @@
                 اطلاعات
             </button>
             <button mat-button fxFlex="50" class="action-button" (click)="goToChangePassForm()">
-                تغییر رمز عبور
+                تغییر کلمه عبور
             </button>
         </div>
     </mat-card-content>
@@ -30,7 +29,6 @@
                 <div fxFlex="10" fxFlex.sm="5" fxFlex.xs="0">&nbsp;</div>
                 <div fxLayout="column" fxFlex=80 fxFlex.sm=90 fxFlex.xs=100
                      dir="rtl">
-                    <h3>{{formTitle}}</h3>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
                         <div fxFlex="15" class="input-label"><span>نام</span>
                         </div>
@@ -124,7 +122,6 @@
             <div fxLayout="row">
                 <div fxFlex="20" fxFlex.sm="15" fxFlex.xs="0">&nbsp;</div>
                 <div fxLayout="column" fxFlex=60 fxFlex.sm=90 fxFlex.xs=100 dir="rtl">
-                    <h3>{{formTitle}}</h3>
                     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
                         <div fxFlex="50" class="change-pass-input-label">
                             <span>کلمه عبور فعلی را وارد کنید</span>

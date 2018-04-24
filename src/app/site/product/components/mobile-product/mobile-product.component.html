@@ -9,11 +9,11 @@
   </div>
 </swiper>
 <div *ngIf="product.colors" class="colors">
-  <div [style.width]="(product.colors.length * 131) + 'px'">
+  <div [style.width]="(product.colors.length * 136) + 'px'">
     <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
       <span style="margin:0">
         <p *ngIf="item.soldOut" class="soldOut">موجود نیست</p>
-        <img [style.opacity]="selectedProductColor && item._id === selectedProductColor._id ? 1 : .5"
+        <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id"
            src="{{item.image.thumbnail}}">
     </span>
     </a>

@@ -2,16 +2,11 @@ import {
   Component,
   OnInit,
   Output,
-  ViewChild,
   EventEmitter,
   Input,
-  OnChanges,
-  SimpleChanges,
-  SimpleChange
 } from '@angular/core';
-import {isUndefined, log} from 'util';
 import {DictionaryService} from '../../services/dictionary.service';
-import {sizeOptionsEnum} from '../../enum/sizeOptions.enum';
+import {HttpService} from '../../services/http.service';
 
 @Component({
   selector: 'app-size-picker',
@@ -20,14 +15,42 @@ import {sizeOptionsEnum} from '../../enum/sizeOptions.enum';
 })
 export class SizePickerComponent implements OnInit {
   sizeSplits = [];
+  @Input() gender: String = 'MENS';
+  isEU = true;
+  productSize;
+
 
   @Input()
   set sizes(productSizes) {
+    this.productSize = productSizes;
+    this.setProductSize(productSizes);
+  }
+
+  @Output('value') value = new EventEmitter();
+  val = '';
+
+  constructor(private dict: DictionaryService, private httpService: HttpService) {
+  }
+
+  ngOnInit() {
+    this.getUserSizeType();
+  }
+
+  onChange(e) {
+    this.val = e.value;
+    this.value.emit(this.val);
+  }
+
+  setProductSize(productSizes) {
     const temp = [];
     Object.assign(temp, productSizes);
     if (productSizes && productSizes.length) {
       productSizes.forEach((p, pi) => {
-        temp[pi].displayValue = this.dict.translateWord(p.value);
+        if (!this.isEU)
+          temp[pi].displayValue = this.dict.translateWord(p.value);
+        else {
+          temp[pi].displayValue = this.dict.translateWord(this.USToEU(p.value));
+        }
       });
     }
     this.sizeSplits = [];
@@ -36,46 +59,26 @@ export class SizePickerComponent implements OnInit {
     }
   }
 
-  @Output('value') value = new EventEmitter();
-  val = 0;
-
-  constructor(private dict: DictionaryService) {
+  USToEU(oldSize) {
+    let returnValue: any;
+    if (!this.gender || this.gender.toUpperCase() === 'MENS') {
+      returnValue = this.dict.shoesSizeMap.men.find(size => size.us === oldSize);
+    } else if (this.gender.toUpperCase() === 'WOMENS') {
+      returnValue = this.dict.shoesSizeMap.women.find(size => size.us === oldSize);
+    }
+    if (!returnValue || !returnValue.eu)
+      return oldSize;
+    return returnValue.eu;
   }
 
-  ngOnInit() {
+  getUserSizeType() {
+    // get user size type
+    // set isEU
   }
 
-  onChange(e) {
-    const sizeFirstCharCode = e.value.charCodeAt(0);
-    this.val = (sizeFirstCharCode >= 48 && sizeFirstCharCode <= 57) ? +e.value : e.value;
-    this.value.emit(this.val);
-
-    // if ( +e.value > 0 ) {
-    //   this.val = +e.value;
-    //   this.value.emit(+e.value);
-    // }
-    // else {
-    //   this.val = e.value;
-    //   // this.value.emit(e.value);
-    //   let tempEmitValue = e.value;
-    //   switch (e.value) {
-    //     case 'XS' :
-    //       tempEmitValue = sizeOptionsEnum.XS;
-    //       break;
-    //     case 'S' :
-    //       tempEmitValue = sizeOptionsEnum.S;
-    //       break;
-    //     case 'M' :
-    //       tempEmitValue = sizeOptionsEnum.M;
-    //       break;
-    //     case 'L' :
-    //       tempEmitValue = sizeOptionsEnum.L;
-    //       break;
-    //     case 'XL' :
-    //       tempEmitValue = sizeOptionsEnum.XL;
-    //       break;
-    //   }
-    //   this.value.emit(tempEmitValue);
-    // }
+  changeSizeType() {
+    this.isEU = !this.isEU;
+    this.setProductSize(this.productSize);
+    // TODO: post user size type
   }
 }

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DemoPanelComponent } from './demo-panel.component';
+import { OrderLinesComponent } from './order-lines.component';
 
-describe('DemoPanelComponent', () => {
-  let component: DemoPanelComponent;
-  let fixture: ComponentFixture<DemoPanelComponent>;
+describe('OrderLinesComponent', () => {
+  let component: OrderLinesComponent;
+  let fixture: ComponentFixture<OrderLinesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DemoPanelComponent ]
+      declarations: [ OrderLinesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DemoPanelComponent);
+    fixture = TestBed.createComponent(OrderLinesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

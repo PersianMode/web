@@ -7,6 +7,7 @@ import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-hand
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
 import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 import {AuthGuard} from './auth.guard';
+import {OrderLinesComponent} from './profile/components/order-lines/order-lines.component';
 
 const Site_ROUTES: Routes = [
   {
@@ -23,6 +24,7 @@ const Site_ROUTES: Routes = [
     {path: 'checkout', loadChildren: 'app/site/checkout/checkout.module#CheckoutModule'},
     {path: 'checkout/address', component: UpsertAddressComponent},
     {path: 'profile', loadChildren: 'app/site/profile/profile.module#ProfileModule', canActivate: [AuthGuard]},
+    {path: 'profile/orderlines', component: OrderLinesComponent}
   ]
   }
 ];

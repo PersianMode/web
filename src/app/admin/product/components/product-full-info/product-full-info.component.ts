@@ -5,6 +5,7 @@ import {IType} from '../../interfaces/itype';
 import {IColor} from '../../interfaces/icolor';
 import {IBrand} from '../../interfaces/ibrand';
 import {IWarehouse} from '../../interfaces/iwarehouse';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 // TODO: // import {IProductColor} from '../../interfaces/iproduct-color';
 
@@ -17,18 +18,12 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
 
   productId: string;
   product: any = {};
-  productColors: any;
   types: IType[];
   brands: IBrand[];
   warehouses: IWarehouse[];
-  tags: any;
 
-  constructor(private httpService: HttpService, private route: ActivatedRoute) {
+  constructor(private httpService: HttpService, private route: ActivatedRoute, private progressService: ProgressService) {
 
-  }
-
-  setProductId($event) {
-    this.productId = $event;
   }
 
   ngOnInit() {
@@ -36,7 +31,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
       (params) => {
         this.productId = params['id'];
         if (this.productId)
-          this.getProductColors();
+          this.getProduct();
       });
 
     this.getTypes();
@@ -44,12 +39,20 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
     this.getWarehouses();
   }
 
-  getProductColors() {
-    this.httpService.get(`product/color/${this.productId}`).subscribe(res => {
-      this.productColors = res.colors;
-    }, err => {
-      console.error();
-    });
+
+  getProduct() {
+    this.progressService.enable();
+    this.httpService.get(`/product/${this.productId}`).subscribe(
+      (data) => {
+        this.product = data;
+        this.progressService.disable();
+      },
+      (err) => {
+        this.progressService.disable();
+        console.error('Cannot get product ... ', err);
+      }
+    );
+
   }
 
 
@@ -70,7 +73,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
   }
 
   getWarehouses(): any {
-    this.httpService.get(`warehouse`).subscribe(res => {
+    this.httpService.get(`warehouse/all`).subscribe(res => {
       this.warehouses = res;
     }, err => {
       console.error();
@@ -79,14 +82,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
+    this.product = null;
   }
 
-  setProductColors(productColors: any) {
-    this.productColors = productColors;
-  }
-
-  setProductTags(productTags: any) {
-    this.tags = productTags;
-
-  }
 }

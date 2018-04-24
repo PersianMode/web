@@ -3,15 +3,12 @@ import {HttpService} from './http.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
 import {DictionaryService} from './dictionary.service';
+import {imagePathFixer} from '../lib/imagePathFixer';
 
 const productColorMap = function (r) {
   return r.colors.map(c => c.name ? c.name.split('/')
       .map(x => x.replace(/\W/g, '')) // remove all non alpha-numeric chars from color name
     : []);
-};
-
-const addHost = function (r) {
-  return r.includes(HttpService.Host) ? r : HttpService.Host + r;
 };
 
 const newestSort = function (a, b) {
@@ -191,6 +188,10 @@ export class ProductService {
     data.sizesInventory = {};
     data.colors.forEach(item => {
       const angles = [];
+      const addHost = function (r) {
+        return imagePathFixer(r, data.id, item._id);
+      };
+
       item.image.angles.forEach(r => {
         if (!r.url) {
           const temp = {url: addHost(r), type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};

@@ -7,6 +7,8 @@ import {GenDialogComponent} from '../../shared/components/gen-dialog/gen-dialog.
 import {Router} from '@angular/router';
 import {DialogEnum} from '../../shared/enum/dialog.components.enum';
 import {MatDialog} from '@angular/material';
+import {HttpService} from '../../shared/services/http.service';
+import {imagePathFixer} from '../../shared/lib/imagePathFixer';
 
 @Component({
   selector: 'app-cart',
@@ -34,19 +36,21 @@ export class CartComponent implements OnInit, OnDestroy {
     );
 
     this.subs = this.cartService.cartItems.subscribe(data => {
-      this.products = data;
-      data.forEach(() => this.valid.push(true));
+      const prevProductCount = this.products.length;
+      this.products = [];
+      data.forEach(r => {
+        this.valid.push(true);
+        const temp: any = {};
+        Object.assign(temp, r);
+        temp.thumbnail = imagePathFixer( temp.thumbnail, temp.product_id, temp.color.id);
+        this.products.push(temp);
+      });
 
       if (this.products.length > 0) {
         this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
-
-        // this.totalPrice = this.products
-        //   .filter(el => el.count && el.quantity <= el.count)
-        //   .map(el => el.price * el.quantity)
-        //   .reduce((a, b) => a + b);
         this.totalPrice = this.cartService.calculateTotal();
         this.calculateDiscount();
-      } else {
+      } else if (prevProductCount) {
         this.router.navigate(['/']);
       }
     });
@@ -83,7 +87,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
         this.cartService.updateItem({
           pre_instance_id: currentProduct.instance_id,
-          instance_id: tempInstance ? tempInstance.instance_id : currentProduct.instance_id,
+          instance_id: tempInstance ? (tempInstance.instance_id || tempInstance._id) : currentProduct.instance_id,
           product_id: currentProduct.product_id,
           number: data.value.newQuantity,
         });

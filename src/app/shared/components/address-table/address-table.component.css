@@ -49,6 +49,9 @@ mat-card {
   width: calc(50% - 10px);
   padding-right: 10px;
 }
+.edit-button{
+  direction: ltr;
+}
 
 .newAddress-checkout {
   width: calc(49% - 10px);

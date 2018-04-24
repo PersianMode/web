@@ -24,17 +24,23 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.url && changes.url.currentValue) {
       this.uploader = new FileUploader({url: 'api/' + this.url});
+      this.setEvents();
     }
+  }
 
+  setEvents() {
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       const result = JSON.parse(response);
-      this.results.push(result);
+      if (result)
+        this.results.push(result);
+
     };
 
     this.uploader.onCompleteAll = () => {
       if (Math.max(...this.results.map(el => Object.keys(el).length)) === 1)
         this.results = this.results.map(el => el.downloadURL);
 
+      // Note: if it was 'single', the output is an array with one element, not only the element itself!
       this.OnCompleted.emit(this.results);
       this.results = [];
     };
@@ -48,9 +54,8 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     this.uploader.onBuildItemForm = (fileItem, form) => {
-      Object.keys(this.additionalData).forEach(e => {
-        form.append(e, this.additionalData[e]);
-      });
+      Object.keys(this.additionalData)
+        .forEach(e => form.append(e, this.additionalData[e]));
       return {fileItem, form};
     };
   }
@@ -61,6 +66,7 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     this.uploader = new FileUploader({url: 'api/' + this.url});
     this.enabled = true;
+    this.setEvents();
   }
 
   public fileOverBase(e: any): void {
