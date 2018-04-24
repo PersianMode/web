@@ -1,0 +1,40 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+    position: relative;
+    font-family: iranyekan, sans-serif;
+}
+
+.order-data {
+    margin-top: 5px;
+    font-family: iranyekan, sans-serif;
+}
+
+.order-data div {
+    text-align: right;
+}
+
+.order-data div span:nth-of-type(2) {
+    font-weight: bold;
+}
+
+.info-cell {
+    padding: 6px;
+}
+
+.eye-style {
+    text-align: left !important;
+    font-size: 18px;
+}
+mat-header-cell {
+  text-align: center;
+  font-size: 13px;
+    font-weight: bold;
+    color: #000;
+}
+
+mat-cell {
+    text-align: center;
+}
