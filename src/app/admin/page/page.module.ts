@@ -23,6 +23,7 @@ import {SubMenuComponent} from './components/menu-placement/sub-menu/sub-menu.co
 import {SliderPreviewComponent} from './components/slider-placement/slider-preview/slider-preview.component';
 import {EditPanelComponent} from './components/page-content-placement/edit-panel/edit-panel.component';
 import {ColorPickerModule} from 'primeng/primeng';
+import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import {ColorPickerModule} from 'primeng/primeng';
     MarkdownModule.forRoot(),
     DragulaModule,
     ColorPickerModule,
+    LMarkdownEditorModule,
   ],
   entryComponents: [
     EditPanelComponent,

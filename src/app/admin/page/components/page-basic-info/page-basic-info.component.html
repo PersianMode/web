@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../../../../../assets/css/agate.min.css">
 <mat-card class="card-view">
   <mat-card-header>
     <mat-card-title>
@@ -41,18 +42,21 @@
         </div>
       </div>
 
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+      <!--<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">-->
 
-        <mat-form-field class="example-full-width">
-          <textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down"></textarea>
-        </mat-form-field>
+      <!--<mat-form-field class="example-full-width">-->
+      <!--<textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down"></textarea>-->
+      <!--</mat-form-field>-->
+      <!--</div>-->
+      <!--<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">-->
+
+      <!--<markdown *ngIf="form.controls['content'].value" [data]="form.controls['content'].value"></markdown>-->
+
+      <!--</div>-->
+      <div>
+        <md-editor name="Content" formControlName="content"  [preRender]="preRenderFunc" [(ngModel)]="content" [height]="'200px'" [mode]="mode"
+                   [options]="options" required maxlength="5000"></md-editor>
       </div>
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
-
-        <markdown *ngIf="form.controls['content'].value" [data]="form.controls['content'].value"></markdown>
-
-      </div>
-
 
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
 
