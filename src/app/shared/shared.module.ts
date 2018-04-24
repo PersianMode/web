@@ -5,7 +5,7 @@ import {
   MatInputModule,
   MatMenuModule,
   MatOptionModule, MatRadioModule, MatSelectModule, MatStepperModule,
-  MatToolbarModule
+  MatToolbarModule, MatSnackBarModule,
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -58,6 +58,7 @@ import {DragulaModule} from 'ng2-dragula';
     MatCheckboxModule,
     FileUploadModule,
     MatStepperModule,
+    MatSnackBarModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),

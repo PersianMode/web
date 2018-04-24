@@ -90,7 +90,7 @@ section {
     max-width: calc(100% - 260px);
   }
   .soldOut {
-    transform: rotate(-45deg) translateY(30px);
+    transform: rotate(-45deg) translateY(30px) translateX(-26px);
   }
 }
 
