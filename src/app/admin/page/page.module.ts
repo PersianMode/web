@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
-  MatSnackBarModule, MatTabsModule
+  MatSnackBarModule, MatTabsModule, MatTooltipModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PageRouting} from './page.routing';
@@ -25,6 +25,7 @@ import {EditPanelComponent} from './components/page-content-placement/edit-panel
 import {ColorPickerModule} from 'primeng/primeng';
 import { AppSubMenuComponent } from './components/menu-placement/app-sub-menu/app-sub-menu.component';
 import { UploadImageDialogComponent } from './components/menu-placement/upload-image-dialog/upload-image-dialog.component';
+import { FooterPlacementComponent } from './components/footer-placement/footer-placement.component';
 
 @NgModule({
   declarations: [
@@ -41,10 +42,10 @@ import { UploadImageDialogComponent } from './components/menu-placement/upload-i
     EditPanelComponent,
     AppSubMenuComponent,
     UploadImageDialogComponent,
+    FooterPlacementComponent,
   ],
   imports: [
     PageRouting,
-    SharedModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -57,13 +58,13 @@ import { UploadImageDialogComponent } from './components/menu-placement/upload-i
     MatDialogModule,
     MatSelectModule,
     MatPaginatorModule,
-    MatSelectModule,
     MatTabsModule,
     MatCheckboxModule,
     SharedModule,
     MarkdownModule.forRoot(),
     DragulaModule,
     ColorPickerModule,
+    MatTooltipModule,
   ],
   entryComponents: [
     EditPanelComponent,

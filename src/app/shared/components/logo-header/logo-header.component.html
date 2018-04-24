@@ -1,0 +1,17 @@
+<nav class="first-bar">
+  <ul>
+    <li *ngFor="let logo of logos"
+        [ngStyle]="{width: logo.info.style && logo.info.style.width ? logo.info.style.width + 'px' : '60px'}">
+      <a [href]="logo.info.href || '#'"
+         class="gnav-member-bar"
+         [title]="logo.info.text">
+        <img
+          [src]="getURL(logo.info.imgUrl)" class="general"
+          [ngStyle]="{
+            top: (logo.info.style && logo.info.style.top ? -logo.info.style.top : 0)+ 'px',
+            right: (logo.info.style && logo.info.style.right ? -logo.info.style.right : 0) + 'px',
+            height: (logo.info.style && logo.info.style.height ? logo.info.style.height : 29) + 'px'
+          }"></a>
+    </li>
+  </ul>
+</nav>
