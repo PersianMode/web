@@ -56,7 +56,7 @@ export class UploaderComponent implements OnInit, OnDestroy {
     };
 
     this.uploader.onCompleteAll = () => {
-      this.OnCompleted.emit(this.single ? results[0] : results);
+      this.OnCompleted.emit(results);
       results = [];
     };
 

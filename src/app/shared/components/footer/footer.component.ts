@@ -28,8 +28,11 @@ export class FooterComponent implements OnInit {
 
     this.pageService.placement$.filter(r => r[0] === 'footer').map(r => r[1]).subscribe(
       (data) => {
-        this.setFooterTextLinks(data.filter(el => el.variable_name === 'site_link'));
-        this.setFooterSocialLinks(data.filter(el => el.variable_name === 'social_link'));
+
+        if (data) {
+          this.setFooterTextLinks(data.filter(el => el.variable_name === 'site_link'));
+          this.setFooterSocialLinks(data.filter(el => el.variable_name === 'social_link'));
+        }
       },
       (err) => {
         console.error('Cannot get footer placements: ', err);

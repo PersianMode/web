@@ -19,6 +19,7 @@ import {FormsModule} from '@angular/forms';
 import {SCOrderProcessComponent} from './components/sc-order-process/sc-order-process.component';
 import { InboxComponent } from './components/inbox/inbox.component';
 import { OutboxComponent } from './components/outbox/outbox.component';
+import { ProductViewerComponent } from './components/product-viewer/product-viewer.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { OutboxComponent } from './components/outbox/outbox.component';
     OrderAddressComponent,
     InboxComponent,
     OutboxComponent,
+    ProductViewerComponent,
   ],
   imports: [
     OrderRouting,
@@ -52,7 +54,7 @@ import { OutboxComponent } from './components/outbox/outbox.component';
     MatTabsModule,
     MatCardModule
   ],
-  entryComponents: [OrderAddressComponent, SMOrderProcessComponent, SCOrderProcessComponent],
+  entryComponents: [OrderAddressComponent, SMOrderProcessComponent, SCOrderProcessComponent, ProductViewerComponent],
 })
 export class OrderModule {
 }

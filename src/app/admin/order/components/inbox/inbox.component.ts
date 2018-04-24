@@ -9,6 +9,7 @@ import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {SMOrderProcessComponent} from '../sm-order-process/sm-order-process.component';
 import {SCOrderProcessComponent} from '../sc-order-process/sc-order-process.component';
 import {STATUS} from '../../../../shared/enum/status.enum';
+import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 
 @Component({
   selector: 'app-order-inbox',
@@ -22,10 +23,8 @@ export class InboxComponent implements OnInit {
 
   displayedColumns = [
     'position',
-    'name',
-    'color',
+    'product',
     'is_collect',
-    'size',
     'barcode',
     'price',
     'used_point',
@@ -49,10 +48,10 @@ export class InboxComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private httpService: HttpService,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private  authService: AuthService,
-              private  socketService: SocketService) {
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
+    private socketService: SocketService) {
   }
 
   ngOnInit() {
@@ -93,11 +92,29 @@ export class InboxComponent implements OnInit {
     return this.dataSource.data.indexOf(element) + 1;
   }
 
-  getColor(element) {
-    const color = element.product_colors.find(x => x._id === element.instance.product_color_id);
-    return color ? color.name : 'نامشخص';
+  getProductDetail(element) {
 
+    const product_color = element.product_colors.find(x => x._id === element.instance.product_color_id);
+    const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
+      `${HttpService.Host + HttpService.PRODUCT_IMAGE_PATH + element.product_id}/${product_color.color_id}/${product_color.image.thumbnail}`
+      : null;
+    return {
+      name: element.product_name,
+      thumbnailURL,
+      color: product_color ? product_color.name : null,
+      color_code: product_color ? product_color.code : null,
+      size: element.instance.size,
+      product_id: element.product_id
+    };
   }
+
+  showDetial(element) {
+    this.processDialogRef = this.dialog.open(ProductViewerComponent, {
+      width: '400px',
+      data: this.getProductDetail(element)
+    });
+  }
+
 
   getStatus(element) {
 
@@ -107,28 +124,15 @@ export class InboxComponent implements OnInit {
   }
 
   showAddress(element) {
-    let warehouse;
-    let address = '';
 
-    if (!element.address_id) {
+    if (!element.address) {
       this.openSnackBar('order line has no address !');
       return;
     }
-    if (!!element.is_collect) {
-      warehouse = this.authService.warehouses.find(x => x.address._id === element.address_id);
-      if (!warehouse) {
-        this.openSnackBar('warehouse not found!');
-        return;
-      }
-      address = warehouse.address;
-    } else {
-      address = element.customer.addresses.find(x => x._id === element.address_id);
-    }
-
 
     this.processDialogRef = this.dialog.open(OrderAddressComponent, {
       width: '400px',
-      data: {address, is_collect: !!element.is_collect}
+      data: {address: element.address, is_collect: !!element.is_collect}
     });
 
   }
@@ -142,9 +146,9 @@ export class InboxComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((reload: boolean) => {
-        if (reload)
-          this.load();
-      }
+      if (reload)
+        this.load();
+    }
     );
 
   }
