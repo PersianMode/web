@@ -42,13 +42,7 @@ export class CartComponent implements OnInit, OnDestroy {
         this.valid.push(true);
         const temp: any = {};
         Object.assign(temp, r);
-<<<<<<< HEAD
-        temp.thumbnail = (temp.thumbnail && temp.thumbnail.includes(HttpService.Host)) ?
-          temp.thumbnail :
-          [HttpService.Host, 'images/product-image', temp.product_id, temp.color.id, temp.thumbnail].join('/')
-=======
         temp.thumbnail = imagePathFixer( temp.thumbnail, temp.product_id, temp.color.id);
->>>>>>> 1951589026a91ba56f717b065f1e86368b945d2a
         this.products.push(temp);
       });
 
