@@ -37,17 +37,12 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     this.uploader.onCompleteAll = () => {
-<<<<<<< HEAD
-      this.OnCompleted.emit(results);
-      results = [];
-=======
       if (Math.max(...this.results.map(el => Object.keys(el).length)) === 1)
         this.results = this.results.map(el => el.downloadURL);
 
       // Note: if it was 'single', the output is an array with one element, not only the element itself!
       this.OnCompleted.emit(this.results);
       this.results = [];
->>>>>>> f30a72973aa555c243c8f650f3230367d4dee6d1
     };
 
     this.uploader.onAfterAddingFile = () => {
