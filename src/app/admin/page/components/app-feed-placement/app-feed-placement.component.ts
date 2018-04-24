@@ -218,7 +218,8 @@ export class AppFeedPlacementComponent implements OnInit {
 
   private fieldChanged() {
     if (!this.selectedItem) {
-      this.anyChanges = true;
+      if (this.imageUrlAddress)
+        this.anyChanges = true;
       return;
     }
 
@@ -255,6 +256,8 @@ export class AppFeedPlacementComponent implements OnInit {
       } else {
         this.newPlacementId = data[0].placementId ? data[0].placementId : null;
       }
+
+      this.anyChanges = true;
     } else
       this.snackBar.open('بارگذاری با خطا رو به رو شد. دوباره تلاش کنید', null, {
         duration: 3200,
