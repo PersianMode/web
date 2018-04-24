@@ -1,0 +1,88 @@
+<div class="sub-menu-area">
+  <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="appSubMenuForm">
+    <div class="form-controller">
+      <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
+        fxLayoutAlign.xs="center center">
+        <div fxFlex="25" class="full-width sub-item">
+          <mat-input-container class="full-width">
+            <input matInput type="text" class="persian-field menu-field" placeholder="متن" formControlName="text" />
+          </mat-input-container>
+        </div>
+        <div fxFlex="25">
+          <mat-input-container class="full-width sub-item">
+            <input matInput type="text" class="persian-field menu-field" placeholder="آدرس" formControlName="href" />
+          </mat-input-container>
+        </div>
+        <div fxFlex="15" class="full-width vertical-align-item sub-item persian-field">
+          <mat-select placeholder="بخش" formControlName="section">
+            <mat-option *ngFor="let sec of getSectionList()" [value]="sec">{{sec}}</mat-option>
+          </mat-select>
+        </div>
+        <div fxFlex="15" *ngIf="!selectedItem || !selectedItem._id">
+          <mat-input-container class="full-width sub-item">
+            <input matInput type="text" class="persian-field menu-field" placeholder="یا بخش جدید اضافه کنید" formControlName="new_section"
+            />
+          </mat-input-container>
+        </div>
+        <div fxFlex="10" class="full-width vertical-align-item sub-item">
+          <mat-checkbox formControlName="is_header">
+            <span *ngIf="appSubMenuForm.controls['is_header'].value">عنوان</span>
+            <span *ngIf="!appSubMenuForm.controls['is_header'].value">زیر عنوان</span>
+          </mat-checkbox>
+        </div>
+        <div fxFlex="10" class="full-width sub-item" *ngIf="appSubMenuForm.controls['is_header'].value">
+          <button mat-mini-fab (click)="uploadImage()" color="primary">
+            <mat-icon>
+              <i class="material-icons">photo</i>
+            </mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="button-controller">
+      <button mat-mini-fab color="primary" [disabled]="!this.appSubMenuForm.valid || !this.anyChanges">
+        <mat-icon>
+          <i class="material-icons" *ngIf="selectedItem">create</i>
+          <i class="material-icons" *ngIf="!selectedItem">done</i>
+        </mat-icon>
+      </button>
+      <button mat-mini-fab color="primary" type="button" (click)="removeItem()" *ngIf="selectedItem" class="remove">
+        <mat-icon>
+          <i class="material-icons">remove</i>
+        </mat-icon>
+      </button>
+      <button mat-mini-fab color="primary" (click)="clearFields()" *ngIf="selectedItem">
+        <i class="fa fa-eraser"></i>
+      </button>
+    </div>
+  </form>
+  <div class="demo-area demo-list">
+    <div *ngFor="let section of getSectionList(); first as isFirst; last as isLast">
+      <div class="section-container" (click)="showSubItems(section)">
+        <img *ngIf="filteredSubMenuItems[section].details.info.imgUrl" [src]="getImage(filteredSubMenuItems[section].details.info.imgUrl)"
+          class="section-image" />
+        <div *ngIf="!filteredSubMenuItems[section].details.info.imgUrl" class="section-image no-image">
+          &nbsp;
+        </div>
+        <div class="section-title persian-field">
+          <div>
+            <button mat-icon-button (click)="move(false, section)" [disabled]="isFirst || moveButtonsShouldDisabled" class="move-button">
+              <mat-icon aria-label="انتقال به بالا">expand_less</mat-icon>
+            </button>
+          </div>
+          <div>{{filteredSubMenuItems[section].details.info.text}}</div>
+          <div>
+            <button mat-icon-button (click)="move(true, section)" [disabled]="isLast || moveButtonsShouldDisabled" class="move-button">
+              <mat-icon aria-label="انتقال به پایین">expand_more</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedSectionSubMenu === section" [dragula]="itemBagName" [dragulaModel]="filteredSubMenuItems[section].items">
+        <div *ngFor="let item of filteredSubMenuItems[section].items" (click)="selectItem(item)" class="menu-item">
+          <label>{{item.info.text}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -48,15 +48,16 @@ export class SliderPlacementComponent implements OnInit {
   sliderChanged = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private sanitizer: DomSanitizer) {
+    private progressService: ProgressService, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
     this.clearFields();
 
-    this.dragulaService.setOptions('slider-bag', {
-      direction: 'vertical',
-    });
+    if (!this.dragulaService.find('slider-bag'))
+      this.dragulaService.setOptions('slider-bag', {
+        direction: 'vertical',
+      });
 
     this.dragulaService.dropModel.subscribe(value => {
       this.changeSliderOrder(value.slice(1));

@@ -3,7 +3,7 @@
     <mat-card-title class="title">چینش و جایگاه عناصر</mat-card-title>
     <mat-tab-group>
       <mat-tab label="منو">
-        <app-menu-placement [placements]="getRelatedPlacements('menu')" [pageId]="pageId"
+        <app-menu-placement [placements]="getRelatedPlacements('menu')" [pageId]="pageId" [isApp]="isApp" [address]="pageAddress"
                             (modifyPlacement)="modify($event)"></app-menu-placement>
       </mat-tab>
       <mat-tab label="لوگو" *ngIf="!isApp">
@@ -15,7 +15,7 @@
                               (modifyPlacement)="modify($event)"
                               (reloadPlacements)="reload($event)"></app-slider-placement>
       </mat-tab>
-      <mat-tab label="صفحه">
+      <mat-tab label="صفحه" *ngIf="!isApp">
         <app-page-content-placement [placements]="getRelatedPlacements('main')" [pageId]="pageId"
                                     (modifyPlacement)="modify($event)"></app-page-content-placement>
       </mat-tab>
@@ -25,6 +25,6 @@
     <button mat-raised-button (click)="finalize(true)" [disabled]="finalizeRevertShouldDisabled">تثبیت تغییرات</button>
     <button mat-raised-button (click)="finalize(false)" [disabled]="finalizeRevertShouldDisabled">برگرداندن تغییرات
     </button>
-    <button mat-raised-button (click)="preview()" [disabled]="previewShouldDisabled">پیش نمایش صفحه</button>
+    <button mat-raised-button (click)="preview()" [disabled]="previewShouldDisabled" *ngIf="!isApp">پیش نمایش صفحه</button>
   </mat-card-actions>
 </mat-card>

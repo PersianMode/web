@@ -23,6 +23,8 @@ import {SubMenuComponent} from './components/menu-placement/sub-menu/sub-menu.co
 import {SliderPreviewComponent} from './components/slider-placement/slider-preview/slider-preview.component';
 import {EditPanelComponent} from './components/page-content-placement/edit-panel/edit-panel.component';
 import {ColorPickerModule} from 'primeng/primeng';
+import { AppSubMenuComponent } from './components/menu-placement/app-sub-menu/app-sub-menu.component';
+import { UploadImageDialogComponent } from './components/menu-placement/upload-image-dialog/upload-image-dialog.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import {ColorPickerModule} from 'primeng/primeng';
     SubMenuComponent,
     SliderPreviewComponent,
     EditPanelComponent,
+    AppSubMenuComponent,
+    UploadImageDialogComponent,
   ],
   imports: [
     PageRouting,
