@@ -5,7 +5,7 @@ import {PageRouting} from './page.routing';
 import {MatCardModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MarkdownModule} from 'angular2-markdown';
-import {BrowserModule} from '@angular/platform-browser';
+
 
 @NgModule({
   imports: [
