@@ -4,8 +4,8 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {DomSanitizer} from '@angular/platform-browser';
-import {LogoPos} from '../../../../shared/components/logo-header/logo-header.component';
-import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
+import {MatDialog} from '@angular/material';
+import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-logo-list-placement',
@@ -48,16 +48,15 @@ export class LogoListPlacementComponent implements OnInit {
   bagName = 'logo-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private sanitizer: DomSanitizer) {
+              private progressService: ProgressService, private sanitizer: DomSanitizer,
+              private dialog: MatDialog,) {
   }
 
   ngOnInit() {
     this.clearFields();
 
     if (!this.dragulaService.find(this.bagName))
-      this.dragulaService.setOptions(this.bagName, {
-        direction: 'horizontal',
-      });
+      this.dragulaService.setOptions(this.bagName, {direction: 'horizontal'});
 
     this.dragulaService.dropModel.subscribe(value => {
       if (this.bagName === value[0])
@@ -83,10 +82,6 @@ export class LogoListPlacementComponent implements OnInit {
       placements: this.logos,
     }).subscribe(
       data => {
-        // this.modifyPlacement.emit({
-        //   type: PlacementModifyEnum.Modify,
-        //   placements: this.logos,
-        // });
         this.reloadPlacements.emit();
         this.progressService.disable();
       },
@@ -228,28 +223,32 @@ export class LogoListPlacementComponent implements OnInit {
   }
 
   removeItem() {
-    this.progressService.enable();
-    const index = this.logos.findIndex(
-      el => el.info.text === this.upsertLogo.text && el.info.href === this.upsertLogo.href);
-    if (index !== -1)
-      this.httpService.post('placement/delete', {
-        page_id: this.pageId,
-        placement_id: this.logos[index]._id,
-      }).subscribe(
-        data => {
-          // this.modifyPlacement.emit({
-          //   type: PlacementModifyEnum.Delete,
-          //   placement_id: this.logos[index]._id,
-          // });
-          this.reloadPlacements.emit();
-          this.clearFields();
-          this.progressService.disable();
-        },
-        err => {
-          this.progressService.disable();
-          console.error('something went wrong', err);
-        }
-      );
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+
+    rmDialog.afterClosed().subscribe(status => {
+      if (status) {
+        this.progressService.enable();
+        const index = this.logos.findIndex(
+          el => el.info.text === this.upsertLogo.text && el.info.href === this.upsertLogo.href);
+        if (index !== -1)
+          this.httpService.post('placement/delete', {
+            page_id: this.pageId,
+            placement_id: this.logos[index]._id,
+          }).subscribe(
+            data => {
+              this.reloadPlacements.emit();
+              this.clearFields();
+              this.progressService.disable();
+            },
+            err => {
+              this.progressService.disable();
+              console.error('something went wrong', err);
+            }
+          );
+      }
+    });
   }
 
   getURL(path) {

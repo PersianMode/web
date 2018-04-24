@@ -5,6 +5,8 @@ import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {Pos} from './slider-preview/slider-preview.component';
 import {DomSanitizer} from '@angular/platform-browser';
+import {MatDialog} from '@angular/material';
+import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-slider-placement',
@@ -48,19 +50,17 @@ export class SliderPlacementComponent implements OnInit {
   bagName = 'slider-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private sanitizer: DomSanitizer) {
+              private progressService: ProgressService, private sanitizer: DomSanitizer,
+              private dialog: MatDialog,) {
   }
 
   ngOnInit() {
     this.clearFields();
 
     if (!this.dragulaService.find(this.bagName))
-      this.dragulaService.setOptions(this.bagName, {
-        direction: 'vertical',
-      });
+      this.dragulaService.setOptions(this.bagName, {direction: 'vertical',});
 
     this.dragulaService.dropModel.subscribe(value => {
-      console.log('value from changing order:', value);
       if (this.bagName === value[0])
         this.changeSliderOrder(value.slice(1));
     });
@@ -84,10 +84,6 @@ export class SliderPlacementComponent implements OnInit {
       placements: this.sliders,
     }).subscribe(
       data => {
-        // this.modifyPlacement.emit({
-        //   type: PlacementModifyEnum.Modify,
-        //   placements: this.sliders,
-        // });
         this.reloadPlacements.emit();
         this.progressService.disable();
       },
@@ -156,40 +152,44 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   removeItem() {
-    this.progressService.enable();
-    const index = this.sliders.findIndex(
-      el => el.info.text === this.upsertSlider.text && el.info.href === this.upsertSlider.href);
-    if (index !== -1)
-      this.httpService.post('placement/delete', {
-        page_id: this.pageId,
-        placement_id: this.sliders[index]._id,
-      }).subscribe(
-        data => {
-          // this.modifyPlacement.emit({
-          //   type: PlacementModifyEnum.Delete,
-          //   placement_id: this.sliders[index]._id,
-          // });
-          this.reloadPlacements.emit();
-          this.upsertSlider = {
-            text: '',
-            href: '',
-            id: null,
-            column: null,
-            isEdit: false,
-            imgUrl: null,
-            style: {
-              imgWidth: 40,
-              imgMarginLeft: 0,
-              imgMarginTop: 0,
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+
+    rmDialog.afterClosed().subscribe(status => {
+      if (status) {
+        this.progressService.enable();
+        const index = this.sliders.findIndex(
+          el => el.info.text === this.upsertSlider.text && el.info.href === this.upsertSlider.href);
+        if (index !== -1)
+          this.httpService.post('placement/delete', {
+            page_id: this.pageId,
+            placement_id: this.sliders[index]._id,
+          }).subscribe(
+            data => {
+              this.reloadPlacements.emit();
+              this.upsertSlider = {
+                text: '',
+                href: '',
+                id: null,
+                column: null,
+                isEdit: false,
+                imgUrl: null,
+                style: {
+                  imgWidth: 40,
+                  imgMarginLeft: 0,
+                  imgMarginTop: 0,
+                }
+              };
+              this.progressService.disable();
+            },
+            err => {
+              this.progressService.disable();
+              console.error('something went wrong', err);
             }
-          };
-          this.progressService.disable();
-        },
-        err => {
-          this.progressService.disable();
-          console.error('something went wrong', err);
-        }
-      );
+          );
+      }
+    });
   }
 
   modifyItem(isEdit) {

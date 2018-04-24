@@ -92,8 +92,7 @@ export class TopMenuComponent implements OnInit {
               }
             );
         }
-      }
-    );
+      });
   }
 
   selectItem(value) {
