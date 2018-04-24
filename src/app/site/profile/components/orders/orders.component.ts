@@ -64,30 +64,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }
   };
 
-
-  searching() {
-    this.progressService.enable();
-    const data = Object.assign({
-      offset: this.offset ? this.offset : 0,
-      limit: this.limit ? this.limit : 8,
-    });
-
-    this.httpService.get('/orders', data).subscribe(
-      (res) => {
-        this.totalOrders = res.total ? parseInt(res.total, 10) : 0;
-        this.progressService.disable();
-      }, (err) => {
-        console.log('err', err);
-        this.progressService.disable();
-      }
-    );
-  };
-  changeOffset(data) {
-    this.limit = data.pageSize ? data.pageSize : 10;
-    this.offset = data.pageIndex * this.limit;
-    this.searching();
-  };
-
   ngOnDestroy() {
   };
 }
