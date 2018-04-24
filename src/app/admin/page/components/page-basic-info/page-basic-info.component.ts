@@ -88,7 +88,7 @@ export class PageBasicInfoComponent implements OnInit {
         this.searchPagePlacements();
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         this.snackBar.open('Cannot get page details. Please try again', null, {
           duration: 2500,
         });

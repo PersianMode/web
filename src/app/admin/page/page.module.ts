@@ -42,7 +42,6 @@ import { FooterPlacementComponent } from './components/footer-placement/footer-p
   ],
   imports: [
     PageRouting,
-    SharedModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -55,7 +54,6 @@ import { FooterPlacementComponent } from './components/footer-placement/footer-p
     MatDialogModule,
     MatSelectModule,
     MatPaginatorModule,
-    MatSelectModule,
     MatTabsModule,
     MatCheckboxModule,
     SharedModule,

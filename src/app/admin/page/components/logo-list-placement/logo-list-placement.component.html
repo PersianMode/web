@@ -1,3 +1,110 @@
-<p>
-  logo-list-placement works!
-</p>
+<nav class="first-bar preview-main">
+  <ul [dragula]="'logo-bag'" [dragulaModel]="logos">
+    <li *ngFor="let logo of logos" (click)="selectItem(logo)" class="top-menu-item"
+        [ngClass]="{'highlight-logo': upsertLogo.id === logo._id}"
+        [ngStyle]="{width: (upsertLogo.id && upsertLogo.id === logo._id && upsertLogo.style ? (upsertLogo.style.width === 0 ? '60px' : upsertLogo.style.width + 'px') :
+                            (logo.info.style && logo.info.style.width ? logo.info.style.width + 'px' : '60px'))}">
+      <div class="gnav-member-bar" [title]="logo.info.text">
+        <img [src]="getURL(logo.info.imgUrl)" class="general"
+             [ngStyle]="{
+            top: (upsertLogo.id && upsertLogo.id === logo._id && upsertLogo.style ? (-upsertLogo.style.top + 'px') :
+                  (logo.info.style && logo.info.style.top ? -logo.info.style.top : 0) + 'px'),
+            right: (upsertLogo.id && upsertLogo.id === logo._id && upsertLogo.style ? (-upsertLogo.style.right + 'px') :
+                    (logo.info.style && logo.info.style.right ? -logo.info.style.right : 0) + 'px'),
+            height: (upsertLogo.id && upsertLogo.id === logo._id && upsertLogo.style ? (upsertLogo.style.height + 'px') :
+                     (logo.info.style && logo.info.style.height ? logo.info.style.height : 29) + 'px')
+          }">
+      </div>
+    </li>
+  </ul>
+</nav>
+<div class="image-settings" fxLayout="row" fxLayout.xs="column" *ngIf="upsertLogo.isEdit">
+  <div fxLayout="column" fxFlex="50" class="margin-change-div">
+    <div fxLayout="row">
+      <div fxFlex="10" fxFlexOffset="40">
+        <button mat-mini-fab color="primary" (click)="changePosition('top', 1)">
+          <mat-icon><i class="material-icons">keyboard_arrow_up</i></mat-icon>
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="10" fxFlexOffset="30">
+        <button mat-mini-fab color="primary" (click)="changePosition('right', -1)">
+          <mat-icon><i class="material-icons">keyboard_arrow_left</i></mat-icon>
+        </button>
+      </div>
+      <div fxFlex="10" fxFlexOffset="10">
+        <button mat-mini-fab color="primary" (click)="changePosition('right', 1)">
+          <mat-icon><i class="material-icons">keyboard_arrow_right</i></mat-icon>
+        </button>
+      </div>
+      <div fxFlex class="fb-centerized-div">
+        <div class="title">موقعیت تصویر:</div>
+      </div>
+    </div>
+    <div fxLayout="row">
+      <div fxFlex="10" fxFlexOffset="40">
+        <button mat-mini-fab color="primary" (click)="changePosition('top', -1)">
+          <mat-icon><i class="material-icons">keyboard_arrow_down</i></mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="column" fxFlex="50">
+    <div fxFlex="100" class="fb-centerized-div">
+      <div class="title">عرض مکان:</div>
+      <input type="number" [(ngModel)]="upsertLogo.style.width" min="0" max="400">
+    </div>
+    <div fxFlex="100" class="fb-centerized-div">
+      <div class="title">اندازه تصویر:</div>
+      <input type="number" [(ngModel)]="upsertLogo.style.height" min="0" max="400">
+    </div>
+  </div>
+</div>
+<div class="bottom-part">
+  <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
+       fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
+    <div fxFlex="40" style="width: 100%">
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column">
+        <div fxFlex="50" style="width: 100%">
+          <mat-input-container class="input-field">
+            <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
+                   [(ngModel)]="upsertLogo.text"
+                   (ngModelChange)="changeField($event)"/>
+          </mat-input-container>
+        </div>
+        <div fxFlex="50" style="width: 100%">
+          <mat-input-container dir="ltr" class="input-field">
+            <input matInput type="text" class="menu-field" placeholder="آدرس" [(ngModel)]="upsertLogo.href"
+                   (ngModelChange)="changeField($event)"/>
+          </mat-input-container>
+        </div>
+      </div>
+    </div>
+    <div fxFlex="30" class="button-area">
+      <button mat-mini-fab color="primary" (click)="modifyItem(upsertLogo.isEdit)"
+              [disabled]="logoApplyDisability()">
+        <mat-icon>
+          <i class="material-icons" *ngIf="upsertLogo.isEdit">create</i>
+          <i class="material-icons" *ngIf="!upsertLogo.isEdit">done</i>
+        </mat-icon>
+      </button>
+      <button mat-mini-fab color="primary" (click)="removeItem()" *ngIf="upsertLogo.isEdit" class="remove">
+        <mat-icon>
+          <i class="material-icons">remove</i>
+        </mat-icon>
+      </button>
+      <button mat-mini-fab color="primary" (click)="clearFields()" *ngIf="upsertLogo.isEdit">
+        <mat-icon>
+          <i class="fa fa-eraser"></i>
+        </mat-icon>
+      </button>
+    </div>
+    <div fxFlex="30">
+      <app-uploader [single]="true"
+                    [url]="'placement/image/' + pageId + '/' + upsertLogo.id"
+                    (OnCompleted)="onImageUploaded($event)"
+                    [additionalData]="getThisPlacement()"></app-uploader>
+    </div>
+  </div>
+</div>

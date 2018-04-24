@@ -6,6 +6,7 @@ import {HttpService} from '../../services/http.service';
 const defaultStyle = {
   imgWidth: 40,
   imgMarginLeft: 5,
+  imgMarginTop: 0,
 };
 
 @Component({

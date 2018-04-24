@@ -1,0 +1,78 @@
+.top-menu-item {
+  display: inline-block;
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.top-menu-item:hover {
+  background-color: rgba(176, 182, 180, 0.68);
+}
+
+.highlight-logo {
+  box-shadow: 0 0 10px 1px indigo;
+  -webkit-box-shadow: 0 0 10px 1px indigo;
+  box-shadow: 0.5px 22px 5px 1.01px indigo, 0.5px -19px 5px 1.01px indigo;
+  box-shadow: 0.5px 0px 5px 1.01px indigo;
+  box-shadow: 0px -14px 4px -1px #E7E7E7, 0px 16px 4px -1px #E7E7E7;
+}
+
+.top-menu-item .content {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.preview-main {
+  margin: 20px 0;
+  border: 2px dashed indigo;
+}
+
+.bottom-part {
+  position: relative;
+  margin-top: 60px;
+}
+
+.remove {
+  color: darkred;
+}
+
+.menu-field {
+  height: 20px !important;
+}
+
+.button-area {
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+/* FOR IMAGE MANIPULATING */
+.image-settings {
+  position: relative;
+  margin-top: 60px;
+  border: 1px solid aliceblue;
+  border-radius: 100px;
+  padding: 10px;
+}
+
+.margin-change-div {
+  direction: ltr;
+}
+
+.fb-centerized-div {
+  direction: rtl;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fb-centerized-div input {
+  min-width: 100px;
+  padding: 5px;
+  margin: 0 4px;
+  font-size: 1.2em;
+  text-align: center;
+}
