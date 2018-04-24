@@ -3,7 +3,6 @@ import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
 import {Pos} from './slider-preview/slider-preview.component';
 import {DomSanitizer} from '@angular/platform-browser';
 
@@ -46,6 +45,7 @@ export class SliderPlacementComponent implements OnInit {
 
   imageChanged = false;
   sliderChanged = false;
+  bagName = 'slider-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
               private progressService: ProgressService, private sanitizer: DomSanitizer) {
@@ -54,12 +54,15 @@ export class SliderPlacementComponent implements OnInit {
   ngOnInit() {
     this.clearFields();
 
-    this.dragulaService.setOptions('slider-bag', {
-      direction: 'vertical',
-    });
+    if (!this.dragulaService.find(this.bagName))
+      this.dragulaService.setOptions(this.bagName, {
+        direction: 'vertical',
+      });
 
     this.dragulaService.dropModel.subscribe(value => {
-      this.changeSliderOrder(value.slice(1));
+      console.log('value from changing order:', value);
+      if (this.bagName === value[0])
+        this.changeSliderOrder(value.slice(1));
     });
   }
 
@@ -68,7 +71,8 @@ export class SliderPlacementComponent implements OnInit {
 
     let counter = 0;
     Object.keys(target.children).forEach(child => {
-      const obj = this.sliders.find(el => el.info.text === target.children[child].innerText);
+      const t = target.children[child].innerText;
+      const obj = this.sliders.find(el => el.info.text.trim() == t.trim());
       if (obj) {
         obj.info.column = counter;
         counter++;
@@ -80,11 +84,11 @@ export class SliderPlacementComponent implements OnInit {
       placements: this.sliders,
     }).subscribe(
       data => {
-        this.modifyPlacement.emit({
-          type: PlacementModifyEnum.Modify,
-          placements: this.sliders,
-        });
-        // this.reloadPlacements.emit();
+        // this.modifyPlacement.emit({
+        //   type: PlacementModifyEnum.Modify,
+        //   placements: this.sliders,
+        // });
+        this.reloadPlacements.emit();
         this.progressService.disable();
       },
       err => {
@@ -193,8 +197,8 @@ export class SliderPlacementComponent implements OnInit {
       component_name: 'slider',
       variable_name: 'slider',
       info: {
-        text: this.upsertSlider.text,
-        href: this.upsertSlider.href,
+        text: this.upsertSlider.text.trim(),
+        href: this.upsertSlider.href.trim(),
         column: Math.max(...this.sliders.map(el => el.info.column)) + 1,
         style: this.upsertSlider.style,
       }
@@ -210,8 +214,8 @@ export class SliderPlacementComponent implements OnInit {
         {
           _id: this.upsertSlider.id,
           info: {
-            text: this.upsertSlider.text,
-            href: this.upsertSlider.href,
+            text: this.upsertSlider.text.trim(),
+            href: this.upsertSlider.href.trim(),
             imgUrl: this.upsertSlider.imgUrl,
             style: this.upsertSlider.style,
           }
@@ -276,7 +280,10 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   getURL(path) {
-    if (path)
+    if (path) {
+      if (path[0] !== '/')
+        path = '/' + path;
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    }
   }
 }

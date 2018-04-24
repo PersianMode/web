@@ -64,8 +64,11 @@ export class SliderPreviewComponent {
   }
 
   getURL(path) {
-    if (path)
+    if (path) {
+      if (path[0] !== '/')
+        path = '/' + path;
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    }
   }
 
 }

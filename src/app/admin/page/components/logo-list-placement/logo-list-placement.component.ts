@@ -45,6 +45,7 @@ export class LogoListPlacementComponent implements OnInit {
 
   logoChanged = false;
   imageChanged = false;
+  bagName = 'logo-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
               private progressService: ProgressService, private sanitizer: DomSanitizer) {
@@ -53,12 +54,14 @@ export class LogoListPlacementComponent implements OnInit {
   ngOnInit() {
     this.clearFields();
 
-    this.dragulaService.setOptions('logo-bag', {
-      direction: 'horizontal',
-    });
+    if (!this.dragulaService.find(this.bagName))
+      this.dragulaService.setOptions(this.bagName, {
+        direction: 'horizontal',
+      });
 
     this.dragulaService.dropModel.subscribe(value => {
-      this.changeLogoOrder(value.slice(1));
+      if (this.bagName === value[0])
+        this.changeLogoOrder(value.slice(1));
     });
   }
 
@@ -68,7 +71,7 @@ export class LogoListPlacementComponent implements OnInit {
     let counter = 1;
     Object.keys(target.children).forEach(child => {
       const t = target.children[child].children[0].getAttribute('title');
-      const obj = this.logos.find(el => el.info.text === t);
+      const obj = this.logos.find(el => el.info.text.trim() == t.trim());
       if (obj) {
         obj.info.column = counter;
         counter++;
@@ -176,8 +179,8 @@ export class LogoListPlacementComponent implements OnInit {
       component_name: 'logos',
       variable_name: 'logos',
       info: {
-        text: this.upsertLogo.text,
-        href: this.upsertLogo.href,
+        text: this.upsertLogo.text.trim(),
+        href: this.upsertLogo.href.trim(),
         column: Math.max(...this.logos.map(el => el.info.column)) + 1,
         style: this.upsertLogo.style,
       }
@@ -193,8 +196,8 @@ export class LogoListPlacementComponent implements OnInit {
         {
           _id: this.upsertLogo.id,
           info: {
-            text: this.upsertLogo.text,
-            href: this.upsertLogo.href,
+            text: this.upsertLogo.text.trim(),
+            href: this.upsertLogo.href.trim(),
             imgUrl: this.upsertLogo.imgUrl,
             style: this.upsertLogo.style,
           }
@@ -250,8 +253,11 @@ export class LogoListPlacementComponent implements OnInit {
   }
 
   getURL(path) {
-    if (path)
+    if (path) {
+      if (path[0] !== '/')
+        path = '/' + path;
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    }
   }
 
   changePosition(pos, value) {
