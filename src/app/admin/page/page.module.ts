@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
-  MatSnackBarModule, MatTabsModule
+  MatSnackBarModule, MatTabsModule, MatTooltipModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PageRouting} from './page.routing';
@@ -23,6 +23,7 @@ import {SubMenuComponent} from './components/menu-placement/sub-menu/sub-menu.co
 import {SliderPreviewComponent} from './components/slider-placement/slider-preview/slider-preview.component';
 import {EditPanelComponent} from './components/page-content-placement/edit-panel/edit-panel.component';
 import {ColorPickerModule} from 'primeng/primeng';
+import { FooterPlacementComponent } from './components/footer-placement/footer-placement.component';
 
 @NgModule({
   declarations: [
@@ -37,10 +38,10 @@ import {ColorPickerModule} from 'primeng/primeng';
     SubMenuComponent,
     SliderPreviewComponent,
     EditPanelComponent,
+    FooterPlacementComponent,
   ],
   imports: [
     PageRouting,
-    SharedModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -53,13 +54,13 @@ import {ColorPickerModule} from 'primeng/primeng';
     MatDialogModule,
     MatSelectModule,
     MatPaginatorModule,
-    MatSelectModule,
     MatTabsModule,
     MatCheckboxModule,
     SharedModule,
     MarkdownModule.forRoot(),
     DragulaModule,
     ColorPickerModule,
+    MatTooltipModule,
   ],
   entryComponents: [
     EditPanelComponent,
