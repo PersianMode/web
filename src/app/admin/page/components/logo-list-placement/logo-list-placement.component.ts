@@ -80,11 +80,11 @@ export class LogoListPlacementComponent implements OnInit {
       placements: this.logos,
     }).subscribe(
       data => {
-        this.modifyPlacement.emit({
-          type: PlacementModifyEnum.Modify,
-          placements: this.logos,
-        });
-        // this.reloadPlacements.emit();
+        // this.modifyPlacement.emit({
+        //   type: PlacementModifyEnum.Modify,
+        //   placements: this.logos,
+        // });
+        this.reloadPlacements.emit();
         this.progressService.disable();
       },
       err => {
