@@ -18,7 +18,7 @@ import {OrderAddressComponent} from './components/order-address/order-address.co
 import {FormsModule} from '@angular/forms';
 import {SCOrderProcessComponent} from './components/sc-order-process/sc-order-process.component';
 import { InboxComponent } from './components/inbox/inbox.component';
-import { ReferenceComponent } from './components/reference/reference.component';
+import { OutboxComponent } from './components/outbox/outbox.component';
 
 
 @NgModule({
@@ -28,7 +28,7 @@ import { ReferenceComponent } from './components/reference/reference.component';
     SCOrderProcessComponent,
     OrderAddressComponent,
     InboxComponent,
-    ReferenceComponent,
+    OutboxComponent,
   ],
   imports: [
     OrderRouting,

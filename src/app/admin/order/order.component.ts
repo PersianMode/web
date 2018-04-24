@@ -8,6 +8,7 @@ import {Component, OnInit} from '@angular/core';
 export class OrderComponent implements OnInit {
 
   newInboxCount: number;
+  newOutboxCount: number;
 
   constructor() {
   }

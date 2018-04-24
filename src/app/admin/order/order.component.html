@@ -12,23 +12,23 @@
 <app-order-inbox (newInboxCount)="newInboxCount = $event"></app-order-inbox>
 
   </mat-tab>
-  <mat-tab label="delivery">
+  <!-- <mat-tab label="delivery">
     <ng-template mat-tab-label>
       <span>تحویل</span>
 
       <mat-chip-list>
-        <mat-chip color="accent" selected="true">3</mat-chip>
+        <mat-chip color="accent" (newDeliveryCount)="newDeliveryCount = $event" selected="true">3</mat-chip>
       </mat-chip-list>
     </ng-template>
-  </mat-tab>
+  </mat-tab> -->
   <mat-tab label="outbox">
     <ng-template mat-tab-label>
       <span>ارجاعات</span>
-      <mat-chip-list>
-        <mat-chip color="accent" selected="true">3</mat-chip>
+      <mat-chip-list *ngIf="newOutboxCount">
+        <mat-chip color="accent" selected="true">{{newOutboxCount}}</mat-chip>
       </mat-chip-list>
     </ng-template>
-    <app-reference></app-reference>
+    <app-outbox (newOutboxCount)="newOutboxCount = $event"></app-outbox>
   </mat-tab>
 
 

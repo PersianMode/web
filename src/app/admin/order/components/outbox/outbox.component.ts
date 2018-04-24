@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -9,11 +9,13 @@ import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {STATUS} from '../../../../shared/enum/status.enum';
 
 @Component({
-  selector: 'app-reference',
-  templateUrl: './reference.component.html',
-  styleUrls: ['./reference.component.css']
+  selector: 'app-outbox',
+  templateUrl: './outbox.component.html',
+  styleUrls: ['./outbox.component.css']
 })
-export class ReferenceComponent implements OnInit {
+export class OutboxComponent implements OnInit {
+
+  @Output() newOutboxCount = new EventEmitter();
 
 
   displayedColumns = [
@@ -76,6 +78,9 @@ export class ReferenceComponent implements OnInit {
       this.isLoadingResults = false;
       this.resultsLength = res.total;
       this.dataSource.data = res.data;
+
+      this.newOutboxCount.emit(this.resultsLength);
+
       console.log('-> ', this.dataSource.data);
     }, err => {
       this.isLoadingResults = false;

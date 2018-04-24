@@ -26,7 +26,7 @@ export class CartComponent implements OnInit, OnDestroy {
   disabled = false;
 
   constructor(@Inject(WINDOW) private window, private cartService: CartService,
-              private authService: AuthService, private router: Router, public dialog: MatDialog) {
+    private authService: AuthService, private router: Router, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -41,7 +41,9 @@ export class CartComponent implements OnInit, OnDestroy {
         this.valid.push(true);
         const temp: any = {};
         Object.assign(temp, r);
-        temp.thumbnail = temp.thumbnail.includes(HttpService.Host) ? temp.thumbnail : [HttpService.Host, 'images/product-image', temp.product_id, temp.color.id, temp.thumbnail].join('/')
+        temp.thumbnail = (temp.thumbnail && temp.thumbnail.includes(HttpService.Host)) ?
+          temp.thumbnail :
+          [HttpService.Host, 'images/product-image', temp.product_id, temp.color.id, temp.thumbnail].join('/')
         this.products.push(temp);
       });
 
