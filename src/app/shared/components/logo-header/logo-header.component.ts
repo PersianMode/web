@@ -31,10 +31,8 @@ export class LogoHeaderComponent implements OnInit {
   }
 
   getURL(path) {
-    // TODO: Test-Purpose-Only!
-    return `assets/logos/${path}`;
-    // if (path)
-    //   return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+    if (path)
+      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }
 
 }

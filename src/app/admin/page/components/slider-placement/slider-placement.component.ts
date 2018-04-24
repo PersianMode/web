@@ -130,6 +130,8 @@ export class SliderPlacementComponent implements OnInit {
       this.upsertSlider['imgUrl'] = images[0].downloadURL;
       this.upsertSlider['id'] = images[0].placementId;
     }
+
+    this.reloadPlacements.emit();
   }
 
   selectItem(value) {
