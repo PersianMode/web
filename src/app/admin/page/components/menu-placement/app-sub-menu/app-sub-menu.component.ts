@@ -205,7 +205,7 @@ export class AppSubMenuComponent implements OnInit {
   setFormValue(value = null) {
     if (!value) {
       this.appSubMenuForm.reset();
-      this.appSubMenuForm.controls['section'].enable();
+      this.appSubMenuForm.controls['is_hader'].enable();
     } else {
       this.appSubMenuForm.controls['text'].setValue(value.text);
       this.appSubMenuForm.controls['href'].setValue(value.href);
@@ -349,6 +349,7 @@ export class AppSubMenuComponent implements OnInit {
   clearFields() {
     this.appSubMenuForm.reset();
     this.selectedItem = null;
+    this.appSubMenuForm.controls['is_header'].enable();
   }
 
   getSectionList() {

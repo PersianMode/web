@@ -13,14 +13,14 @@
             <input matInput type="text" class="persian-field menu-field" placeholder="آدرس" formControlName="href" />
           </mat-input-container>
         </div>
-        <div fxFlex="15" class="full-width vertical-align-item sub-item persian-field" *ngIf="selectedItem && selectedItem.is_header">
-          <mat-select placeholder="بخش" formControlName="section">
-            <mat-option *ngFor="let sec of getSectionList()" [value]="sec">{{sec}}</mat-option>
+        <div fxFlex="15" class="full-width vertical-align-item sub-item persian-field" *ngIf="(!selectedItem || !selectedItem.is_header) && !appSubMenuForm.controls['is_header'].value">
+          <mat-select placeholder="بخش" formControlName="section" class="persian-field">
+            <mat-option *ngFor="let sec of getSectionList()" [value]="sec" class="persian-field">{{sec}}</mat-option>
           </mat-select>
         </div>
         <div fxFlex="15" class="full-width sub-item">
           <mat-input-container class="full-width">
-            <input matInput type="text" class="persian-field menu-field" placeholder="یا بخش جدید اضافه کنید" formControlName="new_section"
+            <input matInput type="text" class="persian-field menu-field" placeholder="بخش جدید اضافه کنید" formControlName="new_section"
             />
           </mat-input-container>
         </div>
