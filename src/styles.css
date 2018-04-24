@@ -889,3 +889,8 @@ mat-panel-title {
 .persian-field input {
   height: 20px;
 }
+
+p {
+  text-align: justify;
+  font-family: iranyekan, sans-serif;
+}
