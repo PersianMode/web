@@ -6,6 +6,9 @@ import {ProgressService} from '../../../../../shared/services/progress.service';
 import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
 import {DomSanitizer} from '@angular/platform-browser';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
+import {MatDialog} from '@angular/material';
+import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
+import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-dialog.component';
 
 @Component({
   selector: 'app-app-sub-menu',
@@ -44,9 +47,12 @@ export class AppSubMenuComponent implements OnInit {
   anyChanges = false;
   selectedSectionSubMenu = null;
   moveButtonsShouldDisabled = false;
+  imageUrlAddress = null;
+  newPlacementId = null;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-    private progressService: ProgressService, private sanitizer: DomSanitizer) {}
+    private progressService: ProgressService, private sanitizer: DomSanitizer,
+    private dialog: MatDialog) {}
 
   ngOnInit() {
     if (!this.dragulaService.find(this.itemBagName))
@@ -95,11 +101,44 @@ export class AppSubMenuComponent implements OnInit {
   }
 
   changeItemOrder() {
+    let placementList = [];
 
-  }
+    Object.keys(this.filteredSubMenuItems).forEach(section => {
+      let rowCounter = 1;
+      let orderIsChanged = false;
+      this.filteredSubMenuItems[section].items.forEach(placement => {
+        if (placement.info.row !== +rowCounter || placement.info.section.split('/')[1] !== section)
+          orderIsChanged = true;
 
-  changeSectionOrder() {
+        placement.info.row = +rowCounter;
+        rowCounter++;
+        placement.info.section = this.selectedSection + '/' + section;
+      });
 
+      if (orderIsChanged)
+        placementList = placementList.concat(this.filteredSubMenuItems[section].items);
+    });
+
+    if (placementList.length > 0) {
+      this.progressService.enable();
+      this.httpService.post('placement', {
+        page_id: this.pageId,
+        placements: placementList,
+        is_app: true,
+      }).subscribe(
+        (data) => {
+          this.modifyPlacement.emit({
+            type: PlacementModifyEnum.Modify,
+            placements: placementList,
+          });
+          this.progressService.disable();
+        },
+        (err) => {
+          console.error('Cannot update the placement orders: ', err);
+          this.progressService.disable();
+        }
+      );
+    }
   }
 
   getRelatedItems() {
@@ -172,15 +211,120 @@ export class AppSubMenuComponent implements OnInit {
       this.appSubMenuForm.controls['href'].setValue(value.href);
       this.appSubMenuForm.controls['section'].setValue(value.section.split('/')[1]);
       this.appSubMenuForm.controls['is_header'].setValue(value.is_header ? value.is_header : false);
+      if (value.is_header)
+        this.appSubMenuForm.controls['is_header'].disable();
     }
   }
 
   modifyItem() {
+    this.progressService.enable();
+    (this.selectedItem ? this.httpService.post('placement', {
+      page_id: this.pageId,
+      placements: [{
+        _id: this.selectedItem._id,
+        info: this.getItemInfo(),
+      }],
+      is_app: true
+    }) : this.httpService.put('placement', {
+      page_id: this.pageId,
+      placement: {
+        _id: this.newPlacementId ? this.newPlacementId : null,
+        component_name: 'menu',
+        variable_name: 'subMenu',
+        info: this.getItemInfo(true),
+      },
+      is_app: true,
+    })).subscribe(
+      (data: any) => {
+        this.modifyPlacement.emit({
+          type: this.selectedItem ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
+          placement_id: data.placement_id,
+          placements: [this.selectItem],
+          placement: data.new_placement,
+        });
 
+        if (this.selectedItem) {
+          const newInfo = this.getItemInfo();
+          const changedObj = this.subMenuItems.find(el => el._id === this.selectedItem._id);
+          changedObj.info.text = newInfo.text;
+          changedObj.info.href = newInfo.href;
+          changedObj.info.is_header = newInfo.is_header;
+        } else {
+          const newInfo = this.getItemInfo(true);
+          this.selectedItem = data.new_placement;
+        }
+
+        this.anyChanges = false;
+        this.progressService.disable();
+      },
+      (err) => {
+        console.error('Cannot upsert an item: ', err);
+        this.progressService.disable();
+      }
+    );
+  }
+
+  private getItemInfo(isNewItem = false) {
+    const res = {
+      text: (this.appSubMenuForm.controls['text'].value ? this.appSubMenuForm.controls['text'].value : '').trim(),
+      href: (this.appSubMenuForm.controls['href'].value ? this.appSubMenuForm.controls['href'].value : '').trim(),
+      is_header: this.appSubMenuForm.controls['is_header'].value,
+      imgUrl: isNewItem ? this.imageUrlAddress : this.selectedItem.info.imgUrl,
+    };
+
+    const section = this.appSubMenuForm.controls['new_section'].value ?
+      this.appSubMenuForm.controls['new_section'].value :
+      this.appSubMenuForm.controls['section'].value;
+
+    res['section'] = this.selectedSection + '/' + section;
+
+    // Check to findout assign new row number or not
+    if (!this.selectedItem) {
+      if (res.is_header) {
+        res['row'] = Math.max(...Object.keys(this.filteredSubMenuItems).map(el => this.filteredSubMenuItems[el].details.info.row)) + 1;
+      } else {
+        res['row'] = Math.max(...this.filteredSubMenuItems[section].items.map(el => el.info.row)) + 1;
+      }
+    } else if (this.selectedItem.info.section.toLowerCase() !== section.toLowerCase()) {
+      if (!res.is_header) {
+        res['row'] = Math.max(...this.filteredSubMenuItems[section].items.map(el => el.info.row)) + 1;
+      }
+    }
+
+    return res;
   }
 
   removeItem() {
+    if (!this.selectedItem || !this.selectedItem._id)
+      return;
 
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+
+    this.progressService.enable();
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.httpService.post('placement/delete', {
+            page_id: this.pageId,
+            placement_id: this.selectedItem._id,
+          }).subscribe(
+            (data) => {
+              this.modifyPlacement.emit({
+                type: PlacementModifyEnum.Delete,
+                placement_id: this.selectedItem._id,
+              })
+              this.progressService.disable();
+            },
+            (err) => {
+              console.error('Cannot remove an item from sub menu of my_shop: ', err);
+              this.progressService.disable();
+            }
+          );
+        }
+      }
+    );
   }
 
   private fieldChanged() {
@@ -225,6 +369,27 @@ export class AppSubMenuComponent implements OnInit {
   }
 
   uploadImage() {
+    const uploadImgDialog = this.dialog.open(UploadImageDialogComponent, {
+      width: '500px',
+      data: {
+        pageId: this.pageId,
+        placementId: this.selectedItem ? this.selectedItem._id : null,
+      },
+      disableClose: true,
+    });
+
+    uploadImgDialog.afterClosed().subscribe(
+      (data) => {
+        if (data) {
+          this.imageUrlAddress = data.downloadURL;
+          if (this.selectedItem)
+            this.selectedItem.info.imgUrl = this.imageUrlAddress;
+          this.newPlacementId = data.placement_id ? data.placement_id : null;
+
+          this.anyChanges = true;
+        }
+      }
+    );
   }
 
   move(moveToBottom = false, section) {

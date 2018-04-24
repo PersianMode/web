@@ -1,3 +1,9 @@
-<div>
-  <app-uploader [url]="imageUploadUrl()" [single]="true" (OnCompleted)="imageUploaded($event)"></app-uploader>
+<div dir="rtl">
+  <div mat-dialog-title>
+    <button mat-icon-button (click)="closeDialog()" style="float: left">
+      <mat-icon aria-label="Close">close</mat-icon>
+    </button>
+    <label>بارگذاری تصویر</label>
+  </div>
+  <app-uploader [url]="imageUploadUrl()" [additionalData]="getThisPlacement()" [single]="true" (OnCompleted)="imageUploaded($event)"></app-uploader>
 </div>

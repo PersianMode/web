@@ -68,6 +68,7 @@ import { FooterPlacementComponent } from './components/footer-placement/footer-p
   ],
   entryComponents: [
     EditPanelComponent,
+    UploadImageDialogComponent,    
   ],
 })
 export class PageModule {
