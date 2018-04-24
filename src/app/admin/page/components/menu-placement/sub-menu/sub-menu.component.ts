@@ -72,9 +72,15 @@ export class SubMenuComponent implements OnInit {
   subMenuForm: FormGroup;
   selectedItem = null;
   anyChanges = false;
+  headerAreaNewEmptyList = [];
+  headerAreaHasNewColumn = false;
+  middleAreaNewEmptyList = [];
+  middleAreaHasNewColumn = false;
+  leftAreaNewEmptyList = [];
+  leftAreaHasNewColumn = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private dialog: MatDialog) {
+    private progressService: ProgressService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -233,6 +239,17 @@ export class SubMenuComponent implements OnInit {
         placementList = placementList.concat(this.headerAreaItems[column]);
     });
 
+    // Check headerAreaNewEmptyList
+    let virtualColumn = Math.max(...Object.keys(this.headerAreaItems).map(el => parseInt(el, 10))) + 1;
+    let virtualRowCounter = 1;
+    this.headerAreaNewEmptyList.forEach(placement => {
+      placement.info.column = virtualColumn;
+      placement.info.row = (virtualRowCounter++);
+    });
+    placementList = placementList.concat(this.headerAreaNewEmptyList);
+    this.headerAreaNewEmptyList = [];
+    this.headerAreaHasNewColumn = false;
+
     Object.keys(this.middleAreaItems).forEach(column => {
       let rowCounter = 1;
       let orderIsChanged = false;
@@ -248,6 +265,17 @@ export class SubMenuComponent implements OnInit {
         placementList = placementList.concat(this.middleAreaItems[column]);
     });
 
+    // Check middleAreaNewEmptyList
+    virtualColumn = Math.max(...Object.keys(this.middleAreaItems).map(el => parseInt(el, 10))) + 1;
+    virtualRowCounter = 1;
+    this.middleAreaNewEmptyList.forEach(placement => {
+      placement.info.column = virtualColumn;
+      placement.info.row = (virtualRowCounter++);
+    });
+    placementList = placementList.concat(this.middleAreaNewEmptyList);
+    this.middleAreaNewEmptyList = [];
+    this.middleAreaHasNewColumn = false;
+
     Object.keys(this.leftAreaItems).forEach(column => {
       let rowCounter = 1;
       let orderIsChanged = false;
@@ -262,6 +290,17 @@ export class SubMenuComponent implements OnInit {
       if (orderIsChanged)
         placementList = placementList.concat(this.leftAreaItems[column]);
     });
+
+    // Check leftAreaNewEmptyList
+    virtualColumn = Math.max(...Object.keys(this.leftAreaItems).map(el => parseInt(el, 10))) + 1;
+    virtualRowCounter = 1;
+    this.leftAreaNewEmptyList.forEach(placement => {
+      placement.info.column = virtualColumn;
+      placement.info.row = (virtualRowCounter++);
+    });
+    placementList = placementList.concat(this.leftAreaNewEmptyList);
+    this.leftAreaNewEmptyList = [];
+    this.leftAreaHasNewColumn = false;
 
     if (placementList.length > 0) {
       this.progressService.enable();
@@ -294,21 +333,21 @@ export class SubMenuComponent implements OnInit {
   modifyItem() {
     this.progressService.enable();
     (this.selectedItem ? this.httpService.post('placement', {
-        page_id: this.pageId,
-        placements: [
-          {
-            _id: this.selectedItem._id,
-            info: this.getItemInfo(),
-          }
-        ]
-      }) : this.httpService.put('placement', {
-        page_id: this.pageId,
-        placement: {
-          component_name: 'menu',
-          variable_name: 'subMenu',
-          info: this.getItemInfo(true),
+      page_id: this.pageId,
+      placements: [
+        {
+          _id: this.selectedItem._id,
+          info: this.getItemInfo(),
         }
-      })
+      ]
+    }) : this.httpService.put('placement', {
+      page_id: this.pageId,
+      placement: {
+        component_name: 'menu',
+        variable_name: 'subMenu',
+        info: this.getItemInfo(true),
+      }
+    })
     ).subscribe(
       (data: any) => {
         this.modifyPlacement.emit({
@@ -320,7 +359,7 @@ export class SubMenuComponent implements OnInit {
 
         if (this.selectedItem) {
           const newInfo = this.getItemInfo();
-          const changedObj = this.subMenuItems.find(el => el._id.toString() === this.selectedItem._id.toString());
+          const changedObj = this.subMenuItems.find(el => el._id === this.selectedItem._id);
           changedObj.info.text = newInfo.text;
           changedObj.info.href = newInfo.href;
           changedObj.info.is_header = newInfo.is_header;
@@ -443,5 +482,48 @@ export class SubMenuComponent implements OnInit {
         return;
       }
     });
+  }
+
+  addColumn(area) {
+    switch (area) {
+      case 'header': {
+        this.headerAreaNewEmptyList = [];
+        this.headerAreaHasNewColumn = true;
+      }
+        break;
+      case 'middle': {
+        this.middleAreaNewEmptyList = [];
+        this.middleAreaHasNewColumn = true;
+      }
+        break;
+      case 'left': {
+        this.leftAreaNewEmptyList = [];
+        this.leftAreaHasNewColumn = true;
+      }
+        break;
+    }
+  }
+
+  addColumnDisability(area) {
+    switch (area) {
+      case 'header': {
+        if (!Object.keys(this.headerAreaItems).length)
+          return true;
+        const lastColumn = Math.max(...Object.keys(this.headerAreaItems).map(el => parseInt(el, 10)));
+        return this.headerAreaHasNewColumn || !this.headerAreaItems[lastColumn].length;
+      }
+      case 'middle': {
+        if (!Object.keys(this.middleAreaItems).length)
+          return true;
+        const lastColumn = Math.max(...Object.keys(this.middleAreaItems).map(el => parseInt(el, 10)));
+        return this.middleAreaHasNewColumn || !this.middleAreaItems[lastColumn].length;
+      }
+      case 'left': {
+        if (!Object.keys(this.leftAreaItems).length)
+          return true;
+        const lastColumn = Math.max(...Object.keys(this.leftAreaItems).map(el => parseInt(el, 10)));
+        return this.leftAreaHasNewColumn || !this.leftAreaItems[lastColumn].length;
+      }
+    }
   }
 }

@@ -890,6 +890,16 @@ mat-panel-title {
   height: 20px;
 }
 
+.remove {
+  color: darkred;
+}
+
+.footer-column {
+  display: inline-block;
+  text-align: right;
+  margin-left: 10px;
+  margin-right: 10px;
+  vertical-align: top;
 p {
   text-align: justify;
   font-family: iranyekan, sans-serif;

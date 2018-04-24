@@ -92,7 +92,7 @@ export class PageBasicInfoComponent implements OnInit {
         this.searchPagePlacements();
       },
       (error) => {
-        console.log(error);
+        console.error(error);
         this.snackBar.open('Cannot get page details. Please try again', null, {
           duration: 2500,
         });
@@ -290,7 +290,7 @@ export class PageBasicInfoComponent implements OnInit {
         value.placements.forEach(item => {
           const index = this.placements.findIndex(el => el._id.toString() === item._id.toString());
           if (index !== -1)
-            this.placements[index] = item;
+            this.placements[index].info = item.info;
         });
       }
         break;

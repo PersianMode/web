@@ -1,22 +1,16 @@
 <nav class="first-bar">
-  <ul>
-    <li *ngFor="let logo of logos" [ngStyle]="{width: (logo.width ? logo.width + 'px' : 'initial')}">
-      <a href="#" class="gnav-member-bar" [title]="logo.brand">
-        <img
-          src="assets/logos/{{logo.filename}}" class="general"
-          [ngStyle]="{top: (logo.top ? -logo.top : 0)+ 'px', right: (logo.right ? -logo.right : 0) + 'px', height: (logo.height ? logo.height : 29) + 'px'}"></a>
-    </li>
-  </ul>
+  <app-logo-header [logos]="logos"></app-logo-header>
   <ul class="right-bar top-basket">
     <li *ngIf="isLoggedIn && isVerified" class="welcome">
-      <button mat-button (click)="navigateToProfile()"><i class="fa fa-user"></i>{{display_name}}، خوش آمدید </button>
+      <button mat-button (click)="navigateToProfile()"><i class="fa fa-user"></i>{{display_name}}، خوش آمدید</button>
     </li>
     <li class="welcome">
-      <button mat-button (click)="navigateToCart()" aria-label="Shopping Bag" id="header-cart" [disabled]="!cartNumbers"><i class="fa fa-bag"></i>
+      <button mat-button (click)="navigateToCart()" aria-label="Shopping Bag" id="header-cart"
+              [disabled]="!cartNumbers"><i class="fa fa-bag"></i>
         <span *ngIf="cartNumbers" class="badge-icon">
           {{cartNumbers}}
         </span>
-        <span *ngIf="cartNumbers" >
+        <span *ngIf="cartNumbers">
           <svg height="28" width="28">
             <circle cx="14" cy="14" r="14" fill="#AA0000"/>
           </svg>

@@ -19,7 +19,7 @@
           </button>
         </div>
       </div>
-      <div fxFlex="90" class="container content">
+      <div fxFlex="90" class="content">
         <div *ngIf="modifiedPlacementList[key][0].info.topTitle">
           <h2 *ngIf="modifiedPlacementList[key][0].info.topTitle.title" [style.color]="modifiedPlacementList[key][0].info.topTitle.titleColor ? modifiedPlacementList[key][0].info.topTitle.titleColor : null"
             class="top-title">
@@ -29,7 +29,7 @@
             {{modifiedPlacementList[key][0].info.topTitle.text}}</h3>
         </div>
         <div fxLayout="row" fxLayoutAlign="start start">
-          <div [fxFlex]="getRowParts(item)" *ngFor="let item of modifiedPlacementList[key]; first as hIsFirst; last as hIsLast">
+          <div [fxFlex]="getRowParts(item)" *ngFor="let item of modifiedPlacementList[key]; first as hIsFirst; last as hIsLast" class="container">
             <div class="controller-area">
               <button mat-icon-button (click)="openEditDialog(item)" class="controller-button">
                 <mat-icon aria-label="Edit">create</mat-icon>
