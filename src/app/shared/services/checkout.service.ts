@@ -5,6 +5,7 @@ import {CartService} from './cart.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {PaymentType} from '../enum/payment.type.enum';
 import {AuthService} from './auth.service';
+import {MatSnackBar} from '@angular/material';
 
 @Injectable()
 export class CheckoutService {
@@ -21,7 +22,7 @@ export class CheckoutService {
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
   constructor(private cartService: CartService, private httpService: HttpService,
-              private authService: AuthService) {
+              private authService: AuthService, private snackBar: MatSnackBar) {
     this.cartService.cartItems.subscribe(
       (data) => this.dataIsReady.next((data && data.length > 0) ? true : false)
     );
@@ -72,8 +73,15 @@ export class CheckoutService {
         );
       });
     } else {
-      localStorage.setItem('address', JSON.stringify(data));
-      return Promise.resolve();
+      try {
+        localStorage.setItem('address', JSON.stringify(data));
+        return Promise.resolve();
+      } catch(e) {
+        this.snackBar.open('ذخیره آدرس در حالت Private و بدون login ممکن نیست.', null, {
+          duration: 2000,
+        });
+        return Promise.reject('');
+      }
     }
   }
 

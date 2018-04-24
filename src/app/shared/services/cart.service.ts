@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
 import {AuthService} from './auth.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {MatSnackBar} from '@angular/material';
 
 @Injectable()
 export class CartService {
@@ -9,28 +10,30 @@ export class CartService {
   private localStorageKey = 'cart';
   coupon_discount = 0;
 
-  constructor(private httpService: HttpService, private authService: AuthService) {
-    this.authService.isLoggedIn.subscribe(
-      (data) => {
-        if (data) {
-          // Read data from localStorage and save in server if any data is exist in localStorage
-          const items = this.getItemsFromStorage();
+  constructor(private httpService: HttpService, private authService: AuthService, private snackBar: MatSnackBar) {
+    this.authService.isLoggedIn.filter(r => r).subscribe(
+      () => {
+        // Read data from localStorage and save in server if any data is exist in localStorage
+        const items = this.getItemsFromStorage();
 
-          if (items && items.length > 0) {
-            items.forEach((el, i) => {
-              this.httpService.post('order', {
-                product_id: el.product_id,
-                product_instance_id: el.instance_id,
-                number: el.quantity,
-              })
-                .subscribe(() => {
-                    items.splice(i, 1);
+        if (items && items.length > 0) {
+          items.forEach((el, i) => {
+            this.httpService.post('order', {
+              product_id: el.product_id,
+              product_instance_id: el.instance_id,
+              number: el.quantity,
+            })
+              .subscribe(() => {
+                  items.splice(i, 1);
+                  try {
                     localStorage.setItem(this.localStorageKey, JSON.stringify(items));
-                  },
-                  err => console.error('orders error: ', el, err)
-                );
-            });
-          }
+                  } catch (e) {
+                    console.error('could not update local storage after login', e);
+                  }
+                },
+                err => console.error('orders error: ', el, err)
+              );
+          });
         }
       }
     );
@@ -54,9 +57,14 @@ export class CartService {
       tempItems = tempItems.filter(el => el.product_id !== value.product_id
         && el.instance_id !== value.instance_id);
 
-      localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
-
-      this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
+      try {
+        localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
+        this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
+      } catch (e) {
+        this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, {
+          duration: 2000,
+        });
+      }
     }
   }
 
@@ -95,15 +103,20 @@ export class CartService {
       ls_items = ls_items.filter(el =>
         el.product_id !== value.product_id ||
         el.instance_id !== value.pre_instance_id);
-     
+
       ls_items.push({
         product_id: value.product_id,
         instance_id: value.instance_id,
         quantity: value.number,
       });
-
-      localStorage.setItem(this.localStorageKey, JSON.stringify(ls_items));
-      this.getCartItems();
+      try {
+        localStorage.setItem(this.localStorageKey, JSON.stringify(ls_items));
+        this.getCartItems();
+      } catch (e) {
+        this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, {
+          duration: 2000,
+        });
+      }
     }
   }
 
@@ -211,6 +224,9 @@ export class CartService {
       localStorage.setItem(this.localStorageKey, JSON.stringify(data));
       this.updateCart(item);
     } catch (e) {
+      this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, {
+        duration: 2000,
+      });
       console.error('Cannot save item to local storage: ', e);
     }
   }
@@ -236,7 +252,7 @@ export class CartService {
         instances: item.instances
           .filter(r => r.product_color_id === color._id)
           .map(r => Object.assign(r, {quantity: r.inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b, 0)})),
-       
+
         tags: [],
         name: item.name,
         price: instance.price,
