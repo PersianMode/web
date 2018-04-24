@@ -1,3 +1,5 @@
+
+
 .row{
   margin: 0px 10px;
 }
@@ -24,4 +26,24 @@
   text-align: right;
   margin: 0px 10px;
 
+}
+
+.editor-container {
+  direction: rtl;
+  text-align: right;
+}
+.ql-editor {
+  text-align: right !important;
+}
+
+.ql-editor * {
+  text-align: right !important;
+}
+
+.editor-container ol {
+  margin: 0 2em;
+}
+
+.ql-size-large {
+  font-size: 200px;
 }

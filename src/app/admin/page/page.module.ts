@@ -11,7 +11,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
 import {PageComponent} from './page.component';
 import {PageBasicInfoComponent} from './components/page-basic-info/page-basic-info.component';
-import {MarkdownModule} from 'angular2-markdown';
+// import {MarkdownModule} from 'angular2-markdown';
 import {PlacementComponent} from './components/placement/placement.component';
 import {MenuPlacementComponent} from './components/menu-placement/menu-placement.component';
 import {LogoListPlacementComponent} from './components/logo-list-placement/logo-list-placement.component';
@@ -23,6 +23,7 @@ import {SubMenuComponent} from './components/menu-placement/sub-menu/sub-menu.co
 import {SliderPreviewComponent} from './components/slider-placement/slider-preview/slider-preview.component';
 import {EditPanelComponent} from './components/page-content-placement/edit-panel/edit-panel.component';
 import {ColorPickerModule} from 'primeng/primeng';
+import {EditorModule} from 'primeng/editor';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {ColorPickerModule} from 'primeng/primeng';
     MatTabsModule,
     MatCheckboxModule,
     SharedModule,
-    MarkdownModule.forRoot(),
+    // MarkdownModule.forRoot(),
+    EditorModule,
     DragulaModule,
     ColorPickerModule,
   ],
