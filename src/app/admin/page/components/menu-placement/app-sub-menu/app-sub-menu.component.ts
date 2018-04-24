@@ -248,6 +248,7 @@ export class AppSubMenuComponent implements OnInit {
           const changedObj = this.subMenuItems.find(el => el._id === this.selectedItem._id);
           changedObj.info.text = newInfo.text;
           changedObj.info.href = newInfo.href;
+          changedObj.info.section = newInfo.section;
           changedObj.info.is_header = newInfo.is_header;
         } else {
           const newInfo = this.getItemInfo(true);
@@ -264,7 +265,7 @@ export class AppSubMenuComponent implements OnInit {
     );
   }
 
-  private getItemInfo(isNewItem = false) {
+  private getItemInfo(isNewItem = false): any {
     const res = {
       text: (this.appSubMenuForm.controls['text'].value ? this.appSubMenuForm.controls['text'].value : '').trim(),
       href: (this.appSubMenuForm.controls['href'].value ? this.appSubMenuForm.controls['href'].value : '').trim(),
@@ -371,7 +372,7 @@ export class AppSubMenuComponent implements OnInit {
 
   uploadImage() {
     const uploadImgDialog = this.dialog.open(UploadImageDialogComponent, {
-      width: '500px',
+      width: '550px',
       data: {
         pageId: this.pageId,
         placementId: this.selectedItem ? this.selectedItem._id : null,

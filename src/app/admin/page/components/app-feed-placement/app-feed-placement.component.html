@@ -1,0 +1,52 @@
+<div>
+  <form (ngSubmit)="modifyItem()" [formGroup]="feedForm">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayout.xs="column" fxLayoutAlign.xs="center center">
+      <div fxFlex="70" class="form-controller">
+        <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
+          fxLayoutAlign.xs="center center">
+          <div fxFlex="40" class="full-width sub-item">
+            <div class="full-width">
+              <mat-input-container class="full-width">
+                <input matInput type="text" placeholder="متن" formControlName="text" />
+              </mat-input-container>
+            </div>
+            <div class="full-width">
+              <mat-input-container class="full-width">
+                <input matInput type="text" placeholder="آدرس" formControlName="href" />
+              </mat-input-container>
+            </div>
+          </div>
+          <div fxFlex="60" class="full-width sub-item">
+            <app-uploader style="float: left;" [url]="imageUploadUrl()" [additionalData]="getThisPlacement()" [single]="true" (OnCompleted)="imageUploaded($event)"></app-uploader>
+          </div>
+        </div>
+      </div>
+      <div fxFlex="30" class="button-controller">
+        <button mat-mini-fab color="primary" type="submit" [disabled]="!this.feedForm.valid || !this.anyChanges">
+          <mat-icon>
+            <i class="material-icons" *ngIf="selectedItem">create</i>
+            <i class="material-icons" *ngIf="!selectedItem">done</i>
+          </mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" type="button" (click)="removeItem()" *ngIf="selectedItem" class="remove">
+          <mat-icon>
+            <i class="material-icons">remove</i>
+          </mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" type="button" (click)="clearFields()" *ngIf="selectedItem">
+          <i class="fa fa-eraser"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div class="demo-list demo-area" [dragula]="bagName" [dragulaModel]="placementList">
+    <div *ngFor="let item of placementList" (click)="selectItem(item)" class="feed-container">
+      <img [src]="getImageUrl(item.info.imgUrl)" class="feed-image" 
+      />
+      <div></div>
+      <div class="feed-title">
+        <label class="menu-item">{{item.info.text}}</label>
+      </div>
+    </div>
+  </div>
+</div>

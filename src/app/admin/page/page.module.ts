@@ -26,6 +26,7 @@ import {ColorPickerModule} from 'primeng/primeng';
 import { AppSubMenuComponent } from './components/menu-placement/app-sub-menu/app-sub-menu.component';
 import { UploadImageDialogComponent } from './components/menu-placement/upload-image-dialog/upload-image-dialog.component';
 import { FooterPlacementComponent } from './components/footer-placement/footer-placement.component';
+import { AppFeedPlacementComponent } from './components/app-feed-placement/app-feed-placement.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { FooterPlacementComponent } from './components/footer-placement/footer-p
     AppSubMenuComponent,
     UploadImageDialogComponent,
     FooterPlacementComponent,
+    AppFeedPlacementComponent,
   ],
   imports: [
     PageRouting,
