@@ -18,9 +18,6 @@ import {MatPaginator} from '@angular/material';
 export class OrdersComponent implements OnInit, OnDestroy {
   profileOrder = [];
   displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'used_point', 'address', 'view_details'];
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
   isMobile = false;
   selectedOrder;
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
@@ -39,12 +36,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     });
     this.profileOrderService.getAllOrders();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
-    // this.ngAfterViewInit();
   }
-  //
-  // ngAfterViewInit() {
-  //   this.profileOrder.paginator = this.paginator;
-  // }
 
   makePersianNumber(a: string, isPrice) {
     if (isNaN((+a)))
