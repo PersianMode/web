@@ -8,7 +8,7 @@ import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {MatDialog} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {MatPaginator} from '@angular/material';
+
 
 @Component({
   selector: 'app-orders',
