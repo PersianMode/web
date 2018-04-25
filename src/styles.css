@@ -1,7 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import "~quill/dist/quill.core.css";
-@import "~quill/dist/quill.snow.css";
 
 @font-face {
   font-family: "nikeglyph";
@@ -893,6 +891,20 @@ mat-panel-title {
   height: 20px;
 }
 
+.remove {
+  color: darkred;
+}
+
+.footer-column {
+  display: inline-block;
+  text-align: right;
+  margin-left: 10px;
+  margin-right: 10px;
+  vertical-align: top;
+p {
+  text-align: justify;
+  font-family: iranyekan, sans-serif;
+}
 /* FOR PAGE CONTENT */
 .mat-content-preview-for-page {
   font-family: iranyekan;

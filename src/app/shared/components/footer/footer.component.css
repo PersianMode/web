@@ -21,14 +21,6 @@
   font-weight: bold;
 }
 
-.footer-column {
-  display: inline-block;
-  text-align: right;
-  margin-left: 10px;
-  margin-right: 10px;
-  vertical-align: top;
-}
-
 .row-item {
   margin-top: 3px;
   margin-bottom: 3px;

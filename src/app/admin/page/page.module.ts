@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
-  MatSnackBarModule, MatTabsModule
+  MatSnackBarModule, MatTabsModule, MatTooltipModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PageRouting} from './page.routing';
@@ -24,6 +24,7 @@ import {SliderPreviewComponent} from './components/slider-placement/slider-previ
 import {EditPanelComponent} from './components/page-content-placement/edit-panel/edit-panel.component';
 import {ColorPickerModule} from 'primeng/primeng';
 import {EditorModule} from 'primeng/editor';
+import { FooterPlacementComponent } from './components/footer-placement/footer-placement.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {EditorModule} from 'primeng/editor';
     SubMenuComponent,
     SliderPreviewComponent,
     EditPanelComponent,
+    FooterPlacementComponent,
   ],
   imports: [
     PageRouting,
@@ -60,6 +62,7 @@ import {EditorModule} from 'primeng/editor';
     EditorModule,
     DragulaModule,
     ColorPickerModule,
+    MatTooltipModule,
   ],
   entryComponents: [
     EditPanelComponent,
