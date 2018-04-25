@@ -919,6 +919,10 @@ p {
   font-family: iranyekan, sans-serif;
 }
 
+.waiting-spinner {
+  margin: 0 auto;
+}
+
 /* FOR PAGE CONTENT AND PRIMENG */
 
 .mat-content-preview-for-page {
