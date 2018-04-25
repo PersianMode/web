@@ -49,6 +49,10 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
 
       const warehouseId = this.loginForm.controls['warehouse_id'].value;
+      if (!warehouseId) {
+        this.openSnackBar('فروشگاه حورد نظر را انتخاب کنید');
+        return;
+      }
 
       this.progressService.enable();
       this.authService.login(this.loginForm.controls['email'].value,
@@ -87,6 +91,10 @@ export class LoginComponent implements OnInit {
   setSeen(item) {
     this.seen[item] = true;
     this.curFocus = item;
+  }
+
+  onWarehouseChange(warehouseId) {
+    this.loginForm.controls['warehouse_id'].setValue(warehouseId);
   }
 
   onChange(option) {
