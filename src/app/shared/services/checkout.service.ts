@@ -102,7 +102,7 @@ export class CheckoutService {
     if (this.authService.isLoggedIn.getValue()) {
       return new Promise((resolve, reject) => {
         this.httpService.post('user/address', data).subscribe(
-          res => {
+          () => {
             resolve();
           }, err => {
             reject(err);
@@ -143,7 +143,7 @@ export class CheckoutService {
       used_balance: 0,
       total_amount: this.total,
       is_collect: this.is_collect,
-    }
+    };
   }
 
   checkout() {

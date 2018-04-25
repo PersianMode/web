@@ -231,7 +231,7 @@ export class CartService {
     }
   }
 
-  private updateCart(item, order_id) {
+  private updateCart(item, order_id = null) {
     const currentValue = this.cartItems.getValue();
     const object = {
       product_id: item.product_id,

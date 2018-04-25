@@ -44,7 +44,7 @@ export class AddressTableComponent implements OnInit {
     });
     const state = this.checkoutService.addressState;
     if (state) {
-      [this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress, this.customerData]
+      [this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress]
         = this.checkoutService.addressState;
       if (this.isProfile)
         this.withDelivery = true;
