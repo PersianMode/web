@@ -51,6 +51,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   sortedBy: any = {value: null};
   collectionName = '';
   collectionNameFa = '';
+  showWaitingSpinner = false;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
               private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService) {
@@ -77,6 +78,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.productService.collectionNameFa$.subscribe(r => {
       this.collectionNameFa = r;
     });
+    this.showHideSpinner(true);
     this.productService.productList$.subscribe(r => {
       this.products = r;
       this.sortedBy = {value: null};
@@ -110,6 +112,8 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   }
 
   calcAfterScroll() {
+    this.showHideSpinner(true);
+
     if (!this.isMobile && this.filterPane && this.gridwall) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
       const height = this.window.innerHeight - 209;
@@ -123,6 +127,8 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
         !this.bottomScroll && filterHeight - offset < height - 209;
       this.topDist = height - filterHeight + 209;
     }
+
+    this.showHideSpinner(false);
   }
 
   selectSortOption(sortPanel, index) {
@@ -146,5 +152,9 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
 
   setDispalyFilter($event) {
     this.displayFilter = $event;
+  }
+
+  showHideSpinner(shouldShow = false) {
+    this.showWaitingSpinner = shouldShow;
   }
 }
