@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
 import {MatDialogRef} from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+import {OrderStatus} from '../../../../shared/lib/order_status';
 
 
 @Component({
@@ -30,7 +31,6 @@ export class OrderLinesComponent implements OnInit {
     this.removeDuplicates(this.orderLines);
     this.orderStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
-    console.log('removeDuplicatesArray : ', this.noDuplicateOrderLine);
   }
 
   removeDuplicates(arr) {
@@ -79,31 +79,8 @@ export class OrderLinesComponent implements OnInit {
     let statusText = '';
     arr.forEach(el => {
       tickets = el.tickets;
-      switch (tickets[tickets.length - 1].status) {
-        case 1:
-        case 2:
-        case 4:
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 10:
-          statusText = 'درحال پردازش';
-          break;
-        case 3 :
-          statusText = 'بازگشت هزینه';
-          break;
-        case 9:
-          statusText = 'سفارش تحویل شده';
-          break;
-        case 11:
-          statusText = 'سفارش لغو شده';
-          break;
-        default:
-          statusText = 'درحال پردازش';
-      };
-        el.statusText = statusText;
-    }
-    );
+      statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
+      el.statusText = statusText;
+    });
   }
 }

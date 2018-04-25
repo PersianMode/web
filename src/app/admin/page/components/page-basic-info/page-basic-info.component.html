@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../../../../../assets/css/agate.min.css">
 <mat-card class="card-view">
   <mat-card-header>
     <mat-card-title>
@@ -43,17 +44,15 @@
 
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
 
-        <mat-form-field class="example-full-width">
-          <textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down"></textarea>
-        </mat-form-field>
+      <mat-form-field class="example-full-width">
+      <textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down"></textarea>
+      </mat-form-field>
       </div>
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
 
-        <markdown *ngIf="form.controls['content'].value" [data]="form.controls['content'].value"></markdown>
+      <markdown *ngIf="form.controls['content'].value" [data]="form.controls['content'].value"></markdown>
 
       </div>
-
-
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
 
         <div role="submit-button" style="text-align: left; margin-top: 10px;">

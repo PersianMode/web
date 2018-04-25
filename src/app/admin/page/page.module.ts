@@ -70,7 +70,7 @@ import { AppFeedPlacementComponent } from './components/app-feed-placement/app-f
   ],
   entryComponents: [
     EditPanelComponent,
-    UploadImageDialogComponent,    
+    UploadImageDialogComponent,
   ],
 })
 export class PageModule {

@@ -60,7 +60,6 @@ export class PageBasicInfoComponent implements OnInit {
 
     }, {});
   }
-
   initPageInfo() {
     if (!this.id) {
       return;

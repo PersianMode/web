@@ -24,6 +24,7 @@
         "assets/fonts/mat-icon-font/material-icons.css",
         "assets/fonts/adobe-arabic/index.css",
         "assets/fonts/iran-fonts/index.css",
+        "assets/css/agate.min.css",
         "../node_modules/font-awesome/css/font-awesome.min.css",
         "../node_modules/primeng/resources/primeng.min.css",
         "../node_modules/dragula/dist/dragula.css"
