@@ -13,5 +13,4 @@ export let OrderStatus: any[] = [
   {name: 'ارسال ناموفق', status: STATUS.DeliveryFailed},
   {name: 'لغو', status: STATUS.Cancel},
   {name: 'استرداد', status: STATUS.Return},
-
 ];

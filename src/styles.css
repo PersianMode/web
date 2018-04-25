@@ -651,9 +651,9 @@ mat-panel-title {
 }
 
 .footer-link-bold {
-  color: white;
+  color: white !important;
   font-weight: bolder;
-  font-size: .875em;
+  font-size: .875em !important;
   text-decoration: none;
 }
 
@@ -668,7 +668,7 @@ mat-panel-title {
   background-color: #191919;
   clear: both;
   margin-top: 60px;
-  height: 210px;
+  /* height: 210px; */
 }
 
 .hr-setting {
@@ -697,7 +697,15 @@ mat-panel-title {
 }
 
 .footer-link:hover, .footer-link1:hover, .icons:hover {
-  color: white;
+  color: lightgray;
+}
+
+@media screen and (max-width: 500px) {
+  .footer-link, .footer-link-bold, .footer-link1, .icons {
+    float: none;
+    display: block;
+    text-align: right;
+  }
 }
 
 .div-guide {
@@ -716,7 +724,7 @@ mat-panel-title {
 }
 
 .footer-link1 {
-  color: lightgray;
+  color: gray;
 }
 
 .div-top {
@@ -880,4 +888,19 @@ mat-panel-title {
 
 .persian-field input {
   height: 20px;
+}
+
+.remove {
+  color: darkred;
+}
+
+.footer-column {
+  display: inline-block;
+  text-align: right;
+  margin-left: 10px;
+  margin-right: 10px;
+  vertical-align: top;
+p {
+  text-align: justify;
+  font-family: iranyekan, sans-serif;
 }

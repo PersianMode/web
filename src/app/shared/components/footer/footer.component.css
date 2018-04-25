@@ -3,6 +3,11 @@
   color: #444;
 }
 
+.footer-top-part {
+  padding-left: 70px;
+  padding-right: 70px;
+}
+
 .icons-outer-div {
   text-align: left;
 }
@@ -13,5 +18,14 @@
 
 .country-name {
   color: white;
+  font-weight: bold;
+}
+
+.row-item {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.header {
   font-weight: bold;
 }

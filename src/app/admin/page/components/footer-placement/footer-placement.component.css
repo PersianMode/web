@@ -1,0 +1,70 @@
+.icon-link {
+  display: inline-block;
+  margin-left: 7px;
+  margin-right: 7px;
+  cursor: pointer;
+}
+
+.part-title {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.btn-area {
+  margin-top: 10px;
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+.icons{
+  font-size: 30px;
+  color: #444;
+  padding: 1px 4px 1px 4px;
+}
+
+.demo-area {
+  margin-top: 20px
+}
+
+.selected-icon {
+  border: dotted black thin;
+  border-radius: 5px;
+}
+
+.menu-item {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.divider {
+  text-align: center;
+  width: 70%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.input-item {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.row-item {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.item { 
+  color: black !important;
+}
+
+.vertical-align-item {
+  margin-top: 20px;
+}
+
+.empty-column {
+  background-color: rgba(176,182,180,0.68);
+  width: 20px;
+  height: 100px;
+}

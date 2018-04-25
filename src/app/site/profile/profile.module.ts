@@ -7,7 +7,7 @@ import {SharedModule} from '../../shared/shared.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {
-  MatCardModule, MatFormFieldModule, MatHeaderRow, MatInputModule, MatRadioModule, MatRow, MatRowDef,
+  MatCardModule, MatExpansionModule, MatFormFieldModule, MatHeaderRow, MatInputModule, MatPaginatorModule, MatRadioModule,
   MatTableModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -26,6 +26,9 @@ import {DpDatePickerModule} from 'ng2-jalali-date-picker';
     MatRadioModule,
     DpDatePickerModule,
     ReactiveFormsModule,
+    MatTableModule,
+    MatExpansionModule,
+    MatPaginatorModule,
   ],
   declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent]
 })
