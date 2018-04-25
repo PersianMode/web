@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
     {label: 'کلکسیون‌ها', path: '/agent/collections', active: false},
     {label: 'محصولات', path: '/agent/products', active: false},
     {label: 'صفحه‌ها', path: '/agent/pages', active: false},
+    {label: 'دیکشنری ', path: '/agent/dictionary', active: false},
     {label: 'بارگذاری فایل', path: '/agent/uploads', active: false},
     {label: 'سفارش ها', path: '/agent/orders', active: false},
   ];
@@ -26,7 +27,6 @@ export class HeaderComponent implements OnInit {
   value: any;
   bufferValue: any;
   btnLabel = null;
-
   constructor(private authService: AuthService, private router: Router,
               private progressService: ProgressService) {
   }
@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit {
 
         this.navLinks.forEach(link => {
           const foundLink = links.find(x => x.address === link.path);
-          link.active =  this.authService.userDetails.accessLevel === foundLink.access;
+          link.active = this.authService.userDetails.accessLevel === foundLink.access;
         });
 
       }

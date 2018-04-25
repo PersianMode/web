@@ -1,0 +1,82 @@
+<mat-card>
+  <mat-card-content>
+    <div class="example-container mat-elevation-z8">
+      <div class="example-loading-shade"
+           *ngIf="isLoadingResults">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      </div>
+
+      <mat-table #table [dataSource]="dataSource" class="example-table"
+                 matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
+                 (matSortChange)="onSortChange($event)">
+
+        <ng-container matColumnDef="number">
+          <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{getIndex(element)}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef> نوع</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div *ngIf="editSelectedIndex!==element.position">
+              {{element.type}}
+            </div>
+            <div *ngIf="editSelectedIndex===element.position">
+              <!-- TODO element type select Input-->
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef> نام</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div *ngIf="editSelectedIndex!==element.position">
+              {{element.name}}
+            </div>
+            <div *ngIf="editSelectedIndex===element.position">
+              <!-- TODO element name Input-->
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+          <mat-header-cell *matHeaderCellDef> مقدار</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div *ngIf="editSelectedIndex!==element.position">
+              {{element.value}}
+            </div>
+            <div *ngIf="editSelectedIndex===element.position">
+              <!-- TODO element value Input-->
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="edit">
+          <mat-header-cell *matHeaderCellDef> تغییر</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div *ngIf="editSelectedIndex!==element.position" (click)="Edit(element)">
+              <mat-icon aria-label="edit">edit</mat-icon>
+            </div>
+            <div *ngIf="editSelectedIndex===element.position" (click)="saveEdit()">
+              <mat-icon aria-label="accept">done</mat-icon>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="remove">
+          <mat-header-cell *matHeaderCellDef> حذف</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div (click)="deleteRow(element.position)">
+              <mat-icon aria-label="remove">remove</mat-icon>
+            </div>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+    </div>
+
+  </mat-card-content>
+</mat-card>
