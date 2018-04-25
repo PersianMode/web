@@ -6,23 +6,24 @@ import {HttpService} from '../../../../shared/services/http.service';
 import { ProgressService } from '../../../../shared/services/progress.service';
 
 @Component({
-  selector: 'app-add-dictionary',
-  templateUrl: './add-dictionary.component.html',
-  styleUrls: ['./add-dictionary.component.css']
+  selector: 'app-modify-dictionary',
+  templateUrl: './modify-dictionary.component.html',
+  styleUrls: ['./modify-dictionary.component.css']
 })
-export class AddDictionaryComponent implements OnInit {
+export class ModifyDictionaryComponent implements OnInit {
 
   upsertBtnShouldDisabled = false;
   dictionaryForm: FormGroup;
   types;
   dictionaryId: string;
 
-  constructor(private dialogRef: MatDialogRef<AddDictionaryComponent>,
+  constructor(private dialogRef: MatDialogRef<ModifyDictionaryComponent>,
     @Inject(MAT_DIALOG_DATA) private data: any, private httpService: HttpService,
     private progressService: ProgressService) {
 }
 
   ngOnInit() {
+    // this.dictionaryForm.controls['type'].setValue(this.data.item.type)
     this.initForm();
     this.types = this.data.types;
     if (this.data.item) {
@@ -38,7 +39,7 @@ export class AddDictionaryComponent implements OnInit {
       value: [null, [
         Validators.required,
       ]],
-      type: [null, [
+      type: [ this.data.item ?  this.data.item.type : null, [
         Validators.required,
       ]],
     }, {
@@ -62,7 +63,9 @@ export class AddDictionaryComponent implements OnInit {
         this.progressService.disable();
       });
     }
-    this.dialogRef.close();
+    this.dialogRef.close({
+      status: true
+    });
   }
 
   basicInfoValidation(AC: AbstractControl) {

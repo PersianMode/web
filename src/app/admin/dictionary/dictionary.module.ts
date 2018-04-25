@@ -18,7 +18,7 @@ import {
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import { AddDictionaryComponent } from './components/add-dictionary/add-dictionary.component';
+import {ModifyDictionaryComponent} from './components/modify-dictionary/modify-dictionary.component';
 
 @NgModule({
   imports: [
@@ -43,10 +43,10 @@ import { AddDictionaryComponent } from './components/add-dictionary/add-dictiona
   ],
   declarations: [
     DictionaryComponent,
-    AddDictionaryComponent
+    ModifyDictionaryComponent
   ],
   entryComponents: [
-    AddDictionaryComponent
+    ModifyDictionaryComponent
   ]
 })
 export class DictionaryModule {

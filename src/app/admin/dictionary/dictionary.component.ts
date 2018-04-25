@@ -4,7 +4,7 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
 import {ProgressService} from '../../shared/services/progress.service';
 import {HttpService} from '../../shared/services/http.service';
 import {IDictionary} from './interfaces/IDictionary.interface';
-import { AddDictionaryComponent } from './components/add-dictionary/add-dictionary.component';
+import { ModifyDictionaryComponent } from './components/modify-dictionary/modify-dictionary.component';
 
 @Component({
   selector: 'app-dictionary',
@@ -96,10 +96,12 @@ export class DictionaryComponent implements OnInit {
             res => {
               this.openSnackBar('دیکشنری با موفقیت پاک گردید');
               this.isLoadingResults = false;
+              this.progressService.disable();
             },
             err => {
               this.isLoadingResults = false;
               this.openSnackBar('خطا در پاک کردن دیکشنری');
+              this.progressService.disable();
             }
           );
           this.load();
@@ -110,7 +112,7 @@ export class DictionaryComponent implements OnInit {
   }
 
   updateElement(element: IDictionary) {
-    const updateDicDialog = this.dialog.open(AddDictionaryComponent, {
+    const updateDicDialog = this.dialog.open(ModifyDictionaryComponent, {
           width: '600px;',
       data: {
         types: this.types,
@@ -118,10 +120,12 @@ export class DictionaryComponent implements OnInit {
       }
     });
     updateDicDialog.afterClosed().subscribe(
-      res => {
-        this.openSnackBar('دیکشنری با موفقیت بروزرسانی گردید');
-        this.isLoadingResults = false;
-        this.load();
+      data => {
+        if (data && data.status) {
+          this.openSnackBar('دیکشنری با موفقیت بروزرسانی گردید');
+          this.isLoadingResults = false;
+          this.load();
+        }
       },
       err => {
         this.isLoadingResults = false;
@@ -152,17 +156,19 @@ export class DictionaryComponent implements OnInit {
   }
 
   addDictionary() {
-    const addDicDialog =  this.dialog.open(AddDictionaryComponent, {
+    const addDicDialog =  this.dialog.open(ModifyDictionaryComponent, {
       width: '600px;',
       data: {
         types: this.types
       }
     });
     addDicDialog.afterClosed().subscribe(
-      res => {
-        this.openSnackBar('دیکشنری با موفقیت ثبت گردید');
-        this.isLoadingResults = false;
-        this.load();
+      data => {
+        if (data && data.status) {
+          this.openSnackBar('دیکشنری با موفقیت ثبت گردید');
+          this.isLoadingResults = false;
+          this.load();
+        }
       },
       err => {
         this.isLoadingResults = false;

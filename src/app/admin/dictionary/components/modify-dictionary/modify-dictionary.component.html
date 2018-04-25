@@ -1,7 +1,7 @@
 <mat-card class="card-view">
   <mat-card-header>
     <mat-card-title>
-        
+
       <div *ngIf="!data.item">افزودن دیکشنری جدید</div>
       <div *ngIf="data.item">ویرایش دیکشنری</div>
     </mat-card-title>
@@ -14,7 +14,7 @@
           <mat-input-container class="field farsi">
             <input matInput type="text" placeholder="نام" formControlName="name" role="colNameFa" tabindex="2" [value]="data.item? data.item.name : '' ">
             <mat-hint>نام دیکشنری را وارد کنید</mat-hint>
-            <mat-error *ngIf="dictionaryForm.controls['name'].hasError('required') && anyChanges">
+            <mat-error *ngIf="dictionaryForm.controls['name'].hasError('required')">
               وارد کردن نام دیکشنری الزامی است
             </mat-error>
           </mat-input-container>
@@ -22,29 +22,25 @@
 
         <div fxFlex="33" class="field-container">
           <mat-input-container class="field farsi">
-            <input matInput type="text" placeholder="مقدار" formControlName="value" role="colNameFa" tabindex="2"  [value]="data.item? data.item.value : '' ">
+            <input matInput type="text" placeholder="مقدار" formControlName="value" role="colNameFa" tabindex="2" [value]="data.item? data.item.value : '' ">
             <mat-hint>مقدار دیکشنری را وارد کنید</mat-hint>
-            <mat-error *ngIf="dictionaryForm.controls['value'].hasError('required') && anyChanges">
+            <mat-error *ngIf="dictionaryForm.controls['value'].hasError('required')">
               وارد کردن مقدار دیکشنری الزامی است
             </mat-error>
           </mat-input-container>
         </div>
 
         <mat-form-field fxFlex="33" style="text-align:right" tabindex="4">
-            <mat-select placeholder="نوع" formControlName="type" role="type">
-                <mat-option *ngFor="let type of types" style="text-align:right"
-                            [value]="type">
-                    {{type}}
-                </mat-option>
-            </mat-select>
-            <mat-hint>نوع را انتخاب کنید</mat-hint>
+          <mat-select placeholder="نوع" formControlName="type" role="type">
+            <mat-option *ngFor="let type of types" style="text-align:right" [value]="type"> {{type}}
+            </mat-option>
+          </mat-select>
+          <mat-hint>نوع را انتخاب کنید</mat-hint>
         </mat-form-field>
 
-
         <div fxFlex="20" role="submit-button" style="text-align: left; margin-top: 10px;">
-          <button mat-icon-button type="submit" [disabled]="upsertBtnShouldDisabled || (!dictionaryForm.valid || (collectionId && !anyChanges))"
-            tabindex="3">
-            <mat-icon aria-label="accept">done</mat-icon>
+          <button mat-button mat-raised-button type="submit" [disabled]="upsertBtnShouldDisabled || !dictionaryForm.valid">
+            {{data.item ? 'ویرایش' : 'ذخیره'}}
           </button>
         </div>
       </div>
