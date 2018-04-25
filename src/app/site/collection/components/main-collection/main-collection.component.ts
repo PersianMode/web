@@ -6,7 +6,7 @@ import {PageService} from '../../../../shared/services/page.service';
 import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {Subject} from 'rxjs/Subject';
-
+const HEADER_HEIGHT = 209;
 @Component({
   selector: 'app-main-collection',
   templateUrl: './main-collection.component.html',
@@ -114,16 +114,16 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   calcAfterScroll() {
     if (!this.isMobile && this.filterPane && this.gridwall) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
-      const height = this.window.innerHeight - 209;
+      const height = this.window.innerHeight - HEADER_HEIGHT;
       const filterHeight = this.filterPane.nativeElement.scrollHeight;
-      const docHeight = this.gridwall.nativeElement.scrollHeight + 209;
+      const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT;
       this.innerScroll = docHeight - filterHeight < 100;
-      this.innerHeight = docHeight - 209;
+      this.innerHeight = docHeight - HEADER_HEIGHT;
       this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
       this.bottomScroll = !this.innerScroll && offset >= 65 && (docHeight - offset - height < 180);
       this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= 65 &&
-        !this.bottomScroll && filterHeight - offset < height - 209;
-      this.topDist = height - filterHeight + 209;
+        !this.bottomScroll && filterHeight - offset < height - HEADER_HEIGHT;
+      this.topDist = height - filterHeight + HEADER_HEIGHT;
     }
   }
 

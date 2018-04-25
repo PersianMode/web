@@ -29,7 +29,6 @@ export class AddressTableComponent implements OnInit {
   addresses = [];
   isMobile = false;
   isLoggedIn = false;
-  customerData = {};
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
               private dialog: MatDialog, private checkoutService: CheckoutService,
@@ -61,6 +60,8 @@ export class AddressTableComponent implements OnInit {
         this.addresses = res;
       }
     });
+
+    this.setState();
   }
 
   private setState() {
@@ -68,7 +69,7 @@ export class AddressTableComponent implements OnInit {
       this.withDelivery,
       this.selectedCustomerAddress,
       this.selectedWarehouseAddress,
-      this.customerData,
+      JSON.parse(localStorage.getItem('address')),
       this.withDelivery ?
         this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
         : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null,
@@ -131,7 +132,8 @@ export class AddressTableComponent implements OnInit {
       });
       rmDialog.afterClosed().subscribe(
         () => {
-          this.withDelivery ? this.checkoutService.getCustomerAddresses() : this.customerData = JSON.parse(localStorage.getItem('address'));
+          if (this.withDelivery)
+            this.checkoutService.getCustomerAddresses();
           this.setState();
         },
         (err) => {

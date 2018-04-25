@@ -22,10 +22,10 @@
             <mat-expansion-panel-header>
               <mat-panel-title>آدرس</mat-panel-title>
             </mat-expansion-panel-header>
-            <app-address-table [isProfile]="false" (addressChanged)="changeAddress($event)"></app-address-table>
+            <app-address-table [isProfile]="false"></app-address-table>
           </mat-expansion-panel>
         </mat-accordion>
-        <button mat-raised-button style="padding:10px;margin:15px;font-size:12pt;background: black;color:white;width:calc(100% - 30px)" (click)="sudoVerify()" >پرداخت</button>
+        <button mat-raised-button style="padding:10px;margin:15px;font-size:12pt;background: black;color:white;width:calc(100% - 30px)" (click)="checkout()" [disabled]="disabled" [style.background]="disabled ? 'gray' : 'black'">پرداخت</button>
       </div>
     </div>
   </div>

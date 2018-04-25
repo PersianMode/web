@@ -17,9 +17,7 @@ export class CheckoutPageComponent implements OnInit {
   balanceValue = 0;
   loyaltyPoint = 0;
   paymentType = PaymentType;
-  address: any = null;
-  cc = false;
-  customerData = null;
+  disabled = false;
 
   constructor(private checkoutService: CheckoutService, private httpService: HttpService, private cartService: CartService) {
   }
@@ -43,19 +41,8 @@ export class CheckoutPageComponent implements OnInit {
       .catch(err => {
         console.error('Cannot get balance and loyalty points of customer: ', err);
       });
-  }
 
-  changeAddress(data) {
-    if (data) {
-      this.address = Object.assign({}, data.address);
-      this.cc = data.cc;
-      this.customerData = Object.assign({}, data.customer);
-    } else {
-      this.address = null;
-      this.customerData = null;
-      this.cc = null;
-    }
-    console.log({address:this.address,cc:this.cc,customer: this.customerData});
+    this.checkoutService.isValid$.subscribe(r => this.disabled = !r);
   }
 
   changePaymentType(data) {
@@ -76,12 +63,7 @@ export class CheckoutPageComponent implements OnInit {
     }
   }
 
-  sudoVerify() {
-   this.httpService.post('order/verify', {
-     orderId: this.cartService.cartItems.getValue()[0].order_id,
-     transactionId: '5aca291155b58d09189ab885',
-     usedBalance: this.usedBalance,
-     usedPoints: this.usedLoyaltyPoint
-   });
+  checkout() {
+    this.checkoutService.checkout();
   }
 }

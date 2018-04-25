@@ -201,8 +201,8 @@ export class CartService {
       product_id: item.product_id,
       product_instance_id: item.product_instance_id,
     }).subscribe(
-      () => {
-        this.updateCart(item);
+      res => {
+        this.updateCart(item, res._id);
       },
       err => {
         console.error('Cannot save item to server: ', err);
@@ -231,12 +231,13 @@ export class CartService {
     }
   }
 
-  private updateCart(item) {
+  private updateCart(item, order_id) {
     const currentValue = this.cartItems.getValue();
     const object = {
       product_id: item.product_id,
       instance_id: item.product_instance_id,
       quantity: 1,
+      order_id,
     };
     const found = currentValue.find(r => r.product_id === object.product_id && r.instance_id === object.instance_id);
     if (found)
@@ -354,5 +355,17 @@ export class CartService {
           reject(err);
         });
     });
+  }
+
+  getCheckoutItems() {
+    return this.cartItems.getValue()
+      .map(r => Object.assign({},
+        {product_id: r.product_id, product_instance_id: r.instance_id, number: r.quantity}));
+  }
+
+  getOrderId() {
+    if (this.cartItems.getValue().length)
+      return this.cartItems.getValue()[0].order_id;
+    return null;
   }
 }
