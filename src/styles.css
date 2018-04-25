@@ -901,15 +901,29 @@ mat-panel-title {
   margin-left: 10px;
   margin-right: 10px;
   vertical-align: top;
+}
+
 p {
   text-align: justify;
   font-family: iranyekan, sans-serif;
 }
-/* FOR PAGE CONTENT */
+
+/* FOR PAGE CONTENT AND PRIMENG */
+
 .mat-content-preview-for-page {
   font-family: iranyekan;
   text-align: left;
   direction: ltr;
+}
+
+.mat-content-preview-for-page ul, .mat-content-preview-for-page ol {
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+.mat-content-preview-for-page ol {
+  list-style: -moz-arabic-indic; /* fallback */
+  list-style: arabic-indic;
 }
 
 .ql-align-center {
@@ -935,3 +949,9 @@ p {
 .ql-direction-rtl {
   direction: rtl;
 }
+
+.ql-toolbar.ql-snow {
+  text-align: left;
+}
+
+/* PREVIEW END */

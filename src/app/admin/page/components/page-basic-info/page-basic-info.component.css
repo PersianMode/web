@@ -1,49 +1,39 @@
 
-
-.row{
-  margin: 0px 10px;
+.row {
+  margin: 0 10px;
 }
 
 .card-view {
   direction: rtl;
 }
 
-.field-container{
+.field-container {
   width: 100%;
   margin: 5px;
 }
 
-.field{
+.field {
   width: 100%;
 }
 
-.farsi{
-  direction:rtl;
+.farsi {
+  direction: rtl;
 }
 
 .example-full-width {
   width: 100%;
   text-align: right;
-  margin: 0px 10px;
+  margin: 0 10px;
 
 }
 
 .editor-container {
+  font-family: iranyekan;
   direction: rtl;
   text-align: right;
 }
-.ql-editor {
-  text-align: right !important;
-}
 
-.ql-editor * {
-  text-align: right !important;
-}
-
-.editor-container ol {
-  margin: 0 2em;
-}
-
-.ql-size-large {
-  font-size: 200px;
+.header-little-fix-style {
+  text-align: left;
+  padding-left: 10px;
 }

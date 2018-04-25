@@ -3,22 +3,16 @@
     <mat-card-title>
       <h2> {{ id ? 'ویرایش صفحه': 'افزودن صفحه جدید' }} </h2>
     </mat-card-title>
-
   </mat-card-header>
   <mat-card-content>
-
     <form (ngSubmit)="submitPage()" [formGroup]="form">
-
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
-
         <div fxFlex="50" class="field-container">
-
           <app-suggestion fxFlex="50" [name]="'Collection'" [currentIds]="collection ?  [collection._id] : []"
                           [fieldName]="'name'"
                           [placeholder]="'نام کالکشن'" (add)="setCollection($event)"></app-suggestion>
           <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{collection ? collection.name : ''}} </h3>
         </div>
-
         <div fxFlex="50" class="field-container">
           <mat-input-container class="field">
             <input matInput type="text" placeholder="آدرس" formControlName="address"
@@ -29,34 +23,21 @@
             </mat-error>
           </mat-input-container>
         </div>
-
       </div>
 
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+      <div fxLayout="row" fxLayout.xs="column"
+           fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
         <div fxFlex="50" class="field-container">
-
           <mat-checkbox formControlName="is_app" role="is_app" dir="ltr">
-            Is App?
+            <span class="is-app-style">Is App?</span>
           </mat-checkbox>
         </div>
       </div>
 
-      <!--<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">-->
-      <!---->
-      <!--<mat-form-field class="example-full-width">-->
-      <!--<textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down"></textarea>-->
-      <!--</mat-form-field>-->
-      <!--</div>-->
-      <!--<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">-->
-      <!---->
-      <!--<markdown *ngIf="form.controls['content'].value" [data]="form.controls['content'].value"></markdown>-->
-      <!---->
-      <!--</div>-->
       <div class="ui-rtl" dir="rtl">
-        <p-editor formControlName="content">
-          <p-header>
+        <p-editor formControlName="content" [style]="{'height':'200px'}">
+          <p-header dir="ltr" class="header-little-fix-style">
             <span class="ql-formats">
-              <select class="ql-font"></select>
               <select class="ql-size"></select>
             </span>
             <span class="ql-formats">
@@ -76,14 +57,11 @@
             <span class="ql-formats">
               <button class="ql-header" value="1"></button>
               <button class="ql-header" value="2"></button>
-              <button class="ql-blockquote"></button>
               <button class="ql-code-block"></button>
             </span>
             <span class="ql-formats">
               <button class="ql-list" value="ordered"></button>
               <button class="ql-list" value="bullet"></button>
-              <button class="ql-indent" value="-1"></button>
-              <button class="ql-indent" value="+1"></button>
             </span>
             <span class="ql-formats">
               <button class="ql-direction" value="rtl"></button>
@@ -91,99 +69,29 @@
             </span>
             <span class="ql-formats">
               <button class="ql-link"></button>
-              <button class="ql-image" (click)="imageClicked()"></button>
-              <button (click)="imageClicked()"></button>
-              <button type="button" (click)="imageClicked()">
-              <svg viewBox="0 0 18 18">
-                <rect class="ql-stroke" height="10" width="12" x="3" y="4"></rect>
-                <circle class="ql-fill" cx="6" cy="7" r="1"></circle>
-                <polyline class="ql-even ql-fill" points="5 12 5 11 7 9 8 10 11 7 13 9 13 12 5 12"></polyline>
-              </svg>
-            </button>
-              <button class="ql-video"></button>
-              <button class="ql-formula"></button>
-            </span>
-
-            <span class="ql-formats">
-              <button class="ql-clean"></button>
             </span>
           </p-header>
-          <app-panels></app-panels>
-          <!--<p-header>-->
-          <!--<span class="ql-formats">-->
-          <!--<select class="ql-size">-->
-          <!--<option value="small">Petit</option>-->
-          <!--<option selected></option>-->
-          <!--<option value="large">Sous-titre</option>-->
-          <!--<option value="huge">Titre</option>-->
-          <!--<option value="quite">Quite</option>-->
-          <!--</select>-->
-          <!--</span>-->
-          <!--<span class="ql-formats">-->
-          <!--<button class="ql-bold" aria-label="Bold"></button>-->
-          <!--<button class="ql-italic" aria-label="Italic"></button>-->
-          <!--<button class="ql-underline" aria-label="Underline"></button>-->
-          <!--<button class="ql-strike" aria-label="Strike"></button>-->
-          <!--</span>-->
-          <!--<span class="ql-formats">-->
-          <!--<select title="Text Color" class="ql-color" defaultValue="rgb(0, 0, 0)">-->
-          <!--<option value="rgb(0, 0, 0)" label="rgb(0, 0, 0)"></option>-->
-          <!--...-->
-          <!--<option value="rgb(61, 20, 102)" label="rgb(61, 20, 102)"></option>-->
-          <!--</select>-->
-          <!--<span class="ql-format-separator"></span>-->
-          <!--<select title="Background Color" class="ql-background" defaultValue="rgb(255, 255, 255)">-->
-          <!--<option value="rgb(0, 0, 0)" label="rgb(0, 0, 0)"></option>-->
-          <!--...-->
-          <!--<option value="rgb(61, 20, 102)" label="rgb(61, 20, 102)"></option>-->
-          <!--</select>-->
-          <!--</span>-->
-          <!--<span class="ql-formats">-->
-          <!--&lt;!&ndash;<button class="ql-list" title="List"></button>&ndash;&gt;-->
-          <!--&lt;!&ndash;<button class="ql-bullet" title="Bullet"></button>&ndash;&gt;-->
-          <!--<button class="ql-list" value="ordered"></button>-->
-          <!--<button class="ql-list" value="bullet"></button>-->
-          <!--<select title="Text Alignment" class="ql-align">-->
-          <!--<option value="right" label="Right"></option>-->
-          <!--<option value="center" label="Center"></option>-->
-          <!--<option selected>Gauche</option>-->
-          <!--<option value="justify" label="Justify"></option>-->
-          <!--</select>-->
-          <!--</span>-->
-          <!--<span class="ql-formats">-->
-          <!--<button aria-label="Link" class="ql-link"></button>-->
-          <!--<button aria-label="Image" class="ql-image"></button>-->
-          <!--</span>-->
-          <!--</p-header>-->
         </p-editor>
       </div>
       <br>
       <mat-card>
         <mat-card-content class="mat-content-preview-for-page">
-          <div #one></div>
+          <div #content></div>
         </mat-card-content>
       </mat-card>
-
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
-
         <div role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"
                   [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges))"
                   tabindex="3">
-
             <button mat-icon-button *ngIf="id" (click)="deletePage(id)" color="warn">
               <mat-icon aria-label="delete">delete</mat-icon>
             </button>
             <mat-icon aria-label="accept">done</mat-icon>
           </button>
         </div>
-
       </div>
-
-
     </form>
-
-
   </mat-card-content>
 </mat-card>
 

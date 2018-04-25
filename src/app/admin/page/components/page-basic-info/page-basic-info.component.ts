@@ -27,8 +27,7 @@ export class PageBasicInfoComponent implements OnInit {
 
   placements: IPlacement[] = null;
 
-  text;
-  @ViewChild('one') el: ElementRef;
+  @ViewChild('content') contentEl: ElementRef;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
               private httpService: HttpService, private snackBar: MatSnackBar,
@@ -188,13 +187,13 @@ export class PageBasicInfoComponent implements OnInit {
 
 
   fieldChanged() {
-    const l = this.form.controls['content'].value;
-    console.log('text:', l);
-    this.el.nativeElement.innerHTML = '';
-    this.el.nativeElement.insertAdjacentHTML('beforeend', `${l}`);
+    const previewContent = this.form.controls['content'].value;
+    this.contentEl.nativeElement.innerHTML = '';
+    if (previewContent)
+      this.contentEl.nativeElement.insertAdjacentHTML('beforeend', `${previewContent}`);
+
     if (!this.originalForm)
       return;
-
 
     this.anyChanges = false;
 
@@ -218,7 +217,6 @@ export class PageBasicInfoComponent implements OnInit {
         this.anyChanges = true;
     });
   }
-
 
   searchPagePlacements() {
     if (!this.id) {
