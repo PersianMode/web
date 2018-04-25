@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -27,8 +27,11 @@ export class PageBasicInfoComponent implements OnInit {
 
   placements: IPlacement[] = null;
 
+  @ViewChild('content') contentEl: ElementRef;
+
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-              private httpService: HttpService, private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
+              private httpService: HttpService, private snackBar: MatSnackBar,
+              private dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit() {
@@ -183,6 +186,11 @@ export class PageBasicInfoComponent implements OnInit {
 
 
   fieldChanged() {
+    const previewContent = this.form.controls['content'].value;
+    this.contentEl.nativeElement.innerHTML = '';
+    if (previewContent)
+      this.contentEl.nativeElement.insertAdjacentHTML('beforeend', `${previewContent}`);
+
     if (!this.originalForm)
       return;
 
@@ -208,7 +216,6 @@ export class PageBasicInfoComponent implements OnInit {
         this.anyChanges = true;
     });
   }
-
 
   searchPagePlacements() {
     if (!this.id) {
@@ -282,13 +289,16 @@ export class PageBasicInfoComponent implements OnInit {
       }
         break;
       case PlacementModifyEnum.Modify: {
-        value.placements.forEach(item => {
-          const index = this.placements.findIndex(el => el._id.toString() === item._id.toString());
-          if (index !== -1)
-            this.placements[index].info = item.info;
-        });
+        if (value && value.placements && value.placements.length) {
+          value.placements.forEach(item => {
+            const index = this.placements.findIndex(el => el._id.toString() === item._id.toString());
+            if (index !== -1)
+              this.placements[index].info = item.info;
+          });
+        }
       }
         break;
     }
   }
+
 }
