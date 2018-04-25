@@ -218,8 +218,7 @@ export class AppFeedPlacementComponent implements OnInit {
 
   private fieldChanged() {
     if (!this.selectedItem) {
-      if (this.imageUrlAddress)
-        this.anyChanges = true;
+      this.anyChanges = !!this.imageUrlAddress;
       return;
     }
 

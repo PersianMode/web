@@ -330,7 +330,7 @@ export class AppSubMenuComponent implements OnInit {
 
   private fieldChanged() {
     if (!this.selectedItem) {
-      this.anyChanges = true;
+      this.anyChanges = !this.appSubMenuForm.controls['is_header'].value || !!this.imageUrlAddress;
       return;
     }
 
@@ -405,6 +405,7 @@ export class AppSubMenuComponent implements OnInit {
     curRowSection.info.row = tempRow;
 
     this.progressService.enable();
+    this.moveButtonsShouldDisabled = true;
     this.httpService.post('placement', {
       page_id: this.pageId,
       placements: [postPreRowSection, curRowSection],
@@ -415,10 +416,12 @@ export class AppSubMenuComponent implements OnInit {
           type: PlacementModifyEnum.Modify,
           placements: [postPreRowSection, curRowSection]
         });
+        this.moveButtonsShouldDisabled = false;
         this.progressService.disable();
       },
       (err) => {
         console.error('Cannot update the order of section: ', err);
+        this.moveButtonsShouldDisabled = false;
         this.progressService.disable();
       }
     )
