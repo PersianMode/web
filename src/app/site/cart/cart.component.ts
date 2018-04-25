@@ -27,7 +27,7 @@ export class CartComponent implements OnInit, OnDestroy {
   disabled = false;
 
   constructor(@Inject(WINDOW) private window, private cartService: CartService,
-              private authService: AuthService, private router: Router, public dialog: MatDialog) {
+    private authService: AuthService, private router: Router, public dialog: MatDialog) {
   }
 
   ngOnInit() {

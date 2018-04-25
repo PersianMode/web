@@ -8,7 +8,7 @@
         <form (ngSubmit)="modifyProduct()" [formGroup]="productBasicForm">
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
                  fxLayoutAlign.xs="center center" dir="rtl">
-                <div fxFlex="50" class="field-container">
+                <div fxFlex="100" class="field-container">
                     <mat-input-container class="field farsi">
                         <input matInput type="text" placeholder="نام" formControlName="name"
                                role="name"
@@ -20,7 +20,7 @@
                         </mat-error>
                     </mat-input-container>
                 </div>
-                <div fxFlex="50" class="field-container">
+                <div fxFlex="100" class="field-container">
                     <mat-input-container class="field farsi">
                         <input matInput type="number" placeholder="قیمت پایه" formControlName="base_price"
                                role="base_price" tabindex="2"/>
@@ -59,6 +59,14 @@
                             وارد کردن برند محصول الزامی است
                         </mat-error>
                     </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+                 fxLayoutAlign.xs="center center" dir="rtl">
+                <div style="text-align: right" class="field-container">
+                    <mat-form-field fx-flex="100" class="example-full-width">
+                        <textarea matInput placeholder="توضیحات" formControlName="desc" role="desc"></textarea>
+                      </mat-form-field>
                 </div>
             </div>
             <div role="submit-button" style="text-align: left">
