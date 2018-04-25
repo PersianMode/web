@@ -672,7 +672,7 @@ mat-panel-title {
 }
 
 .hr-setting {
-  width: 70%;
+  width: 100%;
   border-color: gray;
   border-width: 0.5px;
 }
@@ -701,10 +701,21 @@ mat-panel-title {
 }
 
 @media screen and (max-width: 500px) {
-  .footer-link, .footer-link-bold, .footer-link1, .icons {
+  .footer-link, .footer-link-bold, .footer-link1 {
     float: none;
     display: block;
-    text-align: right;
+  }
+
+  .icons {
+    margin-top: 30px;
+  }
+
+  .footer-column {
+    display: block !important;
+    text-align: center !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-top: 23px;
   }
 }
 
@@ -901,6 +912,7 @@ mat-panel-title {
   margin-right: 10px;
   vertical-align: top;
 }
+
 p {
   text-align: justify;
   font-family: iranyekan, sans-serif;

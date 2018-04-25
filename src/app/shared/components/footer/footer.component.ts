@@ -28,8 +28,11 @@ export class FooterComponent implements OnInit {
 
     this.pageService.placement$.filter(r => r[0] === 'footer').map(r => r[1]).subscribe(
       (data) => {
-        this.setFooterTextLinks(data.filter(el => el.variable_name === 'site_link'));
-        this.setFooterSocialLinks(data.filter(el => el.variable_name === 'social_link'));
+
+        if (data) {
+          this.setFooterTextLinks(data.filter(el => el.variable_name === 'site_link'));
+          this.setFooterSocialLinks(data.filter(el => el.variable_name === 'social_link'));
+        }
       },
       (err) => {
         console.error('Cannot get footer placements: ', err);
@@ -61,8 +64,6 @@ export class FooterComponent implements OnInit {
         return 0;
       });
     });
-
-    console.log(this.footerSiteLinksItems);
   }
 
   setFooterSocialLinks(list) {
@@ -75,8 +76,6 @@ export class FooterComponent implements OnInit {
     }).map(el => {
       return {text: el.info.text + ' icons', href: el.info.href};
     });
-
-    console.log('social links: ', this.footerSocialNetworkItems);
   }
 
   getKeyList(list) {

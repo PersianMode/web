@@ -29,18 +29,18 @@
         </div>
       </div>
       <div fxFlex="30">
-        <button mat-mini-fab color="primary" [disabled]="!subMenuForm.valid || !anyChanges">
+        <button mat-mini-fab color="primary" type="submit" [disabled]="!subMenuForm.valid || !anyChanges">
           <mat-icon>
             <i class="material-icons" *ngIf=" selectedItem">create</i>
             <i class="material-icons" *ngIf="!selectedItem">done</i>
           </mat-icon>
         </button>
-        <button mat-mini-fab color="primary" (click)="removeItem()" *ngIf="selectedItem" class="remove">
+        <button mat-mini-fab color="primary" type="button" (click)="removeItem()" *ngIf="selectedItem" class="remove">
           <mat-icon>
             <i class="material-icons">remove</i>
           </mat-icon>
         </button>
-        <button mat-mini-fab color="primary" (click)="clearFields()" *ngIf="selectedItem">
+        <button mat-mini-fab color="primary" type="button" (click)="clearFields()" *ngIf="selectedItem">
           <i class="fa fa-eraser"></i>
         </button>
       </div>

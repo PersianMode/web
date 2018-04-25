@@ -1,0 +1,11 @@
+<div mat-dialog-content class="main">
+
+  <h3>{{data.barcode}}</h3>
+  <input matInput placeholder="" [formControl]="barcodeCtrl">
+
+  <h3>بارکد را اسکن کنید</h3>
+
+  <mat-icon *ngIf="isOK">check</mat-icon>
+  <mat-icon *ngIf="!isOK">clear</mat-icon>
+
+</div>

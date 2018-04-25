@@ -287,16 +287,24 @@ export class EditPanelComponent implements OnInit {
   }
 
   imageUploaded(data) {
-    this.snackBar.open('تصویر بارگذاری شد', null, {
-      duration: 2300,
-    });
-
-
-    if (this.isAdd) {
-      this.imageUrl = data[0].downloadURL;
-      this.placement = {_id: data[0].placementId};
+    if (data.length > 0) {
+      this.snackBar.open('تصویر بارگذاری شد', null, {
+        duration: 2300,
+      });
+      if (this.isAdd) {
+        this.imageUrl = data[0].downloadURL;
+        this.placement = {_id: data[0].placementId};
+      } else
+        this.imageUrl = data[0];
     } else
-      this.imageUrl = data[0];
+      this.snackBar.open('بارگذاری با خطا رو به رو شد. دوباره تلاش کنید', null, {
+        duration: 3200,
+      });
+  }
 
+  getThisPlacement() {
+    return {
+      component_name: 'main',
+    };
   }
 }
