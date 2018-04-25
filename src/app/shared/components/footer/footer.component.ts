@@ -61,8 +61,6 @@ export class FooterComponent implements OnInit {
         return 0;
       });
     });
-
-    console.log(this.footerSiteLinksItems);
   }
 
   setFooterSocialLinks(list) {
@@ -75,8 +73,6 @@ export class FooterComponent implements OnInit {
     }).map(el => {
       return {text: el.info.text + ' icons', href: el.info.href};
     });
-
-    console.log('social links: ', this.footerSocialNetworkItems);
   }
 
   getKeyList(list) {
