@@ -917,3 +917,7 @@ p {
   text-align: justify;
   font-family: iranyekan, sans-serif;
 }
+
+.waiting-spinner {
+  margin: 0 auto;
+}
