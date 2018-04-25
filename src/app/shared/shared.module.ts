@@ -22,6 +22,7 @@ import {AgmCoreModule} from '@agm/core';
 import {AddressTableComponent} from './components/address-table/address-table.component';
 import { DobComponent } from './components/dob/dob.component';
 import {DragulaModule} from 'ng2-dragula';
+import { LogoHeaderComponent } from './components/logo-header/logo-header.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {DragulaModule} from 'ng2-dragula';
     UploaderComponent,
     AddressTableComponent,
     DobComponent,
+    LogoHeaderComponent,
 ],
   imports: [
     FormsModule,
@@ -74,6 +76,7 @@ import {DragulaModule} from 'ng2-dragula';
     UploaderComponent,
     AddressTableComponent,
     DobComponent,
+    LogoHeaderComponent,
   ]
 })
 export class SharedModule {

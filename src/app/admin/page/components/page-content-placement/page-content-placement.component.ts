@@ -37,21 +37,6 @@ export class PageContentPlacementComponent implements OnInit {
   ngOnInit() {
   }
 
-  // modifyItem(value) {
-  //   switch (value.type) {
-  //     case PlacementModifyEnum.Add:
-  //       this.upsertItem(value.data, true);
-  //       break;
-  //     case PlacementModifyEnum.Modify:
-  //       this.upsertItem(value.data, false);
-  //       break;
-  //     case PlacementModifyEnum.Delete:
-  //       this.removeItem(value.data);
-  //       break;
-  //   }
-  //   // this.modifyPlacement.emit(value);
-  // }
-
   removeItem(value) {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
@@ -90,6 +75,7 @@ export class PageContentPlacementComponent implements OnInit {
     (isAdd ? this.httpService.put('placement', {
       page_id: this.pageId,
       placement: {
+        _id: value._id,
         component_name: 'main',
         info: value.info,
       }

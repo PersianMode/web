@@ -54,21 +54,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       });
     this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
-      this.logos = [];
-      data = data.sort((x, y) => x.info.column - y.info.column);
-      data.forEach(r => {
-        const obj = {
-          brand: r.info.text,
-          filename: r.info.imgUrl,
-        };
-        if (r.info.style) {
-          ['width', 'height', 'top', 'right'].forEach(key => {
-            if (r.info.style[key])
-              obj[key] = r.info.style[key];
-          });
-        }
-        this.logos.push(obj);
-      });
+      this.logos = data.sort((x, y) => x.info.column - y.info.column);
     });
     this.display_name = this.authService.userDetails.displayName;
   }

@@ -7,6 +7,8 @@ import {IPlacement} from '../../interfaces/IPlacement.interface';
   styleUrls: ['./menu-placement.component.css']
 })
 export class MenuPlacementComponent implements OnInit {
+  @Input() isApp = false;
+  @Input() address = '';
   @Input() pageId = null;
 
   @Input()
@@ -46,5 +48,9 @@ export class MenuPlacementComponent implements OnInit {
 
   showSubMenu(value) {
     this.selectedSection = value || null;
+  }
+
+  validAddress() {
+    return this.address.toLowerCase() === 'my_shop';
   }
 }

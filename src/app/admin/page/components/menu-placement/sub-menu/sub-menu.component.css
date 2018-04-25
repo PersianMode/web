@@ -42,10 +42,6 @@
   margin-right: 3px;
 }
 
-.remove {
-  color: darkred;
-}
-
 .menu-item:hover {
   background-color: rgba(176,182,180,0.68);
 }
@@ -59,4 +55,10 @@
 
 .selected-item {
   background-color: rgba(176,182,180,0.68);
+}
+
+.empty-column {
+  background-color: rgba(176,182,180,0.68);
+  width: 20px;
+  height: 100px;
 }

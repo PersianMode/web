@@ -1,11 +1,11 @@
 <div *ngIf="curWidth >= 960" class="full-width">
-  <div *ngFor="let key of getKeyList(placements)" class="container">
+  <div *ngFor="let key of getKeyList(placements)">
     <h2 *ngIf="placements[key].topTitle"
         [style.color]="placements[key].topTitle.titleColor ? placements[key].topTitle.titleColor : null" class="top-title">
       {{placements[key].topTitle.title}}</h2>
     <div fxLayout="row"
          fxLayoutAlign="start start">
-      <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs">
+      <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs" class="container">
         <a [routerLink]="im.href">
           <img [src]="im.imgUrl" class="full-width"/>
         </a>

@@ -29,7 +29,7 @@ export class ProductColorEditComponent implements OnInit {
   }
 
   setThumbnail(result: any) {
-    this.data.product_color.image.thumbnail = result.uploaded;
+    this.data.product_color.image.thumbnail = result[0].uploaded;
     this.thumbnailURL = this.getURL(this.data.product_color.image.thumbnail);
   }
 

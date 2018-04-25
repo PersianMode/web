@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
-  MatSnackBarModule, MatTabsModule
+  MatSnackBarModule, MatTabsModule, MatTooltipModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PageRouting} from './page.routing';
@@ -23,6 +23,10 @@ import {SubMenuComponent} from './components/menu-placement/sub-menu/sub-menu.co
 import {SliderPreviewComponent} from './components/slider-placement/slider-preview/slider-preview.component';
 import {EditPanelComponent} from './components/page-content-placement/edit-panel/edit-panel.component';
 import {ColorPickerModule} from 'primeng/primeng';
+import { AppSubMenuComponent } from './components/menu-placement/app-sub-menu/app-sub-menu.component';
+import { UploadImageDialogComponent } from './components/menu-placement/upload-image-dialog/upload-image-dialog.component';
+import { FooterPlacementComponent } from './components/footer-placement/footer-placement.component';
+import { AppFeedPlacementComponent } from './components/app-feed-placement/app-feed-placement.component';
 
 @NgModule({
   declarations: [
@@ -37,10 +41,13 @@ import {ColorPickerModule} from 'primeng/primeng';
     SubMenuComponent,
     SliderPreviewComponent,
     EditPanelComponent,
+    AppSubMenuComponent,
+    UploadImageDialogComponent,
+    FooterPlacementComponent,
+    AppFeedPlacementComponent,
   ],
   imports: [
     PageRouting,
-    SharedModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -53,16 +60,17 @@ import {ColorPickerModule} from 'primeng/primeng';
     MatDialogModule,
     MatSelectModule,
     MatPaginatorModule,
-    MatSelectModule,
     MatTabsModule,
     MatCheckboxModule,
     SharedModule,
     MarkdownModule.forRoot(),
     DragulaModule,
     ColorPickerModule,
+    MatTooltipModule,
   ],
   entryComponents: [
     EditPanelComponent,
+    UploadImageDialogComponent,    
   ],
 })
 export class PageModule {
