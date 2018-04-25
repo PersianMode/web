@@ -1,5 +1,11 @@
 <mat-card>
   <mat-card-content>
+    <div fxLayout="row" class="row" dir="rtl">
+      <button mat-fab color="accent" (click)="addDictionary()" style="margin-top: 15px">
+        افزودن دیکشنری جدید
+        <mat-icon aria-label="Add new Collection">add</mat-icon>
+      </button>
+    </div>
     <div class="example-container mat-elevation-z8">
       <div class="example-loading-shade"
            *ngIf="isLoadingResults">

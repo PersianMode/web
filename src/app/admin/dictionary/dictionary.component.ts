@@ -4,7 +4,7 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
 import {ProgressService} from '../../shared/services/progress.service';
 import {HttpService} from '../../shared/services/http.service';
 import {IDictionary} from './interfaces/IDictionary.interface';
-
+import { AddDictionaryComponent } from './components/add-dictionary/add-dictionary.component';
 
 @Component({
   selector: 'app-dictionary',
@@ -12,6 +12,7 @@ import {IDictionary} from './interfaces/IDictionary.interface';
   styleUrls: ['./dictionary.component.css']
 })
 export class DictionaryComponent implements OnInit {
+  types;
   editSelectedIndex = -1;
   displayedColumns = [
     'remove',
@@ -50,6 +51,7 @@ export class DictionaryComponent implements OnInit {
     this.httpService.get('/dictionary')
       .subscribe(res => {
         console.log(res);
+        this.types = Array.from(new Set(res.map(el => el.type)));
         this.isLoadingResults = false;
         this.resultsLength = res.lenght;
         this.dataSource.data = res;
@@ -109,7 +111,7 @@ export class DictionaryComponent implements OnInit {
       });
   }
 
-  saveEdit() {//should get data
+  saveEdit() {// should get data
     this.editSelectedIndex = -1;
     // TODO send  post request
     // sending editElement datas
@@ -132,4 +134,22 @@ export class DictionaryComponent implements OnInit {
     // TODO send put request
   }
 
+  addDictionary() {
+    const addDicDialog =  this.dialog.open(AddDictionaryComponent, {
+      width: '600px;',
+      data: {
+        types: this.types
+      }
+    });
+    addDicDialog.afterClosed().subscribe(
+      res => {
+        this.openSnackBar('دیکشنری با موفقیت ثبت گردید');
+        this.isLoadingResults = false;
+        this.load();
+      },
+      err => {
+        this.isLoadingResults = false;
+        this.openSnackBar('خطا در پاک کردن دیکشنری');
+      });
+    }
 }
