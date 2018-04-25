@@ -31,7 +31,6 @@ export class OrderLinesComponent implements OnInit {
     this.removeDuplicates(this.orderLines);
     this.orderStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
-    console.log('removeDuplicatesArray : ', this.noDuplicateOrderLine);
   }
 
   removeDuplicates(arr) {
