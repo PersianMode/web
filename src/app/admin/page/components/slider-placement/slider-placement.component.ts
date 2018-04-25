@@ -51,7 +51,7 @@ export class SliderPlacementComponent implements OnInit {
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
               private progressService: ProgressService, private sanitizer: DomSanitizer,
-              private dialog: MatDialog,) {
+              private dialog: MatDialog) {
   }
 
   ngOnInit() {

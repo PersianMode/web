@@ -23,7 +23,10 @@ import {SubMenuComponent} from './components/menu-placement/sub-menu/sub-menu.co
 import {SliderPreviewComponent} from './components/slider-placement/slider-preview/slider-preview.component';
 import {EditPanelComponent} from './components/page-content-placement/edit-panel/edit-panel.component';
 import {ColorPickerModule} from 'primeng/primeng';
+import { AppSubMenuComponent } from './components/menu-placement/app-sub-menu/app-sub-menu.component';
+import { UploadImageDialogComponent } from './components/menu-placement/upload-image-dialog/upload-image-dialog.component';
 import { FooterPlacementComponent } from './components/footer-placement/footer-placement.component';
+import { AppFeedPlacementComponent } from './components/app-feed-placement/app-feed-placement.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { FooterPlacementComponent } from './components/footer-placement/footer-p
     SubMenuComponent,
     SliderPreviewComponent,
     EditPanelComponent,
+    AppSubMenuComponent,
+    UploadImageDialogComponent,
     FooterPlacementComponent,
+    AppFeedPlacementComponent,
   ],
   imports: [
     PageRouting,
@@ -64,6 +70,7 @@ import { FooterPlacementComponent } from './components/footer-placement/footer-p
   ],
   entryComponents: [
     EditPanelComponent,
+    UploadImageDialogComponent,    
   ],
 })
 export class PageModule {
