@@ -7,6 +7,7 @@ import {links} from '../shared/lib/links';
 
 @Injectable()
 export class AdminAuthGuard implements CanActivate {
+  forbiddenStack: any[] = [];
 
   constructor(private authService: AuthService, private router: Router) {
   }
@@ -14,15 +15,25 @@ export class AdminAuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
     this.authService.checkValidation(state.url);
 
-    return this.authService.isLoggedIn.map((res: boolean) => {
-      if (res && this.authService.userDetails.isAgent) {
+    this.authService.isLoggedIn.filter(r => r && !! !!this.forbiddenStack.length)
+      .subscribe(() => {
+        const lastPage = this.forbiddenStack.pop();
+        const curTime: any = new Date();
+        if (curTime - lastPage.time < 500) {
+          this.router.navigate(['agent/' + lastPage.path]);
+        } else {
+          this.forbiddenStack = [];
+          this.router.navigate(['agent']);
+        }
+      });
 
-        const link = links.find(x => state.url.includes(x.address));
-        if (link && link.access === this.authService.userDetails.accessLevel)
-          return true;
+    return this.authService.isLoggedIn.map((res: boolean) => {
+      if (!res) {
+        this.router.navigate(['agent/login']);
+        this.forbiddenStack.push({path: route.url.map(u => u.path), time: new Date()});
       }
-      this.router.navigate(['agent/login']);
-      return false;
+
+      return res;
     });
   }
 }
