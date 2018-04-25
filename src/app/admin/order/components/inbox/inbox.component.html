@@ -1,10 +1,7 @@
 <mat-card>
   <mat-card-content>
     <div class="example-container mat-elevation-z8">
-      <div class="example-loading-shade" *ngIf="isLoadingResults">
-        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-      </div>
-
+      
       <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
         (matSortChange)="onSortChange($event)">
 
@@ -14,7 +11,7 @@
         </ng-container>
 
         <ng-container matColumnDef="product">
-          <mat-header-cell *matHeaderCellDef> نام</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> محصول</mat-header-cell>
           <mat-cell *matCellDef="let element">
             <div class="imgWrapper">
               <img [src]="getProductDetail(element).thumbnailURL" (click)="showDetial(element)">
@@ -71,19 +68,10 @@
         <ng-container matColumnDef="process">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <button mat-button color="primary" (click)="process(element)" *ngIf="!isReadyToDeliver(element) && !invoiceRequested(element)">انتخاب</button>
-            <button mat-button color="primary" (click)="requestForInvoice(element)" *ngIf="invoiceRequested(element)">صدور فاکتور</button>
+            <button mat-button color="primary" (click)="process(element)">انتخاب</button>
           </mat-cell>
         </ng-container>
-
-        <ng-container matColumnDef="delivery">
-          <mat-header-cell *matHeaderCellDef>ارسال</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <button mat-button color="primary" (click)="showDelivery(element)" *ngIf="isReadyToDeliver(element)">انتخاب
-            </button>
-          </mat-cell>
-        </ng-container>
-
+        
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>

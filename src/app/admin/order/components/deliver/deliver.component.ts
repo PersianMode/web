@@ -10,13 +10,13 @@ import {STATUS} from '../../../../shared/enum/status.enum';
 import {ProductViewerComponent} from 'app/admin/order/components/product-viewer/product-viewer.component';
 
 @Component({
-  selector: 'app-outbox',
-  templateUrl: './outbox.component.html',
-  styleUrls: ['./outbox.component.css']
+  selector: 'app-deliver',
+  templateUrl: './deliver.component.html',
+  styleUrls: ['./deliver.component.css']
 })
-export class OutboxComponent implements OnInit {
+export class DeliverComponent implements OnInit {
 
-  @Output() newOutboxCount = new EventEmitter();
+  @Output() newDeliverCount = new EventEmitter();
 
 
   displayedColumns = [
@@ -68,7 +68,7 @@ export class OutboxComponent implements OnInit {
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
-      output: true
+      type: 'readyToDeliver'
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
@@ -78,7 +78,7 @@ export class OutboxComponent implements OnInit {
       this.resultsLength = res.total;
       this.dataSource.data = res.data;
 
-      this.newOutboxCount.emit(this.resultsLength);
+      this.newDeliverCount.emit(this.resultsLength);
 
       console.log('-> ', this.dataSource.data);
     }, err => {

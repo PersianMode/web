@@ -8,7 +8,7 @@ mat-header-cell, mat-cell{
 .imgWrapper{
   width: 72px;
   height: 72px;
-  margin: 0px 10px;
+  margin: 10px;
   text-align: left;
   max-height: 72px;
   cursor: pointer;

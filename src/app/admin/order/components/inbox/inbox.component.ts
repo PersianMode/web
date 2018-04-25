@@ -6,10 +6,10 @@ import {SocketService} from '../../../../shared/services/socket.service';
 import {OrderStatus} from '../../../../shared/lib/order_status';
 import {OrderAddressComponent} from '../order-address/order-address.component';
 import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
-import {SMOrderProcessComponent} from '../sm-order-process/sm-order-process.component';
-import {SCOrderProcessComponent} from '../sc-order-process/sc-order-process.component';
 import {STATUS} from '../../../../shared/enum/status.enum';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
+import {BarcodeCheckerComponent} from '../barcode-checker/barcode-checker.component';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-order-inbox',
@@ -32,13 +32,10 @@ export class InboxComponent implements OnInit {
     'customer',
     'address',
     'status',
-    'process',
-    'delivery'
+    'process'
   ];
 
   dataSource = new MatTableDataSource();
-
-  isLoadingResults = true;
 
   pageSize = 20;
 
@@ -51,7 +48,8 @@ export class InboxComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private authService: AuthService,
-    private socketService: SocketService) {
+    private socketService: SocketService,
+    private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -66,22 +64,24 @@ export class InboxComponent implements OnInit {
   }
 
   load() {
-    this.isLoadingResults = true;
+    
+    this.progressService.enable();
 
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
+      type: 'inbox'
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
 
     this.httpService.post('search/Order', {options, offset, limit}).subscribe(res => {
-      this.isLoadingResults = false;
+      this.progressService.disable();
       this.newInboxCount.emit(res.total);
       this.dataSource.data = res.data;
       console.log('-> ', this.dataSource.data);
     }, err => {
-      this.isLoadingResults = false;
+      this.progressService.disable();
       this.newInboxCount.emit(0);
       this.openSnackBar('خطا در دریافت لیست سفارش ها');
     });
@@ -135,51 +135,45 @@ export class InboxComponent implements OnInit {
       data: {address: element.address, is_collect: !!element.is_collect}
     });
 
+
   }
 
   process(element) {
-    const component: any = this.authService.userDetails.accessLevel === AccessLevel.SalesManager ?
-      SMOrderProcessComponent : SCOrderProcessComponent;
-    const dialogRef = this.dialog.open(component, {
-      width: '600px',
-      data: element
+
+    this.processDialogRef = this.dialog.open(BarcodeCheckerComponent, {
+      width: '400px',
+      data: {barcode: element.instance.barcode}
     });
 
-    dialogRef.afterClosed().subscribe((reload: boolean) => {
-      if (reload)
-        this.load();
-    }
-    );
+    this.processDialogRef.afterClosed().subscribe(isMatched => {
 
+
+      if (isMatched)
+        this.makeDesicion(element);
+
+    });
+  }
+  makeDesicion(element) {
+
+    if (element.tickets.status === STATUS.default)
+      this.addToOnlineWarehouse(element);
   }
 
-  requestForInvoice(element) {
-    this.httpService.post(`order/ticket/offline/requestInvoice`, {
+  addToOnlineWarehouse(element) {
+
+    this.progressService.enable();
+    this.httpService.post('order/ticket/onlineWarehouse', {
       orderId: element._id,
       orderLineId: element.order_line_id
     }).subscribe(res => {
-      if (res && res.result === 'ok')
-        this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد');
-      else
-        this.openSnackBar('خطا در درخواست صدور فاکتور');
+      this.progressService.disable();
+      this.openSnackBar('درخواست به انبار آنلاین با موفقیت ارسال شد');
+  
     }, err => {
-      this.openSnackBar('خطا در درخواست صدور فاکتور');
+      this.openSnackBar('خطا در اضافه نمودن محصول به انبار آنلاین');
+      this.progressService.disable();
     });
   }
-
-
-  isReadyToDeliver(element) {
-    return element.tickets.status === STATUS.ReadyToDeliver;
-  }
-
-  invoiceRequested(element) {
-    return element.tickets.status === STATUS.Invoice;
-  }
-
-  showDelivery(element) {
-
-  }
-
   openSnackBar(message: string) {
     this.snackBar.open(message, null, {
       duration: 2000,
