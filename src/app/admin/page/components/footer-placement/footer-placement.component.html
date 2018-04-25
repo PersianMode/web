@@ -47,8 +47,8 @@
       <div *ngIf="hasNewColumn" class="footer-column empty-column" [dragula]="textBag" [dragulaModel]="newEmptyColumn">
         &nbsp;
       </div>
-      <div class="footer-column">
-        <button mat-icon-button (click)="addColumn()" [disabled]="addColumnDisability()">
+      <div class="footer-column" *ngIf="getKeyList(siteLinkItems).length">
+        <button mat-icon-button (click)="addColumn()" [disabled]="addColumnDisability()" [matTooltip]="'افزودن ستون'" [matTooltipPosition]="'above'">
           <mat-icon aria-label="add column">add_circle_outline</mat-icon>
         </button>
       </div>

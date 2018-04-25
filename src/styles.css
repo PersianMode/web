@@ -970,3 +970,7 @@ p {
 }
 
 /* PREVIEW END */
+
+.placement-tab .mat-tab-body {
+  min-height: 100px;
+}

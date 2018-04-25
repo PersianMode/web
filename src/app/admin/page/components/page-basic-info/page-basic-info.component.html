@@ -101,6 +101,6 @@
   </mat-card-content>
 </mat-card>
 
-<app-placement [isApp]="originalForm ? originalForm.is_app : false" [placements]="placements" [pageId]="id"
+<app-placement *ngIf="id" [isApp]="form.controls['is_app'].value" [placements]="placements" [pageId]="id"
                [pageAddress]="form.controls['address'].value" (modifyPlacement)="modifyPlacement($event)"
                (reloadPlacement)="searchPagePlacements()"></app-placement>

@@ -146,7 +146,7 @@ export class PageBasicInfoComponent implements OnInit {
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
-        console.log(error);
+        console.error(error);
       }
     );
 
@@ -179,7 +179,7 @@ export class PageBasicInfoComponent implements OnInit {
         }
       },
       (err) => {
-        console.log('Error in dialog: ', err);
+        console.error('Error in dialog: ', err);
       }
     );
   }
