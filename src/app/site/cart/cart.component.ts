@@ -25,6 +25,7 @@ export class CartComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   valid = [];
   disabled = false;
+  showWaitingSpinner = false;
 
   constructor(@Inject(WINDOW) private window, private cartService: CartService,
     private authService: AuthService, private router: Router, public dialog: MatDialog) {
@@ -35,6 +36,7 @@ export class CartComponent implements OnInit, OnDestroy {
       (data) => this.isLoggedIn = data
     );
 
+    this.showHideSpinner(true);
     this.subs = this.cartService.cartItems.subscribe(data => {
       const prevProductCount = this.products.length;
       this.products = [];
@@ -42,7 +44,7 @@ export class CartComponent implements OnInit, OnDestroy {
         this.valid.push(true);
         const temp: any = {};
         Object.assign(temp, r);
-        temp.thumbnail = imagePathFixer( temp.thumbnail, temp.product_id, temp.color.id);
+        temp.thumbnail = imagePathFixer(temp.thumbnail, temp.product_id, temp.color.id);
         this.products.push(temp);
       });
 
@@ -53,6 +55,8 @@ export class CartComponent implements OnInit, OnDestroy {
       } else if (prevProductCount) {
         this.router.navigate(['/']);
       }
+
+      this.showHideSpinner(false);
     });
   }
 
@@ -103,5 +107,9 @@ export class CartComponent implements OnInit, OnDestroy {
   changeValidation(isValid, i) {
     this.valid[i] = isValid;
     this.disabled = !this.valid.reduce((x, y) => x && y, true);
+  }
+
+  showHideSpinner(shouldShow = false) {
+    this.showWaitingSpinner = shouldShow;
   }
 }

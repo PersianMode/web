@@ -6,7 +6,8 @@ import {CartRouting} from './cart.routing';
 import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatSelectModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 import {SharedModule} from '../../shared/shared.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -35,6 +36,7 @@ import { EditOrderComponent } from './components/edit-order/edit-order.component
     MatDialogModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
   ],
   entryComponents: [EditOrderComponent],
 })

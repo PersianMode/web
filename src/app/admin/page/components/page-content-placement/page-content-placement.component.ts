@@ -19,6 +19,7 @@ export class PageContentPlacementComponent implements OnInit {
     if (value)
       this.arrangePlacements(value);
   }
+
   get placements() {
     return this._placements;
   }
@@ -31,7 +32,7 @@ export class PageContentPlacementComponent implements OnInit {
   moveButtonsShouldDisabled = false;
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
-    private dialog: MatDialog, private sanitizer: DomSanitizer) {
+              private dialog: MatDialog, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
@@ -153,14 +154,15 @@ export class PageContentPlacementComponent implements OnInit {
       const currentRowList = this.modifiedPlacementList[currentRowIndex];
 
       let emptySpace = 100;
-      currentRowList.filter(el => el._id !== obj._id).forEach(el => {
-        emptySpace -= this.getRowParts(el);
-      });
+      if (currentRowList && currentRowList.length)
+        currentRowList.filter(el => el._id !== obj._id).forEach(el => {
+          emptySpace -= this.getRowParts(el);
+        });
 
       if (emptySpace < this.getRowParts(obj)) {
         // Should change item's position
         const lastRowIndex = Math.max(...Object.keys(this.modifiedPlacementList).map(el => parseInt(el, 10)));
-        const lastRowList = this.modifiedPlacementList[lastRowIndex];
+        // const lastRowList = this.modifiedPlacementList[lastRowIndex];
 
         obj.info.row = lastRowIndex + 1;
         obj.info.column = 1;
@@ -168,17 +170,22 @@ export class PageContentPlacementComponent implements OnInit {
 
     } else {
       // The obj is added newly
-      const lastRowIndex = Math.max(...Object.keys(this.modifiedPlacementList).map(el => parseInt(el, 10)));
+      const lastRowIndex = Math.max(...(
+        Object.keys(this.modifiedPlacementList).length ?
+          Object.keys(this.modifiedPlacementList) :
+          ['0']).map(el => parseInt(el, 10)));
       const lastRowList = this.modifiedPlacementList[lastRowIndex];
 
+
       let emptySpace = 100;
-      lastRowList.forEach(el => {
-        emptySpace -= this.getRowParts(el);
-      });
+      if (lastRowList && lastRowList.length)
+        lastRowList.forEach(el => {
+          emptySpace -= this.getRowParts(el);
+        });
 
       if (emptySpace >= this.getRowParts(obj)) {
         obj.info.row = lastRowIndex;
-        obj.info.column = Math.max(...lastRowList.map(el => el.info.column)) + 1;
+        obj.info.column = (lastRowList ? Math.max(...lastRowList.map(el => el.info.column)) : 0) + 1;
       } else {
         obj.info.row = lastRowIndex + 1;
         obj.info.column = 1;
@@ -188,10 +195,14 @@ export class PageContentPlacementComponent implements OnInit {
 
   getRowParts(item) {
     switch (item.info.panel_type.toLowerCase()) {
-      case 'full': return 100;
-      case 'half': return 50;
-      case 'third': return 33;
-      case 'quarter': return 25;
+      case 'full':
+        return 100;
+      case 'half':
+        return 50;
+      case 'third':
+        return 33;
+      case 'quarter':
+        return 25;
     }
   }
 
@@ -260,7 +271,7 @@ export class PageContentPlacementComponent implements OnInit {
   }
 
   changeColumnOrder(rowKey, columnKey, swapWithLeft = false) {
-    if (!rowKey || !columnKey)
+    if ((!rowKey && rowKey !== 0) || (!columnKey && columnKey !== 0))
       return;
 
     const prePostColumn = this.modifiedPlacementList[rowKey].find(el => +el.info.column === +columnKey + (swapWithLeft ? 1 : -1));
@@ -277,7 +288,7 @@ export class PageContentPlacementComponent implements OnInit {
   }
 
   changeRowOrder(rowKey, swapWithBottom = false) {
-    if (!rowKey)
+    if (!rowKey && rowKey !== 0)
       return;
 
     const prePostRow = this.modifiedPlacementList[+rowKey + (swapWithBottom ? 1 : -1)];

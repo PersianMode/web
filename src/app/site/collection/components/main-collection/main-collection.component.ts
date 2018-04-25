@@ -51,6 +51,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   sortedBy: any = {value: null};
   collectionName = '';
   collectionNameFa = '';
+  showWaitingSpinner = false;
   lazyRows = 10;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
@@ -78,6 +79,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.productService.collectionNameFa$.subscribe(r => {
       this.collectionNameFa = r;
     });
+    this.showHideSpinner(true);
     this.productService.productList$.subscribe(r => {
       this.products = r;
       this.sortedBy = {value: null};
@@ -102,7 +104,9 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.curHeight = this.responsiveService.curHeight;
     this.gridWidth = (this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10;
     this.gridHeight = this.gridWidth + 90;
-    this.lazyRows = this.isMobile ? 10 : Math.floor(this.gridwall.nativeElement.offsetWidth / 242) * Math.floor((this.window.innerHeight - 105) / 348 ) * 2;
+    this.lazyRows = this.isMobile ? 10 :
+      Math.floor(this.gridwall.nativeElement.offsetWidth / 242)
+      * Math.floor((this.window.innerHeight - 105) / 348 ) * 2;
     setTimeout(() => this.calcAfterScroll(), 1000);
   }
 
@@ -112,6 +116,8 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   }
 
   calcAfterScroll() {
+    this.showHideSpinner(true);
+
     if (!this.isMobile && this.filterPane && this.gridwall) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
       const height = this.window.innerHeight - HEADER_HEIGHT;
@@ -125,6 +131,8 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
         !this.bottomScroll && filterHeight - offset < height - HEADER_HEIGHT;
       this.topDist = height - filterHeight + HEADER_HEIGHT;
     }
+
+    this.showHideSpinner(false);
   }
 
   selectSortOption(sortPanel, index) {
@@ -148,5 +156,9 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
 
   setDispalyFilter($event) {
     this.displayFilter = $event;
+  }
+
+  showHideSpinner(shouldShow = false) {
+    this.showWaitingSpinner = shouldShow;
   }
 }

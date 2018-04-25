@@ -30,7 +30,7 @@ export class SiteComponent implements OnInit {
     this.isMobile = this.isMobileCalc();
     this.updateResponsiveService();
     this.authService.checkValidation(this.router.url)
-      .then(() => {}).catch(err => console.log(err));
+      .then(() => {}).catch(err => console.error(err));
     this.loadInitialPlacements();
 
     this.cartService.getCartItems();
