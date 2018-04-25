@@ -18,11 +18,11 @@
             <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
                               (selectedType)="changePaymentType($event)"></app-payment-type>
           </mat-expansion-panel>
-          <mat-expansion-panel>
+          <mat-expansion-panel [expanded]="!address || cc">
             <mat-expansion-panel-header>
               <mat-panel-title>آدرس</mat-panel-title>
             </mat-expansion-panel-header>
-            <app-address-table [isProfile]="false"></app-address-table>
+            <app-address-table [isProfile]="false" (addressChanged)="changeAddress($event)"></app-address-table>
           </mat-expansion-panel>
         </mat-accordion>
         <button mat-raised-button style="padding:10px;margin:15px;font-size:12pt;background: black;color:white;width:calc(100% - 30px)" (click)="sudoVerify()" >پرداخت</button>

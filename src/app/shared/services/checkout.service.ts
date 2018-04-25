@@ -17,15 +17,37 @@ export class CheckoutService {
   private discount = 0;
   private loyaltyPointValue = 0;
   private balance = 0;
+  addressState = null;
+  customerAddresses = [];
+  warehouseAddresses = [];
 
   addressData: IAddressInfo;
-  addresses$: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(private cartService: CartService, private httpService: HttpService,
               private authService: AuthService, private snackBar: MatSnackBar) {
     this.cartService.cartItems.subscribe(
       (data) => this.dataIsReady.next((data && data.length > 0) ? true : false)
     );
+    this.authService.isLoggedIn.subscribe( isLoggedIn => {
+      this.getCustomerAddresses(isLoggedIn);
+    });
+
+    this.httpService.get('warehouse').subscribe(res => {
+      this.warehouseAddresses = res;
+    });
+  }
+
+  getCustomerAddresses (isLoggedIn = this.authService.isLoggedIn.getValue()){
+    if (isLoggedIn) {
+      this.httpService.get(`customer/address`)
+        .subscribe(res => this.addresses$.next(res.addresses), err => console.error(err));
+    } else {
+      const address = JSON.parse(localStorage.getItem('address'));
+      if (address) {
+        this.addresses$.next([address]);
+      }
+    }
   }
 
   setPaymentType(pt) {
@@ -83,16 +105,5 @@ export class CheckoutService {
         return Promise.reject('');
       }
     }
-  }
-
-  getCustomerAddresses() {
-    this.httpService.get(`customer/address`).subscribe(
-      res => {
-        this.addresses$.next(res.addresses);
-      },
-      err => {
-        console.error(err);
-      }
-    );
   }
 }

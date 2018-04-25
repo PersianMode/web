@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {HttpService} from '../../services/http.service';
 import {MatDialog} from '@angular/material';
@@ -16,16 +16,20 @@ import {CheckoutService} from '../../services/checkout.service';
 })
 export class AddressTableComponent implements OnInit {
   @Input() isProfile = true;
-  lat: number;
-  long: number;
+  locs = {
+    'ایران مال': [35.7545945, 51.1921283],
+    'سانا': [35.8024766, 51.4552242],
+    'پالادیوم': [35.7975691, 51.4107673],
+  };
+  loc = null;
   withDelivery = true;
-  selectedCustomerAddresses = -1;
-  selectedWareHouseAddresses = -1;
-
+  selectedCustomerAddress = -1;
+  selectedWarehouseAddress = -1;
+  addrBtnLabel = 'افزودن آدرس جدید';
   addresses = [];
-  customerAddresses = [];
-  wareHouseAddresses = [];
   isMobile = false;
+  isLoggedIn = false;
+  customerData = {};
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
               private dialog: MatDialog, private checkoutService: CheckoutService,
@@ -35,64 +39,72 @@ export class AddressTableComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCustomerAddresses();
-    this.getWareHouseAddresses();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    this.authService.isLoggedIn.subscribe(r => {
+      this.isLoggedIn = r;
+    });
+    const state = this.checkoutService.addressState;
+    if (state) {
+      [this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress, this.customerData]
+        = this.checkoutService.addressState;
+      if (this.isProfile)
+        this.withDelivery = true;
+      this.changeWithDelivery();
+    }
+
+    this.checkoutService.addresses$.subscribe(res => {
+      if (res && res.length && this.withDelivery) {
+        if (this.addresses.length === res.length - 1)
+          this.selectedCustomerAddress = res.length - 1;
+        else if (res.length === 1)
+          this.selectedCustomerAddress = 0;
+        this.addresses = res;
+      }
+    });
+  }
+
+  private setState() {
+    this.checkoutService.addressState = [
+      this.withDelivery,
+      this.selectedCustomerAddress,
+      this.selectedWarehouseAddress,
+      this.customerData,
+      this.withDelivery ?
+        this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
+        : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null,
+    ];
+  }
+
+  private setBtnLabel() {
+    this.addrBtnLabel = this.withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده';
   }
 
   getLatitude() {
-    return this.addresses[this.selectedWareHouseAddresses].loc.type.lat;
+    return this.addresses[this.selectedWarehouseAddress].loc ? this.addresses[this.selectedWarehouseAddress].loc.lat :
+      this.loc ? this.loc[0] : 35.7322793;
   }
 
   getLongitude() {
-    return this.addresses[this.selectedWareHouseAddresses].loc.type.long;
+    return this.addresses[this.selectedWarehouseAddress].loc ? this.addresses[this.selectedWarehouseAddress].loc.long :
+      this.loc ? this.loc[1] : 51.2140536;
   }
 
   setAddress(i: number) {
     if (this.withDelivery) {
-      if (i === this.selectedCustomerAddresses)
-        this.selectedCustomerAddresses = -1;
-      else
-        this.selectedCustomerAddresses = i;
+      if (i === this.selectedCustomerAddress) {
+        this.selectedCustomerAddress = -1;
+      } else {
+        this.selectedCustomerAddress = i;
+      }
     } else {
-      if (i === this.selectedWareHouseAddresses)
-        this.selectedWareHouseAddresses = -1;
-      else {
-        this.selectedWareHouseAddresses = i;
-        this.lat = 1;
-        this.long = 1;
+      if (i === this.selectedWarehouseAddress) {
+        this.selectedWarehouseAddress = -1;
+      } else {
+        this.selectedWarehouseAddress = i;
+        this.loc = this.locs[this.addresses[this.selectedWarehouseAddress].name];
       }
     }
-  }
-
-  getCustomerAddresses() {
-    if (this.authService.isLoggedIn.getValue()) {
-      this.httpService.get(`customer/address`)
-        .subscribe(res => {
-          if (this.withDelivery) {
-            if (this.addresses.length === res.addresses.length - 1)
-              this.selectedCustomerAddresses = res.addresses.length - 1;
-            else if (res.addresses.length === 1)
-              this.selectedCustomerAddresses = 0;
-            this.addresses = res.addresses;
-          }
-          this.customerAddresses = res.addresses;
-
-        }, err => {
-          console.error(err);
-        });
-    } else {
-      const address = JSON.parse(localStorage.getItem('address'));
-      if (address)
-        this.addresses = [address];
-    }
-  }
-
-  getWareHouseAddresses() {
-    // TODO: this should be changed from hard-coded to a request from server
-    this.httpService.get('warehouse').subscribe(res => {
-      this.wareHouseAddresses = res;
-    });
+    this.setState();
   }
 
   makePersianNumber(a: string) {
@@ -102,10 +114,11 @@ export class AddressTableComponent implements OnInit {
   }
 
   openAddressDialog() {
+    const customerAddresses = this.checkoutService.addresses$.getValue();
     this.checkoutService.addressData = {
-      addressId: null,
-      partEdit: false,
-      dialog_address: {}
+      addressId: this.withDelivery ? null : '1',
+      partEdit: !this.withDelivery,
+      dialog_address: this.withDelivery ? {} : customerAddresses ? customerAddresses[0] : {},
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
@@ -117,7 +130,10 @@ export class AddressTableComponent implements OnInit {
         }
       });
       rmDialog.afterClosed().subscribe(
-        () => this.getCustomerAddresses(),
+        () => {
+          this.withDelivery ? this.checkoutService.getCustomerAddresses() : this.customerData = JSON.parse(localStorage.getItem('address'));
+          this.setState();
+        },
         (err) => {
           console.error('Error in dialog: ', err);
         }
@@ -143,13 +159,23 @@ export class AddressTableComponent implements OnInit {
           componentName: DialogEnum.upsertAddress
         },
       });
+
+      rmDialog.afterClosed().subscribe(
+        () => this.setState(),
+        (err) => {
+          console.error('Error in dialog: ', err);
+        }
+      );
     }
   }
 
   changeWithDelivery() {
-    if (this.withDelivery)
-      this.addresses = this.customerAddresses;
-    else
-      this.addresses = this.wareHouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+    if (this.withDelivery) {
+      this.addresses = this.checkoutService.addresses$.getValue();
+    } else {
+      this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+    }
+    this.setState();
+    this.setBtnLabel();
   }
 }

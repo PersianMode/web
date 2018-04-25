@@ -64,9 +64,9 @@ section {
   display: inline-block;
   z-index: 10;
   font-weight: 200;
-  font-size: 300%;
-  font-family: iranyekan,sans-serif;
-  opacity: .6;
+  font-size: 500%;
+  font-family: irankharazmi,sans-serif;
+  opacity: .35;
 }
 
 @media (min-width: 600px) {
@@ -90,7 +90,7 @@ section {
     max-width: calc(100% - 260px);
   }
   .soldOut {
-    transform: rotate(-45deg) translateY(30px) translateX(-26px);
+    transform: rotate(-45deg) translateX(17px) translateY(-17px);
   }
 }
 
