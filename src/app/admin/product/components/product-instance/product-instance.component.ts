@@ -87,7 +87,7 @@ export class ProductInstanceComponent implements OnInit, OnChanges {
 
     this.productInstanceForm.controls['count'].setValue(instance.inventory.find(x => x.warehouse_id === this.warehouseId).count);
     this.productInstanceForm.controls['price'].setValue(instance.price);
-    this.productInstanceForm.controls['reserved'].setValue(instance.inventory[0].reserved);
+    this.productInstanceForm.controls['reserved'].setValue(instance.inventory.find(x => x.warehouse_id === this.warehouseId).reserved);
 
   }
 

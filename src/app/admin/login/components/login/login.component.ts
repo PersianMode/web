@@ -57,7 +57,18 @@ export class LoginComponent implements OnInit {
         warehouseId)
         .then(data => {
           this.progressService.disable();
-          this.router.navigate(['/agent/collections']);
+          switch (this.loginForm.controls['loginAs'].value) {
+            case '0':
+              this.router.navigate(['/agent/collections']);
+              break;
+            case '1':
+              this.router.navigate(['/agent/orders']);
+              break;
+            case '2':
+              this.router.navigate(['/agent/orders']);
+              break;
+
+          }
         })
         .catch(err => {
           this.progressService.disable();
