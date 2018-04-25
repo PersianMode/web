@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReferenceComponent } from './reference.component';
+import { DeliverComponent } from './deliver.component';
 
-describe('ReferenceComponent', () => {
-  let component: ReferenceComponent;
-  let fixture: ComponentFixture<ReferenceComponent>;
+describe('OutBoxComponent', () => {
+  let component: DeliverComponent;
+  let fixture: ComponentFixture<DeliverComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReferenceComponent ]
+      declarations: [ DeliverComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReferenceComponent);
+    fixture = TestBed.createComponent(DeliverComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
