@@ -290,11 +290,13 @@ export class PageBasicInfoComponent implements OnInit {
       }
         break;
       case PlacementModifyEnum.Modify: {
-        value.placements.forEach(item => {
-          const index = this.placements.findIndex(el => el._id.toString() === item._id.toString());
-          if (index !== -1)
-            this.placements[index].info = item.info;
-        });
+        if (value && value.placements && value.placements.length) {
+          value.placements.forEach(item => {
+            const index = this.placements.findIndex(el => el._id.toString() === item._id.toString());
+            if (index !== -1)
+              this.placements[index].info = item.info;
+          });
+        }
       }
         break;
     }

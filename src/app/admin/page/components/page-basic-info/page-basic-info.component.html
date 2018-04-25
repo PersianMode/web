@@ -74,11 +74,16 @@
         </p-editor>
       </div>
       <br>
-      <mat-card>
-        <mat-card-content class="mat-content-preview-for-page">
-          <div #content></div>
-        </mat-card-content>
-      </mat-card>
+      <mat-accordion multi>
+        <mat-expansion-panel style="border: 0;">
+          <mat-expansion-panel-header>پیش نمایش</mat-expansion-panel-header>
+          <mat-card>
+            <mat-card-content class="mat-content-preview-for-page">
+              <div #content></div>
+            </mat-card-content>
+          </mat-card>
+        </mat-expansion-panel>
+      </mat-accordion>
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
         <div role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"

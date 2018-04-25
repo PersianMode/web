@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
   MatSnackBarModule, MatTabsModule, MatTooltipModule
 } from '@angular/material';
@@ -67,6 +67,7 @@ import {AppFeedPlacementComponent} from './components/app-feed-placement/app-fee
     DragulaModule,
     ColorPickerModule,
     MatTooltipModule,
+    MatExpansionModule,
   ],
   entryComponents: [
     EditPanelComponent,
