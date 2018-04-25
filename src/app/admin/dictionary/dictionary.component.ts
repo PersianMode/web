@@ -50,12 +50,10 @@ export class DictionaryComponent implements OnInit {
     // this.httpService.get('../../assets/dictionary.json')
     this.httpService.get('/dictionary')
       .subscribe(res => {
-        console.log(res);
         this.types = Array.from(new Set(res.map(el => el.type)));
         this.isLoadingResults = false;
         this.resultsLength = res.lenght;
         this.dataSource.data = res;
-        console.log('-> ', this.dataSource.data);
       }, err => {
         this.isLoadingResults = false;
         this.resultsLength = 0;
@@ -121,10 +119,13 @@ export class DictionaryComponent implements OnInit {
     });
     updateDicDialog.afterClosed().subscribe(
       res => {
+        this.openSnackBar('دیکشنری با موفقیت بروزرسانی گردید');
+        this.isLoadingResults = false;
         this.load();
       },
       err => {
-
+        this.isLoadingResults = false;
+        this.openSnackBar('خطا در پاک کردن دیکشنری');
       });
   }
   saveEdit() {// should get data
