@@ -12,8 +12,17 @@
         <div class="basket-div">
           سبد خرید شما ({{numberOfProducts}})
         </div>
-        <div *ngFor="let product of products;let i = index" style="margin-bottom: 10px;">
-          <app-cart-items [product]="product" (updateProduct)="updateProduct($event, product)" (valid)="changeValidation($event, i)"></app-cart-items>
+        <div>
+          <div *ngFor="let product of products;let i = index" style="margin-bottom: 10px;">
+            <app-cart-items [product]="product" (updateProduct)="updateProduct($event, product)" (valid)="changeValidation($event, i)"></app-cart-items>
+          </div>
+        </div>
+        <div class="center-content" *ngIf="showWaitingSpinner">
+          <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'" [strokeWidth]="'2'">
+          </mat-progress-spinner>
+          <div>
+            لطفا اندکی صبر نمایید ...
+          </div>
         </div>
       </div>
       <div fxFlex=0 fxFlex.lg="10" fxFlex.xl="20">&nbsp;</div>
