@@ -59,19 +59,14 @@
 
         <ng-container matColumnDef="edit">
           <mat-header-cell *matHeaderCellDef> تغییر</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <div *ngIf="editSelectedIndex!==element.position" (click)="Edit(element)">
-              <mat-icon aria-label="edit">edit</mat-icon>
-            </div>
-            <div *ngIf="editSelectedIndex===element.position" (click)="saveEdit()">
-              <mat-icon aria-label="accept">done</mat-icon>
-            </div>
+          <mat-cell *matCellDef="let element" (click)="updateElement(element)">
+            <mat-icon aria-label="edit">edit</mat-icon>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="remove">
           <mat-header-cell *matHeaderCellDef> حذف</mat-header-cell>
-          <mat-cell *matCellDef="let element" (click)="deleteRow(element)">
+          <mat-cell *matCellDef="let element" (click)="deleteElement(element)">
             <mat-icon aria-label="remove">remove</mat-icon>
           </mat-cell>
         </ng-container>

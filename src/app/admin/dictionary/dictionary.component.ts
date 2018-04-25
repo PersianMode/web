@@ -85,7 +85,7 @@ export class DictionaryComponent implements OnInit {
     this.load();
   }
 
-  deleteRow(element: IDictionary) {
+  deleteElement(element: IDictionary) {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px'
     });
@@ -111,6 +111,22 @@ export class DictionaryComponent implements OnInit {
       });
   }
 
+  updateElement(element: IDictionary) {
+    const updateDicDialog = this.dialog.open(AddDictionaryComponent, {
+          width: '600px;',
+      data: {
+        types: this.types,
+        item: element
+      }
+    });
+    updateDicDialog.afterClosed().subscribe(
+      res => {
+        this.load();
+      },
+      err => {
+
+      });
+  }
   saveEdit() {// should get data
     this.editSelectedIndex = -1;
     // TODO send  post request
