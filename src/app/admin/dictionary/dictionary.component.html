@@ -65,10 +65,8 @@
 
         <ng-container matColumnDef="remove">
           <mat-header-cell *matHeaderCellDef> حذف</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <div (click)="deleteRow(element.position)">
-              <mat-icon aria-label="remove">remove</mat-icon>
-            </div>
+          <mat-cell *matCellDef="let element" (click)="deleteRow(element)">
+            <mat-icon aria-label="remove">remove</mat-icon>
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
