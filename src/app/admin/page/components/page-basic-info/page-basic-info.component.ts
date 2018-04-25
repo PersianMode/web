@@ -60,10 +60,10 @@ export class PageBasicInfoComponent implements OnInit {
 
     }, {});
   }
-
-  preRenderFunc(content: string) {
-    return content.replace(/something/g, 'new value'); // must return a string
-  }
+  //
+  // preRenderFunc(content: string) {
+  //   return content.replace(/something/g, 'new value'); // must return a string
+  // }
 
   initPageInfo() {
     if (!this.id) {

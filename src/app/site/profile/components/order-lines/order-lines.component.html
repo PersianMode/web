@@ -49,14 +49,14 @@
                             <span style="font-weight: bold;">{{makePersianNumber((ol.product.base_price* ol.quantity), true)}}</span>
                             تومان
                         </div>
-                        <div class="submit-cancel-change-btn">
-                            <button mat-button class="action-button"
-                                    *ngIf="ol.tickets[ol.tickets.length - 1].status === 1">لغو سفارش
-                            </button>
-                            <button mat-button class="action-button"
-                                    *ngIf="ol.tickets[ol.tickets.length - 1].status === 9">بازگشت کالا
-                            </button>
-                        </div>
+                        <!--<div class="submit-cancel-change-btn">-->
+                            <!--<button mat-button class="action-button"-->
+                                    <!--*ngIf="ol.tickets[ol.tickets.length - 1].status === 2 || ol.tickets[ol.tickets.length - 1].status === 3 || ol.tickets[ol.tickets.length - 1].status === 4">لغو سفارش-->
+                            <!--</button>-->
+                            <!--<button mat-button class="action-button"-->
+                                    <!--*ngIf="ol.tickets[ol.tickets.length - 1].status === 5 || ol.tickets[ol.tickets.length - 1].status === 1">بازگشت کالا-->
+                            <!--</button>-->
+                        <!--</div>-->
                     </div>
                 </div>
             </div>
