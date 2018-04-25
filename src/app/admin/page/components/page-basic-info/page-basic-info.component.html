@@ -4,22 +4,16 @@
     <mat-card-title>
       <h2> {{ id ? 'ویرایش صفحه': 'افزودن صفحه جدید' }} </h2>
     </mat-card-title>
-
   </mat-card-header>
   <mat-card-content>
-
     <form (ngSubmit)="submitPage()" [formGroup]="form">
-
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
-
         <div fxFlex="50" class="field-container">
-
           <app-suggestion fxFlex="50" [name]="'Collection'" [currentIds]="collection ?  [collection._id] : []"
                           [fieldName]="'name'"
                           [placeholder]="'نام کالکشن'" (add)="setCollection($event)"></app-suggestion>
           <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{collection ? collection.name : ''}} </h3>
         </div>
-
         <div fxFlex="50" class="field-container">
           <mat-input-container class="field">
             <input matInput type="text" placeholder="آدرس" formControlName="address"
@@ -30,49 +24,80 @@
             </mat-error>
           </mat-input-container>
         </div>
-
       </div>
 
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+      <div fxLayout="row" fxLayout.xs="column"
+           fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
         <div fxFlex="50" class="field-container">
-
           <mat-checkbox formControlName="is_app" role="is_app" dir="ltr">
-            Is App?
+            <span class="is-app-style">Is App?</span>
           </mat-checkbox>
         </div>
       </div>
 
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
-
-      <mat-form-field class="example-full-width">
-      <textarea formControlName="content" matInput placeholder="محتوا به صورت Mark Down"></textarea>
-      </mat-form-field>
+      <div class="ui-rtl" dir="rtl">
+        <p-editor formControlName="content" [style]="{'height':'200px'}">
+          <p-header dir="ltr" class="header-little-fix-style">
+            <span class="ql-formats">
+              <select class="ql-size"></select>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-bold"></button>
+              <button class="ql-italic"></button>
+              <button class="ql-underline"></button>
+              <button class="ql-strike"></button>
+            </span>
+            <span class="ql-formats">
+              <select class="ql-color"></select>
+              <select class="ql-background"></select>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-script" value="sub"></button>
+              <button class="ql-script" value="super"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-header" value="1"></button>
+              <button class="ql-header" value="2"></button>
+              <button class="ql-code-block"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-list" value="ordered"></button>
+              <button class="ql-list" value="bullet"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-direction" value="rtl"></button>
+              <select class="ql-align"></select>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-link"></button>
+            </span>
+          </p-header>
+        </p-editor>
       </div>
+      <br>
+      <mat-accordion multi>
+        <mat-expansion-panel style="border: 0;">
+          <mat-expansion-panel-header>پیش نمایش</mat-expansion-panel-header>
+          <mat-card>
+            <mat-card-content class="mat-content-preview-for-page">
+              <div #content></div>
+            </mat-card-content>
+          </mat-card>
+        </mat-expansion-panel>
+      </mat-accordion>
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
-
-      <markdown *ngIf="form.controls['content'].value" [data]="form.controls['content'].value"></markdown>
-
-      </div>
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
-
         <div role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"
                   [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges))"
                   tabindex="3">
-
             <button mat-icon-button *ngIf="id" (click)="deletePage(id)" color="warn">
               <mat-icon aria-label="delete">delete</mat-icon>
             </button>
             <mat-icon aria-label="accept">done</mat-icon>
           </button>
         </div>
-
       </div>
-
-
     </form>
-
-
   </mat-card-content>
 </mat-card>
 

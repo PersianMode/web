@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
   MatSnackBarModule, MatTabsModule, MatTooltipModule
 } from '@angular/material';
@@ -11,7 +11,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
 import {PageComponent} from './page.component';
 import {PageBasicInfoComponent} from './components/page-basic-info/page-basic-info.component';
-import {MarkdownModule} from 'angular2-markdown';
 import {PlacementComponent} from './components/placement/placement.component';
 import {MenuPlacementComponent} from './components/menu-placement/menu-placement.component';
 import {LogoListPlacementComponent} from './components/logo-list-placement/logo-list-placement.component';
@@ -23,10 +22,11 @@ import {SubMenuComponent} from './components/menu-placement/sub-menu/sub-menu.co
 import {SliderPreviewComponent} from './components/slider-placement/slider-preview/slider-preview.component';
 import {EditPanelComponent} from './components/page-content-placement/edit-panel/edit-panel.component';
 import {ColorPickerModule} from 'primeng/primeng';
-import { AppSubMenuComponent } from './components/menu-placement/app-sub-menu/app-sub-menu.component';
-import { UploadImageDialogComponent } from './components/menu-placement/upload-image-dialog/upload-image-dialog.component';
-import { FooterPlacementComponent } from './components/footer-placement/footer-placement.component';
-import { AppFeedPlacementComponent } from './components/app-feed-placement/app-feed-placement.component';
+import {AppSubMenuComponent} from './components/menu-placement/app-sub-menu/app-sub-menu.component';
+import {UploadImageDialogComponent} from './components/menu-placement/upload-image-dialog/upload-image-dialog.component';
+import {EditorModule} from 'primeng/editor';
+import {FooterPlacementComponent} from './components/footer-placement/footer-placement.component';
+import {AppFeedPlacementComponent} from './components/app-feed-placement/app-feed-placement.component';
 
 @NgModule({
   declarations: [
@@ -63,10 +63,11 @@ import { AppFeedPlacementComponent } from './components/app-feed-placement/app-f
     MatTabsModule,
     MatCheckboxModule,
     SharedModule,
-    MarkdownModule.forRoot(),
+    EditorModule,
     DragulaModule,
     ColorPickerModule,
     MatTooltipModule,
+    MatExpansionModule,
   ],
   entryComponents: [
     EditPanelComponent,
