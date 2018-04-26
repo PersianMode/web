@@ -18,7 +18,7 @@ export class CollectionHeaderComponent implements OnInit {
   };
   persistedList = false;
   searchIsFocused = false;
-  menu = {};
+  menu: any = {};
   placements: any = {};
   topMenu = [];
 
@@ -32,9 +32,9 @@ export class CollectionHeaderComponent implements OnInit {
         this.topMenu
           .sort((x, y) => x.info.column - y.info.column)
           .forEach(r => {
-          r.routerLink = ['/'].concat(r.info.href.split('/'));
-          r.type = r.info.section ? r.info.section : r.routerLink[2];
-        });
+            r.routerLink = ['/'].concat(r.info.href.split('/'));
+            r.type = r.info.section ? r.info.section : r.routerLink[2];
+          });
         const subMenu = data.filter(r => r.variable_name === 'subMenu');
         const sections = Array.from(new Set(subMenu.map(r => r.info.section)));
         this.placements = {};

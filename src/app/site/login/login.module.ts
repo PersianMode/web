@@ -7,18 +7,18 @@ import {MatCheckboxModule, MatDialogModule, MatInputModule} from '@angular/mater
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { OtherDetailsComponent } from './components/other-details/other-details.component';
 
-@NgModule({
-  declarations: [LoginComponent, OtherDetailsComponent],
-  imports: [
-    LoginRouting,
-    CommonModule,
-    FlexLayoutModule,
-    MatCheckboxModule,
-    MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-  ],
-})
-export class LoginModule {
-}
+// @NgModule({
+//   declarations: [LoginComponent, OtherDetailsComponent],
+//   imports: [
+//     LoginRouting,
+//     CommonModule,
+//     FlexLayoutModule,
+//     MatCheckboxModule,
+//     MatInputModule,
+//     FormsModule,
+//     ReactiveFormsModule,
+//     MatDialogModule,
+//   ],
+// })
+// export class LoginModule {
+// }

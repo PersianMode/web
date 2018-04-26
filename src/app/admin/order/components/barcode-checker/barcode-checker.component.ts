@@ -13,7 +13,7 @@ export class BarcodeCheckerComponent implements OnInit {
   barcodeCtrl: FormControl;
 
   constructor(private dialogRef: MatDialogRef<BarcodeCheckerComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any) {}
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
 
 
 
