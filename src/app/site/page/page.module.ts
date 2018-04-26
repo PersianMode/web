@@ -5,6 +5,7 @@ import {PageRouting} from './page.routing';
 import {MatCardModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MarkdownModule} from 'angular2-markdown';
+import {SharedModule} from '../../shared/shared.module';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import {MarkdownModule} from 'angular2-markdown';
     FlexLayoutModule,
     MarkdownModule.forRoot(),
     CommonModule,
+    SharedModule,
   ],
   declarations: [PageComponent]
 })

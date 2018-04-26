@@ -4,6 +4,8 @@ import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
+import {ProgressService} from '../../../../shared/services/progress.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,10 @@ export class LoginComponent implements OnInit {
 
   showClerkWarehouses = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService,
+    private router: Router,
+    private progressService: ProgressService,
+    private snakBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -44,15 +49,35 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
 
       const warehouseId = this.loginForm.controls['warehouse_id'].value;
+      if (!warehouseId) {
+        this.openSnackBar('فروشگاه حورد نظر را انتخاب کنید');
+        return;
+      }
 
+      this.progressService.enable();
       this.authService.login(this.loginForm.controls['email'].value,
         this.loginForm.controls['password'].value,
         this.loginForm.controls['loginAs'].value,
         warehouseId)
         .then(data => {
-          this.router.navigate(['/agent/collections']);
+          this.progressService.disable();
+          switch (this.loginForm.controls['loginAs'].value) {
+            case '0':
+              this.router.navigate(['/agent/collections']);
+              break;
+            case '1':
+              this.router.navigate(['/agent/orders']);
+              break;
+            case '2':
+              this.router.navigate(['/agent/orders']);
+              break;
+
+          }
         })
-        .catch(err => console.error('Cannot login: ', err));
+        .catch(err => {
+          this.progressService.disable();
+          this.openSnackBar('نام کاربری یا کلمه عبور نادرست می باشد');
+        });
     }
   }
 
@@ -68,14 +93,28 @@ export class LoginComponent implements OnInit {
     this.curFocus = item;
   }
 
+  onWarehouseChange(warehouseId) {
+    this.loginForm.controls['warehouse_id'].setValue(warehouseId);
+  }
+
   onChange(option) {
     this.showClerkWarehouses = (option === AccessLevel.ShopClerk.toString());
     if (this.showClerkWarehouses && this.authService.warehouses && this.authService.warehouses.length)
-      this.loginForm.controls['warehouse_id'].setValue(this.authService.warehouses.find(x => !x.is_center)._id);
+      this.loginForm.controls['warehouse_id'].setValue(this.getClerkWarehouses()[0]._id);
     else if (option === AccessLevel.SalesManager.toString())
       this.loginForm.controls['warehouse_id'].setValue(this.authService.warehouses.find(x => x.is_center)._id);
     else
       this.loginForm.controls['warehouse_id'].setValue(null);
   }
 
+  getClerkWarehouses() {
+    return this.authService.warehouses.filter(x => !x.is_center)
+      .sort((a, b) => a.priority > b.priority ? -1 : a.priority < b.priority ? 1 : 0);
+  }
+
+  openSnackBar(message: string) {
+    this.snakBar.open(message, null, {
+      duration: 2000,
+    });
+  }
 }

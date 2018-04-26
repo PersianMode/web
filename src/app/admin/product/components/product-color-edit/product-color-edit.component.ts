@@ -29,12 +29,12 @@ export class ProductColorEditComponent implements OnInit {
   }
 
   setThumbnail(result: any) {
-    this.data.product_color.image.thumbnail = result.uploaded;
+    this.data.product_color.image.thumbnail = result[0];
     this.thumbnailURL = this.getURL(this.data.product_color.image.thumbnail);
   }
 
   addAngle(result: any) {
-    this.data.product_color.image.angles = this.data.product_color.image.angles.concat(result.map(x => x.uploaded));
+    this.data.product_color.image.angles = this.data.product_color.image.angles.concat(result);
   }
 
   removeAngle(angle) {

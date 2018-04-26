@@ -48,6 +48,7 @@ export class ProductBasicFormComponent implements OnInit, OnChanges, OnDestroy {
       this.productBasicForm.controls['base_price'].setValue(this.product.base_price);
       this.productBasicForm.controls['product_type'].setValue(this.product.product_type.product_type_id);
       this.productBasicForm.controls['brand'].setValue(this.product.brand.brand_id);
+      this.productBasicForm.controls['desc'].setValue(this.product.desc);
 
     }
 
@@ -66,7 +67,8 @@ export class ProductBasicFormComponent implements OnInit, OnChanges, OnDestroy {
       ]],
       brand: [null, [
         Validators.required,
-      ]]
+      ]],
+      desc: [null]
     },
       {
         validator: this.basicInfoValidation
@@ -85,6 +87,7 @@ export class ProductBasicFormComponent implements OnInit, OnChanges, OnDestroy {
       base_price: this.productBasicForm.controls['base_price'].value,
       product_type: this.productBasicForm.controls['product_type'].value,
       brand: this.productBasicForm.controls['brand'].value,
+      desc: this.productBasicForm.controls['desc'].value,
     };
     this.upsertBtnShouldDisabled = false;
     this.deleteBtnShouldDisabled = false;
@@ -102,6 +105,7 @@ export class ProductBasicFormComponent implements OnInit, OnChanges, OnDestroy {
         this.product.base_price = productBasicInfo.base_price;
         this.product.brand = this.brands.find(x => x._id === productBasicInfo.brand);
         this.product.product_type = this.types.find(x => x._id === productBasicInfo.product_type);
+        this.product.desc = productBasicInfo.desc;
 
         this.upsertBtnShouldDisabled = true;
         this.deleteBtnShouldDisabled = true;
@@ -157,12 +161,14 @@ export class ProductBasicFormComponent implements OnInit, OnChanges, OnDestroy {
     }
     this.anyChanges = false;
     const name = this.productBasicForm.controls['name'].value ? this.productBasicForm.controls['name'].value : '';
-    
+
     const base_price = this.productBasicForm.controls['base_price'].value ? this.productBasicForm.controls['base_price'].value : '';
-    
+
     const brand_id = this.productBasicForm.controls['brand'].value;
 
     const product_type_id = this.productBasicForm.controls['product_type'].value;
+
+    const desc = this.productBasicForm.controls['desc'].value;
 
     const orig_name = this.originalProduct.name;
 
@@ -171,9 +177,12 @@ export class ProductBasicFormComponent implements OnInit, OnChanges, OnDestroy {
     const orig_product_type_id = this.originalProduct.product_type.product_type_id;
 
     const orig_brand_id = this.originalProduct.brand.brand_id;
-    
+
+    const orig_desc = this.originalProduct.desc;
+
 
     if ((name !== orig_name && (name !== '' || orig_name !== null)) ||
+      (desc !== orig_desc && (desc !== '' || orig_desc !== null)) ||
       (base_price !== orig_base_price && (base_price !== '' || orig_base_price !== null)) ||
       (orig_brand_id !== brand_id) ||
       (orig_product_type_id !== product_type_id)

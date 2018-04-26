@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
 
@@ -8,6 +8,7 @@ import {PageService} from '../../../../shared/services/page.service';
   styleUrls: ['./page.component.css']
 })
 export class PageComponent implements OnInit {
+  @ViewChild('content') contentEl: ElementRef;
   pageName = '';
   content = '';
 
@@ -21,9 +22,12 @@ export class PageComponent implements OnInit {
       this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
         if (res && res['content']) {
           this.content = res['content'];
+          this.contentEl.nativeElement.innerHTML = '';
+          if (this.content)
+            this.contentEl.nativeElement.insertAdjacentHTML('beforeend', this.content);
         } else {
           console.error('-> ', `${this.pageName} is getting empty data for page`);
-        };
+        }
       });
     });
   }

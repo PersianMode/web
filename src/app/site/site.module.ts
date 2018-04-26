@@ -19,7 +19,8 @@ import {
   MatOptionModule,
   MatAutocompleteModule,
   MatCheckboxModule,
-  MatStepperModule, MatRadioModule
+  MatStepperModule, MatRadioModule,
+  MatSnackBarModule,
 } from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';
@@ -60,6 +61,7 @@ import {OrderLinesComponent} from './profile/components/order-lines/order-lines.
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    MatSnackBarModule,
     DpDatePickerModule,
     SharedModule,
     AgmCoreModule.forRoot({

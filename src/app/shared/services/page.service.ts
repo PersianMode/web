@@ -13,6 +13,7 @@ export class PageService {
   private homeComponents: any = {};
   placement$: Subject<any[]> = new Subject<any[]>();
   pageInfo$: Subject<any[]> = new Subject<any[]>();
+  private homeWasLoaded = false;
 
   constructor(private httpService: HttpService, private authService: AuthService) {
     this.getPage('home', false);
@@ -25,6 +26,7 @@ export class PageService {
     if (pageName === 'home') {
       defaultComponents.forEach(r => {
         this.homeComponents[r] = dataSplit[components.indexOf(r)];
+        this.homeWasLoaded = true;
       });
     } else {
       defaultComponents.forEach(r => {
@@ -48,9 +50,9 @@ export class PageService {
 
   getPage(pageName, emit = true) {
     const i = setInterval(() => { // All other pages should wait for initialisation of Home placements
-      if (pageName === 'home' || this.homeComponents.menu) {
+      if (pageName === 'home' || this.homeWasLoaded) {
         clearInterval(i);
-        if ( !this.cache[pageName]) {
+        if (!this.cache[pageName]) {
           pageName = pageName.toLowerCase().includes('?preview') ? pageName.substr(0, pageName.indexOf('?preview')) : pageName;
           this.httpService.post('page' + (this.authService.userDetails.isAgent ? '/cm/preview' : ''), {address: pageName}).subscribe(
             (data: any) => {
@@ -67,8 +69,7 @@ export class PageService {
                 defaultComponents.forEach(r => {
                   this.cache[pageName].placement[0].push(r);
                   this.cache[pageName].placement[1].push(this.homeComponents[r]);
-                });
-              }
+                });    }
               if (emit) {
                 this.emitPlacements(pageName, this.cache[pageName]);
               }
@@ -82,6 +83,7 @@ export class PageService {
       }
     }, 500);
   }
+
   getFilterOptions() {
   }
 

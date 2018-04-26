@@ -15,7 +15,7 @@
         <div fxFlex=20 style="font-family:irankharazmi,sans-serif">
           <h4 (click)="navigateToProduct()">{{product?.name}}</h4>
         </div>
-        <div *ngIf="!sizesArray.length" fxFlex=60 class="not-exist">هیچ اندازه‌ای موجود نیست</div>
+        <div *ngIf="!sizesArray.length" fxFlex=60 class="not-exist">تمام اندازه‌ها فروش رفته‌اند.</div>
         <div *ngIf="sizesArray.length" class="style-select-wrapper" fxFlex="30">
           <span>اندازه</span>
           <select class="select-style" (change)="setNewSize($event.target.value)">

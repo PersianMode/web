@@ -1,36 +1,28 @@
 <div class="main">
-<mat-tab-group dir="rtl">
-  <mat-tab label="inbox">
-    <ng-template mat-tab-label>
-      <span>ورودی</span>
+  <mat-tab-group dir="rtl">
+    <mat-tab label="inbox">
+      <ng-template mat-tab-label>
+        <span>ورودی</span>
 
-      <mat-chip-list *ngIf="newInboxCount">
-        <mat-chip color="accent" selected="true">{{newInboxCount}}</mat-chip>
-      </mat-chip-list>
-    </ng-template>
+        <mat-chip-list *ngIf="newInboxCount">
+          <mat-chip color="accent" selected="true">{{newInboxCount}}</mat-chip>
+        </mat-chip-list>
+      </ng-template>
 
-<app-order-inbox (newInboxCount)="newInboxCount = $event"></app-order-inbox>
+      <app-order-inbox (newInboxCount)="newInboxCount = $event"></app-order-inbox>
 
-  </mat-tab>
-  <mat-tab label="delivery">
-    <ng-template mat-tab-label>
-      <span>تحویل</span>
+    </mat-tab>
+    <mat-tab label="outbox">
+      <ng-template mat-tab-label>
+        <span>آماده تحویل</span>
+        <mat-chip-list *ngIf="newDeliverCount">
+          <mat-chip color="accent" selected="true">{{newDeliverCount}}</mat-chip>
+        </mat-chip-list>
+      </ng-template>
+      <app-deliver (newDeliverCount)="newDeliverCount = $event"> </app-deliver>
 
-      <mat-chip-list>
-        <mat-chip color="accent" selected="true">3</mat-chip>
-      </mat-chip-list>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="outbox">
-    <ng-template mat-tab-label>
-      <span>ارجاعات</span>
-      <mat-chip-list>
-        <mat-chip color="accent" selected="true">3</mat-chip>
-      </mat-chip-list>
-    </ng-template>
-    <app-reference></app-reference>
-  </mat-tab>
+    </mat-tab>
 
 
-</mat-tab-group>
+  </mat-tab-group>
 </div>

@@ -1,40 +1,30 @@
-
 <mat-card>
   <mat-card-content>
     <div class="example-container mat-elevation-z8">
-      <div class="example-loading-shade"
-           *ngIf="isLoadingResults">
-        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-      </div>
-
-      <mat-table #table [dataSource]="dataSource" class="example-table"
-                 matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
-                 (matSortChange)="onSortChange($event)">
+      
+      <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
+        (matSortChange)="onSortChange($event)">
 
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
           <mat-cell *matCellDef="let element"> {{getIndex(element)}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef> نام</mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.product_name}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="color">
-          <mat-header-cell *matHeaderCellDef> رنگ</mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{getColor(element)}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="size">
-          <mat-header-cell *matHeaderCellDef> سایز</mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.instance.size}}</mat-cell>
+        <ng-container matColumnDef="product">
+          <mat-header-cell *matHeaderCellDef> محصول</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div class="imgWrapper">
+              <img [src]="getProductDetail(element).thumbnailURL" (click)="showDetial(element)">
+            </div>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="is_collect">
           <mat-header-cell *matHeaderCellDef> C&C</mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <mat-checkbox [checked]="!!element.is_collect" disabled="true"></mat-checkbox>
+            <mat-icon *ngIf="!!element.is_collect">check</mat-icon>
+            <mat-icon *ngIf="!element.is_collect">clear</mat-icon>
+         
           </mat-cell>
         </ng-container>
 
@@ -78,19 +68,10 @@
         <ng-container matColumnDef="process">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <button mat-button color="primary" (click)="process(element)" *ngIf="!isReadyToDeliver(element) && !invoiceRequested(element)">انتخاب</button>
-            <button mat-button color="primary" (click)="requestForInvoice(element)" *ngIf="invoiceRequested(element)">صدور مجدد فاکتور</button>
+            <button mat-button color="primary" (click)="process(element)">انتخاب</button>
           </mat-cell>
         </ng-container>
-
-        <ng-container matColumnDef="delivery">
-          <mat-header-cell *matHeaderCellDef>ارسال</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <button mat-button color="primary" (click)="showDelivery(element)" *ngIf="isReadyToDeliver(element)">انتخاب
-            </button>
-          </mat-cell>
-        </ng-container>
-
+        
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>

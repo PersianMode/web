@@ -15,7 +15,6 @@ body, label {
   direction: rtl;
 }
 
-
 a {
   text-decoration: none;
   outline: none;
@@ -524,7 +523,7 @@ dp-date-picker.dp-material .dp-picker-input {
 
 .bottomScroll {
   position: absolute !important;
-  bottom: 212px !important;
+  bottom: 229px !important;
   top: unset !important;
 }
 
@@ -672,7 +671,7 @@ mat-panel-title {
 }
 
 .hr-setting {
-  width: 70%;
+  width: 100%;
   border-color: gray;
   border-width: 0.5px;
 }
@@ -701,10 +700,21 @@ mat-panel-title {
 }
 
 @media screen and (max-width: 500px) {
-  .footer-link, .footer-link-bold, .footer-link1, .icons {
+  .footer-link, .footer-link-bold, .footer-link1 {
     float: none;
     display: block;
-    text-align: right;
+  }
+
+  .icons {
+    margin-top: 30px;
+  }
+
+  .footer-column {
+    display: block !important;
+    text-align: center !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-top: 23px;
   }
 }
 
@@ -849,6 +859,7 @@ mat-panel-title {
 .mat-radio-label-content {
   margin-right: 5px;
 }
+
 .cdk-overlay-pane {
   max-width: 100% !important;
 }
@@ -880,8 +891,9 @@ mat-panel-title {
 }
 
 .mat-slide-toggle-bar {
-  background: rgba(99,99,99,.5) !important;
+  background: rgba(99, 99, 99, .5) !important;
 }
+
 .mat-slide-toggle-thumb {
   background: gray !important;
 }
@@ -900,7 +912,61 @@ mat-panel-title {
   margin-left: 10px;
   margin-right: 10px;
   vertical-align: top;
+}
+
 p {
   text-align: justify;
   font-family: iranyekan, sans-serif;
 }
+
+.waiting-spinner {
+  margin: 0 auto;
+}
+
+/* FOR PAGE CONTENT AND PRIMENG */
+
+.mat-content-preview-for-page {
+  font-family: iranyekan;
+  text-align: left;
+  direction: ltr;
+}
+
+.mat-content-preview-for-page ul, .mat-content-preview-for-page ol {
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+.mat-content-preview-for-page ol {
+  list-style: -moz-arabic-indic; /* fallback */
+  list-style: arabic-indic;
+}
+
+.ql-align-center {
+  text-align: center;
+}
+
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-size-small {
+  font-size: 0.75em;
+}
+
+.ql-size-large {
+  font-size: 1.5em;
+}
+
+.ql-size-huge {
+  font-size: 2.5em;
+}
+
+.ql-direction-rtl {
+  direction: rtl;
+}
+
+.ql-toolbar.ql-snow {
+  text-align: left;
+}
+
+/* PREVIEW END */
