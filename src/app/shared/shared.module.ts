@@ -5,7 +5,7 @@ import {
   MatInputModule,
   MatMenuModule,
   MatOptionModule, MatRadioModule, MatSelectModule, MatStepperModule,
-  MatToolbarModule
+  MatToolbarModule, MatSnackBarModule,
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -60,6 +60,7 @@ import { LogoHeaderComponent } from './components/logo-header/logo-header.compon
     MatCheckboxModule,
     FileUploadModule,
     MatStepperModule,
+    MatSnackBarModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),

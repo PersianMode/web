@@ -523,7 +523,7 @@ dp-date-picker.dp-material .dp-picker-input {
 
 .bottomScroll {
   position: absolute !important;
-  bottom: 212px !important;
+  bottom: 229px !important;
   top: unset !important;
 }
 
@@ -970,3 +970,7 @@ p {
 }
 
 /* PREVIEW END */
+
+.placement-tab .mat-tab-body {
+  min-height: 100px;
+}
