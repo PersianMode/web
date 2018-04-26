@@ -27,7 +27,7 @@ export class BrowserWindowRef extends WindowRef {
 }
 
 /* Create an factory function that returns the native window object. */
-function windowFactory(browserWindowRef: BrowserWindowRef, platformId: Object): Window | Object {
+export function windowFactory(browserWindowRef: BrowserWindowRef, platformId: Object): Window | Object {
   if (isPlatformBrowser(platformId)) {
     return browserWindowRef.nativeWindow;
   }
@@ -52,3 +52,4 @@ export const WINDOW_PROVIDERS = [
   browserWindowProvider,
   windowProvider
 ];
+
