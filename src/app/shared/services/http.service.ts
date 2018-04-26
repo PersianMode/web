@@ -12,7 +12,7 @@ export class HttpService {
   public static Host;
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {
-    HttpService.Host = this.isInDevMode ? 'http://localhost:3000' : 'http://173.249.11.153';
+    HttpService.Host = this.isInDevMode() ? 'http://localhost:3000' : 'http://173.249.11.153';
   }
 
   isInDevMode() {
