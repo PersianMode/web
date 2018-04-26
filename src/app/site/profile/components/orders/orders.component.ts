@@ -26,7 +26,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
               protected progressService: ProgressService) {
     this.isMobile = this.responsiveService.isMobile;
   }
-
   ngOnInit() {
     this.profileOrderService.orderArray.subscribe(result => {
       if (!result.length)
