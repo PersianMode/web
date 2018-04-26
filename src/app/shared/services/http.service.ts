@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
+import {isDevMode} from '@angular/core';
 
 @Injectable()
 export class HttpService {
 
+
   public static PRODUCT_IMAGE_PATH = '/images/product-image/';
-  public static Host = 'http://localhost:3000';
+  public static Host = isDevMode() ? 'http://localhost:3000' : 'http://173.249.11.153';
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {
   }
