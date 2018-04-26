@@ -5,8 +5,6 @@ import {AuthService} from '../../../../shared/services/auth.service';
 import {SocketService} from '../../../../shared/services/socket.service';
 import {OrderStatus} from '../../../../shared/lib/order_status';
 import {OrderAddressComponent} from '../order-address/order-address.component';
-import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
-import {STATUS} from '../../../../shared/enum/status.enum';
 
 @Component({
   selector: 'app-reference',
