@@ -44,11 +44,9 @@ export class DictionaryComponent implements OnInit {
     // this.httpService.get('../../assets/dictionary.json')
     this.httpService.get('/dictionary')
       .subscribe(res => {
-        console.log(res);
         this.isLoadingResults = false;
         this.resultsLength = res.lenght;
         this.dataSource.data = res;
-        console.log('-> ', this.dataSource.data);
       }, err => {
         this.isLoadingResults = false;
         this.resultsLength = 0;
