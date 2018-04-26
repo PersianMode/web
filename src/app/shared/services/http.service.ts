@@ -9,11 +9,15 @@ export class HttpService {
 
 
   public static PRODUCT_IMAGE_PATH = '/images/product-image/';
-  public static Host = isDevMode() ? 'http://localhost:3000' : 'http://173.249.11.153';
+  public static Host;
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {
+    HttpService.Host = this.isInDevMode ? 'http://localhost:3000' : 'http://173.249.11.153';
   }
 
+  isInDevMode() {
+    return isDevMode();
+  }
 
   get(url): Observable<any> {
     return this.http.get(this.serverAddress + url, {observe: 'response'}).map(data => data.body);
