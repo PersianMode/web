@@ -1,6 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
+import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
+import {ProgressService} from '../../shared/services/progress.service';
 import {HttpService} from '../../shared/services/http.service';
+import {IDictionary} from './interfaces/IDictionary.interface';
+import { ModifyDictionaryComponent } from './components/modify-dictionary/modify-dictionary.component';
 
 @Component({
   selector: 'app-dictionary',
@@ -8,6 +12,7 @@ import {HttpService} from '../../shared/services/http.service';
   styleUrls: ['./dictionary.component.css']
 })
 export class DictionaryComponent implements OnInit {
+  types;
   editSelectedIndex = -1;
   displayedColumns = [
     'remove',
@@ -17,7 +22,7 @@ export class DictionaryComponent implements OnInit {
     'type',
     'number',
   ];
-  editElement = { //it is bind to selected row for editing
+  editElement = { // it is bind to selected row for editing
     type: '',
     name: '',
     value: '',
@@ -31,7 +36,8 @@ export class DictionaryComponent implements OnInit {
 
   constructor(private httpService: HttpService,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -40,15 +46,14 @@ export class DictionaryComponent implements OnInit {
 
   load() {
     this.isLoadingResults = true;
-    //TODO send get request
+    // TODO send get request
     // this.httpService.get('../../assets/dictionary.json')
     this.httpService.get('/dictionary')
       .subscribe(res => {
-        console.log(res);
+        this.types = Array.from(new Set(res.map(el => el.type)));
         this.isLoadingResults = false;
         this.resultsLength = res.lenght;
         this.dataSource.data = res;
-        console.log('-> ', this.dataSource.data);
       }, err => {
         this.isLoadingResults = false;
         this.resultsLength = 0;
@@ -78,14 +83,59 @@ export class DictionaryComponent implements OnInit {
     this.load();
   }
 
-  deleteRow(position: number) {
-    //TODO send delete request
+  deleteElement(element: IDictionary) {
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px'
+    });
+    rmDialog.afterClosed().subscribe(
+      status => {
+        if (status) {
+          this.progressService.enable();
+          // TODO send delete request
+          this.httpService.delete(`/dictionary/${element._id}`).subscribe(
+            res => {
+              this.openSnackBar('دیکشنری با موفقیت پاک گردید');
+              this.isLoadingResults = false;
+              this.progressService.disable();
+            },
+            err => {
+              this.isLoadingResults = false;
+              this.openSnackBar('خطا در پاک کردن دیکشنری');
+              this.progressService.disable();
+            }
+          );
+          this.load();
+        }
+      }, err => {
+        console.log('Error in dialog: ', err);
+      });
   }
 
-  saveEdit() {//should get data
+  updateElement(element: IDictionary) {
+    const updateDicDialog = this.dialog.open(ModifyDictionaryComponent, {
+          width: '600px;',
+      data: {
+        types: this.types,
+        item: element
+      }
+    });
+    updateDicDialog.afterClosed().subscribe(
+      data => {
+        if (data && data.status) {
+          this.openSnackBar('دیکشنری با موفقیت بروزرسانی گردید');
+          this.isLoadingResults = false;
+          this.load();
+        }
+      },
+      err => {
+        this.isLoadingResults = false;
+        this.openSnackBar('خطا در پاک کردن دیکشنری');
+      });
+  }
+  saveEdit() {// should get data
     this.editSelectedIndex = -1;
-    //TODO send  post request
-    //sending editElement datas
+    // TODO send  post request
+    // sending editElement datas
 
 
     this.editElement.type = '';
@@ -100,8 +150,29 @@ export class DictionaryComponent implements OnInit {
     this.editElement.value = element.value;
   }
 
-  put() {//should get data
-    //TODO send put request
+  put() {
+     // should get data
+    // TODO send put request
   }
 
+  addDictionary() {
+    const addDicDialog =  this.dialog.open(ModifyDictionaryComponent, {
+      width: '600px;',
+      data: {
+        types: this.types
+      }
+    });
+    addDicDialog.afterClosed().subscribe(
+      data => {
+        if (data && data.status) {
+          this.openSnackBar('دیکشنری با موفقیت ثبت گردید');
+          this.isLoadingResults = false;
+          this.load();
+        }
+      },
+      err => {
+        this.isLoadingResults = false;
+        this.openSnackBar('خطا در پاک کردن دیکشنری');
+      });
+    }
 }
