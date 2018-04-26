@@ -4,7 +4,7 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
 import {ProgressService} from '../../shared/services/progress.service';
 import {HttpService} from '../../shared/services/http.service';
 import {IDictionary} from './interfaces/IDictionary.interface';
-import { ModifyDictionaryComponent } from './components/modify-dictionary/modify-dictionary.component';
+import {ModifyDictionaryComponent} from './components/modify-dictionary/modify-dictionary.component';
 
 @Component({
   selector: 'app-dictionary',
@@ -13,7 +13,6 @@ import { ModifyDictionaryComponent } from './components/modify-dictionary/modify
 })
 export class DictionaryComponent implements OnInit {
   types;
-  editSelectedIndex = -1;
   displayedColumns = [
     'remove',
     'edit',
@@ -22,11 +21,6 @@ export class DictionaryComponent implements OnInit {
     'type',
     'number',
   ];
-  editElement = { // it is bind to selected row for editing
-    type: '',
-    name: '',
-    value: '',
-  };
   dataSource = new MatTableDataSource();
   resultsLength = 0;
   isLoadingResults = true;
@@ -46,8 +40,6 @@ export class DictionaryComponent implements OnInit {
 
   load() {
     this.isLoadingResults = true;
-    // TODO send get request
-    // this.httpService.get('../../assets/dictionary.json')
     this.httpService.get('/dictionary')
       .subscribe(res => {
         this.types = Array.from(new Set(res.map(el => el.type)));
@@ -59,9 +51,6 @@ export class DictionaryComponent implements OnInit {
         this.resultsLength = 0;
         this.openSnackBar('خطا در دریافت دیکشنری');
       });
-  }
-
-  plusElement() {
   }
 
   getIndex(element) {
@@ -113,7 +102,7 @@ export class DictionaryComponent implements OnInit {
 
   updateElement(element: IDictionary) {
     const updateDicDialog = this.dialog.open(ModifyDictionaryComponent, {
-          width: '600px;',
+      width: '600px;',
       data: {
         types: this.types,
         item: element
@@ -132,31 +121,9 @@ export class DictionaryComponent implements OnInit {
         this.openSnackBar('خطا در پاک کردن دیکشنری');
       });
   }
-  saveEdit() {// should get data
-    this.editSelectedIndex = -1;
-    // TODO send  post request
-    // sending editElement datas
-
-
-    this.editElement.type = '';
-    this.editElement.name = '';
-    this.editElement.value = '';
-  }
-
-  Edit(element: any) {
-    this.editSelectedIndex = this.dataSource.data.indexOf(element);
-    this.editElement.type = element.type;
-    this.editElement.name = element.name;
-    this.editElement.value = element.value;
-  }
-
-  put() {
-     // should get data
-    // TODO send put request
-  }
 
   addDictionary() {
-    const addDicDialog =  this.dialog.open(ModifyDictionaryComponent, {
+    const addDicDialog = this.dialog.open(ModifyDictionaryComponent, {
       width: '600px;',
       data: {
         types: this.types
@@ -174,5 +141,12 @@ export class DictionaryComponent implements OnInit {
         this.isLoadingResults = false;
         this.openSnackBar('خطا در پاک کردن دیکشنری');
       });
-    }
+  }
+
+  isColor(element) {
+    if (element.type != 'color')
+      return false;
+    return !((element.value.length !== 7 && element.value.length !== 4) || element.value.charAt(0) !== '#');
+  }
+
 }

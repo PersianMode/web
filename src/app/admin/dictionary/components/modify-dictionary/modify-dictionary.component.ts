@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../../../../shared/services/http.service';
-import { ProgressService } from '../../../../shared/services/progress.service';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-modify-dictionary',
@@ -18,9 +18,9 @@ export class ModifyDictionaryComponent implements OnInit {
   dictionaryId: string;
 
   constructor(private dialogRef: MatDialogRef<ModifyDictionaryComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any, private httpService: HttpService,
-    private progressService: ProgressService) {
-}
+              @Inject(MAT_DIALOG_DATA) private data: any, private httpService: HttpService,
+              private progressService: ProgressService) {
+  }
 
   ngOnInit() {
     // this.dictionaryForm.controls['type'].setValue(this.data.item.type)
@@ -33,13 +33,13 @@ export class ModifyDictionaryComponent implements OnInit {
 
   initForm() {
     this.dictionaryForm = new FormBuilder().group({
-      name: [null, [
+      name: [this.data.item ? this.data.item.name : null, [
         Validators.required,
       ]],
-      value: [null, [
+      value: [this.data.item ? this.data.item.value : null, [
         Validators.required,
       ]],
-      type: [ this.data.item ?  this.data.item.type : null, [
+      type: [this.data.item ? this.data.item.type : null, [
         Validators.required,
       ]],
     }, {
@@ -50,7 +50,7 @@ export class ModifyDictionaryComponent implements OnInit {
   submitDictionary() {
     this.progressService.enable();
     const sendingData = {
-      name: this.dictionaryForm.controls['name'].value,
+      name: this.dictionaryForm.controls['name'].value.toString().toUpperCase(),
       type: this.dictionaryForm.controls['type'].value,
       value: this.dictionaryForm.controls['value'].value,
     };
@@ -58,7 +58,7 @@ export class ModifyDictionaryComponent implements OnInit {
       this.httpService.post(`/dictionary/${this.dictionaryId}`, sendingData).subscribe((res) => {
         this.progressService.disable();
       });
-    }else {
+    } else {
       this.httpService.put(`/dictionary`, sendingData).subscribe((res) => {
         this.progressService.disable();
       });

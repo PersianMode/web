@@ -8,27 +8,7 @@
   </mat-card-header>
   <mat-card-content>
     <form (ngSubmit)="submitDictionary()" [formGroup]="dictionaryForm">
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
-
-        <div fxFlex="33" class="field-container">
-          <mat-input-container class="field farsi">
-            <input matInput type="text" placeholder="نام" formControlName="name" role="colNameFa" tabindex="2" [value]="data.item? data.item.name : '' ">
-            <mat-hint>نام دیکشنری را وارد کنید</mat-hint>
-            <mat-error *ngIf="dictionaryForm.controls['name'].hasError('required')">
-              وارد کردن نام دیکشنری الزامی است
-            </mat-error>
-          </mat-input-container>
-        </div>
-
-        <div fxFlex="33" class="field-container">
-          <mat-input-container class="field farsi">
-            <input matInput type="text" placeholder="مقدار" formControlName="value" role="colNameFa" tabindex="2" [value]="data.item? data.item.value : '' ">
-            <mat-hint>مقدار دیکشنری را وارد کنید</mat-hint>
-            <mat-error *ngIf="dictionaryForm.controls['value'].hasError('required')">
-              وارد کردن مقدار دیکشنری الزامی است
-            </mat-error>
-          </mat-input-container>
-        </div>
+      <div fxLayout="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl" style="height: 300px">
 
         <mat-form-field fxFlex="33" style="text-align:right" tabindex="4">
           <mat-select placeholder="نوع" formControlName="type" role="type">
@@ -38,8 +18,37 @@
           <mat-hint>نوع را انتخاب کنید</mat-hint>
         </mat-form-field>
 
+        <div fxFlex="33" class="field-container">
+          <mat-input-container class="field farsi">
+            <input matInput type="text" placeholder="نام" formControlName="name" role="colNameFa" tabindex="2"
+                   [value]="data.item? data.item.name : '' ">
+            <mat-hint>نام دیکشنری را وارد کنید</mat-hint>
+            <mat-error *ngIf="dictionaryForm.controls['name'].hasError('required')">
+              وارد کردن نام دیکشنری الزامی است
+            </mat-error>
+          </mat-input-container>
+        </div>
+
+        <div fxFlex="33" class="field-container">
+          <div *ngIf="dictionaryForm.controls['type'].value==='color'">
+            <p-colorPicker [formControlName]="'value'"></p-colorPicker>
+            <label>رنگ متن</label>
+          </div>
+          <div *ngIf="dictionaryForm.controls['type'].value!=='color'">
+            <mat-input-container class="field farsi">
+              <input matInput type="text" placeholder="مقدار" formControlName="value" role="colNameFa" tabindex="2"
+                     [value]="data.item? data.item.value : '' ">
+              <mat-hint>مقدار دیکشنری را وارد کنید</mat-hint>
+              <mat-error *ngIf="dictionaryForm.controls['value'].hasError('required')">
+                وارد کردن مقدار دیکشنری الزامی است
+              </mat-error>
+            </mat-input-container>
+          </div>
+        </div>
+
         <div fxFlex="20" role="submit-button" style="text-align: left; margin-top: 10px;">
-          <button mat-button mat-raised-button type="submit" [disabled]="upsertBtnShouldDisabled || !dictionaryForm.valid">
+          <button mat-button mat-raised-button type="submit"
+                  [disabled]="upsertBtnShouldDisabled || !dictionaryForm.valid">
             {{data.item ? 'ویرایش' : 'ذخیره'}}
           </button>
         </div>
