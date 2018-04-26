@@ -9,7 +9,7 @@ export class HttpService {
 
 
   public static PRODUCT_IMAGE_PATH = '/images/product-image/';
-  public static Host = isDevMode() ? 'http://localhost:3000' : 'http://http://173.249.11.153';
+  public static Host = isDevMode() ? 'http://localhost:3000' : 'http://173.249.11.153';
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {
   }
