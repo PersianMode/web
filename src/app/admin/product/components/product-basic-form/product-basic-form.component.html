@@ -75,8 +75,8 @@
                         tabindex="6" color="accent">
                     <mat-icon aria-label="accept">done</mat-icon>
                 </button>
-                <button mat-icon-button *ngIf="productId" color="warn"
-                        type="button" [disabled]="deleteBtnShouldDisabled" (click)="deleteProduct(productId)"
+                <button mat-icon-button color="warn"
+                        type="button" [disabled]="deleteBtnShouldDisabled" (click)="deleteProduct(product._id)"
                         tabindex="7">
                     <mat-icon aria-label="delete">delete</mat-icon>
                 </button>

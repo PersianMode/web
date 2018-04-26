@@ -13,7 +13,7 @@ export class ProductColorEditComponent implements OnInit {
 
   thumbnailURL: any;
   constructor(private dialogRef: MatDialogRef<ProductColorEditComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private httpService: HttpService,
     private progressService: ProgressService,
     private sanitizer: DomSanitizer,

@@ -18,7 +18,7 @@
             <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
                               (selectedType)="changePaymentType($event)"></app-payment-type>
           </mat-expansion-panel>
-          <mat-expansion-panel [expanded]="!address || cc">
+          <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header>
               <mat-panel-title>آدرس</mat-panel-title>
             </mat-expansion-panel-header>
