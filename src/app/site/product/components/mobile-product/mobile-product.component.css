@@ -66,11 +66,13 @@ button:focus{
 .soldOut {
   color: #d00000;
   position: absolute;
-  transform: rotate(-45deg) translateY(17px);
+  transform: rotate(-45deg) translateY(-11px) translateX(12px);
   width: auto;
   font-weight: 400;
-  font-size: 22px;
   display: inline-block;
+  font-size: 40px;
+  font-family: irankharazmi, sans-serif;
+  opacity: .6;
 }
 .selectedImg {
   opacity: 1 !important;
