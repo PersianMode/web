@@ -58,8 +58,12 @@ export class ProductColorEditComponent implements OnInit {
 
   getURL(name) {
     if (name) {
-      const path = HttpService.PRODUCT_IMAGE_PATH + this.data.productId + '/' + this.data.product_color.color_id + '/' + name;
-      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+      const path = [HttpService.Host,
+      HttpService.PRODUCT_IMAGE_PATH,
+      this.data.productId,
+      this.data.product_color.color_id,
+        name].join('/');
+      return this.sanitizer.bypassSecurityTrustResourceUrl(path);
     } else
       return '';
   }

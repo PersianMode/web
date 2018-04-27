@@ -8,7 +8,7 @@ import {isDevMode} from '@angular/core';
 export class HttpService {
 
 
-  public static PRODUCT_IMAGE_PATH = '/images/product-image/';
+  public static PRODUCT_IMAGE_PATH = 'images/product-image';
   public static Host;
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {
