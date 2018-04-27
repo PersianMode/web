@@ -50,7 +50,7 @@ export class OrderLinesComponent implements OnInit {
     arr.forEach(el => {
       const boughtColor = el.product.colors.find(c => c._id === el.product_instance.product_color_id);
       el.boughtColor = boughtColor;
-      boughtColor.image.thumbnail = imagePathFixer(boughtColor.image.thumbnail, el.product._id, boughtColor._id);
+      boughtColor.image.thumbnail = imagePathFixer(boughtColor.image.thumbnail, el.product._id, boughtColor.color_id);
     });
   }
 

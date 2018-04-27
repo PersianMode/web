@@ -98,7 +98,11 @@ export class InboxComponent implements OnInit {
 
     const product_color = element.product_colors.find(x => x._id === element.instance.product_color_id);
     const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      `${HttpService.Host + HttpService.PRODUCT_IMAGE_PATH + element.product_id}/${product_color.color_id}/${product_color.image.thumbnail}`
+      [HttpService.Host,
+      HttpService.PRODUCT_IMAGE_PATH,
+      element.product_id,
+      product_color.color_id,
+      product_color.image.thumbnail].join('/')
       : null;
     return {
       name: element.product_name,

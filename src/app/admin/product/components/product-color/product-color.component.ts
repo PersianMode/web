@@ -78,8 +78,12 @@ export class ProductColorComponent implements OnInit, OnChanges {
 
   getURL(name, pc) {
     if (name) {
-      const path = HttpService.PRODUCT_IMAGE_PATH + this.product._id + '/' + pc.color_id + '/' + name;
-      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+      const path = [HttpService.Host,
+      HttpService.PRODUCT_IMAGE_PATH,
+      this.product._id,
+      pc.color_id,
+        name].join('/');
+      return this.sanitizer.bypassSecurityTrustResourceUrl(path);
     } else
       return '';
   }

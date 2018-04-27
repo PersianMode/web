@@ -189,7 +189,7 @@ export class ProductService {
     data.colors.forEach(item => {
       const angles = [];
       const addHost = function (r) {
-        return imagePathFixer(r, data.id, item._id);
+        return imagePathFixer(r, data.id, item.color_id);
       };
 
       item.image.angles.forEach(r => {
