@@ -188,10 +188,7 @@ export class ProductService {
     data.sizesInventory = {};
     data.colors.forEach(item => {
       const angles = [];
-      const addHost = function (r) {
-        return imagePathFixer(r, data.id, item.color_id);
-      };
-
+      
       item.image.angles.forEach(r => {
         if (!r.url) {
           const temp = {url: imagePathFixer(r, data.id, item.color_id), type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
