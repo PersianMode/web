@@ -1,33 +1,41 @@
 <link rel="stylesheet" href="../../../../../assets/css/agate.min.css">
 <mat-card class="card-view">
   <mat-card-header>
-    <mat-card-title>
-      <h2> {{ id ? 'ویرایش صفحه': 'افزودن صفحه جدید' }} </h2>
+    <mat-card-title class="persian-field">
+      <h2> {{ id ? 'ویرایش صفحه' : 'افزودن صفحه جدید' }} </h2>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form (ngSubmit)="submitPage()" [formGroup]="form">
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
-        <div fxFlex="50" class="field-container">
-          <app-suggestion fxFlex="50" [name]="'Collection'" [currentIds]="collection ?  [collection._id] : []"
-                          [fieldName]="'name'"
-                          [placeholder]="'نام کالکشن'" (add)="setCollection($event)"></app-suggestion>
-          <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{collection ? collection.name : ''}} </h3>
+        <div fxFlex="70" class="field-container">
+          <div fxLayout="row" fxLayoutAlign="start start" fxLayout.xs="column" fxLayoutAlign.xs="center center">
+            <div fxFlex="50" class="full-width">
+              <app-suggestion class="full-width" [name]="'Collection'" [currentIds]="collection ?  [collection._id] : []" [fieldName]="'name'"
+                [placeholder]="'نام کالکشن'" (add)="setCollection($event)"></app-suggestion>
+            </div>
+            <div fxFlex="50" *ngIf="collection">
+              <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{collection.name}} </h3>
+              <button mat-icon-button (click)="removeCollection()" color="primary" class="remove-collection-button">
+                <mat-icon>
+                  <i class="material-icons">close</i>
+                </mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
-        <div fxFlex="50" class="field-container">
+        <div fxFlex="30" class="field-container">
           <mat-input-container class="field">
-            <input matInput type="text" placeholder="آدرس" formControlName="address"
-                   role="address" tabindex="2" dir="ltr">
-            <mat-hint>آدرس صفحه را وارد کنید</mat-hint>
-            <mat-error *ngIf="form.controls['address'].hasError('required') && anyChanges">
+            <input matInput type="text" placeholder="آدرس" formControlName="address" role="address" tabindex="2" dir="ltr">
+            <mat-hint class="persian-field hit-label">آدرس صفحه را وارد کنید</mat-hint>
+            <mat-error *ngIf="form.controls['address'].hasError('required') && anyChanges" class="persian-field error-label">
               وارد کردن آدرس صفحه الزامی است
             </mat-error>
           </mat-input-container>
         </div>
       </div>
 
-      <div fxLayout="row" fxLayout.xs="column"
-           fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
         <div fxFlex="50" class="field-container">
           <mat-checkbox formControlName="is_app" role="is_app" dir="ltr">
             <span class="is-app-style">Is App?</span>
@@ -87,9 +95,7 @@
       </mat-accordion>
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
         <div role="submit-button" style="text-align: left; margin-top: 10px;">
-          <button mat-icon-button type="submit"
-                  [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges))"
-                  tabindex="3">
+          <button mat-icon-button type="submit" [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges))" tabindex="3">
             <button mat-icon-button *ngIf="id" (click)="deletePage(id)" color="warn">
               <mat-icon aria-label="delete">delete</mat-icon>
             </button>
@@ -101,6 +107,6 @@
   </mat-card-content>
 </mat-card>
 
-<app-placement *ngIf="id" [isApp]="form.controls['is_app'].value" [placements]="placements" [pageId]="id"
-               [pageAddress]="form.controls['address'].value" (modifyPlacement)="modifyPlacement($event)"
-               (reloadPlacement)="searchPagePlacements()"></app-placement>
+<app-placement *ngIf="id && (!form.controls['is_app'].value || (form.controls['address'].value.toLowerCase() === 'feed') || form.controls['address'].value.toLowerCase() === 'my_shop')"
+  [isApp]="form.controls['is_app'].value" [placements]="placements" [pageId]="id" [pageAddress]="form.controls['address'].value"
+  (modifyPlacement)="modifyPlacement($event)" (reloadPlacement)="searchPagePlacements()"></app-placement>

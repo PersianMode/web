@@ -30,8 +30,8 @@ export class PageBasicInfoComponent implements OnInit {
   @ViewChild('content') contentEl: ElementRef;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-              private httpService: HttpService, private snackBar: MatSnackBar,
-              private dialog: MatDialog, private router: Router) {
+    private httpService: HttpService, private snackBar: MatSnackBar,
+    private dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit() {
@@ -104,6 +104,12 @@ export class PageBasicInfoComponent implements OnInit {
 
   setCollection(collection: any) {
     this.collection = collection;
+    this.fieldChanged();
+  }
+
+  removeCollection() {
+    this.collection = null;
+    this.fieldChanged();
   }
 
   submitPage() {
@@ -134,13 +140,20 @@ export class PageBasicInfoComponent implements OnInit {
         this.anyChanges = false;
 
         this.id = result._id;
+        this.originalForm = result;
+        if (this.originalForm.collection) {
+          this.collection = {
+            _id: this.originalForm.collection._id,
+            name: this.originalForm.collection.name,
+          };
+        }
         this.searchPagePlacements();
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
       (error) => {
-        this.snackBar.open(`Cannot ${ !this.id ? 'add' : 'update' } ' this page. Try again`, null, {
+        this.snackBar.open(`Cannot ${!this.id ? 'add' : 'update'} ' this page. Try again`, null, {
           duration: 3200,
         });
 
@@ -200,21 +213,32 @@ export class PageBasicInfoComponent implements OnInit {
       let formValue = this.form.controls[el].value;
       let originalValue = this.originalForm[el];
 
-      if (typeof formValue === 'string')
+      if (typeof formValue === 'string') {
         if (formValue && formValue.trim().length <= 0)
           formValue = null;
         else if (formValue)
           formValue = formValue.trim();
+      } else
+        formValue = formValue !== null && formValue !== undefined ? formValue : null;
 
-      if (typeof originalValue === 'string')
+      if (typeof originalValue === 'string') {
         if (originalValue && originalValue.trim().length <= 0)
           originalValue = null;
         else if (originalValue)
           originalValue = originalValue.trim();
+      } else
+        originalValue = originalValue !== null && originalValue !== undefined ? originalValue : null;
 
       if (formValue !== originalValue && (formValue !== '' || originalValue !== null))
         this.anyChanges = true;
     });
+
+    if (this.originalForm.collection && this.collection && this.collection._id !== this.originalForm.collection._id)
+      this.anyChanges = true;
+    else if (!this.originalForm.collection && this.collection)
+      this.anyChanges = true;
+    else if (this.originalForm.collection && !this.collection)
+      this.anyChanges = true;
   }
 
   searchPagePlacements() {
