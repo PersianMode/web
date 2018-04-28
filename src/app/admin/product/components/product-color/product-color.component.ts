@@ -49,7 +49,7 @@ export class ProductColorComponent implements OnInit, OnChanges {
       (status) => {
         if (status) {
           this.progressService.enable();
-          this.httpService.delete(`/product/color/${this.product._id}/${pc.color_id}`).subscribe(
+          this.httpService.delete(`/product/color/${this.product._id}/${pc._id}`).subscribe(
             (data) => {
               this.snackBar.open('this color deleted successfully', null, {
                 duration: 2000,
@@ -81,7 +81,7 @@ export class ProductColorComponent implements OnInit, OnChanges {
       const path = [HttpService.Host,
       HttpService.PRODUCT_IMAGE_PATH,
       this.product._id,
-      pc.color_id,
+      pc._id,
         name].join('/');
       return this.sanitizer.bypassSecurityTrustResourceUrl(path);
     } else

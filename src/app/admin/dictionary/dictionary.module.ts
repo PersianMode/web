@@ -5,7 +5,7 @@ import {DictionaryRouting} from './dictionary.routing';
 import {
   MatDialogModule, MatCardModule, MatGridListModule, MatIconModule,
   MatInputModule, MatPaginatorModule, MatSelectModule, MatSnackBarModule, MatCheckboxModule, MatFormFieldModule,
-  MatProgressSpinnerModule, MatTableModule
+  MatProgressSpinnerModule, MatTableModule, MatButtonModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -32,7 +32,8 @@ import {ColorPickerModule} from 'primeng/primeng';
     MatIconModule,
     MatInputModule,
     MatSelectModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatButtonModule,
   ],
   declarations: [
     DictionaryComponent,
