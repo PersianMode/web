@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {PageService} from '../../services/page.service';
 import {HttpService} from '../../services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
+import {DictionaryService} from '../../services/dictionary.service';
 
 @Component({
   selector: 'app-collection-header',
@@ -28,7 +29,8 @@ export class CollectionHeaderComponent implements OnInit {
   searchWaiting = false;
 
   constructor(private router: Router, private pageService: PageService,
-    private httpService: HttpService, private sanitizer: DomSanitizer) {
+    private httpService: HttpService, private sanitizer: DomSanitizer,
+    private dictionaryService: DictionaryService) {
   }
 
   ngOnInit() {
@@ -137,8 +139,8 @@ export class CollectionHeaderComponent implements OnInit {
             this.searchResultList.push({
               id: el._id,
               name: el.name,
-              brand: el.brand.name,
-              type: el.product_type.name,
+              brand: this.dictionaryService.translateWord(el.brand.name),
+              type: this.dictionaryService.translateWord(el.product_type.name),
               imgUrl: this.getProductThumbnail(el)
             });
           });
