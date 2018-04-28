@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
 
       const warehouseId = this.loginForm.controls['warehouse_id'].value;
       if (!warehouseId) {
-        this.openSnackBar('فروشگاه حورد نظر را انتخاب کنید');
+        this.openSnackBar('فروشگاه مورد نظر را انتخاب کنید');
         return;
       }
 
