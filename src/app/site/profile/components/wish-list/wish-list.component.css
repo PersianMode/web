@@ -1,0 +1,53 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+    position: relative;
+    font-family: iranyekan, sans-serif;
+}
+
+.info-cell {
+    padding: 6px;
+}
+
+img {
+    cursor: pointer;
+    height: 200px;
+}
+.image-wrapper {
+    display: inline-block;
+    height: 200px;
+    min-width: 200px;
+    padding: 10px;
+}
+mat-header-cell {
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #000;
+}
+
+a {
+    cursor: pointer;
+}
+.w50 {
+    flex: 0 0 50px;
+}
+
+.w200 {
+    flex: 0 0 200px;
+}
+mat-cell {
+    text-align: center;
+}
+
+.trash-style {
+    text-align: left !important;
+    font-size: 18px;
+}
+
+.wish-list-data {
+    margin-top: 5px;
+    font-family: iranyekan, sans-serif;
+}

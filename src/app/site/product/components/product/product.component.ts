@@ -103,6 +103,21 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
+  saveToFavorites(size) {
+    this.size = size;
+    const instance = this.product.instances.find( el => el.product_color_id === this.selectedProductColor && el.size === size + '');
+    if (instance) {
+      const favoriteObject = {
+        product_id: this.product._id,
+        product_instance_id: instance._id,
+        instances: this.product.instances,
+      };
+
+      Object.assign(favoriteObject, this.product);
+      this.cartService.saveFavoriteItem(favoriteObject);
+    }
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.isMobile = event.target.innerWidth < 960;
