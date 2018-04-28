@@ -18,7 +18,7 @@ export class ModifyDictionaryComponent implements OnInit {
   dictionaryId: string;
 
   constructor(private dialogRef: MatDialogRef<ModifyDictionaryComponent>,
-              @Inject(MAT_DIALOG_DATA) private data: any, private httpService: HttpService,
+              @Inject(MAT_DIALOG_DATA) public data: any, private httpService: HttpService,
               private progressService: ProgressService) {
   }
 
