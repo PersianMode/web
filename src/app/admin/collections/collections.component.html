@@ -2,9 +2,7 @@
   <app-search-fields fxFlex="100" [target]="'Collection'" (searching)="search($event)"></app-search-fields>
 </div>
 <div fxLayout="row" class="row">
-  <button mat-fab color="accent" (click)="openForm()" style="margin-top: 15px">
-    <mat-icon aria-label="Add new Collection">add</mat-icon>
-  </button>
+
 </div>
 <div *ngFor="let r of rows" dir="rtl">
   <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
