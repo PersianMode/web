@@ -12,6 +12,7 @@ import {
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
+import { WishListComponent } from './components/wish-list/wish-list.component';
 
 @NgModule({
   imports: [
@@ -30,6 +31,6 @@ import {DpDatePickerModule} from 'ng2-jalali-date-picker';
     MatExpansionModule,
     MatPaginatorModule,
   ],
-  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent]
+  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent, WishListComponent]
 })
 export class ProfileModule { }

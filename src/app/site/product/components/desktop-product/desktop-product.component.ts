@@ -52,6 +52,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   selectedProductColor: any = {};
 
   @Output() add = new EventEmitter<any>();
+  @Output() addFavorite = new EventEmitter<any>();
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
   }
@@ -61,6 +62,10 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
 
   saveToCart() {
     this.add.emit(this.size);
+  }
+
+  saveToFavorites() {
+    this.addFavorite.emit(this.size);
   }
 
   newSize(event) {

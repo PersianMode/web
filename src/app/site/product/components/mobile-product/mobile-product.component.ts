@@ -21,6 +21,7 @@ export class MobileProductComponent implements OnInit {
   selectedProductColor: any = {};
   addCardBtnDisabled = true;
   @Output() add = new EventEmitter<any>();
+  @Output() addFavorite = new EventEmitter<any>();
   @Output() changeSize = new EventEmitter<any>();
   size = '';
 
@@ -37,5 +38,9 @@ export class MobileProductComponent implements OnInit {
 
   saveToCart() {
     this.add.emit(this.size);
+  }
+
+  saveToFavorites() {
+    this.addFavorite.emit(this.size);
   }
 }

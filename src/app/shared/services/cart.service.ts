@@ -368,4 +368,42 @@ export class CartService {
       return this.cartItems.getValue()[0].order_id;
     return null;
   }
+
+  // favorites
+  saveFavoriteItem(favoriteItem) {
+    if (this.authService.isLoggedIn.getValue()) {
+      this.saveFavoriteItemToServer(favoriteItem);
+    }
+    else {
+      this.loginToHaveWishList();
+    }
+  }
+
+  private saveFavoriteItemToServer(favoriteItem) {
+    this.httpService.post('wishlist', {
+      product_id: favoriteItem.product_id,
+      product_instance_id: favoriteItem.product_instance_id,
+    }).subscribe(
+      res => {
+        console.log('success', res);
+        this.snackBar.open(`محصول به لیست علاقمندیهای شما افزوده شد`, null, {
+          duration: 3200,
+        });
+      },
+      err => {
+        console.error('Cannot save favorite item to server: ', err);
+        if (err.error === 'Duplicate WishList Item is not allowed')
+          this.snackBar.open(`این محصول از قبل به لیست علاقمندی های شما افزوده شده است`, null, {
+            duration: 3200,
+          });
+        else
+          this.snackBar.open(`محصول به لیست علاقمندیها افزوده نشد. لطفا دوباره تلاش کنید`, null, {
+            duration: 3200,
+          });
+      });
+  }
+
+  private loginToHaveWishList() {
+    // TODO navigate to login or register form
+  }
 }
