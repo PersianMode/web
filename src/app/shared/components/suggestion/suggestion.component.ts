@@ -20,7 +20,7 @@ export class SuggestionComponent implements OnInit {
   @Output() add = new EventEmitter<any>();
 
   targetEnum = TargetEnum;
-
+  textDirection = 'ltr';
 
   suggestionCtrl: FormControl;
   filteredItems: any[] = [];
@@ -35,6 +35,7 @@ export class SuggestionComponent implements OnInit {
     this.suggestionCtrl = new FormControl();
     this.suggestionCtrl.valueChanges.debounceTime(150).subscribe(
       (data) => {
+        this.getTextDirection(data);
         this.filtering(data);
       },
       (err) => {
@@ -70,4 +71,12 @@ export class SuggestionComponent implements OnInit {
     }
   }
 
+  getTextDirection(value) {
+    if (!value) {
+      this.textDirection = 'ltr';
+      return;
+    }
+    const charCode = value.toLowerCase().charCodeAt(0);
+    this.textDirection = (charCode >= 48 && charCode <= 121) ? 'ltr' : 'rtl';
+  }
 }

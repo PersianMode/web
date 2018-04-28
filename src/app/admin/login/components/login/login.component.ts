@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
         this.loginForm.controls['loginAs'].value === AccessLevel.ShopClerk) {
         warehouseId = this.loginForm.controls['warehouse_id'].value
         if (!warehouseId) {
-          this.openSnackBar('فروشگاه حورد نظر را انتخاب کنید');
+          this.openSnackBar('فروشگاه مورد نظر را انتخاب کنید');
           return;
         }
       }
@@ -65,14 +65,14 @@ export class LoginComponent implements OnInit {
         warehouseId)
         .then(data => {
           this.progressService.disable();
-          switch (this.loginForm.controls['loginAs'].value) {
-            case '0':
+          switch (parseInt(this.loginForm.controls['loginAs'].value, 10)) {
+            case 0:
               this.router.navigate(['/agent/collections']);
               break;
-            case '1':
+            case 1:
               this.router.navigate(['/agent/orders']);
               break;
-            case '2':
+            case 2:
               this.router.navigate(['/agent/orders']);
               break;
 
