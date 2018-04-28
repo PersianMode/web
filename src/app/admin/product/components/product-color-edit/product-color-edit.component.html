@@ -2,7 +2,7 @@
   
 <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
   <div fxFlex="70">
-    <app-uploader [single]="true" [url]="'product/image/'+ data.productId + '/' +  data.product_color.color_id  + '/' + true" (OnCompleted)="setThumbnail($event)"></app-uploader>
+    <app-uploader [single]="true" [url]="'product/image/'+ data.productId + '/' +  data.product_color._id  + '/' + true" (OnCompleted)="setThumbnail($event)"></app-uploader>
   </div>
   <div fxFlex="30">
     <img *ngIf="thumbnailURL" [src]="thumbnailURL" style="width: 72px; height: 72px;">
@@ -12,7 +12,7 @@
 <h3 >سایر تصاویر:</h3>
 
 <div *ngIf="thumbnailURL">
-    <app-uploader [single]="false" [url]="'product/image/'+ data.productId + '/' +  data.product_color.color_id  + '/' + false" (OnCompleted)="addAngle($event)"></app-uploader>
+    <app-uploader [single]="false" [url]="'product/image/'+ data.productId + '/' +  data.product_color._id  + '/' + false" (OnCompleted)="addAngle($event)"></app-uploader>
   </div>
 
   <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" >
