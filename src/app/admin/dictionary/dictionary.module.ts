@@ -34,7 +34,6 @@ import {ColorPickerModule} from 'primeng/primeng';
     MatSelectModule,
     MatFormFieldModule,
     MatButtonModule,
-    
   ],
   declarations: [
     DictionaryComponent,
