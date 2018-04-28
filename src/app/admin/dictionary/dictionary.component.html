@@ -1,5 +1,11 @@
 <mat-card>
   <mat-card-content>
+    <div fxLayout="row" class="row" dir="rtl">
+      <button mat-fab color="accent" (click)="addDictionary()" style="margin-top: 15px">
+        افزودن ردیف جدید
+        <mat-icon aria-label="Add new Collection">add</mat-icon>
+      </button>
+    </div>
     <div class="example-container mat-elevation-z8">
       <div class="example-loading-shade"
            *ngIf="isLoadingResults">
@@ -18,11 +24,8 @@
         <ng-container matColumnDef="type">
           <mat-header-cell *matHeaderCellDef> نوع</mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <div *ngIf="editSelectedIndex!==element.position">
+            <div>
               {{element.type}}
-            </div>
-            <div *ngIf="editSelectedIndex===element.position">
-              <!-- TODO element type select Input-->
             </div>
           </mat-cell>
         </ng-container>
@@ -30,11 +33,8 @@
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef> نام</mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <div *ngIf="editSelectedIndex!==element.position">
+            <div>
               {{element.name}}
-            </div>
-            <div *ngIf="editSelectedIndex===element.position">
-              <!-- TODO element name Input-->
             </div>
           </mat-cell>
         </ng-container>
@@ -42,33 +42,28 @@
         <ng-container matColumnDef="value">
           <mat-header-cell *matHeaderCellDef> مقدار</mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <div *ngIf="editSelectedIndex!==element.position">
+            <div *ngIf="!isColor(element)">
               {{element.value}}
             </div>
-            <div *ngIf="editSelectedIndex===element.position">
-              <!-- TODO element value Input-->
+            <div *ngIf="isColor(element)">
+              <svg xmlns="http://www.w3.org/2000/svg" style="height:22px; width: 22px;">
+                <circle cx="10" cy="10" r="10" [attr.fill]="element.value"/>
+              </svg>
             </div>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="edit">
           <mat-header-cell *matHeaderCellDef> تغییر</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <div *ngIf="editSelectedIndex!==element.position" (click)="Edit(element)">
-              <mat-icon aria-label="edit">edit</mat-icon>
-            </div>
-            <div *ngIf="editSelectedIndex===element.position" (click)="saveEdit()">
-              <mat-icon aria-label="accept">done</mat-icon>
-            </div>
+          <mat-cell *matCellDef="let element" (click)="updateElement(element)">
+            <mat-icon aria-label="edit">edit</mat-icon>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="remove">
           <mat-header-cell *matHeaderCellDef> حذف</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <div (click)="deleteRow(element.position)">
-              <mat-icon aria-label="remove">remove</mat-icon>
-            </div>
+          <mat-cell *matCellDef="let element" (click)="deleteElement(element)">
+            <mat-icon aria-label="delete">delete</mat-icon>
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
