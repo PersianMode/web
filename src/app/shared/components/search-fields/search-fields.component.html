@@ -5,18 +5,16 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div class="flex-container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
-         fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
+    <div class="flex-container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
+      fxLayoutAlign.xs="center center">
       <div *ngIf="!target" class="flex-item" fxFlex="30" fxFlex.sm="50" fxFlex.xs="50" role="add-target-button">
         <button id="m" mat-raised-button [matMenuTriggerFor]="menu">Target</button>
         <mat-menu #menu="matMenu">
-          <button *ngFor="let trg of targetList; let i = index;" mat-menu-item (click)="addTarget(i)"
-                  role="'target-button' + i">{{trg}}
+          <button *ngFor="let trg of targetList; let i = index;" mat-menu-item (click)="addTarget(i)" role="'target-button' + i">{{trg}}
           </button>
         </mat-menu>
         <div *ngIf="targets.length > 0">Search in:</div>
-        <button *ngFor="let trg of targets" class="trg-btn" mat-raised-button color="primary"
-                (click)="removeTarget(trg)" role="remove-target-button">{{trg}}
+        <button *ngFor="let trg of targets" class="trg-btn" mat-raised-button color="primary" (click)="removeTarget(trg)" role="remove-target-button">{{trg}}
         </button>
       </div>
     </div>
@@ -24,16 +22,14 @@
       <form>
         <div class="field-container">
           <mat-input-container class="field">
-            <input class="field" matInput type="text" placeholder="phrase" [formControl]="searchCtrl"
-                   role="phrase-field">
+            <input class="field" matInput type="text" placeholder="phrase" [formControl]="searchCtrl" role="phrase-field">
           </mat-input-container>
         </div>
         <div *ngIf="target === targetEnum.page">
-          <mat-checkbox name="is_app" [ngModel]="isApp" (change)="changeState(elementEnum.isApp)"
-                        [indeterminate]="isApp == null" role="is-app-button">Is App Page
+          <mat-checkbox name="is_app" [ngModel]="isApp" (change)="changeState(elementEnum.isApp)" [indeterminate]="isApp == null" role="is-app-button">Is App Page
           </mat-checkbox>
         </div>
-         </form>
+      </form>
     </div>
   </mat-card-content>
 </mat-card>

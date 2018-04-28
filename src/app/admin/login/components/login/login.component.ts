@@ -50,9 +50,9 @@ export class LoginComponent implements OnInit {
 
       let warehouseId;
 
-      if (this.loginForm.controls['loginAs'].value === AccessLevel.SalesManager ||
-        this.loginForm.controls['loginAs'].value === AccessLevel.ShopClerk) {
-        warehouseId = this.loginForm.controls['warehouse_id'].value
+      if (+this.loginForm.controls['loginAs'].value === AccessLevel.SalesManager ||
+        +this.loginForm.controls['loginAs'].value === AccessLevel.ShopClerk) {
+        warehouseId = this.loginForm.controls['warehouse_id'].value;
         if (!warehouseId) {
           this.openSnackBar('فروشگاه مورد نظر را انتخاب کنید');
           return;
