@@ -4,8 +4,9 @@ import {Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {dateFormatter} from '../../../../shared/lib/dateFormatter';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
+import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-wish-list',
@@ -20,7 +21,7 @@ export class WishListComponent implements OnInit {
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
               private responsiveService: ResponsiveService,
               private dialog: MatDialog, protected httpService: HttpService,
-              protected progressService: ProgressService) {
+              protected progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
   ngOnInit() {
@@ -42,5 +43,53 @@ export class WishListComponent implements OnInit {
   }
 
   deletWishItem(wishItem) {
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.delete(`wishlist/delete/${wishItem}`).subscribe(
+            (data) => {
+              this.profileWishList = this.profileWishList.filter(el => el._id !== wishItem);
+              this.progressService.disable();
+              this.ngOnInit();
+              this.snackBar.open('کالا از لیست علاقمندی های شما حذف شد', null, {
+                duration: 3200
+              });
+            },
+            error => {
+              this.snackBar.open('محصول از لیست علاقمندی های شما حذف نشد، لطفا دوباره تلاش کنید', null, {
+                duration: 3200
+              });
+              this.progressService.disable();
+            });
+        }
+      },
+      (err) => {
+        console.log('Error in dialog: ', err);
+      });
   }
 }
+
+
+
+/*
+    this.progressService.enable();
+    this.httpService.delete(`wishlist/delete/${wishItem}`).subscribe(
+      data => {
+        this.profileWishList = this.profileWishList.filter(el => el._id !== wishItem);
+        this.progressService.disable();
+        this.ngOnInit();
+        this.snackBar.open('کالا از لیست علاقمندی های شما حذف شد', null, {
+          duration: 3200
+        });
+      },
+      error => {
+        this.snackBar.open('محصول از لیست علاقمندی های شما حذف نشد، لطفا دوباره تلاش کنید', null, {
+          duration: 3200
+        });
+        this.progressService.disable();
+      });
+ */
