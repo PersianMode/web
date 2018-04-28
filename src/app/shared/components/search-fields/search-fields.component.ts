@@ -76,7 +76,6 @@ export class SearchFieldsComponent implements OnInit {
       options: {
         phrase: phrase,
         is_app: this.isApp,
-        is_smart: this.isSmart,
         show_all: (this.target
           && (phrase === null || phrase === '')
           && this.isApp === null),
@@ -95,14 +94,6 @@ export class SearchFieldsComponent implements OnInit {
         else if (this.isApp === false)
           this.isApp = null;
         break;
-      case this.elementEnum.isSmart:
-        if (this.isSmart === null)
-          this.isSmart = true;
-        else if (this.isSmart === true)
-          this.isSmart = false;
-        else if (this.isSmart === false)
-          this.isSmart = null;
-        break;
     }
 
     this.searchOnData();
@@ -113,7 +104,6 @@ export class SearchFieldsComponent implements OnInit {
       this.searchCtrl.setValue(this.initItems.phrase ? this.initItems.phrase : null);
       this.phrase = this.initItems.phrase ? this.initItems.phrase : null;
       this.isApp = this.initItems.options.is_app ? this.initItems.options.is_app : null;
-      this.isSmart = this.initItems.options.is_smart ? this.initItems.options.is_smart : null;
     }
   }
 }
