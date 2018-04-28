@@ -13,10 +13,14 @@
 
 img {
     cursor: pointer;
-    width: 100%;
-    height: 100%;
+    height: 200px;
 }
-
+.image-wrapper {
+    display: inline-block;
+    height: 200px;
+    min-width: 200px;
+    padding: 10px;
+}
 mat-header-cell {
     text-align: center;
     font-size: 13px;
@@ -27,11 +31,15 @@ mat-header-cell {
 a {
     cursor: pointer;
 }
+.w50 {
+    flex: 0 0 50px;
+}
 
-
+.w200 {
+    flex: 0 0 200px;
+}
 mat-cell {
     text-align: center;
-    /*height: 220px;*/
 }
 
 .trash-style {

@@ -2,16 +2,30 @@
 <mat-table *ngIf="!isMobile && profileWishList.length" [dataSource]="profileWishList"
            class="example-container mat-elevation-z8">
   <ng-container matColumnDef="col_no">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
-    <mat-cell *matCellDef="let wishItem">{{(profileWishList.indexOf(wishItem)+1).toLocaleString('fa')}}</mat-cell>
+    <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
+    <mat-cell class="w50" *matCellDef="let wishItem">{{(profileWishList.indexOf(wishItem)+1).toLocaleString('fa')}}
+    </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="thumbnail">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>تصویر</mat-header-cell>
-    <mat-cell *matCellDef="let wishItem">
-      <div><a (click)="navigateToProduct(wishItem.product[0]._id, wishItem.product[0].instances[0].product_color_id)">
+    <mat-header-cell class="w200" *matHeaderCellDef mat-sort-header>تصویر</mat-header-cell>
+    <mat-cell class="w200" *matCellDef="let wishItem">
+      <div class="image-wrapper"><a
+        (click)="navigateToProduct(wishItem.product[0]._id, wishItem.product[0].instances[0].product_color_id)">
         <img src="{{getThumbnailURL(wishItem.product[0])}}">
       </a></div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>نام کالا</mat-header-cell>
+    <mat-cell *matCellDef="let wishItem"><b>{{wishItem.product[0].name}}</b>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="size">
+    <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>اندازه</mat-header-cell>
+    <mat-cell class="w50" *matCellDef="let wishItem">{{wishItem.product[0].instances[0].size}}
     </mat-cell>
   </ng-container>
 
@@ -23,25 +37,13 @@
       {{wishItem.time}}
     </mat-cell>
   </ng-container>
-
-  <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>نام کالا</mat-header-cell>
-    <mat-cell *matCellDef="let wishItem">{{wishItem.product[0].name}}
-    </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="size">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>اندازه</mat-header-cell>
-    <mat-cell *matCellDef="let wishItem">{{wishItem.product[0].instances[0].size}}
-    </mat-cell>
-  </ng-container>
-
   <ng-container matColumnDef="delete">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>حذف از لیست</mat-header-cell>
-    <mat-cell *matCellDef="let wishItem" style=" font-size: 20px"><a class="clickable-link"
-                                                                     (click)="deletWishItem(wishItem.wish_list._id)"
-                                                                     style="color: #000;"><i
-      class="fa fa-trash"></i></a></mat-cell>
+    <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>حذف</mat-header-cell>
+    <mat-cell class="w50" *matCellDef="let wishItem" style=" font-size: 20px">
+      <a class="clickable-link" (click)="deletWishItem(wishItem.wish_list._id)" style="color: #000;">
+        <mat-icon>delete</mat-icon>
+      </a>
+    </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -53,8 +55,8 @@
       <mat-card-content>
         <div>
           <a (click)="navigateToProduct(wishItem.product[0]._id, wishItem.product[0].instances[0].product_color_id)">
-          <img src="{{getThumbnailURL(wishItem.product[0])}}">
-        </a>
+            <img src="{{getThumbnailURL(wishItem.product[0])}}">
+          </a>
         </div>
         <div>
           <b>{{wishItem.product[0].name}}</b>
@@ -63,7 +65,8 @@
           <span>تاریخ و زمان ثبت کالا : </span>
           <span>{{wishItem.jalali_date}} , {{wishItem.time}}</span>
         </div>
-        <div class="trash-style"><a (click)="deletWishItem(wishItem.wish_list._id)"><i class="fa fa-trash"></i></a></div>
+        <div class="trash-style"><a (click)="deletWishItem(wishItem.wish_list._id)"><i class="fa fa-trash"></i></a>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

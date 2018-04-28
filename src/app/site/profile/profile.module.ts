@@ -7,7 +7,7 @@ import {SharedModule} from '../../shared/shared.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {
-  MatCardModule, MatExpansionModule, MatFormFieldModule, MatHeaderRow, MatInputModule, MatPaginatorModule, MatRadioModule,
+  MatCardModule, MatExpansionModule, MatFormFieldModule, MatHeaderRow, MatIconModule, MatInputModule, MatPaginatorModule, MatRadioModule,
   MatTableModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -23,6 +23,7 @@ import { WishListComponent } from './components/wish-list/wish-list.component';
     MatCardModule,
     FormsModule,
     MatInputModule,
+    MatIconModule,
     MatFormFieldModule,
     MatRadioModule,
     DpDatePickerModule,

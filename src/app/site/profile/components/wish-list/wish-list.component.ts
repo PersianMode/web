@@ -16,7 +16,7 @@ import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
   styleUrls: ['./wish-list.component.css']
 })
 export class WishListComponent implements OnInit {
-  displayedColumns = ['col_no', 'thumbnail', 'date', 'name', 'size', 'delete'];
+  displayedColumns = ['col_no', 'thumbnail', 'name', 'size', 'date', 'delete'];
   profileWishList = [];
   isMobile = false;
 
