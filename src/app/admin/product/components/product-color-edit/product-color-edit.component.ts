@@ -38,7 +38,7 @@ export class ProductColorEditComponent implements OnInit {
   }
 
   removeAngle(angle) {
-    this.httpService.post(`product/image/${this.data.productId}/${this.data.product_color.color_id}`, {
+    this.httpService.post(`product/image/${this.data.productId}/${this.data.product_color._id}`, {
       angle
     }).subscribe(res => {
 
@@ -61,7 +61,7 @@ export class ProductColorEditComponent implements OnInit {
       const path = [HttpService.Host,
       HttpService.PRODUCT_IMAGE_PATH,
       this.data.productId,
-      this.data.product_color.color_id,
+      this.data.product_color._id,
         name].join('/');
       return this.sanitizer.bypassSecurityTrustResourceUrl(path);
     } else

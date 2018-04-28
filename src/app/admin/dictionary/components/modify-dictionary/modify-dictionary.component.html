@@ -22,9 +22,9 @@
           <mat-input-container class="field farsi">
             <input matInput type="text" placeholder="نام" formControlName="name" role="colNameFa" tabindex="2"
                    [value]="data.item? data.item.name : '' ">
-            <mat-hint>نام دیکشنری را وارد کنید</mat-hint>
+            <mat-hint>نام را وارد کنید</mat-hint>
             <mat-error *ngIf="dictionaryForm.controls['name'].hasError('required')">
-              وارد کردن نام دیکشنری الزامی است
+              وارد کردن نام الزامی است
             </mat-error>
           </mat-input-container>
         </div>
@@ -38,9 +38,9 @@
             <mat-input-container class="field farsi">
               <input matInput type="text" placeholder="مقدار" formControlName="value" role="colNameFa" tabindex="2"
                      [value]="data.item? data.item.value : '' ">
-              <mat-hint>مقدار دیکشنری را وارد کنید</mat-hint>
+              <mat-hint>مقدار را وارد کنید</mat-hint>
               <mat-error *ngIf="dictionaryForm.controls['value'].hasError('required')">
-                وارد کردن مقدار دیکشنری الزامی است
+                وارد کردن مقدار الزامی است
               </mat-error>
             </mat-input-container>
           </div>
