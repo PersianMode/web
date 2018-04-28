@@ -324,5 +324,4 @@ export class PageBasicInfoComponent implements OnInit {
         break;
     }
   }
-
 }

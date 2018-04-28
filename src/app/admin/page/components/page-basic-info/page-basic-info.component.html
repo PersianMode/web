@@ -11,7 +11,7 @@
         <div fxFlex="70" class="field-container">
           <div fxLayout="row" fxLayoutAlign="start start" fxLayout.xs="column" fxLayoutAlign.xs="center center">
             <div fxFlex="50" class="full-width">
-              <app-suggestion class="full-width" [name]="'Collection'" [currentIds]="collection ?  [collection._id] : []" [fieldName]="'name'"
+              <app-suggestion class="full-width persian-field" [name]="'Collection'" [currentIds]="collection ?  [collection._id] : []" [fieldName]="'name'"
                 [placeholder]="'نام کالکشن'" (add)="setCollection($event)"></app-suggestion>
             </div>
             <div fxFlex="50" *ngIf="collection">
