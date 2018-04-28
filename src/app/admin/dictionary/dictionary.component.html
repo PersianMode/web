@@ -2,75 +2,79 @@
   <mat-card-content>
     <div fxLayout="row" class="row" dir="rtl">
       <button mat-fab color="accent" (click)="addDictionary()" style="margin-top: 15px">
-        افزودن ردیف جدید
-        <mat-icon aria-label="Add new Collection">add</mat-icon>
+        <mat-icon aria-label="Add new dictionary">add</mat-icon>
       </button>
     </div>
-    <div class="example-container mat-elevation-z8">
-      <div class="example-loading-shade"
-           *ngIf="isLoadingResults">
-        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+
+    <div class="row">
+      <div class="example-container mat-elevation-z8">
+        <div class="example-loading-shade" *ngIf="isLoadingResults">
+          <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+        </div>
+
+        <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
+          (matSortChange)="onSortChange($event)">
+          <ng-container matColumnDef="number">
+            <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{getIndex(element)}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef> نوع</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <div>
+                {{element.type}}
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> نام</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <div>
+                {{element.name}}
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="value">
+            <mat-header-cell *matHeaderCellDef> مقدار</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <div *ngIf="!isColor(element)">
+                {{element.value}}
+              </div>
+              <div *ngIf="isColor(element)">
+                <svg xmlns="http://www.w3.org/2000/svg" style="height:22px; width: 22px;">
+                  <circle cx="10" cy="10" r="10" [attr.fill]="element.value" />
+                </svg>
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <mat-header-cell *matHeaderCellDef> تغییر</mat-header-cell>
+            <mat-cell *matCellDef="let element" >
+              <button mat-icon-button (click)="updateElement(element)" color="warn">
+                <mat-icon aria-label="edit">edit</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="remove">
+            <mat-header-cell *matHeaderCellDef> حذف</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+        
+              <button mat-icon-button (click)="deleteElement(element)" color="warn">
+                <mat-icon aria-label="delete">delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
       </div>
-
-      <mat-table #table [dataSource]="dataSource" class="example-table"
-                 matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
-                 (matSortChange)="onSortChange($event)">
-
-        <ng-container matColumnDef="number">
-          <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
-          <mat-cell *matCellDef="let element">{{getIndex(element)}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="type">
-          <mat-header-cell *matHeaderCellDef> نوع</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <div>
-              {{element.type}}
-            </div>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="name">
-          <mat-header-cell *matHeaderCellDef> نام</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <div>
-              {{element.name}}
-            </div>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="value">
-          <mat-header-cell *matHeaderCellDef> مقدار</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <div *ngIf="!isColor(element)">
-              {{element.value}}
-            </div>
-            <div *ngIf="isColor(element)">
-              <svg xmlns="http://www.w3.org/2000/svg" style="height:22px; width: 22px;">
-                <circle cx="10" cy="10" r="10" [attr.fill]="element.value"/>
-              </svg>
-            </div>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="edit">
-          <mat-header-cell *matHeaderCellDef> تغییر</mat-header-cell>
-          <mat-cell *matCellDef="let element" (click)="updateElement(element)">
-            <mat-icon aria-label="edit">edit</mat-icon>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="remove">
-          <mat-header-cell *matHeaderCellDef> حذف</mat-header-cell>
-          <mat-cell *matCellDef="let element" (click)="deleteElement(element)">
-            <mat-icon aria-label="delete">delete</mat-icon>
-          </mat-cell>
-        </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
-
-      <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
     </div>
 
   </mat-card-content>
