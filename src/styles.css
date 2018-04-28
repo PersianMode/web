@@ -900,6 +900,7 @@ mat-panel-title {
 
 .persian-field input {
   height: 20px;
+  font-family: iranyekan, sans-serif !important;
 }
 
 .remove {
@@ -968,9 +969,17 @@ p {
 .ql-toolbar.ql-snow {
   text-align: left;
 }
-
+.ui-colorpicker-panel {
+  bottom: 26px !important;
+  right: 0px !important;
+}
 /* PREVIEW END */
 
 .placement-tab .mat-tab-body {
   min-height: 100px;
+}
+
+.left-text {
+  text-align: left !important;
+  direction: ltr !important;
 }

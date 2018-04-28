@@ -1,0 +1,21 @@
+.row{
+    margin: 0px 10px;
+  }
+  
+  .card-view {
+    direction: rtl;
+  }
+  
+  .field-container{
+    width: 100%;
+    margin: 5px;
+  }
+  
+  .field{
+    width: 100%;
+  }
+  
+  .farsi{
+    direction:rtl;
+  }
+  
