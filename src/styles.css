@@ -973,7 +973,10 @@ p {
 .ql-toolbar.ql-snow {
   text-align: left;
 }
-
+.ui-colorpicker-panel {
+  bottom: 26px !important;
+  right: 0px !important;
+}
 /* PREVIEW END */
 
 .placement-tab .mat-tab-body {
