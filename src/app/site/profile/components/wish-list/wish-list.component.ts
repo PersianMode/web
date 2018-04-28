@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -7,6 +7,8 @@ import {dateFormatter} from '../../../../shared/lib/dateFormatter';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+
 
 @Component({
   selector: 'app-wish-list',
@@ -24,8 +26,9 @@ export class WishListComponent implements OnInit {
               protected progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
+
   ngOnInit() {
-    this.profileOrderService.wishListArray.subscribe( result => {
+    this.profileOrderService.wishListArray.subscribe(result => {
       if (!result.length)
         return;
       else {
@@ -34,7 +37,7 @@ export class WishListComponent implements OnInit {
       }
     });
     this.profileOrderService.getWishList();
-    this.responsiveService.switch$.subscribe( isMobile => this.isMobile = isMobile);
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }
 
 
@@ -71,25 +74,11 @@ export class WishListComponent implements OnInit {
         console.log('Error in dialog: ', err);
       });
   }
+
+
+  getThumbnailURL(product) {
+    return imagePathFixer(product.colors[0].image.thumbnail, product._id, product.colors[0]._id);
+
+
+  }
 }
-
-
-
-/*
-    this.progressService.enable();
-    this.httpService.delete(`wishlist/delete/${wishItem}`).subscribe(
-      data => {
-        this.profileWishList = this.profileWishList.filter(el => el._id !== wishItem);
-        this.progressService.disable();
-        this.ngOnInit();
-        this.snackBar.open('کالا از لیست علاقمندی های شما حذف شد', null, {
-          duration: 3200
-        });
-      },
-      error => {
-        this.snackBar.open('محصول از لیست علاقمندی های شما حذف نشد، لطفا دوباره تلاش کنید', null, {
-          duration: 3200
-        });
-        this.progressService.disable();
-      });
- */

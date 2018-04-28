@@ -28,8 +28,10 @@ a {
     cursor: pointer;
 }
 
+
 mat-cell {
     text-align: center;
+    /*height: 220px;*/
 }
 
 .trash-style {

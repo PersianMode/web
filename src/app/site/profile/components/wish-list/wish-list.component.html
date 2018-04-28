@@ -10,7 +10,7 @@
     <mat-header-cell *matHeaderCellDef mat-sort-header>تصویر</mat-header-cell>
     <mat-cell *matCellDef="let wishItem">
       <div><a (click)="navigateToProduct(wishItem.product[0]._id, wishItem.product[0].instances[0].product_color_id)">
-        <img src="{{wishItem.product[0].colors[0].image.thumbnail}}">
+        <img src="{{getThumbnailURL(wishItem.product[0])}}">
       </a></div>
     </mat-cell>
   </ng-container>
@@ -53,7 +53,7 @@
       <mat-card-content>
         <div>
           <a (click)="navigateToProduct(wishItem.product[0]._id, wishItem.product[0].instances[0].product_color_id)">
-          <img src="{{wishItem.product[0].colors[0].image.thumbnail}}">
+          <img src="{{getThumbnailURL(wishItem.product[0])}}">
         </a>
         </div>
         <div>
