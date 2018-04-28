@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {Router} from '@angular/router';
 import {dateFormatter} from '../../../../shared/lib/dateFormatter';
@@ -8,6 +8,7 @@ import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {MatDialog} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
+
 
 @Component({
   selector: 'app-orders',
@@ -19,16 +20,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
   displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'used_point', 'address', 'view_details'];
   isMobile = false;
   selectedOrder;
-  offset = 0;
-  limit = 8;
-  totalOrders: number = null;
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
               private responsiveService: ResponsiveService,
               private dialog: MatDialog, protected httpService: HttpService,
               protected progressService: ProgressService) {
     this.isMobile = this.responsiveService.isMobile;
   }
-
   ngOnInit() {
     this.profileOrderService.orderArray.subscribe(result => {
       if (!result.length)

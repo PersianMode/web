@@ -1,6 +1,5 @@
 <div *ngIf="!isMobile" class="filters" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
-     [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll"
-     [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
+  [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
      'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}" #filterPane>
   <app-filtering-panel (scrollChange)="calcAfterScroll()"></app-filtering-panel>
 </div>
@@ -13,9 +12,14 @@
   <app-panels></app-panels>
   <div class="gridwall-wrapper">
     <div *ngIf="!isMobile" class="gridwall-title">
-      <h1>{{collectionNameFa}} <span>({{products.length.toLocaleString('fa')}})</span></h1>
+      <h1>{{collectionNameFa}}
+        <span>({{products.length.toLocaleString('fa')}})</span>
+      </h1>
       <div class="sorter-row">
-      <div class="sorter" (click)="sortPanel.toggle($event)">ترتیب نمایش<span *ngIf="sortedBy.value"> با {{sortedBy.fa}}</span> <i class="fa" [ngClass]="sortPanel.visible ? 'fa-chevron-up' : 'fa-chevron-down'"></i></div>
+        <div class="sorter" (click)="sortPanel.toggle($event)">ترتیب نمایش
+          <span *ngIf="sortedBy.value"> با {{sortedBy.fa}}</span>
+          <i class="fa" [ngClass]="sortPanel.visible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+        </div>
         <p-overlayPanel #sortPanel>
           <div *ngFor="let sortOption of sortOptions;let i=index" (click)="selectSortOption(sortPanel,i)" [style.borderRight]="sortedBy && (sortedBy.value === sortOption.value) ? 'black 4px solid':'transparent 4px solid'">
             {{sortOption.fa}}
@@ -27,15 +31,23 @@
       <h1>{{collectionNameFa}}</h1>
       <div>
         <span>{{products.length.toLocaleString('fa')}} مورد</span>
-        <p><i class="fa fa-cog" (click)="displayFilter=!displayFilter"></i> فیلتر</p>
+        <p>
+          <i class="fa fa-cog" (click)="displayFilter=!displayFilter"></i> فیلتر</p>
       </div>
     </div>
     <div class="gridwall-content">
-      <p-dataScroller [value]="products" [rows]="50">
+      <p-dataScroller [value]="products" [rows]="lazyRows">
         <ng-template let-item pTemplate="item">
           <app-product-grid-item [data]="item" [width]="gridWidth" [height]="gridHeight"></app-product-grid-item>
         </ng-template>
       </p-dataScroller>
+    </div>
+  </div>
+  <div class="center-content" *ngIf="showWaitingSpinner">
+    <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'" [strokeWidth]="'2'">
+    </mat-progress-spinner>
+    <div>
+      لطفا اندکی صبر نمایید ...
     </div>
   </div>
 </div>

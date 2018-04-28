@@ -65,9 +65,9 @@ export class SizePickerComponent implements OnInit {
 
   USToEU(oldSize) {
     let returnValue: any;
-    if (!this.gender || this.gender.toUpperCase() === 'MENS') {
+    if (!this.gender ||  (this.gender && this.gender.toUpperCase() === 'MENS')) {
       returnValue = this.dict.shoesSizeMap.men.find(size => size.us === oldSize);
-    } else if (this.gender.toUpperCase() === 'WOMENS') {
+    } else if (this.gender && this.gender.toUpperCase() === 'WOMENS') {
       returnValue = this.dict.shoesSizeMap.women.find(size => size.us === oldSize);
     }
     if (!returnValue || !returnValue.eu)

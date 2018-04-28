@@ -1,84 +1,86 @@
 <div *ngIf="!profileOrder.length"><b>هیچ سفارش ثبت شده ای موجود نمی باشد.</b></div>
 <mat-table *ngIf="!isMobile && profileOrder.length" [dataSource]="profileOrder"
            class="example-container mat-elevation-z8">
-    <ng-container matColumnDef="col_no">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
-        <mat-cell *matCellDef="let order">{{(profileOrder.indexOf(order)+1).toLocaleString('fa')}}</mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="col_no">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
+    <mat-cell *matCellDef="let order">{{(profileOrder.indexOf(order)+1).toLocaleString('fa')}}</mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="date">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>زمان ثبت سفارش</mat-header-cell>
-        <mat-cell *matCellDef="let order">
-            {{order.jalali_date}}
-            <br>
-            {{order.time}}
-        </mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="date">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>زمان ثبت سفارش</mat-header-cell>
+    <mat-cell *matCellDef="let order">
+      {{order.jalali_date}}
+      <br>
+      {{order.time}}
+    </mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="order_lines">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>تعداد ارقام کالا</mat-header-cell>
-        <mat-cell *matCellDef="let order">{{order.order_lines.length.toLocaleString('fa')}}</mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="order_lines">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>تعداد ارقام کالا</mat-header-cell>
+    <mat-cell *matCellDef="let order">{{order.order_lines.length.toLocaleString('fa')}}</mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="total_amount">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>هزینه کل(تومان)</mat-header-cell>
-        <mat-cell *matCellDef="let order">{{makePersianNumber(order.total_amount, true)}}</mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="total_amount">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>هزینه کل(تومان)</mat-header-cell>
+    <mat-cell *matCellDef="let order">{{makePersianNumber(order.total_amount, true)}}</mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="used_point">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>امتیاز استفاده شده</mat-header-cell>
-        <mat-cell *matCellDef="let order">{{makePersianNumber(order.used_point, false)}}
-        </mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="used_point">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>امتیاز استفاده شده</mat-header-cell>
+    <mat-cell *matCellDef="let order">{{makePersianNumber(order.used_point, false)}}
+    </mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="address">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>ارسال شده به</mat-header-cell>
-        <mat-cell *matCellDef="let order" style="font-size: 13px; text-align: right">استان {{order.address.province}} شهر {{order.address.city}}
-            <br>
-            {{order.address.district}} {{order.address.street}} پلاک {{makePersianNumber(order.address.no, false)}} واحد
-            {{makePersianNumber(order.address.unit, false)}}
-        </mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="address">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ارسال شده به</mat-header-cell>
+    <mat-cell *matCellDef="let order" style="font-size: 13px; text-align: right">استان {{order.address.province}} شهر
+      {{order.address.city}}
+      <br>
+      {{order.address.district}} {{order.address.street}} پلاک {{makePersianNumber(order.address.no, false)}} واحد
+      {{makePersianNumber(order.address.unit, false)}}
+    </mat-cell>
+  </ng-container>
 
-    <ng-container matColumnDef="view_details">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>مشاهده جزییات</mat-header-cell>
-        <mat-cell *matCellDef="let order" style=" font-size: 20px"><a class="clickable-link"
-                                                                      (click)="goToOrderLines(order._id)" style="color: #000;"><i
-                class="fa fa-eye"></i></a></mat-cell>
-    </ng-container>
+  <ng-container matColumnDef="view_details">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>مشاهده جزییات</mat-header-cell>
+    <mat-cell *matCellDef="let order" style=" font-size: 20px"><a class="clickable-link"
+                                                                  (click)="goToOrderLines(order._id)"
+                                                                  style="color: #000;"><i
+      class="fa fa-eye"></i></a></mat-cell>
+  </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns:displayedColumns"></mat-row>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns:displayedColumns"></mat-row>
 </mat-table>
 <div *ngIf="isMobile && profileOrder.length">
-    <div *ngFor="let order of profileOrder; let i = index">
-        <mat-card class="order-data">
-            <mat-card-content>
-                <div>
-                    <span>تاریخ و زمان ثبت سفارش : </span>
-                    <span>{{order.jalali_date}} , {{order.time}}</span>
-                </div>
-                <div>
-                    <span>تعداد ارقام کالا : </span>
-                    <span>{{order.order_lines.length.toLocaleString('fa')}}</span>
-                </div>
-                <div>
-                    <span>هزینه کل : </span>
-                    <span>{{makePersianNumber(order.total_amount, true)}} تومان</span>
-                </div>
-                <div>
-                    <span>امتیاز استفاده شده : </span>
-                    <span>{{makePersianNumber(order.used_point, false)}} امتیاز</span>
-                </div>
-                <div>
-                    <span>ارسال شده به :</span>
-                    <span>استان {{order.address.province}} شهر {{order.address.city}}
+  <div *ngFor="let order of profileOrder; let i = index">
+    <mat-card class="order-data">
+      <mat-card-content>
+        <div>
+          <span>تاریخ و زمان ثبت سفارش : </span>
+          <span>{{order.jalali_date}} , {{order.time}}</span>
+        </div>
+        <div>
+          <span>تعداد ارقام کالا : </span>
+          <span>{{order.order_lines.length.toLocaleString('fa')}}</span>
+        </div>
+        <div>
+          <span>هزینه کل : </span>
+          <span>{{makePersianNumber(order.total_amount, true)}} تومان</span>
+        </div>
+        <div>
+          <span>امتیاز استفاده شده : </span>
+          <span>{{makePersianNumber(order.used_point, false)}} امتیاز</span>
+        </div>
+        <div>
+          <span>ارسال شده به :</span>
+          <span>استان {{order.address.province}} شهر {{order.address.city}}
             <br>
             {{order.address.district}} {{order.address.street}} پلاک {{makePersianNumber(order.address.no, false)}} واحد
             {{makePersianNumber(order.address.unit, false)}}</span>
-                </div>
-                <div class="eye-style"><a (click)="goToOrderLines(order._id)"><i class="fa fa-eye"></i></a></div>
-            </mat-card-content>
-        </mat-card>
-    </div>
+        </div>
+        <div class="eye-style"><a (click)="goToOrderLines(order._id)"><i class="fa fa-eye"></i></a></div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

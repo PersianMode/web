@@ -11,14 +11,14 @@
       </div>
       <div fxFlex="30" class="full-width input-item">
         <mat-input-container class="full-width input-item persian-field">
-          <input matInput type="text" class="input-item" placeholder="آدرس" [(ngModel)]="selectedTextLink.href" (ngModelChange)="checkTextchanges()"
+          <input matInput type="text" class="input-item left-text" placeholder="آدرس" [(ngModel)]="selectedTextLink.href" (ngModelChange)="checkTextchanges()"
           />
         </mat-input-container>
       </div>
       <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
         <mat-checkbox [(ngModel)]="selectedTextLink.is_header">
-          <span *ngIf="selectedTextLink.is_header.value">عنوان</span>
-          <span *ngIf="!selectedTextLink.is_header.value">زیر عنوان</span>
+          <span *ngIf="selectedTextLink.is_header">عنوان</span>
+          <span *ngIf="!selectedTextLink.is_header">زیر عنوان</span>
         </mat-checkbox>
       </div>
       <div fxFlex="15">
@@ -47,8 +47,8 @@
       <div *ngIf="hasNewColumn" class="footer-column empty-column" [dragula]="textBag" [dragulaModel]="newEmptyColumn">
         &nbsp;
       </div>
-      <div class="footer-column">
-        <button mat-icon-button (click)="addColumn()" [disabled]="addColumnDisability()">
+      <div class="footer-column" *ngIf="getKeyList(siteLinkItems).length">
+        <button mat-icon-button (click)="addColumn()" [disabled]="addColumnDisability()" [matTooltip]="'افزودن ستون'" [matTooltipPosition]="'above'">
           <mat-icon aria-label="add column">add_circle_outline</mat-icon>
         </button>
       </div>

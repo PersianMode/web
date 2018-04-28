@@ -6,7 +6,7 @@ import {PageService} from '../../../../shared/services/page.service';
 import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {Subject} from 'rxjs/Subject';
-
+const HEADER_HEIGHT = 209;
 @Component({
   selector: 'app-main-collection',
   templateUrl: './main-collection.component.html',
@@ -51,6 +51,8 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   sortedBy: any = {value: null};
   collectionName = '';
   collectionNameFa = '';
+  showWaitingSpinner = false;
+  lazyRows = 10;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
               private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService) {
@@ -77,6 +79,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.productService.collectionNameFa$.subscribe(r => {
       this.collectionNameFa = r;
     });
+    this.showHideSpinner(true);
     this.productService.productList$.subscribe(r => {
       this.products = r;
       this.sortedBy = {value: null};
@@ -101,6 +104,9 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.curHeight = this.responsiveService.curHeight;
     this.gridWidth = (this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10;
     this.gridHeight = this.gridWidth + 90;
+    this.lazyRows = this.isMobile ? 10 :
+      Math.floor(this.gridwall.nativeElement.offsetWidth / 242)
+      * Math.floor((this.window.innerHeight - 105) / 348 ) * 2;
     setTimeout(() => this.calcAfterScroll(), 1000);
   }
 
@@ -110,19 +116,23 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   }
 
   calcAfterScroll() {
+    this.showHideSpinner(true);
+
     if (!this.isMobile && this.filterPane && this.gridwall) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
-      const height = this.window.innerHeight - 209;
+      const height = this.window.innerHeight - HEADER_HEIGHT;
       const filterHeight = this.filterPane.nativeElement.scrollHeight;
-      const docHeight = this.gridwall.nativeElement.scrollHeight + 209;
+      const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT;
       this.innerScroll = docHeight - filterHeight < 100;
-      this.innerHeight = docHeight - 209;
+      this.innerHeight = docHeight - HEADER_HEIGHT;
       this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
       this.bottomScroll = !this.innerScroll && offset >= 65 && (docHeight - offset - height < 180);
       this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= 65 &&
-        !this.bottomScroll && filterHeight - offset < height - 209;
-      this.topDist = height - filterHeight + 209;
+        !this.bottomScroll && filterHeight - offset < height - HEADER_HEIGHT;
+      this.topDist = height - filterHeight + HEADER_HEIGHT;
     }
+
+    this.showHideSpinner(false);
   }
 
   selectSortOption(sortPanel, index) {
@@ -146,5 +156,9 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
 
   setDispalyFilter($event) {
     this.displayFilter = $event;
+  }
+
+  showHideSpinner(shouldShow = false) {
+    this.showWaitingSpinner = shouldShow;
   }
 }

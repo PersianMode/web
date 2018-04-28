@@ -2,8 +2,9 @@
   <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0" fxFlex.lg="25" fxFlex.xl="30">&nbsp;</div>
   <div fxFlex="70" fxFlex.sm="80" fxFlex.xs="100" fxFlex.lg="50" fxFlex.xl="40">
     <mat-card>
-      <mat-card-content>
-        <markdown [data]="content"></markdown>
+      <mat-card-content class="mat-content-preview-for-page">
+        <app-panels></app-panels>
+        <div #content></div>
       </mat-card-content>
     </mat-card>
   </div>

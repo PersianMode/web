@@ -11,7 +11,8 @@ import {DataScrollerModule} from 'primeng/datascroller';
 import {SidebarModule} from 'primeng/sidebar';
 import {
   MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatExpansionModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
@@ -36,6 +37,7 @@ import {SliderModule} from 'primeng/slider';
     MatButtonModule,
     MatButtonToggleModule,
     MatExpansionModule,
+    MatProgressSpinnerModule,
     MatTooltipModule,
     OverlayPanelModule,
     SliderModule,

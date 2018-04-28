@@ -13,7 +13,7 @@ export class ProductColorEditComponent implements OnInit {
 
   thumbnailURL: any;
   constructor(private dialogRef: MatDialogRef<ProductColorEditComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private httpService: HttpService,
     private progressService: ProgressService,
     private sanitizer: DomSanitizer,
@@ -29,12 +29,12 @@ export class ProductColorEditComponent implements OnInit {
   }
 
   setThumbnail(result: any) {
-    this.data.product_color.image.thumbnail = result.uploaded;
+    this.data.product_color.image.thumbnail = result[0];
     this.thumbnailURL = this.getURL(this.data.product_color.image.thumbnail);
   }
 
   addAngle(result: any) {
-    this.data.product_color.image.angles = this.data.product_color.image.angles.concat(result.map(x => x.uploaded));
+    this.data.product_color.image.angles = this.data.product_color.image.angles.concat(result);
   }
 
   removeAngle(angle) {
@@ -58,8 +58,12 @@ export class ProductColorEditComponent implements OnInit {
 
   getURL(name) {
     if (name) {
-      const path = HttpService.PRODUCT_IMAGE_PATH + this.data.productId + '/' + this.data.product_color.color_id + '/' + name;
-      return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
+      const path = [HttpService.Host,
+      HttpService.PRODUCT_IMAGE_PATH,
+      this.data.productId,
+      this.data.product_color.color_id,
+        name].join('/');
+      return this.sanitizer.bypassSecurityTrustResourceUrl(path);
     } else
       return '';
   }

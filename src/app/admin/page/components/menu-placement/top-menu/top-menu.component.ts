@@ -85,6 +85,7 @@ export class TopMenuComponent implements OnInit {
                   column: null,
                   isEdit: false,
                 };
+                this.itemSelected.emit(null);
                 this.progressService.disable();
               },
               (err) => {

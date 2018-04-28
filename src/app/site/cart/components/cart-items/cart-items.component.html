@@ -2,9 +2,9 @@
   <mat-card-content>
     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column">
       <div fxFlex="25" class="thumbnail">
-        <a [routerLink]="['/', 'product', product.product_id, product.color.id]">
+        <a [routerLink]="['/', 'product', product.product_id, product.product_color_id || product.color.id]">
           <span style="margin:0;">
-        <p *ngIf="notExist" class="soldOut">موجود نیست</p>
+        <p *ngIf="notExist" class="soldOut">تمام شد</p>
           <img src="{{product?.thumbnail}}">
           </span>
         </a>

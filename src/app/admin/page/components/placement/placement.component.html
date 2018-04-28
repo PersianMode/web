@@ -1,7 +1,7 @@
 <mat-card dir="rtl">
   <mat-card-content>
     <mat-card-title class="title">چینش و جایگاه عناصر</mat-card-title>
-    <mat-tab-group>
+    <mat-tab-group class="placement-tab">
       <mat-tab label="منو" *ngIf="!isApp || pageAddress.toLowerCase() === 'my_shop'">
         <app-menu-placement [placements]="getRelatedPlacements('menu')" [pageId]="pageId" [isApp]="isApp" [address]="pageAddress"
           (modifyPlacement)="modify($event)"></app-menu-placement>

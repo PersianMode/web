@@ -15,25 +15,28 @@ import {
 } from '@angular/material';
 import {SMOrderProcessComponent} from './components/sm-order-process/sm-order-process.component';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
-import {FormsModule} from '@angular/forms';
-import {SCOrderProcessComponent} from './components/sc-order-process/sc-order-process.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { InboxComponent } from './components/inbox/inbox.component';
-import { ReferenceComponent } from './components/reference/reference.component';
+import { ProductViewerComponent } from './components/product-viewer/product-viewer.component';
+import {DeliverComponent} from './components/deliver/deliver.component';
+import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-checker.component';
 
 
 @NgModule({
   declarations: [
     OrderComponent,
     SMOrderProcessComponent,
-    SCOrderProcessComponent,
     OrderAddressComponent,
     InboxComponent,
-    ReferenceComponent,
+    DeliverComponent,
+    ProductViewerComponent,
+    BarcodeCheckerComponent,
   ],
   imports: [
     OrderRouting,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     SharedModule,
     MatToolbarModule,
     MatButtonModule,
@@ -52,7 +55,7 @@ import { ReferenceComponent } from './components/reference/reference.component';
     MatTabsModule,
     MatCardModule
   ],
-  entryComponents: [OrderAddressComponent, SMOrderProcessComponent, SCOrderProcessComponent],
+  entryComponents: [OrderAddressComponent, SMOrderProcessComponent,  ProductViewerComponent, BarcodeCheckerComponent],
 })
 export class OrderModule {
 }
