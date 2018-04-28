@@ -100,7 +100,7 @@ export class DeliverComponent implements OnInit {
       [HttpService.Host,
       HttpService.PRODUCT_IMAGE_PATH,
       element.product_id,
-      product_color.color_id,
+      product_color._id,
       product_color.image.thumbnail].join('/')
       : null;
     return {
