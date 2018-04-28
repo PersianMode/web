@@ -48,12 +48,16 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.loginForm.valid) {
 
-      const warehouseId = this.loginForm.controls['warehouse_id'].value;
-      if (!warehouseId) {
-        this.openSnackBar('فروشگاه مورد نظر را انتخاب کنید');
-        return;
-      }
+      let warehouseId;
 
+      if (this.loginForm.controls['loginAs'].value === AccessLevel.SalesManager ||
+        this.loginForm.controls['loginAs'].value === AccessLevel.ShopClerk) {
+        warehouseId = this.loginForm.controls['warehouse_id'].value
+        if (!warehouseId) {
+          this.openSnackBar('فروشگاه مورد نظر را انتخاب کنید');
+          return;
+        }
+      }
       this.progressService.enable();
       this.authService.login(this.loginForm.controls['email'].value,
         this.loginForm.controls['password'].value,

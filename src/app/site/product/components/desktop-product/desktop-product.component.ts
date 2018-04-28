@@ -71,7 +71,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
 
   ngAfterContentChecked() {
     if (this.product.id) {
-      this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER');
+      this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').tg_name;
     }
     this.onScroll();
   }

@@ -38,6 +38,7 @@ export class InboxComponent implements OnInit {
   dataSource = new MatTableDataSource();
 
   pageSize = 20;
+  resultsLength: Number;
 
   processDialogRef;
 
@@ -64,7 +65,7 @@ export class InboxComponent implements OnInit {
   }
 
   load() {
-    
+
     this.progressService.enable();
 
     const options = {
@@ -79,6 +80,7 @@ export class InboxComponent implements OnInit {
       this.progressService.disable();
       this.newInboxCount.emit(res.total);
       this.dataSource.data = res.data;
+      this.resultsLength = res.data.length ? res.data.length : 0;
       console.log('-> ', this.dataSource.data);
     }, err => {
       this.progressService.disable();
@@ -96,7 +98,11 @@ export class InboxComponent implements OnInit {
 
     const product_color = element.product_colors.find(x => x._id === element.instance.product_color_id);
     const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      `${HttpService.Host + HttpService.PRODUCT_IMAGE_PATH + element.product_id}/${product_color.color_id}/${product_color.image.thumbnail}`
+      [HttpService.Host,
+      HttpService.PRODUCT_IMAGE_PATH,
+      element.product_id,
+      product_color.color_id,
+      product_color.image.thumbnail].join('/')
       : null;
     return {
       name: element.product_name,
@@ -168,7 +174,7 @@ export class InboxComponent implements OnInit {
     }).subscribe(res => {
       this.progressService.disable();
       this.openSnackBar('درخواست به انبار آنلاین با موفقیت ارسال شد');
-  
+
     }, err => {
       this.openSnackBar('خطا در اضافه نمودن محصول به انبار آنلاین');
       this.progressService.disable();
