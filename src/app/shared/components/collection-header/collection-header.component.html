@@ -7,23 +7,25 @@
       <a [routerLink]="item.routerLink">{{item.info.text}}</a>
     </li>
   </ul>
-  <div class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'" [style.width]="'300px'">
+  <div id="search-area" class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'" [style.width]="(searchIsFocused ? 341 : 197) + 'px'">
     <i class="fa fa-search fa-flip-horizontal"></i>
-    <input placeholder="جُست‌وجو" type="text" (focus)="searchFocused()" (blur)="searchUnfocused()" [(ngModel)]="searchPhrase"
-      
-      [style.width]="'300px'"
-       (ngModelChange)="searchProduct()">
-    <div *ngIf="searchResultList.length" class="search-result-panel">
-      <div *ngFor="let product of searchResultList" (click)="selectProduct(product)" class="search-item">
-        <div class="inner-search-item">
+    <input placeholder="جُست‌وجو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase" [style.width]="(searchIsFocused ? 300 : 156) + 'px'"
+      (ngModelChange)="searchProduct()">
+    <div *ngIf="!searchWaiting && searchResultList.length" class="search-result-panel">
+      <div *ngFor="let product of searchResultList" (click)="selectProduct(product)" class="search-item" fxLayout="row" fxLayoutAlign="start start">
+        <div fxFlex="80">
           <div class="search-name">{{product.name}}</div>
-          <div class="search-brand">{{product.brand.name}}</div>
-          <div class="search-type">{{product.product_type.name}}</div>
+          <div class="search-brand">{{product.brand}}</div>
+          <div class="search-type">{{product.type}}</div>
         </div>
-        <div class="inner-search-item">
-          <img [src]=""/>
+        <div fxFlex="20" class="second-search-item">
+          <img [src]="product.imgUrl" class="search-item-image" />
         </div>
       </div>
+    </div>
+    <div *ngIf="searchWaiting" class="search-result-panel">
+      <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'" [strokeWidth]="'2'">
+      </mat-progress-spinner>
     </div>
   </div>
 </div>

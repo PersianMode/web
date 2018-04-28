@@ -214,10 +214,14 @@ nav {
   left: 13px;
   top: 14px;
   border: #E5E5E5 solid 1px;
-  padding: 3px;
+  /* padding: 3px; */
   transition: all .3s ease;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.search-bar input, i {
+  padding: 3px;
 }
 
 .search-bar i {

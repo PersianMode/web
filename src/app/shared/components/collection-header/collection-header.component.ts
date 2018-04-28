@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {PageService} from '../../services/page.service';
 import {HttpService} from '../../services/http.service';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-collection-header',
@@ -24,8 +25,10 @@ export class CollectionHeaderComponent implements OnInit {
   topMenu = [];
   searchPhrase = null;
   searchResultList = [];
+  searchWaiting = false;
 
-  constructor(private router: Router, private pageService: PageService, private httpService: HttpService) {
+  constructor(private router: Router, private pageService: PageService,
+    private httpService: HttpService, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
@@ -65,6 +68,7 @@ export class CollectionHeaderComponent implements OnInit {
 
   showList(type) {
     setTimeout(() => {
+      this.searchUnfocused();
       this.hiddenGenderMenu = false;
       this.selected[type] = true;
       this.menu = this.placements[type + 'Menu'];
@@ -87,7 +91,7 @@ export class CollectionHeaderComponent implements OnInit {
 
   searchUnfocused() {
     this.searchIsFocused = false;
-    // this.searchResultList = [];
+    this.searchResultList = [];
   }
 
   persistList() {
@@ -113,10 +117,12 @@ export class CollectionHeaderComponent implements OnInit {
   }
 
   searchProduct() {
-    if (!this.searchPhrase)
+    if (!this.searchPhrase) {
+      this.searchResultList = [];
       return;
+    }
 
-
+    this.searchWaiting = true;
     this.httpService.post('search/Product', {
       options: {
         phrase: this.searchPhrase,
@@ -125,26 +131,50 @@ export class CollectionHeaderComponent implements OnInit {
       limit: 5,
     }).subscribe(
       (data) => {
-        console.log('Data: ', data);
-        this.searchResultList = data.data ? data.data : [];
+        this.searchResultList = [];
+        if (data.data) {
+          data.data.forEach(el => {
+            this.searchResultList.push({
+              id: el._id,
+              name: el.name,
+              brand: el.brand.name,
+              type: el.product_type.name,
+              imgUrl: this.getProductThumbnail(el)
+            });
+          });
+        }
+        this.searchWaiting = false;
       },
       (err) => {
         console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
       });
   }
 
   selectProduct(product) {
-    console.log(product);
+    this.router.navigate([`/product/${product.id}`]);
+    this.searchIsFocused = false;
+    this.searchResultList = [];
   }
 
   getProductThumbnail(product) {
-    
-    // const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-    //   [HttpService.Host,
-    //   HttpService.PRODUCT_IMAGE_PATH,
-    //   element.product_id,
-    //   product_color.color_id,
-    //   product_color.image.thumbnail].join('/')
-    //   : null;
+    const img = (product.colors && product.colors.length) ?
+      product.colors.filter(el => el.image && el.image.thumbnail) :
+      null;
+    return img && img.length ?
+      this.sanitizer.bypassSecurityTrustResourceUrl([
+        HttpService.Host,
+        HttpService.PRODUCT_IMAGE_PATH,
+        product._id,
+        img[0]._id,
+        img[0].image.thumbnail
+      ].join('/')) :
+      'assets/nike-brand.jpg';
+  }
+
+  @HostListener('document:click', ['$event'])
+  public documentClick(e: any): void {
+    if (!e.path.some(el => el.id === 'search-area'))
+      this.searchUnfocused();
   }
 }
