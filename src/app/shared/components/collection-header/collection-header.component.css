@@ -1,0 +1,23 @@
+.search-data {
+  z-index: 10000;
+}
+
+.search-result-panel {
+  background-color: white;
+  min-width: 250px;
+}
+
+.search-item {
+  text-align: right;
+  display: inline-block;
+}
+
+.search-name {
+  font-size: 0.8em;
+  color: black;
+}
+
+.search-brand, .search-type {
+  font-size: 0.4em;
+  color: gray;
+}

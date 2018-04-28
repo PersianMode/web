@@ -49,7 +49,7 @@ export class AbstractSearchComponent implements OnInit {
         this.alignRow();
         this.progressService.disable();
       }, (err) => {
-        console.log('err', err);
+        console.error('err', err);
         this.progressService.disable();
       }
     );

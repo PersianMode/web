@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {PageService} from '../../services/page.service';
+import {HttpService} from '../../services/http.service';
 
 @Component({
   selector: 'app-collection-header',
@@ -21,8 +22,10 @@ export class CollectionHeaderComponent implements OnInit {
   menu: any = {};
   placements: any = {};
   topMenu = [];
+  searchPhrase = null;
+  searchResultList = [];
 
-  constructor(private router: Router, private pageService: PageService) {
+  constructor(private router: Router, private pageService: PageService, private httpService: HttpService) {
   }
 
   ngOnInit() {
@@ -78,10 +81,13 @@ export class CollectionHeaderComponent implements OnInit {
 
   searchFocused() {
     this.searchIsFocused = true;
+    if (this.searchPhrase)
+      this.searchProduct();
   }
 
   searchUnfocused() {
     this.searchIsFocused = false;
+    // this.searchResultList = [];
   }
 
   persistList() {
@@ -104,5 +110,41 @@ export class CollectionHeaderComponent implements OnInit {
 
   getKeyList(list) {
     return Object.keys(list);
+  }
+
+  searchProduct() {
+    if (!this.searchPhrase)
+      return;
+
+
+    this.httpService.post('search/Product', {
+      options: {
+        phrase: this.searchPhrase,
+      },
+      offset: 0,
+      limit: 5,
+    }).subscribe(
+      (data) => {
+        console.log('Data: ', data);
+        this.searchResultList = data.data ? data.data : [];
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+      });
+  }
+
+  selectProduct(product) {
+    console.log(product);
+  }
+
+  getProductThumbnail(product) {
+    
+    // const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
+    //   [HttpService.Host,
+    //   HttpService.PRODUCT_IMAGE_PATH,
+    //   element.product_id,
+    //   product_color.color_id,
+    //   product_color.image.thumbnail].join('/')
+    //   : null;
   }
 }
