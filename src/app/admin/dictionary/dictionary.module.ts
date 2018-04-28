@@ -2,14 +2,23 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DictionaryComponent} from './dictionary.component';
 import {DictionaryRouting} from './dictionary.routing';
+// import {
+//   MatCardModule,
+//   MatCheckboxModule,
+//   MatDialogModule, MatIconModule,
+//   MatPaginatorModule,
+//   MatProgressSpinnerModule, MatSnackBarModule,
+//   MatTableModule
+// } from '@angular/material';
 import {
-  MatCardModule,
-  MatCheckboxModule,
-  MatDialogModule, MatIconModule,
-  MatPaginatorModule,
-  MatProgressSpinnerModule, MatSnackBarModule,
-  MatTableModule
+  MatAutocompleteModule,
+  MatButtonModule, MatDialogModule, MatCardModule, MatGridListModule, MatIconModule,
+  MatInputModule, MatPaginatorModule, MatSelectModule, MatSnackBarModule, MatCheckboxModule, MatFormFieldModule,
+  MatTabsModule, MatProgressSpinnerModule, MatTableModule
 } from '@angular/material';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {ModifyDictionaryComponent} from './components/modify-dictionary/modify-dictionary.component';
 
 @NgModule({
   imports: [
@@ -23,8 +32,22 @@ import {
     MatDialogModule,
     MatIconModule,
     MatSnackBarModule,
+    FlexLayoutModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+    MatFormFieldModule
   ],
-  declarations: [DictionaryComponent]
+  declarations: [
+    DictionaryComponent,
+    ModifyDictionaryComponent
+  ],
+  entryComponents: [
+    ModifyDictionaryComponent
+  ]
 })
 export class DictionaryModule {
 }
