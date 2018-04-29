@@ -73,7 +73,7 @@ export class SummaryComponent implements OnInit {
 
     this.cartService.cartItems.subscribe(() => {
       this.total = this.cartService.calculateTotal();
-      this.disabled = this.cartService.calculateDiscount(!!this.coupon_code);
+      this.cartService.calculateDiscount(!!this.coupon_code);
     })
   }
 

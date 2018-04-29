@@ -58,6 +58,7 @@ export class AddressTableComponent implements OnInit {
         else if (res.length === 1)
           this.selectedCustomerAddress = 0;
         this.addresses = res;
+        this.setState();
       }
     });
 
