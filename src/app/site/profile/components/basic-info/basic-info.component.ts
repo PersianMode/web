@@ -39,6 +39,7 @@ export class BasicInfoComponent implements OnInit {
   passCampatible = true;
   changedDob;
   changeDobFlag = false;
+
   constructor(private authService: AuthService, private httpService: HttpService) {
   }
 
@@ -57,7 +58,7 @@ export class BasicInfoComponent implements OnInit {
 
   private formatDob() {
     const dob = moment(this.customerBasicInfo.dob);
-    this.birthDate = [dob.jDate(), dob.jMonth() + 1,  dob.jYear()].map(r => r.toLocaleString('fa', {useGrouping: false})).join(' / ');
+    this.birthDate = [dob.jDate(), dob.jMonth() + 1, dob.jYear()].map(r => r.toLocaleString('fa', {useGrouping: false})).join(' / ');
   }
 
   dobChange(dob) {
@@ -190,6 +191,7 @@ export class BasicInfoComponent implements OnInit {
       (er) => console.error('Error when subscribing on userInfo form valueChanges: ', er)
     );
   }
+
   checkCompatibilityOfNewPass() {
     this.passCampatible = true;
     let newPass = (this.changePassForm.controls['newPass'].value === null ||
@@ -199,7 +201,7 @@ export class BasicInfoComponent implements OnInit {
     let retypePass = (this.changePassForm.controls['retypePass'].value === null ||
       isUndefined(this.changePassForm.controls['retypePass'].value)) ? '' : this.changePassForm.controls['retypePass'].value;
     retypePass = retypePass.trim();
-    if ( newPass !== null && retypePass !== null && newPass !== retypePass)
+    if (newPass !== null && retypePass !== null && newPass !== retypePass)
       this.passCampatible = false;
     else {
       this.passCampatible = true;

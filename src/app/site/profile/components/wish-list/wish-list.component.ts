@@ -29,9 +29,10 @@ export class WishListComponent implements OnInit {
 
   ngOnInit() {
     this.profileOrderService.wishListArray.subscribe(result => {
-      if (!result.length)
+      if (!result.length) {
+        this.profileWishList = [];
         return;
-      else {
+      } else {
         this.profileWishList = result;
         this.profileWishList.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time));
       }

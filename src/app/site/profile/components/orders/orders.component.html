@@ -1,4 +1,4 @@
-<div *ngIf="!profileOrder.length"><b>هیچ سفارش ثبت شده ای موجود نمی باشد.</b></div>
+<div *ngIf="!profileOrder.length">هیچ سفارش ثبت شده ای موجود نمی باشد.</div>
 <mat-table *ngIf="!isMobile && profileOrder.length" [dataSource]="profileOrder"
            class="example-container mat-elevation-z8">
   <ng-container matColumnDef="col_no">
