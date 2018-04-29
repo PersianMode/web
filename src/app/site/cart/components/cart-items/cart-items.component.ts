@@ -3,6 +3,7 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {EditOrderComponent} from '../edit-order/edit-order.component';
 import {MatDialog} from '@angular/material';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
+import {AuthService} from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-cart-items',
@@ -22,17 +23,27 @@ export class CartItemsComponent implements OnInit {
   displayPrice = null;
   displayTotalPrice = null;
 
-  constructor(private dialog: MatDialog, private dict: DictionaryService) {
+  constructor(private dialog: MatDialog, private dict: DictionaryService, private auth: AuthService) {
   }
 
   ngOnInit() {
     this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
     this.stock = this.product.count.toLocaleString('fa', {useGrouping: false});
     this.valid.emit(!this.notExist);
-    this.displaySize = this.dict.translateWord(this.product.size);
+
     this.displayQuantity = this.dict.translateWord(this.product.quantity);
     this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
     this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price) + ' تومان';
+
+    this.auth.isLoggedIn.subscribe(() => {
+      const isEU = this.auth.userDetails.shoesType === 'EU';
+      if (isEU) {
+        const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+        this.displaySize = this.dict.USToEU(this.product.size, gender);
+      } else {
+        this.displaySize = this.dict.translateWord(this.product.size);
+      }
+    });
   }
 
   deleteProduct() {

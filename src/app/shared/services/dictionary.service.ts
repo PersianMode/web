@@ -47,4 +47,16 @@ export class DictionaryService {
 
     return convertedColor;
   }
+
+  USToEU(oldSize, gender) {
+    let returnValue: any;
+    if (!gender ||  (gender && gender.toUpperCase() === 'MENS')) {
+      returnValue = this.shoesSizeMap.men.find(size => size.us === oldSize);
+    } else if (gender && gender.toUpperCase() === 'WOMENS') {
+      returnValue = this.shoesSizeMap.women.find(size => size.us === oldSize);
+    }
+    if (!returnValue || !returnValue.eu)
+      return this.translateWord(oldSize);
+    return this.translateWord(returnValue.eu);
+  }
 }

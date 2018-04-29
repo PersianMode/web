@@ -260,7 +260,7 @@ export class CartService {
           .filter(r => r.product_color_id === color._id)
           .map(r => Object.assign(r, {quantity: r.inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b, 0)})),
 
-        tags: [],
+        tags: item.tags,
         name: item.name,
         price: instance.price,
         discount: [1],

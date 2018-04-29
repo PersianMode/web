@@ -24,6 +24,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   isMobile = false;
   cartNumbers = null;
   size = '';
+  gender = 'MENS';
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
@@ -53,6 +54,9 @@ export class ProductComponent implements OnInit, OnDestroy {
           this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
           this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
           this.updatePrice();
+          if (this.product.id) {
+            this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+          }
         });
       } else {
         this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;

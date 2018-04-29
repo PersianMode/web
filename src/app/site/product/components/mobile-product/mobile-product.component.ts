@@ -10,6 +10,7 @@ export class MobileProductComponent implements OnInit {
   @Input() price;
   @Input() sub;
   @Input() id;
+  @Input() gender;
   @Input()
   set selectedProductColorID(id) {
     if (id) {
