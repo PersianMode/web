@@ -6,6 +6,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 @Injectable()
 export class ProfileOrderService {
   orderArray: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  wishListArray: BehaviorSubject<any> = new BehaviorSubject<any>({});
   orderData: any;
   constructor(private httpService: HttpService, private authService: AuthService) {
   }
@@ -19,6 +20,15 @@ export class ProfileOrderService {
         console.error('error');
       }
     );
+  }
+  getWishList() {
+    this.httpService.get('/wishlist').subscribe(
+      info => {
+        this.wishListArray.next(info);
+      },
+      err => {
+        console.error('error');
+      });
   }
 }
 

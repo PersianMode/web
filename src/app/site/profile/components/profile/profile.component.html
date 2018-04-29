@@ -1,20 +1,24 @@
 <div fxLayout="row" style="direction: rtl">
-    <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
-    <div fxFlex="70" fxFlex.sm="80" fxFlex.xs="100">
-        <mat-accordion multi>
-            <mat-expansion-panel expanded>
-                <mat-expansion-panel-header>{{headerTitle}}</mat-expansion-panel-header>
-                <app-basic-info [isEdit]=false (formTitle)="setHeaderTitle($event)"></app-basic-info>
-            </mat-expansion-panel>
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>آدرس</mat-expansion-panel-header>
-                <app-address-table [isProfile]="true"></app-address-table>
-            </mat-expansion-panel>
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>سفارش ها</mat-expansion-panel-header>
-                <app-orders></app-orders>
-            </mat-expansion-panel>
-        </mat-accordion>
-    </div>
-    <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
+  <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
+  <div fxFlex="70" fxFlex.sm="80" fxFlex.xs="100">
+    <mat-accordion multi>
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>{{headerTitle}}</mat-expansion-panel-header>
+        <app-basic-info [isEdit]=false (formTitle)="setHeaderTitle($event)"></app-basic-info>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>آدرس</mat-expansion-panel-header>
+        <app-address-table [isProfile]="true"></app-address-table>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>سفارش ها</mat-expansion-panel-header>
+        <app-orders></app-orders>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>علاقمندی ها</mat-expansion-panel-header>
+        <app-wish-list></app-wish-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
 </div>
