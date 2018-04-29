@@ -29,6 +29,10 @@ mat-header-cell {
     color: #000;
 }
 
+mat-card-content div span:nth-of-type(2) {
+    font-weight: bold;
+}
+
 a {
     cursor: pointer;
 }
