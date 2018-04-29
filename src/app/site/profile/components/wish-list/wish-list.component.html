@@ -69,7 +69,9 @@
           <span>تاریخ و زمان ثبت کالا : </span>
           <span>{{wishItem.jalali_date}} , {{wishItem.time}}</span>
         </div>
-        <div class="trash-style"><a (click)="deletWishItem(wishItem.wish_list._id)"><mat-icon>delete</mat-icon></a>
+        <div class="trash-style"><a (click)="deletWishItem(wishItem.wish_list._id)">
+          <mat-icon>delete</mat-icon>
+        </a>
         </div>
       </mat-card-content>
     </mat-card>
