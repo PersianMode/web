@@ -40,7 +40,7 @@
   <ng-container matColumnDef="delete">
     <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>حذف</mat-header-cell>
     <mat-cell class="w50" *matCellDef="let wishItem" style=" font-size: 20px">
-      <a class="clickable-link" (click)="deletWishItem(wishItem.wish_list._id)" style="color: #000;">
+      <a class="clickable-link" (click)="deletWishItem(wishItem.wish_list._id)">
         <mat-icon>delete</mat-icon>
       </a>
     </mat-cell>
@@ -65,7 +65,7 @@
           <span>تاریخ و زمان ثبت کالا : </span>
           <span>{{wishItem.jalali_date}} , {{wishItem.time}}</span>
         </div>
-        <div class="trash-style"><a (click)="deletWishItem(wishItem.wish_list._id)"><i class="fa fa-trash"></i></a>
+        <div class="trash-style"><a (click)="deletWishItem(wishItem.wish_list._id)"><mat-icon>delete</mat-icon></a>
         </div>
       </mat-card-content>
     </mat-card>
