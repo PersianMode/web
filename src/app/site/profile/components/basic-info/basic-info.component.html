@@ -136,7 +136,7 @@
                                        #old_pass
                                        [ngClass]="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ? 'input-error' : null"/>
                                 <label class="field-error"
-                                       *ngIf="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ">لطفا
+                                       *ngIf="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ">
                                     {{errorMsgOld}}</label>
                             </div>
                             <div fxFlex="20" class="eye-div">

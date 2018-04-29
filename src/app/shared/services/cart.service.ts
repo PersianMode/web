@@ -385,7 +385,6 @@ export class CartService {
       product_instance_id: favoriteItem.product_instance_id,
     }).subscribe(
       res => {
-        console.log('success', res);
         this.snackBar.open(`محصول به لیست علاقمندیهای شما افزوده شد`, null, {
           duration: 3200,
         });
