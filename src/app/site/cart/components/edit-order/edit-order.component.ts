@@ -1,6 +1,7 @@
 import {Component, Inject, Input, EventEmitter, OnInit, Output} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -19,17 +20,16 @@ export class EditOrderComponent implements OnInit {
   selectedQuantityArray = null;
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,  private router: Router) {
+              @Inject(MAT_DIALOG_DATA) public data: any,  private router: Router, private dict: DictionaryService) {
   }
 
   ngOnInit() {
     this.product = this.data.dialog_product;
     this.product.instances.forEach(el => {
       if (el.quantity) {
-        const sizeFirstCharCode = el.size.charCodeAt(0);
         this.sizesArray.push({
           value: el.size,
-          name: (sizeFirstCharCode >= 48 && sizeFirstCharCode <= 57) ? el.size.toLocaleString('fa') : el.size,
+          name: this.dict.translateWord(el.size),
           quantity: el.quantity
         });
       };
@@ -46,7 +46,7 @@ export class EditOrderComponent implements OnInit {
         for (let i = 1; i <= el.quantity; i++) {
           tempObj.qtyArray.push({
             value: i,
-            name: i.toLocaleString('fa')
+            name: this.dict.translateWord(i)
           });
         }
         this.qtyArray.push(tempObj);

@@ -2,7 +2,12 @@ import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
 import {AuthService} from './auth.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
+
+const SNACK_CONFIG: MatSnackBarConfig = {
+  duration: 3200,
+  direction: 'rtl',
+};
 
 @Injectable()
 export class CartService {
@@ -11,12 +16,12 @@ export class CartService {
   coupon_discount = 0;
 
   constructor(private httpService: HttpService, private authService: AuthService, private snackBar: MatSnackBar) {
-    this.authService.isLoggedIn.filter(r => r).subscribe(
-      () => {
+    this.authService.isLoggedIn.subscribe(
+      isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
         const items = this.getItemsFromStorage();
 
-        if (items && items.length > 0) {
+        if (isLoggedIn && items && items.length) {
           items.forEach((el, i) => {
             this.httpService.post('order', {
               product_id: el.product_id,
@@ -35,8 +40,18 @@ export class CartService {
               );
           });
         }
-      }
-    );
+        if (isLoggedIn || items && items.length > 0) {
+          this.getItemsDetail(isLoggedIn ? null : items)
+            .then(res => {
+              this.setCartItem(res, false);
+            })
+            .catch(err => {
+              console.error('Cannot fetch cart items: ', err);
+            });
+        } else {
+          this.setCartItem([], false);
+        }
+      });
   }
 
   removeItem(value) {
@@ -61,34 +76,46 @@ export class CartService {
         localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
         this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
       } catch (e) {
-        this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, {
-          duration: 2000,
-        });
+        this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, SNACK_CONFIG);
       }
     }
   }
 
   updateItem(value) {
-    // Check for update or delete and add new item
-    const item = this.cartItems.getValue().find(el => el.product_id === value.product_id &&
-      el.instance_id === value.instance_id);
-
+    let items = this.cartItems.getValue();
+    const instanceChange = value.instance_id !== value.pre_instance_id;
+    const update = () => {
+      const curInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
+      const newInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
+      const product =  curInstance || newInstance;
+      const instance = product.instances.find(r => (r.instance_id || r._id) === value.instance_id);
+      Object.assign(product, {
+        product_id: value.product_id,
+        instance_id: value.instance_id,
+        quantity: instanceChange && curInstance ? value.number + curInstance.quantity : value.number,
+        price: instance.price ? instance.price : product.price,
+        size: instance.size,
+        count: instance.quantity,
+      });
+      if (instanceChange && curInstance)
+        items = items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id );
+      this.cartItems.next(items);
+    };
     // Should delete and add new product's instance
     if (this.authService.isLoggedIn.getValue()) {
       // Change in server
       this.httpService.post('order/delete', {
         product_instance_id: value.pre_instance_id,
       }).subscribe(
-        (data) => {
+        () => {
           this.httpService.post('order', {
             product_id: value.product_id,
             product_instance_id: value.instance_id,
             number: value.number
-          }).subscribe(
-            (dt) => {
-              this.getCartItems();
-            },
-            (err) => {
+          }).subscribe((dt) => {
+              update();
+              console.log('dt', dt);
+            }, (err) => {
               console.error('Cannot add new order-line to order in server: ', err);
             }
           );
@@ -100,22 +127,22 @@ export class CartService {
     } else {
       // Change in localStorage
       let ls_items = this.getItemsFromStorage();
-      ls_items = ls_items.filter(el =>
-        el.product_id !== value.product_id ||
-        el.instance_id !== value.pre_instance_id);
-
-      ls_items.push({
+      const cur_ls_item = ls_items.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
+      const new_ls_item = ls_items.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
+      const ls_item = cur_ls_item || new_ls_item;
+      Object.assign(ls_item, {
         product_id: value.product_id,
         instance_id: value.instance_id,
-        quantity: value.number,
+        quantity: instanceChange && cur_ls_item ? cur_ls_item.quantity + value.number : value.number,
       });
+      if (instanceChange && cur_ls_item)
+        ls_items = ls_items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id)
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify(ls_items));
-        this.getCartItems();
+        update();
       } catch (e) {
-        this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, {
-          duration: 2000,
-        });
+        this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, SNACK_CONFIG);
+        console.log(e);
       }
     }
   }
@@ -128,25 +155,6 @@ export class CartService {
       // Save data on storage
       this.saveItemToStorage(item);
     }
-  }
-
-  getCartItems() {
-    this.authService.isLoggedIn.subscribe(
-      (data) => {
-        let cartData = null;
-        if (!data)
-          cartData = this.getItemsFromStorage();
-
-        if (data || cartData && cartData.length > 0)
-          this.getItemsDetail(cartData)
-            .then(res => {
-              this.setCartItem(res, false);
-            })
-            .catch(err => {
-              console.error('Cannot fetch cart items: ', err);
-            });
-      }
-    );
   }
 
   getItemsDetail(items) {
@@ -224,9 +232,7 @@ export class CartService {
       localStorage.setItem(this.localStorageKey, JSON.stringify(data));
       this.updateCart(item);
     } catch (e) {
-      this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, {
-        duration: 2000,
-      });
+      this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, SNACK_CONFIG);
       console.error('Cannot save item to local storage: ', e);
     }
   }
@@ -373,8 +379,7 @@ export class CartService {
   saveFavoriteItem(favoriteItem) {
     if (this.authService.isLoggedIn.getValue()) {
       this.saveFavoriteItemToServer(favoriteItem);
-    }
-    else {
+    } else {
       this.loginToHaveWishList();
     }
   }
@@ -386,20 +391,14 @@ export class CartService {
     }).subscribe(
       res => {
         console.log('success', res);
-        this.snackBar.open(`محصول به لیست علاقمندیهای شما افزوده شد`, null, {
-          duration: 3200,
-        });
+        this.snackBar.open(`محصول به لیست علاقمندیهای شما افزوده شد`, null, SNACK_CONFIG);
       },
       err => {
         console.error('Cannot save favorite item to server: ', err);
         if (err.error === 'Duplicate WishList Item is not allowed')
-          this.snackBar.open(`این محصول از قبل به لیست علاقمندی های شما افزوده شده است`, null, {
-            duration: 3200,
-          });
+          this.snackBar.open(`این محصول از قبل به لیست علاقمندی های شما افزوده شده است`, null, SNACK_CONFIG);
         else
-          this.snackBar.open(`محصول به لیست علاقمندیها افزوده نشد. لطفا دوباره تلاش کنید`, null, {
-            duration: 3200,
-          });
+          this.snackBar.open(`محصول به لیست علاقمندیها افزوده نشد. لطفا دوباره تلاش کنید`, null, SNACK_CONFIG);
       });
   }
 
