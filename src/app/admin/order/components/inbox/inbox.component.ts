@@ -42,6 +42,8 @@ export class InboxComponent implements OnInit {
 
   processDialogRef;
 
+  isSalesManager: boolean;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -54,7 +56,15 @@ export class InboxComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.isSalesManager = this.authService.userDetails.accessLevel === AccessLevel.SalesManager;
+
+    if (this.isSalesManager)
+      this.displayedColumns.push('refund')
+
     this.load();
+
+
 
     this.socketService.getOrderLineMessage().subscribe(msg => {
       if (this.processDialogRef)
@@ -144,21 +154,68 @@ export class InboxComponent implements OnInit {
 
   }
 
+  getProcessTitle(element) {
+
+    if (element.tickets.status === STATUS.WaitForOnlineWarehouse) {
+      return 'درخواست مجدد به انبار آنلاین'
+    } else if (element.tickets.status === STATUS.WaitForInvoice) {
+      return 'درخواست مجدد صدور فاکتور'
+    } else {
+      return 'انتخاب'
+    }
+
+  }
   process(element) {
 
+    if (element.tickets.status === STATUS.WaitForOnlineWarehouse) {
+      this.requestOnlineWarehouse(element._id, element.order_line_id);
+    } else if (element.tickets.status === STATUS.WaitForInvoice) {
+      this.requestInvoice(element._id, element.order_line_id);
+    } else if (element.tickets.status === STATUS.default ||
+      element.tickets.status === STATUS.InternalDelivery) {
+      this.scanProduct(element);
+    }
+  }
+
+  scanProduct(element) {
     this.processDialogRef = this.dialog.open(BarcodeCheckerComponent, {
       width: '400px',
       data: {barcode: element.instance.barcode}
     });
-
     this.processDialogRef.afterClosed().subscribe(isMatched => {
-
-
       if (isMatched)
         this.makeDesicion(element);
-
     });
   }
+
+  requestOnlineWarehouse(orderId, orderLineId) {
+    this.progressService.enable();
+    this.httpService.post('order/offline/requestOnlineWarehouse', {
+      orderId,
+      orderLineId
+    }).subscribe(res => {
+      this.progressService.disable();
+      this.openSnackBar('درخواست به انبار آنلاین با موفقیت انجام شد')
+    }, err => {
+      this.progressService.disable();
+      this.openSnackBar('خطا در درخواست به انبار آنلاین')
+    })
+  }
+
+  requestInvoice(orderId, orderLineId) {
+    this.progressService.enable();
+    this.httpService.post('order/offline/requestInvoice', {
+      orderId,
+      orderLineId
+    }).subscribe(res => {
+      this.progressService.disable();
+      this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد')
+    }, err => {
+      this.progressService.disable();
+      this.openSnackBar('خطا در درخواست صدور مجدد فاکتور')
+    })
+  }
+
   makeDesicion(element) {
 
     if (element.tickets.status === STATUS.default)
@@ -166,7 +223,6 @@ export class InboxComponent implements OnInit {
   }
 
   addToOnlineWarehouse(element) {
-
     this.progressService.enable();
     this.httpService.post('order/ticket/onlineWarehouse', {
       orderId: element._id,
@@ -174,7 +230,6 @@ export class InboxComponent implements OnInit {
     }).subscribe(res => {
       this.progressService.disable();
       this.openSnackBar('درخواست به انبار آنلاین با موفقیت ارسال شد');
-
     }, err => {
       this.openSnackBar('خطا در اضافه نمودن محصول به انبار آنلاین');
       this.progressService.disable();
