@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {CartService} from '../../../../shared/services/cart.service';
 
 @Component({
   selector: 'app-mobile-product',
@@ -26,7 +27,7 @@ export class MobileProductComponent implements OnInit {
   @Output() changeSize = new EventEmitter<any>();
   size = '';
 
-  constructor() { }
+  constructor(private cartService: CartService) { }
 
   newSize(event) {
     this.size = event;
@@ -35,6 +36,7 @@ export class MobileProductComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.cartService.itemAdded$.subscribe(r => this.addCardBtnDisabled = !r);
   }
 
   saveToCart() {

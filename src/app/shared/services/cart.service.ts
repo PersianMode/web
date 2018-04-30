@@ -3,6 +3,7 @@ import {HttpService} from './http.service';
 import {AuthService} from './auth.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 const SNACK_CONFIG: MatSnackBarConfig = {
   duration: 3200,
@@ -14,6 +15,7 @@ export class CartService {
   cartItems: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private localStorageKey = 'cart';
   coupon_discount = 0;
+  itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
   constructor(private httpService: HttpService, private authService: AuthService, private snackBar: MatSnackBar) {
     this.authService.isLoggedIn.subscribe(
@@ -39,17 +41,18 @@ export class CartService {
                 err => console.error('orders error: ', el, err)
               );
           });
-
-          this.getItemsDetail(isLoggedIn ? null : items)
-            .then(res => {
-              this.setCartItem(res, false);
-            })
-            .catch(err => {
-              console.error('Cannot fetch cart items: ', err);
-            });
-        } else {
-          this.setCartItem([], false);
+        } else if (!items && items.length){
+            this.setCartItem([], false);
         }
+
+        this.getItemsDetail(items && items.length ? items : null)
+          .then(res => {
+            this.setCartItem(res, false);
+          })
+          .catch(err => {
+            console.error('Cannot fetch cart items: ', err);
+            this.setCartItem([]);
+          });
       });
   }
 
@@ -157,6 +160,7 @@ export class CartService {
   }
 
   saveItem(item) {
+    this.itemAdded$.next(false);
     if (this.authService.isLoggedIn.getValue()) {
       // Update order in server
       this.saveItemToServer(item);
@@ -219,10 +223,12 @@ export class CartService {
       product_instance_id: item.product_instance_id,
     }).subscribe(
       res => {
-        this.updateCart(item, res._id);
+        this.addToCart(item, res._id);
       },
       err => {
-        console.error('Cannot save item to server: ', err);
+        this.itemAdded$.next(err);
+        this.snackBar.open('ذخیره کالای مورد نظر ممکن نیست، لطفاً صفحه را refresh کنید و یا بعداً دوباره سعی کنید.', null, SNACK_CONFIG);
+        console.error(err);
       });
   }
 
@@ -239,14 +245,16 @@ export class CartService {
       });
     try {
       localStorage.setItem(this.localStorageKey, JSON.stringify(data));
-      this.updateCart(item);
+      this.addToCart(item);
     } catch (e) {
       this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, SNACK_CONFIG);
       console.error('Cannot save item to local storage: ', e);
+      this.itemAdded$.next(e);
     }
   }
 
-  private updateCart(item, order_id = null) {
+  private addToCart(item, order_id = null) {
+    this.itemAdded$.next(true);
     const currentValue = this.cartItems.getValue();
     const object = {
       product_id: item.product_id,

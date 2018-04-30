@@ -75,7 +75,7 @@ export class CheckoutService {
         product_id: r.product_id,
         product_instance_id: r.instance_id,
         price: r.price,
-        count: r.count,
+        count: r.count - (r.reserved ? r.reserved : 0),
         quantity: r.quantity,
       }));
     this.httpService.post('finalCheck', cartItems)

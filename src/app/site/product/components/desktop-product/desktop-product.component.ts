@@ -5,6 +5,7 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
+import {CartService} from '../../../../shared/services/cart.service';
 
 @Component({
   selector: 'app-desktop-product',
@@ -54,10 +55,12 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Output() add = new EventEmitter<any>();
   @Output() addFavorite = new EventEmitter<any>();
 
-  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
+  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
+              private cartService: CartService) {
   }
 
   ngOnInit() {
+    this.cartService.itemAdded$.subscribe(r => this.addCardBtnDisabled = !r);
   }
 
   saveToCart() {
