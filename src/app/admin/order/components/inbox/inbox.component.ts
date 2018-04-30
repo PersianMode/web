@@ -155,13 +155,17 @@ export class InboxComponent implements OnInit {
   }
 
   getProcessTitle(element) {
-
-    if (element.tickets.status === STATUS.WaitForOnlineWarehouse) {
+    if (element.tickets.status === STATUS.default) {
+      return 'اضافه به انبار آنلاین'
+    }
+    else if (element.tickets.status === STATUS.WaitForOnlineWarehouse) {
       return 'درخواست مجدد به انبار آنلاین'
     } else if (element.tickets.status === STATUS.WaitForInvoice) {
       return 'درخواست مجدد صدور فاکتور'
-    } else {
-      return 'انتخاب'
+    } else if (element.tickets.status === STATUS.InternalDelivery) {
+      return 'اعلام دریافت محصول'
+    } else if (element.tickets.status === STATUS.NotExists) {
+      return ''
     }
 
   }
@@ -220,6 +224,8 @@ export class InboxComponent implements OnInit {
 
     if (element.tickets.status === STATUS.default)
       this.addToOnlineWarehouse(element);
+    if (element.tickets.status === STATUS.InternalDelivery)
+      this.receiveAgreement(element);
   }
 
   addToOnlineWarehouse(element) {
@@ -235,6 +241,22 @@ export class InboxComponent implements OnInit {
       this.progressService.disable();
     });
   }
+
+
+  receiveAgreement(element) {
+    this.progressService.enable();
+    this.httpService.post('order/ticket/receive', {
+      orderId: element._id,
+      orderLineId: element.order_line_id
+    }).subscribe(res => {
+      this.progressService.disable();
+      this.openSnackBar('اعلام رسید محصول به انبار با موفقیت ارسال شد');
+    }, err => {
+      this.openSnackBar('خطا در اعلام رسید محصول به انبار');
+      this.progressService.disable();
+    });
+  }
+
   openSnackBar(message: string) {
     this.snackBar.open(message, null, {
       duration: 2000,

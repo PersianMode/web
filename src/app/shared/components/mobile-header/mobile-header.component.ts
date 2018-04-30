@@ -39,7 +39,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
       (data) => {
-        this.isLoggedIn = data;
+        this.isLoggedIn = this.authService.userIsLoggedIn();
         this.display_name = this.authService.userDetails.displayName;
       },
       (err) =>  {

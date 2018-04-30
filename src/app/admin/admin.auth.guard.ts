@@ -16,9 +16,9 @@ export class AdminAuthGuard implements CanActivate {
     this.authService.checkValidation(state.url);
 
     return this.authService.isLoggedIn
-      .filter((data: any) => data)
+      .filter((data: any) => data) 
       .map((data: any) => {
-        if (data.hasOwnProperty('username') && this.authService.userDetails.isAgent) {
+        if (data.username && this.authService.userDetails.isAgent) {
           const link = links.find(x => state.url.includes(x.address));
           if (link && link.access === this.authService.userDetails.accessLevel)
             return true;

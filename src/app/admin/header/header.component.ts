@@ -33,8 +33,8 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
-      (data) => {
-        this.isLoggedIn = data;
+      (data: any) => {
+        this.isLoggedIn = this.authService.userIsLoggedIn();
         this.btnLabel = data ? this.authService.userDetails.displayName : 'Logout';
 
         this.navLinks.forEach(link => {

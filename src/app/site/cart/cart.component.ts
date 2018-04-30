@@ -33,7 +33,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
-      (data) => this.isLoggedIn = data
+      (data) => this.isLoggedIn = this.authService.userIsLoggedIn()
     );
 
     this.showHideSpinner(true);

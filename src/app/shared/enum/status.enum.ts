@@ -3,7 +3,8 @@ export enum STATUS {
   WaitForOnlineWarehouse = 2,
   WaitForInvoice = 3,
   InternalDelivery = 4,
-  ReadyToDeliver = 5,
-  NotExists = 6,
-  Refund = 7,
+  Receive = 5,
+  ReadyToDeliver = 6,
+  NotExists = 7,
+  Refund = 8,
 }

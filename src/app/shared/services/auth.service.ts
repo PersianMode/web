@@ -85,7 +85,7 @@ export class AuthService {
         (this.router.url.includes('agent') ? 'agent/' : '') + 'login', info).subscribe(
           (data) => {
             this.populateUserDetails(data);
-            this.isLoggedIn.next(true);
+            this.isLoggedIn.next(data);
             this.isVerified.next(data.is_verified ? data.is_verified : false);
             if (this.userDetails.warehouse_id) {
               this.socketService.init(this.userDetails.warehouse_id);
@@ -93,7 +93,7 @@ export class AuthService {
             resolve();
           },
           (err) => {
-            this.isLoggedIn.next(false);
+            this.isLoggedIn.next({});
             this.isVerified.next(false);
             console.error('Error in login: ', err);
             this.populateUserDetails();
@@ -108,7 +108,7 @@ export class AuthService {
       this.httpService.get('logout').subscribe(
         (data) => {
           // const rt = (this.router.url.includes('admin') ? 'admin/' : '') + 'login';
-          this.isLoggedIn.next(false);
+          this.isLoggedIn.next({});
           this.isVerified.next(data.is_verified ? data.is_verified : false);
           this.populateUserDetails();
           // this.router.navigate([rt]);
@@ -128,5 +128,11 @@ export class AuthService {
     this.httpService.get('warehouse/all').subscribe(res => {
       this.warehouses = res;
     });
+  }
+
+
+  public userIsLoggedIn(): boolean {
+    const currentState = this.isLoggedIn.getValue();
+    return currentState ? currentState && currentState.username : false;
   }
 }

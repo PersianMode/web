@@ -16,8 +16,9 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.isLoggedIn.filter(r => !r).subscribe(() => { // on logout
-      this.router.navigate(['/']);
+    this.authService.isLoggedIn.filter(r => r).subscribe(() => { // on logout
+      if (!this.authService.userIsLoggedIn())
+        this.router.navigate(['/']);
     });
   }
   setHeaderTitle(title) {
