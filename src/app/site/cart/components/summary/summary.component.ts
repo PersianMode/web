@@ -70,6 +70,11 @@ export class SummaryComponent implements OnInit {
       .catch(err => {
         console.error('Cannot get user balance and loyalty: ', err);
       });
+
+    this.cartService.cartItems.subscribe(() => {
+      this.total = this.cartService.calculateTotal();
+      this.cartService.calculateDiscount(!!this.coupon_code);
+    })
   }
 
   changeCouponVisibility() {

@@ -1,6 +1,8 @@
 import {Component, Inject, Input, EventEmitter, OnInit, Output} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
+import {AuthService} from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -18,27 +20,29 @@ export class EditOrderComponent implements OnInit {
   };
   selectedQuantityArray = null;
 
-  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,  private router: Router) {
+  constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, private auth: AuthService,
+              @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private dict: DictionaryService) {
   }
 
   ngOnInit() {
     this.product = this.data.dialog_product;
-    this.product.instances.forEach(el => {
-      if (el.quantity) {
-        const sizeFirstCharCode = el.size.charCodeAt(0);
-        this.sizesArray.push({
-          value: el.size,
-          name: (sizeFirstCharCode >= 48 && sizeFirstCharCode <= 57) ? el.size.toLocaleString('fa') : el.size,
-          quantity: el.quantity
-        });
-      };
-      this.editObj.newQuantity = this.product.quantity;
-    });
+    this.auth.isLoggedIn.subscribe(() => {
+      const isEU = this.auth.userDetails.shoesType === 'EU';
+      const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+      this.product.instances.forEach(el => {
+        if (el.quantity) {
+          this.sizesArray.push({
+            value: el.size,
+            name: isEU ? this.dict.USToEU(el.size, gender) : this.dict.translateWord(el.size),
+            quantity: el.quantity
+          });
+        }
+        this.editObj.newQuantity = this.product.quantity;
+      });
 
-    this.sizesArray = Array.from(new Set(this.sizesArray));
+      this.sizesArray = Array.from(new Set(this.sizesArray));
 
-    this.sizesArray.forEach(el => {
+      this.sizesArray.forEach(el => {
         const tempObj: any = {
           qtyArray: [],
           size: el
@@ -46,15 +50,14 @@ export class EditOrderComponent implements OnInit {
         for (let i = 1; i <= el.quantity; i++) {
           tempObj.qtyArray.push({
             value: i,
-            name: i.toLocaleString('fa')
+            name: this.dict.translateWord(i)
           });
         }
         this.qtyArray.push(tempObj);
-      }
-    );
-
-    const tempObj = this.qtyArray.find(el => el.size.value === this.product.size);
-    this.selectedQuantityArray = tempObj ? tempObj.qtyArray : null;
+      });
+      const tempObj = this.qtyArray.find(el => el.size.value === this.product.size);
+      this.selectedQuantityArray = tempObj ? tempObj.qtyArray : null;
+    });
   }
 
   closeDialog() {

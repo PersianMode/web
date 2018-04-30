@@ -25,8 +25,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   joinedTags = '';
   formattedPrice = '';
   isMobile = false;
-  cartNumbers = null;
   size = '';
+  gender = 'MENS';
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
@@ -57,6 +57,9 @@ export class ProductComponent implements OnInit, OnDestroy {
           this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
           this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
           this.updatePrice();
+          if (this.product.id) {
+            this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+          }
         });
       } else {
         this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
@@ -92,18 +95,25 @@ export class ProductComponent implements OnInit, OnDestroy {
       Object.assign(object, this.product);
 
       this.cartService.saveItem(object);
-      const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
-        position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
-        width: this.isMobile ? '100%' : '550px',
-        data: {
-          product: this.product,
-          instance,
-          selectedSize: size,
-        }
-      });
-      setTimeout(function () {
-        rmDialog.close();
-      }, 3000);
+
+      const sub = this.cartService.itemAdded$.filter(r => r === true)
+        .subscribe(() => {
+          const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
+            position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
+            width: this.isMobile ? '100%' : '550px',
+            data: {
+              product: this.product,
+              instance,
+              selectedSize: size,
+            }
+          });
+          setTimeout(function () {
+            rmDialog.close();
+            sub.unsubscribe();
+          }, 3000);
+        });
+
+      setTimeout(() => sub ? sub.unsubscribe() : null, 10000);
     }
   }
 

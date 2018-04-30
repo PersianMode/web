@@ -3,6 +3,8 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {CartService} from '../../../../shared/services/cart.service';
 import {Router} from '@angular/router';
+import {AuthService} from '../../../../shared/services/auth.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
 @Component({
   selector: 'app-add-to-card-confirm',
@@ -20,12 +22,20 @@ export class AddToCardConfirmComponent implements OnInit {
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<AddToCardConfirmComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private cartService: CartService,
-              private router: Router) { }
+              private router: Router, private auth: AuthService, private dict: DictionaryService) { }
   ngOnInit() {
     this.cartNumbers = 0;
     this.name = (this.data && this.data.name) ? this.data.name : null;
     this.product = this.data.product;
-    this.selectedSize = this.data.selectedSize;
+    this.auth.isLoggedIn.subscribe(() => {
+      const isEU = this.auth.userDetails.shoesType === 'EU';
+      if (isEU) {
+        const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+        this.selectedSize = this.dict.USToEU(this.data.selectedSize, gender);
+      } else {
+        this.selectedSize = this.dict.translateWord(this.data.selectedSize);
+      }
+    });
     this.farsiPrice = '@ ' + priceFormatter(this.data.instance.price ? this.data.instance.price : this.product.base_price) + ' تومان';
     this.thumbnail = this.product.colors.find(r => this.data.instance.product_color_id === r._id).image.thumbnail;
     this.cartService.cartItems.subscribe(items => {

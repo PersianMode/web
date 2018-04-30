@@ -67,6 +67,8 @@ export class DobComponent implements OnInit {
   private correctDaysInMonth(x: moment.Moment) {
     if (this.month > 6 && this.month < 12)
       this.initDates(30);
+    else if (this.month <= 6)
+      this.initDates(31);
     else if (this.month === 12) {
       if (x.jIsLeapYear())
         this.initDates(30);
