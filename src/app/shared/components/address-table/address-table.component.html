@@ -62,8 +62,8 @@
           <td>
             استان {{address.province}} شهر {{address.city}}
             <br>
-            {{address.district}} {{address.street}} پلاک {{makePersianNumber(address.no)}} واحد
-            {{makePersianNumber(address.unit)}}
+            {{address.district}} {{address.street}} {{address.no ? 'پلاک ' + makePersianNumber(address.no) : ''}}
+            {{address.unit ?  'واحد' + makePersianNumber(address.unit) : ''}}
           </td>
           <td *ngIf="withDelivery && !isProfile">
             <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddress===i"></mat-checkbox>

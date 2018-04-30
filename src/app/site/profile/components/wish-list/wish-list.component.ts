@@ -33,6 +33,7 @@ export class WishListComponent implements OnInit {
         this.profileWishList = [];
         return;
       } else {
+        console.log('*************', result);
         this.profileWishList = result;
         this.profileWishList.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time));
       }
@@ -78,5 +79,11 @@ export class WishListComponent implements OnInit {
 
   getThumbnailURL(product) {
     return imagePathFixer(product.colors[0].image.thumbnail, product._id, product.colors[0]._id);
+  }
+
+  makePersianNumber(a: string, isPrice) {
+    if (isNaN((+a)))
+      return a;
+    return (+a).toLocaleString('fa', {useGrouping: isPrice});
   }
 }

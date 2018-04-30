@@ -25,7 +25,7 @@
 
   <ng-container matColumnDef="size">
     <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>اندازه</mat-header-cell>
-    <mat-cell class="w50" *matCellDef="let wishItem">{{wishItem.product[0].instances[0].size}}
+    <mat-cell class="w50" *matCellDef="let wishItem">{{makePersianNumber(wishItem.product[0].instances[0].size, false)}}
     </mat-cell>
   </ng-container>
 
@@ -63,7 +63,7 @@
         </div>
         <div>
           <span>اندازه : </span>
-          <span>{{wishItem.product[0].instances[0].size}}</span>
+          <span>{{makePersianNumber(wishItem.product[0].instances[0].size, false)}}</span>
         </div>
         <div>
           <span>تاریخ و زمان ثبت کالا : </span>
