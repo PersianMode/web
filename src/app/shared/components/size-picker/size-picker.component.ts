@@ -17,7 +17,9 @@ import {AuthService} from '../../services/auth.service';
 export class SizePickerComponent implements OnInit {
   sizeSplits = [];
   @Input() gender: String = 'MENS';
+  @Input() productType: string;
   isShoes = true;
+
   isEU = true;
   productSize;
 
@@ -69,7 +71,7 @@ export class SizePickerComponent implements OnInit {
   }
 
   USToEU(oldSize) {
-    return this.dict.USToEU(oldSize, this.gender);
+    return this.dict.USToEU(oldSize, this.gender, this.productType);
   }
 
   changeSizeType(change = true) {

@@ -41,8 +41,8 @@ export class CartService {
                 err => console.error('orders error: ', el, err)
               );
           });
-        } else if (!items && items.length){
-            this.setCartItem([], false);
+        } else if (!items && items.length) {
+          this.setCartItem([], false);
         }
 
         this.getItemsDetail(items && items.length ? items : null)
@@ -102,6 +102,7 @@ export class CartService {
       const newInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
       const product = curInstance || newInstance;
       const instance = product.instances.find(r => (r.instance_id || r._id) === value.instance_id);
+      console.log(value);
       Object.assign(product, {
         product_id: value.product_id,
         instance_id: value.instance_id,
@@ -187,10 +188,11 @@ export class CartService {
 
     items.forEach((el: any) => {
       const objItem: any = {};
-
+      console.log(el);
       objItem.order_id = el.order_id;
       objItem.product_id = el.product_id;
       objItem.instance_id = el.instance_id;
+      objItem.productType = el.type;
       objItem.name = el.name;
       objItem.color = el.color;
       objItem.size = el.size;

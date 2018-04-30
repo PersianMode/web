@@ -39,7 +39,7 @@ export class CartItemsComponent implements OnInit {
       const isEU = this.auth.userDetails.shoesType === 'EU';
       if (isEU) {
         const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-        this.displaySize = this.dict.USToEU(this.product.size, gender);
+        this.displaySize = this.dict.USToEU(this.product.size, gender, this.product.productType);
       } else {
         this.displaySize = this.dict.translateWord(this.product.size);
       }

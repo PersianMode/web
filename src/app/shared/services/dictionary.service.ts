@@ -48,12 +48,11 @@ export class DictionaryService {
     return convertedColor;
   }
 
-  USToEU(oldSize, gender) {
+  USToEU(oldSize, gender, type) {
     let returnValue: any;
-    if (!gender ||  (gender && gender.toUpperCase() === 'MENS')) {
-      returnValue = this.shoesSizeMap.men.find(size => size.us === oldSize);
-    } else if (gender && gender.toUpperCase() === 'WOMENS') {
-      returnValue = this.shoesSizeMap.women.find(size => size.us === oldSize);
+    if (type.toUpperCase() === 'FOOTWEAR') {
+      const g = (gender && gender.toUpperCase() === 'WOMENS') ? 'women' : 'men';
+      returnValue = this.shoesSizeMap[g].find(size => size.us === oldSize);
     }
     if (!returnValue || !returnValue.eu)
       return this.translateWord(oldSize);
