@@ -32,7 +32,7 @@ export class CheckoutPageComponent implements OnInit {
         }
       }
     );
-
+    this.checkoutService.finalCheck();
     this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = res.balance;

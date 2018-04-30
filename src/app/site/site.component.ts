@@ -20,8 +20,7 @@ export class SiteComponent implements OnInit {
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
-              private router: Router, private pageService: PageService,
-              private cartService: CartService, private dictionaryService: DictionaryService) {
+              private router: Router, private pageService: PageService) {
   }
 
   ngOnInit() {
@@ -32,8 +31,6 @@ export class SiteComponent implements OnInit {
     this.authService.checkValidation(this.router.url)
       .then(() => {}).catch(err => console.error(err));
     this.loadInitialPlacements();
-
-    this.cartService.getCartItems();
     this.onResize(null, this.curWidth, this.curHeight);
   }
 

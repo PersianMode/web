@@ -4,13 +4,13 @@
   padding: 8px;
 }
 
-.left-text {
+.co-left-text {
   float: left;
   padding-left: 10px;
   color: black;
 }
 
-.right-text {
+.co-right-text {
   color: black;
   padding: 5px;
 }

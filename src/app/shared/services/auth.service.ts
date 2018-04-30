@@ -9,7 +9,7 @@ export class AuthService {
   private defaultDisplayName = 'Anonymous user';
   isLoggedIn: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isVerified: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  userDetails: any;
+  userDetails: any = {};
   warehouses: any[] = [];
 
 

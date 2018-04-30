@@ -50,7 +50,7 @@ export class OrderLinesComponent implements OnInit {
     arr.forEach(el => {
       const boughtColor = el.product.colors.find(c => c._id === el.product_instance.product_color_id);
       el.boughtColor = boughtColor;
-      boughtColor.image.thumbnail = imagePathFixer(boughtColor.image.thumbnail, el.product._id, boughtColor.color_id);
+      // boughtColor.image.thumbnail = imagePathFixer(boughtColor.image.thumbnail, el.product._id, boughtColor.color_id);
     });
   }
 
@@ -82,5 +82,9 @@ export class OrderLinesComponent implements OnInit {
       statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
       el.statusText = statusText;
     });
+  }
+
+  getThumbnailURL(boughtColor, product) {
+    return imagePathFixer(boughtColor.image.thumbnail, product._id, boughtColor._id);
   }
 }

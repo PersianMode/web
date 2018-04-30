@@ -1,5 +1,5 @@
 import {Component, HostListener, Inject, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -10,6 +10,9 @@ import {Subscription} from 'rxjs/Subscription';
 import {AddToCardConfirmComponent} from '../add-to-card-confirm/add-to-card-confirm.component';
 import {CartService} from '../../../../shared/services/cart.service';
 import {MatDialog} from '@angular/material';
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {AuthService} from '../../../../shared/services/auth.service';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 
 @Component({
   selector: 'app-product',
@@ -22,15 +25,16 @@ export class ProductComponent implements OnInit, OnDestroy {
   joinedTags = '';
   formattedPrice = '';
   isMobile = false;
-  cartNumbers = null;
   size = '';
+  gender = 'MENS';
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
 
   constructor(public httpService: HttpService, private route: ActivatedRoute, @Inject(WINDOW) private window,
               private responsiveService: ResponsiveService, private productService: ProductService,
-              private dict: DictionaryService, private cartService: CartService, private dialog: MatDialog) {
+              private dict: DictionaryService, private cartService: CartService, private dialog: MatDialog,
+              private authService: AuthService, private router: Router) {
   }
 
   // this component we need to have a product data by this format :
@@ -53,6 +57,9 @@ export class ProductComponent implements OnInit, OnDestroy {
           this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
           this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
           this.updatePrice();
+          if (this.product.id) {
+            this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+          }
         });
       } else {
         this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
@@ -88,38 +95,63 @@ export class ProductComponent implements OnInit, OnDestroy {
       Object.assign(object, this.product);
 
       this.cartService.saveItem(object);
-      const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
-        position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
-        width: this.isMobile ? '100%' : '550px',
-        data: {
-          product: this.product,
-          instance,
-          selectedSize: size,
-        }
-      });
-      setTimeout(function () {
-        rmDialog.close();
-      }, 3000);
+
+      const sub = this.cartService.itemAdded$.filter(r => r === true)
+        .subscribe(() => {
+          const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
+            position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
+            width: this.isMobile ? '100%' : '550px',
+            data: {
+              product: this.product,
+              instance,
+              selectedSize: size,
+            }
+          });
+          setTimeout(function () {
+            rmDialog.close();
+            sub.unsubscribe();
+          }, 3000);
+        });
+
+      setTimeout(() => sub ? sub.unsubscribe() : null, 10000);
     }
   }
 
   saveToFavorites(size) {
-    this.size = size;
-    const instance = this.product.instances.find( el => el.product_color_id === this.selectedProductColor && el.size === size + '');
-    if (instance) {
-      const favoriteObject = {
-        product_id: this.product._id,
-        product_instance_id: instance._id,
-        instances: this.product.instances,
-      };
+    if (this.authService.isLoggedIn.getValue()) {
+      this.size = size;
+      const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
+      if (instance) {
+        const favoriteObject = {
+          product_id: this.product._id,
+          product_instance_id: instance._id,
+          instances: this.product.instances,
+        };
 
-      Object.assign(favoriteObject, this.product);
-      this.cartService.saveFavoriteItem(favoriteObject);
-    }
+        Object.assign(favoriteObject, this.product);
+        this.cartService.saveFavoriteItem(favoriteObject);
+      }
+    }  else this.goToRegister(size);
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.isMobile = event.target.innerWidth < 960;
+  }
+
+  goToRegister(size) {
+    // this.window.innerWidth >= 960
+    if (size) {
+      if (!this.isMobile) {
+        this.dialog.open(GenDialogComponent, {
+          width: '500px',
+          data: {
+            componentName: DialogEnum.login,
+          }
+        });
+      } else {
+        this.router.navigate(['login']);
+      }
+    }
   }
 }
