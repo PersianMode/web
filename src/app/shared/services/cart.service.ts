@@ -394,11 +394,8 @@ export class CartService {
 
   // favorites
   saveFavoriteItem(favoriteItem) {
-    if (this.authService.isLoggedIn.getValue()) {
+    if (this.authService.isLoggedIn.getValue())
       this.saveFavoriteItemToServer(favoriteItem);
-    } else {
-      this.loginToHaveWishList();
-    }
   }
 
   private saveFavoriteItemToServer(favoriteItem) {
@@ -416,9 +413,5 @@ export class CartService {
         else
           this.snackBar.open(`محصول به لیست علاقمندیها افزوده نشد. لطفا دوباره تلاش کنید`, null, SNACK_CONFIG);
       });
-  }
-
-  private loginToHaveWishList() {
-    // TODO navigate to login or register form
   }
 }

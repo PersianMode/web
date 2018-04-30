@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
-import {ActivatedRoute} from '@angular/router';
 
 enum RegStatus {
   Register = 'Register',
