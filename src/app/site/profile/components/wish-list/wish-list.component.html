@@ -1,4 +1,4 @@
-<div *ngIf="!profileWishList.length"><b>هیچ محصولی در لیست علاقمندی های شما موجود نمی باشد.</b></div>
+<div *ngIf="!profileWishList.length">هیچ محصولی در لیست علاقمندی های شما موجود نمی باشد.</div>
 <mat-table *ngIf="!isMobile && profileWishList.length" [dataSource]="profileWishList"
            class="example-container mat-elevation-z8">
   <ng-container matColumnDef="col_no">
@@ -19,7 +19,7 @@
 
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef mat-sort-header>نام کالا</mat-header-cell>
-    <mat-cell *matCellDef="let wishItem"><b>{{wishItem.product[0].name}}</b>
+    <mat-cell *matCellDef="let wishItem">{{wishItem.product[0].name}}
     </mat-cell>
   </ng-container>
 
@@ -39,8 +39,8 @@
   </ng-container>
   <ng-container matColumnDef="delete">
     <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>حذف</mat-header-cell>
-    <mat-cell class="w50" *matCellDef="let wishItem" style=" font-size: 20px">
-      <a class="clickable-link" (click)="deletWishItem(wishItem.wish_list._id)" style="color: #000;">
+    <mat-cell class="w50" *matCellDef="let wishItem">
+      <a class="clickable-link" (click)="deletWishItem(wishItem.wish_list._id)">
         <mat-icon>delete</mat-icon>
       </a>
     </mat-cell>
@@ -62,10 +62,16 @@
           <b>{{wishItem.product[0].name}}</b>
         </div>
         <div>
+          <span>اندازه : </span>
+          <span>{{wishItem.product[0].instances[0].size}}</span>
+        </div>
+        <div>
           <span>تاریخ و زمان ثبت کالا : </span>
           <span>{{wishItem.jalali_date}} , {{wishItem.time}}</span>
         </div>
-        <div class="trash-style"><a (click)="deletWishItem(wishItem.wish_list._id)"><i class="fa fa-trash"></i></a>
+        <div class="trash-style"><a (click)="deletWishItem(wishItem.wish_list._id)">
+          <mat-icon>delete</mat-icon>
+        </a>
         </div>
       </mat-card-content>
     </mat-card>
