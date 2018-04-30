@@ -31,9 +31,8 @@ export class CheckoutPageComponent implements OnInit {
           this.discount = totalDiscount.discount;
         }
       }
-      this.checkoutService.finalCheck();
     );
-
+    this.checkoutService.finalCheck();
     this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = res.balance;
