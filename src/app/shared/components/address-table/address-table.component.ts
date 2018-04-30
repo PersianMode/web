@@ -31,16 +31,16 @@ export class AddressTableComponent implements OnInit {
   isLoggedIn = false;
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
-              private dialog: MatDialog, private checkoutService: CheckoutService,
-              private responsiveService: ResponsiveService, private router: Router,
-              private authService: AuthService) {
+    private dialog: MatDialog, private checkoutService: CheckoutService,
+    private responsiveService: ResponsiveService, private router: Router,
+    private authService: AuthService) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
   ngOnInit() {
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.authService.isLoggedIn.subscribe(r => {
-      this.isLoggedIn = r;
+      this.isLoggedIn = this.authService.userIsLoggedIn();
     });
     const state = this.checkoutService.addressState;
     if (state) {
@@ -147,10 +147,9 @@ export class AddressTableComponent implements OnInit {
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
-    const partEdit = true;
     this.checkoutService.addressData = {
       addressId: tempAddressId,
-      partEdit: this.isProfile || !this.authService.isLoggedIn.getValue() ? false : partEdit,
+      partEdit: this.isProfile ||  this.authService.userIsLoggedIn(),
       dialog_address: tempAddress
     };
     if (this.responsiveService.isMobile) {
