@@ -371,12 +371,8 @@ export class CartService {
 
   // favorites
   saveFavoriteItem(favoriteItem) {
-    if (this.authService.isLoggedIn.getValue()) {
+    if (this.authService.isLoggedIn.getValue())
       this.saveFavoriteItemToServer(favoriteItem);
-    }
-    else {
-      this.loginToHaveWishList();
-    }
   }
 
   private saveFavoriteItemToServer(favoriteItem) {
@@ -400,9 +396,5 @@ export class CartService {
             duration: 3200,
           });
       });
-  }
-
-  private loginToHaveWishList() {
-    // TODO navigate to login or register form
   }
 }

@@ -99,5 +99,4 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
       !this.bottomScroll && filterHeight - offset < height - 209;
     this.topDist = height - filterHeight + 209;
   }
-
 }

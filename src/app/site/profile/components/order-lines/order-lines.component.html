@@ -8,7 +8,7 @@
         <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column" dir="rtl">
             <div fxFlex="25">
                 <a (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">
-                    <img src="{{ol.boughtColor.image.thumbnail}}">
+                    <img src="{{getThumbnailURL(ol.boughtColor, ol.product)}}">
                 </a>
             </div>
             <div fxFlex="75" class="order-data-div">
