@@ -1,11 +1,21 @@
 <div mat-dialog-content class="main">
 
-  <h3>{{data.barcode}}</h3>
-  <input matInput placeholder="" [formControl]="barcodeCtrl">
 
-  <h3>بارکد را اسکن کنید</h3>
+  <div>
+    <h1 style="text-align: center">بارکد را اسکن کنید</h1>
+    <img src="/assets/logos/barcode.png" class="center logo">
+  </div>
+  <mat-divider></mat-divider>
+  <div>
+      <mat-form-field class="center" >
+    <input matInput placeholder="" [formControl]="barcodeCtrl" >
+  </mat-form-field>
+  </div>
 
-  <mat-icon *ngIf="isOK">check</mat-icon>
-  <mat-icon *ngIf="!isOK">clear</mat-icon>
+  <div>
+      <img src="/assets/logos/accept.png" class="center icon" *ngIf="isOK">
+      <img src="/assets/logos/fail.png" class="center icon" *ngIf="!isOK">
+  </div>
 
+   
 </div>

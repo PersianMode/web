@@ -78,7 +78,7 @@ export class SizePickerComponent implements OnInit {
 
     this.setProductSize();
     const shoesType = this.isEU ? 'EU' : 'US';
-    if (this.auth.isLoggedIn.getValue()) {
+    if (this.auth.userIsLoggedIn()) {
       this.httpService.post(`customer/shoesType`, {shoesType})
         .subscribe(() => {
           this.auth.userDetails.shoesType = shoesType;
