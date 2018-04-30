@@ -140,7 +140,7 @@ export class ProductComponent implements OnInit, OnDestroy {
           }
         });
       } else {
-        this.router.navigate(['register']);
+        this.router.navigate(['login']);
       }
     }
   }
