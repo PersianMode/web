@@ -69,6 +69,21 @@ export class CheckoutService {
     this.selectedPaymentType = pt;
   }
 
+  finalCheck() {
+    const cartItems = this.cartService.cartItems.getValue()
+      .map(r => Object.assign({}, {
+        product_id: r.product_id,
+        product_instance_id: r.instance_id,
+        price: r.price,
+        count: r.count,
+        quantity: r.quantity,
+      }));
+    this.httpService.post('finalCheck', cartItems)
+      .subscribe(res => {
+        console.log(res);
+      }, err => console.error(err));
+  }
+
   getLoyaltyBalance() {
     return new Promise((resolve, reject) => {
       this.cartService.getLoyaltyBalance()

@@ -39,8 +39,7 @@ export class CartService {
                 err => console.error('orders error: ', el, err)
               );
           });
-        }
-        if (isLoggedIn || items && items.length > 0) {
+
           this.getItemsDetail(isLoggedIn ? null : items)
             .then(res => {
               this.setCartItem(res, false);
@@ -98,7 +97,7 @@ export class CartService {
     const update = () => {
       const curInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
       const newInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
-      const product =  curInstance || newInstance;
+      const product = curInstance || newInstance;
       const instance = product.instances.find(r => (r.instance_id || r._id) === value.instance_id);
       Object.assign(product, {
         product_id: value.product_id,
@@ -109,7 +108,7 @@ export class CartService {
         count: instance.quantity,
       });
       if (instanceChange && curInstance)
-        items = items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id );
+        items = items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
       this.cartItems.next(items);
     };
     // Should delete and add new product's instance
@@ -125,7 +124,6 @@ export class CartService {
             number: value.number
           }).subscribe((dt) => {
               update();
-              console.log('dt', dt);
             }, (err) => {
               console.error('Cannot add new order-line to order in server: ', err);
             }
@@ -401,7 +399,6 @@ export class CartService {
       product_instance_id: favoriteItem.product_instance_id,
     }).subscribe(
       res => {
-        console.log('success', res);
         this.snackBar.open(`محصول به لیست علاقمندیهای شما افزوده شد`, null, SNACK_CONFIG);
       },
       err => {
