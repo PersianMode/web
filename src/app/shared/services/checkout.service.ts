@@ -150,7 +150,7 @@ export class CheckoutService {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
       .subscribe(res => {
-        console.log(res);
+        this.cartService.emptyCart();
       },
         err => console.error(err));
   }

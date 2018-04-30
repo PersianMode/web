@@ -54,6 +54,17 @@ export class CartService {
       });
   }
 
+  emptyCart() {
+    this.cartItems.next([]);
+    if (!this.authService.isLoggedIn.getValue()) {
+      try {
+        localStorage.setItem(this.localStorageKey, JSON.stringify([]));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+
   removeItem(value) {
     if (this.authService.isLoggedIn.getValue()) {
       // Update server
