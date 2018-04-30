@@ -987,3 +987,6 @@ p {
   text-align: left !important;
   direction: ltr !important;
 }
+.ui-dialog	{
+  font-family: iranyekan, sans-serif !important;
+}
