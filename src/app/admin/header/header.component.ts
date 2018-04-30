@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit {
   bufferValue: any;
   btnLabel = null;
   constructor(private authService: AuthService, private router: Router,
-              private progressService: ProgressService) {
+    private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit {
 
         this.navLinks.forEach(link => {
           const foundLink = links.find(x => x.address === link.path);
-          link.active = this.authService.userDetails.accessLevel === foundLink.access;
+          link.active = !!foundLink.access.find(x => x === this.authService.userDetails.accessLevel);
         });
 
       }
