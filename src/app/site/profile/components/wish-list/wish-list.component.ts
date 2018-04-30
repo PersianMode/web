@@ -76,7 +76,6 @@ export class WishListComponent implements OnInit {
       });
   }
 
-
   getThumbnailURL(product) {
     return imagePathFixer(product.colors[0].image.thumbnail, product._id, product.colors[0]._id);
   }

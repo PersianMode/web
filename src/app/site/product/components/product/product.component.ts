@@ -136,7 +136,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.dialog.open(GenDialogComponent, {
           width: '500px',
           data: {
-            componentName: DialogEnum.register,
+            componentName: DialogEnum.login,
           }
         });
       } else {
