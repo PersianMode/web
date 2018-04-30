@@ -394,7 +394,7 @@ export class CartService {
 
   // favorites
   saveFavoriteItem(favoriteItem) {
-    if (this.authService.isLoggedIn.getValue())
+    if (this.authService.userIsLoggedIn())
       this.saveFavoriteItemToServer(favoriteItem);
   }
 
