@@ -9,6 +9,7 @@ import {ResponsiveService} from '../../../../shared/services/responsive.service'
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {AuthService} from '../../../../shared/services/auth.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
 
 @Component({
@@ -21,23 +22,19 @@ export class WishListComponent implements OnInit {
   profileWishList = [];
   isMobile = false;
   isEU = false;
+  displaySize = null;
 
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
               private responsiveService: ResponsiveService,
               private dialog: MatDialog, protected httpService: HttpService,
-              protected progressService: ProgressService, private snackBar: MatSnackBar, private auth: AuthService) {
+              protected progressService: ProgressService, private snackBar: MatSnackBar,
+              private auth: AuthService, private dict: DictionaryService) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
   ngOnInit() {
     this.auth.isLoggedIn.subscribe(() => {
       this.isEU = this.auth.userDetails.shoesType === 'EU';
-      // if (isEU) {
-      //   let gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-      //   this.displaySize = this.dict.USToEU(this.product.size, gender);
-      // } else {
-      //   this.displaySize = this.dict.translateWord(this.product.size);
-      // }
     });
 
     this.profileOrderService.wishListArray.subscribe(result => {
@@ -45,13 +42,15 @@ export class WishListComponent implements OnInit {
         this.profileWishList = [];
         return;
       } else {
-        console.log('*************', result);
         this.profileWishList = result;
         this.profileWishList.forEach(
           el => {
             let gender =  el.product[0].tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
             [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time);
-            if(isEU)
+            if (this.isEU)
+              el.product[0].displaySize = this.dict.USToEU(el.product[0].instances[0].size, gender);
+            else
+              el.product[0].displaySize = this.dict.translateWord(el.product[0].instances[0].size);
           });
       }
     });

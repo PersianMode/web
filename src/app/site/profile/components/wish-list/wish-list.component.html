@@ -25,9 +25,11 @@
 
   <ng-container matColumnDef="size">
     <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>اندازه</mat-header-cell>
-    <mat-cell class="w50" *matCellDef="let wishItem">{{makePersianNumber(wishItem.product[0].instances[0].size, false)}}
+    <mat-cell class="w50" *matCellDef="let wishItem">{{wishItem.product[0].displaySize}}
     </mat-cell>
   </ng-container>
+
+  <!--{{makePersianNumber(wishItem.product[0].instances[0].size, false)}}-->
 
   <ng-container matColumnDef="date">
     <mat-header-cell *matHeaderCellDef mat-sort-header>زمان ثبت</mat-header-cell>
@@ -63,7 +65,8 @@
         </div>
         <div>
           <span>اندازه : </span>
-          <span>{{makePersianNumber(wishItem.product[0].instances[0].size, false)}}</span>
+          {{wishItem.product[0].displaySize}}
+          <!--<span>{{makePersianNumber(wishItem.product[0].instances[0].size, false)}}</span>-->
         </div>
         <div>
           <span>تاریخ و زمان ثبت کالا : </span>
