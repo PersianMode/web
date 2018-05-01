@@ -3,6 +3,10 @@
   <mat-card-content>
     <div class="example-container mat-elevation-z8">
 
+      <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
+        <mat-icon aria-label="Example icon-button with a heart icon">cached</mat-icon>
+      </button>
+  
       <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
         (matSortChange)="onSortChange($event)">
 

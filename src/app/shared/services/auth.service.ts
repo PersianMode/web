@@ -29,7 +29,7 @@ export class AuthService {
           this.isVerified.next(!!data.is_verified);
 
           if (this.userDetails.warehouse_id) {
-            this.socketService.init(this.userDetails.warehouse_id);
+            this.socketService.init();
           }
           data.username ? resolve() : reject();
         },
@@ -63,7 +63,6 @@ export class AuthService {
         mobile_no: null,
         national_id: null,
         warehouse_id: null,
-        socket_token: null
       };
     }
   }
@@ -88,7 +87,7 @@ export class AuthService {
             this.isLoggedIn.next(data);
             this.isVerified.next(data.is_verified ? data.is_verified : false);
             if (this.userDetails.warehouse_id) {
-              this.socketService.init(this.userDetails.warehouse_id);
+              this.socketService.init();
             }
             resolve();
           },

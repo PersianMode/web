@@ -5,9 +5,9 @@ import {HttpService} from './http.service';
 
 @Injectable()
 export class SocketService {
-  private socketConfig = {
-    transports: ['websocket']
-  };
+  // private socketConfig = {
+  //   transports: ['websocket']
+  // };
 
   private orderLineSocket;
 
@@ -21,8 +21,8 @@ export class SocketService {
   constructor() {
   }
 
-  public init(nsp) {
-    this.orderLineSocket = io(HttpService.Host + '/' + nsp, this.socketConfig);
+  public init() {
+    this.orderLineSocket = io(HttpService.Host );
   }
 
   getOrderLineMessage() {
