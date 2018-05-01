@@ -245,10 +245,24 @@ export class InboxComponent implements OnInit {
 
   receiveAgreement(element) {
     this.progressService.enable();
-    this.httpService.post('order/ticket/receive', {
+
+    const body: any = {
       orderId: element._id,
       orderLineId: element.order_line_id
-    }).subscribe(res => {
+    };
+    if (element.is_collect) {
+      const destionationWarehouse = this.authService.warehouses.find(x => x.address._id === element.address._id);
+      if (!destionationWarehouse) {
+        this.openSnackBar('فروشگاه مقصد پیدا نشد');
+        return;
+      }
+      if (destionationWarehouse._id !== this.authService.userDetails.warehouse_id)
+        body.toWarehouseId = destionationWarehouse._id;
+    }
+
+
+
+    this.httpService.post('order/ticket/receive', body).subscribe(res => {
       this.progressService.disable();
       this.openSnackBar('اعلام رسید محصول به انبار با موفقیت ارسال شد');
     }, err => {
