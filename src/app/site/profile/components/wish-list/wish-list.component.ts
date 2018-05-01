@@ -97,9 +97,9 @@ export class WishListComponent implements OnInit {
     return imagePathFixer(product.colors[0].image.thumbnail, product._id, product.colors[0]._id);
   }
 
-  makePersianNumber(a: string, isPrice) {
-    if (isNaN((+a)))
-      return a;
-    return (+a).toLocaleString('fa', {useGrouping: isPrice});
-  }
+  // makePersianNumber(a: string, isPrice) {
+  //   if (isNaN((+a)))
+  //     return a;
+  //   return (+a).toLocaleString('fa', {useGrouping: isPrice});
+  // }
 }
