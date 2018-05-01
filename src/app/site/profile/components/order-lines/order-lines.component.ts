@@ -6,6 +6,8 @@ import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order
 import {MatDialogRef} from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {OrderStatus} from '../../../../shared/lib/order_status';
+import {AuthService} from '../../../../shared/services/auth.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
 
 @Component({
@@ -16,16 +18,20 @@ import {OrderStatus} from '../../../../shared/lib/order_status';
 export class OrderLinesComponent implements OnInit {
   orderInfo: any;
   orderLines = [];
-  statusText = 'درحال پردازش';
+  isEU = false;
   noDuplicateOrderLine = [];
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
 
   constructor(private profileOrderService: ProfileOrderService,
-              private location: Location, private router: Router) {
+              private location: Location, private router: Router,
+              private auth: AuthService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
+    this.auth.isLoggedIn.subscribe(() => {
+      this.isEU = this.auth.userDetails.shoesType === 'EU';
+    });
     this.orderInfo = this.profileOrderService.orderData;
     this.orderLines = this.orderInfo.dialog_order.order_lines;
     this.removeDuplicates(this.orderLines);
@@ -36,9 +42,12 @@ export class OrderLinesComponent implements OnInit {
   removeDuplicates(arr) {
     const instancArr = [];
     arr.forEach(el => {
+      const gender =  el.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
       if (instancArr.indexOf(el.product_instance._id) === -1) {
         instancArr.push(el.product_instance._id);
         el.quantity = 1;
+        el.product_instance.displaySize = this.isEU ? this.dict.USToEU(el.product_instance.size, gender) :
+        this.dict.translateWord(el.product_instance.size);
         this.noDuplicateOrderLine.push(el);
       } else {
         this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
