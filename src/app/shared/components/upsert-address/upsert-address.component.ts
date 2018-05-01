@@ -55,7 +55,7 @@ export class UpsertAddressComponent implements OnInit {
     this.dialogTitle = this.addressInfo.partEdit ? '' : this.addressInfo.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
     this.buttonTitle = 'ثبت اطلاعات';
     this.addressData = this.addressInfo.dialog_address;
-    this.emailRequired = !this.authService.isLoggedIn.getValue();
+    this.emailRequired = !this.authService.userIsLoggedIn();
     this.initForm();
   }
 

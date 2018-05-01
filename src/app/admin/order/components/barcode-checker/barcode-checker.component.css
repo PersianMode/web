@@ -1,6 +1,15 @@
-h3{
-  font-family:  iranyekan, sans-serif !Important
-}
 .main{
   direction: rtl;
+}
+.center{
+  display:block;
+    margin:auto;
+}
+
+.logo{
+  width: 150px;
+}
+
+.icon{
+  width: 50px;
 }

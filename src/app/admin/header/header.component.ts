@@ -28,18 +28,18 @@ export class HeaderComponent implements OnInit {
   bufferValue: any;
   btnLabel = null;
   constructor(private authService: AuthService, private router: Router,
-              private progressService: ProgressService) {
+    private progressService: ProgressService) {
   }
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
-      (data) => {
-        this.isLoggedIn = data;
+      (data: any) => {
+        this.isLoggedIn = this.authService.userIsLoggedIn();
         this.btnLabel = data ? this.authService.userDetails.displayName : 'Logout';
 
         this.navLinks.forEach(link => {
           const foundLink = links.find(x => x.address === link.path);
-          link.active = this.authService.userDetails.accessLevel === foundLink.access;
+          link.active = !!foundLink.access.find(x => x === this.authService.userDetails.accessLevel);
         });
 
       }

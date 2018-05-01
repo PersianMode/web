@@ -117,7 +117,7 @@ export class BasicInfoComponent implements OnInit {
     this.authService.userDetails.national_id = this.customerBasicInfo.national_id;
     this.authService.userDetails.dob = this.customerBasicInfo.dob;
     this.authService.userDetails.username = this.customerBasicInfo.username;
-    this.authService.isLoggedIn.next(true);
+    this.authService.isLoggedIn.next(this.authService.userDetails);
     this.httpService.post('editUserBasicInfo', this.customerBasicInfo).subscribe(
       (res) => {
         this.ngOnInit();

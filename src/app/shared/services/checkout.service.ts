@@ -29,7 +29,7 @@ export class CheckoutService {
       data => this.dataIsReady.next(data && data.length)
     );
     this.authService.isLoggedIn.subscribe(isLoggedIn => {
-      this.getCustomerAddresses(isLoggedIn);
+      this.getCustomerAddresses(this.authService.userIsLoggedIn());
     });
 
     this.httpService.get('warehouse').subscribe(res => {
@@ -48,12 +48,12 @@ export class CheckoutService {
 
   private checkValidity() {
     const data = this.accumulateData();
-    const il = this.authService.isLoggedIn.getValue();
+    const il = this.authService.userIsLoggedIn();
     this.isValid$.next(data.total_amount &&
       (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
   }
 
-  getCustomerAddresses(isLoggedIn = this.authService.isLoggedIn.getValue()) {
+  getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
     if (isLoggedIn) {
       this.httpService.get(`customer/address`)
         .subscribe(res => this.addresses$.next(res.addresses), err => console.error(err));
@@ -114,7 +114,7 @@ export class CheckoutService {
     if (!data)
       return Promise.reject('');
 
-    if (this.authService.isLoggedIn.getValue()) {
+    if (this.authService.userIsLoggedIn()) {
       return new Promise((resolve, reject) => {
         this.httpService.post('user/address', data).subscribe(
           () => {
@@ -149,7 +149,7 @@ export class CheckoutService {
 
   private accumulateData() {
     return {
-      cartItems: this.authService.isLoggedIn.getValue() ? {} : this.cartService.getCheckoutItems() ,
+      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems() ,
       order_id: this.cartService.getOrderId(),
       address: this.address,
       customerData: this.customerData,

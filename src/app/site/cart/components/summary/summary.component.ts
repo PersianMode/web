@@ -56,7 +56,7 @@ export class SummaryComponent implements OnInit {
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
-      (data) => this.isLoggedIn = data,
+      (data) => this.isLoggedIn = this.authService.userIsLoggedIn(),
       (err) => {
         console.error('Cannot subscribe to isLoggedIn in authService: ', err);
       }

@@ -1,2 +1,7 @@
 <app-desktop-product *ngIf="!isMobile" [selectedProductColorID]="selectedProductColor" [product]="product" [sub]="joinedTags" [price]="formattedPrice" [gender]="gender" (add)="saveToCart($event)" (addFavorite)="saveToFavorites($event)" (changeSize)="updatePrice($event)"></app-desktop-product>
 <app-mobile-product *ngIf="isMobile" [selectedProductColorID]="selectedProductColor" [product]="product" [sub]="joinedTags" [price]="formattedPrice" [gender]="gender" (add)="saveToCart($event)" (addFavorite)="saveToFavorites($event)" (changeSize)="updatePrice($event)"></app-mobile-product>
+<p-dialog [visible]="waiting" header="لطفاً کمی صبر کنید..." [modal]="true" [closable]="false" dir="rtl">
+  <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'" [strokeWidth]="'2'" dir="rtl">
+    لطفاً کمی صبر کنید...
+  </mat-progress-spinner>
+</p-dialog>>

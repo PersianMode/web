@@ -12,23 +12,26 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-    this.authService.isLoggedIn.filter(r => r && !!this.forbiddenStack.length)
-      .subscribe(() => {
-        const lastPage = this.forbiddenStack.pop();
-        const curTime: any = new Date();
-        if (curTime - lastPage.time < 500) {
-          this.router.navigate(lastPage.path);
-        } else {
-          this.forbiddenStack = [];
-        }
-      });
+    // this.authService.isLoggedIn.filter(r => r && !!this.forbiddenStack.length)
+    //   .subscribe(() => {
+    //     const lastPage = this.forbiddenStack.pop();
+    //     const curTime: any = new Date();
+    //     if (curTime - lastPage.time < 500) {
+    //       this.router.navigate(lastPage.path);
+    //     } else {
+    //       this.forbiddenStack = [];
+    //     }
+    //   });
 
-    return this.authService.isLoggedIn.map(r => {
-      if (!r) {
-        this.router.navigate(['/']);
-        this.forbiddenStack.push({path: route.url.map(u => u.path), time: new Date()});
-      }
-      return r;
-    });
+    return this.authService.isLoggedIn
+      .filter(x => x)
+      .map(r => {
+        if (!r.username) {
+          this.router.navigate(['/']);
+          // this.forbiddenStack.push({path: route.url.map(u => u.path), time: new Date()});
+          return false
+        } else
+          return true;
+      });
   }
 }
