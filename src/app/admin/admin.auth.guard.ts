@@ -20,7 +20,7 @@ export class AdminAuthGuard implements CanActivate {
       .map((data: any) => {
         if (data.username && this.authService.userDetails.isAgent) {
           const link = links.find(x => state.url.includes(x.address));
-          if (link && link.access.find(x => x === this.authService.userDetails.accessLevel))
+          if (link && link.access.find(x => +x === +this.authService.userDetails.accessLevel) >= 0)
             return true;
           else {
             this.router.navigate(['agent/login']);
