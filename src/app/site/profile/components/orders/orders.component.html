@@ -36,8 +36,8 @@
     <mat-cell *matCellDef="let order" style="font-size: 13px; text-align: right">استان {{order.address.province}} شهر
       {{order.address.city}}
       <br>
-      {{order.address.district}} {{order.address.street}} پلاک {{makePersianNumber(order.address.no, false)}} واحد
-      {{makePersianNumber(order.address.unit, false)}}
+      {{order.address.district}} {{order.address.street}} {{order.address.no ? 'پلاک ' + makePersianNumber(order.address.no, false) : ''}}
+      {{order.address.unit ?  'واحد' + makePersianNumber(order.address.unit, false) : ''}}
     </mat-cell>
   </ng-container>
 
@@ -76,8 +76,8 @@
           <span>ارسال شده به :</span>
           <span>استان {{order.address.province}} شهر {{order.address.city}}
             <br>
-            {{order.address.district}} {{order.address.street}} پلاک {{makePersianNumber(order.address.no, false)}} واحد
-            {{makePersianNumber(order.address.unit, false)}}</span>
+            {{order.address.district}} {{order.address.street}} {{order.address.no ? 'پلاک ' + makePersianNumber(order.address.no, false) : ''}}
+           {{order.address.unit ?  'واحد' + makePersianNumber(order.address.unit, false) : ''}}</span>
         </div>
         <div class="eye-style"><a (click)="goToOrderLines(order._id)" class="clickable-link"><i
           class="fa fa-eye"></i></a></div>
