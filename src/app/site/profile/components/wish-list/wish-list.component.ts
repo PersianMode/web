@@ -8,6 +8,7 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+import {AuthService} from '../../../../shared/services/auth.service';
 
 
 @Component({
@@ -19,15 +20,26 @@ export class WishListComponent implements OnInit {
   displayedColumns = ['col_no', 'thumbnail', 'name', 'size', 'date', 'delete'];
   profileWishList = [];
   isMobile = false;
+  isEU = false;
 
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
               private responsiveService: ResponsiveService,
               private dialog: MatDialog, protected httpService: HttpService,
-              protected progressService: ProgressService, private snackBar: MatSnackBar) {
+              protected progressService: ProgressService, private snackBar: MatSnackBar, private auth: AuthService) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
   ngOnInit() {
+    this.auth.isLoggedIn.subscribe(() => {
+      this.isEU = this.auth.userDetails.shoesType === 'EU';
+      // if (isEU) {
+      //   let gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+      //   this.displaySize = this.dict.USToEU(this.product.size, gender);
+      // } else {
+      //   this.displaySize = this.dict.translateWord(this.product.size);
+      // }
+    });
+
     this.profileOrderService.wishListArray.subscribe(result => {
       if (!result.length) {
         this.profileWishList = [];
@@ -35,7 +47,12 @@ export class WishListComponent implements OnInit {
       } else {
         console.log('*************', result);
         this.profileWishList = result;
-        this.profileWishList.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time));
+        this.profileWishList.forEach(
+          el => {
+            let gender =  el.product[0].tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+            [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time);
+            if(isEU)
+          });
       }
     });
     this.profileOrderService.getWishList();
