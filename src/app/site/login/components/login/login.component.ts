@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   curFocus = null;
 
   constructor(private authService: AuthService, private router: Router,
-              @Inject(WINDOW) private window, public dialog: MatDialog) {
+    @Inject(WINDOW) private window, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -75,5 +75,19 @@ export class LoginComponent implements OnInit {
   setSeen(item) {
     this.seen[item] = true;
     this.curFocus = item;
+  }
+
+  forgotPassword() {
+    if (this.window.innerWidth >= 960) {
+      this.closeDialog.emit(true);
+      this.dialog.open(GenDialogComponent, {
+        width: '500px',
+        data: {
+          componentName: this.dialogEnum.forgotPassword,
+        },
+      });
+    } else {
+      this.router.navigate(['forgot/password']);
+    }
   }
 }
