@@ -149,7 +149,7 @@ export class AddressTableComponent implements OnInit {
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     this.checkoutService.addressData = {
       addressId: tempAddressId,
-      partEdit: this.isProfile ||  this.authService.userIsLoggedIn(),
+      partEdit: !this.isProfile || !this.authService.userIsLoggedIn(),
       dialog_address: tempAddress
     };
     if (this.responsiveService.isMobile) {
