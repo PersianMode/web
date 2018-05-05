@@ -10,7 +10,7 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
 export class CollectionsComponent extends AbstractSearchComponent implements OnInit {
 
   ngOnInit() {
-    this.titleService.setTitle('ادمین : کالکشن');
+    this.titleService.setTitleWithOutConstant('ادمین : کالکشن');
     this.key = 'Collection';
     super.ngOnInit();
 

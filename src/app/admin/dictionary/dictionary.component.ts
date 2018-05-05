@@ -5,7 +5,7 @@ import {ProgressService} from '../../shared/services/progress.service';
 import {HttpService} from '../../shared/services/http.service';
 import {IDictionary} from './interfaces/IDictionary.interface';
 import {ModifyDictionaryComponent} from './components/modify-dictionary/modify-dictionary.component';
-import {Title} from '@angular/platform-browser';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-dictionary',
@@ -32,11 +32,11 @@ export class DictionaryComponent implements OnInit {
   constructor(private httpService: HttpService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
-              private progressService: ProgressService, private titleService: Title) {
+              private progressService: ProgressService, private titleService: TitleService) {
   }
 
   ngOnInit() {
-    this.titleService.setTitle('ادمین : صفحه ها');
+    this.titleService.setTitleWithOutConstant('ادمین : دیکشنری');
     this.load();
   }
 

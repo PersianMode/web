@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-upload',
@@ -11,11 +12,11 @@ export class OrderComponent implements OnInit {
   newInboxCount: number;
   newDeliverCount: number;
 
-  constructor( private titleService: Title) {
+  constructor( private titleService: TitleService) {
   }
 
   ngOnInit() {
-    this.titleService.setTitle('ادمین : سفارش ها');
+    this.titleService.setTitleWithOutConstant('ادمین : سفارش ها');
   }
 
 }

@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-// import {AuthService} from '../../services/auth.service';
 import {HttpService} from '../../services/http.service';
 import {ProgressService} from '../../services/progress.service';
 import {Router} from '@angular/router';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {DomSanitizer, Title} from '@angular/platform-browser';
+import {DomSanitizer} from '@angular/platform-browser';
 import {TitleService} from '../../services/title.service';
 
 @Component({
