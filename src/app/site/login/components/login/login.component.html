@@ -30,15 +30,15 @@
                  formControlName="password"
                  (focus)="setSeen('password')"
                  (blur)="curFocus = null"
-                 [ngClass]="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus['password'] ? 'input-error' : null"
+                 [ngClass]="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus !== 'password' ? 'input-error' : null"
                  (keypress)="keyPress($event)"
                  autocomplete="current_password"/>
-          <label *ngIf="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus['password']" class="field-error">لطفا رمز عبور را وارد
+          <label *ngIf="loginForm.controls['password'].hasError('required') && seen['password'] && curFocus !== 'password'" class="field-error">لطفا رمز عبور را وارد
             کنید</label>
         </div>
       </div>
       <div fxLayout="row" fxLayoutAlign="start start" style="margin-top: 13px">
-        <div fxFlex="50">
+        <div fxFlex="50" (click)="forgotPassword()">
           <a class="clickable-link">رمز را فراموش کرده اید؟</a>
         </div>
         <!-- <div fxFlex="50" style="text-align: left; margin-left: -15px;">
