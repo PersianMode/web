@@ -36,7 +36,7 @@ export class DictionaryComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.titleService.setTitleWithOutConstant('ادمین : دیکشنری');
+    this.titleService.setTitleWithOutConstant('ادمین: دیکشنری');
     this.load();
   }
 

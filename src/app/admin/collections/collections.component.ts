@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-collections',
@@ -10,7 +11,7 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
 export class CollectionsComponent extends AbstractSearchComponent implements OnInit {
 
   ngOnInit() {
-    this.titleService.setTitleWithOutConstant('ادمین : کالکشن');
+    this.titleService.setTitleWithOutConstant('ادمین: ' + TitleService.collection_name);
     this.key = 'Collection';
     super.ngOnInit();
 

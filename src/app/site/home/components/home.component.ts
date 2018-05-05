@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.titleService.setTitleWithConstant('خانه');
+    this.titleService.setTitleWithConstant();
     this.pageService.getPage('home');
   }
 }

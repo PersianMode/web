@@ -22,12 +22,10 @@ export class AbstractSearchComponent implements OnInit {
   searchData: any = null;
   initSearchData: any = null;
   key: string;
-  titleService;
 
   constructor(protected httpService: HttpService, protected progressService: ProgressService,
               protected router: Router, protected dialog: MatDialog,
-              protected snackBar: MatSnackBar, protected sanitizer: DomSanitizer, titleService: TitleService) {
-    this.titleService = titleService;
+              protected snackBar: MatSnackBar, protected sanitizer: DomSanitizer, protected titleService: TitleService) {
   }
 
   ngOnInit() {

@@ -81,8 +81,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     });
     this.productService.collectionNameFa$.subscribe(r => {
       this.collectionNameFa = r;
-      console.log(r);
-      this.titleService.setTitleWithConstant('کالکشن ' + r);
+      this.titleService.setTitleWithConstant(TitleService.collection_name + ' ' + r);
     });
     this.showHideSpinner(true);
     this.productService.productList$.subscribe(r => {

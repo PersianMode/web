@@ -12,7 +12,7 @@ export class UploadComponent implements OnInit {
   constructor(private snackBar: MatSnackBar,private titleService :TitleService) { }
 
   ngOnInit() {
-    this.titleService.setTitleWithOutConstant('ادمین : بارگذاری فایل');
+    this.titleService.setTitleWithOutConstant('ادمین: بارگذاری فایل');
   }
 
   Success($event: Event) {
