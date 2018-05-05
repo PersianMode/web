@@ -34,7 +34,7 @@ export class EditOrderComponent implements OnInit {
           console.log(this.product);
           this.sizesArray.push({
             value: el.size,
-            name: isEU ? this.dict.USToEU(el.size, gender,"") : this.dict.translateWord(el.size),
+            name: isEU ? this.dict.USToEU(el.size, gender,this.product.productType) : this.dict.translateWord(el.size),
             quantity: el.quantity
           });
         }

@@ -27,6 +27,7 @@ export class CartItemsComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.product);
     this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
     this.stock = this.product.count.toLocaleString('fa', {useGrouping: false});
     this.valid.emit(!this.notExist);

@@ -48,7 +48,7 @@ export class WishListComponent implements OnInit {
             let gender =  el.product[0].tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
             [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time);
             if (this.isEU)
-              el.product[0].displaySize = this.dict.USToEU(el.product[0].instances[0].size, gender);
+              el.product[0].displaySize = this.dict.USToEU(el.product[0].instances[0].size, gender,el.product[0].product_type.name);
             else
               el.product[0].displaySize = this.dict.translateWord(el.product[0].instances[0].size);
           });

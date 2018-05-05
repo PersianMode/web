@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {colorConverter} from './colorConverter';
 import {HttpService} from './http.service';
+import {AuthService} from './auth.service';
 
 @Injectable()
 export class DictionaryService {
@@ -8,7 +9,7 @@ export class DictionaryService {
   colorDictionary = {};
   shoesSizeMap: any = {};
 
-  constructor(httpService: HttpService) {
+  constructor(httpService: HttpService, private auth: AuthService) {
     httpService.get('dictionary').subscribe((res: any) => {
       res.forEach(x => {
         if (x.type === 'tag') {
@@ -46,6 +47,15 @@ export class DictionaryService {
     }
 
     return convertedColor;
+  }
+
+  setShoesSize(oldSize, gender, type) {
+    const isEU = this.auth.userDetails.shoesType === 'EU';
+    console.log(isEU);
+    if (isEU && type.toUpperCase() === 'FOOTWEAR')
+      return this.USToEU(oldSize, gender, type);
+    return this.translateWord(oldSize);
+
   }
 
   USToEU(oldSize, gender, type) {

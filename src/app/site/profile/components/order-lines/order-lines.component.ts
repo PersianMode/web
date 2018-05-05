@@ -43,12 +43,13 @@ export class OrderLinesComponent implements OnInit {
   removeDuplicates(arr) {
     const instancArr = [];
     arr.forEach(el => {
-      const gender =  el.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+      const gender = el.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
       if (instancArr.indexOf(el.product_instance._id) === -1) {
         instancArr.push(el.product_instance._id);
         el.quantity = 1;
-        el.product_instance.displaySize = this.isEU ? this.dict.USToEU(el.product_instance.size, gender) :
-        this.dict.translateWord(el.product_instance.size);
+        console.log(el);
+        el.product_instance.displaySize = this.isEU ? this.dict.USToEU(el.product_instance.size, gender, el.product.product_type.name) :
+          this.dict.translateWord(el.product_instance.size);
         this.noDuplicateOrderLine.push(el);
       } else {
         this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;

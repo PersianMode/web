@@ -60,7 +60,7 @@ export class SizePickerComponent implements OnInit {
         if (!this.isEU)
           temp[pi].displayValue = this.dict.translateWord(p.value);
         else {
-          temp[pi].displayValue = this.USToEU(p.value);
+          temp[pi].displayValue = this.dict.USToEU(p.value,this.gender,this.productType);
         }
       });
     }
@@ -68,10 +68,6 @@ export class SizePickerComponent implements OnInit {
     while (temp && temp.length) {
       this.sizeSplits.push(temp.splice(0, 5));
     }
-  }
-
-  USToEU(oldSize) {
-    return this.dict.USToEU(oldSize, this.gender, this.productType);
   }
 
   changeSizeType(change = true) {
