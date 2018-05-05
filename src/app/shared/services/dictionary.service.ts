@@ -1,14 +1,19 @@
 import {Injectable} from '@angular/core';
 import {colorConverter} from './colorConverter';
 import {HttpService} from './http.service';
+import {AuthService} from './auth.service';
 
 @Injectable()
 export class DictionaryService {
   wordDictionary = {};
   colorDictionary = {};
   shoesSizeMap: any = {};
+  isEU = false;
 
-  constructor(httpService: HttpService) {
+  constructor(httpService: HttpService, private auth: AuthService) {
+    this.auth.isLoggedIn.subscribe(() => {
+      this.isEU = this.auth.userDetails.shoesType === 'EU';
+    });
     httpService.get('dictionary').subscribe((res: any) => {
       res.forEach(x => {
         if (x.type === 'tag') {
@@ -48,15 +53,25 @@ export class DictionaryService {
     return convertedColor;
   }
 
+  setShoesSize(oldSize, gender, type) {
+    this.isEU = this.auth.userDetails.shoesType === 'EU';
+    if (type) {
+      if (type.name)
+        type = type.name;
+      if (this.isEU && type.toUpperCase() === 'FOOTWEAR')
+        return this.USToEU(oldSize, gender);
+    }
+    return this.translateWord(oldSize);
+
+  }
+
   USToEU(oldSize, gender) {
     let returnValue: any;
-    if (!gender ||  (gender && gender.toUpperCase() === 'MENS')) {
-      returnValue = this.shoesSizeMap.men.find(size => size.us === oldSize);
-    } else if (gender && gender.toUpperCase() === 'WOMENS') {
-      returnValue = this.shoesSizeMap.women.find(size => size.us === oldSize);
-    }
+    const g = (gender && gender.toUpperCase() === 'WOMENS') ? 'women' : 'men';
+    returnValue = this.shoesSizeMap[g].find(size => size.us === oldSize);
     if (!returnValue || !returnValue.eu)
       return this.translateWord(oldSize);
     return this.translateWord(returnValue.eu);
   }
+
 }

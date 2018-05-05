@@ -30,6 +30,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   size = '';
   gender = 'MENS';
   waiting = false;
+  productType = '';
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
@@ -63,6 +64,7 @@ export class ProductComponent implements OnInit, OnDestroy {
           this.updatePrice();
           if (this.product.id) {
             this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+            this.productType = this.product.type.name || this.product.type;
           }
         });
       } else {
@@ -94,6 +96,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         product_id: this.product._id,
         product_instance_id: instance._id,
         instances: this.product.instances,
+        product_type: this.productType,
       };
 
       Object.assign(object, this.product);

@@ -27,13 +27,12 @@ export class EditOrderComponent implements OnInit {
   ngOnInit() {
     this.product = this.data.dialog_product;
     this.auth.isLoggedIn.subscribe(() => {
-      const isEU = this.auth.userDetails.shoesType === 'EU';
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
       this.product.instances.forEach(el => {
         if (el.quantity) {
           this.sizesArray.push({
             value: el.size,
-            name: isEU ? this.dict.USToEU(el.size, gender) : this.dict.translateWord(el.size),
+            name: this.dict.setShoesSize(el.size, gender, this.product.productType),
             quantity: el.quantity
           });
         }
