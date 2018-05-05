@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {PageService} from '../../../shared/services/page.service';
-import {Title} from '@angular/platform-browser';
+import {TitleService} from '../../../shared/services/title.service';
 
 @Component({
   selector: 'app-home',
@@ -9,11 +9,11 @@ import {Title} from '@angular/platform-browser';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private pageService: PageService, private titleService: Title) {
+  constructor(private pageService: PageService, private titleService: TitleService) {
   }
 
   ngOnInit() {
-    this.titleService.setTitle('خانه');
+    this.titleService.setTitleWithConstant('خانه');
     this.pageService.getPage('home');
   }
 }

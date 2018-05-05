@@ -3,7 +3,7 @@ import {PaymentType} from '../../../shared/enum/payment.type.enum';
 import {CheckoutService} from '../../../shared/services/checkout.service';
 import {HttpService} from '../../../shared/services/http.service';
 import {CartService} from '../../../shared/services/cart.service';
-import {Title} from '@angular/platform-browser';
+import {TitleService} from '../../../shared/services/title.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -20,11 +20,11 @@ export class CheckoutPageComponent implements OnInit {
   paymentType = PaymentType;
   disabled = false;
 
-  constructor(private checkoutService: CheckoutService, private httpService: HttpService, private cartService: CartService, private titleService: Title) {
+  constructor(private checkoutService: CheckoutService, private httpService: HttpService, private cartService: CartService, private titleService: TitleService) {
   }
 
   ngOnInit() {
-    this.titleService.setTitle('پرداخت هزینه');
+    this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {
         if (data) {

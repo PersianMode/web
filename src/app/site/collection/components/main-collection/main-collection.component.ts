@@ -6,9 +6,9 @@ import {PageService} from '../../../../shared/services/page.service';
 import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {Subject} from 'rxjs/Subject';
+import {TitleService} from '../../../../shared/services/title.service';
 
 const HEADER_HEIGHT = 209;
-import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-main-collection',
@@ -58,7 +58,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   lazyRows = 10;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-              private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService, private titleService: Title) {
+              private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService, private titleService: TitleService) {
   }
 
   ngOnInit() {
@@ -82,7 +82,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.productService.collectionNameFa$.subscribe(r => {
       this.collectionNameFa = r;
       console.log(r);
-      this.titleService.setTitle('کالکشن ' + r);
+      this.titleService.setTitleWithConstant('کالکشن ' + r);
     });
     this.showHideSpinner(true);
     this.productService.productList$.subscribe(r => {

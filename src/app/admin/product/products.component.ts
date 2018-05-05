@@ -10,7 +10,7 @@ import {AbstractSearchComponent} from '../../shared/components/abstract-search/a
 export class ProductsComponent extends AbstractSearchComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
-    this.titleService.setTitleWithOutConstant('ادمین : محصول');
+    this.titleService.setTitleWithOutConstant('ادمین : محصولات');
     this.key = 'Product';
     super.ngOnInit();
   }

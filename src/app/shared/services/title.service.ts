@@ -10,7 +10,7 @@ export class TitleService {
   readonly constTitle = 'Nike';
 
   setTitleWithConstant(newTitle: string) {
-    this.titleService.setTitle(this.constTitle + newTitle);
+    this.titleService.setTitle(this.constTitle + ' ' + newTitle);
   }
 
   setTitleWithOutConstant(title: string) {

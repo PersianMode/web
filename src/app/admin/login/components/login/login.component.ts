@@ -2,11 +2,9 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
-import {HttpService} from '../../../../shared/services/http.service';
 import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {MatSnackBar} from '@angular/material';
-import {Title} from '@angular/platform-browser';
 import {TitleService} from '../../../../shared/services/title.service';
 
 @Component({

@@ -13,7 +13,8 @@ import {MatDialog} from '@angular/material';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
-import {Title} from '@angular/platform-browser';
+import {TitleService} from '../../../../shared/services/title.service';
+
 
 @Component({
   selector: 'app-product',
@@ -36,7 +37,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   constructor(public httpService: HttpService, private route: ActivatedRoute, @Inject(WINDOW) private window,
               private responsiveService: ResponsiveService, private productService: ProductService,
               private dict: DictionaryService, private cartService: CartService, private dialog: MatDialog,
-              private authService: AuthService, private router: Router, private titleService: Title) {
+              private authService: AuthService, private router: Router, private titleService: TitleService) {
   }
 
   // this component we need to have a product data by this format :
@@ -56,7 +57,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.productService.getProduct(productId);
         this.product$ = this.productService.product$.subscribe(data => {
           this.product = data;
-          this.titleService.setTitle(this.product.name);
+          this.titleService.setTitleWithConstant(this.product.name);
           this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
           this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
           this.updatePrice();

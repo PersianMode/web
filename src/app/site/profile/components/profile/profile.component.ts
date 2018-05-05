@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
-import {Title} from '@angular/platform-browser';
+import {TitleService} from '../../../../shared/services/title.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +14,7 @@ export class ProfileComponent implements OnInit {
   isEdit = false;
   headerTitle;
 
-  constructor(private authService: AuthService, private router: Router, private profileOrderService: ProfileOrderService, private titleService: Title) {
+  constructor(private authService: AuthService, private router: Router, private profileOrderService: ProfileOrderService, private titleService: TitleService  ) {
   }
 
   ngOnInit() {
@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
       if (!this.authService.userIsLoggedIn())
         this.router.navigate(['/']);
       else
-        this.titleService.setTitle('پروفایل');
+        this.titleService.setTitleWithConstant('پروفایل');
     });
   }
 
