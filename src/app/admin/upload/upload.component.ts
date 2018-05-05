@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MatSnackBar} from '@angular/material';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-upload',
@@ -8,9 +9,10 @@ import {MatSnackBar} from '@angular/material';
 })
 export class UploadComponent implements OnInit {
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar,private titleService :TitleService) { }
 
   ngOnInit() {
+    this.titleService.setTitleWithOutConstant('ادمین: بارگذاری فایل');
   }
 
   Success($event: Event) {

@@ -13,6 +13,8 @@ import {MatDialog} from '@angular/material';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import {TitleService} from '../../../../shared/services/title.service';
+
 
 @Component({
   selector: 'app-product',
@@ -30,6 +32,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   size = '';
   gender = 'MENS';
   waiting = false;
+  productType = '';
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
@@ -37,7 +40,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   constructor(public httpService: HttpService, private route: ActivatedRoute, @Inject(WINDOW) private window,
               private responsiveService: ResponsiveService, private productService: ProductService,
               private dict: DictionaryService, private cartService: CartService, private dialog: MatDialog,
-              private authService: AuthService, private router: Router) {
+              private authService: AuthService, private router: Router, private titleService: TitleService) {
   }
 
   // this component we need to have a product data by this format :
@@ -57,11 +60,13 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.productService.getProduct(productId);
         this.product$ = this.productService.product$.subscribe(data => {
           this.product = data;
+          this.titleService.setTitleWithConstant(this.product.name);
           this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
           this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
           this.updatePrice();
           if (this.product.id) {
             this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+            this.productType = this.product.type.name || this.product.type;
           }
         });
       } else {
@@ -96,6 +101,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         product_id: this.product._id,
         product_instance_id: instance._id,
         instances: this.product.instances,
+        product_type: this.productType,
       };
 
       Object.assign(object, this.product);
@@ -142,7 +148,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         Object.assign(favoriteObject, this.product);
         this.cartService.saveFavoriteItem(favoriteObject);
       }
-    }  else this.goToRegister(size);
+    } else this.goToRegister(size);
   }
 
   @HostListener('window:resize', ['$event'])

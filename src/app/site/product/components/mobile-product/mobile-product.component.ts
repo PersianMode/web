@@ -14,6 +14,8 @@ export class MobileProductComponent implements OnInit {
   @Input() sub;
   @Input() id;
   @Input() gender;
+  @Input() productType;
+
   @Input()
   set selectedProductColorID(id) {
     if (id) {
@@ -21,6 +23,7 @@ export class MobileProductComponent implements OnInit {
       this.productSize = this.product.sizesByColor[id];
     }
   };
+
   productSize = [];
   selectedProductColor: any = {};
   addCardBtnDisabled = true;
@@ -29,7 +32,8 @@ export class MobileProductComponent implements OnInit {
   @Output() changeSize = new EventEmitter<any>();
   size = '';
 
-  constructor(private cartService: CartService) { }
+  constructor(private cartService: CartService) {
+  }
 
   newSize(event) {
     this.size = event;
