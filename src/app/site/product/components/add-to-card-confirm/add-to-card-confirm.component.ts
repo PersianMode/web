@@ -22,19 +22,25 @@ export class AddToCardConfirmComponent implements OnInit {
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<AddToCardConfirmComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private cartService: CartService,
-              private router: Router, private auth: AuthService, private dict: DictionaryService) { }
+              private router: Router, private auth: AuthService, private dict: DictionaryService) {
+  }
+
   ngOnInit() {
     this.cartNumbers = 0;
     this.name = (this.data && this.data.name) ? this.data.name : null;
     this.product = this.data.product;
     this.auth.isLoggedIn.subscribe(() => {
-      const isEU = this.auth.userDetails.shoesType === 'EU';
-      if (isEU) {
-        const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-        this.selectedSize = this.dict.USToEU(this.data.selectedSize, gender,this.data.product.product_type.name || this.data.product.type);
-      } else {
-        this.selectedSize = this.dict.translateWord(this.data.selectedSize);
-      }
+
+      // const isEU = this.auth.userDetails.shoesType === 'EU';
+      // if (isEU) {
+      //   const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+      //   this.selectedSize = this.dict.USToEU(this.data.selectedSize, gender, this.data.product.product_type.name || this.data.product.type);
+      // } else {
+      //   this.selectedSize = this.dict.translateWord(this.data.selectedSize);
+      // }
+      const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+      this.selectedSize = this.dict.setShoesSize(this.data.selectedSize, gender, this.data.product.product_type.name || this.data.product.type);
+
     });
     this.farsiPrice = '@ ' + priceFormatter(this.data.instance.price ? this.data.instance.price : this.product.base_price) + ' تومان';
     this.thumbnail = this.product.colors.find(r => this.data.instance.product_color_id === r._id).image.thumbnail;
@@ -45,6 +51,7 @@ export class AddToCardConfirmComponent implements OnInit {
       }
     })
   }
+
   closeDialog() {
     this.dialogRef.close();
   }

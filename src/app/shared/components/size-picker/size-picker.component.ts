@@ -18,8 +18,7 @@ export class SizePickerComponent implements OnInit {
   sizeSplits = [];
   @Input() gender: String = 'MENS';
   @Input() productType: string;
-  isShoes = true;
-
+  isShoes = false;
   isEU = true;
   productSize;
 
@@ -57,11 +56,9 @@ export class SizePickerComponent implements OnInit {
     Object.assign(temp, this.productSize);
     if (this.productSize && this.productSize.length) {
       this.productSize.forEach((p, pi) => {
-        if (!this.isEU)
-          temp[pi].displayValue = this.dict.translateWord(p.value);
-        else {
-          temp[pi].displayValue = this.dict.USToEU(p.value,this.gender,this.productType);
-        }
+        temp[pi].displayValue = this.dict.setShoesSize(p.value, this.gender, this.productType);
+
+
       });
     }
     this.sizeSplits = [];
@@ -73,16 +70,13 @@ export class SizePickerComponent implements OnInit {
   changeSizeType(change = true) {
     if (change)
       this.isEU = !this.isEU;
-
-    this.setProductSize();
     const shoesType = this.isEU ? 'EU' : 'US';
     if (this.auth.userIsLoggedIn()) {
       this.httpService.post(`customer/shoesType`, {shoesType})
         .subscribe(() => {
-          this.auth.userDetails.shoesType = shoesType;
         });
-    } else {
-      this.auth.userDetails.shoesType = shoesType;
     }
+    this.auth.userDetails.shoesType = shoesType;
+    this.setProductSize();
   }
 }

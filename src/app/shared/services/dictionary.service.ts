@@ -54,18 +54,20 @@ export class DictionaryService {
   }
 
   setShoesSize(oldSize, gender, type) {
+    this.isEU = this.auth.userDetails.shoesType === 'EU';
+    console.log(type);
     console.log(this.isEU);
-    console.log('oldSize =', oldSize);
-    console.log('gender =', gender);
-    console.log('type =', type);
-    if (type.name)
-      type = type.name;
-    if (this.isEU && type.toUpperCase() === 'FOOTWEAR')
-      return this.USToEU1(oldSize, gender);
+    if (type) {
+      if (type.name)
+        type = type.name;
+      if (this.isEU && type.toUpperCase() === 'FOOTWEAR')
+        return this.USToEU(oldSize, gender);
+    }
     return this.translateWord(oldSize);
+
   }
 
-  USToEU1(oldSize, gender) {
+  USToEU(oldSize, gender) {
     let returnValue: any;
     const g = (gender && gender.toUpperCase() === 'WOMENS') ? 'women' : 'men';
     returnValue = this.shoesSizeMap[g].find(size => size.us === oldSize);
@@ -74,14 +76,4 @@ export class DictionaryService {
     return this.translateWord(returnValue.eu);
   }
 
-  USToEU(oldSize, gender, type) {
-    let returnValue: any;
-    if (type.toUpperCase() === 'FOOTWEAR') {
-      const g = (gender && gender.toUpperCase() === 'WOMENS') ? 'women' : 'men';
-      returnValue = this.shoesSizeMap[g].find(size => size.us === oldSize);
-    }
-    if (!returnValue || !returnValue.eu)
-      return this.translateWord(oldSize);
-    return this.translateWord(returnValue.eu);
-  }
 }
