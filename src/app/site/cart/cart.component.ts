@@ -9,6 +9,7 @@ import {DialogEnum} from '../../shared/enum/dialog.components.enum';
 import {MatDialog} from '@angular/material';
 import {HttpService} from '../../shared/services/http.service';
 import {imagePathFixer} from '../../shared/lib/imagePathFixer';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-cart',
@@ -28,10 +29,11 @@ export class CartComponent implements OnInit, OnDestroy {
   showWaitingSpinner = false;
 
   constructor(@Inject(WINDOW) private window, private cartService: CartService,
-    private authService: AuthService, private router: Router, public dialog: MatDialog) {
+    private authService: AuthService, private router: Router, public dialog: MatDialog, private titleService: Title) {
   }
 
   ngOnInit() {
+    this.titleService.setTitle('سبد خرید');
     this.authService.isLoggedIn.subscribe(
       (data) => this.isLoggedIn = this.authService.userIsLoggedIn()
     );

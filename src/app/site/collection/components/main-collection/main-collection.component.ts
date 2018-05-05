@@ -6,7 +6,10 @@ import {PageService} from '../../../../shared/services/page.service';
 import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {Subject} from 'rxjs/Subject';
+
 const HEADER_HEIGHT = 209;
+import {Title} from '@angular/platform-browser';
+
 @Component({
   selector: 'app-main-collection',
   templateUrl: './main-collection.component.html',
@@ -55,7 +58,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   lazyRows = 10;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-              private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService) {
+              private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService, private titleService: Title) {
   }
 
   ngOnInit() {
@@ -78,6 +81,8 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     });
     this.productService.collectionNameFa$.subscribe(r => {
       this.collectionNameFa = r;
+      console.log(r);
+      this.titleService.setTitle('کالکشن ' + r);
     });
     this.showHideSpinner(true);
     this.productService.productList$.subscribe(r => {
@@ -106,7 +111,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.gridHeight = this.gridWidth + 90;
     this.lazyRows = this.isMobile ? 10 :
       Math.floor(this.gridwall.nativeElement.offsetWidth / 242)
-      * Math.floor((this.window.innerHeight - 105) / 348 ) * 2;
+      * Math.floor((this.window.innerHeight - 105) / 348) * 2;
     setTimeout(() => this.calcAfterScroll(), 1000);
   }
 

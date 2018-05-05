@@ -4,7 +4,8 @@ import {HttpService} from '../../services/http.service';
 import {ProgressService} from '../../services/progress.service';
 import {Router} from '@angular/router';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, Title} from '@angular/platform-browser';
+import {TitleService} from '../../services/title.service';
 
 @Component({
   selector: 'app-abstract-search',
@@ -22,10 +23,12 @@ export class AbstractSearchComponent implements OnInit {
   searchData: any = null;
   initSearchData: any = null;
   key: string;
+  titleService;
 
   constructor(protected httpService: HttpService, protected progressService: ProgressService,
               protected router: Router, protected dialog: MatDialog,
-              protected snackBar: MatSnackBar, protected sanitizer: DomSanitizer) {
+              protected snackBar: MatSnackBar, protected sanitizer: DomSanitizer, titleService: TitleService) {
+    this.titleService = titleService;
   }
 
   ngOnInit() {

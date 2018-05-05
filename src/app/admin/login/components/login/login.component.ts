@@ -6,6 +6,7 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {MatSnackBar} from '@angular/material';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -22,11 +23,12 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService,
     private router: Router,
     private progressService: ProgressService,
-    private snakBar: MatSnackBar) {
+    private snakBar: MatSnackBar, private titleService: Title) {
   }
 
   ngOnInit() {
     this.initForm();
+    this.titleService.setTitle('ورود ادمین') ;
 
   }
 

@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
-
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-products',
@@ -11,6 +11,7 @@ import {AbstractSearchComponent} from '../../shared/components/abstract-search/a
 export class ProductsComponent extends AbstractSearchComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
+    this.titleService.setTitle('ادمین : محصول');
     this.key = 'Product';
     super.ngOnInit();
   }
