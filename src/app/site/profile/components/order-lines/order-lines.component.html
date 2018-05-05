@@ -23,7 +23,6 @@
                             <div fxFlex="50">
                                 <span>اندازه : </span>
                                 <span>{{ol.product_instance.displaySize}}</span>
-                                <!--<span>{{makePersianNumber(ol.product_instance.size, false)}}</span>-->
                             </div>
                             <div fxFlex="50">
                                 <span>تعداد : </span>
@@ -33,7 +32,8 @@
                         <div fxLayout="row" fxLayout.xs="column" dir="rtl">
                             <div fxFlex="50">
                                 <span>قیمت واحد : </span>
-                                <span>{{makePersianNumber(ol.paid_price ? ol.paid_price : ol.product.base_price, true)}}</span>
+                                <span>{{makePersianNumber(ol.product.instances.price ? ol.product.instances.price : ol.product.base_price, true)}}</span>
+                                <!--<span>{{makePersianNumber(ol.paid_price ? ol.paid_price : (ol.product.instances.price ? ol.product.instances.price : ol.product.base_price), true)}}</span>-->
                             </div>
                             <div fxFlex="50">
                                 <span>تخفیف : </span>
@@ -47,7 +47,8 @@
                     </div>
                     <div fxFlex="30" class="total_price">
                         <div style="height: 80%">
-                            <span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : ol.product.base_price)* ol.quantity), true)}}</span>
+                            <!--<span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : ol.product.base_price)* ol.quantity), true)}}</span>-->
+                            <span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : (ol.product.instances.price ? ol.product.instances.price : ol.product.base_price))* ol.quantity), true)}}</span>
                             تومان
                         </div>
                         <!--<div class="submit-cancel-change-btn">-->

@@ -34,9 +34,11 @@ export class OrderLinesComponent implements OnInit {
     });
     this.orderInfo = this.profileOrderService.orderData;
     this.orderLines = this.orderInfo.dialog_order.order_lines;
+    console.log('--------->>>', this.orderLines);
     this.removeDuplicates(this.orderLines);
     this.orderStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
+    console.log('************', this.noDuplicateOrderLine);
   }
 
   removeDuplicates(arr) {
