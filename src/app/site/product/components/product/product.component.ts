@@ -86,13 +86,13 @@ export class ProductComponent implements OnInit, OnDestroy {
     // check form size and id undefined
     this.size = size;
     const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
-
+    console.log(size);
     if (instance) {
       const object = {
         product_id: this.product._id,
         product_instance_id: instance._id,
         instances: this.product.instances,
-        product_type:this.productType,
+        product_type: this.productType,
       };
 
       Object.assign(object, this.product);
