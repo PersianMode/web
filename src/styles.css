@@ -436,12 +436,12 @@ input {
 .input-field {
   padding: 5px 5px 5px 5px;
   height: 20px;
-  width: 98%;
+  width: calc(100% - 10px);
   border-radius: 5px;
 }
 
 .input-container {
-  margin: 15px 5px 0px;
+  margin: 15px 0px 0px;
   width: 100%;
 }
 
