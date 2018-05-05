@@ -8,6 +8,7 @@ import {OrderAddressComponent} from '../order-address/order-address.component';
 import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {STATUS} from '../../../../shared/enum/status.enum';
 import {ProductViewerComponent} from 'app/admin/order/components/product-viewer/product-viewer.component';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-deliver',
@@ -35,8 +36,6 @@ export class DeliverComponent implements OnInit {
   dataSource = new MatTableDataSource();
 
   resultsLength = 0;
-  isLoadingResults = true;
-
   pageSize = 20;
 
   processDialogRef;
@@ -48,7 +47,8 @@ export class DeliverComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private authService: AuthService,
-    private socketService: SocketService) {
+    private socketService: SocketService,
+    private progeressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -63,8 +63,7 @@ export class DeliverComponent implements OnInit {
   }
 
   load() {
-    this.isLoadingResults = true;
-
+    this.progeressService.enable();
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
@@ -74,15 +73,16 @@ export class DeliverComponent implements OnInit {
     const limit = this.pageSize;
 
     this.httpService.post('search/Order', {options, offset, limit}).subscribe(res => {
-      this.isLoadingResults = false;
       this.resultsLength = res.total;
       this.dataSource.data = res.data;
 
+      
       this.newDeliverCount.emit(this.resultsLength);
 
+      this.progeressService.disable();
       console.log('-> ', this.dataSource.data);
     }, err => {
-      this.isLoadingResults = false;
+      this.progeressService.disable();
       this.resultsLength = 0;
       this.openSnackBar('خطا در دریافت لیست سفارش ها');
     });

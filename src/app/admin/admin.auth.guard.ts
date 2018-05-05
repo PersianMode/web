@@ -15,25 +15,23 @@ export class AdminAuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
     this.authService.checkValidation(state.url);
 
-    this.authService.isLoggedIn.filter(r => r && !! !!this.forbiddenStack.length)
-      .subscribe(() => {
-        const lastPage = this.forbiddenStack.pop();
-        const curTime: any = new Date();
-        if (curTime - lastPage.time < 500) {
-          this.router.navigate(['agent/' + lastPage.path]);
+    return this.authService.isLoggedIn
+      .filter((data: any) => data)
+      .map((data: any) => {
+        if (data.username && this.authService.userDetails.isAgent) {
+          const link = links.find(x => state.url.includes(x.address));
+          if (link && link.access.find(x => +x === +this.authService.userDetails.accessLevel) >= 0)
+            return true;
+          else {
+            this.router.navigate(['agent/login']);
+            return false
+          }
         } else {
-          this.forbiddenStack = [];
-          this.router.navigate(['agent']);
+          {
+            this.router.navigate(['agent/login']);
+            return false;
+          }
         }
-      });
-
-    return this.authService.isLoggedIn.map((res: boolean) => {
-      if (!res) {
-        this.router.navigate(['agent/login']);
-        this.forbiddenStack.push({path: route.url.map(u => u.path), time: new Date()});
-      }
-
-      return res;
-    });
+      })
   }
 }

@@ -27,6 +27,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   isMobile = false;
   size = '';
   gender = 'MENS';
+  waiting = false;
   productType = '';
   private switch$: Subscription;
   private params$: Subscription;
@@ -86,7 +87,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     // check form size and id undefined
     this.size = size;
     const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
-    console.log(size);
+
     if (instance) {
       const object = {
         product_id: this.product._id,
@@ -98,9 +99,10 @@ export class ProductComponent implements OnInit, OnDestroy {
       Object.assign(object, this.product);
 
       this.cartService.saveItem(object);
-
+      this.waiting = true;
       const sub = this.cartService.itemAdded$.filter(r => r === true)
         .subscribe(() => {
+          this.waiting = false;
           const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
             position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
             width: this.isMobile ? '100%' : '550px',
@@ -116,7 +118,11 @@ export class ProductComponent implements OnInit, OnDestroy {
           }, 3000);
         });
 
-      setTimeout(() => sub ? sub.unsubscribe() : null, 10000);
+      setTimeout(() => {
+        if (sub)
+          sub.unsubscribe();
+        this.waiting = false;
+      }, 10000);
     }
   }
 

@@ -23,7 +23,7 @@ export class CartService {
         // Read data from localStorage and save in server if any data is exist in localStorage
         const items = this.getItemsFromStorage();
 
-        if (isLoggedIn && items && items.length) {
+        if (this.authService.userIsLoggedIn() && items && items.length) {
           items.forEach((el, i) => {
             this.httpService.post('order', {
               product_id: el.product_id,
@@ -58,7 +58,7 @@ export class CartService {
 
   emptyCart() {
     this.cartItems.next([]);
-    if (!this.authService.isLoggedIn.getValue()) {
+    if (!this.authService.userIsLoggedIn()) {
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify([]));
       } catch (e) {
@@ -68,7 +68,7 @@ export class CartService {
   }
 
   removeItem(value) {
-    if (this.authService.isLoggedIn.getValue()) {
+    if (this.authService.userIsLoggedIn()) {
       // Update server
       this.httpService.post('order/delete', {
         product_instance_id: value.instance_id,
@@ -115,7 +115,7 @@ export class CartService {
       this.cartItems.next(items);
     };
     // Should delete and add new product's instance
-    if (this.authService.isLoggedIn.getValue()) {
+    if (this.authService.userIsLoggedIn()) {
       // Change in server
       this.httpService.post('order/delete', {
         product_instance_id: value.pre_instance_id,
@@ -161,7 +161,7 @@ export class CartService {
 
   saveItem(item) {
     this.itemAdded$.next(false);
-    if (this.authService.isLoggedIn.getValue()) {
+    if (this.authService.userIsLoggedIn()) {
       // Update order in server
       this.saveItemToServer(item);
     } else {
@@ -334,7 +334,7 @@ export class CartService {
   }
 
   addCoupon(coupon_code = '') {
-    if (!this.authService.isLoggedIn.getValue())
+    if (!this.authService.userIsLoggedIn())
       return Promise.reject(403);
 
     if (coupon_code.length <= 0)
@@ -394,7 +394,7 @@ export class CartService {
 
   // favorites
   saveFavoriteItem(favoriteItem) {
-    if (this.authService.isLoggedIn.getValue())
+    if (this.authService.userIsLoggedIn())
       this.saveFavoriteItemToServer(favoriteItem);
   }
 

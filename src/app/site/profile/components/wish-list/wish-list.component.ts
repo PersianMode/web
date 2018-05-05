@@ -8,6 +8,8 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+import {AuthService} from '../../../../shared/services/auth.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
 
 @Component({
@@ -19,22 +21,37 @@ export class WishListComponent implements OnInit {
   displayedColumns = ['col_no', 'thumbnail', 'name', 'size', 'date', 'delete'];
   profileWishList = [];
   isMobile = false;
+  isEU = false;
+  displaySize = null;
 
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
               private responsiveService: ResponsiveService,
               private dialog: MatDialog, protected httpService: HttpService,
-              protected progressService: ProgressService, private snackBar: MatSnackBar) {
+              protected progressService: ProgressService, private snackBar: MatSnackBar,
+              private auth: AuthService, private dict: DictionaryService) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
   ngOnInit() {
+    this.auth.isLoggedIn.subscribe(() => {
+      this.isEU = this.auth.userDetails.shoesType === 'EU';
+    });
+
     this.profileOrderService.wishListArray.subscribe(result => {
       if (!result.length) {
         this.profileWishList = [];
         return;
       } else {
         this.profileWishList = result;
-        this.profileWishList.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time));
+        this.profileWishList.forEach(
+          el => {
+            let gender =  el.product[0].tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+            [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time);
+            if (this.isEU)
+              el.product[0].displaySize = this.dict.USToEU(el.product[0].instances[0].size, gender);
+            else
+              el.product[0].displaySize = this.dict.translateWord(el.product[0].instances[0].size);
+          });
       }
     });
     this.profileOrderService.getWishList();
@@ -79,4 +96,5 @@ export class WishListComponent implements OnInit {
   getThumbnailURL(product) {
     return imagePathFixer(product.colors[0].image.thumbnail, product._id, product.colors[0]._id);
   }
+
 }
