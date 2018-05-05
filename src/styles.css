@@ -671,7 +671,6 @@ mat-panel-title {
   background-color: #191919;
   clear: both;
   margin-top: 60px;
-  height: 227px;
 }
 
 .hr-setting {
@@ -702,7 +701,11 @@ mat-panel-title {
 .footer-link:hover, .footer-link1:hover, .icons:hover {
   color: lightgray;
 }
-
+@media screen and (min-width: 960px) {
+  .footer-wrapper {
+    height: 227px;
+  }
+}
 @media screen and (max-width: 500px) {
   .footer-link, .footer-link-bold, .footer-link1 {
     float: none;
