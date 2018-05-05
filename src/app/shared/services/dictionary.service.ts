@@ -55,8 +55,6 @@ export class DictionaryService {
 
   setShoesSize(oldSize, gender, type) {
     this.isEU = this.auth.userDetails.shoesType === 'EU';
-    console.log(type);
-    console.log(this.isEU);
     if (type) {
       if (type.name)
         type = type.name;
