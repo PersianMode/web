@@ -4,6 +4,7 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IFilter} from '../interfaces/ifilter.interface';
 import {DictionaryService} from './dictionary.service';
 import {imagePathFixer} from '../lib/imagePathFixer';
+import {discountCalc} from '../lib/discountCalc';
 
 const productColorMap = function (r) {
   return r.colors.map(c => c.name ? c.name.split('/')
@@ -186,38 +187,58 @@ export class ProductService {
     data.season = season ? ['HOLI', 'CORE', 'WINTER', 'SPRING', 'SUMMER', 'FALL'].indexOf(season.name) : NaN;
     data.sizesByColor = {};
     data.sizesInventory = {};
-    data.colors.forEach(item => {
+
+    // TODO: remove this!
+    data.campaigns = [{discount_ref: .4753}, {discount_ref: .3}, {discount_ref: .7, start_date: new Date(2019, 1, 1)}, {discount_ref: .8, end_date: new Date(2018, 1, 1)}];
+
+    data.discount = data.campaigns ? data.campaigns
+      .filter(r => (!r.end_date || new Date() < r.end_date) && (!r.start_date || new Date() > r.start_date))
+      .map(r => r.discount_ref)
+      .reduce((x, y) => Math.max(x, y), 0) : 0;
+    data.instances.forEach(instance => {
+      if (!instance.price)
+        instance.price = data.price;
+      instance.discountedPrice = discountCalc(instance.price, data.discount);
+    });
+    data.colors.forEach(color => {
       const angles = [];
-      
-      item.image.angles.forEach(r => {
+
+      color.image.angles.forEach(r => {
         if (!r.url) {
-          const temp = {url: imagePathFixer(r, data.id, item._id), type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
+          const temp = {url: imagePathFixer(r, data.id, color._id), type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
           angles.push(temp);
         } else {
           angles.push(r);
         }
       });
-      item.image.angles = angles;
-      if (item.image.thumbnail) {
-        item.image.thumbnail = imagePathFixer(item.image.thumbnail, data.id, item._id);
+      color.image.angles = angles;
+      if (color.image.thumbnail) {
+        color.image.thumbnail = imagePathFixer(color.image.thumbnail, data.id, color._id);
       }
       if (data.instances) {
         data.detailed = true;
-        item.soldOut = data.instances
-          .filter(r => r.product_color_id === item._id)
+        const colorInstances = data.instances.filter(r => r.product_color_id === color._id);
+
+        color.soldOut = colorInstances
           .map(r => r.inventory)
-          .map(r => r.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0))
+          .map(r => r.map(e => (e.count ? e.count : 0 ) - (e.reserved ? e.reserved : 0)).reduce((x, y) => x + y, 0))
           .reduce((x, y) => x + y, 0) <= 0;
 
-        data.sizesByColor[item._id] = data.instances
-          .filter(r => r.product_color_id === item._id)
+        color.price = colorInstances
+          .map(r => r.price)
+          .reduce((x, y) => Math.max(x, y), 0);
+
+        color.discountedPrice = discountCalc(color.price, data.discount);
+
+        data.sizesByColor[color._id] = data.instances
+          .filter(r => r.product_color_id === color._id)
           .map(r => {
             const inventory = r.inventory.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0);
             if (inventory) {
               if (!data.sizesInventory[r.size]) {
                 data.sizesInventory[r.size] = {};
               }
-              data.sizesInventory[r.size][item._id] = inventory;
+              data.sizesInventory[r.size][color._id] = inventory;
             }
             return {
               value: r.size,

@@ -990,3 +990,11 @@ p {
 .ui-dialog	{
   font-family: iranyekan, sans-serif !important;
 }
+
+.ui-widget {
+  font-family: iranyekan, sans-serif !important;
+}
+
+.overridden {
+  text-decoration: line-through;
+}

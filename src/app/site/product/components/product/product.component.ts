@@ -24,6 +24,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   product: any = {};
   joinedTags = '';
   formattedPrice = '';
+  discountedPrice = '';
+  discounted = false;
   isMobile = false;
   size = '';
   gender = 'MENS';
@@ -76,9 +78,12 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   updatePrice(size = this.size) {
     const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
-    const price = instance && instance.price ? instance.price : this.product.base_price;
+    const color = this.product.colors.find(el => el._id === this.selectedProductColor);
+    const price = instance && instance.price ? instance.price : color && color.price ? color.price : this.product.base_price;
+    this.discountedPrice = priceFormatter(instance && instance.discountedPrice ? instance.discountedPrice : color && color.discountedPrice ? color.discountedPrice : price);
     this.size = size;
     this.formattedPrice = priceFormatter(price);
+    this.discounted = this.formattedPrice !== this.discountedPrice;
   }
 
   saveToCart(size) {

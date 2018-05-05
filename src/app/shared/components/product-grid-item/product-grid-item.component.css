@@ -96,8 +96,9 @@
 .main h4 {
   color: #666;
   font-size: inherit;
-  margin: -5px 13px 6px;
+  margin: -5px 13px 6px 0px;
   font-weight: 200;
+  display: inline-block;
 }
 .mainMobile h4{
   color: #222;
