@@ -30,14 +30,6 @@ export class AddToCardConfirmComponent implements OnInit {
     this.name = (this.data && this.data.name) ? this.data.name : null;
     this.product = this.data.product;
     this.auth.isLoggedIn.subscribe(() => {
-
-      // const isEU = this.auth.userDetails.shoesType === 'EU';
-      // if (isEU) {
-      //   const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-      //   this.selectedSize = this.dict.USToEU(this.data.selectedSize, gender, this.data.product.product_type.name || this.data.product.type);
-      // } else {
-      //   this.selectedSize = this.dict.translateWord(this.data.selectedSize);
-      // }
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
       this.selectedSize = this.dict.setShoesSize(this.data.selectedSize, gender, this.data.product.product_type.name || this.data.product.type);
 
