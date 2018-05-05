@@ -8,8 +8,12 @@ export class DictionaryService {
   wordDictionary = {};
   colorDictionary = {};
   shoesSizeMap: any = {};
+  isEU = false;
 
   constructor(httpService: HttpService, private auth: AuthService) {
+    this.auth.isLoggedIn.subscribe(() => {
+      this.isEU = this.auth.userDetails.shoesType === 'EU';
+    });
     httpService.get('dictionary').subscribe((res: any) => {
       res.forEach(x => {
         if (x.type === 'tag') {
@@ -50,12 +54,24 @@ export class DictionaryService {
   }
 
   setShoesSize(oldSize, gender, type) {
-    const isEU = this.auth.userDetails.shoesType === 'EU';
-    console.log(isEU);
-    if (isEU && type.toUpperCase() === 'FOOTWEAR')
-      return this.USToEU(oldSize, gender, type);
+    console.log(this.isEU);
+    console.log('oldSize =', oldSize);
+    console.log('gender =', gender);
+    console.log('type =', type);
+    if (type.name)
+      type = type.name;
+    if (this.isEU && type.toUpperCase() === 'FOOTWEAR')
+      return this.USToEU1(oldSize, gender);
     return this.translateWord(oldSize);
+  }
 
+  USToEU1(oldSize, gender) {
+    let returnValue: any;
+    const g = (gender && gender.toUpperCase() === 'WOMENS') ? 'women' : 'men';
+    returnValue = this.shoesSizeMap[g].find(size => size.us === oldSize);
+    if (!returnValue || !returnValue.eu)
+      return this.translateWord(oldSize);
+    return this.translateWord(returnValue.eu);
   }
 
   USToEU(oldSize, gender, type) {

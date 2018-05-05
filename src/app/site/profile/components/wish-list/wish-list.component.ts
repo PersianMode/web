@@ -21,7 +21,6 @@ export class WishListComponent implements OnInit {
   displayedColumns = ['col_no', 'thumbnail', 'name', 'size', 'date', 'delete'];
   profileWishList = [];
   isMobile = false;
-  isEU = false;
   displaySize = null;
 
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
@@ -33,10 +32,6 @@ export class WishListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth.isLoggedIn.subscribe(() => {
-      this.isEU = this.auth.userDetails.shoesType === 'EU';
-    });
-
     this.profileOrderService.wishListArray.subscribe(result => {
       if (!result.length) {
         this.profileWishList = [];
@@ -45,12 +40,9 @@ export class WishListComponent implements OnInit {
         this.profileWishList = result;
         this.profileWishList.forEach(
           el => {
-            let gender =  el.product[0].tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+            let gender = el.product[0].tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
             [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time);
-            if (this.isEU)
-              el.product[0].displaySize = this.dict.USToEU(el.product[0].instances[0].size, gender,el.product[0].product_type.name);
-            else
-              el.product[0].displaySize = this.dict.translateWord(el.product[0].instances[0].size);
+            el.product[0].displaySize = this.dict.setShoesSize(el.product[0].instances[0].size, gender, el.product[0].product_type.name);
           });
       }
     });

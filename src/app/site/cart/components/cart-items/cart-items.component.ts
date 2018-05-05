@@ -27,7 +27,6 @@ export class CartItemsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.product);
     this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
     this.stock = this.product.count.toLocaleString('fa', {useGrouping: false});
     this.valid.emit(!this.notExist);
@@ -37,13 +36,8 @@ export class CartItemsComponent implements OnInit {
     this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price) + ' تومان';
 
     this.auth.isLoggedIn.subscribe(() => {
-      const isEU = this.auth.userDetails.shoesType === 'EU';
-      if (isEU) {
-        const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-        this.displaySize = this.dict.USToEU(this.product.size, gender, this.product.productType);
-      } else {
-        this.displaySize = this.dict.translateWord(this.product.size);
-      }
+      const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+      this.displaySize = this.dict.setShoesSize(this.product.size, gender, this.product.productType);
     });
   }
 
