@@ -46,7 +46,6 @@
                     </div>
                     <div fxFlex="30" class="total_price">
                         <div style="height: 80%">
-                            <!--<span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : ol.product.base_price)* ol.quantity), true)}}</span>-->
                             <span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : (ol.product.instances.price ? ol.product.instances.price : ol.product.base_price))* ol.quantity), true)}}</span>
                             تومان
                         </div>
