@@ -14,3 +14,20 @@
 .farsi{
     direction:rtl;
 }
+
+.dob {
+    padding: 5px;
+    border: 2px solid rgb(229, 229, 229);
+    border-radius: 5px;
+    margin-left: 5px;
+    width: calc(100% - 7px);
+  }
+  mat-card-content{
+    font-family: iranyekan, sans-serif !important;
+  }
+  
+  td{
+    text-align: center;
+    font-family: iranyekan, sans-serif;
+
+}

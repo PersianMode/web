@@ -22,7 +22,7 @@ export class CampaignsComponent extends AbstractSearchComponent implements OnIni
       this.router.navigate([`/agent/campaigns/campaignInfo/`]);
   }
 
-  deleteCampaing(id: string = null): void {
+  deletecampaign(id: string = null): void {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });

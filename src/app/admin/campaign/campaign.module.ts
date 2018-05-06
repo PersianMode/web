@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
-  MatSnackBarModule, MatTabsModule, MatDividerModule
+  MatSnackBarModule, MatTabsModule, MatDividerModule, MatRadioModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -31,15 +31,12 @@ import {CampaignRouting} from './campaign.routing';
     MatInputModule,
     MatButtonModule,
     MatSnackBarModule,
-    MatIconModule,
     MatDialogModule,
-    MatSelectModule,
-    MatTabsModule,
-    MatCheckboxModule,
-    MatPaginatorModule,
     SharedModule,
     MatCheckboxModule,
-    MatDividerModule
+    MatDividerModule,
+    MatRadioModule,
+    MatPaginatorModule
   ]
 })
 export class  CampaignModule {

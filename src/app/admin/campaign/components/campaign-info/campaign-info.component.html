@@ -2,42 +2,129 @@
     <mat-card-header style="direction:rtl">
         <mat-card-title>
             <div>
-                <b>ویرایش محصول</b>
+                <b>ویرایش کمپین</b>
             </div>
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <form (ngSubmit)="modifyCampaign()" [formGroup]="CampaignInfoForm">
+        <form (ngSubmit)="modifyCampaign()" [formGroup]="campaingInfoForm">
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
-                <div fxFlex="100" class="field-container">
+                <div fxFlex="25" class="field-container">
                     <mat-input-container class="field farsi">
                         <input matInput type="text" placeholder="نام" formControlName="name" role="name" tabindex="2" />
                         <mat-hint>نام کمپین را وارد کنید</mat-hint>
-                        <mat-error *ngIf="CampaignInfoForm.controls['name'].hasError('required')">
+                        <mat-error *ngIf="campaingInfoForm.controls['name'].hasError('required')">
                             وارد کردن نام کمپبن الزامی است
                         </mat-error>
                     </mat-input-container>
                 </div>
-                <div fxFlex="100" class="field-container">
+                <div fxFlex="25" class="field-container">
                     <mat-input-container class="field farsi">
                         <input matInput type="number" placeholder="پایه تخفیف" formControlName="discount_ref" role="discount_ref" tabindex="2" />
                         <mat-hint>پایه تخفیف را وارد کنید</mat-hint>
                         <mat-error *ngIf="campaingInfoForm.controls['discount_ref'].hasError('required')">
-                            وارد کردن پایه تخفیف الزامی است
+                            پایه تخفیف 1 تا 100 درصد الزامی است
                         </mat-error>
                     </mat-input-container>
                 </div>
             </div>
+            <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
+                <div fxFlex="25" class="field-container">
+                    <div class="dob" [class.input-error]="dateError">
+                        <span>تاریخ شروع: </span>
+                        <app-dob [date]="start_date" [isDOB]="false" (change)="setStartDate($event)"></app-dob>
+                    </div>
+                    <label class="field-error dp-hint" *ngIf="dateError">تاریخ شروع و پایان کمپین نادرست است</label>
+
+                </div>
+
+                <div fxFlex="25" class="field-container">
+                    <div class="dob" [class.input-error]="dateError">
+                        <span>تاریخ پایان: </span>
+                        <app-dob [date]="end_date" [isDOB]="false" (change)="setEndDate($event)"></app-dob>
+                    </div>
+                    <label class="field-error dp-hint" *ngIf="dateError">تاریخ شروع و پایان کمپین نادرست است</label>
+                </div>
+            </div>
+
+
+            <mat-divider></mat-divider>
+            <div *ngIf="campaignId">
+                <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
+                    <div fxFlex="25" class="field-container">
+                        <h3>انتخاب نوع کمپین</h3>
+                        <mat-radio-group>
+                            <mat-radio-button value="collection" (change)="type = $event.value" [checked]="type === 'collection'">کالکشن</mat-radio-button>
+                            <mat-radio-button value="couponCode" (change)="type = $event.value" [checked]="type === 'couponCode'">کوپن تخفیف</mat-radio-button>
+                        </mat-radio-group>
+
+                    </div>
+                </div>
+                <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
+                    <div fxFlex="100" class="field-container" *ngIf="type === 'collection'">
+                        <div class="little-right-margin right-alignment">
+                            <app-suggestion [name]="'Collection'" [currentIds]="[0]" [placeholder]="'نام کالکشن'" (add)="addCollection($event)"></app-suggestion>
+                        </div>
+                        <br/>
+
+                        <table class="field mat-elevation-z1">
+                            <thead>
+                                <td style="width: 10%">
+                                    <b>ردیف</b>
+                                </td>
+                                <td style="width: 10%">
+                                    <b>نمایش</b>
+                                </td>
+                                <td style="width: 70%;">
+                                    <b>نام</b>
+                                </td>
+                                <td style="width: 10%">
+                                    <b>حذف</b>
+                                </td>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let collection of collections; let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>
+                                        <button mat-icon-button type="button" (click)="viewCollection(collection._id)" color="primary">
+                                            <mat-icon aria-label="view">visibility</mat-icon>
+                                        </button>
+                                    </td>
+                                    <td style="direction: ltr">{{collection.name_fa ? collection.name_fa : collection.name}}</td>
+                                    <td>
+                                        <button mat-icon-button type="button" (click)="removeCollection(collection)" color="warn">
+                                            <mat-icon aria-label="clear">delete</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <div fxFlex="25" class="field-container" *ngIf="type === 'couponCode'">
+                        <mat-input-container class="field farsi">
+                            <input matInput type="text" placeholder="کوپن تخفیف" formControlName="coupon_code" role="coupon_code" tabindex="2" />
+                            <mat-hint>کوپن تخفیف را وارد نمایید</mat-hint>
+                        </mat-input-container>
+                    </div>
+
+                </div>
+
+            </div>
+
             <div role="submit-button" style="text-align: left">
                 <button mat-icon-button type="submit" [disabled]="upsertBtnShouldDisabled || (!campaingInfoForm.valid) || (campaignId && !anyChanges)"
                     tabindex="6" color="accent">
                     <mat-icon aria-label="accept">done</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" type="button" [disabled]="deleteBtnShouldDisabled" (click)="deleteCampaign(campaignId)"
+                <button mat-icon-button color="warn" type="button" [disabled]="deleteBtnShouldDisabled" (click)="removeCampaign(campaignId)"
                     tabindex="7">
                     <mat-icon aria-label="delete">delete</mat-icon>
                 </button>
             </div>
         </form>
+
+
     </mat-card-content>
 </mat-card>
