@@ -20,6 +20,7 @@ import {CartService} from './shared/services/cart.service';
 import {DictionaryService} from './shared/services/dictionary.service';
 import {CheckoutService} from './shared/services/checkout.service';
 import {ProfileOrderService} from './shared/services/profile-order.service';
+import {TitleService} from './shared/services/title.service';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import {ProfileOrderService} from './shared/services/profile-order.service';
     ProductService,
     ResponsiveService,
     CartService,
+    TitleService,
     DictionaryService,
     CheckoutService,
     ProfileOrderService,

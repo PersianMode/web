@@ -2,10 +2,10 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
-import {HttpService} from '../../../../shared/services/http.service';
 import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {MatSnackBar} from '@angular/material';
+import {TitleService} from '../../../../shared/services/title.service';
 
 @Component({
   selector: 'app-login',
@@ -22,11 +22,12 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService,
     private router: Router,
     private progressService: ProgressService,
-    private snakBar: MatSnackBar) {
+    private snakBar: MatSnackBar, private titleService: TitleService) {
   }
 
   ngOnInit() {
     this.initForm();
+    this.titleService.setTitleWithOutConstant('ورود ادمین') ;
 
   }
 

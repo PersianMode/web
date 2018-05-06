@@ -8,6 +8,7 @@ import {OtherDetailsComponent} from './login/components/other-details/other-deta
 import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 import {AuthGuard} from './auth.guard';
 import {OrderLinesComponent} from './profile/components/order-lines/order-lines.component';
+import {ForgotPasswordComponent} from './login/components/forgot-password/forgot-password.component';
 
 const Site_ROUTES: Routes = [
   {
@@ -16,6 +17,7 @@ const Site_ROUTES: Routes = [
     {path: 'home', loadChildren: 'app/site/home/home.module#HomeModule'},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterComponent},
+    {path: 'forgot/password', component: ForgotPasswordComponent},
     {path: 'collection', loadChildren: 'app/site/collection/collection.module#CollectionModule'},
     {path: 'page', loadChildren: 'app/site/page/page.module#PageModule'},
     {path: 'cart', loadChildren: 'app/site/cart/cart.module#CartModule'},
