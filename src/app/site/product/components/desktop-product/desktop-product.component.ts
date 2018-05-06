@@ -1,6 +1,5 @@
 import {
-  Component, HostListener, Inject, Input, OnInit, Output, ViewChild, EventEmitter,
-  OnDestroy, AfterContentChecked
+  Component, HostListener, Inject, Input, OnInit, Output, ViewChild, EventEmitter, AfterContentChecked
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
@@ -18,6 +17,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input() sub;
   @Input() gender;
   @Output() changeSize = new EventEmitter<any>();
+  @Input() productType;
 
   @Input()
   set id(value) {

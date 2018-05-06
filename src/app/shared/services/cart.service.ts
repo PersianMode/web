@@ -41,8 +41,8 @@ export class CartService {
                 err => console.error('orders error: ', el, err)
               );
           });
-        } else if (!items && items.length){
-            this.setCartItem([], false);
+        } else if (!items && items.length) {
+          this.setCartItem([], false);
         }
 
         this.getItemsDetail(items && items.length ? items : null)
@@ -187,10 +187,10 @@ export class CartService {
 
     items.forEach((el: any) => {
       const objItem: any = {};
-
       objItem.order_id = el.order_id;
       objItem.product_id = el.product_id;
       objItem.instance_id = el.instance_id;
+      objItem.productType = el.type;
       objItem.name = el.name;
       objItem.color = el.color;
       objItem.size = el.size;
@@ -218,6 +218,7 @@ export class CartService {
   }
 
   private saveItemToServer(item) {
+
     this.httpService.post('order', {
       product_id: item.product_id,
       product_instance_id: item.product_instance_id,
@@ -258,6 +259,7 @@ export class CartService {
     const currentValue = this.cartItems.getValue();
     const object = {
       product_id: item.product_id,
+      productType:item.type,
       instance_id: item.product_instance_id,
       quantity: 1,
       order_id,

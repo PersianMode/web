@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
     //       this.forbiddenStack = [];
     //     }
     //   });
+    this.authService.checkValidation(state.url);
 
     return this.authService.isLoggedIn
       .filter(x => x)
@@ -29,7 +30,7 @@ export class AuthGuard implements CanActivate {
         if (!r.username) {
           this.router.navigate(['/']);
           // this.forbiddenStack.push({path: route.url.map(u => u.path), time: new Date()});
-          return false
+          return false;
         } else
           return true;
       });

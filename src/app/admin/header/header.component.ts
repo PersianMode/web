@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit {
 
         this.navLinks.forEach(link => {
           const foundLink = links.find(x => x.address === link.path);
-          link.active =  foundLink.access.find(x => x === this.authService.userDetails.accessLevel) >= 0;
+          link.active = foundLink.access.find(x => x === this.authService.userDetails.accessLevel) >= 0;
         });
 
       }

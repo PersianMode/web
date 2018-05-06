@@ -6,6 +6,8 @@ import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order
 import {MatDialogRef} from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {OrderStatus} from '../../../../shared/lib/order_status';
+import {AuthService} from '../../../../shared/services/auth.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
 
 @Component({
@@ -16,13 +18,13 @@ import {OrderStatus} from '../../../../shared/lib/order_status';
 export class OrderLinesComponent implements OnInit {
   orderInfo: any;
   orderLines = [];
-  statusText = 'درحال پردازش';
   noDuplicateOrderLine = [];
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
 
   constructor(private profileOrderService: ProfileOrderService,
-              private location: Location, private router: Router) {
+              private location: Location, private router: Router,
+              private auth: AuthService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
@@ -36,9 +38,11 @@ export class OrderLinesComponent implements OnInit {
   removeDuplicates(arr) {
     const instancArr = [];
     arr.forEach(el => {
+      const gender = el.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
       if (instancArr.indexOf(el.product_instance._id) === -1) {
         instancArr.push(el.product_instance._id);
         el.quantity = 1;
+        el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
         this.noDuplicateOrderLine.push(el);
       } else {
         this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
@@ -50,7 +54,6 @@ export class OrderLinesComponent implements OnInit {
     arr.forEach(el => {
       const boughtColor = el.product.colors.find(c => c._id === el.product_instance.product_color_id);
       el.boughtColor = boughtColor;
-      // boughtColor.image.thumbnail = imagePathFixer(boughtColor.image.thumbnail, el.product._id, boughtColor.color_id);
     });
   }
 
