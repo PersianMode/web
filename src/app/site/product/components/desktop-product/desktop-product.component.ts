@@ -20,6 +20,8 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input() gender;
   @Output() changeSize = new EventEmitter<any>();
   @Input() productType;
+  @Input() color;
+  @Input() barcode;
 
   @Input()
   set id(value) {

@@ -7,7 +7,7 @@ export class TitleService {
   constructor(private titleService: Title) {
   }
 
-  readonly constTitle = 'پرشین مد';
+  readonly constTitle = 'پرشین مُد';
   static collection_name = 'کلکسیون';
 
   setTitleWithConstant(newTitle: string = '') {

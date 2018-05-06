@@ -22,7 +22,7 @@ import {TitleService} from '../../../../shared/services/title.service';
   styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit, OnDestroy {
-  selectedProductColor;
+  selectedProductColorID;
   product: any = {};
   joinedTags = '';
   formattedPrice = '';
@@ -33,6 +33,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   gender = 'MENS';
   waiting = false;
   productType = '';
+  color = '';
+  barcode = '';
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
@@ -50,29 +52,37 @@ export class ProductComponent implements OnInit, OnDestroy {
   // in every switch to thumbnails we need to have angles pictures to show in browser
   ngOnInit() {
     this.product = {};
-    this.selectedProductColor = null;
+    this.selectedProductColorID = null;
     this.isMobile = this.responsiveService.isMobile;
     this.switch$ = this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.params$ = this.route.paramMap.subscribe(params => {
       const productId = params.get('product_id');
       const colorIdParam = params.get('color');
-      if (!this.product || this.product.id !== productId || this.selectedProductColor !== colorIdParam) {
+      if (!this.product || this.product.id !== productId || this.selectedProductColorID !== colorIdParam) {
         this.productService.getProduct(productId);
         this.product$ = this.productService.product$.subscribe(data => {
           this.product = data;
+          this.product.colors = data.colors.map(c => Object.assign(c, {translatedName: this.dict.translateColor(c)}));
           this.titleService.setTitleWithConstant(this.product.name);
           this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
-          this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
+          this.selectedProductColorID = colorIdParam ? colorIdParam : this.product.colors[0]._id;
           this.updatePrice();
           if (this.product.id) {
             this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
             this.productType = this.product.type.name || this.product.type;
           }
+          this.setColor();
         });
       } else {
-        this.selectedProductColor = colorIdParam ? colorIdParam : this.product.colors[0]._id;
+        this.selectedProductColorID = colorIdParam ? colorIdParam : this.product.colors[0]._id;
+        this.setColor();
       }
     });
+  }
+
+  private setColor() {
+    const col = this.product.colors.find(el => el._id === this.selectedProductColorID);
+    this.color = col ? col.translatedName : '';
   }
 
   ngOnDestroy(): void {
@@ -82,19 +92,20 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   updatePrice(size = this.size) {
-    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
-    const color = this.product.colors.find(el => el._id === this.selectedProductColor);
+    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColorID && el.size === size + '');
+    const color = this.product.colors.find(el => el._id === this.selectedProductColorID);
     const price = instance && instance.price ? instance.price : color && color.price ? color.price : this.product.base_price;
     this.discountedPrice = priceFormatter(instance && instance.discountedPrice ? instance.discountedPrice : color && color.discountedPrice ? color.discountedPrice : price);
     this.size = size;
     this.formattedPrice = priceFormatter(price);
     this.discounted = this.formattedPrice !== this.discountedPrice;
+    this.barcode = instance ? instance.barcode : '';
   }
 
   saveToCart(size) {
     // check form size and id undefined
     this.size = size;
-    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
+    const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColorID && el.size === size + '');
 
     if (instance) {
       const object = {
@@ -137,7 +148,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   saveToFavorites(size) {
     if (this.authService.isLoggedIn.getValue()) {
       this.size = size;
-      const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColor && el.size === size + '');
+      const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColorID && el.size === size + '');
       if (instance) {
         const favoriteObject = {
           product_id: this.product._id,

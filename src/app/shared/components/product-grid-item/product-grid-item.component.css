@@ -86,12 +86,18 @@
   font-size: inherit;
   margin: 0px 13px 6px;
   font-weight: 200;
+  max-height: 30px;
+  overflow: hidden;
+  line-height: 14px;
 }
 .mainMobile h3{
   color: #222;
   font-size: inherit;
   margin: 0px 2px 1px ;
   font-weight: 200;
+  max-height: 36px;
+  overflow: hidden;
+  line-height: 17px;
 }
 .main h4 {
   color: #666;
@@ -105,6 +111,7 @@
   font-size: inherit;
   margin: -1px 2px 1px ;
   font-weight: 200;
+  line-height: 17px;
 }
 .imgWrapper{
   width: 220px;

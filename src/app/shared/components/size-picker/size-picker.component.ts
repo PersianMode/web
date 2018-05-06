@@ -16,8 +16,19 @@ import {AuthService} from '../../services/auth.service';
 })
 export class SizePickerComponent implements OnInit {
   sizeSplits = [];
+  _pt = '';
   @Input() gender: String = 'MENS';
-  @Input() productType: string;
+
+  @Input()
+  set productType(pt: string) {
+    this._pt = pt;
+    this.isShoes = pt.toUpperCase() === 'FOOTWEAR';
+  };
+
+  get productType(): string {
+    return this._pt;
+  }
+
   isShoes = false;
   isEU = true;
   productSize;
@@ -26,8 +37,6 @@ export class SizePickerComponent implements OnInit {
   @Input()
   set sizes(productSizes) {
     this.productSize = productSizes;
-    if (this.productSize)
-      this.isShoes = !!+this.productSize[0].value;
     this.setProductSize();
   }
 
@@ -57,8 +66,6 @@ export class SizePickerComponent implements OnInit {
     if (this.productSize && this.productSize.length) {
       this.productSize.forEach((p, pi) => {
         temp[pi].displayValue = this.dict.setShoesSize(p.value, this.gender, this.productType);
-
-
       });
     }
     this.sizeSplits = [];

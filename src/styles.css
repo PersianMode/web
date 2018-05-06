@@ -559,7 +559,7 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .mat-button-toggle-label-content {
-  font-family: iranyekan !important;
+  font-family: iranyekan, sans-serif !important;
   width: 79px;
   padding: 4px 0 !important;
   text-align: center;
@@ -601,19 +601,19 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .mat-tooltip {
-  font-family: iranyekan !important;
+  font-family: iranyekan, sans-serif !important;
   font-weight: 200;
   font-size: 12px;
 }
 
 .mat-expansion-panel-header {
-  font-family: iranyekan;
+  font-family: iranyekan, sans-serif;
   font-weight: 600;
   padding: 0 !important;
 }
 
 .mat-expansion-panel-body {
-  font-family: iranyekan;
+  font-family: iranyekan, sans-serif;
   font-weight: 200;
   padding: 0 !important;
 }
@@ -784,7 +784,7 @@ mat-panel-title {
 }
 
 .mat-checkbox {
-  font-family: iranyekan !important;
+  font-family: iranyekan, sans-serif !important;
   font-weight: 200 !important;
 }
 

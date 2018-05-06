@@ -5,12 +5,7 @@ import {IFilter} from '../interfaces/ifilter.interface';
 import {DictionaryService} from './dictionary.service';
 import {imagePathFixer} from '../lib/imagePathFixer';
 import {discountCalc} from '../lib/discountCalc';
-
-const productColorMap = function (r) {
-  return r.colors.map(c => c.name ? c.name.split('/')
-    .map(x => x.replace(/\W/g, '')) // remove all non alpha-numeric chars from color name
-    : []);
-};
+import {productColorMap} from '../lib/colorNameMap';
 
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
@@ -145,7 +140,7 @@ export class ProductService {
             .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
         } else if (f.name === 'price') {
-          this.filteredProducts = this.filteredProducts.filter(p => p.base_price >= f.values[0] && p.base_price <= f.values[1]);
+          this.filteredProducts = this.filteredProducts.filter(p => p.discountedPrice >= f.values[0] && p.discountedPrice <= f.values[1]);
         } else {
           this.filteredProducts = this.filteredProducts
             .filter(p => p.tags.filter(t => Array.from(f.values).includes(t.name)).length);
@@ -187,25 +182,23 @@ export class ProductService {
     data.season = season ? ['HOLI', 'CORE', 'WINTER', 'SPRING', 'SUMMER', 'FALL'].indexOf(season.name) : NaN;
     data.sizesByColor = {};
     data.sizesInventory = {};
-
     // TODO: remove this!
-    data.campaigns = [{discount_ref: .4753}, {discount_ref: .3}, {discount_ref: .7, start_date: new Date(2019, 1, 1)}, {discount_ref: .8, end_date: new Date(2018, 1, 1)}];
-
-    data.discount = data.campaigns ? data.campaigns
-      .filter(r => (!r.end_date || new Date() < r.end_date) && (!r.start_date || new Date() > r.start_date))
-      .map(r => r.discount_ref)
-      .reduce((x, y) => Math.max(x, y), 0) : 0;
-    data.instances.forEach(instance => {
-      if (!instance.price)
-        instance.price = data.price;
-      instance.discountedPrice = discountCalc(instance.price, data.discount);
-    });
+    data.discount = 47.5;
+    data.discountedPrice =
+      data.instances.forEach(instance => {
+        if (!instance.price)
+          instance.price = data.price;
+        instance.discountedPrice = discountCalc(instance.price, data.discount);
+      });
     data.colors.forEach(color => {
       const angles = [];
 
       color.image.angles.forEach(r => {
         if (!r.url) {
-          const temp = {url: imagePathFixer(r, data.id, color._id), type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'};
+          const temp = {
+            url: imagePathFixer(r, data.id, color._id),
+            type: r.split('.').pop(-1) === 'webm' ? 'video' : 'photo'
+          };
           angles.push(temp);
         } else {
           angles.push(r);
@@ -221,7 +214,7 @@ export class ProductService {
 
         color.soldOut = colorInstances
           .map(r => r.inventory)
-          .map(r => r.map(e => (e.count ? e.count : 0 ) - (e.reserved ? e.reserved : 0)).reduce((x, y) => x + y, 0))
+          .map(r => r.map(e => (e.count ? e.count : 0) - (e.reserved ? e.reserved : 0)).reduce((x, y) => x + y, 0))
           .reduce((x, y) => x + y, 0) <= 0;
 
         color.price = colorInstances

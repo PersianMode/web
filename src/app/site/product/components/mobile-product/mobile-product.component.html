@@ -26,6 +26,12 @@
   <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled">در سبد بگذار</button>
   <button class="wishlist" matTooltip="در آرزوها بگذار" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
   <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <ul>
+        <li *ngIf="color"><strong>رنگ:</strong> {{color}}</li>
+        <li *ngIf="barcode"><strong>بارکد:</strong> {{barcode}}</li>
+      </ul>
+    </mat-expansion-panel>
     <mat-expansion-panel>
       <mat-expansion-panel-header *ngIf="product.desc">
         <mat-panel-title>

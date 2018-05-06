@@ -42,6 +42,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     MatSlideToggleModule,
     MatProgressSpinnerModule,
     DialogModule,
+    MatTooltipModule,
   ],
   declarations: [
     DesktopProductComponent,
