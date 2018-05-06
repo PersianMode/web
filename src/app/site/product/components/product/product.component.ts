@@ -113,6 +113,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         product_instance_id: instance._id,
         instances: this.product.instances,
         product_type: this.productType,
+        discountedPrice: instance.discountedPrice,
       };
 
       Object.assign(object, this.product);
@@ -124,7 +125,7 @@ export class ProductComponent implements OnInit, OnDestroy {
           this.waiting = false;
           const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
             position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
-            width: this.isMobile ? '100%' : '550px',
+            width: this.isMobile ? '100%' : '750px',
             data: {
               product: this.product,
               instance,
@@ -134,7 +135,7 @@ export class ProductComponent implements OnInit, OnDestroy {
           setTimeout(function () {
             rmDialog.close();
             sub.unsubscribe();
-          }, 3000);
+          }, 30000);
         });
 
       setTimeout(() => {

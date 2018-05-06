@@ -5,6 +5,7 @@ import {CartService} from '../../../../shared/services/cart.service';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
+import {discountCalc} from '../../../../shared/lib/discountCalc';
 
 @Component({
   selector: 'app-add-to-card-confirm',
@@ -17,6 +18,7 @@ export class AddToCardConfirmComponent implements OnInit {
   cartNumbers = null;
   selectedSize = null;
   farsiPrice = null;
+  discountedPrice = null;
   thumbnail;
   countFa;
 
@@ -32,9 +34,10 @@ export class AddToCardConfirmComponent implements OnInit {
     this.auth.isLoggedIn.subscribe(() => {
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
       this.selectedSize = this.dict.setShoesSize(this.data.selectedSize, gender, this.data.product.product_type.name || this.data.product.type);
-
     });
-    this.farsiPrice = '@ ' + priceFormatter(this.data.instance.price ? this.data.instance.price : this.product.base_price) + ' تومان';
+    const price =  this.data.instance.price ? this.data.instance.price : this.product.base_price;
+    this.farsiPrice = '@ ' + priceFormatter(price) + ' تومان';
+    this.discountedPrice = '@ ' + priceFormatter(discountCalc(price, this.product.discount)) + ' تومان';
     this.thumbnail = this.product.colors.find(r => this.data.instance.product_color_id === r._id).image.thumbnail;
     this.cartService.cartItems.subscribe(items => {
       const found = items.find(r => r.instance_id === this.data.instance._id && r.product_id === this.data.product.id);

@@ -22,6 +22,8 @@ export class CartItemsComponent implements OnInit {
   displayQuantity = null;
   displayPrice = null;
   displayTotalPrice = null;
+  totalDiscountedPrice = null;
+  discountedPrice = null;
   color = '';
 
   constructor(private dialog: MatDialog, private dict: DictionaryService, private auth: AuthService) {
@@ -34,7 +36,9 @@ export class CartItemsComponent implements OnInit {
 
     this.displayQuantity = this.dict.translateWord(this.product.quantity);
     this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
+    this.discountedPrice = '@ ' + priceFormatter(this.product.discountedPrice) + ' تومان';
     this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price) + ' تومان';
+    this.totalDiscountedPrice = priceFormatter(this.product.quantity * this.product.discountedPrice) + ' تومان';
     this.color =  this.dict.translateColor(this.product.color);
 
     this.auth.isLoggedIn.subscribe(() => {

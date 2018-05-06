@@ -6,11 +6,11 @@
     </div>
     <mat-icon aria-label="close" (click)="closeDialog()" style="cursor: pointer;">clear</mat-icon>
   </div>
-  <div class="body" fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column">
-    <div class="thumbnail" fxFlex="45">
+  <div class="body" fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column">
+    <div class="thumbnail" fxFlex="32" fxFlex.xs="45" fxFlex.sm="45">
       <img src="{{thumbnail}}">
     </div>
-    <div class="item-data-and-name" fxFlex="55">
+    <div class="item-data-and-name" fxFlex="68" fxFlex.xs="55" fxFlex.sm="55">
       <h4>
         <div>{{product.name}}</div>
       </h4>
@@ -21,7 +21,7 @@
       <div class="item-data">
         <span>  تعداد:</span>
         <section>{{countFa}}</section>
-        <p>{{farsiPrice}}</p>
+        <p [class.overridden]="product.discount">{{farsiPrice}}</p><p *ngIf="product.discount">{{discountedPrice}}</p>
       </div>
       <div class="bag-btn">
         <button mat-button (click)="navigateToCart()">دیدن سبد خرید</button>
