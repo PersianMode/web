@@ -39,7 +39,7 @@
       </div>
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
         <div fxFlex="30" class="field-container">
-          <mat-input-container class="field" style="text-align: right">
+          <mat-input-container class="field-right">
             <input matInput type="text" placeholder="تیتر" formControlName="title" role="title" tabindex="2" dir="rtl">
             <mat-hint class="persian-field hit-label">تیتر صفحه را وارد کنید</mat-hint>
             <mat-error *ngIf="form.controls['title'].hasError('required') && anyChanges"
