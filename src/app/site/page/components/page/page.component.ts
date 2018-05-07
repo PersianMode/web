@@ -31,7 +31,6 @@ export class PageComponent implements OnInit {
         }
         if (res && res['title']) {
           this.titleService.setTitleWithConstant(res['title']);
-
         }
       });
     });
