@@ -34,7 +34,7 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
   endDateError: boolean = false;
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar, private router: Router,
-    public dialog: MatDialog, private progressService: ProgressService, private route: ActivatedRoute) {
+              public dialog: MatDialog, private progressService: ProgressService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -59,16 +59,16 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.campaingInfoForm = new FormBuilder().group({
-      name: [null, [
-        Validators.required,
-      ]],
-      discount_ref: [null, [
-        Validators.required,
-        Validators.min(1),
-        Validators.max(100)
-      ]],
-      coupon_code: [null]
-    },
+        name: [null, [
+          Validators.required,
+        ]],
+        discount_ref: [null, [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(100)
+        ]],
+        coupon_code: [null]
+      },
       {
         validator: this.basicInfoValidation
       });
@@ -207,7 +207,6 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
   }
 
 
-
   addCollection(collection) {
 
     this.progressService.enable();
@@ -275,6 +274,11 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (!this.end_date) {
+      this.endDateError = true;
+      return;
+    }
+
     let now, start, end;
     start = new Date(this.start_date);
     now = new Date();
@@ -283,10 +287,9 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
       this.startDateError = true;
       return;
     }
-
     if (this.start_date && this.end_date) {
       end = new Date(this.end_date);
-      this.endDateError = end < now || end < start;
+      this.endDateError = end < now || end < start || start.toString() === end.toString();
       return;
     }
   }
