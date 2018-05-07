@@ -35,7 +35,6 @@ import {CampaignRouting} from './campaign.routing';
     SharedModule,
     MatCheckboxModule,
     MatDividerModule,
-    MatRadioModule,
     MatPaginatorModule
   ]
 })

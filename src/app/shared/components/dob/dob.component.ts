@@ -28,7 +28,7 @@ export class DobComponent implements OnInit {
   @Output() change = new EventEmitter();
 
   constructor() {
-    
+
   }
 
   ngOnInit() {

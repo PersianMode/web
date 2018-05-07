@@ -22,7 +22,21 @@ export class CampaignsComponent extends AbstractSearchComponent implements OnIni
       this.router.navigate([`/agent/campaigns/campaignInfo/`]);
   }
 
-  deletecampaign(id: string = null): void {
+
+  getCampaignStatus(campaign) : boolean{
+
+    const now = new Date();
+    if (campaign.end_date) {
+      const end = new Date(campaign.end_date);
+      return end > now;
+    } else {
+      return true;
+    }
+
+
+  }
+
+  endCampaign(id: string = null): void {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
@@ -33,14 +47,14 @@ export class CampaignsComponent extends AbstractSearchComponent implements OnIni
           this.httpService.delete(`/campaign/${id}`).subscribe(
             (data) => {
               this.selectedId = null;
-              this.snackBar.open('Campaign deleted successfully', null, {
+              this.snackBar.open('کمپین با موفقیت به پایان رسید', null, {
                 duration: 2000,
               });
               this.searching();
               this.progressService.disable();
             },
             (error) => {
-              this.snackBar.open('Cannot delete this campaign. Please try again', null, {
+              this.snackBar.open('خطا در اتمام کمپین. لطفا مجددا تلاش کنید', null, {
                 duration: 2700
               });
               this.progressService.disable();

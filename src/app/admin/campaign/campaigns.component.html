@@ -21,10 +21,20 @@
             <span>تخفیف پایه :</span>
             {{campaign.discount_ref}}
           </div>
+          <div dir="rtl" style="font-family: 'irankharazmi'">
+            <span>نوع :</span>
+            {{ campaign.coupon_code ? 'کوپن تخفیف' : 'مجموعه کالکشن'}}
+          </div>
+          <div dir="rtl" style="font-family: 'irankharazmi'">
+            <span>وضعیت :</span>
+            {{getCampaignStatus(campaign) ? 'فعال' : 'غیر فعال'}}
+          </div>
+       
+
         </mat-card-content>
         <mat-card-actions style="text-align: left" *ngIf="campaign._id == selectedId">
-          <button mat-icon-button type (click)="deletecampaign(campaign._id)" color="warn">
-            <mat-icon aria-label="delete">delete</mat-icon>
+          <button mat-icon-button type (click)="endCampaign(campaign._id)" color="warn" *ngIf="getCampaignStatus(campaign)">
+            <mat-icon aria-label="schedule">schedule</mat-icon>
           </button>
           <button mat-icon-button (click)="openForm(campaign._id)" color="accent">
             <mat-icon aria-label="edit">edit</mat-icon>

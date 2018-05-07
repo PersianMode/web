@@ -16,10 +16,8 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 export class CampaignInfoComponent implements OnInit, OnDestroy {
 
   campaingInfoForm: FormGroup = null;
-  upsertBtnShouldDisabled = false;
-  deleteBtnShouldDisabled = false;
-  anyChanges = false;
-  originalCampaign: any = null;
+  showInsertButton = false;
+  showEndButton = false;
 
   campaignId: string = null;
 
@@ -29,8 +27,11 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
 
   collections: any[] = [];
 
+  isCoupon: boolean = false;
+  isActive: boolean = true;
 
-  type: string = 'collection'
+  startDateError: boolean = true;
+  endDateError: boolean = false;
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar, private router: Router,
     public dialog: MatDialog, private progressService: ProgressService, private route: ActivatedRoute) {
@@ -43,9 +44,13 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
       (params) => {
         this.campaignId = params['id'];
         if (this.campaignId) {
+
+          this.showInsertButton = false;
+          this.showEndButton = true;
           this.getCampaign();
-        }else{
-          this.deleteBtnShouldDisabled = true;
+        } else {
+          this.showInsertButton = true;
+          this.showEndButton = false;
         }
 
       });
@@ -67,11 +72,6 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
       {
         validator: this.basicInfoValidation
       });
-
-    this.campaingInfoForm.valueChanges.subscribe(
-      (dt) => this.fieldChanged(),
-      (er) => console.error(er)
-    );
   }
 
   getCampaign() {
@@ -79,33 +79,29 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
     this.progressService.enable();
     this.httpService.get(`campaign/${this.campaignId}`).subscribe(res => {
 
-      this.originalCampaign = {
-        name: res.name,
-        discount_ref: res.discount_ref,
-        start_date: res.start_date,
-        end_date: res.end_date
-      };
-
-      this.campaingInfoForm.controls['name'].setValue(this.originalCampaign.name);
-      this.campaingInfoForm.controls['discount_ref'].setValue(this.originalCampaign.discount_ref);
+      this.campaingInfoForm.controls['name'].setValue(res.name);
+      this.campaingInfoForm.controls['discount_ref'].setValue(res.discount_ref);
       this.start_date = res.start_date;
       this.end_date = res.end_date;
 
+      const now = new Date();
+
+      if (this.end_date) {
+        const end = new Date(this.end_date);
+        this.isActive = end > now;
+      } else {
+        this.isActive = true;
+      }
+
+
       if (res.coupon_code) {
 
-        this.type = 'couponCode';
-
-        this.originalCampaign.coupon_code = res.coupon_code;
-        this.campaingInfoForm.controls['coupon_code'].setValue(this.originalCampaign.coupon_code);
-        this.collections = [];
+        this.isCoupon = true;
+        this.campaingInfoForm.controls['coupon_code'].setValue(res.coupon_code);
 
       } else if (res.collection_ids) {
-
-        this.type = 'collection';
-
+        this.isCoupon = false;
         this.collections = res.collection_ids;
-        this.originalCampaign.coupon_code = null;
-        this.campaingInfoForm.controls['coupon_code'].setValue(null);
       }
       this.progressService.disable();
 
@@ -119,69 +115,67 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
 
   }
 
+  setCampaign() {
 
-  modifyCampaign() {
+    if (this.campaignId)
+      return;
+
+
     const campaignInfo: any = {
       name: this.campaingInfoForm.controls['name'].value,
       discount_ref: this.campaingInfoForm.controls['discount_ref'].value,
     };
-    if (this.start_date)
-      campaignInfo.start_date = this.start_date;
+
+    campaignInfo.start_date = this.start_date;
+
     if (this.end_date)
       campaignInfo.end_date = this.end_date;
 
+    if (this.isCoupon) {
+      campaignInfo.coupon_code = this.campaingInfoForm.controls['coupon_code'].value;
+      if (!campaignInfo.coupon_code || Number.parseInt(campaignInfo.coupon_code) <= 0) {
+        this.snackBar.open(`ورود کد تخفیف الزامی است`, null, {
+          duration: 3200,
+        });
+        return;
+      }
+    }
 
-    this.upsertBtnShouldDisabled = true;
-    this.deleteBtnShouldDisabled = true;
-
-    let exec;
-    if (this.campaignId) {
-
-      if (this.campaingInfoForm.controls['coupon_code'].value)
-        campaignInfo.coupon_code = this.campaingInfoForm.controls['coupon_code'].value;
-
-      exec = this.httpService.post(`campaign/${this.campaignId}`, campaignInfo);
-
-    } else
-      exec = this.httpService.put('campaign', campaignInfo);
 
     this.progressService.enable();
 
-    exec.subscribe(
+    this.httpService.put('campaign', campaignInfo).subscribe(
       (data) => {
-        console.log('-> ', data);
         this.snackBar.open(`تغییرات با موفقیت ثبت گردید`, null, {
           duration: 2300,
         });
-        if (!this.campaignId)
-          this.campaignId = data._id;
+        this.campaignId = data._id;
 
+        const now = new Date();
+        if (this.end_date) {
+          const end = new Date(this.end_date);
+          this.isActive = end > now;
+        } else {
+          this.isActive = true;
+        }
 
-        this.originalCampaign = campaignInfo;
-
-        if (this.campaignId && this.originalCampaign.coupon_code)
-          this.collections = [];
-
-        this.deleteBtnShouldDisabled = false;
-        this.upsertBtnShouldDisabled = false;
-        this.anyChanges = false;
+        this.showEndButton = true;
+        this.showInsertButton = false;
         this.progressService.disable();
-
       },
       (err) => {
         console.error();
         this.snackBar.open(`خطا در بروز رسانی کمپین`, null, {
           duration: 3200,
         });
-        this.upsertBtnShouldDisabled = false;
-        this.deleteBtnShouldDisabled = false;
+        this.showEndButton = false;
+        this.showInsertButton = true;
         this.progressService.disable();
-
       }
     );
   }
 
-  removeCampaign(id: string = null): void {
+  endCampaign(id: string = null): void {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
@@ -189,16 +183,16 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
       (status) => {
         if (status) {
           this.progressService.enable();
-          this.httpService.delete(`campaign/${id}`).subscribe(
+          this.httpService.delete(`campaign/${this.campaignId}`).subscribe(
             (data) => {
-              this.snackBar.open('کمپین با موفقیت حذف گردید', null, {
+              this.snackBar.open('کمپین با موفقیت به پایان رسید', null, {
                 duration: 2000,
               });
               this.progressService.disable();
               this.router.navigate(['agent/campaigns']);
             },
             (error) => {
-              this.snackBar.open('خطا در حذف کمپین. لطفا مجددا تلاش کنید', null, {
+              this.snackBar.open('خطا در پایان کمپین. لطفا مجددا تلاش کنید', null, {
                 duration: 2700
               });
               this.progressService.disable();
@@ -223,12 +217,7 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
     }).subscribe(
       (data) => {
         this.collections.push(collection)
-
-        this.originalCampaign.coupon_code = null;
-        this.campaingInfoForm.controls['coupon_code'].setValue(null);
-
         this.progressService.disable();
-
       },
       (error) => {
         this.snackBar.open('خطا در اضافه کردن کالکشن به کمپین', null, {
@@ -250,10 +239,6 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
       (data) => {
         let index = this.collections.findIndex(x => x._id === collection._id);
         this.collections.splice(index, 1);
-
-        this.originalCampaign.coupon_code = null;
-        this.campaingInfoForm.controls['coupon_code'].setValue(null);
-
         this.progressService.disable();
       },
       (error) => {
@@ -271,51 +256,38 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
     this.router.navigate([`/agent/collections/form/${collectionId}`]);
 
   }
-  setStartDate(start_date) {
 
+  setStartDate(start_date) {
     this.start_date = start_date;
     this.checkDateValidation();
-
   }
 
   setEndDate(end_date) {
-
     this.end_date = end_date;
     this.checkDateValidation();
   }
 
   checkDateValidation() {
+
+    this.startDateError = false;
+    if (!this.start_date) {
+      this.startDateError = true;
+      return;
+    }
+
+    let now, start, end;
+    start = new Date(this.start_date);
+    now = new Date();
+
+    if (start < now) {
+      this.startDateError = true;
+      return;
+    }
+
     if (this.start_date && this.end_date) {
-      this.dateError = new Date(this.end_date) <= new Date(this.start_date);
-    } else if (!this.start_date && !this.end_date)
-      this.dateError = false;
-    else
-      this.dateError = true;
-
-    if (!this.dateError)
-      this.fieldChanged();
-  }
-
-  fieldChanged() {
-
-    this.anyChanges = false;
-    const name = this.campaingInfoForm.controls['name'].value ? this.campaingInfoForm.controls['name'].value.trim() : '';
-    const discount_ref = this.campaingInfoForm.controls['discount_ref'].value ? this.campaingInfoForm.controls['discount_ref'].value : 0;
-    const coupon_code = this.campaingInfoForm.controls['coupon_code'].value ? this.campaingInfoForm.controls['coupon_code'].value.trim() : '';
-
-    const orig_name = this.originalCampaign ? this.originalCampaign.name : null;
-    const orig_discount_ref = this.originalCampaign ? this.originalCampaign.discount_ref : null;
-    const orig_start_date = this.originalCampaign ? this.originalCampaign.start_date : null;
-    const orig_end_date = this.originalCampaign ? this.originalCampaign.end_date : null;
-    const orig_coupon_code = this.originalCampaign ? this.originalCampaign.coupon_code : null;
-
-
-    if ((name !== orig_name && name) ||
-      (discount_ref !== orig_discount_ref && discount_ref > 0) ||
-      (this.start_date !== orig_start_date && this.start_date) ||
-      (this.end_date !== orig_end_date && this.end_date) ||
-      (coupon_code !== orig_coupon_code && coupon_code)) {
-      this.anyChanges = true;
+      end = new Date(this.end_date);
+      this.endDateError = end < now || end < start;
+      return;
     }
   }
 
