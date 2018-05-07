@@ -87,8 +87,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
         this.titleService.setTitleWithConstant(TitleService.collection_name + ' ' + r);
       else
         this.titleService.setTitleWithConstant(this.title);
-
-        });
+    });
     this.showHideSpinner(true);
     this.productService.productList$.subscribe(r => {
       this.products = r;

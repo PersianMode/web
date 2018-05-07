@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AsyncValidator, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
@@ -106,11 +106,7 @@ export class PageBasicInfoComponent implements OnInit {
 
   setCollection(collection: any) {
     this.collection = collection;
-    this.httpService.get(`collection/${collection._id}`).subscribe((data) => {
-      this.form.controls['title'].setValue(data.name_fa);
-    });
     this.fieldChanged();
-
   }
 
   removeCollection() {
@@ -205,13 +201,10 @@ export class PageBasicInfoComponent implements OnInit {
   }
 
   fieldChanged() {
-    if ((this.form.controls['is_app'].value || (this.form.controls['address'].value && (this.form.controls['address'].value === 'home' || this.form.controls['address'].value.includes('collection')))) || this.form.controls['title'].value) {
+    if ((this.form.controls['is_app'].value || (this.form.controls['address'].value && (this.form.controls['address'].value === 'home' || this.form.controls['address'].value.includes('collection')))) || this.form.controls['title'].value)
       this.isTitleValid = true;
-    }
-    else {
+    else
       this.isTitleValid = false;
-    }
-    console.log(this.isTitleValid);
     const previewContent = this.form.controls['content'].value;
     this.contentEl.nativeElement.innerHTML = '';
     if (previewContent)
