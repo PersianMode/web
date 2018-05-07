@@ -30,8 +30,8 @@ export class PageBasicInfoComponent implements OnInit {
   @ViewChild('content') contentEl: ElementRef;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-    private httpService: HttpService, private snackBar: MatSnackBar,
-    private dialog: MatDialog, private router: Router) {
+              private httpService: HttpService, private snackBar: MatSnackBar,
+              private dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit() {
@@ -58,11 +58,13 @@ export class PageBasicInfoComponent implements OnInit {
   initForm() {
     this.form = new FormBuilder().group({
       address: [, [Validators.required]],
+      title: [, [Validators.required]],
       is_app: [false],
       content: []
 
     }, {});
   }
+
   initPageInfo() {
     if (!this.id) {
       return;
@@ -73,6 +75,8 @@ export class PageBasicInfoComponent implements OnInit {
     this.httpService.get(`page/${this.id}`).subscribe(
       (data) => {
         data = data[0];
+        if (data.page_info)
+          this.form.controls['title'].setValue(data.page_info!.title);
         this.form.controls['address'].setValue(data.address);
         this.form.controls['is_app'].setValue(data.is_app);
         this.form.controls['content'].setValue((data.page_info && data.page_info.content) ? data.page_info.content : null);
@@ -104,7 +108,11 @@ export class PageBasicInfoComponent implements OnInit {
 
   setCollection(collection: any) {
     this.collection = collection;
+    this.httpService.get(`collection/${collection._id}`).subscribe((data) => {
+      this.form.controls['title'].setValue(data.name_fa);
+    });
     this.fieldChanged();
+
   }
 
   removeCollection() {
@@ -116,6 +124,7 @@ export class PageBasicInfoComponent implements OnInit {
 
     const data = {
       address: this.form.controls['address'].value,
+      title: this.form.controls['title'].value,
       is_app: this.form.controls['is_app'].value,
       collection_id: this.collection ? this.collection._id : null,
       content: this.form.controls['content'].value
@@ -196,7 +205,6 @@ export class PageBasicInfoComponent implements OnInit {
       }
     );
   }
-
 
   fieldChanged() {
     const previewContent = this.form.controls['content'].value;
