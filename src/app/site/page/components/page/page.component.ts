@@ -21,7 +21,6 @@ export class PageComponent implements OnInit {
       this.pageName = 'page/' + params.get('typeName');
       this.pageService.getPage(this.pageName);
       this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
-        console.log(res);
         if (res && res['content']) {
           this.content = res['content'];
           this.contentEl.nativeElement.innerHTML = '';
