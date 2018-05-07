@@ -37,12 +37,12 @@
           </mat-input-container>
         </div>
       </div>
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+      <div *ngIf="!form.controls['is_app'].value" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
         <div fxFlex="30" class="field-container">
           <mat-input-container class="field-right">
             <input matInput type="text" placeholder="تیتر" formControlName="title" role="title" tabindex="2" dir="rtl">
             <mat-hint class="persian-field hit-label">تیتر صفحه را وارد کنید</mat-hint>
-            <mat-error *ngIf="form.controls['title'].hasError('required') && anyChanges"
+            <mat-error *ngIf="isTitleValid"
                        class="persian-field error-label">
               وارد کردن تیتر صفحه الزامی است
             </mat-error>
@@ -110,7 +110,7 @@
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
         <div role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"
-                  [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges))" tabindex="3">
+                  [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges)) || !isTitleValid" tabindex="3">
             <button mat-icon-button *ngIf="id" (click)="deletePage(id)" color="warn">
               <mat-icon aria-label="delete">delete</mat-icon>
             </button>

@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AsyncValidator, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
@@ -21,6 +21,7 @@ export class PageBasicInfoComponent implements OnInit {
   originalForm: IPageInfo = null;
   form: FormGroup;
   collection: ICollection = null;
+  isTitleValid = false;
 
   anyChanges = false;
   upsertBtnShouldDisabled = false;
@@ -58,7 +59,7 @@ export class PageBasicInfoComponent implements OnInit {
   initForm() {
     this.form = new FormBuilder().group({
       address: [, [Validators.required]],
-      title: [, [Validators.required]],
+      title: [],
       is_app: [false],
       content: []
 
@@ -75,12 +76,10 @@ export class PageBasicInfoComponent implements OnInit {
     this.httpService.get(`page/${this.id}`).subscribe(
       (data) => {
         data = data[0];
-        if (data.page_info)
-          this.form.controls['title'].setValue(data.page_info!.title);
         this.form.controls['address'].setValue(data.address);
         this.form.controls['is_app'].setValue(data.is_app);
+        this.form.controls['title'].setValue(data.page_info && data.page_info.title ? data.page_info.title : null);
         this.form.controls['content'].setValue((data.page_info && data.page_info.content) ? data.page_info.content : null);
-
         if (data.collection) {
           this.collection = {
             _id: data.collection._id,
@@ -103,7 +102,6 @@ export class PageBasicInfoComponent implements OnInit {
         this.upsertBtnShouldDisabled = false;
       }
     );
-
   }
 
   setCollection(collection: any) {
@@ -207,6 +205,13 @@ export class PageBasicInfoComponent implements OnInit {
   }
 
   fieldChanged() {
+    if ((this.form.controls['is_app'].value || (this.form.controls['address'].value && (this.form.controls['address'].value === 'home' || this.form.controls['address'].value.includes('collection')))) || this.form.controls['title'].value) {
+      this.isTitleValid = true;
+    }
+    else {
+      this.isTitleValid = false;
+    }
+    console.log(this.isTitleValid);
     const previewContent = this.form.controls['content'].value;
     this.contentEl.nativeElement.innerHTML = '';
     if (previewContent)
