@@ -19,13 +19,14 @@
                 </div>
                 <div fxFlex="25" class="field-container">
                     <mat-input-container class="field farsi">
-                        <input matInput type="number" placeholder="پایه تخفیف" formControlName="discount_ref" role="discount_ref" tabindex="2" [disabled]="campaignId"
-                        />
-                        <mat-hint>پایه تخفیف را وارد کنید</mat-hint>
-                        <mat-error *ngIf="campaingInfoForm.controls['discount_ref'].hasError('required')">
-                            پایه تخفیف 1 تا 100 درصد الزامی است
+                        <input matInput type="number" [placeholder]="getDiscountInfo().placeholder" formControlName="discount_ref" role="discount_ref" tabindex="2" [disabled]="campaignId"
+                        /> 
+                        <mat-hint>{{getDiscountInfo().hint}}</mat-hint>
+                        <mat-error *ngIf="discountRefError">
+                            {{getDiscountInfo().error}}
                         </mat-error>
                     </mat-input-container>
+                    <span>{{discountByPercent ? '%' :'تومان'}}</span>
                 </div>
             </div>
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
@@ -34,7 +35,7 @@
                         <span>تاریخ شروع: </span>
                         <app-dob [date]="start_date" [isDOB]="false" (change)="setStartDate($event)"></app-dob>
                     </div>
-                    <label class="field-error dp-hint" *ngIf="dateError">تاریخ شروع کمپین نادرست است</label>
+                    <label class="field-error dp-hint" *ngIf="startDateError">تاریخ شروع کمپین نادرست است</label>
 
                 </div>
 
@@ -43,7 +44,7 @@
                         <span>تاریخ پایان: </span>
                         <app-dob [date]="end_date" [isDOB]="false" (change)="setEndDate($event)"></app-dob>
                     </div>
-                    <label class="field-error dp-hint" *ngIf="dateError">تاریخ پایان کمپین نادرست است</label>
+                    <label class="field-error dp-hint" *ngIf="endDateError">تاریخ پایان کمپین نادرست است</label>
                 </div>
             </div>
 
@@ -110,7 +111,7 @@
             </div>
 
             <div role="submit-button" style="text-align: left">
-                <button mat-icon-button type="submit" *ngIf="showInsertButton" [disabled]="!campaingInfoForm.valid || startDateError || endDateError" tabindex="6" color="accent">
+                <button mat-icon-button type="submit" *ngIf="showInsertButton" [disabled]="!campaingInfoForm.valid || startDateError || endDateError || discountRefError" tabindex="6" color="accent">
                     <mat-icon aria-label="accept">done</mat-icon>
                 </button>
                 <button mat-icon-button color="warn" type="button" *ngIf="showEndButton && isActive" (click)="endCampaign(campaignId)" tabindex="7">

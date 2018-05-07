@@ -33,8 +33,11 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
   startDateError: boolean = true;
   endDateError: boolean = false;
 
+  discountRefError: boolean = true;
+  discountByPercent: boolean = true;
+
   constructor(private httpService: HttpService, private snackBar: MatSnackBar, private router: Router,
-              public dialog: MatDialog, private progressService: ProgressService, private route: ActivatedRoute) {
+    public dialog: MatDialog, private progressService: ProgressService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -55,20 +58,23 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
 
       });
 
+    this.campaingInfoForm.valueChanges.subscribe(
+      (dt) => this.fieldChanged(),
+      (er) => console.error(er)
+    );
+
   }
 
   initForm() {
     this.campaingInfoForm = new FormBuilder().group({
-        name: [null, [
-          Validators.required,
-        ]],
-        discount_ref: [null, [
-          Validators.required,
-          Validators.min(1),
-          Validators.max(100)
-        ]],
-        coupon_code: [null]
-      },
+      name: [null, [
+        Validators.required,
+      ]],
+      discount_ref: [null, [
+        Validators.required,
+      ]],
+      coupon_code: [null]
+    },
       {
         validator: this.basicInfoValidation
       });
@@ -86,13 +92,8 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
 
       const now = new Date();
 
-      if (this.end_date) {
-        const end = new Date(this.end_date);
-        this.isActive = end > now;
-      } else {
-        this.isActive = true;
-      }
-
+      const end = new Date(this.end_date);
+      this.isActive = end > now;
 
       if (res.coupon_code) {
 
@@ -127,9 +128,7 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
     };
 
     campaignInfo.start_date = this.start_date;
-
-    if (this.end_date)
-      campaignInfo.end_date = this.end_date;
+    campaignInfo.end_date = this.end_date;
 
     if (this.isCoupon) {
       campaignInfo.coupon_code = this.campaingInfoForm.controls['coupon_code'].value;
@@ -152,12 +151,8 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
         this.campaignId = data._id;
 
         const now = new Date();
-        if (this.end_date) {
-          const end = new Date(this.end_date);
-          this.isActive = end > now;
-        } else {
-          this.isActive = true;
-        }
+        const end = new Date(this.end_date);
+        this.isActive = end > now;
 
         this.showEndButton = true;
         this.showInsertButton = false;
@@ -291,6 +286,41 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
       end = new Date(this.end_date);
       this.endDateError = end < now || end < start || start.toString() === end.toString();
       return;
+    }
+  }
+
+
+  getDiscountInfo() {
+
+    if (this.isCoupon)
+      return {
+        placeholder: 'درصد یا مقدار تخفیف (تومان)',
+        hint: 'مقدار تخفیف به تومان یا درصد تخفیف را وارد نمایید',
+        error: 'ورود میزان یا درصد تخفیف الزامی است'
+      }
+    else
+      return {
+        placeholder: 'درصد تخفیف',
+        hint: 'درصد تخفیف را وارد نمایید',
+        error: 'ورود درصد تخفیف الزامی است'
+      }
+
+
+  }
+
+  fieldChanged() {
+
+    this.discountRefError = !this.campaingInfoForm.controls['discount_ref'].value || (this.campaingInfoForm.controls['discount_ref'].value <= 0)
+    if (this.discountRefError) {
+      this.discountByPercent = true;
+      return;
+    }
+    if (this.isCoupon) {
+      this.discountByPercent = (this.campaingInfoForm.controls['discount_ref'].value >= 100)
+    } else {
+      if (this.campaingInfoForm.controls['discount_ref'].value >= 100)
+      this.discountRefError = true;
+      this.discountByPercent = true;
     }
   }
 
