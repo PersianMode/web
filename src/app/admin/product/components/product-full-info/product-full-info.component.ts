@@ -44,6 +44,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
     this.progressService.enable();
     this.httpService.get(`/product/${this.productId}`).subscribe(
       (data) => {
+        console.log('-> ', data);
         this.product = data;
         this.progressService.disable();
       },
