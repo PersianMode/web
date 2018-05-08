@@ -16,7 +16,7 @@
         </mat-input-container>
       </div>
       <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
-        <mat-checkbox [(ngModel)]="selectedTextLink.is_header">
+        <mat-checkbox [(ngModel)]="selectedTextLink.is_header" (ngModelChange)="checkTextchanges()">
           <span *ngIf="selectedTextLink.is_header">عنوان</span>
           <span *ngIf="!selectedTextLink.is_header">زیر عنوان</span>
         </mat-checkbox>
@@ -73,7 +73,7 @@
       <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
         fxLayoutAlign.xs="center center">
         <div fxFlex="50" class="full-width">
-          <mat-input-container class="full-width">
+          <mat-input-container class="full-width" style="direction: ltr; float: left; text-align: left">
             <input matInput type="text" placeholder="آدرس" [(ngModel)]="selectedSocialNetwork.href" (ngModelChange)="checkSocialchanges()"
             />
           </mat-input-container>
