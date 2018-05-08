@@ -12,8 +12,9 @@ import {links} from '../../shared/lib/links';
 })
 export class HeaderComponent implements OnInit {
   navLinks = [
-    {label: 'کلکسیون‌ها', path: '/agent/collections', active: false},
+    {label: 'کالکشن ها', path: '/agent/collections', active: false},
     {label: 'محصولات', path: '/agent/products', active: false},
+    {label: 'کمپین ها', path: '/agent/campaigns', active: false},
     {label: 'صفحه‌ها', path: '/agent/pages', active: false},
     {label: 'دیکشنری ', path: '/agent/dictionary', active: false},
     {label: 'بارگذاری فایل', path: '/agent/uploads', active: false},
