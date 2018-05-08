@@ -298,7 +298,7 @@ export class EditPanelComponent implements OnInit {
       } else
         this.imageUrl = data[0];
     } else
-      this.snackBar.open('بارگذاری با خطا رو به رو شد. دوباره تلاش کنید', null, {
+      this.snackBar.open('بارگذاری با خطا روبه‌رو شد. دوباره تلاش کنید', null, {
         duration: 3200,
       });
   }
