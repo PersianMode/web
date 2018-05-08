@@ -291,11 +291,7 @@ export class EditPanelComponent implements OnInit {
       this.snackBar.open('تصویر بارگذاری شد', null, {
         duration: 2300,
       });
-<<<<<<< HEAD
       this.saveButtonShouldBeDisabled = false;
-=======
-      this.areaDoneBtnShouldDisabled = false;
->>>>>>> 3641f61ceb1b9426eea4be2c7612b182e49c3048
       if (this.isAdd) {
         this.imageUrl = data[0].downloadURL;
         this.placement = {_id: data[0].placementId};
