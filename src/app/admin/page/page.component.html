@@ -12,7 +12,7 @@
       <mat-card class="card-view" (click)="select(c._id)" [ngClass]="{'mat-elevation-z24': c._id === selectedId}">
         <mat-card-header>
           <mat-card-title>
-            <a href="#" >{{c.address}}</a>
+            <a>{{c.address}}</a>
           </mat-card-title>
           <mat-card-subtitle>
             <span *ngIf="c.is_app !== true">Site Page</span>
@@ -20,9 +20,6 @@
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions *ngIf="c._id == selectedId">
-          <button mat-icon-button (click)="openView(c._id)" color="primary">
-            <mat-icon aria-label="view">visibility</mat-icon>
-          </button>
           <button mat-icon-button (click)="openForm(c._id)" color="accent">
             <mat-icon aria-label="edit">edit</mat-icon>
           </button>

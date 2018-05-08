@@ -15,7 +15,7 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.titleService.setTitleWithOutConstant('ادمین: سفارش ها');
+    this.titleService.setTitleWithOutConstant('ادمین: سفارش‌ها');
   }
 
 }

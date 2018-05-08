@@ -388,12 +388,12 @@ export class CartService {
       product_instance_id: favoriteItem.product_instance_id,
     }).subscribe(
       res => {
-        this.snackBar.open(`محصول به لیست علاقمندیهای شما افزوده شد`, null, SNACK_CONFIG);
+        this.snackBar.open(`محصول به لیست علاقمندی‌های شما افزوده شد`, null, SNACK_CONFIG);
       },
       err => {
         console.error('Cannot save favorite item to server: ', err);
         if (err.error === 'Duplicate WishList Item is not allowed')
-          this.snackBar.open(`این محصول از قبل به لیست علاقمندی های شما افزوده شده است`, null, SNACK_CONFIG);
+          this.snackBar.open(`این محصول از قبل به لیست علاقمندی‌های شما افزوده شده است`, null, SNACK_CONFIG);
         else
           this.snackBar.open(`محصول به لیست علاقمندیها افزوده نشد. لطفا دوباره تلاش کنید`, null, SNACK_CONFIG);
       });

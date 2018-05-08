@@ -37,7 +37,8 @@
           </mat-input-container>
         </div>
       </div>
-      <div *ngIf="!form.controls['is_app'].value" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+      <div *ngIf="!form.controls['is_app'].value" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+           fxLayoutAlign.xs="center center">
         <div fxFlex="30" class="field-container">
           <mat-input-container class="field-right">
             <input matInput type="text" placeholder="تیتر" formControlName="title" role="title" tabindex="2" dir="rtl">
@@ -110,15 +111,16 @@
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
         <div role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"
-                  [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges)) || !isTitleValid" tabindex="3">
-            <button mat-icon-button *ngIf="id" (click)="deletePage(id)" color="warn">
-              <mat-icon aria-label="delete">delete</mat-icon>
-            </button>
+                  [disabled]="upsertBtnShouldDisabled || (!form.valid || (id && !anyChanges)) || !isTitleValid"
+                  tabindex="3">
             <mat-icon aria-label="accept">done</mat-icon>
           </button>
         </div>
       </div>
     </form>
+    <button mat-icon-button *ngIf="id" (click)="deletePage(id)" color="warn">
+      <mat-icon aria-label="delete">delete</mat-icon>
+    </button>
   </mat-card-content>
 </mat-card>
 

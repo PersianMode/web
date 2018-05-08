@@ -282,11 +282,11 @@ export class FooterPlacementComponent implements OnInit {
 
     if (isNewItem) {
       const tempColumns = Object.keys(this.siteLinkItems);
-      res['column'] = tempColumns.length && this.siteLinkItems[0].length ? Math.max(...tempColumns
+      res['column'] = tempColumns && tempColumns.length && this.siteLinkItems[0] && this.siteLinkItems[0].length ? Math.max(...tempColumns
         .map(el => this.siteLinkItems[el])
         .reduce((a, b) => (a || []).concat(b || []))
         .map(el => el.info.column)) : 1;
-      res['row'] = (tempColumns.length && this.siteLinkItems[0].length ? Math.max(...tempColumns
+      res['row'] = ( tempColumns && tempColumns.length && this.siteLinkItems[0] && this.siteLinkItems[0].length ? Math.max(...tempColumns
         .map(el => this.siteLinkItems[el])
         .reduce((a, b) => (a || []).concat(b || []))
         .map(el => el.info.row)) : 0) + 1;
