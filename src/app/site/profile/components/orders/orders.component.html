@@ -21,10 +21,13 @@
   </ng-container>
 
   <ng-container matColumnDef="total_amount">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>هزینه کل(تومان)</mat-header-cell>
-    <mat-cell *matCellDef="let order">{{makePersianNumber(order.total_amount, true)}}</mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>هزینه کل (تومان)</mat-header-cell>
+    <mat-cell *matCellDef="let order"><span *ngIf="order.discount" class="overridden">{{makePersianNumber(order.total_amount, true)}}<br/></span>{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}</mat-cell>
   </ng-container>
-
+  <ng-container matColumnDef="discount">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>تخفیف (تومان)</mat-header-cell>
+    <mat-cell *matCellDef="let order">{{makePersianNumber(order.discount, true)}}</mat-cell>
+  </ng-container>
   <ng-container matColumnDef="used_point">
     <mat-header-cell *matHeaderCellDef mat-sort-header>امتیاز استفاده شده</mat-header-cell>
     <mat-cell *matCellDef="let order">{{makePersianNumber(order.used_point, false)}}
@@ -57,23 +60,27 @@
     <mat-card class="order-data">
       <mat-card-content>
         <div>
-          <span>تاریخ و زمان ثبت سفارش : </span>
+          <span>تاریخ و زمان ثبت سفارش: </span>
           <span>{{order.jalali_date}} , {{order.time}}</span>
         </div>
         <div>
-          <span>تعداد ارقام کالا : </span>
+          <span>تعداد ارقام کالا: </span>
           <span>{{order.order_lines.length.toLocaleString('fa')}}</span>
         </div>
         <div>
-          <span>هزینه کل : </span>
-          <span>{{makePersianNumber(order.total_amount, true)}} تومان</span>
+          <span>هزینه کل: </span>
+          <span><span *ngIf="order.discount" class="overridden" style="margin-left: 20px; display: inline-block">{{makePersianNumber(order.total_amount, true)}} تومان</span><span style="display: inline-block">{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}} تومان</span></span>
         </div>
         <div>
-          <span>امتیاز استفاده شده : </span>
+          <span>تخفیف: </span>
+          <span>{{makePersianNumber(order.discount, true)}} تومان</span>
+        </div>
+        <div>
+          <span>امتیاز استفاده شده: </span>
           <span>{{makePersianNumber(order.used_point, false)}} امتیاز</span>
         </div>
         <div>
-          <span>ارسال شده به :</span>
+          <span>ارسال شده به:</span>
           <span>استان {{order.address.province}} شهر {{order.address.city}}
             <br>
             {{order.address.district}} {{order.address.street}} {{order.address.no ? 'پلاک ' + makePersianNumber(order.address.no, false) : ''}}

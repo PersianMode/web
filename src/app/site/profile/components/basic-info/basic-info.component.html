@@ -1,16 +1,24 @@
 <mat-card class="customer-data" *ngIf="!isEdit && !isChangePass">
   <mat-card-content>
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-      <div fxFlex="50" class="info-cell"><b>نام : {{customerBasicInfo.name}}</b></div>
-      <div fxFlex="50" class="info-cell"><b>نام خانوادگی : {{customerBasicInfo.surname}}</b></div>
+      <div fxFlex="50" class="info-cell">نام: <b>{{customerBasicInfo.name}}</b></div>
+      <div fxFlex="50" class="info-cell">نام خانوادگی: <b>{{customerBasicInfo.surname}}</b></div>
     </div>
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-      <div fxFlex="50" class="info-cell"><b>تاریخ تولد : {{birthDate}}</b></div>
-      <div fxFlex="50" class="info-cell"><b>شماره ملی : {{userNationalId}}</b></div>
+      <div fxFlex="50" class="info-cell">امتیاز وفاداری: <b>{{loyaltyPointsFa}}</b></div>
+      <div fxFlex="50" class="info-cell">ارزش امتیاز به تومان: <b>{{loyaltyPointsValueFa}}</b></div>
+    </div>
+    <div *ngIf="balance" style="background: #ccc" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+      <div fxFlex="50" class="info-cell">موجودی اکانت: <b>{{balanceFa}}</b></div>
+      <div fxFlex="50" class="info-cell"><button mat-raised-button style="line-height: 24px">واریز موجودی به حساب بانکی</button></div>
     </div>
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-      <div fxFlex="50" class="info-cell"><b>ایمیل : {{customerBasicInfo.username}}</b></div>
-      <div fxFlex="50" class="info-cell"><b>تلفن همراه : {{customerBasicInfo.mobile_no}}</b></div>
+      <div fxFlex="50" class="info-cell">تاریخ تولد: <b>{{birthDate}}</b></div>
+      <div fxFlex="50" class="info-cell">شماره ملی: <b>{{userNationalId}}</b></div>
+    </div>
+    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+      <div fxFlex="50" class="info-cell">ایمیل: <b>{{customerBasicInfo.username}}</b></div>
+      <div fxFlex="50" class="info-cell">تلفن همراه: <b>{{customerBasicInfo.mobile_no}}</b></div>
     </div>
     <div fxLayout="row" class="submit-cancel-change-btn">
       <button mat-button fxFlex="50" class="action-button" (click)="goToEditForm()">ویرایش

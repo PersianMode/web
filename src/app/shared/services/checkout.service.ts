@@ -6,6 +6,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {PaymentType} from '../enum/payment.type.enum';
 import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class CheckoutService {
@@ -24,7 +25,8 @@ export class CheckoutService {
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private cartService: CartService, private httpService: HttpService,
-              private authService: AuthService, private snackBar: MatSnackBar) {
+              private authService: AuthService, private snackBar: MatSnackBar,
+              private router: Router) {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
@@ -157,6 +159,7 @@ export class CheckoutService {
       used_point: 0,
       used_balance: 0,
       total_amount: this.total,
+      discount: this.discount,
       is_collect: this.is_collect,
     };
   }
@@ -166,6 +169,7 @@ export class CheckoutService {
     this.httpService.post('checkout', data)
       .subscribe(res => {
         this.cartService.emptyCart();
+        this.router.navigate(['/', 'profile']);
       },
         err => console.error(err));
   }
