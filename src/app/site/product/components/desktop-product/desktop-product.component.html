@@ -12,10 +12,10 @@
      [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
      'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}" #descPane>
   <h1 *ngIf="product">{{product.name}}</h1>
-  <h4>{{sub}} <span>{{price}} تومان</span></h4>
+  <h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}} تومان</span></h4>
   <div *ngIf="product?.colors" class="colors">
     <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
-      <span style="margin:0;">
+      <span style="margin:0;" matTooltip="{{item?.translatedName}}">
         <p *ngIf="item.soldOut && !focused[item._id]" class="soldOut">تمام شد</p>
       <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id"
            src="{{item.image.thumbnail}}" (mouseenter)="focused[item._id]=true" (mouseout)="focused[item._id]=false">
@@ -26,6 +26,12 @@
   <button mat-button class="cart" [disabled]="addCardBtnDisabled" (click)="saveToCart()">در سبد بگذار</button>
   <button class="wishlist" matTooltip="در آرزوها بگذار" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
   <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <ul>
+        <li *ngIf="color"><strong>رنگ:</strong> {{color}}</li>
+        <li *ngIf="barcode"><strong>بارکد:</strong> {{barcode}}</li>
+      </ul>
+    </mat-expansion-panel>
     <mat-expansion-panel *ngIf="product.desc">
       <mat-expansion-panel-header>
         <mat-panel-title>

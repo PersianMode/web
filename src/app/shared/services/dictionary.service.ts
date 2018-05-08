@@ -37,7 +37,9 @@ export class DictionaryService {
     }
     return word + '';
   }
-
+  translateColor(col: any) {
+    return col && col.name ? col.name.split('/').map(r => r.split('-')).reduce((x, y) => x.concat(y)).map(r => this.translateWord(r)).join(' / ') : 'نامعین';
+  }
   convertColor(color: string): string {
     let convertedColor = this.colorDictionary[color.toUpperCase()];
     if (!convertedColor) {

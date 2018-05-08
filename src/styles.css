@@ -559,7 +559,7 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .mat-button-toggle-label-content {
-  font-family: iranyekan !important;
+  font-family: iranyekan, sans-serif !important;
   width: 79px;
   padding: 4px 0 !important;
   text-align: center;
@@ -601,19 +601,19 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .mat-tooltip {
-  font-family: iranyekan !important;
+  font-family: iranyekan, sans-serif !important;
   font-weight: 200;
   font-size: 12px;
 }
 
 .mat-expansion-panel-header {
-  font-family: iranyekan;
+  font-family: iranyekan, sans-serif;
   font-weight: 600;
   padding: 0 !important;
 }
 
 .mat-expansion-panel-body {
-  font-family: iranyekan;
+  font-family: iranyekan, sans-serif;
   font-weight: 200;
   padding: 0 !important;
 }
@@ -671,7 +671,6 @@ mat-panel-title {
   background-color: #191919;
   clear: both;
   margin-top: 60px;
-  height: 227px;
 }
 
 .hr-setting {
@@ -702,7 +701,11 @@ mat-panel-title {
 .footer-link:hover, .footer-link1:hover, .icons:hover {
   color: lightgray;
 }
-
+@media screen and (min-width: 960px) {
+  .footer-wrapper {
+    height: 227px;
+  }
+}
 @media screen and (max-width: 500px) {
   .footer-link, .footer-link-bold, .footer-link1 {
     float: none;
@@ -781,7 +784,7 @@ mat-panel-title {
 }
 
 .mat-checkbox {
-  font-family: iranyekan !important;
+  font-family: iranyekan, sans-serif !important;
   font-weight: 200 !important;
 }
 
@@ -989,4 +992,12 @@ p {
 }
 .ui-dialog	{
   font-family: iranyekan, sans-serif !important;
+}
+
+.ui-widget {
+  font-family: iranyekan, sans-serif !important;
+}
+
+.overridden {
+  text-decoration: line-through;
 }

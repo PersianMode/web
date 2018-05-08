@@ -21,6 +21,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   @Output() sortedByChange = new EventEmitter<any>();
   isChecked: any = {};
   oppositeColor: any = {};
+  translatedColor: any = {};
   needsBorder: any = {};
   expanded: any = {};
   rangeValues: any;
@@ -64,6 +65,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       for (const col in this.isChecked.color) {
         let color;
         color = this.dict.convertColor(col);
+        this.translatedColor[col] = this.dict.translateWord(col);
         if (color) {
           this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
           const red = color.substring(1, 3);
