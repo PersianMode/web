@@ -33,11 +33,12 @@ export class AddToCardConfirmComponent implements OnInit {
     this.product = this.data.product;
     this.auth.isLoggedIn.subscribe(() => {
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-      this.selectedSize = this.dict.setShoesSize(this.data.selectedSize, gender, this.data.product.product_type.name || this.data.product.type);
+      this.selectedSize = this.dict.setShoesSize(this.data.selectedSize, gender,
+        this.data.product.product_type.name || this.data.product.type);
     });
     const price =  this.data.instance.price ? this.data.instance.price : this.product.base_price;
     this.farsiPrice = '@ ' + priceFormatter(price) + ' تومان';
-    this.discountedPrice = '@ ' + priceFormatter(discountCalc(price, this.product.discount)) + ' تومان';
+    this.discountedPrice = '@ ' + priceFormatter(this.data.instance.discountedPrice) + ' تومان';
     this.thumbnail = this.product.colors.find(r => this.data.instance.product_color_id === r._id).image.thumbnail;
     this.cartService.cartItems.subscribe(items => {
       const found = items.find(r => r.instance_id === this.data.instance._id && r.product_id === this.data.product.id);

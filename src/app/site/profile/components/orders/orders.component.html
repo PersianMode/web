@@ -21,10 +21,9 @@
   </ng-container>
 
   <ng-container matColumnDef="total_amount">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>هزینه کل(تومان)</mat-header-cell>
-    <mat-cell *matCellDef="let order">{{makePersianNumber(order.total_amount, true)}}</mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>هزینه کل (تومان)</mat-header-cell>
+    <mat-cell *matCellDef="let order">{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}</mat-cell>
   </ng-container>
-
   <ng-container matColumnDef="used_point">
     <mat-header-cell *matHeaderCellDef mat-sort-header>امتیاز استفاده شده</mat-header-cell>
     <mat-cell *matCellDef="let order">{{makePersianNumber(order.used_point, false)}}

@@ -295,23 +295,14 @@ export class CartService {
   }
 
   calculateDiscount(considerCoupon = false) {
-    let discountValue = 0;
-
-    if (this.cartItems.getValue().length > 0) {
-      this.cartItems.getValue().forEach(el => {
-        let tempTotalDiscount = el.discount && el.discount.length > 0 ? el.discount.reduce((a, b) => a * b) : 0;
-
-        if (el.coupon_discount) {
-          if (considerCoupon)
-            tempTotalDiscount *= el.coupon_discount;
-        }
-
-        tempTotalDiscount = Number(tempTotalDiscount.toFixed(5));
-        discountValue += (el.price - tempTotalDiscount * el.price) * el.quantity;
-      });
-    }
-
-    return discountValue;
+    return this.cartItems.getValue()
+      .map(r => Object.assign({}, {
+        p: r.price ? r.price : 0,
+        d: r.discountedPrice ? r.discountedPrice : 0,
+        q: r.quantity ? r.quantity : 1,
+      }))
+      .map(r => r.q * (r.p - r.d))
+      .reduce((x, y) => x + y , 0);
   }
 
   calculateTotal() {
