@@ -6,7 +6,7 @@
     <div fxLayout="row"
          fxLayoutAlign="start start">
       <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs" class="container">
-        <a [routerLink]="im.href">
+        <a (click)="directToUrl(im.href)">
           <img [src]="im.imgUrl" class="full-width"/>
         </a>
         <div *ngFor="let ar of im.areas">
@@ -40,7 +40,7 @@
     <div fxLayout="row"
          fxLayoutAlign="center center" fxLayout.sm="column" fxLayout.xs="column">
       <div [fxFlex]="100" *ngFor="let im of placements[key].imgs">
-        <a [routerLink]="im.href">
+        <a (click)="directToUrl(im.href)">
           <img [src]="im.imgUrl" class="full-width"/>
         </a>
         <div *ngFor="let ar of im.areas">
