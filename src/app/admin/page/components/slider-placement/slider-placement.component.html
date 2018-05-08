@@ -51,7 +51,10 @@
   </div>
   <div class="demo-list" [dragula]="'slider-bag'" [dragulaModel]="sliders">
     <div *ngFor="let item of sliders" class="top-menu-item" (click)="selectItem(item)">
-      <img [src]="getURL(item.info.imgUrl)" alt="">
+      <img [style.width]="item.imgWidth? item.imgWidth + 'px': '40px'"
+           [style.marginLeft]="item.imgMarginLeft ? item.imgMarginLeft + 'px' : 0"
+           [style.marginTop]="item.imgMarginTop ? item.imgMarginTop + 'px' : 0"
+           [src]="getURL(item.info.imgUrl)" alt="">
       <label class="content">{{item.info.text}}</label>
     </div>
   </div>
