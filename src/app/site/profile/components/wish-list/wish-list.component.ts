@@ -68,12 +68,12 @@ export class WishListComponent implements OnInit {
               this.profileWishList = this.profileWishList.filter(el => el._id !== wishItem);
               this.progressService.disable();
               this.ngOnInit();
-              this.snackBar.open('کالا از لیست علاقمندی های شما حذف شد', null, {
+              this.snackBar.open('کالا از لیست علاقمندی‌های شما حذف شد', null, {
                 duration: 3200
               });
             },
             error => {
-              this.snackBar.open('محصول از لیست علاقمندی های شما حذف نشد، لطفا دوباره تلاش کنید', null, {
+              this.snackBar.open('محصول از لیست علاقمندی‌های شما حذف نشد، لطفا دوباره تلاش کنید', null, {
                 duration: 3200
               });
               this.progressService.disable();

@@ -76,7 +76,7 @@ export class DeliverComponent implements OnInit {
       this.resultsLength = res.total;
       this.dataSource.data = res.data;
 
-      
+
       this.newDeliverCount.emit(this.resultsLength);
 
       this.progeressService.disable();
@@ -84,7 +84,7 @@ export class DeliverComponent implements OnInit {
     }, err => {
       this.progeressService.disable();
       this.resultsLength = 0;
-      this.openSnackBar('خطا در دریافت لیست سفارش ها');
+      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
     });
   }
 

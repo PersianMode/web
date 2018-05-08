@@ -5,4 +5,5 @@ export interface IPageInfo {
   is_app: boolean;
   collection: ICollection;
   content: string;
+  page_info: any;
 }
