@@ -37,9 +37,12 @@ export class DictionaryService {
     }
     return word + '';
   }
+
   translateColor(col: any) {
-    return col && col.name ? col.name.split('/').map(r => r.split('-')).reduce((x, y) => x.concat(y)).map(r => this.translateWord(r)).join(' / ') : 'نامعین';
+    return col && col.name ? col.name.split('/').map(r => r.split('-'))
+      .reduce((x, y) => x.concat(y)).map(r => this.translateWord(r)).join(' / ') : 'نامعین';
   }
+
   convertColor(color: string): string {
     let convertedColor = this.colorDictionary[color.toUpperCase()];
     if (!convertedColor) {
@@ -70,9 +73,12 @@ export class DictionaryService {
   USToEU(oldSize, gender) {
     let returnValue: any;
     const g = (gender && gender.toUpperCase() === 'WOMENS') ? 'women' : 'men';
-    returnValue = this.shoesSizeMap[g].find(size => size.us === oldSize);
+    if (this.shoesSizeMap[g])
+      returnValue = this.shoesSizeMap[g].find(size => size.us === oldSize);
+
     if (!returnValue || !returnValue.eu)
       return this.translateWord(oldSize);
+
     return this.translateWord(returnValue.eu);
   }
 

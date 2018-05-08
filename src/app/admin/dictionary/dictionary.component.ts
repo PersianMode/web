@@ -85,13 +85,13 @@ export class DictionaryComponent implements OnInit {
           // TODO send delete request
           this.httpService.delete(`/dictionary/${element._id}`).subscribe(
             res => {
-              this.openSnackBar('دیکشنری با موفقیت پاک گردید');
+              this.openSnackBar('مدخل با موفقیت پاک شد');
               this.isLoadingResults = false;
               this.progressService.disable();
             },
             err => {
               this.isLoadingResults = false;
-              this.openSnackBar('خطا در پاک کردن دیکشنری');
+              this.openSnackBar('خطا در پاک کردن مدخل');
               this.progressService.disable();
             }
           );
@@ -113,14 +113,14 @@ export class DictionaryComponent implements OnInit {
     updateDicDialog.afterClosed().subscribe(
       data => {
         if (data && data.status) {
-          this.openSnackBar('دیکشنری با موفقیت بروزرسانی گردید');
+          this.openSnackBar('مدخل با موفقیت بروزرسانی شد');
           this.isLoadingResults = false;
           this.load();
         }
       },
       err => {
         this.isLoadingResults = false;
-        this.openSnackBar('خطا در پاک کردن دیکشنری');
+        this.openSnackBar('خطا در پاک کردن مدخل');
       });
   }
 
@@ -134,14 +134,14 @@ export class DictionaryComponent implements OnInit {
     addDicDialog.afterClosed().subscribe(
       data => {
         if (data && data.status) {
-          this.openSnackBar('دیکشنری با موفقیت ثبت گردید');
+          this.openSnackBar('مدخل با موفقیت ثبت شد');
           this.isLoadingResults = false;
           this.load();
         }
       },
       err => {
         this.isLoadingResults = false;
-        this.openSnackBar('خطا در پاک کردن دیکشنری');
+        this.openSnackBar('خطا در پاک کردن مدخل');
       });
   }
 
