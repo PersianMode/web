@@ -16,7 +16,7 @@
         </mat-input-container>
       </div>
       <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
-        <mat-checkbox [(ngModel)]="selectedTextLink.is_header">
+        <mat-checkbox [(ngModel)]="selectedTextLink.is_header" (ngModelChange)="checkTextchanges()">
           <span *ngIf="selectedTextLink.is_header">عنوان</span>
           <span *ngIf="!selectedTextLink.is_header">زیر عنوان</span>
         </mat-checkbox>

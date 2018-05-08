@@ -218,7 +218,7 @@ export class PageBasicInfoComponent implements OnInit {
 
     Object.keys(this.form.controls).forEach(el => {
       let formValue = this.form.controls[el].value;
-      let originalValue = this.originalForm[el];
+      let originalValue = el.toLowerCase() === 'title' ? this.originalForm.page_info[el] : this.originalForm[el];
 
       if (typeof formValue === 'string') {
         if (formValue && formValue.trim().length <= 0)
