@@ -21,6 +21,7 @@ export class PageBasicInfoComponent implements OnInit {
   originalForm: IPageInfo = null;
   form: FormGroup;
   collection: ICollection = null;
+  isTitleValid = false;
 
   anyChanges = false;
   upsertBtnShouldDisabled = false;
@@ -30,8 +31,8 @@ export class PageBasicInfoComponent implements OnInit {
   @ViewChild('content') contentEl: ElementRef;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-    private httpService: HttpService, private snackBar: MatSnackBar,
-    private dialog: MatDialog, private router: Router) {
+              private httpService: HttpService, private snackBar: MatSnackBar,
+              private dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit() {
@@ -58,11 +59,13 @@ export class PageBasicInfoComponent implements OnInit {
   initForm() {
     this.form = new FormBuilder().group({
       address: [, [Validators.required]],
+      title: [],
       is_app: [false],
       content: []
 
     }, {});
   }
+
   initPageInfo() {
     if (!this.id) {
       return;
@@ -75,8 +78,8 @@ export class PageBasicInfoComponent implements OnInit {
         data = data[0];
         this.form.controls['address'].setValue(data.address);
         this.form.controls['is_app'].setValue(data.is_app);
+        this.form.controls['title'].setValue(data.page_info && data.page_info.title ? data.page_info.title : null);
         this.form.controls['content'].setValue((data.page_info && data.page_info.content) ? data.page_info.content : null);
-
         if (data.collection) {
           this.collection = {
             _id: data.collection._id,
@@ -99,7 +102,6 @@ export class PageBasicInfoComponent implements OnInit {
         this.upsertBtnShouldDisabled = false;
       }
     );
-
   }
 
   setCollection(collection: any) {
@@ -116,6 +118,7 @@ export class PageBasicInfoComponent implements OnInit {
 
     const data = {
       address: this.form.controls['address'].value,
+      title: this.form.controls['title'].value,
       is_app: this.form.controls['is_app'].value,
       collection_id: this.collection ? this.collection._id : null,
       content: this.form.controls['content'].value
@@ -197,8 +200,11 @@ export class PageBasicInfoComponent implements OnInit {
     );
   }
 
-
   fieldChanged() {
+    if ((this.form.controls['is_app'].value || (this.form.controls['address'].value && (this.form.controls['address'].value === 'home' || this.form.controls['address'].value.includes('collection')))) || this.form.controls['title'].value)
+      this.isTitleValid = true;
+    else
+      this.isTitleValid = false;
     const previewContent = this.form.controls['content'].value;
     this.contentEl.nativeElement.innerHTML = '';
     if (previewContent)

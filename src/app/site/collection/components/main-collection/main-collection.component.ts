@@ -24,6 +24,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   bottomScroll = false;
   topDist = 0;
   innerHeight = 0;
+  title = '';
   innerScroll = false;
   pageName = '';
   curWidth: number;
@@ -66,6 +67,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
       this.pageName = 'collection/' + params.get('typeName');
       this.pageService.getPage(this.pageName);
       this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
+          this.title = res.title;
           if (res && res['collection_id']) {
             this.productService.loadProducts(res['collection_id']);
           } else {
@@ -81,7 +83,10 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     });
     this.productService.collectionNameFa$.subscribe(r => {
       this.collectionNameFa = r;
-      this.titleService.setTitleWithConstant(TitleService.collection_name + ' ' + r);
+      if (!this.title)
+        this.titleService.setTitleWithConstant(TitleService.collection_name + ' ' + r);
+      else
+        this.titleService.setTitleWithConstant(this.title);
     });
     this.showHideSpinner(true);
     this.productService.productList$.subscribe(r => {

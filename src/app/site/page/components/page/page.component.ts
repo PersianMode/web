@@ -1,6 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
+import {TitleService} from '../../../../shared/services/title.service';
 
 @Component({
   selector: 'app-page',
@@ -12,7 +13,7 @@ export class PageComponent implements OnInit {
   pageName = '';
   content = '';
 
-  constructor(private route: ActivatedRoute, private pageService: PageService) {
+  constructor(private route: ActivatedRoute, private pageService: PageService,private titleService: TitleService) {
   }
 
   ngOnInit() {
@@ -27,6 +28,9 @@ export class PageComponent implements OnInit {
             this.contentEl.nativeElement.insertAdjacentHTML('beforeend', this.content);
         } else {
           console.error('-> ', `${this.pageName} is getting empty data for page`);
+        }
+        if (res && res['title']) {
+          this.titleService.setTitleWithConstant(res['title']);
         }
       });
     });
