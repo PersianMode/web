@@ -11,15 +11,15 @@ export class FooterComponent implements OnInit {
   footer = {
     headerList: [
       {
-        text: 'کارت های هدیه',
+        text: 'کارت‌های هدیه',
         href: '#',
       },
       {
-        text: 'تخفیف های دانش آموزی',
+        text: 'تخفیف‌های دانش آموزی',
         href: '#',
       },
       {
-        text: 'تخفیف های دانشجویی',
+        text: 'تخفیف‌های دانشجویی',
         href: '#',
       },
       {
@@ -31,7 +31,7 @@ export class FooterComponent implements OnInit {
         href: '#',
       },
       {
-        text: 'فیدبک های اعضا',
+        text: 'فیدبک‌های اعضا',
         href: '#',
       },
     ],
@@ -58,7 +58,7 @@ export class FooterComponent implements OnInit {
       },
       {
         header: false,
-        text: 'آپشن های پرداخت',
+        text: 'آپشن‌های پرداخت',
         href: '#',
       },
       {
@@ -95,7 +95,7 @@ export class FooterComponent implements OnInit {
       },
       {
         header: false,
-        text: 'ایده های نو',
+        text: 'ایده‌های نو',
         href: '#',
       },
     ],

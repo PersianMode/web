@@ -115,7 +115,7 @@ export class PageBasicInfoComponent implements OnInit {
   }
 
   submitPage() {
-
+    console.log('on submit page!');
     const data = {
       address: this.form.controls['address'].value,
       title: this.form.controls['title'].value,
@@ -201,7 +201,9 @@ export class PageBasicInfoComponent implements OnInit {
   }
 
   fieldChanged() {
-    if ((this.form.controls['is_app'].value || (this.form.controls['address'].value && (this.form.controls['address'].value === 'home' || this.form.controls['address'].value.includes('collection')))) || this.form.controls['title'].value)
+    if ((this.form.controls['is_app'].value || (this.form.controls['address'].value &&
+        (this.form.controls['address'].value === 'home' || this.form.controls['address'].value.includes('collection')))) ||
+      this.form.controls['title'].value)
       this.isTitleValid = true;
     else
       this.isTitleValid = false;

@@ -3,13 +3,13 @@
     تأیید حذف
   </mat-card-header>
   <mat-card-content class="page">
-    <div class="content">
-      آیا مطمئن هستید که می خواهید
+    <div class="content" dir="rtl">
+      آیا مطمئن هستید که می‌خواهید
       <span *ngIf="name">"{{name}}"</span>
       <span *ngIf="!name"> این موجودیت </span>
-      را حدف نمایید?
+      را حدف نمایید؟
     </div>
-    <div class="sub-title content">این حذف، ممکن است موجب حذف موجودیت های دیگر نیز شود</div>
+    <div class="sub-title content">این حذف، ممکن است موجب حذف موجودیت‌های دیگر نیز شود</div>
     <br/>
     <div fxLayout="row" rxLayout.xs="column" fxLayoutAlign="center center">
       <div fxFlex="50" role="yes-btn" style="display: inline-block">

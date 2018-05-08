@@ -20,9 +20,6 @@
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-actions *ngIf="c._id == selectedId">
-          <button mat-icon-button (click)="openView(c._id)" color="primary">
-            <mat-icon aria-label="view">visibility</mat-icon>
-          </button>
           <button mat-icon-button (click)="openForm(c._id)" color="accent">
             <mat-icon aria-label="edit">edit</mat-icon>
           </button>
