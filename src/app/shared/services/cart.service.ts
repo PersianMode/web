@@ -187,9 +187,6 @@ export class CartService {
     const itemList = [];
 
     items.forEach((el: any) => {
-      // TODO: remove this!
-      el.discount = 47.5;
-      
       const objItem: any = Object.assign({}, el);
       const price = el.instance_price ? el.instance_price : el.base_price;
       Object.assign(objItem, {
