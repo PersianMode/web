@@ -115,7 +115,6 @@ export class PageBasicInfoComponent implements OnInit {
   }
 
   submitPage() {
-    console.log('on submit page!');
     const data = {
       address: this.form.controls['address'].value,
       title: this.form.controls['title'].value,
