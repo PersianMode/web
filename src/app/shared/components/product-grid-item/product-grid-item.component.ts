@@ -28,6 +28,8 @@ export class ProductGridItemComponent implements OnInit {
   rect;
   isMobile = false;
   soldOut = false;
+  discounted = false;
+  discountedPrice: any;
 
   constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router,
               private responsiveService: ResponsiveService, private sanitizer: DomSanitizer,
@@ -39,7 +41,7 @@ export class ProductGridItemComponent implements OnInit {
 
   ngOnInit() {
     this.desc = Array.from(new Set([... this.data.tags.map(x => this.dict.translateWord(x.name.trim()))])).join(' ');
-    this.price = priceFormatter(this.data.base_price);
+    this.setPrice();
 
     const arrImages = this.data.colors.map(r => r.image.thumbnail);
     this.images = Array.from(new Set<string>(arrImages));
@@ -47,6 +49,13 @@ export class ProductGridItemComponent implements OnInit {
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.soldOut = this.data.soldOut;
+    this.discounted = !!this.data.discount;
+    this.setPrice();
+  }
+
+  private setPrice() {
+    this.price = priceFormatter(this.data.colors[this.pos].price);
+    this.discountedPrice = priceFormatter(this.data.colors[this.pos].discountedPrice);
   }
 
   turnOn(e, time) {
@@ -66,6 +75,7 @@ export class ProductGridItemComponent implements OnInit {
 
   changePos(i) {
     this.pos = i;
+    this.setPrice();
   }
 
   nextSlide() {

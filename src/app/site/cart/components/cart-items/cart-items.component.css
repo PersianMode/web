@@ -58,6 +58,9 @@ section {
   margin-right: 8px;
   display: inline-block;
 }
+section span {
+  margin-right: 20px;
+}
 .soldOut {
   color: red;
   position: absolute;

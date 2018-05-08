@@ -17,7 +17,7 @@
               </h4>
             </div>
             <div fxFlex="30" class="main-price">
-              <section *ngIf="!notExist">{{displayTotalPrice}}</section>
+              <section *ngIf="!notExist"><span [class.overridden]="product?.discount">{{displayTotalPrice}}</span><br/><span *ngIf="product?.discount">{{totalDiscountedPrice}}</span></section>
               <section *ngIf="notExist && !product.count">ناموجود</section>
               <section *ngIf="notExist && product.count">فقط {{stock}} عدد موجود است</section>
             </div>
@@ -32,12 +32,12 @@
           <div>
             <p>تعداد:</p>
             <span>{{displayQuantity}} {{' عدد'}}</span>
-            <section>{{displayPrice}}</section>
+            <section><span [class.overridden]="product?.discount">{{displayPrice}}</span><span *ngIf="product?.discount">{{discountedPrice}}</span></section>
           </div>
           <br>
           <div>
             <p>رنگ:</p>
-            <span>{{product?.color?.name}}</span>
+            <span>{{color}}</span>
           </div>
         </div>
         <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">

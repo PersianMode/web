@@ -14,10 +14,14 @@ import {CartService} from '../../../../shared/services/cart.service';
 export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input() product;
   @Input() price;
+  @Input() discountedPrice;
+  @Input() discounted;
   @Input() sub;
   @Input() gender;
   @Output() changeSize = new EventEmitter<any>();
   @Input() productType;
+  @Input() color;
+  @Input() barcode;
 
   @Input()
   set id(value) {

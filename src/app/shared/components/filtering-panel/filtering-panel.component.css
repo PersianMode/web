@@ -10,9 +10,10 @@
 
 .circle{
   top: -27px;
-  right: 6px;
+  right: 3px;
   font-size: 13px;
   position: relative;
+  display: table;
 }
 .color-span {
   width: 26px;

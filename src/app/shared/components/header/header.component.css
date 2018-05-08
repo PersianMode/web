@@ -3,7 +3,8 @@
   font-weight: 200;
   position: absolute;
   color: white;
-  right: 12px;
+  right: 20px;
+  top: 1px;
   width: 26px;
   text-align: center;
   line-height: 26px;
@@ -23,7 +24,7 @@
 
 #header-cart span:nth-child(3) {
   position: absolute;
-  right: 12px;
+  right: 20px;
   z-index: 1;
   opacity:.8;
 }

@@ -9,10 +9,14 @@ import {CartService} from '../../../../shared/services/cart.service';
 export class MobileProductComponent implements OnInit {
   @Input() product;
   @Input() price;
+  @Input() discountedPrice;
+  @Input() discounted;
   @Input() sub;
   @Input() id;
   @Input() gender;
   @Input() productType;
+  @Input() color;
+  @Input() barcode;
 
   @Input()
   set selectedProductColorID(id) {

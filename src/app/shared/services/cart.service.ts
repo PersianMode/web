@@ -4,6 +4,7 @@ import {AuthService} from './auth.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {discountCalc} from '../lib/discountCalc';
 
 const SNACK_CONFIG: MatSnackBarConfig = {
   duration: 3200,
@@ -186,24 +187,16 @@ export class CartService {
     const itemList = [];
 
     items.forEach((el: any) => {
-      const objItem: any = {};
-      objItem.order_id = el.order_id;
-      objItem.product_id = el.product_id;
-      objItem.instance_id = el.instance_id;
-      objItem.productType = el.type;
-      objItem.name = el.name;
-      objItem.color = el.color;
-      objItem.size = el.size;
-      objItem.quantity = el.quantity;
-      objItem.tags = el.tags;
-      objItem.count = el.count;
-      objItem.thumbnail = el.thumbnail;
-      objItem.instances = el.instances;
-      objItem.price = el.instance_price ? el.instance_price : el.base_price;
-      objItem.discount = el.discount;
-      // objItem.discount = (el.discount && el.discount.length > 0) ?
-      //   (objItem.price - (el.discount.reduce((a, b) => a * b) * objItem.price)) : 0;
-
+      // TODO: remove this!
+      el.discount = 47.5;
+      
+      const objItem: any = Object.assign({}, el);
+      const price = el.instance_price ? el.instance_price : el.base_price;
+      Object.assign(objItem, {
+        productType: el.type,
+        price,
+        discountedPrice: discountCalc(price, el.discount),
+      });
       itemList.push(objItem);
     });
 
@@ -282,7 +275,8 @@ export class CartService {
         tags: item.tags,
         name: item.name,
         price: instance.price,
-        discount: [1],
+        discountedPrice: item.discountedPrice,
+        discount: item.discount,
         thumbnail: color.image.thumbnail,
         product_color_id: instance.product_color_id,
       }));
