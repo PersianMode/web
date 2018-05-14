@@ -134,7 +134,7 @@ export class ProductComponent implements OnInit, OnDestroy {
           setTimeout(function () {
             rmDialog.close();
             sub.unsubscribe();
-          }, 30000);
+          }, 3000);
         });
 
       setTimeout(() => {

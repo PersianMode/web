@@ -161,11 +161,12 @@ export class BasicInfoComponent implements OnInit {
     let national_id = (this.userInfoForm.controls['national_id'].value === null ||
       isUndefined(this.userInfoForm.controls['national_id'].value)) ? '' : this.userInfoForm.controls['national_id'].value;
     national_id = national_id.trim();
-
+    console.log(national_id);
+    console.log(this.customerBasicInfo.national_id);
     if ((name !== this.customerBasicInfo.name && (name !== '' || this.customerBasicInfo.name !== null))
       || (surname !== this.customerBasicInfo.surname && (surname !== '' || this.customerBasicInfo.surname !== null))
       || (username !== this.customerBasicInfo.username && (username !== '' || this.customerBasicInfo.username !== null))
-      || ((this.customerBasicInfo.national_id && national_id !== this.customerBasicInfo.national_id)
+      || ((national_id !== this.customerBasicInfo.national_id)
         || (isUndefined(this.customerBasicInfo.national_id) && national_id !== ''))) {
       this.anyChanges = true;
     }
