@@ -68,7 +68,6 @@ export class BasicInfoComponent implements OnInit {
       this.balanceFa = this.balance.toLocaleString('fa');
       this.loyaltyPointsFa = this.loyaltyPoints.toLocaleString('fa');
       this.loyaltyPointsValueFa = this.loyaltyPointsValue.toLocaleString('fa');
-      ;
     });
   }
 
