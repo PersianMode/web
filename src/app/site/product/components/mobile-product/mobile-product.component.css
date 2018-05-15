@@ -27,6 +27,7 @@ button:focus{
 }
 .cart {
   width: calc(100% - 80px);
+  cursor: pointer;
 }
 
 .container {

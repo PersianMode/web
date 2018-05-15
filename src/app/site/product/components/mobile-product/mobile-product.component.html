@@ -23,7 +23,7 @@
   <div style="width:100%">
     <app-size-picker [sizes]="productSize" [productType]="productType" (value)="newSize($event)" [gender]="gender"></app-size-picker>
   </div>
-  <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled">در سبد بگذار</button>
+  <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">در سبد بگذار</button>
   <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
   <mat-accordion>
     <mat-expansion-panel [expanded]="true">
