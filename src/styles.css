@@ -1001,3 +1001,8 @@ p {
 .overridden {
   text-decoration: line-through;
 }
+
+.dialog-style {
+  max-height: calc(100vh);
+  overflow-y: auto;
+}
