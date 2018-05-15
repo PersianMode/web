@@ -187,9 +187,6 @@ export class CartService {
     const itemList = [];
 
     items.forEach((el: any) => {
-      // TODO: remove this!
-      el.discount = 47.5;
-      
       const objItem: any = Object.assign({}, el);
       const price = el.instance_price ? el.instance_price : el.base_price;
       Object.assign(objItem, {
@@ -298,23 +295,14 @@ export class CartService {
   }
 
   calculateDiscount(considerCoupon = false) {
-    let discountValue = 0;
-
-    if (this.cartItems.getValue().length > 0) {
-      this.cartItems.getValue().forEach(el => {
-        let tempTotalDiscount = el.discount && el.discount.length > 0 ? el.discount.reduce((a, b) => a * b) : 0;
-
-        if (el.coupon_discount) {
-          if (considerCoupon)
-            tempTotalDiscount *= el.coupon_discount;
-        }
-
-        tempTotalDiscount = Number(tempTotalDiscount.toFixed(5));
-        discountValue += (el.price - tempTotalDiscount * el.price) * el.quantity;
-      });
-    }
-
-    return discountValue;
+    return this.cartItems.getValue()
+      .map(r => Object.assign({}, {
+        p: r.price ? r.price : 0,
+        d: r.discountedPrice ? r.discountedPrice : 0,
+        q: r.quantity ? r.quantity : 1,
+      }))
+      .map(r => r.q * (r.p - r.d))
+      .reduce((x, y) => x + y , 0);
   }
 
   calculateTotal() {
@@ -400,12 +388,12 @@ export class CartService {
       product_instance_id: favoriteItem.product_instance_id,
     }).subscribe(
       res => {
-        this.snackBar.open(`محصول به لیست علاقمندیهای شما افزوده شد`, null, SNACK_CONFIG);
+        this.snackBar.open(`محصول به لیست علاقمندی‌های شما افزوده شد`, null, SNACK_CONFIG);
       },
       err => {
         console.error('Cannot save favorite item to server: ', err);
         if (err.error === 'Duplicate WishList Item is not allowed')
-          this.snackBar.open(`این محصول از قبل به لیست علاقمندی های شما افزوده شده است`, null, SNACK_CONFIG);
+          this.snackBar.open(`این محصول از قبل به لیست علاقمندی‌های شما افزوده شده است`, null, SNACK_CONFIG);
         else
           this.snackBar.open(`محصول به لیست علاقمندیها افزوده نشد. لطفا دوباره تلاش کنید`, null, SNACK_CONFIG);
       });

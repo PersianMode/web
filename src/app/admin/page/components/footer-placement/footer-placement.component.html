@@ -1,27 +1,27 @@
 <div class="inner-placement-div">
   <div>
-    <label class="part-title">لینک های متنی</label>
+    <label class="part-title">لینک‌های متنی</label>
     <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
       fxLayoutAlign.xs="center center">
-      <div fxFlex="30" class="full-width input-item">
+      <div fxFlex="25" class="full-width input-item">
         <mat-input-container class="full-width input-item persian-field">
           <input matInput type="text" class="input-item" placeholder="متن" [(ngModel)]="selectedTextLink.text" (ngModelChange)="checkTextchanges()"
           />
         </mat-input-container>
       </div>
-      <div fxFlex="30" class="full-width input-item">
+      <div fxFlex="25" class="full-width input-item">
         <mat-input-container class="full-width input-item persian-field">
           <input matInput type="text" class="input-item left-text" placeholder="آدرس" [(ngModel)]="selectedTextLink.href" (ngModelChange)="checkTextchanges()"
           />
         </mat-input-container>
       </div>
       <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
-        <mat-checkbox [(ngModel)]="selectedTextLink.is_header">
+        <mat-checkbox [(ngModel)]="selectedTextLink.is_header" (ngModelChange)="checkTextchanges()">
           <span *ngIf="selectedTextLink.is_header">عنوان</span>
           <span *ngIf="!selectedTextLink.is_header">زیر عنوان</span>
         </mat-checkbox>
       </div>
-      <div fxFlex="15">
+      <div fxFlex="25">
         <button mat-mini-fab color="primary" [disabled]="!textAnyChanges" (click)="modifyTextLink()">
           <mat-icon>
             <i class="material-icons" *ngIf="selectedTextLink._id">create</i>
@@ -58,9 +58,9 @@
     <hr class="divider" />
   </div>
   <div>
-    <label class="part-title">لینک های تصویری شبکه های اجتماعی</label>
+    <label class="part-title">لینک‌های تصویری شبکه‌های اجتماعی</label>
     <div>
-      <label>شبکه های اجتماعی انتخاب نشده:</label>
+      <label>شبکه‌های اجتماعی انتخاب نشده:</label>
       <div *ngFor="let icon of getNotSelectedIcons()" class="icon-link" (click)="selectIcon(icon)">
         <div class="example-tooltip-host" [matTooltip]="icon.name" [matTooltipPosition]="'above'">
           <span class="icons">
@@ -73,7 +73,7 @@
       <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
         fxLayoutAlign.xs="center center">
         <div fxFlex="50" class="full-width">
-          <mat-input-container class="full-width">
+          <mat-input-container class="full-width" style="direction: ltr; float: left; text-align: left">
             <input matInput type="text" placeholder="آدرس" [(ngModel)]="selectedSocialNetwork.href" (ngModelChange)="checkSocialchanges()"
             />
           </mat-input-container>

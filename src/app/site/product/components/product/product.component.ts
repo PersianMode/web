@@ -108,15 +108,14 @@ export class ProductComponent implements OnInit, OnDestroy {
     const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColorID && el.size === size + '');
 
     if (instance) {
-      const object = {
+      const object = Object.assign({}, this.product);
+
+      Object.assign(object, {
         product_id: this.product._id,
         product_instance_id: instance._id,
-        instances: this.product.instances,
         product_type: this.productType,
         discountedPrice: instance.discountedPrice,
-      };
-
-      Object.assign(object, this.product);
+      });
 
       this.cartService.saveItem(object);
       this.waiting = true;

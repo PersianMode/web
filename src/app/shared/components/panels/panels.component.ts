@@ -4,6 +4,7 @@ import {AuthService} from '../../services/auth.service';
 import {PageService} from '../../services/page.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -17,7 +18,8 @@ export class PanelsComponent implements OnInit {
   placements: any = [];
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
-    private pageService: PageService, private sanitizer: DomSanitizer) {
+    private pageService: PageService, private sanitizer: DomSanitizer,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class PanelsComponent implements OnInit {
 
             if (r.info.topTitle)
               this.placements[r.info.row].topTitle = r.info.topTitle;
-            
+
             this.placements[r.info.row].imgs.push({
               href: r.info.href,
               areas: r.info.areas,
@@ -81,5 +83,15 @@ export class PanelsComponent implements OnInit {
 
   getKeyList(list) {
     return Object.keys(list);
+  }
+
+  directToUrl(url) {
+    if (url.includes('http')) {
+      // this.window.location.replace(url);
+      const win = window.open(url, '_blank');
+      win.focus();
+    } else {
+      this.router.navigate([url]);
+    }
   }
 }

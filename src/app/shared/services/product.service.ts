@@ -182,8 +182,6 @@ export class ProductService {
     data.season = season ? ['HOLI', 'CORE', 'WINTER', 'SPRING', 'SUMMER', 'FALL'].indexOf(season.name) : NaN;
     data.sizesByColor = {};
     data.sizesInventory = {};
-    // TODO: remove this!
-    data.discount = 47.5;
     data.discountedPrice =
       data.instances.forEach(instance => {
         if (!instance.price)

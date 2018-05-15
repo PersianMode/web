@@ -95,7 +95,7 @@ export class InboxComponent implements OnInit {
     }, err => {
       this.progressService.disable();
       this.newInboxCount.emit(0);
-      this.openSnackBar('خطا در دریافت لیست سفارش ها');
+      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
     });
   }
 
