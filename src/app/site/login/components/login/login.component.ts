@@ -46,10 +46,9 @@ export class LoginComponent implements OnInit {
       if (username.includes('@')) {
         isMatched = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(username);
       } else {
-        isMatched = username.length === 11 && !isNaN(username);
+        isMatched = (/^[\u0660-\u06690-9\u06F0-\u06F9]+$/).test(username);
       }
     }
-
 
     if (!isMatched) {
       AC.get('username').setErrors({match: 'not matched to any type'});
