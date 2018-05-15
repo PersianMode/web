@@ -14,16 +14,16 @@
     <form (ngSubmit)="login()" [formGroup]="loginForm">
       <div fxLayout="column" fxLayoutAlign="center center">
         <div fxFlex="50" class="input-container">
-          <input class="input-field left-direction" type="email" placeholder="ایمیل"
-                 formControlName="email"
-                 (focus)="setSeen('email')"
+          <input class="input-field left-direction" placeholder="ایمیل یا شماره تلفن همراه"
+                 formControlName="username"
+                 (focus)="setSeen('username')"
                  (blur)="curFocus = null"
-                 [ngClass]="(loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email' ? 'input-error' : null"
+                 [ngClass]="(loginForm.controls['username'].hasError('required') || loginForm.controls['username'].hasError('match')) && seen['username'] && curFocus !== 'username' ? 'input-error' : null"
                  (keypress)="keyPress($event)"
-                  autocomplete="email"/>
+                  autocomplete="username"/>
           <label
-            *ngIf="(loginForm.controls['email'].hasError('required') || loginForm.controls['email'].hasError('email')) && seen['email'] && curFocus !== 'email'"
-            class="field-error">لطفا آدرس ایمیل معتبری وارد کنید</label>
+            *ngIf="(loginForm.controls['username'].hasError('required') || loginForm.controls['username'].hasError('match')) && seen['username'] && curFocus !== 'username'"
+            class="field-error">لطفا آدرس ایمیل و یا شماره تلفن همراه معتبری وارد کنید</label>
         </div>
         <div fxFlex="50" class="input-container">
           <input class="input-field left-direction" type="password" placeholder="رمز عبور"
