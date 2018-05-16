@@ -17,6 +17,7 @@ import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-di
 })
 export class AppSubMenuComponent implements OnInit {
   @Input() pageId = null;
+
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -24,6 +25,7 @@ export class AppSubMenuComponent implements OnInit {
       this.getRelatedItems();
     }
   }
+
   @Input()
   set section(value) {
     if (value !== this.selectedSection) {
@@ -36,6 +38,7 @@ export class AppSubMenuComponent implements OnInit {
     if (value)
       this.getRelatedItems();
   }
+
   @Output() modifyPlacement = new EventEmitter();
 
   itemBagName = 'app-sub-menu-bag';
@@ -51,8 +54,9 @@ export class AppSubMenuComponent implements OnInit {
   newPlacementId = null;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-    private progressService: ProgressService, private sanitizer: DomSanitizer,
-    private dialog: MatDialog) {}
+              private progressService: ProgressService, private sanitizer: DomSanitizer,
+              private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     if (!this.dragulaService.find(this.itemBagName))
@@ -84,8 +88,8 @@ export class AppSubMenuComponent implements OnInit {
       new_section: [null],
       is_header: [false],
     }, {
-        validator: this.checkEnteredSection,
-      });
+      validator: this.checkEnteredSection,
+    });
   }
 
   private checkEnteredSection(AC: AbstractControl) {

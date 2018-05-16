@@ -1,11 +1,10 @@
-import {Component, HostListener, Inject, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {AuthService} from '../../services/auth.service';
 import {PageService} from '../../services/page.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
 import {Router} from '@angular/router';
-
 
 @Component({
   selector: 'app-panels',
@@ -18,8 +17,8 @@ export class PanelsComponent implements OnInit {
   placements: any = [];
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
-    private pageService: PageService, private sanitizer: DomSanitizer,
-    private router: Router) {
+              private pageService: PageService, private sanitizer: DomSanitizer,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -51,6 +50,7 @@ export class PanelsComponent implements OnInit {
               href: r.info.href,
               areas: r.info.areas,
               imgUrl: this.getUrl(r.info.imgUrl),
+              fileType: r.info.fileType,
               subTitle: r.info.subTitle,
               type: r.info.panel_type,
             });
@@ -74,10 +74,14 @@ export class PanelsComponent implements OnInit {
 
   getRowParts(item) {
     switch (item.type.toLowerCase()) {
-      case 'full': return 100;
-      case 'half': return 50;
-      case 'third': return 33;
-      case 'quarter': return 25;
+      case 'full':
+        return 100;
+      case 'half':
+        return 50;
+      case 'third':
+        return 33;
+      case 'quarter':
+        return 25;
     }
   }
 
@@ -93,5 +97,18 @@ export class PanelsComponent implements OnInit {
     } else {
       this.router.navigate([url]);
     }
+  }
+
+  getFileTypeFromExtension(ext) {
+    const imgs = this.pageService['fileTypes']['images'].filter(el => el === ext);
+    if (imgs.length > 0)
+      return 'image';
+
+    const vds = this.pageService['fileTypes']['videos'].filter(el => el === ext);
+    if (vds.length > 0)
+      return 'video';
+
+    // default
+    return 'image';
   }
 }
