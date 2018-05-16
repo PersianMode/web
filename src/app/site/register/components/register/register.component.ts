@@ -6,7 +6,10 @@ import {AuthService} from '../../../../shared/services/auth.service';
 
 enum RegStatus {
   Register = 'Register',
-  Verify = 'Verify'
+  Verify = 'Verify',
+  PreferenceSize = 'PreferenceSize',
+  PreferenceBrand = 'PreferenceBrand',
+  PreferenceTags = 'PreferenceTags',
 };
 
 @Component({
@@ -15,6 +18,48 @@ enum RegStatus {
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  sizeSelected;
+  brandSelected;
+  tagsSelected;
+  brandsType;
+  brandsFromServer = [{
+    _id : '5af95c12867a8527085f471d',
+    name : 'Nike',
+  }, {
+    _id : '5af95c12867a8527085f471e',
+    name : 'Puma',
+  }, {
+    _id : '5af95c12867a8527085f4720',
+    name : 'Addidas',
+  }];
+  tagsType;
+  tagsFromServer = [{
+    _id : '5af95c12867a8527085f471d',
+    name : 'CAPS',
+  }, {
+    _id : '5af95c12867a8527085f471e',
+    name : 'BEANIE',
+  }, {
+    _id : '5af95c12867a8527085f4720',
+    name : 'DUFFEL BAGS',
+  }, {
+    _id : '5af95c12867a8527085f4722',
+    name : 'BACKPACK',
+  }];
+  sizesFromServer = [
+    {value: '10', disabled: false, displayValue: '۱۰'},
+    {value: '11', disabled: false, displayValue: '۱۱'},
+    {value: '6', disabled: false, displayValue: '۶'},
+    {value: '7', disabled: false, displayValue: '۷'},
+    {value: '8', disabled: false, displayValue: '۸'},
+    {value: '9', disabled: false, displayValue: '۹'}
+  ];
+  preferences = {
+    size: null,
+    brands: [],
+    tags: []
+  };
+
   @Output() closeDialog = new EventEmitter<boolean>();
   dob = null;
   dateObject = null;
@@ -71,30 +116,31 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    if (this.registerForm.valid && this.gender) {
-      let data: any = {};
-      Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
-      data.gender = this.gender;
-      data.dob = this.dob;
-      this.httpService.put('register', data).subscribe(
-        (res) => {
-          this.curStatus = this.regStatus.Verify;
-        },
-        (err) => {
-          console.error('Cannot register user: ', err);
-        }
-      );
-    } else {
-      Object.keys(this.registerForm.controls).forEach(el => {
-        if (!this.registerForm.controls[el].valid) {
-          this.seen[el] = true;
-        }
-      });
+    return this.curStatus = this.regStatus.Verify;
+    // if (this.registerForm.valid && this.gender) {
+    //   let data: any = {};
+    //   Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
+    //   data.gender = this.gender;
+    //   data.dob = this.dob;
+    //   this.httpService.put('register', data).subscribe(
+    //     (res) => {
+    //       this.curStatus = this.regStatus.Verify;
+    //     },
+    //     (err) => {
+    //       console.error('Cannot register user: ', err);
+    //     }
+    //   );
+    // } else {
+    //   Object.keys(this.registerForm.controls).forEach(el => {
+    //     if (!this.registerForm.controls[el].valid) {
+    //       this.seen[el] = true;
+    //     }
+    //   });
 
-      if (!this.gender) {
-        this.seen['gender'] = true;
-      }
-    }
+    //   if (!this.gender) {
+    //     this.seen['gender'] = true;
+    //   }
+    // }
   }
 
   changeDob(date) {
@@ -123,22 +169,56 @@ export class RegisterComponent implements OnInit {
   }
 
   checkCode() {
-    this.httpService.post('register/verify', {
-      code: this.code,
-      username: this.registerForm.controls['username'].value,
-    }).subscribe(
-      (data) => {
-        this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
-          .then(res => {
-            this.closeDialog.emit(true);
-          })
-          .catch(err => {
-            console.error('Cannot login: ', err);
-          });
-      },
-      (err) => {
-        console.error('Cannot verify registration: ', err);
-      }
-    );
+    return this.curStatus = this.regStatus.PreferenceSize;
+    // this.httpService.post('register/verify', {
+    //   code: this.code,
+    //   username: this.registerForm.controls['username'].value,
+    // }).subscribe(
+    //   (data) => {
+    //     this.curStatus = this.regStatus.PreferenceSize;
+    //     this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
+    //       .then(res => {
+    //         this.closeDialog.emit(true);
+    //       })
+    //       .catch(err => {
+    //         console.error('Cannot login: ', err);
+    //       });
+    //   },
+    //   (err) => {
+    //     console.error('Cannot verify registration: ', err);
+    //   }
+    // );
+  }
+
+  setSize() {
+    this.tagsType = this.tagsFromServer;
+    return this.curStatus = this.regStatus.PreferenceTags;
+  }
+
+  selectedSize(event) {
+    this.preferences.size = event;
+  }
+
+  setTags(tags) {
+    this.preferences.tags = tags.selectedOptions.selected.map(item => item.value);
+    this.brandsType = this.brandsFromServer;
+    return this.curStatus = this.regStatus.PreferenceBrand;
+  }
+
+  setBrand(brands) {
+    this.preferences.brands = brands.selectedOptions.selected.map(item => item.value);
+    console.log('------->', this.preferences);
+  }
+
+  backToCheckCode() {
+    return this.curStatus = this.regStatus.Verify;
+  }
+
+  backToSetSize() {
+    return this.curStatus = this.regStatus.PreferenceSize;
+  }
+
+  backToSetTags() {
+    return this.curStatus = this.regStatus.PreferenceTags;
   }
 }
