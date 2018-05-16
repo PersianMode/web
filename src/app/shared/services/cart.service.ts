@@ -249,7 +249,7 @@ export class CartService {
     const currentValue = this.cartItems.getValue();
     const object = {
       product_id: item.product_id,
-      productType:item.type,
+      productType: item.type,
       instance_id: item.product_instance_id,
       quantity: 1,
       order_id,
@@ -386,6 +386,7 @@ export class CartService {
     this.httpService.post('wishlist', {
       product_id: favoriteItem.product_id,
       product_instance_id: favoriteItem.product_instance_id,
+      product_color_id: favoriteItem.product_color_id,
     }).subscribe(
       res => {
         this.snackBar.open(`محصول به لیست علاقمندی‌های شما افزوده شد`, null, SNACK_CONFIG);

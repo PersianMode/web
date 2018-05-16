@@ -103,4 +103,9 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
       !this.bottomScroll && filterHeight - offset < height - 209;
     this.topDist = height - filterHeight + 209;
   }
+
+  addToCartDisability() {
+    console.log(this.addCardBtnDisabled || !this.size);
+    return this.addCardBtnDisabled || !this.size;
+  }
 }

@@ -5,8 +5,8 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class ProfileOrderService {
-  orderArray: BehaviorSubject<any> = new BehaviorSubject<any>({});
-  wishListArray: BehaviorSubject<any> = new BehaviorSubject<any>({});
+  orderArray: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  wishListArray: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   orderData: any;
   constructor(private httpService: HttpService, private authService: AuthService) {
   }
