@@ -24,10 +24,10 @@ export class WishListComponent implements OnInit {
   displaySize = null;
 
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
-              private responsiveService: ResponsiveService,
-              private dialog: MatDialog, protected httpService: HttpService,
-              protected progressService: ProgressService, private snackBar: MatSnackBar,
-              private auth: AuthService, private dict: DictionaryService) {
+    private responsiveService: ResponsiveService,
+    private dialog: MatDialog, protected httpService: HttpService,
+    protected progressService: ProgressService, private snackBar: MatSnackBar,
+    private auth: AuthService, private dict: DictionaryService) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -40,10 +40,13 @@ export class WishListComponent implements OnInit {
         this.profileWishList = result;
         this.profileWishList.forEach(
           el => {
-            let gender = el.product[0].tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+            const gender = el.product[0].tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
             [el.jalali_date, el.time] = dateFormatter(el.wish_list.adding_time);
-            el.product[0].displaySize = this.dict.setShoesSize(el.product[0].instances[0].size, gender, el.product[0].product_type.name);
+            el.product[0].displaySize = el.wish_list.product_instance_id ?
+              this.dict.setShoesSize(el.product[0].instances[0].size, gender, el.product[0].product_type.name) :
+              null;
           });
+        console.log(this.profileWishList);
       }
     });
     this.profileOrderService.getWishList();

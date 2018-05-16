@@ -9,7 +9,7 @@ import {DictionaryService} from '../../../../shared/services/dictionary.service'
 import {Subscription} from 'rxjs/Subscription';
 import {AddToCardConfirmComponent} from '../add-to-card-confirm/add-to-card-confirm.component';
 import {CartService} from '../../../../shared/services/cart.service';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
@@ -42,7 +42,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   constructor(public httpService: HttpService, private route: ActivatedRoute, @Inject(WINDOW) private window,
               private responsiveService: ResponsiveService, private productService: ProductService,
               private dict: DictionaryService, private cartService: CartService, private dialog: MatDialog,
-              private authService: AuthService, private router: Router, private titleService: TitleService) {
+              private authService: AuthService, private router: Router, private titleService: TitleService,
+              private snackBar: MatSnackBar) {
   }
 
   // this component we need to have a product data by this format :
@@ -103,6 +104,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   saveToCart(size) {
+    if (!size) {
+      this.snackBar.open('لطفا یک سایز را انتخاب کنید', null, {
+        duration: 2300,
+      });
+      return;
+    }
     // check form size and id undefined
     this.size = size;
     const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColorID && el.size === size + '');
@@ -148,16 +155,20 @@ export class ProductComponent implements OnInit, OnDestroy {
   saveToFavorites(size) {
     if (this.authService.isLoggedIn.getValue()) {
       this.size = size;
-      const instance = this.product.instances.find(el => el.product_color_id === this.selectedProductColorID && el.size === size + '');
-      if (instance) {
+      const colorBasedInstances = this.product.instances.filter(el => el.product_color_id === this.selectedProductColorID);
+      const instance = size ? colorBasedInstances.find(el => el.size === size + '') : null;
+      if (colorBasedInstances) {
         const favoriteObject = {
           product_id: this.product._id,
-          product_instance_id: instance._id,
+          product_instance_id: instance ? instance._id : null,
+          product_color_id: this.selectedProductColorID,
           instances: this.product.instances,
         };
 
         Object.assign(favoriteObject, this.product);
         this.cartService.saveFavoriteItem(favoriteObject);
+      } else {
+        console.error('Not specified color is selected');
       }
     } else this.goToRegister(size);
   }
