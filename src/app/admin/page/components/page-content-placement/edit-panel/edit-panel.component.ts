@@ -294,7 +294,7 @@ export class EditPanelComponent implements OnInit {
 
   imageUploaded(data) {
     if (data.length > 0) {
-      this.snackBar.open('تصویر بارگذاری شد', null, {
+      this.snackBar.open('با موفقیت بارگذاری شد', null, {
         duration: 2300,
       });
       this.saveButtonShouldBeDisabled = false;
