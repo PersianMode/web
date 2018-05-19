@@ -74,10 +74,11 @@
           </mat-input-container>
         </div>
         <div fxFlex="50" style="width: 100%">
-          <mat-input-container dir="ltr" class="input-field">
-            <input matInput type="text" class="menu-field left-text" placeholder="آدرس" [(ngModel)]="upsertLogo.href"
-                   (ngModelChange)="changeField()"/>
-          </mat-input-container>
+          <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [formControlName]="'href'"
+                          (add)="upsertLogo.href=$event" (field)="upsertLogo.href=$event" >
+          </app-suggestion>
+          <!--add label-->
+          <label class="content">{{upsertLogo.href}}</label>
         </div>
       </div>
     </div>

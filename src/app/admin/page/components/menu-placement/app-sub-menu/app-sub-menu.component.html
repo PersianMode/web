@@ -9,9 +9,10 @@
           </mat-input-container>
         </div>
         <div fxFlex="25" class="full-width sub-item">
-          <mat-input-container class="full-width">
-            <input matInput type="text" class="persian-field menu-field left-text" placeholder="آدرس" formControlName="href" />
-          </mat-input-container>
+          <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [formControlName]="'href'"
+                          (add)="insertedAddress=$event" (field)="insertedAddress=$event" >
+          </app-suggestion>
+
         </div>
         <div fxFlex="15" class="full-width vertical-align-item sub-item persian-field" *ngIf="(!selectedItem || !selectedItem.is_header) && !appSubMenuForm.controls['is_header'].value">
           <mat-select placeholder="بخش" formControlName="section" class="persian-field">

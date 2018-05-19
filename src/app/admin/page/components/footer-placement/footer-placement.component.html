@@ -10,10 +10,12 @@
         </mat-input-container>
       </div>
       <div fxFlex="25" class="full-width input-item">
-        <mat-input-container class="full-width input-item persian-field">
-          <input matInput type="text" class="input-item left-text" placeholder="آدرس" [(ngModel)]="selectedTextLink.href" (ngModelChange)="checkTextchanges()"
-          />
-        </mat-input-container>
+        <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [formControlName]="'href'"
+                        (add)="selectedTextLink.href=$event" (field)="selectedTextLink.href=$event" >
+        </app-suggestion>
+        <!--add label-->
+        <label class="content">{{selectedTextLink.href}}</label>
+
       </div>
       <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
         <mat-checkbox [(ngModel)]="selectedTextLink.is_header" (ngModelChange)="checkTextchanges()">

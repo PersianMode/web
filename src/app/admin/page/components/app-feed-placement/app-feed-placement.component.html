@@ -11,9 +11,11 @@
               </mat-input-container>
             </div>
             <div class="full-width">
-              <mat-input-container class="full-width persian-field">
-                <input matInput type="text" class="left-text" placeholder="آدرس" formControlName="href" />
-              </mat-input-container>
+              <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [formControlName]="'href'"
+                              (add)="insertedAddress=$event" (field)="insertedAddress=$event" >
+              </app-suggestion>
+              <!--add label-->
+              <label class="content">{{insertedAddress}}</label>
             </div>
           </div>
           <div fxFlex="60" class="full-width sub-item">
@@ -41,7 +43,7 @@
   </form>
   <div class="demo-list demo-area" [dragula]="bagName" [dragulaModel]="placementList">
     <div *ngFor="let item of placementList" (click)="selectItem(item)" class="feed-container">
-      <img [src]="getImageUrl(item.info.imgUrl)" class="feed-image" 
+      <img [src]="getImageUrl(item.info.imgUrl)" class="feed-image"
       />
       <div></div>
       <div class="feed-title">

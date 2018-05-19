@@ -17,10 +17,15 @@
           </mat-select>
         </div>
         <div>
-          <mat-input-container class="persian-field full-width" dir="ltr">
-            <input matInput type="text" placeholder="آدرس" [(ngModel)]="urlAddress" (ngModelChange)="changeField()" style="text-align: left;"
-            />
-          </mat-input-container>
+          <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'"
+                          (add)="insertedAddress=$event" (field)="insertedAddress=$event" >
+          </app-suggestion>
+          <!--add label-->
+          <label class="content">{{ insertedAddress }}</label>
+          <!--<mat-input-container class="persian-field full-width" dir="ltr">-->
+            <!--<input matInput type="text" placeholder="آدرس" [(ngModel)]="urlAddress" (ngModelChange)="changeField()" style="text-align: left;"-->
+            <!--/>-->
+          <!--</mat-input-container>-->
         </div>
       </div>
       <div fxFlex="70">

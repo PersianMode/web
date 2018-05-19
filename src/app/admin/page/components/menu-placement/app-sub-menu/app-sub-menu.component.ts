@@ -17,6 +17,7 @@ import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-di
 })
 export class AppSubMenuComponent implements OnInit {
   @Input() pageId = null;
+  insertedAddress: string;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -77,9 +78,7 @@ export class AppSubMenuComponent implements OnInit {
       text: [null, [
         Validators.required,
       ]],
-      href: [null, [
-        Validators.required,
-      ]],
+      href: [null],
       section: [null],
       new_section: [null],
       is_header: [false],
@@ -208,7 +207,7 @@ export class AppSubMenuComponent implements OnInit {
       this.appSubMenuForm.controls['is_hader'].enable();
     } else {
       this.appSubMenuForm.controls['text'].setValue(value.text);
-      this.appSubMenuForm.controls['href'].setValue(value.href);
+     // this.appSubMenuForm.controls['href'].setValue(value.href);
       this.appSubMenuForm.controls['section'].setValue(value.section.split('/')[1]);
       this.appSubMenuForm.controls['is_header'].setValue(value.is_header ? value.is_header : false);
       if (value.is_header)
@@ -247,7 +246,7 @@ export class AppSubMenuComponent implements OnInit {
           const newInfo = this.getItemInfo();
           const changedObj = this.subMenuItems.find(el => el._id === this.selectedItem._id);
           changedObj.info.text = newInfo.text;
-          changedObj.info.href = newInfo.href;
+          changedObj.info.insertedAddress = newInfo.insertedAddress;
           changedObj.info.section = newInfo.section;
           changedObj.info.is_header = newInfo.is_header;
         } else {
@@ -268,7 +267,7 @@ export class AppSubMenuComponent implements OnInit {
   private getItemInfo(isNewItem = false): any {
     const res = {
       text: (this.appSubMenuForm.controls['text'].value ? this.appSubMenuForm.controls['text'].value : '').trim(),
-      href: (this.appSubMenuForm.controls['href'].value ? this.appSubMenuForm.controls['href'].value : '').trim(),
+      href: (this.insertedAddress ? this.insertedAddress : '').trim(),
       is_header: this.appSubMenuForm.controls['is_header'].value,
       imgUrl: isNewItem ? this.imageUrlAddress : this.selectedItem.info.imgUrl,
     };
@@ -336,7 +335,7 @@ export class AppSubMenuComponent implements OnInit {
 
     this.anyChanges = false;
 
-    ['text', 'href', 'is_header'].forEach(el => {
+    ['text', 'insertedAddress', 'is_header'].forEach(el => {
       if (this.selectedItem.info[el] !== this.appSubMenuForm.controls[el].value) {
         this.anyChanges = true;
         return;
