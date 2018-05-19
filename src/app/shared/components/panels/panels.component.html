@@ -8,8 +8,10 @@
          fxLayoutAlign="start start">
       <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs" class="container">
         <a (click)="directToUrl(im.href)">
-          <img *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext']) === 'image'" [src]="im.imgUrl" class="full-width"/>
-          <video *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext']) === 'video'" class="full-width" autoplay loop>
+          <img *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext'], getImageLink(im.imgUrl)) === 'image'"
+               [src]="im.imgUrl" class="full-width"/>
+          <video *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext'], getImageLink(im.imgUrl)) === 'video'"
+                 class="full-width" autoplay loop>
             <source [src]="im.imgUrl" type="{{im.fileType && im.fileType['mime']}}">
             مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
           </video>
@@ -47,8 +49,10 @@
          fxLayoutAlign="center center" fxLayout.sm="column" fxLayout.xs="column">
       <div [fxFlex]="100" *ngFor="let im of placements[key].imgs">
         <a (click)="directToUrl(im.href)">
-          <img *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext']) === 'image'" [src]="im.imgUrl" class="full-width"/>
-          <video *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext']) === 'video'" class="full-width" autoplay loop>
+          <img *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext']) === 'image'" [src]="im.imgUrl"
+               class="full-width"/>
+          <video *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext']) === 'video'" class="full-width"
+                 autoplay loop>
             <source [src]="im.imgUrl" type="{{im.fileType && im.fileType['mime']}}">
             مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
           </video>
