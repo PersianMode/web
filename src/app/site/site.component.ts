@@ -1,7 +1,7 @@
 import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../shared/services/window.service';
 import {AuthService} from '../shared/services/auth.service';
-import {Router} from '@angular/router';
+import {Router, NavigationEnd} from '@angular/router';
 import {PageService} from '../shared/services/page.service';
 import {ResponsiveService} from '../shared/services/responsive.service';
 import {CartService} from '../shared/services/cart.service';
@@ -24,6 +24,12 @@ export class SiteComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+          return;
+      }
+      window.scrollTo(0, 0);
+    });
     this.curWidth = this.window.innerWidth;
     this.curHeight = this.window.innerHeight;
     this.isMobile = this.isMobileCalc();

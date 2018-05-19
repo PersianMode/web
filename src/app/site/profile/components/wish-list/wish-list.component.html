@@ -11,7 +11,7 @@
     <mat-header-cell class="w200" *matHeaderCellDef mat-sort-header>تصویر</mat-header-cell>
     <mat-cell class="w200" *matCellDef="let wishItem">
       <div class="image-wrapper"><a
-        (click)="navigateToProduct(wishItem.product[0]._id, wishItem.product[0].instances[0].product_color_id)">
+        (click)="navigateToProduct(wishItem.wish_list.product_id, wishItem.wish_list.product_color_id)">
         <img src="{{getThumbnailURL(wishItem.product[0])}}">
       </a></div>
     </mat-cell>
@@ -19,7 +19,8 @@
 
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef mat-sort-header>نام کالا</mat-header-cell>
-    <mat-cell *matCellDef="let wishItem">{{wishItem.product[0].name}}
+    <mat-cell *matCellDef="let wishItem" class="wish-item-name" (click)="navigateToProduct(wishItem.wish_list.product_id, wishItem.wish_list.product_color_id)">
+      {{wishItem.product[0].name}}
     </mat-cell>
   </ng-container>
 
@@ -27,7 +28,8 @@
     <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>اندازه</mat-header-cell>
     <mat-cell class="w50" *matCellDef="let wishItem">
       <!--{{makePersianNumber(wishItem.product[0].instances[0].size, false)}}-->
-      {{wishItem.product[0].displaySize}}
+      <span *ngIf="wishItem.wish_list.product_instance_id">{{wishItem.product[0].displaySize}}</span>
+      <span *ngIf="!wishItem.wish_list.product_instance_id">-</span>
     </mat-cell>
   </ng-container>
 
