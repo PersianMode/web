@@ -64,7 +64,9 @@ export class ProductService {
     const brand = Array.from(new Set([...products.map(r => r.brand)]));
     const type = Array.from(new Set([...products.map(r => r.product_type)]));
 
-    const size = Array.from(new Set([...products.map(r => Object.keys(r.sizesInventory))
+    const size = Array.from(new Set([...products.filter(r => r.product_type !== 'FOOTWEAR').map(r => Object.keys(r.sizesInventory))
+      .reduce((x, y) => x.concat(y), []).sort()]));
+    const shoesSize = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR').map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
     const color = Array.from(new Set([...products.map(productColorMap)
       .reduce((x, y) => x.concat(y), []).reduce((x, y) => x.concat(y), [])]));
@@ -79,7 +81,7 @@ export class ProductService {
       price = [minPrice, maxPrice];
     }
 
-    tags = {brand, type, price, size, color};
+    tags = {brand, type, price, size, shoesSize, color};
 
     if (trigger && trigger !== 'price') {
       tags[trigger] = this.collectionTags[trigger] ? this.collectionTags[trigger] : [];
@@ -134,8 +136,22 @@ export class ProductService {
               .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').includes(v) : false).length));
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
         } else if (f.name === 'size') {
-          this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].instances = p.instances
-            .filter(i => Array.from(f.values).includes(i.size)));
+          this.filteredProducts.forEach((p, pi) => {
+            if (p.product_type === 'FOOTWEAR')
+              return this.filteredProducts[pi].instances = p.instances;
+            return this.filteredProducts[pi].instances = p.instances
+              .filter(i => Array.from(f.values).includes(i.size))
+          });
+          this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
+            .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
+          this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
+        } else if (f.name === 'shoesSize') {
+          this.filteredProducts.forEach((p, pi) => {
+            if (p.product_type !== 'FOOTWEAR')
+              return this.filteredProducts[pi].instances = p.instances;
+            return this.filteredProducts[pi].instances = p.instances
+              .filter(i => Array.from(f.values).includes(i.size))
+          });
           this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
             .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
