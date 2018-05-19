@@ -14,6 +14,15 @@
             <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" (add)="upsertTopMenuItem.href=$event"
                             (field)="upsertTopMenuItem.href=$event" >
             </app-suggestion>
+          <!--add label-->
+          <div fxFlex="50" *ngIf="upsertTopMenuItem.href">
+            <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{upsertTopMenuItem.href}} </h3>
+            <button mat-icon-button (click)="removeAddress()" color="primary" class="remove-collection-button">
+              <mat-icon>
+                <i class="material-icons">close</i>
+              </mat-icon>
+            </button>
+          </div>
         </div>
         <div fxFlex="40" class="full-width">
           <mat-input-container dir="ltr" class="input-field">

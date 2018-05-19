@@ -14,8 +14,14 @@
                         (add)="selectedTextLink.href=$event" (field)="selectedTextLink.href=$event" >
         </app-suggestion>
         <!--add label-->
-        <label class="content">{{selectedTextLink.href}}</label>
-
+        <div fxFlex="50" *ngIf="selectedTextLink.href">
+          <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{selectedTextLink.href}} </h3>
+          <button mat-icon-button (click)="removeAddress()" color="primary" class="remove-collection-button">
+            <mat-icon>
+              <i class="material-icons">close</i>
+            </mat-icon>
+          </button>
+        </div>
       </div>
       <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
         <mat-checkbox [(ngModel)]="selectedTextLink.is_header" (ngModelChange)="checkTextchanges()">

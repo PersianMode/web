@@ -21,7 +21,13 @@
                           (add)="insertedAddress=$event" (field)="insertedAddress=$event" >
           </app-suggestion>
           <!--add label-->
-          <label class="content">{{ insertedAddress }}</label>
+          <div fxFlex="50" *ngIf="insertedAddress">
+            <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{insertedAddress}} </h3>
+            <button mat-icon-button (click)="removeAddress()" color="primary" class="remove-collection-button">
+              <mat-icon>
+                <i class="material-icons">close</i>
+              </mat-icon>
+            </button>
           <!--<mat-input-container class="persian-field full-width" dir="ltr">-->
             <!--<input matInput type="text" placeholder="آدرس" [(ngModel)]="urlAddress" (ngModelChange)="changeField()" style="text-align: left;"-->
             <!--/>-->
