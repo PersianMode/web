@@ -4,6 +4,7 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {IPageInfo} from '../../admin/page/interfaces/IPageInfo.interface';
 import {Subject} from 'rxjs/Subject';
 import {AuthService} from './auth.service';
+import {ActivatedRoute} from '@angular/router';
 
 const defaultComponents = ['menu', 'slider', 'logos', 'footer'];
 
@@ -15,8 +16,14 @@ export class PageService {
   pageInfo$: Subject<any[]> = new Subject<any[]>();
   private homeWasLoaded = false;
 
-  constructor(private httpService: HttpService, private authService: AuthService) {
-    this.getPage('home', false);
+  constructor(private httpService: HttpService, private authService: AuthService,
+    private route: ActivatedRoute) {
+    route.queryParams.subscribe(params => {
+      if (params.hasOwnProperty('preview'))
+        this.getPage(`home?preview=&date=` + params.date, false);
+      else
+        this.getPage('home', false);
+    });
   }
 
   private classifyPlacements(pageName, data) {
@@ -63,7 +70,6 @@ export class PageService {
             date: plcDate,
           }).subscribe(
             (data: any) => {
-              // ToDo: need to ignore home placements when route to home with specific date
               if (data && data.placement && data.placement.length) {
                 this.cache[pageName] = {
                   placement: this.classifyPlacements(pageName, data.placement),
