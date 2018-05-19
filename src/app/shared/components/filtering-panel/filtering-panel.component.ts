@@ -96,9 +96,17 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   }
 
+  changeSizeType() {
+    this.isEU = !this.isEU;
+  }
+
+  logMethod(ins){
+    console.log(ins);
+  }
+
   shoesSize(size) {
     if (this.isEU)
-      return size;
+      return this.dict.translateWord(size);
     return this.dict.USToEU(size, 'WOMENS');
   }
 

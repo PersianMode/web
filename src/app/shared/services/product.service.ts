@@ -66,7 +66,13 @@ export class ProductService {
 
     const size = Array.from(new Set([...products.filter(r => r.product_type !== 'FOOTWEAR').map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
-    const shoesSize = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR').map(r => Object.keys(r.sizesInventory))
+    const shoesSizeMen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
+      .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'MENS')
+      .map(r => Object.keys(r.sizesInventory))
+      .reduce((x, y) => x.concat(y), []).sort()]));
+    const shoesSizeWomen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
+      .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'WOMENS')
+      .map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
     const color = Array.from(new Set([...products.map(productColorMap)
       .reduce((x, y) => x.concat(y), []).reduce((x, y) => x.concat(y), [])]));
@@ -80,7 +86,8 @@ export class ProductService {
       const maxPrice = Math.max(...price);
       price = [minPrice, maxPrice];
     }
-
+    const shoesSize = {mens: shoesSizeMen, womens: shoesSizeWomen};
+    // const shoesSize = shoesSizeMen;
     tags = {brand, type, price, size, shoesSize, color};
 
     if (trigger && trigger !== 'price') {
@@ -100,19 +107,31 @@ export class ProductService {
     } else {
       this.collectionTags = tags;
     }
-
+    console.log(tags);
     const emittedValue = [];
     for (const name in tags) {
       if (tags.hasOwnProperty(name)) {
-        const values = Array.from(tags[name]);
         const found = filters.find(r => r.name === name);
-        if (values.length > 1 || (found && found.values.length)) {
-          emittedValue.push({
-            name: name,
-            name_fa: this.dict.translateWord(name),
-            values,
-            values_fa: values.map((r: string | number) => name !== 'color' ? this.dict.translateWord(r) : this.dict.convertColor(r + ''))
-          });
+        if (name !== 'shoesSize') {
+          const values = Array.from(tags[name]);
+          if (values.length > 1 || (found && found.values.length)) {
+            emittedValue.push({
+              name: name,
+              name_fa: this.dict.translateWord(name),
+              values,
+              values_fa: values.map((r: string | number) => name !== 'color' ? this.dict.translateWord(r) : this.dict.convertColor(r + ''))
+            });
+          }
+        } else {
+          const values = tags['shoesSize'];
+          console.log(values);
+          if (values.length > 1 || (found && found.values.length)) {
+            emittedValue.push({
+              name: name,
+              name_fa: this.dict.translateWord(name),
+              values,
+            });
+          }
         }
       }
     }

@@ -46,9 +46,21 @@
       </mat-button-toggle>
     </span>
     <span *ngIf="fo.name === 'shoesSize'">
-      <mat-button-toggle *ngFor="let v of filter_options[i].values; let j = index" class="filter-size"
+      <div fxFlex="50" fxFlex.sm="80" class="slider">
+        <span>US</span>
+        <mat-slide-toggle [checked]="isEU" (change)="changeSizeType()">
+        </mat-slide-toggle>
+        <span>EU</span>
+      </div>
+      <mat-button-toggle *ngFor="let v of filter_options[i].values[0]; let j = index" class="filter-size"
                          (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
-          {{shoesSize(filter_options[i].values[j])}}
+          {{shoesSize(filter_options[i].values[0][j])}}
+        {{logMethod(filter_options[i][0])}}
+      </mat-button-toggle>
+      <mat-button-toggle *ngFor="let v of filter_options[i].values[0]; let j = index" class="filter-size"
+                         (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
+          {{shoesSize(filter_options[i].values[0][j])}}
+        {{logMethod(filter_options[i][0])}}
       </mat-button-toggle>
     </span>
   </mat-expansion-panel>
