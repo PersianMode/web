@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -26,6 +26,7 @@ export class LogoListPlacementComponent implements OnInit {
 
   @Output() modifyPlacement = new EventEmitter();
   @Output() reloadPlacements = new EventEmitter();
+  @Output() selectToRevert = new EventEmitter();
 
   logos: IPlacement[] = [];
   upsertLogo = {
@@ -46,10 +47,12 @@ export class LogoListPlacementComponent implements OnInit {
   logoChanged = false;
   imageChanged = false;
   bagName = 'logo-bag';
+  revertSelectedList = [];
+  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private sanitizer: DomSanitizer,
-              private dialog: MatDialog,) {
+    private progressService: ProgressService, private sanitizer: DomSanitizer,
+    private dialog: MatDialog, ) {
   }
 
   ngOnInit() {
@@ -58,7 +61,7 @@ export class LogoListPlacementComponent implements OnInit {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'horizontal',
-        moves: function() {
+        moves: function () {
           return this.canEdit;
         }
       });
@@ -157,21 +160,33 @@ export class LogoListPlacementComponent implements OnInit {
   }
 
   selectItem(value) {
-    const style = value.info.style;
-    this.upsertLogo = {
-      text: value.info.text,
-      href: value.info.href,
-      id: value._id,
-      column: value.info.column,
-      isEdit: true,
-      imgUrl: value.info.imgUrl,
-      style: {
-        width: style && typeof style.width !== 'undefined' && style.width !== null ? style.width : 60,
-        height: style && typeof style.height !== 'undefined' && style.height !== null ? style.height : 29,
-        top: style && typeof style.top !== 'undefined' && style.top !== null ? style.top : 0,
-        right: style && typeof style.right !== 'undefined' && style.right !== null ? style.right : 0,
-      }
-    };
+    if (this.onRevertMode && !this.canEdit) {
+      if (this.revertSelectedList.includes(value._id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
+      else
+        this.revertSelectedList.push(value._id);
+      this.selectToRevert.emit(value._id);
+    } else if (this.canEdit) {
+      const style = value.info.style;
+      this.upsertLogo = {
+        text: value.info.text,
+        href: value.info.href,
+        id: value._id,
+        column: value.info.column,
+        isEdit: true,
+        imgUrl: value.info.imgUrl,
+        style: {
+          width: style && typeof style.width !== 'undefined' && style.width !== null ? style.width : 60,
+          height: style && typeof style.height !== 'undefined' && style.height !== null ? style.height : 29,
+          top: style && typeof style.top !== 'undefined' && style.top !== null ? style.top : 0,
+          right: style && typeof style.right !== 'undefined' && style.right !== null ? style.right : 0,
+        }
+      };
+    }
+  }
+
+  isSelectedToRevert(id) {
+    return this.revertSelectedList.includes(id);
   }
 
   modifyItem(isEdit) {
@@ -274,5 +289,15 @@ export class LogoListPlacementComponent implements OnInit {
       component_name: 'logos',
       variable_name: 'logos'
     };
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.onRevertMode = true;
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.onRevertMode = false;
   }
 }

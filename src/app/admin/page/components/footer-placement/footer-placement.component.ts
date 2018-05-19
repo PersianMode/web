@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, HostListener} from '@angular/core';
 import {HttpService} from '../../../../shared/services/http.service';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {DragulaService} from 'ng2-dragula';
@@ -30,6 +30,7 @@ export class FooterPlacementComponent implements OnInit {
   }
 
   @Output() modifyPlacement = new EventEmitter();
+  @Output() selectToRevert = new EventEmitter();
 
   siteLinkItems = {};
   socialLinkItems = [];
@@ -90,6 +91,8 @@ export class FooterPlacementComponent implements OnInit {
   textAnyChanges = false;
   hasNewColumn = false;
   newEmptyColumn = [];
+  revertSelectedList = [];
+  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog) {}
@@ -202,31 +205,51 @@ export class FooterPlacementComponent implements OnInit {
   }
 
   selectIcon(icon) {
-    if (icon.info && this.socialLinkItems.find(el => el.info.href === icon.info.href))
-      this.selectedSocialNetwork = {
-        _id: icon._id,
-        href: icon.info.href,
-        text: icon.info.text,
-        column: icon.info.column,
-      };
-    else
-      this.selectedSocialNetwork = {
-        _id: null,
-        href: null,
-        text: icon.text,
-        column: null,
-      };
+    if (this.onRevertMode && !this.canEdit) {
+      if (this.revertSelectedList.includes(icon._id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== icon._id);
+      else
+        this.revertSelectedList.push(icon._id);
+      this.selectToRevert.emit(icon._id);
+    } else if (this.canEdit) {
+      if (icon.info && this.socialLinkItems.find(el => el.info.href === icon.info.href))
+        this.selectedSocialNetwork = {
+          _id: icon._id,
+          href: icon.info.href,
+          text: icon.info.text,
+          column: icon.info.column,
+        };
+      else
+        this.selectedSocialNetwork = {
+          _id: null,
+          href: null,
+          text: icon.text,
+          column: null,
+        };
+    }
   }
 
   selectTextItem(item) {
-    this.selectedTextLink = {
-      _id: item._id,
-      href: item.info.href,
-      text: item.info.text,
-      column: item.info.column,
-      row: item.info.row,
-      is_header: item.info.hasOwnProperty('is_header') ? item.info.is_header : false,
-    };
+    if (this.onRevertMode && !this.canEdit) {
+      if (this.revertSelectedList.includes(item._id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== item._id);
+      else
+        this.revertSelectedList.push(item._id);
+      this.selectToRevert.emit(item._id);
+    } else if (this.canEdit) {
+      this.selectedTextLink = {
+        _id: item._id,
+        href: item.info.href,
+        text: item.info.text,
+        column: item.info.column,
+        row: item.info.row,
+        is_header: item.info.hasOwnProperty('is_header') ? item.info.is_header : false,
+      };
+    }
+  }
+
+  isSelectedToRevert(id) {
+    return this.revertSelectedList.includes(id);
   }
 
   modifyTextLink() {
@@ -552,5 +575,15 @@ export class FooterPlacementComponent implements OnInit {
       return true;
     const lastColumn = Math.max(...Object.keys(this.siteLinkItems).map(el => parseInt(el, 10)));
     return this.hasNewColumn || !this.siteLinkItems[lastColumn].length;
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.onRevertMode = true;
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.onRevertMode = false;
   }
 }

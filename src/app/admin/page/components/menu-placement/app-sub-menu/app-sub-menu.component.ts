@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, HostListener} from '@angular/core';
 import {IPlacement} from '../../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -38,6 +38,7 @@ export class AppSubMenuComponent implements OnInit {
       this.getRelatedItems();
   }
   @Output() modifyPlacement = new EventEmitter();
+  @Output() selectToRevert = new EventEmitter();
 
   itemBagName = 'app-sub-menu-bag';
   appSubMenuForm: FormGroup = null;
@@ -50,6 +51,8 @@ export class AppSubMenuComponent implements OnInit {
   moveButtonsShouldDisabled = false;
   imageUrlAddress = null;
   newPlacementId = null;
+  revertSelectedList = [];
+  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private sanitizer: DomSanitizer,
@@ -197,10 +200,26 @@ export class AppSubMenuComponent implements OnInit {
   }
 
   selectItem(value) {
-    this.selectedItem = value;
-    this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
-    this.setFormValue(value.info);
-    this.anyChanges = false;
+    if (this.onRevertMode && !this.canEdit) {
+      if (this.revertSelectedList.includes(value._id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
+      else
+        this.revertSelectedList.push(value._id);
+      this.selectToRevert.emit(value._id);
+    } else if (this.canEdit) {
+      this.selectedItem = value;
+      this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
+      this.setFormValue(value.info);
+      this.anyChanges = false;
+    }
+  }
+
+  isSelectedToRevert(value, type) {
+    if (type === 'item')
+      return this.revertSelectedList.includes(value);
+    else if (type === 'section') {
+      return this.revertSelectedList.includes(this.filteredSubMenuItems[value].details._id);
+    }
   }
 
   setFormValue(value = null) {
@@ -367,8 +386,17 @@ export class AppSubMenuComponent implements OnInit {
   }
 
   showSubItems(section) {
-    this.selectedSectionSubMenu = this.selectedSectionSubMenu === section ? null : section;
-    this.selectItem(this.filteredSubMenuItems[section].details);
+    if (this.onRevertMode && !this.canEdit) {
+      const id = this.filteredSubMenuItems[section].details._id;
+      if (this.revertSelectedList.includes(id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== id);
+      else
+        this.revertSelectedList.push(id);
+      this.selectToRevert.emit(id);
+    } else {
+      this.selectedSectionSubMenu = this.selectedSectionSubMenu === section ? null : section;
+      this.selectItem(this.filteredSubMenuItems[section].details);
+    }
   }
 
   uploadImage() {
@@ -424,7 +452,16 @@ export class AppSubMenuComponent implements OnInit {
         console.error('Cannot update the order of section: ', err);
         this.moveButtonsShouldDisabled = false;
         this.progressService.disable();
-      }
-    )
+      });
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.onRevertMode = true;
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.onRevertMode = false;
   }
 }

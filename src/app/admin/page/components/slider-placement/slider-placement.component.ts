@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -27,6 +27,7 @@ export class SliderPlacementComponent implements OnInit {
 
   @Output() modifyPlacement = new EventEmitter();
   @Output() reloadPlacements = new EventEmitter();
+  @Output() selectToRevert = new EventEmitter();
 
   sliders: IPlacement[] = [];
   upsertSlider = {
@@ -48,10 +49,12 @@ export class SliderPlacementComponent implements OnInit {
   imageChanged = false;
   sliderChanged = false;
   bagName = 'slider-bag';
+  revertSelectedList = [];
+  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private sanitizer: DomSanitizer,
-              private dialog: MatDialog) {
+    private progressService: ProgressService, private sanitizer: DomSanitizer,
+    private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -60,7 +63,7 @@ export class SliderPlacementComponent implements OnInit {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
-        moves: function() {
+        moves: function () {
           return this.canEdit;
         }
       });
@@ -140,20 +143,32 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   selectItem(value) {
-    this.upsertSlider = {
-      text: value.info.text,
-      href: value.info.href,
-      id: value._id,
-      column: value.info.column,
-      isEdit: true,
-      imgUrl: value.info.imgUrl,
-      style: value.info.style || {
-        imgWidth: 40,
-        imgMarginLeft: 0,
-        imgMarginTop: 0,
-      },
-    };
-    this.pos = Object.assign({}, this.upsertSlider.style);
+    if (this.onRevertMode && !this.canEdit) {
+      if (this.revertSelectedList.includes(value._id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
+      else
+        this.revertSelectedList.push(value._id);
+      this.selectToRevert.emit(value._id);
+    } else {
+      this.upsertSlider = {
+        text: value.info.text,
+        href: value.info.href,
+        id: value._id,
+        column: value.info.column,
+        isEdit: true,
+        imgUrl: value.info.imgUrl,
+        style: value.info.style || {
+          imgWidth: 40,
+          imgMarginLeft: 0,
+          imgMarginTop: 0,
+        },
+      };
+      this.pos = Object.assign({}, this.upsertSlider.style);
+    }
+  }
+
+  isSelectedToRevert(id) {
+    return this.revertSelectedList.includes(id);
   }
 
   removeItem() {
@@ -290,5 +305,15 @@ export class SliderPlacementComponent implements OnInit {
         path = '/' + path;
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
     }
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.onRevertMode = true;
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.onRevertMode = false;
   }
 }

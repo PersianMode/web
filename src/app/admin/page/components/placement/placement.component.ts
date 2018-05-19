@@ -24,6 +24,7 @@ export class PlacementComponent implements OnInit {
   finalizeRevertShouldDisabled = false;
   previewShouldDisabled = false;
   placement_date: any = new Date();
+  selectToRevertList: any[] = [];
 
   constructor(private httpService: HttpService, public snackBar: MatSnackBar,
     @Inject(WINDOW) private window, private router: Router) {
@@ -100,5 +101,16 @@ export class PlacementComponent implements OnInit {
 
   canEdit() {
     return moment(moment(this.placement_date).format('YYYY-MM-DD')).isSame(moment(new Date).format('YYYY-MM-DD'));
+  }
+
+  selectToRevert(value) {
+    if (this.selectToRevertList.includes(value))
+      this.selectToRevertList = this.selectToRevertList.filter(el => el !== value);
+    else
+      this.selectToRevertList.push(value);
+  }
+
+  revertToToday() {
+
   }
 }

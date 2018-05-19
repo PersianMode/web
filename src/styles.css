@@ -1012,3 +1012,11 @@ p {
   max-height: calc(100vh);
   overflow-y: auto;
 }
+
+.selected-to-revert {
+  background-color: #263f66 !important;
+}
+
+.selected-to-revert-img {
+  border: #263f66 dashed thick !important;
+}

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 import {IPlacement} from '../../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -44,6 +44,7 @@ export class SubMenuComponent implements OnInit {
   }
 
   @Output() modifyPlacement = new EventEmitter();
+  @Output() selectToRevert = new EventEmitter();
 
   subMenuItems: IPlacement[] = [];
   headerAreaItems: any = {};
@@ -78,6 +79,8 @@ export class SubMenuComponent implements OnInit {
   middleAreaHasNewColumn = false;
   leftAreaNewEmptyList = [];
   leftAreaHasNewColumn = false;
+  onRevertMode = false;
+  revertSelectedList = [];
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog) {
@@ -87,7 +90,7 @@ export class SubMenuComponent implements OnInit {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
-        moves: function() {
+        moves: function () {
           return this.canEdit;
         }
       });
@@ -327,10 +330,18 @@ export class SubMenuComponent implements OnInit {
   }
 
   selectItem(value) {
-    this.selectedItem = value;
-    this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
-    this.setFormValue(value.info);
-    this.anyChanges = false;
+    if (this.onRevertMode && !this.canEdit) {
+      if (this.revertSelectedList.includes(value._id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
+      else
+        this.revertSelectedList.push(value._id);
+      this.selectToRevert.emit(value._id);
+    } else if (this.canEdit) {
+      this.selectedItem = value;
+      this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
+      this.setFormValue(value.info);
+      this.anyChanges = false;
+    }
   }
 
   modifyItem() {
@@ -529,5 +540,19 @@ export class SubMenuComponent implements OnInit {
         return this.leftAreaHasNewColumn || !this.leftAreaItems[lastColumn].length;
       }
     }
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.onRevertMode = true;
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.onRevertMode = false;
+  }
+
+  isSelectedToRevert(id) {
+    return this.revertSelectedList.includes(id);
   }
 }

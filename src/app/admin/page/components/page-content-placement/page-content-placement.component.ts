@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
@@ -27,13 +27,16 @@ export class PageContentPlacementComponent implements OnInit {
 
   @Input() pageId = null;
   @Output() modifyPlacement = new EventEmitter();
+  @Output() selectToRevert = new EventEmitter();
 
   _placements = [];
   modifiedPlacementList = {};
   moveButtonsShouldDisabled = false;
+  revertSelectedList = [];
+  onRevertMode = false;
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
-              private dialog: MatDialog, private sanitizer: DomSanitizer) {
+    private dialog: MatDialog, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
@@ -146,6 +149,20 @@ export class PageContentPlacementComponent implements OnInit {
         }
       }
     );
+  }
+
+  selectedPanel(value) {
+    if (this.onRevertMode && !this.canEdit) {
+      if (this.revertSelectedList.includes(value._id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
+      else
+        this.revertSelectedList.push(value._id);
+      this.selectToRevert.emit(value._id);
+    }
+  }
+
+  isSelectedToRevert(id) {
+    return this.revertSelectedList.includes(id);
   }
 
   setColumnRow(obj) {
@@ -334,5 +351,15 @@ export class PageContentPlacementComponent implements OnInit {
         this.moveButtonsShouldDisabled = false;
       }
     );
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.onRevertMode = true;
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.onRevertMode = false;
   }
 }

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 import {IPlacement} from '../../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -26,6 +26,7 @@ export class TopMenuComponent implements OnInit {
 
   @Output() modifyPlacement = new EventEmitter();
   @Output() itemSelected = new EventEmitter();
+  @Output() selectToRevert = new EventEmitter();
 
   topMenuItems: IPlacement[] = [];
   upsertTopMenuItem = {
@@ -38,16 +39,18 @@ export class TopMenuComponent implements OnInit {
   };
   topMenuChanged = false;
   bagName = 'top-menu-bag';
+  revertSelectedList = [];
+  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private dialog: MatDialog) {
+    private progressService: ProgressService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'horizontal',
-        moves: function() {
+        moves: function () {
           return this.canEdit;
         }
       });
@@ -100,15 +103,27 @@ export class TopMenuComponent implements OnInit {
   }
 
   selectItem(value) {
-    this.upsertTopMenuItem = {
-      text: value.info.text,
-      href: value.info.href,
-      id: value._id,
-      column: value.info.column,
-      isEdit: true,
-      section: value.info.section,
-    };
-    this.itemSelected.emit(this.upsertTopMenuItem.section);
+    if (this.onRevertMode && !this.canEdit) {
+      if (this.revertSelectedList.includes(value._id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
+      else
+        this.revertSelectedList.push(value._id);
+      this.selectToRevert.emit(value._id);
+    } else {
+      this.upsertTopMenuItem = {
+        text: value.info.text,
+        href: value.info.href,
+        id: value._id,
+        column: value.info.column,
+        isEdit: true,
+        section: value.info.section,
+      };
+      this.itemSelected.emit(this.upsertTopMenuItem.section);
+    }
+  }
+
+  isSelectedToRevert(id) {
+    return this.revertSelectedList.includes(id);
   }
 
   changeTopMenuColumn(args) {
@@ -232,5 +247,15 @@ export class TopMenuComponent implements OnInit {
     } else {
       return !this.upsertTopMenuItem.text || !this.upsertTopMenuItem.href || !this.upsertTopMenuItem.section;
     }
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.onRevertMode = true;
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.onRevertMode = false;
   }
 }

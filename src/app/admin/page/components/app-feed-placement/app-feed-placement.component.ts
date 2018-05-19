@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, Output, HostListener} from '@angular/core';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -24,6 +24,7 @@ export class AppFeedPlacementComponent implements OnInit {
       this.sortingPlacementItems(value);
   }
   @Output() modifyPlacement = new EventEmitter();
+  @Output() selectToRevert = new EventEmitter();
 
   bagName = 'app-feed-bag';
   placementList: IPlacement[] = [];
@@ -32,6 +33,8 @@ export class AppFeedPlacementComponent implements OnInit {
   imageUrlAddress = null;
   newPlacementId = null;
   anyChanges = false;
+  revertSelectedList = [];
+  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog,
@@ -41,7 +44,7 @@ export class AppFeedPlacementComponent implements OnInit {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
-        moves: function() {
+        moves: function () {
           return this.canEdit;
         }
       });
@@ -207,8 +210,20 @@ export class AppFeedPlacementComponent implements OnInit {
   }
 
   selectItem(item) {
-    this.selectedItem = item;
-    this.setFormValue(item.info);
+    if (this.onRevertMode && !this.canEdit) {
+      if (this.revertSelectedList.includes(item._id))
+        this.revertSelectedList = this.revertSelectedList.filter(el => el !== item._id);
+      else
+        this.revertSelectedList.push(item._id);
+      this.selectToRevert.emit(item._id);
+    } else {
+      this.selectedItem = item;
+      this.setFormValue(item.info);
+    }
+  }
+
+  isSelectedToRevert(id) {
+    return this.revertSelectedList.includes(id);
   }
 
   setFormValue(value = null) {
@@ -273,5 +288,15 @@ export class AppFeedPlacementComponent implements OnInit {
 
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + url);
     }
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.onRevertMode = true;
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.onRevertMode = false;
   }
 }
