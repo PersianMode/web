@@ -29,8 +29,8 @@ export class CollectionHeaderComponent implements OnInit {
   searchWaiting = false;
 
   constructor(private router: Router, private pageService: PageService,
-    private httpService: HttpService, private sanitizer: DomSanitizer,
-    private dictionaryService: DictionaryService) {
+              private httpService: HttpService, private sanitizer: DomSanitizer,
+              private dictionaryService: DictionaryService) {
   }
 
   ngOnInit() {
@@ -85,17 +85,6 @@ export class CollectionHeaderComponent implements OnInit {
     }, 100);
   }
 
-  searchFocused() {
-    this.searchIsFocused = true;
-    if (this.searchPhrase)
-      this.searchProduct();
-  }
-
-  searchUnfocused() {
-    this.searchIsFocused = false;
-    this.searchResultList = [];
-  }
-
   persistList() {
     this.persistedList = true;
   }
@@ -116,6 +105,17 @@ export class CollectionHeaderComponent implements OnInit {
 
   getKeyList(list) {
     return Object.keys(list);
+  }
+
+  searchFocused() {
+    this.searchIsFocused = true;
+    if (this.searchPhrase)
+      this.searchProduct();
+  }
+
+  searchUnfocused() {
+    this.searchIsFocused = false;
+    this.searchResultList = [];
   }
 
   searchProduct() {
@@ -141,10 +141,55 @@ export class CollectionHeaderComponent implements OnInit {
               name: el.name,
               brand: this.dictionaryService.translateWord(el.brand.name),
               type: this.dictionaryService.translateWord(el.product_type.name),
-              imgUrl: this.getProductThumbnail(el)
+              imgUrl: this.getProductThumbnail(el),
+              title: 'Product'
             });
           });
         }
+        this.searchCollection();
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  searchCollection() {
+    this.httpService.post('search/Collection', {
+      options: {
+        phrase: this.searchPhrase,
+      },
+      offset: 0,
+      limit: 5,
+    }).subscribe(
+      (data) => {
+        if (data.data) {
+          data.data.forEach(el => {
+            this.searchResultList.push({
+              id: el._id,
+              name: el.name,
+              title: 'Collection'
+            });
+          });
+        }
+        this.searchResultList.forEach(el => {
+          if (el.title === 'Collection')
+            this.getCollectionPages(el);
+        });
+        console.log(this.searchResultList);
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  getCollectionPages(el) {
+    this.httpService.post('collectionPages', {
+      collection_id: el.id,
+    }).subscribe(
+      (data) => {
+        el.pages = data;
         this.searchWaiting = false;
       },
       (err) => {
@@ -153,8 +198,12 @@ export class CollectionHeaderComponent implements OnInit {
       });
   }
 
-  selectProduct(product) {
-    this.router.navigate([`/product/${product.id}`]);
+  selectSearchResult(element) {
+    if (element.title === 'Product')
+      this.router.navigate([`/product/${element.id}`]);
+    else
+      this.router.navigate([`${element}`]);
+
     this.searchIsFocused = false;
     this.searchResultList = [];
   }

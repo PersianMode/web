@@ -24,7 +24,7 @@
   text-overflow: ellipsis;
 }
 
-.search-brand, .search-type {
+.search-brand, .search-type, .search-title {
   font-size: 0.4em;
   color: gray;
 }
@@ -39,6 +39,10 @@
   margin: 3px;
 }
 
+.search-address {
+  font-size: 0.5em;
+  color: gray;
+}
 .not-found {
   color: darkred;
   margin: 10px;
