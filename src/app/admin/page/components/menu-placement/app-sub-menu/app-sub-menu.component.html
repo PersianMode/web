@@ -1,5 +1,5 @@
 <div class="sub-menu-area">
-  <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="appSubMenuForm">
+  <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="appSubMenuForm" *ngIf="canEdit">
     <div class="form-controller">
       <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
         fxLayoutAlign.xs="center center">
@@ -64,7 +64,7 @@
         <div *ngIf="!filteredSubMenuItems[section].details.info.imgUrl" class="section-image no-image">
           &nbsp;
         </div>
-        <div class="section-title persian-field">
+        <div class="section-title persian-field" *ngIf="canEdit">
           <div>
             <button mat-icon-button (click)="move(false, section)" [disabled]="isFirst || moveButtonsShouldDisabled" class="move-button">
               <mat-icon aria-label="انتقال به بالا">expand_less</mat-icon>

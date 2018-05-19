@@ -18,7 +18,7 @@
     </li>
   </ul>
 </nav>
-<div class="image-settings" fxLayout="row" fxLayout.xs="column" *ngIf="upsertLogo.isEdit">
+<div class="image-settings" fxLayout="row" fxLayout.xs="column" *ngIf="upsertLogo.isEdit && canEdit">
   <div fxLayout="column" fxFlex="50" class="margin-change-div">
     <div fxLayout="row">
       <div fxFlex="10" fxFlexOffset="40">
@@ -61,7 +61,7 @@
     </div>
   </div>
 </div>
-<div class="bottom-part">
+<div class="bottom-part" *ngIf="canEdit">
   <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
        fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
     <div fxFlex="40" style="width: 100%">

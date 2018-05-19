@@ -90,7 +90,7 @@ export class PageBasicInfoComponent implements OnInit {
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
 
-        this.searchPagePlacements();
+        this.getPagePlacements();
       },
       (error) => {
         console.error(error);
@@ -149,7 +149,7 @@ export class PageBasicInfoComponent implements OnInit {
             name: this.originalForm.collection.name,
           };
         }
-        this.searchPagePlacements();
+        this.getPagePlacements();
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
@@ -248,13 +248,16 @@ export class PageBasicInfoComponent implements OnInit {
       this.anyChanges = true;
   }
 
-  searchPagePlacements() {
+  getPagePlacements(plcDate: any = new Date()) {
     if (!this.id) {
       return;
     }
 
     this.progressService.enable();
-    this.httpService.post(`page/cm/preview`, {address: this.form.controls['address'].value}).subscribe(
+    this.httpService.post(`page/cm/preview`, {
+      address: this.form.controls['address'].value,
+      date: plcDate,
+    }).subscribe(
       (result) => {
 
         this.placements = [];
@@ -268,8 +271,6 @@ export class PageBasicInfoComponent implements OnInit {
               info: p.info,
             });
           });
-
-          this.alignRow();
         }
         this.progressService.disable();
       },
@@ -283,28 +284,6 @@ export class PageBasicInfoComponent implements OnInit {
       }
     );
 
-  }
-
-  alignRow() {
-    if (this.placements.length <= 0) {
-      this.placementRows = [];
-      return;
-    }
-    this.placementRows = [];
-    let chunk = [], counter = 0;
-    for (const p in this.placements) {
-      chunk.push(this.placements[p]);
-      counter++;
-
-      if (counter >= 5) {
-        counter = 0;
-        this.placementRows.push(chunk);
-        chunk = [];
-      }
-    }
-    if (counter > 0) {
-      this.placementRows.push(chunk);
-    }
   }
 
   modifyPlacement(value) {
@@ -330,5 +309,9 @@ export class PageBasicInfoComponent implements OnInit {
       }
         break;
     }
+  }
+
+  placementDateIsChanged(value) {
+    this.getPagePlacements(value);
   }
 }

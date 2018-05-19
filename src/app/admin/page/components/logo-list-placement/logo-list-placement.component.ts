@@ -14,7 +14,7 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 })
 export class LogoListPlacementComponent implements OnInit {
   @Input() pageId = null;
-
+  @Input() canEdit = true;
   @Input()
   set placements(value) {
     if (value) {
@@ -56,7 +56,12 @@ export class LogoListPlacementComponent implements OnInit {
     this.clearFields();
 
     if (!this.dragulaService.find(this.bagName))
-      this.dragulaService.setOptions(this.bagName, {direction: 'horizontal'});
+      this.dragulaService.setOptions(this.bagName, {
+        direction: 'horizontal',
+        moves: function() {
+          return this.canEdit;
+        }
+      });
 
     this.dragulaService.dropModel.subscribe(value => {
       if (this.bagName === value[0])

@@ -13,6 +13,7 @@ import {DomSanitizer} from '@angular/platform-browser';
   styleUrls: ['./page-content-placement.component.css']
 })
 export class PageContentPlacementComponent implements OnInit {
+  @Input() canEdit = true;
   @Input()
   set placements(value) {
     this._placements = value;

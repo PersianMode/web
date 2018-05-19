@@ -50,12 +50,20 @@ export class PageService {
 
   getPage(pageName, emit = true) {
     const i = setInterval(() => { // All other pages should wait for initialisation of Home placements
-      if (pageName === 'home' || this.homeWasLoaded) {
+      if (pageName === 'home' || pageName.includes('?preview') || this.homeWasLoaded) {
         clearInterval(i);
         if (!this.cache[pageName]) {
+          const originalPageName = pageName;
           pageName = pageName.toLowerCase().includes('?preview') ? pageName.substr(0, pageName.indexOf('?preview')) : pageName;
-          this.httpService.post('page' + (this.authService.userDetails.isAgent ? '/cm/preview' : ''), {address: pageName}).subscribe(
+          const plcDate = originalPageName.toLowerCase().includes('?preview') && originalPageName.toLowerCase().includes('&date=') ?
+            originalPageName.toLowerCase().substr(originalPageName.toLowerCase().indexOf('&date=') + 6) :
+            null;
+          this.httpService.post('page' + (this.authService.userDetails.isAgent ? '/cm/preview' : ''), {
+            address: pageName,
+            date: plcDate,
+          }).subscribe(
             (data: any) => {
+              // ToDo: need to ignore home placements when route to home with specific date
               if (data && data.placement && data.placement.length) {
                 this.cache[pageName] = {
                   placement: this.classifyPlacements(pageName, data.placement),
@@ -69,7 +77,8 @@ export class PageService {
                 defaultComponents.forEach(r => {
                   this.cache[pageName].placement[0].push(r);
                   this.cache[pageName].placement[1].push(this.homeComponents[r]);
-                });    }
+                });
+              }
               if (emit) {
                 this.emitPlacements(pageName, this.cache[pageName]);
               }

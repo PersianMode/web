@@ -21,7 +21,7 @@ enum ItemArea {
 })
 export class SubMenuComponent implements OnInit {
   @Input() pageId = null;
-
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -87,6 +87,9 @@ export class SubMenuComponent implements OnInit {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
+        moves: function() {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe((value) => {

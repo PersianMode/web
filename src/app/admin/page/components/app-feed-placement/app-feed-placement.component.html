@@ -1,5 +1,5 @@
 <div>
-  <form (ngSubmit)="modifyItem()" [formGroup]="feedForm">
+  <form (ngSubmit)="modifyItem()" [formGroup]="feedForm" *ngIf="canEdit">
     <div fxLayout="row" fxLayoutAlign="start start" fxLayout.xs="column" fxLayoutAlign.xs="center center">
       <div fxFlex="70" class="form-controller">
         <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
@@ -41,8 +41,7 @@
   </form>
   <div class="demo-list demo-area" [dragula]="bagName" [dragulaModel]="placementList">
     <div *ngFor="let item of placementList" (click)="selectItem(item)" class="feed-container">
-      <img [src]="getImageUrl(item.info.imgUrl)" class="feed-image" 
-      />
+      <img [src]="getImageUrl(item.info.imgUrl)" class="feed-image" />
       <div></div>
       <div class="feed-title">
         <label class="menu-item persian-field">{{item.info.text}}</label>

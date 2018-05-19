@@ -15,7 +15,7 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 })
 export class SliderPlacementComponent implements OnInit {
   @Input() pageId = null;
-
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -58,7 +58,12 @@ export class SliderPlacementComponent implements OnInit {
     this.clearFields();
 
     if (!this.dragulaService.find(this.bagName))
-      this.dragulaService.setOptions(this.bagName, {direction: 'vertical',});
+      this.dragulaService.setOptions(this.bagName, {
+        direction: 'vertical',
+        moves: function() {
+          return this.canEdit;
+        }
+      });
 
     this.dragulaService.dropModel.subscribe(value => {
       if (this.bagName === value[0])

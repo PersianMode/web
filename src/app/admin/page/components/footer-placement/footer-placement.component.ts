@@ -15,6 +15,7 @@ import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
 })
 export class FooterPlacementComponent implements OnInit {
   @Input() pageId = null;
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value.length) {
@@ -22,6 +23,9 @@ export class FooterPlacementComponent implements OnInit {
 
       this.socialLinkItems = [];
       this.socialLinkItems = value.filter(el => el.variable_name.toLowerCase() === 'social_link');
+    } else {
+      this.socialLinkItems = [];
+      this.siteLinkItems = [];
     }
   }
 
@@ -95,11 +99,17 @@ export class FooterPlacementComponent implements OnInit {
     if (!this.dragulaService.find(this.socialBag))
       this.dragulaService.setOptions(this.socialBag, {
         direction: 'horizontal',
+        moves: function () {
+          return this.canEdit;
+        }
       });
 
     if (!this.dragulaService.find(this.textBag))
       this.dragulaService.setOptions(this.textBag, {
-
+        direction: 'horizontal',
+        moves: function () {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe(value => {
@@ -286,7 +296,7 @@ export class FooterPlacementComponent implements OnInit {
         .map(el => this.siteLinkItems[el])
         .reduce((a, b) => (a || []).concat(b || []))
         .map(el => el.info.column)) : 1;
-      res['row'] = ( tempColumns && tempColumns.length && this.siteLinkItems[0] && this.siteLinkItems[0].length ? Math.max(...tempColumns
+      res['row'] = (tempColumns && tempColumns.length && this.siteLinkItems[0] && this.siteLinkItems[0].length ? Math.max(...tempColumns
         .map(el => this.siteLinkItems[el])
         .reduce((a, b) => (a || []).concat(b || []))
         .map(el => el.info.row)) : 0) + 1;

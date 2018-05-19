@@ -127,5 +127,5 @@
 <app-placement
   *ngIf="id && (!form.controls['is_app'].value || (form.controls['address'].value.toLowerCase() === 'feed') || form.controls['address'].value.toLowerCase() === 'my_shop')"
   [isApp]="form.controls['is_app'].value" [placements]="placements" [pageId]="id"
-  [pageAddress]="form.controls['address'].value"
+  [pageAddress]="form.controls['address'].value" (dateIsChanged)="placementDateIsChanged($event)"
   (modifyPlacement)="modifyPlacement($event)" (reloadPlacement)="searchPagePlacements()"></app-placement>

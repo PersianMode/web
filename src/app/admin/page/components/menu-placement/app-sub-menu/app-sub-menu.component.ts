@@ -17,6 +17,7 @@ import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-di
 })
 export class AppSubMenuComponent implements OnInit {
   @Input() pageId = null;
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {

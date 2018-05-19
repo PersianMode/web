@@ -17,6 +17,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 })
 export class AppFeedPlacementComponent implements OnInit {
   @Input() pageId = null;
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value)
@@ -40,6 +41,9 @@ export class AppFeedPlacementComponent implements OnInit {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
+        moves: function() {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe(value => {

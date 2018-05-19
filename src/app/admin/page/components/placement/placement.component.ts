@@ -4,6 +4,7 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {MatSnackBar} from '@angular/material';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {Router} from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-placement',
@@ -18,12 +19,14 @@ export class PlacementComponent implements OnInit {
   @Input() placements: IPlacement[] = [];
   @Output() modifyPlacement = new EventEmitter();
   @Output() reloadPlacement = new EventEmitter();
+  @Output() dateIsChanged = new EventEmitter();
 
   finalizeRevertShouldDisabled = false;
   previewShouldDisabled = false;
+  placement_date: any = new Date();
 
   constructor(private httpService: HttpService, public snackBar: MatSnackBar,
-              @Inject(WINDOW) private window, private router: Router) {
+    @Inject(WINDOW) private window, private router: Router) {
   }
 
   ngOnInit() {
@@ -71,6 +74,31 @@ export class PlacementComponent implements OnInit {
   }
 
   preview() {
-    this.window.open(this.router.url.split('/')[0] + '/' + this.pageAddress + '?preview');
+    this.window.open(
+      this.router.url.split('/')[0] +
+      '/' +
+      this.pageAddress +
+      '?preview&date=' +
+      moment(this.placement_date).format('YYYY-MM-DD')
+    );
+  }
+
+  placementDateIsChanged() {
+    if (moment(moment(this.placement_date).format('YYYY-MM-DD')).isAfter(moment(new Date()).format('YYYY-MM-DD'))) {
+      this.snackBar.open('تاریخ انتخاب شده معتبر نمی باشد', null, {
+        duration: 3200,
+      });
+      this.goToToday();
+      return;
+    }
+    this.dateIsChanged.emit(this.placement_date);
+  }
+
+  goToToday() {
+    this.placement_date = new Date();
+  }
+
+  canEdit() {
+    return moment(moment(this.placement_date).format('YYYY-MM-DD')).isSame(moment(new Date).format('YYYY-MM-DD'));
   }
 }

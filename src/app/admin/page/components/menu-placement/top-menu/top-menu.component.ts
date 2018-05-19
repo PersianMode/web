@@ -14,7 +14,7 @@ import {RemovingConfirmComponent} from '../../../../../shared/components/removin
 })
 export class TopMenuComponent implements OnInit {
   @Input() pageId = null;
-
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -47,6 +47,9 @@ export class TopMenuComponent implements OnInit {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'horizontal',
+        moves: function() {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe((value) => {

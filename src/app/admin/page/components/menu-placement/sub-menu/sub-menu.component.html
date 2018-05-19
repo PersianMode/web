@@ -1,5 +1,5 @@
 <div class="sub-menu-area">
-  <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="subMenuForm">
+  <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="subMenuForm" *ngIf="canEdit">
     <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
       fxLayoutAlign.xs="center center">
       <div fxFlex="70">
@@ -56,7 +56,7 @@
       <div *ngIf="headerAreaHasNewColumn" class="menu-column empty-column" [dragula]="'sub-menu-bag'" [dragulaModel]="headerAreaNewEmptyList">
         &nbsp;
       </div>
-      <div class="menu-column">
+      <div class="menu-column" *ngIf="canEdit">
         <button mat-icon-button (click)="addColumn('header')" [disabled]="addColumnDisability('header')" [matTooltip]="'افزودن ستون'" [matTooltipPosition]="'above'">
           <mat-icon aria-label="add column">add_circle_outline</mat-icon>
         </button>
@@ -72,7 +72,7 @@
       <div *ngIf="middleAreaHasNewColumn" class="menu-column empty-column" [dragula]="'sub-menu-bag'" [dragulaModel]="middleAreaNewEmptyList">
         &nbsp;
       </div>
-      <div class="menu-column">
+      <div class="menu-column" *ngIf="canEdit">
         <button mat-icon-button (click)="addColumn('middle')" [disabled]="addColumnDisability('middle')" [matTooltip]="'افزودن ستون'" [matTooltipPosition]="'above'">
           <mat-icon aria-label="add column">add_circle_outline</mat-icon>
         </button>
@@ -88,7 +88,7 @@
       <div *ngIf="leftAreaHasNewColumn" class="menu-column empty-column" [dragula]="'sub-menu-bag'" [dragulaModel]="leftAreaNewEmptyList">
         &nbsp;
       </div>
-      <div class="menu-column">
+      <div class="menu-column" *ngIf="canEdit">
         <button mat-icon-button (click)="addColumn('left')" [disabled]="addColumnDisability('left')" [matTooltip]="'افزودن ستون'" [matTooltipPosition]="'above'">
           <mat-icon aria-label="add column">add_circle_outline</mat-icon>
         </button>

@@ -10,6 +10,7 @@ export class MenuPlacementComponent implements OnInit {
   @Input() isApp = false;
   @Input() address = '';
   @Input() pageId = null;
+  @Input() canEdit = true;
 
   @Input()
   set placements(value: IPlacement[]) {
