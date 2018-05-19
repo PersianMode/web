@@ -131,7 +131,7 @@ export class ProductService {
         } else if (f.name === 'color') {
           this.filteredProducts
             .forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
-              .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').includes(v) : false).length));
+              .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').find(x=> x.includes(v)) : false).length));
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
         } else if (f.name === 'size') {
           this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].instances = p.instances
