@@ -75,14 +75,10 @@ export class ProductService {
     if (trigger === 'price') {
       price = [];
     } else {
-      products.forEach((product) => {
-        product.instances.forEach(instance => {
-          if (!minPrice || minPrice > instance.discountedPrice)
-            minPrice = instance.discountedPrice;
-          if (!maxPrice || maxPrice < instance.discountedPrice)
-            maxPrice = instance.discountedPrice;
-        });
-      });
+      const pricesHelper = products.map(product => product.instances.map(instance => instance.discountedPrice));
+      const prices=[].concat(...pricesHelper);
+      minPrice = Math.min(...prices);
+      maxPrice = Math.max(...prices);
       price = [minPrice, maxPrice];
     }
 
@@ -138,7 +134,7 @@ export class ProductService {
         } else if (f.name === 'color') {
           this.filteredProducts
             .forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
-              .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').includes(v) : false).length));
+              .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').find(a => a.includes(v)) : false).length));
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
         } else if (f.name === 'size') {
           this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].instances = p.instances
