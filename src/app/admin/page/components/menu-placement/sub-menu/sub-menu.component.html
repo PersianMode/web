@@ -11,9 +11,12 @@
             </mat-input-container>
           </div>
           <div fxFlex="30" class="full-width sub-item">
-            <mat-input-container class="full-width">
-              <input matInput type="text" class="persian-field menu-field left-text" placeholder="آدرس" formControlName="href" />
-            </mat-input-container>
+            <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [formControlName]="'href'"
+                 (add)="insertedAddress=$event" (field)="insertedAddress=$event" >
+            </app-suggestion>
+            <label class="content">{{insertedAddress}}</label>
+
+
           </div>
           <div fxFlex="20" class="full-width vertical-align-item sub-item">
             <mat-select placeholder="بخش" formControlName="area" dir="rtl" class="persian-field">

@@ -18,7 +18,7 @@ export class SuggestionComponent implements OnInit {
   @Input() fieldName = '';
   @Input() currentIds: number[] = [];
   @Output() add = new EventEmitter<any>();
-
+  @Output() field= new EventEmitter<any>();
   targetEnum = TargetEnum;
   textDirection = 'ltr';
 
