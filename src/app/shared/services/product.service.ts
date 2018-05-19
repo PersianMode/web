@@ -125,7 +125,6 @@ export class ProductService {
 
   applyFilters(filters, trigger) {
     this.filteredProducts = JSON.parse(JSON.stringify(this.products));
-
     filters.forEach(f => {
       if (f.values.length) {
         if (['brand', 'type'].includes(f.name)) {

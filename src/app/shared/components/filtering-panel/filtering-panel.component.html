@@ -48,7 +48,7 @@
     <span *ngIf="fo.name === 'shoesSize'">
       <mat-button-toggle *ngFor="let v of filter_options[i].values; let j = index" class="filter-size"
                          (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
-          {{filter_options[i].values_fa[j]}}
+          {{shoesSize(filter_options[i].values[j])}}
       </mat-button-toggle>
     </span>
   </mat-expansion-panel>

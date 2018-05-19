@@ -27,6 +27,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   rangeValues: any;
   minPrice;
   maxPrice;
+  isEU = false;
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
 
@@ -37,7 +38,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.filter_options$ =  this.productService.filtering$.subscribe(r => {
+    this.filter_options$ = this.productService.filtering$.subscribe(r => {
       this.filter_options = r;
       this.filter_options.forEach(el => {
         const found = this.current_filter_state.find(cfs => cfs.name === el.name);
@@ -93,6 +94,12 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.productService.applyFilters(this.current_filter_state, 'price');
     this.expanded.price = true;
 
+  }
+
+  shoesSize(size) {
+    if (this.isEU)
+      return size;
+    return this.dict.USToEU(size, 'WOMENS');
   }
 
   getValue(name, value) {
@@ -151,6 +158,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     }
     this.sortedByChange.emit(this.sortedBy);
   }
+
   ngOnDestroy(): void {
     this.filter_options$.unsubscribe();
   }
