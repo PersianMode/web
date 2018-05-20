@@ -1,0 +1,77 @@
+<mat-card>
+  <mat-card-content>
+    <div class="row">
+      <div class="example-container mat-elevation-z8">
+
+        <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
+          (matSortChange)="onSortChange($event)">
+          <ng-container matColumnDef="number">
+            <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{getIndex(element)}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="thumbnail">
+            <mat-header-cell *matHeaderCellDef> تصویر</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <div>
+                {{getPIThumbnail(element)}}
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef>نام محصول</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <div>
+                {{element.product.name}}
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="size">
+            <mat-header-cell *matHeaderCellDef> اندازه</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <div>
+                {{element.product.instances.size}}
+              </div>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="barcode">
+            <mat-header-cell *matHeaderCellDef> بارکد</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <div>
+                {{element.product.instances.barcode}}
+              </div>
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="articleNo">
+            <mat-header-cell *matHeaderCellDef> Article No.</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <div>
+                {{element.product.instances.article_no}}
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <mat-header-cell *matHeaderCellDef> تغییر وضعیت نمایش</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <button *ngIf="element.product.instances.sold_out" mat-icon-button (click)="changeSoldOutStatus(element,false)" color="warn">
+                <mat-icon aria-label="visibility_off">visibility_off</mat-icon>
+              </button>
+              <button *ngIf="!element.product.instances.sold_out" mat-icon-button (click)="changeSoldOutStatus(element,true)" color="warn">
+                <mat-icon aria-label="visibility">visibility</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>
