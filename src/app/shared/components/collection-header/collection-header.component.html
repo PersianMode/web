@@ -15,7 +15,7 @@
       <div *ngFor="let element of searchResultList" class="search-item" fxLayout="row" fxLayoutAlign="start start">
         <div *ngIf="element.title === 'Product'" fxFlex="80" (click)="selectSearchResult(element)">
           <div class="search-name">{{element.name}}</div>
-          <div class="search-brand">{{element.brand}}</div>
+          <div class="search-brand">{{element.brand}}{{' - '}}{{element.tags}}</div>
           <div class="search-type">{{element.type}}</div>
           <div class="search-title">{{element.title}}</div>
         </div>

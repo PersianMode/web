@@ -143,6 +143,7 @@ export class CollectionHeaderComponent implements OnInit {
               brand: this.dictionaryService.translateWord(el.brand.name),
               type: this.dictionaryService.translateWord(el.product_type.name),
               imgUrl: this.getProductThumbnail(el),
+              tags: this.dictionaryService.translateWord(el.tags.name),
               title: 'Product'
             });
           });
@@ -178,7 +179,6 @@ export class CollectionHeaderComponent implements OnInit {
           if (el.title === 'Collection')
             this.getCollectionPages(el);
         });
-        console.log(this.searchResultList);
         this.searchWaiting = false;
       },
       (err) => {
