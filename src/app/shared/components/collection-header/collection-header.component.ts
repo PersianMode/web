@@ -119,6 +119,7 @@ export class CollectionHeaderComponent implements OnInit {
   }
 
   searchProduct() {
+    this.searchResultList = [];
     if (!this.searchPhrase) {
       this.searchResultList = [];
       return;
@@ -168,6 +169,7 @@ export class CollectionHeaderComponent implements OnInit {
             this.searchResultList.push({
               id: el._id,
               name: el.name,
+              name_fa: el.name_fa,
               title: 'Collection'
             });
           });
@@ -177,6 +179,7 @@ export class CollectionHeaderComponent implements OnInit {
             this.getCollectionPages(el);
         });
         console.log(this.searchResultList);
+        this.searchWaiting = false;
       },
       (err) => {
         console.error('Cannot get search data: ', err);
@@ -190,7 +193,6 @@ export class CollectionHeaderComponent implements OnInit {
     }).subscribe(
       (data) => {
         el.pages = data;
-        this.searchWaiting = false;
       },
       (err) => {
         console.error('Cannot get search data: ', err);

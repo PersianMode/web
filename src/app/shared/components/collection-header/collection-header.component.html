@@ -9,7 +9,7 @@
   </ul>
   <div id="search-area" class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'" [style.width]="(searchIsFocused ? 341 : 197) + 'px'">
     <i class="fa fa-search fa-flip-horizontal"></i>
-    <input placeholder="جُستجو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase" [style.width]="(searchIsFocused ? 300 : 156) + 'px'"
+    <input placeholder="جُست و جو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase" [style.width]="(searchIsFocused ? 300 : 156) + 'px'"
       (ngModelChange)="searchProduct()">
     <div *ngIf="!searchWaiting && searchResultList.length" class="search-result-panel">
       <div *ngFor="let element of searchResultList" class="search-item" fxLayout="row" fxLayoutAlign="start start">
@@ -22,12 +22,13 @@
         <div *ngIf="element.title === 'Product'" fxFlex="20" class="second-search-item" (click)="selectSearchResult(element)">
           <img [src]="element.imgUrl" class="search-item-image" />
         </div>
-        <div *ngIf="element.title === 'Collection'" fxFlex="40">
+        <div *ngIf="element.title === 'Collection' && element.pages && element.pages.length" fxFlex="40">
           <div class="search-name">{{element.name}}</div>
           <div class="search-title">{{element.title}}</div>
         </div>
-        <div *ngIf="element.title === 'Collection'" fxFlex="60" class="second-search-item">
-          <div *ngFor="let page of element.pages" class="search-address" (click)="selectSearchResult(page.address)">{{page.address}}</div>
+        <div *ngIf="element.title === 'Collection' && element.pages && element.pages.length" fxFlex="60" class="second-search-item">
+          <!--<div *ngFor="let page of element.pages" class="search-address" (click)="selectSearchResult(page.address)">{{page.address}}</div>-->
+          <div class="search-address" (click)="selectSearchResult(element.pages[0].address)">{{element.name_fa}}</div>
         </div>
       </div>
     </div>
