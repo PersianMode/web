@@ -151,10 +151,6 @@ export class CollectionHeaderComponent implements OnInit {
               imgUrl: this.getProductThumbnail(el),
               tags: this.dictionaryService.translateWord(el.tags.name),
               instances: el.instances.article_no,
-              title: {
-                name: 'Product',
-                value: 'محصول',
-              }
             });
           });
         }
@@ -180,21 +176,17 @@ export class CollectionHeaderComponent implements OnInit {
       limit: 5,
     }).subscribe(
       (data) => {
+        this.searchCollectionList = [];
         if (data.data) {
           data.data.forEach(el => {
             this.searchCollectionList.push({
               id: el._id,
               name: el.name,
               name_fa: el.name_fa,
-              title: {
-                name: 'Collection',
-                value: 'کالکشن',
-              }
             });
           });
         }
         this.searchCollectionList.forEach(el => {
-          if (el.title.name === 'Collection')
             this.getCollectionPages(el);
         });
         this.searchWaiting = false;
@@ -218,14 +210,15 @@ export class CollectionHeaderComponent implements OnInit {
       });
   }
 
-  selectSearchResult(element) {
-    if (element.title.name === 'Product')
+  selectSearchResult(element, isProduct) {
+    if (isProduct)
       this.router.navigate([`/product/${element.id}`]);
     else
       this.router.navigate([`${element.pages[0].address}`]);
 
     this.searchIsFocused = false;
     this.searchProductList = [];
+    this.searchCollectionList = [];
   }
 
   getProductThumbnail(product) {

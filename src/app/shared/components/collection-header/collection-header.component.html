@@ -8,7 +8,7 @@
       <a [routerLink]="item.routerLink">{{item.info.text}}</a>
     </li>
   </ul>
-  <div id="search-area" class="search-bar" [style.borderColor]="searchIsFocused ? 'red' : '#E5E5E5'"
+  <div id="search-area" class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"
        [style.width]="(searchIsFocused ? 341 : 197) + 'px'">
     <i class="fa fa-search fa-flip-horizontal"></i>
     <input placeholder="جُست و جو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase"
@@ -18,7 +18,7 @@
          class="search-result-panel">
       <div *ngIf="searchProductList.length" class="search-title">{{'محصولات'}}</div>
       <hr *ngIf="searchProductList.length">
-      <div *ngFor="let element of searchProductList" class="search-item" (click)="selectSearchResult(element)"
+      <div *ngFor="let element of searchProductList" class="search-item" (click)="selectSearchResult(element, true)"
            fxLayout="row" fxLayoutAlign="start start">
         <div fxFlex="80">
           <div class="search-name">{{element.name}}</div>
@@ -33,9 +33,9 @@
       <br *ngIf="searchCollectionList.length">
       <div *ngIf="searchCollectionList.length" class="search-title">{{'کالکشن ها'}}</div>
       <hr *ngIf="searchCollectionList.length">
-      <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element)"
+      <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element, false)"
            fxLayout="row" fxLayoutAlign="start start">
-        <div *ngIf="element.title.name === 'Collection' && element.pages && element.pages.length" fxFlex="40">
+        <div *ngIf="element.pages && element.pages.length" fxFlex="40">
           <div class="search-name">{{element.name}}</div>
         </div>
         <div *ngIf="element.pages && element.pages.length" fxFlex="60"
