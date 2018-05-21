@@ -27,6 +27,9 @@ import {SoldOutComponent} from './soldout.component';
     MatGridListModule,
     MatIconModule,
     MatButtonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   declarations: [
     SoldOutComponent

@@ -1,8 +1,14 @@
 <mat-card>
   <mat-card-content>
+
+    <div class="row">
+      <mat-form-field class="center">
+        <input matInput placeholder="جستجو" [(ngModel)]="phrase" (ngModelChange)="load()" >
+      </mat-form-field>
+    </div>
+
     <div class="row">
       <div class="example-container mat-elevation-z8">
-
         <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
           (matSortChange)="onSortChange($event)">
           <ng-container matColumnDef="number">
