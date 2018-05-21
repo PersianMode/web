@@ -3,37 +3,50 @@
     <span>ُ</span>
   </div>
   <ul>
-    <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]" (mouseenter)="showList(item.type)" (mouseleave)="countDownHideList()">
+    <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]" (mouseenter)="showList(item.type)"
+        (mouseleave)="countDownHideList()">
       <a [routerLink]="item.routerLink">{{item.info.text}}</a>
     </li>
   </ul>
-  <div id="search-area" class="search-bar" [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'" [style.width]="(searchIsFocused ? 341 : 197) + 'px'">
+  <div id="search-area" class="search-bar" [style.borderColor]="searchIsFocused ? 'red' : '#E5E5E5'"
+       [style.width]="(searchIsFocused ? 341 : 197) + 'px'">
     <i class="fa fa-search fa-flip-horizontal"></i>
-    <input placeholder="جُست و جو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase" [style.width]="(searchIsFocused ? 300 : 156) + 'px'"
-      (ngModelChange)="searchProduct()">
-    <div *ngIf="!searchWaiting && searchResultList.length" class="search-result-panel">
-      <div *ngFor="let element of searchResultList" class="search-item" fxLayout="row" fxLayoutAlign="start start">
-        <div *ngIf="element.title === 'Product'" fxFlex="80" (click)="selectSearchResult(element)">
+    <input placeholder="جُست و جو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase"
+           [style.width]="(searchIsFocused ? 300 : 156) + 'px'"
+           (ngModelChange)="searchProduct()">
+    <div *ngIf="!searchWaiting && (searchProductList.length || searchCollectionList.length)"
+         class="search-result-panel">
+      <div *ngIf="searchProductList.length" class="search-title">{{'محصولات'}}</div>
+      <hr *ngIf="searchProductList.length">
+      <div *ngFor="let element of searchProductList" class="search-item" (click)="selectSearchResult(element)"
+           fxLayout="row" fxLayoutAlign="start start">
+        <div fxFlex="80">
           <div class="search-name">{{element.name}}</div>
           <div class="search-brand">{{element.brand}}{{' - '}}{{element.tags}}</div>
           <div class="search-type">{{element.type}}</div>
-          <div class="search-title">{{element.title}}</div>
+          <div class="search-article_no">{{'article_no : '}}{{element.instances}}</div>
         </div>
-        <div *ngIf="element.title === 'Product'" fxFlex="20" class="second-search-item" (click)="selectSearchResult(element)">
-          <img [src]="element.imgUrl" class="search-item-image" />
+        <div fxFlex="20" class="second-search-item">
+          <img [src]="element.imgUrl" class="search-item-image"/>
         </div>
-        <div *ngIf="element.title === 'Collection' && element.pages && element.pages.length" fxFlex="40">
+      </div>
+      <br *ngIf="searchCollectionList.length">
+      <div *ngIf="searchCollectionList.length" class="search-title">{{'کالکشن ها'}}</div>
+      <hr *ngIf="searchCollectionList.length">
+      <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element)"
+           fxLayout="row" fxLayoutAlign="start start">
+        <div *ngIf="element.title.name === 'Collection' && element.pages && element.pages.length" fxFlex="40">
           <div class="search-name">{{element.name}}</div>
-          <div class="search-title">{{element.title}}</div>
         </div>
-        <div *ngIf="element.title === 'Collection' && element.pages && element.pages.length" fxFlex="60" class="second-search-item">
-          <!--<div *ngFor="let page of element.pages" class="search-address" (click)="selectSearchResult(page.address)">{{page.address}}</div>-->
-          <div class="search-address" (click)="selectSearchResult(element.pages[0].address)">{{element.name_fa}}</div>
+        <div *ngIf="element.pages && element.pages.length" fxFlex="60"
+             class="second-search-item">
+          <div class="search-address">{{element.name_fa}}</div>
         </div>
       </div>
     </div>
     <div *ngIf="searchWaiting" class="search-result-panel">
-      <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'" [strokeWidth]="'2'">
+      <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
+                            [strokeWidth]="'2'">
       </mat-progress-spinner>
     </div>
   </div>
@@ -49,14 +62,16 @@
     </div>
     <div *ngIf="menu && menu.middleList" class="middle">
       <ul *ngFor="let key of getKeyList(menu.middleList)">
-        <li *ngFor="let item of menu.middleList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header" [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
+        <li *ngFor="let item of menu.middleList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header"
+            [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
           <a [routerLink]="item.routerLink">{{item.text}}</a>
         </li>
       </ul>
     </div>
     <div *ngIf="menu && menu.leftList" class="leftColumn">
       <ul *ngFor="let key of getKeyList(menu.leftList)">
-        <li *ngFor="let item of menu.leftList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header" [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
+        <li *ngFor="let item of menu.leftList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header"
+            [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
           <a [routerLink]="item.routerLink">{{item.text}}</a>
         </li>
       </ul>
