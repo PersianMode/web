@@ -23,9 +23,7 @@ import {
   MatSnackBarModule,
   MatProgressSpinnerModule,
   MatListModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatButtonToggleModule
+  MatSliderModule
 } from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';
@@ -43,7 +41,6 @@ import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert
 import {AuthGuard} from './auth.guard';
 import {OrderLinesComponent} from './profile/components/order-lines/order-lines.component';
 import { ForgotPasswordComponent } from './login/components/forgot-password/forgot-password.component';
-import { SizePickerComponent } from '../shared/components/size-picker/size-picker.component';
 
 @NgModule({
   imports: [
@@ -74,8 +71,6 @@ import { SizePickerComponent } from '../shared/components/size-picker/size-picke
     MatListModule,
     MatSliderModule,
     SharedModule,
-    MatSlideToggleModule,
-    MatButtonToggleModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),
@@ -94,7 +89,6 @@ import { SizePickerComponent } from '../shared/components/size-picker/size-picke
     UpsertAddressComponent,
     GenDialogComponent,
     OtherDetailsComponent,
-    SizePickerComponent,
     OrderLinesComponent,
   ],
   entryComponents: [GenDialogComponent],
