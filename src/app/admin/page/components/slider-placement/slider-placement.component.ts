@@ -152,7 +152,6 @@ export class SliderPlacementComponent implements OnInit {
   }
   removeAddress() {
     this.upsertSlider.href = null;
-    this.fieldChanged();
   }
   removeItem() {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {

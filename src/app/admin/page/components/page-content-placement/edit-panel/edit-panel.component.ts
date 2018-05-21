@@ -8,7 +8,7 @@ import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
   styleUrls: ['./edit-panel.component.css']
 })
 export class EditPanelComponent implements OnInit {
-  insertedAddress: string;
+  insertedAddress = '#';
   placement = null;
   rowTemplate = null;
   rowTemplateList = [

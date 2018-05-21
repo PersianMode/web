@@ -1,28 +1,18 @@
 <div class="sub-menu-area">
   <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="subMenuForm">
-    <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
-      fxLayoutAlign.xs="center center">
+    <div fxLayout="row" >
       <div fxFlex="70">
-        <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
-          fxLayoutAlign.xs="center center">
-          <div fxFlex="30" class="full-width sub-item">
+        <div fxLayout="row" >
+          <div fxFlex="50" class="full-width sub-item">
             <mat-input-container class="full-width">
               <input matInput type="text" class="persian-field menu-field" placeholder="متن" formControlName="text" />
             </mat-input-container>
           </div>
-          <div fxFlex="30" class="full-width sub-item">
-            <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [formControlName]="'href'"
-                 (add)="insertedAddress=$event" (field)="insertedAddress=$event" >
+          <div fxLayout="row" class="address-field">
+            <app-suggestion fxFlex="50" [name]="'Page'" [placeholder]="'آدرس'"
+                 (add)="insertedAddress=$event.address" (field)="insertedAddress=$event" >
             </app-suggestion>
-            <!--add label-->
-            <div fxFlex="50" *ngIf="insertedAddress">
-              <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{insertedAddress}} </h3>
-              <button mat-icon-button (click)="removeAddress()" color="primary" class="remove-collection-button">
-                <mat-icon>
-                  <i class="material-icons">close</i>
-                </mat-icon>
-              </button>
-            </div>
+            <div fxFlex="50" class="text-field" *ngIf="insertedAddress">{{ insertedAddress }}</div>
           </div>
           <div fxFlex="20" class="full-width vertical-align-item sub-item">
             <mat-select placeholder="بخش" formControlName="area" dir="rtl" class="persian-field">

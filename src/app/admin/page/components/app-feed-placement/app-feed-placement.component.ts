@@ -16,7 +16,7 @@ import {DomSanitizer} from '@angular/platform-browser';
   styleUrls: ['./app-feed-placement.component.css']
 })
 export class AppFeedPlacementComponent implements OnInit {
-  insertedAddress: string;
+  insertedAddress = '#';
   @Input() pageId = null;
   @Input()
   set placements(value: IPlacement[]) {
@@ -130,7 +130,7 @@ export class AppFeedPlacementComponent implements OnInit {
           const newInfo = this.getItemInfo();
           const changedObj = this.placementList.find(el => el._id === this.selectedItem._id);
           changedObj.info.text = newInfo.text;
-         // changedObj.info.insertedAddress = newInfo.href
+         changedObj.info.insertedAddress = newInfo.href;
         } else {
           const newInfo = this.getItemInfo(true);
           this.selectedItem = data.new_placement;
@@ -203,6 +203,7 @@ export class AppFeedPlacementComponent implements OnInit {
 
   selectItem(item) {
     this.selectedItem = item;
+   // console.log('aaaaaa', item);
     this.setFormValue(item.info);
   }
 
@@ -211,7 +212,7 @@ export class AppFeedPlacementComponent implements OnInit {
       this.feedForm.reset();
     else {
       this.feedForm.controls['text'].setValue(value.text);
-      // this.insertedAddress.(value.href);
+       this.insertedAddress = value.href;
     }
   }
 

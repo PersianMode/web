@@ -21,7 +21,7 @@ enum ItemArea {
 })
 export class SubMenuComponent implements OnInit {
   @Input() pageId = null;
-  insertedAddress: string;
+  insertedAddress = '#';
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -122,7 +122,7 @@ export class SubMenuComponent implements OnInit {
       this.subMenuForm.controls['area'].enable();
     } else {
       this.subMenuForm.controls['text'].setValue(value.text);
-      // this.subMenuForm.controls['href'].setValue(value.text);
+      this.insertedAddress = value.href;
       switch (value.section.toLowerCase().split('/')[1]) {
         case 'header':
           this.subMenuForm.controls['area'].setValue(this.itemArea.Header);

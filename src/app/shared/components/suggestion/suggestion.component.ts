@@ -17,6 +17,8 @@ export class SuggestionComponent implements OnInit {
   @Input() placeholder: string = null;
   @Input() fieldName = '';
   @Input() currentIds: number[] = [];
+  @Input() hasReturn = false;
+
   @Output() add = new EventEmitter<any>();
   @Output() field = new EventEmitter<any>();
   targetEnum = TargetEnum;
@@ -28,6 +30,7 @@ export class SuggestionComponent implements OnInit {
   constructor(private httpService: HttpService, private progressService: ProgressService) {
   }
 
+
   ngOnInit() {
     if (!this.placeholder)
       this.placeholder = this.name;
@@ -37,6 +40,9 @@ export class SuggestionComponent implements OnInit {
       (data) => {
         this.getTextDirection(data);
         this.filtering(data);
+        if (data && this.hasReturn) {
+          this.field.emit(data);
+        }
       },
       (err) => {
         this.filteredItems = [];
@@ -45,7 +51,7 @@ export class SuggestionComponent implements OnInit {
   }
 
   addItem(data) {
-    const item = this.filteredItems.filter(el => el._id.toLowerCase() === data.option.value.toLowerCase())[0];
+    const item = this.filteredItems.filter(el => el._id === data.option.value)[0];
     this.add.emit(item);
     this.suggestionCtrl.setValue('');
   }

@@ -112,7 +112,6 @@ export class LogoListPlacementComponent implements OnInit {
   changeField() {
     const text = this.upsertLogo && this.upsertLogo.text ? this.upsertLogo.text.trim().toLowerCase() : '';
     const href = this.upsertLogo && this.upsertLogo.href ? this.upsertLogo.href.trim().toLowerCase() : '';
-
     const curLogo = this.logos.find(el => el.info.text === this.upsertLogo.text && el.info.href === this.upsertLogo.href);
     if (curLogo) {
       const logoStyle = curLogo.info.style, upsertStyle = this.upsertLogo.style;

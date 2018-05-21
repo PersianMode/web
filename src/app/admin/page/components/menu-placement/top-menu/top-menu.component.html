@@ -1,30 +1,22 @@
 <div>
-  <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
-       fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
-    <div fxFlex="50" class="full-width">
-      <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column">
-        <div fxFlex="30" class="full-width">
+  <div fxLayout="column"
+       fxLayoutAlign="center center">
+    <div class="full-width">
+      <div  fxLayout="column">
+        <div class="full-width">
           <mat-input-container class="input-field">
             <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
                    [(ngModel)]="upsertTopMenuItem.text"
                    (ngModelChange)="changeField()"/>
           </mat-input-container>
         </div>
-        <div fxFlex="30" class="full-width">
-            <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" (add)="upsertTopMenuItem.href=$event"
-                            (field)="upsertTopMenuItem.href=$event" >
+        <div fxLayout="row" class="address-field">
+            <app-suggestion fxFlex="50"  [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true"
+            (add)="upsertTopMenuItem.href=$event.address" (field)="upsertTopMenuItem.href=$event">
             </app-suggestion>
-          <!--add label-->
-          <div fxFlex="50" *ngIf="upsertTopMenuItem.href">
-            <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{upsertTopMenuItem.href}} </h3>
-            <button mat-icon-button (click)="removeAddress()" color="primary" class="remove-collection-button">
-              <mat-icon>
-                <i class="material-icons">close</i>
-              </mat-icon>
-            </button>
-          </div>
+          <div fxFlex="50" class="text-field" *ngIf="upsertTopMenuItem.href"> {{ upsertTopMenuItem.href }} </div>
         </div>
-        <div fxFlex="40" class="full-width">
+        <div  class="full-width">
           <mat-input-container dir="ltr" class="input-field">
             <input matInput class="menu-field left-text" placeholder="بخش" [(ngModel)]="upsertTopMenuItem.section"
                    [disabled]="upsertTopMenuItem.isEdit"/>
@@ -32,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div fxFlex="50" class="button-area">
+    <div class="button-area">
       <button mat-mini-fab color="primary" (click)="modifyItem(upsertTopMenuItem.isEdit)"
               [disabled]="topMenuApplyDisability()">
         <mat-icon>

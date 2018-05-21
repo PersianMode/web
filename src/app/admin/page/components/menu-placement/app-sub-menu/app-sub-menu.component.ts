@@ -17,7 +17,7 @@ import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-di
 })
 export class AppSubMenuComponent implements OnInit {
   @Input() pageId = null;
-  insertedAddress: string;
+  insertedAddress = '#';
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -207,7 +207,7 @@ export class AppSubMenuComponent implements OnInit {
       this.appSubMenuForm.controls['is_hader'].enable();
     } else {
       this.appSubMenuForm.controls['text'].setValue(value.text);
-     // this.appSubMenuForm.controls['href'].setValue(value.href);
+      this.insertedAddress = value.href;
       this.appSubMenuForm.controls['section'].setValue(value.section.split('/')[1]);
       this.appSubMenuForm.controls['is_header'].setValue(value.is_header ? value.is_header : false);
       if (value.is_header)
@@ -335,7 +335,7 @@ export class AppSubMenuComponent implements OnInit {
 
     this.anyChanges = false;
 
-    ['text', 'insertedAddress', 'is_header'].forEach(el => {
+    ['text', 'href', 'is_header'].forEach(el => {
       if (this.selectedItem.info[el] !== this.appSubMenuForm.controls[el].value) {
         this.anyChanges = true;
         return;

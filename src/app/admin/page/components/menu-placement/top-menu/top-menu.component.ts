@@ -24,6 +24,7 @@ export class TopMenuComponent implements OnInit {
     }
   }
 
+
   @Output() modifyPlacement = new EventEmitter();
   @Output() itemSelected = new EventEmitter();
 
@@ -41,6 +42,7 @@ export class TopMenuComponent implements OnInit {
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
               private progressService: ProgressService, private dialog: MatDialog) {
+
   }
 
   ngOnInit() {
@@ -54,6 +56,7 @@ export class TopMenuComponent implements OnInit {
         this.changeTopMenuColumn(value.slice(2));
     });
   }
+
 
   removeItem() {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
@@ -214,8 +217,7 @@ export class TopMenuComponent implements OnInit {
 
   changeField() {
     const text = this.upsertTopMenuItem.text.trim().toLowerCase();
-    const href = this.upsertTopMenuItem.href.trim().toLowerCase();
-
+    const href = this.upsertTopMenuItem.href ? this.upsertTopMenuItem.href.trim().toLowerCase() : '';
     if (this.upsertTopMenuItem.isEdit && text && href &&
       this.topMenuItems.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1)
       this.topMenuChanged = true;

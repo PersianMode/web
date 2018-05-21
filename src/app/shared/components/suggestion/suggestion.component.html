@@ -18,6 +18,9 @@
       <span *ngIf="name == targetEnum.type .toString()" style="direction: ltr; text-align: left;">
         {{item.name}}
       </span>
+      <span *ngIf="name == targetEnum.page .toString()" style="direction: ltr; text-align: left;">
+        {{item.address}}
+      </span>
     </mat-option>
   </mat-autocomplete>
 </mat-input-container>

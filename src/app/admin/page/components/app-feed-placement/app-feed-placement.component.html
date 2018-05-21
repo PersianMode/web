@@ -11,17 +11,11 @@
               </mat-input-container>
             </div>
             <div class="full-width">
-              <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [formControlName]="'href'"
-                              (add)="insertedAddress=$event" (field)="insertedAddress=$event" >
+              <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'"
+                              (add)="insertedAddress=$event.address" (field)="insertedAddress=$event" >
               </app-suggestion>
-              <!--add label-->
               <div fxFlex="50" *ngIf="insertedAddress">
                 <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{insertedAddress}} </h3>
-                <button mat-icon-button (click)="removeAddress()" color="primary" class="remove-collection-button">
-                  <mat-icon>
-                    <i class="material-icons">close</i>
-                  </mat-icon>
-                </button>
               </div>
             </div>
           </div>
