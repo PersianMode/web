@@ -1012,3 +1012,12 @@ p {
   max-height: calc(100vh);
   overflow-y: auto;
 }
+
+.mat-list-text {
+  padding-left: 20px !important;
+  font-family: iranyekan, sans-serif;
+}
+
+.mat-pseudo-checkbox-checked {
+  background: #999999 !important;
+}

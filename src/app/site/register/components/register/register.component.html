@@ -99,6 +99,7 @@
         </div>
       </form>
     </div>
+    <!-- verifyCode -->
     <div *ngIf="curStatus === regStatus.Verify">
       <div fxLayout="column" fxLayoutAlign="center center">
         <div fxFlex="33">
@@ -125,28 +126,13 @@
         </div>
       </div>
     </div>
-    <div *ngIf="curStatus === regStatus.PreferenceSize">
-      <div fxLayout="row" fxLayoutAlign="center center">
-        <!-- app size picker -->
-        <div fxLayout="column" fxLayoutAlign="center center">
-            <app-size-picker [sizes]="sizesFromServer" [gender]="male" [productType]="EU" (value)="selectedSize($event)"></app-size-picker>
-        </div>   
-      </div>
-      <br>     
-      <div fxLayout="row" fxLayoutAlign="center center">
-        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="setSize()">
-          <label>مرحله بعدی</label>
-        </div>
-        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="backToCheckCode()">
-          <label>مرحله قبل</label>
-        </div>
-      </div>
-    </div>
+
+    <!-- tags -->
     <div *ngIf="curStatus === regStatus.PreferenceTags">
       <div fxLayout="column" fxLayoutAlign="center center">
         <h1>انتخاب دسته بندی</h1>
         <mat-selection-list #tags>
-          <mat-list-option *ngFor="let tag of tagsType" [value]="tag.name">
+          <mat-list-option *ngFor="let tag of tagsType" [value]="tag" dir="rtl">
             {{tag.name}}
           </mat-list-option>
         </mat-selection-list>
@@ -155,16 +141,36 @@
         <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="setTags(tags)">
           <label>مرحله بعدی</label>
         </div>
-        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="backToSetSize()">
+        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="backToCheckCode()">
           <label>مرحله قبل</label>
         </div>
       </div>
     </div>
+
+    <!-- sizes -->
+    <div *ngIf="curStatus === regStatus.PreferenceSize">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <app-size-picker [sizes]="shoesSize" [gender]="gender" [productType]="productType"  (value)="selectedSize($event)"></app-size-picker>
+        </div>
+      </div>
+      <br>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="setSize()">
+          <label>مرحله بعدی</label>
+        </div>
+        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="backToSetTags()">
+          <label>مرحله قبل</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- brands -->
     <div *ngIf="curStatus === regStatus.PreferenceBrand">
       <div fxLayout="column" fxLayoutAlign="center center">
         <h1>انتخاب برند</h1>
         <mat-selection-list #brands>
-          <mat-list-option *ngFor="let brand of brandsType" [value]="brand.name">
+          <mat-list-option *ngFor="let brand of brandsType" [value]="brand">
             {{brand.name}}
           </mat-list-option>
         </mat-selection-list>
@@ -173,7 +179,7 @@
         <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="setBrand(brands)">
           <label>پایان</label>
         </div>
-        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="backToSetTags()">
+        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="backToSetSize()">
           <label>مرحله قبل</label>
         </div>
       </div>
