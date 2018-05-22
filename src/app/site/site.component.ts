@@ -60,6 +60,9 @@ export class SiteComponent implements OnInit {
       this.responsiveService.isMobile = this.isMobile;
       this.loadInitialPlacements();
     }
+    console.log('page height : ', h);
+    console.log('curHeight : ', this.curHeight);
+    console.log('curWidth : ', this.curWidth);
   }
 
   private loadInitialPlacements() {
