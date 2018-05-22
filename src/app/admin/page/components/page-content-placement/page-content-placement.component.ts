@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@ang
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {EditPanelComponent} from './edit-panel/edit-panel.component';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -36,7 +36,8 @@ export class PageContentPlacementComponent implements OnInit {
   onRevertMode = false;
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
-    private dialog: MatDialog, private sanitizer: DomSanitizer) {
+    private dialog: MatDialog, private sanitizer: DomSanitizer,
+    private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -153,6 +154,12 @@ export class PageContentPlacementComponent implements OnInit {
 
   selectedPanel(value) {
     if (this.onRevertMode && !this.canEdit) {
+      if (!value.end_date) {
+        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
+          duration: 2300,
+        });
+        return;
+      }
       if (this.revertSelectedList.includes(value._id))
         this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
       else

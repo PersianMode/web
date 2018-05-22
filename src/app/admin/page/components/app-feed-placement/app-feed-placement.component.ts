@@ -211,6 +211,12 @@ export class AppFeedPlacementComponent implements OnInit {
 
   selectItem(item) {
     if (this.onRevertMode && !this.canEdit) {
+      if (!item.end_date) {
+        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
+          duration: 2300,
+        });
+        return;
+      }
       if (this.revertSelectedList.includes(item._id))
         this.revertSelectedList = this.revertSelectedList.filter(el => el !== item._id);
       else

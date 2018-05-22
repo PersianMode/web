@@ -5,7 +5,7 @@ import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {Pos} from './slider-preview/slider-preview.component';
 import {DomSanitizer} from '@angular/platform-browser';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
@@ -54,7 +54,7 @@ export class SliderPlacementComponent implements OnInit {
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private sanitizer: DomSanitizer,
-    private dialog: MatDialog) {
+    private dialog: MatDialog, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -144,6 +144,12 @@ export class SliderPlacementComponent implements OnInit {
 
   selectItem(value) {
     if (this.onRevertMode && !this.canEdit) {
+      if (!value.end_date) {
+        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
+          duration: 2300,
+        });
+        return;
+      }
       if (this.revertSelectedList.includes(value._id))
         this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
       else

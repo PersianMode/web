@@ -6,7 +6,7 @@ import {ProgressService} from '../../../../../shared/services/progress.service';
 import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
 import {DomSanitizer} from '@angular/platform-browser';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
 import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-dialog.component';
 
@@ -56,7 +56,7 @@ export class AppSubMenuComponent implements OnInit {
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private sanitizer: DomSanitizer,
-    private dialog: MatDialog) {}
+    private dialog: MatDialog, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     if (!this.dragulaService.find(this.itemBagName))
@@ -201,6 +201,12 @@ export class AppSubMenuComponent implements OnInit {
 
   selectItem(value) {
     if (this.onRevertMode && !this.canEdit) {
+      if (!value.end_date) {
+        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
+          duration: 2300,
+        });
+        return;
+      }
       if (this.revertSelectedList.includes(value._id))
         this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
       else

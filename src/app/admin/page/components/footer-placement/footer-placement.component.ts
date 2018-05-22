@@ -4,7 +4,7 @@ import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {FormGroup, FormBuilder} from '@angular/forms';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
 
@@ -95,7 +95,8 @@ export class FooterPlacementComponent implements OnInit {
   onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-    private progressService: ProgressService, private dialog: MatDialog) {}
+    private progressService: ProgressService, private dialog: MatDialog,
+    private snackBar: MatSnackBar) {}
 
 
   ngOnInit() {
@@ -206,6 +207,13 @@ export class FooterPlacementComponent implements OnInit {
 
   selectIcon(icon) {
     if (this.onRevertMode && !this.canEdit) {
+      if (!icon.end_date) {
+        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
+          duration: 2300,
+        });
+        return;
+      }
+
       if (this.revertSelectedList.includes(icon._id))
         this.revertSelectedList = this.revertSelectedList.filter(el => el !== icon._id);
       else
@@ -231,6 +239,12 @@ export class FooterPlacementComponent implements OnInit {
 
   selectTextItem(item) {
     if (this.onRevertMode && !this.canEdit) {
+      if (!item.end_date) {
+        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
+          duration: 2300,
+        });
+        return;
+      }
       if (this.revertSelectedList.includes(item._id))
         this.revertSelectedList = this.revertSelectedList.filter(el => el !== item._id);
       else
