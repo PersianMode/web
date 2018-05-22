@@ -5,6 +5,8 @@ import {MatSnackBar} from '@angular/material';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {Router} from '@angular/router';
 import * as moment from 'moment';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-placement',
@@ -24,13 +26,20 @@ export class PlacementComponent implements OnInit {
   finalizeRevertShouldDisabled = false;
   previewShouldDisabled = false;
   placement_date: any = new Date();
-  selectToRevertList: any[] = [];
+  revertShouldBeDisabled = false;
+  allOldPlacementItems = false;
+  revertItemsCount = 0;
 
   constructor(private httpService: HttpService, public snackBar: MatSnackBar,
-    @Inject(WINDOW) private window, private router: Router) {
+    @Inject(WINDOW) private window, private router: Router,
+    private revertService: RevertPlacementService, private progressService: ProgressService) {
   }
 
   ngOnInit() {
+    this.revertService.itemsCount.subscribe(res => {
+      this.revertItemsCount = res;
+      this.allOldPlacementItems = this.revertItemsCount > 0;
+    });
   }
 
   getRelatedPlacements(type) {
@@ -97,38 +106,41 @@ export class PlacementComponent implements OnInit {
 
   goToToday() {
     this.placement_date = new Date();
+    this.placementDateIsChanged();
   }
 
   canEdit() {
     return moment(moment(this.placement_date).format('YYYY-MM-DD')).isSame(moment(new Date).format('YYYY-MM-DD'));
   }
 
-  selectToRevert(value) {
-    if (this.selectToRevertList.includes(value))
-      this.selectToRevertList = this.selectToRevertList.filter(el => el !== value);
-    else
-      this.selectToRevertList.push(value);
-  }
-
   revertToToday() {
-    this.httpService.post('placement/revert', {
-      placements: this.selectToRevertList,
-      page_id: this.pageId,
-    }).subscribe(
-      (res) => {
+    this.progressService.enable();
+    this.revertShouldBeDisabled = true;
+    this.revertService.revert(this.pageId)
+      .then(res => {
+        this.progressService.disable();
+        this.revertShouldBeDisabled = false;
         this.snackBar.open('موارد انتخاب بازگردانده شدند', null, {
           duration: 2300,
         });
-        this.selectToRevertList = [];
         this.goToToday();
         this.placementDateIsChanged();
-      },
-      (err) => {
+      })
+      .catch(err => {
+        this.progressService.disable();
+        this.revertShouldBeDisabled = false;
         this.snackBar.open('قادر به بازگردانی موارد انتخاب شده نیستیم. دوباره تلاش کنید', null, {
           duration: 3200,
         });
         console.error('Cannot revert selected items: ', err);
-      }
-    );
+      });
+  }
+
+  selectAllItems() {
+    if (this.allOldPlacementItems) {
+      this.revertService.selectBatch(this.placements);
+    } else {
+      this.revertService.unSelectBatch();
+    }
   }
 }

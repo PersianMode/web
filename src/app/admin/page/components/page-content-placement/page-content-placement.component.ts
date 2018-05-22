@@ -2,10 +2,11 @@ import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@ang
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {EditPanelComponent} from './edit-panel/edit-panel.component';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {DomSanitizer} from '@angular/platform-browser';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-page-content-placement',
@@ -27,17 +28,14 @@ export class PageContentPlacementComponent implements OnInit {
 
   @Input() pageId = null;
   @Output() modifyPlacement = new EventEmitter();
-  @Output() selectToRevert = new EventEmitter();
 
   _placements = [];
   modifiedPlacementList = {};
   moveButtonsShouldDisabled = false;
-  revertSelectedList = [];
-  onRevertMode = false;
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
     private dialog: MatDialog, private sanitizer: DomSanitizer,
-    private snackBar: MatSnackBar) {
+    private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
@@ -153,23 +151,13 @@ export class PageContentPlacementComponent implements OnInit {
   }
 
   selectedPanel(value) {
-    if (this.onRevertMode && !this.canEdit) {
-      if (!value.end_date) {
-        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
-          duration: 2300,
-        });
-        return;
-      }
-      if (this.revertSelectedList.includes(value._id))
-        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
-      else
-        this.revertSelectedList.push(value._id);
-      this.selectToRevert.emit(value._id);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
     }
   }
 
-  isSelectedToRevert(id) {
-    return this.revertSelectedList.includes(id);
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   setColumnRow(obj) {
@@ -362,11 +350,11 @@ export class PageContentPlacementComponent implements OnInit {
 
   @HostListener('document:keydown.control', ['$event'])
   keydown(event: KeyboardEvent) {
-    this.onRevertMode = true;
+    this.revertService.setRevertMode(true);
   }
 
   @HostListener('document:keyup.control', ['$event'])
   keyup(event: KeyboardEvent) {
-    this.onRevertMode = false;
+    this.revertService.setRevertMode(false);
   }
 }

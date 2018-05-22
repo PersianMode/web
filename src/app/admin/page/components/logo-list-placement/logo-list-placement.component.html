@@ -1,6 +1,6 @@
 <nav class="first-bar preview-main">
   <ul [dragula]="'logo-bag'" [dragulaModel]="logos">
-    <li *ngFor="let logo of logos" (click)="selectItem(logo)" class="top-menu-item" [ngClass]="{'highlight-logo': upsertLogo.id === logo._id, 'selected-to-revert-logo': !canEdit && isSelectedToRevert(logo._id)}"
+    <li *ngFor="let logo of logos" (click)="selectItem(logo)" class="top-menu-item" [ngClass]="{'highlight-logo': upsertLogo.id === logo._id, 'selected-to-revert-logo': !canEdit && isSelectedToRevert(logo)}"
       [ngStyle]="{width: (upsertLogo.id && upsertLogo.id === logo._id && upsertLogo.style ? (upsertLogo.style.width === 0 ? '60px' : upsertLogo.style.width + 'px') :
                             (logo.info.style && logo.info.style.width ? logo.info.style.width + 'px' : '60px'))}">
       <div class="gnav-member-bar" [title]="logo.info.text">

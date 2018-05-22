@@ -85,7 +85,7 @@
         </div>
       </div>
       <div *ngIf="selectedSectionSubMenu === section" [dragula]="itemBagName" [dragulaModel]="filteredSubMenuItems[section].items">
-        <div *ngFor="let item of filteredSubMenuItems[section].items" (click)="selectItem(item)" class="menu-item" [ngClass]="{'selected-item': selectedItem && selectedItem._id === item._id, 'selected-to-revert': !canEdit && isSelectedToRevert(item._id, 'item')}">
+        <div *ngFor="let item of filteredSubMenuItems[section].items" (click)="selectItem(item)" class="menu-item" [ngClass]="{'selected-item': selectedItem && selectedItem._id === item._id, 'selected-to-revert': !canEdit && isSelectedToRevert(item, 'item')}">
           <label class="menu-item">{{item.info.text}}</label>
         </div>
       </div>

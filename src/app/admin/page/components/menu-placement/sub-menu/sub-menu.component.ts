@@ -5,8 +5,9 @@ import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
+import {RevertPlacementService} from '../../../../../shared/services/revert-placement.service';
 
 enum ItemArea {
   Header,
@@ -44,7 +45,6 @@ export class SubMenuComponent implements OnInit {
   }
 
   @Output() modifyPlacement = new EventEmitter();
-  @Output() selectToRevert = new EventEmitter();
 
   subMenuItems: IPlacement[] = [];
   headerAreaItems: any = {};
@@ -79,19 +79,17 @@ export class SubMenuComponent implements OnInit {
   middleAreaHasNewColumn = false;
   leftAreaNewEmptyList = [];
   leftAreaHasNewColumn = false;
-  onRevertMode = false;
-  revertSelectedList = [];
-
+  
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog,
-    private snackBar: MatSnackBar) {
+    private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
-        moves: function () {
+        moves: () => {
           return this.canEdit;
         }
       });
@@ -331,18 +329,8 @@ export class SubMenuComponent implements OnInit {
   }
 
   selectItem(value) {
-    if (this.onRevertMode && !this.canEdit) {
-      if (!value.end_date) {
-        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
-          duration: 2300,
-        });
-        return;
-      }
-      if (this.revertSelectedList.includes(value._id))
-        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
-      else
-        this.revertSelectedList.push(value._id);
-      this.selectToRevert.emit(value._id);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
     } else if (this.canEdit) {
       this.selectedItem = value;
       this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
@@ -551,15 +539,15 @@ export class SubMenuComponent implements OnInit {
 
   @HostListener('document:keydown.control', ['$event'])
   keydown(event: KeyboardEvent) {
-    this.onRevertMode = true;
+    this.revertService.setRevertMode(true);
   }
 
   @HostListener('document:keyup.control', ['$event'])
   keyup(event: KeyboardEvent) {
-    this.onRevertMode = false;
+    this.revertService.setRevertMode(false);
   }
 
-  isSelectedToRevert(id) {
-    return this.revertSelectedList.includes(id);
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 }

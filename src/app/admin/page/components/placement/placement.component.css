@@ -22,3 +22,7 @@
 .title {
   font-size: unset !important;
 }
+
+.all-items-check {
+  margin-left: 10px;
+}

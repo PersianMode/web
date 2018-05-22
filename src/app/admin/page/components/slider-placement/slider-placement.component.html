@@ -50,7 +50,7 @@
     </div>
   </div>
   <div class="demo-list" [dragula]="'slider-bag'" [dragulaModel]="sliders">
-    <div *ngFor="let item of sliders" class="top-menu-item" (click)="selectItem(item)" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(item._id)}">
+    <div *ngFor="let item of sliders" class="top-menu-item" (click)="selectItem(item)" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(item)}">
       <img [style.width]="item.imgWidth? item.imgWidth + 'px': '40px'"
            [style.marginLeft]="item.imgMarginLeft ? item.imgMarginLeft + 'px' : 0"
            [style.marginTop]="item.imgMarginTop ? item.imgMarginTop + 'px' : 0"

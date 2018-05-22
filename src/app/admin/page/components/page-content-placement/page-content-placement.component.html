@@ -30,7 +30,7 @@
         </div>
         <div fxLayout="row" fxLayoutAlign="start start">
           <div [fxFlex]="getRowParts(item)" *ngFor="let item of modifiedPlacementList[key]; first as hIsFirst; last as hIsLast" class="container"
-            (click)="selectedPanel(item)" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(item._id)}">
+            (click)="selectedPanel(item)" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(item)}">
             <div class="controller-area" *ngIf="canEdit">
               <button mat-icon-button (click)="openEditDialog(item)" class="controller-button">
                 <mat-icon aria-label="Edit">create</mat-icon>

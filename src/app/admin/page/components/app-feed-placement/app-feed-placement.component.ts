@@ -9,6 +9,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
 import {UploadImageDialogComponent} from '../menu-placement/upload-image-dialog/upload-image-dialog.component';
 import {DomSanitizer} from '@angular/platform-browser';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-app-feed-placement',
@@ -24,7 +25,6 @@ export class AppFeedPlacementComponent implements OnInit {
       this.sortingPlacementItems(value);
   }
   @Output() modifyPlacement = new EventEmitter();
-  @Output() selectToRevert = new EventEmitter();
 
   bagName = 'app-feed-bag';
   placementList: IPlacement[] = [];
@@ -33,18 +33,17 @@ export class AppFeedPlacementComponent implements OnInit {
   imageUrlAddress = null;
   newPlacementId = null;
   anyChanges = false;
-  revertSelectedList = [];
-  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog,
-    private snackBar: MatSnackBar, private sanitizer: DomSanitizer) {}
+    private snackBar: MatSnackBar, private sanitizer: DomSanitizer,
+    private revertService: RevertPlacementService) {}
 
   ngOnInit() {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
-        moves: function () {
+        moves: () => {
           return this.canEdit;
         }
       });
@@ -210,26 +209,16 @@ export class AppFeedPlacementComponent implements OnInit {
   }
 
   selectItem(item) {
-    if (this.onRevertMode && !this.canEdit) {
-      if (!item.end_date) {
-        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
-          duration: 2300,
-        });
-        return;
-      }
-      if (this.revertSelectedList.includes(item._id))
-        this.revertSelectedList = this.revertSelectedList.filter(el => el !== item._id);
-      else
-        this.revertSelectedList.push(item._id);
-      this.selectToRevert.emit(item._id);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item);
     } else {
       this.selectedItem = item;
       this.setFormValue(item.info);
     }
   }
 
-  isSelectedToRevert(id) {
-    return this.revertSelectedList.includes(id);
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   setFormValue(value = null) {
@@ -298,11 +287,11 @@ export class AppFeedPlacementComponent implements OnInit {
 
   @HostListener('document:keydown.control', ['$event'])
   keydown(event: KeyboardEvent) {
-    this.onRevertMode = true;
+    this.revertService.setRevertMode(true);
   }
 
   @HostListener('document:keyup.control', ['$event'])
   keyup(event: KeyboardEvent) {
-    this.onRevertMode = false;
+    this.revertService.setRevertMode(false);
   }
 }

@@ -5,8 +5,9 @@ import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {Pos} from './slider-preview/slider-preview.component';
 import {DomSanitizer} from '@angular/platform-browser';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-slider-placement',
@@ -27,7 +28,6 @@ export class SliderPlacementComponent implements OnInit {
 
   @Output() modifyPlacement = new EventEmitter();
   @Output() reloadPlacements = new EventEmitter();
-  @Output() selectToRevert = new EventEmitter();
 
   sliders: IPlacement[] = [];
   upsertSlider = {
@@ -49,12 +49,10 @@ export class SliderPlacementComponent implements OnInit {
   imageChanged = false;
   sliderChanged = false;
   bagName = 'slider-bag';
-  revertSelectedList = [];
-  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private sanitizer: DomSanitizer,
-    private dialog: MatDialog, private snackBar: MatSnackBar) {
+    private dialog: MatDialog, private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
@@ -63,7 +61,7 @@ export class SliderPlacementComponent implements OnInit {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
-        moves: function () {
+        moves: () => {
           return this.canEdit;
         }
       });
@@ -143,18 +141,8 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   selectItem(value) {
-    if (this.onRevertMode && !this.canEdit) {
-      if (!value.end_date) {
-        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
-          duration: 2300,
-        });
-        return;
-      }
-      if (this.revertSelectedList.includes(value._id))
-        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
-      else
-        this.revertSelectedList.push(value._id);
-      this.selectToRevert.emit(value._id);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
     } else {
       this.upsertSlider = {
         text: value.info.text,
@@ -173,8 +161,8 @@ export class SliderPlacementComponent implements OnInit {
     }
   }
 
-  isSelectedToRevert(id) {
-    return this.revertSelectedList.includes(id);
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   removeItem() {
@@ -315,11 +303,11 @@ export class SliderPlacementComponent implements OnInit {
 
   @HostListener('document:keydown.control', ['$event'])
   keydown(event: KeyboardEvent) {
-    this.onRevertMode = true;
+    this.revertService.setRevertMode(true);
   }
 
   @HostListener('document:keyup.control', ['$event'])
   keyup(event: KeyboardEvent) {
-    this.onRevertMode = false;
+    this.revertService.setRevertMode(false);
   }
 }

@@ -4,8 +4,9 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {DomSanitizer} from '@angular/platform-browser';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-logo-list-placement',
@@ -26,7 +27,6 @@ export class LogoListPlacementComponent implements OnInit {
 
   @Output() modifyPlacement = new EventEmitter();
   @Output() reloadPlacements = new EventEmitter();
-  @Output() selectToRevert = new EventEmitter();
 
   logos: IPlacement[] = [];
   upsertLogo = {
@@ -47,12 +47,10 @@ export class LogoListPlacementComponent implements OnInit {
   logoChanged = false;
   imageChanged = false;
   bagName = 'logo-bag';
-  revertSelectedList = [];
-  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private sanitizer: DomSanitizer,
-    private dialog: MatDialog, private snackBar: MatSnackBar) {
+    private dialog: MatDialog, private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
@@ -61,7 +59,7 @@ export class LogoListPlacementComponent implements OnInit {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'horizontal',
-        moves: function () {
+        moves: () => {
           return this.canEdit;
         }
       });
@@ -160,18 +158,8 @@ export class LogoListPlacementComponent implements OnInit {
   }
 
   selectItem(value) {
-    if (this.onRevertMode && !this.canEdit) {
-      if (!value.end_date) {
-        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
-          duration: 2300,
-        });
-        return;
-      }
-      if (this.revertSelectedList.includes(value._id))
-        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
-      else
-        this.revertSelectedList.push(value._id);
-      this.selectToRevert.emit(value._id);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
     } else if (this.canEdit) {
       const style = value.info.style;
       this.upsertLogo = {
@@ -191,8 +179,8 @@ export class LogoListPlacementComponent implements OnInit {
     }
   }
 
-  isSelectedToRevert(id) {
-    return this.revertSelectedList.includes(id);
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   modifyItem(isEdit) {
@@ -299,11 +287,11 @@ export class LogoListPlacementComponent implements OnInit {
 
   @HostListener('document:keydown.control', ['$event'])
   keydown(event: KeyboardEvent) {
-    this.onRevertMode = true;
+    this.revertService.setRevertMode(true);
   }
 
   @HostListener('document:keyup.control', ['$event'])
   keyup(event: KeyboardEvent) {
-    this.onRevertMode = false;
+    this.revertService.setRevertMode(false);
   }
 }

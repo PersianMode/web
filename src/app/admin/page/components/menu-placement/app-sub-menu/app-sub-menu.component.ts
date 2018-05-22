@@ -6,9 +6,10 @@ import {ProgressService} from '../../../../../shared/services/progress.service';
 import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
 import {DomSanitizer} from '@angular/platform-browser';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
 import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-dialog.component';
+import {RevertPlacementService} from '../../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-app-sub-menu',
@@ -38,7 +39,6 @@ export class AppSubMenuComponent implements OnInit {
       this.getRelatedItems();
   }
   @Output() modifyPlacement = new EventEmitter();
-  @Output() selectToRevert = new EventEmitter();
 
   itemBagName = 'app-sub-menu-bag';
   appSubMenuForm: FormGroup = null;
@@ -51,12 +51,10 @@ export class AppSubMenuComponent implements OnInit {
   moveButtonsShouldDisabled = false;
   imageUrlAddress = null;
   newPlacementId = null;
-  revertSelectedList = [];
-  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private sanitizer: DomSanitizer,
-    private dialog: MatDialog, private snackBar: MatSnackBar) {}
+    private dialog: MatDialog, private revertService: RevertPlacementService) {}
 
   ngOnInit() {
     if (!this.dragulaService.find(this.itemBagName))
@@ -200,18 +198,8 @@ export class AppSubMenuComponent implements OnInit {
   }
 
   selectItem(value) {
-    if (this.onRevertMode && !this.canEdit) {
-      if (!value.end_date) {
-        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
-          duration: 2300,
-        });
-        return;
-      }
-      if (this.revertSelectedList.includes(value._id))
-        this.revertSelectedList = this.revertSelectedList.filter(el => el !== value._id);
-      else
-        this.revertSelectedList.push(value._id);
-      this.selectToRevert.emit(value._id);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
     } else if (this.canEdit) {
       this.selectedItem = value;
       this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
@@ -222,9 +210,10 @@ export class AppSubMenuComponent implements OnInit {
 
   isSelectedToRevert(value, type) {
     if (type === 'item')
-      return this.revertSelectedList.includes(value);
+      return this.revertService.isSelected(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value._id);
     else if (type === 'section') {
-      return this.revertSelectedList.includes(this.filteredSubMenuItems[value].details._id);
+      const item = this.filteredSubMenuItems[value].details;
+      return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
     }
   }
 
@@ -392,13 +381,9 @@ export class AppSubMenuComponent implements OnInit {
   }
 
   showSubItems(section) {
-    if (this.onRevertMode && !this.canEdit) {
+    if (this.revertService.getRevertMode() && !this.canEdit) {
       const id = this.filteredSubMenuItems[section].details._id;
-      if (this.revertSelectedList.includes(id))
-        this.revertSelectedList = this.revertSelectedList.filter(el => el !== id);
-      else
-        this.revertSelectedList.push(id);
-      this.selectToRevert.emit(id);
+      this.revertService.select('app-sub-menu', this.filteredSubMenuItems[section].details);
     } else {
       this.selectedSectionSubMenu = this.selectedSectionSubMenu === section ? null : section;
       this.selectItem(this.filteredSubMenuItems[section].details);
@@ -463,11 +448,11 @@ export class AppSubMenuComponent implements OnInit {
 
   @HostListener('document:keydown.control', ['$event'])
   keydown(event: KeyboardEvent) {
-    this.onRevertMode = true;
+    this.revertService.setRevertMode(true);
   }
 
   @HostListener('document:keyup.control', ['$event'])
   keyup(event: KeyboardEvent) {
-    this.onRevertMode = false;
+    this.revertService.setRevertMode(false);
   }
 }

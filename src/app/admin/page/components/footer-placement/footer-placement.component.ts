@@ -4,9 +4,10 @@ import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {FormGroup, FormBuilder} from '@angular/forms';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-footer-placement',
@@ -22,7 +23,15 @@ export class FooterPlacementComponent implements OnInit {
       this.arrangeTextLinkItems(value.filter(el => el.variable_name.toLowerCase() === 'site_link'));
 
       this.socialLinkItems = [];
-      this.socialLinkItems = value.filter(el => el.variable_name.toLowerCase() === 'social_link');
+      this.socialLinkItems = value
+        .filter(el => el.variable_name.toLowerCase() === 'social_link')
+        .sort((a, b) => {
+          if (a.info.column > b.info.column)
+            return 1;
+          else if (a.info.column < b.info.column)
+            return -1;
+          return 0;
+        });
     } else {
       this.socialLinkItems = [];
       this.siteLinkItems = [];
@@ -30,7 +39,6 @@ export class FooterPlacementComponent implements OnInit {
   }
 
   @Output() modifyPlacement = new EventEmitter();
-  @Output() selectToRevert = new EventEmitter();
 
   siteLinkItems = {};
   socialLinkItems = [];
@@ -91,19 +99,17 @@ export class FooterPlacementComponent implements OnInit {
   textAnyChanges = false;
   hasNewColumn = false;
   newEmptyColumn = [];
-  revertSelectedList = [];
-  onRevertMode = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog,
-    private snackBar: MatSnackBar) {}
+    private revertService: RevertPlacementService) {}
 
 
   ngOnInit() {
     if (!this.dragulaService.find(this.socialBag))
       this.dragulaService.setOptions(this.socialBag, {
         direction: 'horizontal',
-        moves: function () {
+        moves: () => {
           return this.canEdit;
         }
       });
@@ -111,7 +117,7 @@ export class FooterPlacementComponent implements OnInit {
     if (!this.dragulaService.find(this.textBag))
       this.dragulaService.setOptions(this.textBag, {
         direction: 'horizontal',
-        moves: function () {
+        moves: () => {
           return this.canEdit;
         }
       });
@@ -206,19 +212,8 @@ export class FooterPlacementComponent implements OnInit {
   }
 
   selectIcon(icon) {
-    if (this.onRevertMode && !this.canEdit) {
-      if (!icon.end_date) {
-        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
-          duration: 2300,
-        });
-        return;
-      }
-
-      if (this.revertSelectedList.includes(icon._id))
-        this.revertSelectedList = this.revertSelectedList.filter(el => el !== icon._id);
-      else
-        this.revertSelectedList.push(icon._id);
-      this.selectToRevert.emit(icon._id);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(icon.component_name + (icon.variable_name ? '-' + icon.variable_name : ''), icon);
     } else if (this.canEdit) {
       if (icon.info && this.socialLinkItems.find(el => el.info.href === icon.info.href))
         this.selectedSocialNetwork = {
@@ -238,18 +233,8 @@ export class FooterPlacementComponent implements OnInit {
   }
 
   selectTextItem(item) {
-    if (this.onRevertMode && !this.canEdit) {
-      if (!item.end_date) {
-        this.snackBar.open('این مورد در حال حاضر نیز وجود دارد', null, {
-          duration: 2300,
-        });
-        return;
-      }
-      if (this.revertSelectedList.includes(item._id))
-        this.revertSelectedList = this.revertSelectedList.filter(el => el !== item._id);
-      else
-        this.revertSelectedList.push(item._id);
-      this.selectToRevert.emit(item._id);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item);
     } else if (this.canEdit) {
       this.selectedTextLink = {
         _id: item._id,
@@ -262,8 +247,8 @@ export class FooterPlacementComponent implements OnInit {
     }
   }
 
-  isSelectedToRevert(id) {
-    return this.revertSelectedList.includes(id);
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   modifyTextLink() {
@@ -593,11 +578,11 @@ export class FooterPlacementComponent implements OnInit {
 
   @HostListener('document:keydown.control', ['$event'])
   keydown(event: KeyboardEvent) {
-    this.onRevertMode = true;
+    this.revertService.setRevertMode(true);
   }
 
   @HostListener('document:keyup.control', ['$event'])
   keyup(event: KeyboardEvent) {
-    this.onRevertMode = false;
+    this.revertService.setRevertMode(false);
   }
 }

@@ -41,7 +41,7 @@
     <div class="demo-list demo-area">
       <div *ngFor="let columnKey of getKeyList(siteLinkItems); first as isFirst" class="footer-column" [dragula]="textBag" [dragulaModel]="siteLinkItems[columnKey]">
         <div *ngFor="let item of siteLinkItems[columnKey]; first as rowHeader" class="row-item menu-item" (click)="selectTextItem(item)">
-          <a class="item persian-field" [ngClass]="{'footer-link-bold': rowHeader || item.info.is_header || isFirst, 'footer-link': !rowHeader && !item.info.is_header, 'selected-item': selectedTextLink._id && item._id === selectedTextLink._id , 'selected-to-revert': !canEdit && isSelectedToRevert(item._id)}">{{item.info.text}}</a>
+          <a class="item persian-field" [ngClass]="{'footer-link-bold': rowHeader || item.info.is_header || isFirst, 'footer-link': !rowHeader && !item.info.is_header, 'selected-item': selectedTextLink._id && item._id === selectedTextLink._id , 'selected-to-revert': !canEdit && isSelectedToRevert(item)}">{{item.info.text}}</a>
         </div>
       </div>
       <div *ngIf="hasNewColumn" class="footer-column empty-column" [dragula]="textBag" [dragulaModel]="newEmptyColumn">
@@ -98,7 +98,7 @@
         </div>
       </div>
       <div class="demo-list demo-area" [dragula]="socialBag" [dragulaModel]="socialLinkItems">
-        <div *ngFor="let icon of socialLinkItems" (click)="selectIcon(icon)" class="icon-link menu-item" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(icon._id)}">
+        <div *ngFor="let icon of socialLinkItems" (click)="selectIcon(icon)" class="icon-link menu-item" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(icon)}">
           <span class="icons">
             <a class="icons" [ngClass]="{'selected-icon': selectedSocialNetwork.text === icon.info.text}">
               <i [class]="icon.info.text"></i>
