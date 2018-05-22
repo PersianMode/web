@@ -332,7 +332,7 @@ export class SubMenuComponent implements OnInit {
   }
 
   modifyItem() {
-    if (!this.insertedAddress) {
+    if (!this.insertedAddress || this.insertedAddress.length === 1) {
       this.openSnackBar('وارد کردن آدرس برای صفحه الزامی است');
       return; }
     this.progressService.enable();
