@@ -265,6 +265,8 @@ export class PageBasicInfoComponent implements OnInit {
           result.placement.forEach(p => {
             this.placements.push({
               _id: p._id,
+              start_date: p.start_date,
+              end_date: p.end_date,
               component_name: p.component_name,
               variable_name: p.variable_name,
               info: p.info,

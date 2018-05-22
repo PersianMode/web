@@ -111,6 +111,24 @@ export class PlacementComponent implements OnInit {
   }
 
   revertToToday() {
-
+    this.httpService.post('placement/revert', {
+      placements: this.selectToRevertList,
+      page_id: this.pageId,
+    }).subscribe(
+      (res) => {
+        this.snackBar.open('موارد انتخاب بازگردانده شدند', null, {
+          duration: 2300,
+        });
+        this.selectToRevertList = [];
+        this.goToToday();
+        this.placementDateIsChanged();
+      },
+      (err) => {
+        this.snackBar.open('قادر به بازگردانی موارد انتخاب شده نیستیم. دوباره تلاش کنید', null, {
+          duration: 3200,
+        });
+        console.error('Cannot revert selected items: ', err);
+      }
+    );
   }
 }
