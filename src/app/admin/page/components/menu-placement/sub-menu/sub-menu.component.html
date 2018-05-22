@@ -1,15 +1,16 @@
 <div class="sub-menu-area">
   <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="subMenuForm">
-    <div fxLayout="row" >
-      <div fxFlex="70">
-        <div fxLayout="row" >
-          <div fxFlex="50" class="full-width sub-item">
+    <div fxLayout="column"
+         fxLayoutAlign="center center">
+      <div class="full-width">
+        <div fxLayout="column">
+          <div class="full-width">
             <mat-input-container class="full-width">
               <input matInput type="text" class="persian-field menu-field" placeholder="متن" formControlName="text" />
             </mat-input-container>
           </div>
           <div fxLayout="row" class="address-field">
-            <app-suggestion fxFlex="50" [name]="'Page'" [placeholder]="'آدرس'"
+            <app-suggestion fxFlex="50" [name]="'Page'" [placeholder]="'آدرس'" [hasReturn]="true"
                  (add)="insertedAddress=$event.address" (field)="insertedAddress=$event" >
             </app-suggestion>
             <div fxFlex="50" class="text-field" *ngIf="insertedAddress">{{ insertedAddress }}</div>

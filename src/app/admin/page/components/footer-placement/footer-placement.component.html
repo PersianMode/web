@@ -10,12 +10,10 @@
         </mat-input-container>
       </div>
       <div fxFlex="25" class="full-width input-item">
-        <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'"
+        <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true"
                         (add)="selectedTextLink.href=$event.address" (field)="selectedTextLink.href=$event" >
         </app-suggestion>
-        <div fxFlex="50" *ngIf="selectedTextLink.href">
-          <h3  dir="ltr" style="text-align:center"> {{selectedTextLink.href}} </h3>
-        </div>
+        <div fxFlex="50" *ngIf="selectedTextLink.href">{{selectedTextLink.href}}</div>
       </div>
       <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
         <mat-checkbox [(ngModel)]="selectedTextLink.is_header" (ngModelChange)="checkTextchanges()">

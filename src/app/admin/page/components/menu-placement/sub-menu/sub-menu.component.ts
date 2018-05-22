@@ -21,7 +21,7 @@ enum ItemArea {
 })
 export class SubMenuComponent implements OnInit {
   @Input() pageId = null;
-  insertedAddress = '#';
+  insertedAddress: string;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -106,7 +106,6 @@ export class SubMenuComponent implements OnInit {
       text: [null, [
         Validators.required,
       ]],
-      href: [null],
       area: [null, [
         Validators.required,
       ]],
@@ -122,7 +121,6 @@ export class SubMenuComponent implements OnInit {
       this.subMenuForm.controls['area'].enable();
     } else {
       this.subMenuForm.controls['text'].setValue(value.text);
-      this.insertedAddress = value.href;
       switch (value.section.toLowerCase().split('/')[1]) {
         case 'header':
           this.subMenuForm.controls['area'].setValue(this.itemArea.Header);
@@ -379,7 +377,7 @@ export class SubMenuComponent implements OnInit {
   getItemInfo(isNewItem = false): any {
     const res = {
       text: (this.subMenuForm.controls['text'].value ? this.subMenuForm.controls['text'].value : '').trim(),
-      insertedAddress: (this.insertedAddress ? this.insertedAddress : '').trim(),
+      href: (this.insertedAddress ? this.insertedAddress : '').trim(),
       is_header: this.subMenuForm.controls['is_header'].value,
     };
 
@@ -434,7 +432,7 @@ export class SubMenuComponent implements OnInit {
         if (status) {
           this.progressService.enable();
           const index = this.subMenuItems.findIndex(
-            el => el.info.text === this.selectedItem.info.text && el.info.insertedAddress === this.selectedItem.info.insertedAddress);
+            el => el.info.text === this.selectedItem.info.text && el.info.href === this.selectedItem.info.href);
           if (index !== -1)
             this.httpService.post('placement/delete', {
               page_id: this.pageId,
@@ -475,7 +473,7 @@ export class SubMenuComponent implements OnInit {
 
     const tempInfo = this.getItemInfo();
 
-    ['text', 'insertedAddress', 'is_header'].forEach(el => {
+    ['text', 'href', 'is_header'].forEach(el => {
       if (tempInfo[el] !== this.selectedItem.info[el]) {
         this.anyChanges = true;
         return;

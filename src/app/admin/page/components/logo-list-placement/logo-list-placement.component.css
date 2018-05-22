@@ -76,3 +76,12 @@
   font-size: 1.2em;
   text-align: center;
 }
+
+.address-field {
+  margin-top: 30px;
+}
+
+.text-field {
+  padding-top: 26px;
+  padding-right: 30px;
+}

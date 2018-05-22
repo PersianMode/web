@@ -16,7 +16,7 @@
           </mat-input-container>
         </div>
         <div fxFlex="50" fxLayout="row">
-          <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'"
+          <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true"
                           (add)="upsertSlider.href=$event.address" (field)="upsertSlider.href=$event">
           </app-suggestion>
           <div fxFlex="50" *ngIf="upsertSlider.href">

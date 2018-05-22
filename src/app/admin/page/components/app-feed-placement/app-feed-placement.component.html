@@ -11,7 +11,7 @@
               </mat-input-container>
             </div>
             <div class="full-width">
-              <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'"
+              <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true"
                               (add)="insertedAddress=$event.address" (field)="insertedAddress=$event" >
               </app-suggestion>
               <div fxFlex="50" *ngIf="insertedAddress">

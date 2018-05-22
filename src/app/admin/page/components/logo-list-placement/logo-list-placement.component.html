@@ -65,7 +65,7 @@
   <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
        fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
     <div fxFlex="40" style="width: 100%">
-      <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column">
+      <div fxLayout="row">
         <div fxFlex="50" style="width: 100%">
           <mat-input-container class="input-field">
             <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
@@ -73,17 +73,15 @@
                    (ngModelChange)="changeField()"/>
           </mat-input-container>
         </div>
-        <div fxFlex="50" style="width: 100%">
-          <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'"
+        <div fxLayout="row" class="address-field">
+          <app-suggestion fxFlex="50" [name]="'Page'" [placeholder]="'آدرس'" [hasReturn]="true"
                           (add)="upsertLogo.href=$event.address" (field)="upsertLogo.href=$event" >
           </app-suggestion>
-          <div fxFlex="50" *ngIf="upsertLogo.href">
-            <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{upsertLogo.href}} </h3>
-          </div>
+          <div fxFlex="50" class="text-field" *ngIf="upsertLogo.href">{{upsertLogo.href}}</div>
         </div>
       </div>
     </div>
-    <div fxFlex="30" class="button-area">
+    <div class="button-area">
       <button mat-mini-fab color="primary" (click)="modifyItem(upsertLogo.isEdit)"
               [disabled]="logoApplyDisability()">
         <mat-icon>
