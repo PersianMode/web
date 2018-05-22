@@ -2,7 +2,7 @@
   <div class="fixed">
     <app-header *ngIf="!isMobile"></app-header>
     <app-collection-header *ngIf="!isMobile"></app-collection-header>
-    <app-mobile-header  *ngIf="isMobile" [menuWidth]="curWidth - 40" [menuHeight]="curHeight"></app-mobile-header>
+    <app-mobile-header  *ngIf="isMobile" [menuWidth]="curWidth - 40" [menuHeight]="curHeight" (isSearching)="showSearchResultOrHome($event)"></app-mobile-header>
   </div>
   <div [class.scrollable]="!isMobile">
     <app-sliding-header *ngIf="!isMobile"></app-sliding-header>

@@ -17,6 +17,7 @@ export class SiteComponent implements OnInit {
   isMobile = false;
   curWidth: number;
   curHeight: number;
+  showSearchREsult = false;
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
@@ -63,6 +64,9 @@ export class SiteComponent implements OnInit {
 
   private loadInitialPlacements() {
      setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
+  }
+  showSearchResultOrHome(isSearching) {
+    this.showSearchREsult = isSearching;
   }
 
   isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {
