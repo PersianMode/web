@@ -4,8 +4,9 @@ import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
+import {duration} from 'jalali-moment';
 
 @Component({
   selector: 'app-top-menu',
@@ -41,7 +42,7 @@ export class TopMenuComponent implements OnInit {
   bagName = 'top-menu-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private dialog: MatDialog) {
+              private progressService: ProgressService, private dialog: MatDialog, private sncakBar: MatSnackBar) {
 
   }
 
@@ -98,7 +99,11 @@ export class TopMenuComponent implements OnInit {
         }
       });
   }
-
+  openSnackBar(message: string) {
+    this.sncakBar.open(message, null, {
+      duration: 2000,
+    });
+  }
   selectItem(value) {
     this.upsertTopMenuItem = {
       text: value.info.text,
@@ -143,6 +148,10 @@ export class TopMenuComponent implements OnInit {
   }
 
   modifyItem(isEdit) {
+    if (!this.upsertTopMenuItem.href) {
+      this.openSnackBar('وارد کردن آدرس برای صفحه الزامی است');
+      return;
+    }
     this.progressService.enable();
     (isEdit ? this.httpService.post('placement', {
       page_id: this.pageId,

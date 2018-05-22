@@ -5,8 +5,9 @@ import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
+
 
 enum ItemArea {
   Header,
@@ -80,7 +81,7 @@ export class SubMenuComponent implements OnInit {
   leftAreaHasNewColumn = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-    private progressService: ProgressService, private dialog: MatDialog) {
+    private progressService: ProgressService, private dialog: MatDialog, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -318,7 +319,11 @@ export class SubMenuComponent implements OnInit {
       );
     }
   }
-
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 2000,
+    });
+  }
   selectItem(value) {
     this.selectedItem = value;
     this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
@@ -327,6 +332,9 @@ export class SubMenuComponent implements OnInit {
   }
 
   modifyItem() {
+    if (!this.insertedAddress) {
+      this.openSnackBar('وارد کردن آدرس برای صفحه الزامی است');
+      return; }
     this.progressService.enable();
     (this.selectedItem ? this.httpService.post('placement', {
       page_id: this.pageId,
