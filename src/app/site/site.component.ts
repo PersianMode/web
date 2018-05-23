@@ -60,16 +60,10 @@ export class SiteComponent implements OnInit {
       this.responsiveService.isMobile = this.isMobile;
       this.loadInitialPlacements();
     }
-    console.log('page height : ', h);
-    console.log('curHeight : ', this.curHeight);
-    console.log('curWidth : ', this.curWidth);
   }
 
   private loadInitialPlacements() {
      setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
-  }
-  showSearchResultOrHome(isSearching) {
-    this.showSearchREsult = isSearching;
   }
 
   isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {

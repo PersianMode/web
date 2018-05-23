@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, Inject, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {WINDOW} from '../../services/window.service';
@@ -40,8 +40,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   searchProductList = [];
   searchCollectionList = [];
   searchWaiting = false;
-  curheight;
-  @Output('isSearching') isSearching = new EventEmitter();
+  curHeight;
 
   constructor(private authService: AuthService, private router: Router,
     @Inject(WINDOW) private window, private cartService: CartService, private pageService: PageService,
@@ -50,8 +49,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.curheight = this.responsiveService.curHeight + 'px';
-    console.log('**************', this.curheight);
+    this.curHeight = this.responsiveService.curHeight;
     this.authService.isLoggedIn.subscribe(
       (data) => {
         this.isLoggedIn = this.authService.userIsLoggedIn();
@@ -218,10 +216,8 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   }
   searchProduct() {
     this.is_searching = true;
-    this.isSearching.emit(this.is_searching);
     this.searchProductList = [];
     if (!this.searchPhrase) {
-      this.searchProductList = [];
       return;
     }
 
@@ -231,7 +227,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 15,
+      limit: 5,
     }).subscribe(
       (data) => {
         this.searchProductList = [];
@@ -259,7 +255,6 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   searchCollection() {
     this.searchCollectionList = [];
     if (!this.searchPhrase) {
-      this.searchCollectionList = [];
       return;
     }
     this.httpService.post('search/Collection', {
@@ -305,14 +300,15 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   }
 
   selectSearchResult(element, isProduct) {
-    if (isProduct)
-      this.router.navigate([`/product/${element.id}`]);
-    else
-      this.router.navigate([`${element.pages[0].address}`]);
-
     this.searchIsFocused = false;
     this.searchProductList = [];
     this.searchCollectionList = [];
+    if (isProduct) {
+      this.router.navigate([`/product/${element.id}`]);
+    } else if (!isProduct) {
+      this.router.navigate([`${element.pages[0].address}`]);
+    }
+    this.is_searching = false;
   }
 
   getProductThumbnail(product) {
@@ -332,7 +328,6 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
 
   closeSearch() {
     this.is_searching = false;
-    this.isSearching.emit(this.is_searching);
   }
 
   logout() {

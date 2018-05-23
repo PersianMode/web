@@ -31,7 +31,7 @@
         </div>
       </div>
       <br *ngIf="searchCollectionList.length">
-      <div *ngIf="searchCollectionList.length" class="search-title">{{'کالکشن ها'}}</div>
+      <div *ngIf="searchCollectionList.length" class="search-title">{{'مجموعه ها'}}</div>
       <hr *ngIf="searchCollectionList.length">
       <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element, false)"
            fxLayout="row" fxLayoutAlign="start start">

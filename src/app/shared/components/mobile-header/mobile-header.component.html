@@ -129,10 +129,10 @@
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
-  <div *ngIf="is_searching && !searchWaiting && ((searchProductList.length) || (searchCollectionList.length))"
-       style="z-index: 10000; width: 100%;" [style.height] = "curHeight+'px'">
-    <div *ngIf="searchProductList.length" class="search-title">{{'محصولات'}}</div>
-    <hr *ngIf="searchProductList.length">
+  <div *ngIf="is_searching"
+       style="z-index: 10000; width: 100%; background-color: #f7f7f7" [style.height]="curHeight + 'px'">
+    <div *ngIf="!searchWaiting && searchProductList.length" class="search-title">{{'محصولات'}}</div>
+    <hr *ngIf="!searchWaiting &&  searchProductList.length">
     <div *ngFor="let element of searchProductList" class="search-item" (click)="selectSearchResult(element, true)"
          fxLayout="row" fxLayoutAlign="start start">
       <div fxFlex="70">
@@ -145,9 +145,9 @@
         <img [src]="element.imgUrl" class="search-item-image"/>
       </div>
     </div>
-    <br *ngIf="searchCollectionList.length">
-    <div *ngIf="searchCollectionList.length" class="search-title">{{'مجموعه ها'}}</div>
-    <hr *ngIf="searchCollectionList.length">
+    <br *ngIf="!searchWaiting && searchCollectionList.length">
+    <div *ngIf="!searchWaiting && searchCollectionList.length" class="search-title">{{'مجموعه ها'}}</div>
+    <hr *ngIf="!searchWaiting && searchCollectionList.length">
     <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element, false)"
          fxLayout="row" fxLayoutAlign="start start">
       <div *ngIf="element.pages && element.pages.length" fxFlex="40">
