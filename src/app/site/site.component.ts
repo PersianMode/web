@@ -17,7 +17,6 @@ export class SiteComponent implements OnInit {
   isMobile = false;
   curWidth: number;
   curHeight: number;
-  showSearchREsult = false;
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
