@@ -155,6 +155,12 @@ export class RegisterComponent implements OnInit {
         this.preferences.username = this.registerForm.controls['username'].value;
         this.curStatus = this.regStatus.PreferenceTags;
         // login service
+        this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
+        .then(res => {
+        })
+        .catch(err => {
+          console.error('Cannot login: ', err);
+        });
       },
       (err) => {
         console.error('Cannot verify registration: ', err);
@@ -202,13 +208,7 @@ export class RegisterComponent implements OnInit {
       preferred_tags: this.preferences.preferred_tags,
       preferred_size: this.preferences.preferred_size
     }).subscribe(response => {
-      this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
-      .then(res => {
-        this.closeDialog.emit(true);
-      })
-      .catch(err => {
-        console.error('Cannot login: ', err);
-      });
+      this.closeDialog.emit(true);
     });
   }
 
