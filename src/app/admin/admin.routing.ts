@@ -14,6 +14,7 @@ const Admin_ROUTES: Routes = [
       {path: 'pages', loadChildren: 'app/admin/page/page.module#PageModule', canActivate: [AdminAuthGuard]},
       {path: 'orders', loadChildren: 'app/admin/order/order.module#OrderModule', canActivate: [AdminAuthGuard]},
       {path: 'dictionary', loadChildren: 'app/admin/dictionary/dictionary.module#DictionaryModule', canActivate: [AdminAuthGuard]},
+      {path: 'soldouts', loadChildren: 'app/admin/soldout/soldout.module#SoldOutModule', canActivate: [AdminAuthGuard]},
       {path: 'uploads', loadChildren: 'app/admin/upload/upload.module#UploadModule', canActivate: [AdminAuthGuard]},
     ]
   },

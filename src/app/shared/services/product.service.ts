@@ -225,12 +225,10 @@ export class ProductService {
           .filter(r => r.product_color_id === color._id)
           .map(r => {
             const inventory = r.inventory.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0);
-            if (inventory) {
               if (!data.sizesInventory[r.size]) {
                 data.sizesInventory[r.size] = {};
               }
               data.sizesInventory[r.size][color._id] = inventory;
-            }
             return {
               value: r.size,
               disabled: inventory <= 0,

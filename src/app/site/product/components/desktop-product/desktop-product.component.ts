@@ -22,6 +22,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input() productType;
   @Input() color;
   @Input() barcode;
+  @Input() articleNo;
 
   @Input()
   set id(value) {
