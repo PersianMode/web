@@ -22,6 +22,8 @@ import {
   MatStepperModule, MatRadioModule,
   MatSnackBarModule,
   MatProgressSpinnerModule,
+  MatListModule,
+  MatSliderModule
 } from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';
@@ -66,6 +68,8 @@ import { ForgotPasswordComponent } from './login/components/forgot-password/forg
     MatSnackBarModule,
     MatProgressSpinnerModule,
     DpDatePickerModule,
+    MatListModule,
+    MatSliderModule,
     SharedModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
