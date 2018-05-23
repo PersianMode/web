@@ -45,10 +45,10 @@
             <a>
               <!--<img [src]="getUrl(item.info.imgUrl)" class="full-width"/>-->
               <img
-                *ngIf="getFileTypeFromExtension(item.info.fileType && item.info.fileType['ext'], item.info.imgUrl) === 'image'"
+                *ngIf="item.info.mediaType === 'image'"
                 [src]="getUrl(item.info.imgUrl)" class="full-width"/>
               <video #player
-                *ngIf="getFileTypeFromExtension(item.info.fileType && item.info.fileType['ext'], item.info.imgUrl) === 'video'"
+                *ngIf="item.info.mediaType === 'video'"
                 class="full-width" autoplay loop>
                 <source [src]="getUrl(item.info.imgUrl)" type="{{item.info.fileType && item.info.fileType['mime']}}">
                 مرورگر شما از پخش ویدیو پشتیبانی نمی کند!

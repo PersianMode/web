@@ -51,6 +51,7 @@ export class PanelsComponent implements OnInit {
               areas: r.info.areas,
               imgUrl: this.getUrl(r.info.imgUrl),
               fileType: r.info.fileType,
+              mediaType: this.getFileTypeFromExtension(r.info.fileType && r.info.fileType['ext'], this.getImageLink(r.info.imgUrl)),
               subTitle: r.info.subTitle,
               type: r.info.panel_type,
             });

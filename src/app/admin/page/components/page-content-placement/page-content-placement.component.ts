@@ -230,8 +230,11 @@ export class PageContentPlacementComponent implements OnInit {
       if (!this.modifiedPlacementList[el.info.row])
         this.modifiedPlacementList[el.info.row] = [];
 
-      this.modifiedPlacementList[el.info.row].push(el);
+      const tempEl = Object.assign(el);
+      tempEl.info['mediaType'] = this.getFileTypeFromExtension(el.info.fileType && el.info.fileType['ext'], el.info.imgUrl);
+      this.modifiedPlacementList[el.info.row].push(tempEl);
     });
+    console.log(this.modifiedPlacementList);
   }
 
   getKeyList(data) {
