@@ -152,11 +152,11 @@ export class RegisterComponent implements OnInit {
       username: this.registerForm.controls['username'].value,
     }).subscribe(
       (data) => {
-        this.preferences.username = this.registerForm.controls['username'].value;
-        this.curStatus = this.regStatus.PreferenceTags;
         // login service
         this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
         .then(res => {
+          this.preferences.username = this.registerForm.controls['username'].value;
+          this.curStatus = this.regStatus.PreferenceTags;
         })
         .catch(err => {
           console.error('Cannot login: ', err);
