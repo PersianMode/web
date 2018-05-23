@@ -7,6 +7,7 @@ import {PageService} from '../../services/page.service';
 import {DictionaryService} from '../../services/dictionary.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
+import {ResponsiveService} from '../../services/responsive.service';
 
 @Component({
   selector: 'app-mobile-header',
@@ -39,15 +40,18 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   searchProductList = [];
   searchCollectionList = [];
   searchWaiting = false;
+  curheight;
   @Output('isSearching') isSearching = new EventEmitter();
 
   constructor(private authService: AuthService, private router: Router,
     @Inject(WINDOW) private window, private cartService: CartService, private pageService: PageService,
               private httpService: HttpService, private sanitizer: DomSanitizer,
-              private dictionaryService: DictionaryService) {
+              private dictionaryService: DictionaryService, private responsiveService: ResponsiveService) {
   }
 
   ngOnInit() {
+    this.curheight = this.responsiveService.curHeight + 'px';
+    console.log('**************', this.curheight);
     this.authService.isLoggedIn.subscribe(
       (data) => {
         this.isLoggedIn = this.authService.userIsLoggedIn();
@@ -227,7 +231,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 5,
+      limit: 15,
     }).subscribe(
       (data) => {
         this.searchProductList = [];
@@ -280,8 +284,6 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
           this.getCollectionPages(el);
         });
         this.searchWaiting = false;
-        console.log('product returned : ', this.searchProductList);
-        console.log('collection returned : ', this.searchCollectionList);
       },
       (err) => {
         console.error('Cannot get search data: ', err);

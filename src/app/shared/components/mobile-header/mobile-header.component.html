@@ -110,44 +110,56 @@
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
-  <!--<div *ngIf="is_searching">-->
-  <!--<div id="search-area" class="search-bar"-->
-  <!--[style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"-->
-  <!--style="width: 99.5%; height: 30%; left: 0px !important; top: 0px !important; padding-top: 12px; direction: rtl;"-->
-  <!--fxLayout="row"-->
-  <!--fxLayoutAlign="start start">-->
-  <!--<div fxFlex="7" style="text-align: left; padding-right: 3px"><i class="fa fa-search fa-flip-horizontal"></i>-->
-  <!--</div>-->
-  <!--<input placeholder="جُست و جو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase"-->
-  <!--(ngModelChange)="searchProduct()" style="width: 99%" fxFlex="83">-->
-  <!--<div style="text-align: left; padding-left: 3px" fxFlex="10">-->
-  <!--<b>-->
-  <!--<mat-icon aria-label="no" (click)="closeSearch()" style="cursor: pointer">clear</mat-icon>-->
-  <!--</b>-->
-  <!--</div>-->
-  <!--</div>-->
-  <!--<div style="height: 70%;"></div>-->
-  <!--</div>-->
-
-  <div *ngIf="is_searching" style="z-index: 10000; height: 550px; width: 100%;">
-    <div id="search-area" class="search-bar"
-         [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"
-         style="width: 99.5%; height: 10%; left: 0px !important; top: 0px !important; padding-top: 12px; direction: rtl;"
-         fxLayout="row"
-         fxLayoutAlign="start start">
-      <div fxFlex="7" style="text-align: left; padding-right: 3px"><i class="fa fa-search fa-flip-horizontal"></i>
+  <mat-sidenav-container *ngIf="is_searching">
+    <mat-sidenav-content>
+      <div id="search-area" class="search-bar"
+           [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"
+           style="width: 99.5%; height: 100%; left: 0px !important; top: 0px !important; padding-top: 12px; direction: rtl;"
+           fxLayout="row"
+           fxLayoutAlign="start start">
+        <div fxFlex="7" style="text-align: left; padding-right: 3px"><i class="fa fa-search fa-flip-horizontal"></i>
+        </div>
+        <input placeholder="جُست و جو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase"
+               (ngModelChange)="searchProduct()" style="width: 99%" fxFlex="83">
+        <div style="text-align: left; padding-left: 3px" fxFlex="10">
+          <b>
+            <mat-icon aria-label="no" (click)="closeSearch()" style="cursor: pointer">clear</mat-icon>
+          </b>
+        </div>
       </div>
-      <input placeholder="جُست و جو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase"
-             (ngModelChange)="searchProduct()" style="width: 99%" fxFlex="83">
-      <div style="text-align: left; padding-left: 3px" fxFlex="10">
-        <b>
-          <mat-icon aria-label="no" (click)="closeSearch()" style="cursor: pointer">clear</mat-icon>
-        </b>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <div *ngIf="is_searching && !searchWaiting && ((searchProductList.length) || (searchCollectionList.length))"
+       style="z-index: 10000; width: 100%;" [style.height] = "curHeight+'px'">
+    <div *ngIf="searchProductList.length" class="search-title">{{'محصولات'}}</div>
+    <hr *ngIf="searchProductList.length">
+    <div *ngFor="let element of searchProductList" class="search-item" (click)="selectSearchResult(element, true)"
+         fxLayout="row" fxLayoutAlign="start start">
+      <div fxFlex="70">
+        <div class="search-name">{{element.name}}</div>
+        <div class="search-brand">{{element.brand}}{{' - '}}{{element.tags}}</div>
+        <div class="search-type">{{element.type}}</div>
+        <div class="search-article_no">{{'article_no : '}}{{element.instances}}</div>
+      </div>
+      <div fxFlex="30" class="second-search-item">
+        <img [src]="element.imgUrl" class="search-item-image"/>
       </div>
     </div>
-    <div style="height: 90%;"></div>
+    <br *ngIf="searchCollectionList.length">
+    <div *ngIf="searchCollectionList.length" class="search-title">{{'مجموعه ها'}}</div>
+    <hr *ngIf="searchCollectionList.length">
+    <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element, false)"
+         fxLayout="row" fxLayoutAlign="start start">
+      <div *ngIf="element.pages && element.pages.length" fxFlex="40">
+        <div class="search-name">{{element.name}}</div>
+      </div>
+      <div *ngIf="element.pages && element.pages.length" fxFlex="60"
+           class="second-search-item">
+        <div class="search-address">{{element.name_fa}}</div>
+      </div>
+    </div>
+    <br>
   </div>
-
 </div>
 <div class="backdrop" *ngIf="sideNavIsOpen" style="width: 40px;"></div>
 
