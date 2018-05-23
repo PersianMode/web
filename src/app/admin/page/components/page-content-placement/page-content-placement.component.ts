@@ -234,7 +234,6 @@ export class PageContentPlacementComponent implements OnInit {
       tempEl.info['mediaType'] = this.getFileTypeFromExtension(el.info.fileType && el.info.fileType['ext'], el.info.imgUrl);
       this.modifiedPlacementList[el.info.row].push(tempEl);
     });
-    console.log(this.modifiedPlacementList);
   }
 
   getKeyList(data) {
