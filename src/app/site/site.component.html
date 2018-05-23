@@ -4,18 +4,18 @@
     <app-collection-header *ngIf="!isMobile"></app-collection-header>
     <app-mobile-header *ngIf="isMobile" [menuWidth]="curWidth - 40" [menuHeight]="curHeight" (isSearching)="showSearchResultOrHome($event)"></app-mobile-header>
   </div>
-  <div *ngIf="!showSearchREsult" [class.scrollable]="!isMobile">
+  <div [class.scrollable]="!isMobile">
     <app-sliding-header *ngIf="!isMobile"></app-sliding-header>
     <div [class.content]="!isMobile" [class.mobile-content]="isMobile">
       <router-outlet></router-outlet>
       <app-footer></app-footer>
     </div>
   </div>
-  <div *ngIf="showSearchREsult" [class.scrollable] = false>
-    <div [class.mobile-content]="isMobile">
-      <div [style.height]="curHeight"></div>
-      <app-footer></app-footer>
-    </div>
-  </div>
+  <!--<div *ngIf="showSearchREsult" [class.scrollable] = false>-->
+    <!--<div [class.mobile-content]="isMobile">-->
+      <!--<div [style.height]="curHeight"></div>-->
+      <!--<app-footer></app-footer>-->
+    <!--</div>-->
+  <!--</div>-->
 </div>
 

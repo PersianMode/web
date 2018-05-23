@@ -280,8 +280,8 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
           this.getCollectionPages(el);
         });
         this.searchWaiting = false;
-        console.log('rearch returned : ', this.searchProductList);
-        console.log('rearch returned : ', this.searchCollectionList);
+        console.log('product returned : ', this.searchProductList);
+        console.log('collection returned : ', this.searchCollectionList);
       },
       (err) => {
         console.error('Cannot get search data: ', err);
