@@ -195,7 +195,6 @@ export class RegisterComponent implements OnInit {
   }
 
   selectedSize(event) {
-    console.log('selectedSize', event);
     this.preferences.preferred_size = event;
   }
 

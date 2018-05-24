@@ -37,9 +37,16 @@ export class SizePickerComponent implements OnInit {
   @Input()
   set sizes(productSizes) {
     this.productSize = productSizes;
-    console.log(this.productSize);
     this.setProductSize();
   }
+
+  @Input()
+  set selectedSize(value) {
+    if (value)
+      this.val = value;
+  }
+
+  @Input() displayTitle = true;
 
   @Output('value') value = new EventEmitter();
   val = '';
