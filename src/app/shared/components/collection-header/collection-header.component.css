@@ -24,14 +24,20 @@
   text-overflow: ellipsis;
 }
 
-.search-brand, .search-type {
+.search-brand, .search-type, .search-article_no {
   font-size: 0.4em;
   color: gray;
 }
 
+.search-title {
+  font-size: 0.6em;
+  color: gray;
+  text-align: right;
+}
+
 .search-item-image {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
 }
 
 .second-search-item {
@@ -39,8 +45,21 @@
   margin: 3px;
 }
 
+.search-address {
+  font-size: 0.5em;
+  color: gray;
+}
 .not-found {
   color: darkred;
   margin: 10px;
   text-align: center;
+}
+
+hr {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: dashed;
+  border-width: 0.5px;
+  border-color: gray;
 }

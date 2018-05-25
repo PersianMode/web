@@ -9,21 +9,25 @@
           وارد/عضو شوید
         </div>
         <div *ngIf="isLoggedIn && isVerified" class="menu-item menu-title clickable-link" (click)="navigateToProfile()">
-         {{display_name}}، خوش آمدید <i class="fa fa-user"></i>
+          {{display_name}}، خوش آمدید <i class="fa fa-user"></i>
         </div>
-        <div *ngIf="true" class="menu-item menu-title clickable-link" (click)="navigate(['/'])"><i class="fa fa-home"></i> صفحه اول</div>
+        <div *ngIf="true" class="menu-item menu-title clickable-link" (click)="navigate(['/'])"><i
+          class="fa fa-home"></i> صفحه اول
+        </div>
         <div *ngFor="let first_level of getKeys(menuItems)">
           <div *ngIf="menuItems[first_level].is_title">
             <div class="menu-item menu-static-title">{{first_level}}</div>
           </div>
           <div *ngIf="!menuItems[first_level].is_title">
-            <div *ngIf="menuItems[first_level].menu" class="menu-item clickable-link" (click)="select(2, menuItems[first_level], first_level)">
+            <div *ngIf="menuItems[first_level].menu" class="menu-item clickable-link"
+                 (click)="select(2, menuItems[first_level], first_level)">
               <span style="float: left">
                 <i class="fa fa-angle-left" aria-hidden="true"></i>
               </span>
               <span>{{first_level}}</span>
             </div>
-            <div *ngIf="!menuItems[first_level].menu" class="menu-item clickable-link" (click)="navigate(menuItems[first_level].routerLink)">
+            <div *ngIf="!menuItems[first_level].menu" class="menu-item clickable-link"
+                 (click)="navigate(menuItems[first_level].routerLink)">
               <span>{{first_level}}</span>
             </div>
           </div>
@@ -43,13 +47,15 @@
             <div class="menu-item menu-title">{{second_level}}</div>
           </div>
           <div *ngIf="!firstLevelSelected[second_level].is_title">
-            <div *ngIf="firstLevelSelected[second_level].menu" class="menu-item clickable-link" (click)="select(3, firstLevelSelected[second_level], second_level)">
+            <div *ngIf="firstLevelSelected[second_level].menu" class="menu-item clickable-link"
+                 (click)="select(3, firstLevelSelected[second_level], second_level)">
               <span style="float: left;">
                 <i class="fa fa-angle-left" aria-hidden="true"></i>
               </span>
               <span>{{second_level}}</span>
             </div>
-            <div *ngIf="!firstLevelSelected[second_level].menu" class="menu-item clickable-link" (click)="navigate(firstLevelSelected[second_level].routerLink)">
+            <div *ngIf="!firstLevelSelected[second_level].menu" class="menu-item clickable-link"
+                 (click)="navigate(firstLevelSelected[second_level].routerLink)">
               <span>{{second_level}}</span>
             </div>
           </div>
@@ -77,13 +83,13 @@
         </div>
       </div>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content *ngIf="!is_searching">
       <div style="left: 8px; top: 8px; background-color: transparent;">
         <a class="mobile-header-item" (click)="sidenav.toggle()">
           <i class="fa fa-bars" aria-hidden="true"></i>
         </a>
         <a class="mobile-header-item" [routerLink]="'/cart'" id="header-cart">
-          <span  [style.visibility]="cartNumbers ? 'visible' : 'hidden'" class="badge-number">
+          <span [style.visibility]="cartNumbers ? 'visible' : 'hidden'" class="badge-number">
           {{cartNumbers}}
           </span>
           <span [style.visibility]="cartNumbers ? 'visible' : 'hidden'">
@@ -95,7 +101,7 @@
             <i class="fa fa-shopping-bag"></i>
           </span>
         </a>
-        <a class="mobile-header-item">
+        <a class="mobile-header-item" (click)="searchProduct()">
           <i class="fa fa-search" aria-hidden="true"></i>
         </a>
         <a>
@@ -104,5 +110,56 @@
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
+  <mat-sidenav-container *ngIf="is_searching">
+    <mat-sidenav-content>
+      <div id="search-area" class="search-bar"
+           [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"
+           style="width: 99.5%; height: 100%; left: 0px !important; top: 0px !important; padding-top: 12px; direction: rtl;"
+           fxLayout="row"
+           fxLayoutAlign="start start">
+        <div fxFlex="7" style="text-align: left; padding-right: 3px"><i class="fa fa-search fa-flip-horizontal"></i>
+        </div>
+        <input placeholder="جُست و جو" type="text" (focus)="searchFocused()" [(ngModel)]="searchPhrase"
+               (ngModelChange)="searchProduct()" style="width: 99%" fxFlex="83">
+        <div style="text-align: left; padding-left: 3px" fxFlex="10">
+          <b>
+            <mat-icon aria-label="no" (click)="closeSearch()" style="cursor: pointer">clear</mat-icon>
+          </b>
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  <div *ngIf="is_searching"
+       style="z-index: 10000; width: 100%; background-color: #f7f7f7" [style.height]="curHeight + 'px'">
+    <div *ngIf="!searchWaiting && searchProductList.length" class="search-title">{{'محصولات'}}</div>
+    <hr *ngIf="!searchWaiting &&  searchProductList.length">
+    <div *ngFor="let element of searchProductList" class="search-item" (click)="selectSearchResult(element, true)"
+         fxLayout="row" fxLayoutAlign="start start">
+      <div fxFlex="70">
+        <div class="search-name">{{element.name}}</div>
+        <div class="search-brand">{{element.brand}}{{' - '}}{{element.tags}}</div>
+        <div class="search-type">{{element.type}}</div>
+        <div class="search-article_no">{{'article_no : '}}{{element.instances}}</div>
+      </div>
+      <div fxFlex="30" class="second-search-item">
+        <img [src]="element.imgUrl" class="search-item-image"/>
+      </div>
+    </div>
+    <br *ngIf="!searchWaiting && searchCollectionList.length">
+    <div *ngIf="!searchWaiting && searchCollectionList.length" class="search-title">{{'مجموعه ها'}}</div>
+    <hr *ngIf="!searchWaiting && searchCollectionList.length">
+    <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element, false)"
+         fxLayout="row" fxLayoutAlign="start start">
+      <div *ngIf="element.pages && element.pages.length" fxFlex="40">
+        <div class="search-name">{{element.name}}</div>
+      </div>
+      <div *ngIf="element.pages && element.pages.length" fxFlex="60"
+           class="second-search-item">
+        <div class="search-address">{{element.name_fa}}</div>
+      </div>
+    </div>
+    <br>
+  </div>
 </div>
 <div class="backdrop" *ngIf="sideNavIsOpen" style="width: 40px;"></div>
+
