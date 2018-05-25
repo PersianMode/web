@@ -1,6 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
+import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
+import {ProgressService} from '../../shared/services/progress.service';
 import {HttpService} from '../../shared/services/http.service';
+import {IDictionary} from './interfaces/IDictionary.interface';
+import {ModifyDictionaryComponent} from './components/modify-dictionary/modify-dictionary.component';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-dictionary',
@@ -8,7 +13,7 @@ import {HttpService} from '../../shared/services/http.service';
   styleUrls: ['./dictionary.component.css']
 })
 export class DictionaryComponent implements OnInit {
-  editSelectedIndex = -1;
+  types;
   displayedColumns = [
     'remove',
     'edit',
@@ -17,11 +22,6 @@ export class DictionaryComponent implements OnInit {
     'type',
     'number',
   ];
-  editElement = { //it is bind to selected row for editing
-    type: '',
-    name: '',
-    value: '',
-  };
   dataSource = new MatTableDataSource();
   resultsLength = 0;
   isLoadingResults = true;
@@ -31,32 +31,28 @@ export class DictionaryComponent implements OnInit {
 
   constructor(private httpService: HttpService,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private progressService: ProgressService, private titleService: TitleService) {
   }
 
   ngOnInit() {
+    this.titleService.setTitleWithOutConstant('ادمین: دیکشنری');
     this.load();
   }
 
   load() {
     this.isLoadingResults = true;
-    //TODO send get request
-    // this.httpService.get('../../assets/dictionary.json')
     this.httpService.get('/dictionary')
       .subscribe(res => {
-        console.log(res);
+        this.types = Array.from(new Set(res.map(el => el.type)));
         this.isLoadingResults = false;
         this.resultsLength = res.lenght;
         this.dataSource.data = res;
-        console.log('-> ', this.dataSource.data);
       }, err => {
         this.isLoadingResults = false;
         this.resultsLength = 0;
         this.openSnackBar('خطا در دریافت دیکشنری');
       });
-  }
-
-  plusElement() {
   }
 
   getIndex(element) {
@@ -78,30 +74,81 @@ export class DictionaryComponent implements OnInit {
     this.load();
   }
 
-  deleteRow(position: number) {
-    //TODO send delete request
+  deleteElement(element: IDictionary) {
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px'
+    });
+    rmDialog.afterClosed().subscribe(
+      status => {
+        if (status) {
+          this.progressService.enable();
+          // TODO send delete request
+          this.httpService.delete(`/dictionary/${element._id}`).subscribe(
+            res => {
+              this.openSnackBar('مدخل با موفقیت پاک شد');
+              this.isLoadingResults = false;
+              this.progressService.disable();
+            },
+            err => {
+              this.isLoadingResults = false;
+              this.openSnackBar('خطا در پاک کردن مدخل');
+              this.progressService.disable();
+            }
+          );
+          this.load();
+        }
+      }, err => {
+        console.log('Error in dialog: ', err);
+      });
   }
 
-  saveEdit() {//should get data
-    this.editSelectedIndex = -1;
-    //TODO send  post request
-    //sending editElement datas
-
-
-    this.editElement.type = '';
-    this.editElement.name = '';
-    this.editElement.value = '';
+  updateElement(element: IDictionary) {
+    const updateDicDialog = this.dialog.open(ModifyDictionaryComponent, {
+      width: '600px;',
+      data: {
+        types: this.types,
+        item: element
+      }
+    });
+    updateDicDialog.afterClosed().subscribe(
+      data => {
+        if (data && data.status) {
+          this.openSnackBar('مدخل با موفقیت بروزرسانی شد');
+          this.isLoadingResults = false;
+          this.load();
+        }
+      },
+      err => {
+        this.isLoadingResults = false;
+        this.openSnackBar('خطا در پاک کردن مدخل');
+      });
   }
 
-  Edit(element: any) {
-    this.editSelectedIndex = this.dataSource.data.indexOf(element);
-    this.editElement.type = element.type;
-    this.editElement.name = element.name;
-    this.editElement.value = element.value;
+  addDictionary() {
+    const addDicDialog = this.dialog.open(ModifyDictionaryComponent, {
+      width: '600px;',
+      data: {
+        types: this.types
+      }
+    });
+    addDicDialog.afterClosed().subscribe(
+      data => {
+        if (data && data.status) {
+          this.openSnackBar('مدخل با موفقیت ثبت شد');
+          this.isLoadingResults = false;
+          this.load();
+        }
+      },
+      err => {
+        this.isLoadingResults = false;
+        this.openSnackBar('خطا در پاک کردن مدخل');
+      });
   }
 
-  put() {//should get data
-    //TODO send put request
+  isColor(element) {
+    if (element.type != 'color')
+      return false;
+    return !((element.value.length !== 7 && element.value.length !== 4) || element.value.charAt(0) !== '#');
   }
 
 }

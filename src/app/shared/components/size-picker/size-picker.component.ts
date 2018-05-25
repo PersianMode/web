@@ -16,8 +16,20 @@ import {AuthService} from '../../services/auth.service';
 })
 export class SizePickerComponent implements OnInit {
   sizeSplits = [];
+  _pt = '';
   @Input() gender: String = 'MENS';
-  isShoes = true;
+
+  @Input()
+  set productType(pt: string) {
+    this._pt = pt;
+    this.isShoes = pt.toUpperCase() === 'FOOTWEAR';
+  };
+
+  get productType(): string {
+    return this._pt;
+  }
+
+  isShoes = false;
   isEU = true;
   productSize;
 
@@ -25,9 +37,8 @@ export class SizePickerComponent implements OnInit {
   @Input()
   set sizes(productSizes) {
     this.productSize = productSizes;
-    if (this.productSize)
-      this.isShoes = this.productSize[0].value !== this.USToEU(this.productSize[0].value);
-    this.setProductSize(productSizes);
+    console.log(this.productSize);
+    this.setProductSize();
   }
 
   @Output('value') value = new EventEmitter();
@@ -37,7 +48,12 @@ export class SizePickerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getUserSizeType();
+    this.auth.isLoggedIn.filter(r => r).subscribe(() => {
+      const prevIsEu = this.isEU;
+      this.isEU = this.auth.userDetails.shoesType === 'EU';
+      if (prevIsEu !== this.isEU)
+        this.changeSizeType(false);
+    });
   }
 
   onChange(e) {
@@ -45,16 +61,12 @@ export class SizePickerComponent implements OnInit {
     this.value.emit(this.val);
   }
 
-  setProductSize(productSizes) {
+  setProductSize() {
     const temp = [];
-    Object.assign(temp, productSizes);
-    if (productSizes && productSizes.length) {
-      productSizes.forEach((p, pi) => {
-        if (!this.isEU)
-          temp[pi].displayValue = this.dict.translateWord(p.value);
-        else {
-          temp[pi].displayValue = this.dict.translateWord(this.USToEU(p.value));
-        }
+    Object.assign(temp, this.productSize);
+    if (this.productSize && this.productSize.length) {
+      this.productSize.forEach((p, pi) => {
+        temp[pi].displayValue = this.dict.setShoesSize(p.value, this.gender, this.productType);
       });
     }
     this.sizeSplits = [];
@@ -63,39 +75,16 @@ export class SizePickerComponent implements OnInit {
     }
   }
 
-  USToEU(oldSize) {
-    let returnValue: any;
-    if (!this.gender || this.gender.toUpperCase() === 'MENS') {
-      returnValue = this.dict.shoesSizeMap.men.find(size => size.us === oldSize);
-    } else if (this.gender.toUpperCase() === 'WOMENS') {
-      returnValue = this.dict.shoesSizeMap.women.find(size => size.us === oldSize);
-    }
-    if (!returnValue || !returnValue.eu)
-      return oldSize;
-    return returnValue.eu;
-  }
-
-  getUserSizeType() {
-    this.httpService.get(`customer/shoesType`).subscribe(res => {
-      if (!res.shoesType) {
-        this.isEU = false;
-      } else {
-        this.isEU = res.shoesType === 'EU';
-      }
-      this.setProductSize(this.productSize);
-    }, err => {
-      console.error(err);
-    });
-  }
-
-  changeSizeType() {
-    this.isEU = !this.isEU;
-    this.setProductSize(this.productSize);
+  changeSizeType(change = true) {
+    if (change)
+      this.isEU = !this.isEU;
     const shoesType = this.isEU ? 'EU' : 'US';
-    if (this.auth.isLoggedIn.getValue()) {
+    if (this.auth.userIsLoggedIn()) {
       this.httpService.post(`customer/shoesType`, {shoesType})
         .subscribe(() => {
         });
     }
+    this.auth.userDetails.shoesType = shoesType;
+    this.setProductSize();
   }
 }

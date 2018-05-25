@@ -55,7 +55,7 @@
           <mat-input-container class="field">
             <input matInput type="number" placeholder="تعداد" formControlName="count" role="count" tabindex="2" dir="ltr">
             <mat-hint>تعداد را وارد کنید</mat-hint>
-            <mat-error *ngIf="productInstanceForm.controls['count'].hasError('required') && anyChanges">
+            <mat-error *ngIf="productInstanceForm.controls['count'].hasError('required')">
               وارد کردن تعداد محصول الزامی است
             </mat-error>
           </mat-input-container>

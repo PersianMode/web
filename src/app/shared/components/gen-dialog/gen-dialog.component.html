@@ -1,16 +1,8 @@
 <div>
-  <app-login *ngIf="componentName === dialogEnum.login"
-             (closeDialog)="close()"></app-login>
-  <app-register *ngIf="componentName === dialogEnum.register"
-                (closeDialog)="close()"></app-register>
-  <app-other-details
-          *ngIf="componentName === dialogEnum.oauthOtherDetails"
-          (closeDialog)="close()"
-          [status]="extraData.status"></app-other-details>
-  <app-upsert-address
-          *ngIf="componentName === dialogEnum.upsertAddress"
-          (closeDialog)="close()" [isNotMobile]="true"></app-upsert-address>
-  <app-order-lines
-          *ngIf="componentName === dialogEnum.orderLinesComponent"
-          (closeDialog)="close()" [isNotMobile]="true"></app-order-lines>
+        <app-login *ngIf="componentName === dialogEnum.login" (closeDialog)="close()"></app-login>
+        <app-register *ngIf="componentName === dialogEnum.register" (closeDialog)="close()"></app-register>
+        <app-other-details *ngIf="componentName === dialogEnum.oauthOtherDetails" (closeDialog)="close()" [status]="extraData.status"></app-other-details>
+        <app-upsert-address *ngIf="componentName === dialogEnum.upsertAddress" (closeDialog)="close()" [isNotMobile]="true"></app-upsert-address>
+        <app-order-lines *ngIf="componentName === dialogEnum.orderLinesComponent" (closeDialog)="close()" [isNotMobile]="true"></app-order-lines>
+        <app-forgot-password *ngIf="componentName === dialogEnum.forgotPassword" (closeDialog)="close()"></app-forgot-password>
 </div>

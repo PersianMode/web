@@ -22,6 +22,7 @@ export class CollectionProductComponent implements OnInit {
     this.progressService.enable();
     this.httpService.get(`collection/product/manual/${this.collectionId}`).subscribe(res => {
 
+      console.log('-> ', res  );
       if (res && res.products)
         this.products = res.products;
       this.progressService.disable();

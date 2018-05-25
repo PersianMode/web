@@ -1,10 +1,10 @@
 import {
-  Component, HostListener, Inject, Input, OnInit, Output, ViewChild, EventEmitter,
-  OnDestroy, AfterContentChecked
+  Component, HostListener, Inject, Input, OnInit, Output, ViewChild, EventEmitter, AfterContentChecked
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
+import {CartService} from '../../../../shared/services/cart.service';
 
 @Component({
   selector: 'app-desktop-product',
@@ -14,8 +14,15 @@ import {DOCUMENT} from '@angular/platform-browser';
 export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input() product;
   @Input() price;
+  @Input() discountedPrice;
+  @Input() discounted;
   @Input() sub;
+  @Input() gender;
   @Output() changeSize = new EventEmitter<any>();
+  @Input() productType;
+  @Input() color;
+  @Input() barcode;
+  @Input() articleNo;
 
   @Input()
   set id(value) {
@@ -39,7 +46,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   productSize;
   addCardBtnDisabled = true;
   focused: any = {};
-  gender: String = '';
 
   @Input()
   set selectedProductColorID(id) {
@@ -52,15 +58,22 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   selectedProductColor: any = {};
 
   @Output() add = new EventEmitter<any>();
+  @Output() addFavorite = new EventEmitter<any>();
 
-  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window) {
+  constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
+              private cartService: CartService) {
   }
 
   ngOnInit() {
+    this.cartService.itemAdded$.subscribe(r => this.addCardBtnDisabled = !r);
   }
 
   saveToCart() {
     this.add.emit(this.size);
+  }
+
+  saveToFavorites() {
+    this.addFavorite.emit(this.size);
   }
 
   newSize(event) {
@@ -70,9 +83,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked() {
-    if (this.product.id) {
-      this.gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER');
-    }
     this.onScroll();
   }
 
@@ -95,4 +105,8 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     this.topDist = height - filterHeight + 209;
   }
 
+  addToCartDisability() {
+    console.log(this.addCardBtnDisabled || !this.size);
+    return this.addCardBtnDisabled || !this.size;
+  }
 }

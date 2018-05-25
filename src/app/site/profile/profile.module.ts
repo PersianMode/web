@@ -7,11 +7,20 @@ import {SharedModule} from '../../shared/shared.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {
-  MatCardModule, MatExpansionModule, MatFormFieldModule, MatHeaderRow, MatInputModule, MatPaginatorModule, MatRadioModule,
+  MatButtonModule,
+  MatCardModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatHeaderRow,
+  MatIconModule,
+  MatInputModule,
+  MatPaginatorModule,
+  MatRadioModule,
   MatTableModule
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
+import { WishListComponent } from './components/wish-list/wish-list.component';
 
 @NgModule({
   imports: [
@@ -22,6 +31,7 @@ import {DpDatePickerModule} from 'ng2-jalali-date-picker';
     MatCardModule,
     FormsModule,
     MatInputModule,
+    MatIconModule,
     MatFormFieldModule,
     MatRadioModule,
     DpDatePickerModule,
@@ -29,7 +39,8 @@ import {DpDatePickerModule} from 'ng2-jalali-date-picker';
     MatTableModule,
     MatExpansionModule,
     MatPaginatorModule,
+    MatButtonModule,
   ],
-  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent]
+  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent, WishListComponent]
 })
 export class ProfileModule { }

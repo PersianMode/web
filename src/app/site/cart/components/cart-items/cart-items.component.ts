@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {EditOrderComponent} from '../edit-order/edit-order.component';
 import {MatDialog} from '@angular/material';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
+import {AuthService} from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-cart-items',
@@ -10,6 +12,7 @@ import {MatDialog} from '@angular/material';
 })
 export class CartItemsComponent implements OnInit {
   @Input() product = null;
+
   @Output() updateProduct = new EventEmitter();
   @Output() valid = new EventEmitter();
 
@@ -19,18 +22,29 @@ export class CartItemsComponent implements OnInit {
   displayQuantity = null;
   displayPrice = null;
   displayTotalPrice = null;
+  totalDiscountedPrice = null;
+  discountedPrice = null;
+  color = '';
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private dict: DictionaryService, private auth: AuthService) {
   }
 
   ngOnInit() {
     this.notExist = !(this.product.count && this.product.quantity <= this.product.count);
     this.stock = this.product.count.toLocaleString('fa', {useGrouping: false});
     this.valid.emit(!this.notExist);
-    this.displaySize = this.product.size.toLocaleString('fa');
-    this.displayQuantity = this.product.quantity.toLocaleString('fa');
+
+    this.displayQuantity = this.dict.translateWord(this.product.quantity);
     this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
+    this.discountedPrice = '@ ' + priceFormatter(this.product.discountedPrice) + ' تومان';
     this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price) + ' تومان';
+    this.totalDiscountedPrice = priceFormatter(this.product.quantity * this.product.discountedPrice) + ' تومان';
+    this.color =  this.dict.translateColor(this.product.color);
+
+    this.auth.isLoggedIn.subscribe(() => {
+      const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+      this.displaySize = this.dict.setShoesSize(this.product.size, gender, this.product.productType);
+    });
   }
 
   deleteProduct() {

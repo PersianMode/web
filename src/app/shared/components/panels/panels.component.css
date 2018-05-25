@@ -12,7 +12,7 @@
 /* Bottom left text */
 .left-top {
   position: absolute;
-  bottom: 67%;
+  bottom: 0%;
   left: 2%;
   text-align: left;
 }
@@ -36,27 +36,27 @@
 /* Top left text */
 .center-top {
   position: absolute;
-  bottom: 67%;
-  left: 50%;
+  top: 0%;
+  left: 45%;
 }
 
 /* Top right text */
 .center-center {
   position: absolute;
   bottom: 33.33%;
-  left: 50%;
+  left: 45%;
 }
 
 /* Bottom right text */
 .center-bottom {
   position: absolute;
   bottom: 10%;
-  left: 50%;
+  left: 45%;
 }
 
 .right-top {
   position: absolute;
-  bottom: 67%;
+  top: 0%;
   right: 2%;
   text-align: right;
 }

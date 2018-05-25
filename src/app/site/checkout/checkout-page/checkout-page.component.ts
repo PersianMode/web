@@ -3,6 +3,7 @@ import {PaymentType} from '../../../shared/enum/payment.type.enum';
 import {CheckoutService} from '../../../shared/services/checkout.service';
 import {HttpService} from '../../../shared/services/http.service';
 import {CartService} from '../../../shared/services/cart.service';
+import {TitleService} from '../../../shared/services/title.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -17,11 +18,13 @@ export class CheckoutPageComponent implements OnInit {
   balanceValue = 0;
   loyaltyPoint = 0;
   paymentType = PaymentType;
+  disabled = false;
 
-  constructor(private checkoutService: CheckoutService, private httpService: HttpService, private cartService: CartService) {
+  constructor(private checkoutService: CheckoutService, private httpService: HttpService, private cartService: CartService, private titleService: TitleService) {
   }
 
   ngOnInit() {
+    this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {
         if (data) {
@@ -31,7 +34,7 @@ export class CheckoutPageComponent implements OnInit {
         }
       }
     );
-
+    this.checkoutService.finalCheck();
     this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = res.balance;
@@ -40,6 +43,8 @@ export class CheckoutPageComponent implements OnInit {
       .catch(err => {
         console.error('Cannot get balance and loyalty points of customer: ', err);
       });
+
+    this.checkoutService.isValid$.subscribe(r => this.disabled = !r);
   }
 
   changePaymentType(data) {
@@ -60,12 +65,7 @@ export class CheckoutPageComponent implements OnInit {
     }
   }
 
-  sudoVerify() {
-   this.httpService.post('order/verify', {
-     orderId: this.cartService.cartItems.getValue()[0].order_id,
-     transactionId: '5aca291155b58d09189ab885',
-     usedBalance: this.usedBalance,
-     usedPoints: this.usedLoyaltyPoint
-   });
+  checkout() {
+    this.checkoutService.checkout();
   }
 }

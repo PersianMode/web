@@ -70,13 +70,13 @@
           <mat-input-container class="input-field">
             <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
                    [(ngModel)]="upsertLogo.text"
-                   (ngModelChange)="changeField($event)"/>
+                   (ngModelChange)="changeField()"/>
           </mat-input-container>
         </div>
         <div fxFlex="50" style="width: 100%">
           <mat-input-container dir="ltr" class="input-field">
-            <input matInput type="text" class="menu-field" placeholder="آدرس" [(ngModel)]="upsertLogo.href"
-                   (ngModelChange)="changeField($event)"/>
+            <input matInput type="text" class="menu-field left-text" placeholder="آدرس" [(ngModel)]="upsertLogo.href"
+                   (ngModelChange)="changeField()"/>
           </mat-input-container>
         </div>
       </div>

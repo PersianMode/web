@@ -15,6 +15,10 @@
 .field {
   width: 100%;
 }
+.field-right{
+  width: 100%;
+  text-align: right;
+}
 
 .farsi {
   direction: rtl;
@@ -36,4 +40,17 @@
 .header-little-fix-style {
   text-align: left;
   padding-left: 10px;
+}
+
+.choose-collection {
+  display: inline-block;
+  margin: 3px;
+}
+
+.remove-collection-button {
+  top: 3px;
+}
+
+.hit-label, .error-label {
+  font-size: 0.8em;
 }

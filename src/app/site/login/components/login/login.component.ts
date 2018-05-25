@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, AbstractControl} from '@angular/forms';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   curFocus = null;
 
   constructor(private authService: AuthService, private router: Router,
-              @Inject(WINDOW) private window, public dialog: MatDialog) {
+    @Inject(WINDOW) private window, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -29,9 +29,8 @@ export class LoginComponent implements OnInit {
 
   initForm() {
     this.loginForm = new FormBuilder().group({
-      email: [null, [
+      username: [null, [
         Validators.required,
-        Validators.email,
       ]],
       password: [null, [
         Validators.required,
@@ -40,9 +39,28 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  checkUsername(AC: AbstractControl) {
+    const username = AC.get('username').value;
+    let isMatched = false;
+    if (username) {
+      if (username.includes('@')) {
+        isMatched = (/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).test(username);
+      } else {
+        isMatched = (/^[\u0660-\u06690-9\u06F0-\u06F9]+$/).test(username);
+      }
+    }
+
+    if (!isMatched) {
+      AC.get('username').setErrors({match: 'not matched to any type'});
+    } else {
+      AC.get('username').setErrors(null);
+      return null;
+    }
+  }
+
   login() {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.controls['email'].value, this.loginForm.controls['password'].value)
+      this.authService.login(this.loginForm.controls['username'].value, this.loginForm.controls['password'].value)
         .then(data => {
           this.closeDialog.emit(true);
           this.router.navigate(['home']);
@@ -75,5 +93,19 @@ export class LoginComponent implements OnInit {
   setSeen(item) {
     this.seen[item] = true;
     this.curFocus = item;
+  }
+
+  forgotPassword() {
+    if (this.window.innerWidth >= 960) {
+      this.closeDialog.emit(true);
+      this.dialog.open(GenDialogComponent, {
+        width: '500px',
+        data: {
+          componentName: this.dialogEnum.forgotPassword,
+        },
+      });
+    } else {
+      this.router.navigate(['forgot/password']);
+    }
   }
 }

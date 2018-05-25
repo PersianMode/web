@@ -9,22 +9,31 @@
       </mat-radio-button>
     </mat-radio-group>
 </span>
-<span *ngIf="withDelivery" class="newAddress-checkout" [class.newAddress-profile]="isProfile">
-  <button (click)="openAddressDialog()">افزودن آدرس جدید</button>
+<span
+  *ngIf="(withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
+  class="newAddress-checkout" [class.newAddress-profile]="isProfile">
+  <button mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
+  <div class="recipient" *ngIf="!withDelivery && customerData && customerData.recipient_name">
+    <b>نام تحویل گیرنده:</b>
+    <span *ngIf="customerData.recipient_title === 'f'"> خانم </span>
+    <span *ngIf="customerData.recipient_title === 'm'"> آقای </span>
+    {{customerData.recipient_name + ' ' + customerData.recipient_surname}}
+  </div>
 </span>
-<div *ngIf="addresses.length">
+<div *ngIf="addresses && addresses.length">
   <div *ngIf="!isMobile" class="rs-table field">
     <mat-card>
       <table class="field table">
         <thead>
-        <th style="width: 5%"><b>ردیف</b></th>
-        <th *ngIf="withDelivery"><b>مشخصات تحویل گیرنده</b></th>
-        <th *ngIf="withDelivery && !isProfile"></th>
-        <th *ngIf="!withDelivery">نام فروشگاه</th>
-        <th style="min-width: 40%"><b>آدرس</b></th>
-        <th *ngIf="!isProfile" style=" width: 5%"></th>
-        <th *ngIf="isProfile"></th>
-
+        <tr>
+          <th style="width: 5%"><b>ردیف</b></th>
+          <th *ngIf="withDelivery"><b>مشخصات تحویل گیرنده</b></th>
+          <th *ngIf="withDelivery && !isProfile"></th>
+          <th *ngIf="!withDelivery">نام فروشگاه</th>
+          <th style="min-width: 40%"><b>آدرس</b></th>
+          <th *ngIf="!isProfile" style=" width: 5%"></th>
+          <th *ngIf="isProfile"></th>
+        </tr>
         </thead>
         <tbody>
         <tr *ngFor="let address of addresses; let i = index">
@@ -53,14 +62,14 @@
           <td>
             استان {{address.province}} شهر {{address.city}}
             <br>
-            {{address.district}} {{address.street}} پلاک {{makePersianNumber(address.no)}} واحد
-            {{makePersianNumber(address.unit)}}
+            {{address.district}} {{address.street}} {{address.no ? 'پلاک ' + makePersianNumber(address.no) : ''}}
+            {{address.unit ?  'واحد' + makePersianNumber(address.unit) : ''}}
           </td>
           <td *ngIf="withDelivery && !isProfile">
-            <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddresses===i"></mat-checkbox>
+            <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddress===i"></mat-checkbox>
           </td>
           <td *ngIf="!withDelivery">
-            <mat-checkbox class="check-box" [checked]="selectedWareHouseAddresses===i"
+            <mat-checkbox class="check-box" [checked]="selectedWarehouseAddress===i"
                           (change)="setAddress(i)"></mat-checkbox>
           </td>
           <td *ngIf="isProfile">
@@ -89,16 +98,20 @@
           </div>
           <div>
             <span> آدرس: </span>
-            <span style="font-weight: 600">استان {{address.province}} شهر{{address.city}} {{address.district}} {{address.street}} پلاک {{makePersianNumber(address.no)}} واحد {{ makePersianNumber(address.unit)}}</span>
+            <span style="font-weight: 600">
+                          استان {{address.province}} شهر {{address.city}}
+            {{address.district}} {{address.street}} {{address.no ? 'پلاک ' + makePersianNumber(address.no) : ''}}
+            {{address.unit ?  'واحد' + makePersianNumber(address.unit) : ''}}
+            </span>
           </div>
           <div *ngIf="withDelivery" class="edit-button">
             <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
           </div>
           <div *ngIf="!isProfile" style="margin-top: 20px;">
             انتخاب آدرس
-            <mat-checkbox *ngIf="withDelivery" [checked]="selectedCustomerAddresses===i"
+            <mat-checkbox *ngIf="withDelivery" [checked]="selectedCustomerAddress===i"
                           (change)="setAddress(i)"></mat-checkbox>
-            <mat-checkbox *ngIf="!withDelivery" [checked]="selectedWareHouseAddresses===i"
+            <mat-checkbox *ngIf="!withDelivery" [checked]="selectedWarehouseAddress===i"
                           (change)="setAddress(i)"></mat-checkbox>
           </div>
           <br>
@@ -107,7 +120,7 @@
       <br>
     </div>
   </div>
-  <div *ngIf="!withDelivery && selectedWareHouseAddresses!==-1" class="map-div">
+  <div *ngIf="!withDelivery && selectedWarehouseAddress!==-1" class="map-div">
     <agm-map class="ev-loc" [latitude]="getLatitude()" [longitude]="getLongitude()">
       <agm-marker
         [latitude]="getLatitude()"

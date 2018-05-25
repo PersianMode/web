@@ -7,18 +7,18 @@
           <mat-input-container class="input-field">
             <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
                    [(ngModel)]="upsertTopMenuItem.text"
-                   (ngModelChange)="changeField($event)"/>
+                   (ngModelChange)="changeField()"/>
           </mat-input-container>
         </div>
         <div fxFlex="30" class="full-width">
           <mat-input-container dir="ltr" class="input-field">
-            <input matInput type="text" class="menu-field" placeholder="آدرس" [(ngModel)]="upsertTopMenuItem.href"
-                   (ngModelChange)="changeField($event)"/>
+            <input matInput type="text" class="menu-field left-text" placeholder="آدرس" [(ngModel)]="upsertTopMenuItem.href"
+                   (ngModelChange)="changeField()"/>
           </mat-input-container>
         </div>
         <div fxFlex="40" class="full-width">
           <mat-input-container dir="ltr" class="input-field">
-            <input matInput class="menu-field" placeholder="بخش" [(ngModel)]="upsertTopMenuItem.section"
+            <input matInput class="menu-field left-text" placeholder="بخش" [(ngModel)]="upsertTopMenuItem.section"
                    [disabled]="upsertTopMenuItem.isEdit"/>
           </mat-input-container>
         </div>

@@ -2,10 +2,10 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
-import {HttpService} from '../../../../shared/services/http.service';
 import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {MatSnackBar} from '@angular/material';
+import {TitleService} from '../../../../shared/services/title.service';
 
 @Component({
   selector: 'app-login',
@@ -22,11 +22,12 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService,
     private router: Router,
     private progressService: ProgressService,
-    private snakBar: MatSnackBar) {
+    private snakBar: MatSnackBar, private titleService: TitleService) {
   }
 
   ngOnInit() {
     this.initForm();
+    this.titleService.setTitleWithOutConstant('ورود ادمین') ;
 
   }
 
@@ -48,12 +49,16 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.loginForm.valid) {
 
-      const warehouseId = this.loginForm.controls['warehouse_id'].value;
-      if (!warehouseId) {
-        this.openSnackBar('فروشگاه حورد نظر را انتخاب کنید');
-        return;
-      }
+      let warehouseId;
 
+      if (+this.loginForm.controls['loginAs'].value === AccessLevel.SalesManager ||
+        +this.loginForm.controls['loginAs'].value === AccessLevel.ShopClerk) {
+        warehouseId = this.loginForm.controls['warehouse_id'].value;
+        if (!warehouseId) {
+          this.openSnackBar('فروشگاه مورد نظر را انتخاب کنید');
+          return;
+        }
+      }
       this.progressService.enable();
       this.authService.login(this.loginForm.controls['email'].value,
         this.loginForm.controls['password'].value,
@@ -61,14 +66,14 @@ export class LoginComponent implements OnInit {
         warehouseId)
         .then(data => {
           this.progressService.disable();
-          switch (this.loginForm.controls['loginAs'].value) {
-            case '0':
+          switch (parseInt(this.loginForm.controls['loginAs'].value, 10)) {
+            case 0:
               this.router.navigate(['/agent/collections']);
               break;
-            case '1':
+            case 1:
               this.router.navigate(['/agent/orders']);
               break;
-            case '2':
+            case 2:
               this.router.navigate(['/agent/orders']);
               break;
 

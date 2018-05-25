@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {CartService} from '../../../../shared/services/cart.service';
 
 @Component({
   selector: 'app-mobile-product',
@@ -8,8 +9,16 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 export class MobileProductComponent implements OnInit {
   @Input() product;
   @Input() price;
+  @Input() discountedPrice;
+  @Input() discounted;
   @Input() sub;
   @Input() id;
+  @Input() gender;
+  @Input() productType;
+  @Input() color;
+  @Input() barcode;
+  @Input() articleNo;
+
   @Input()
   set selectedProductColorID(id) {
     if (id) {
@@ -17,14 +26,17 @@ export class MobileProductComponent implements OnInit {
       this.productSize = this.product.sizesByColor[id];
     }
   };
+
   productSize = [];
   selectedProductColor: any = {};
   addCardBtnDisabled = true;
   @Output() add = new EventEmitter<any>();
+  @Output() addFavorite = new EventEmitter<any>();
   @Output() changeSize = new EventEmitter<any>();
   size = '';
 
-  constructor() { }
+  constructor(private cartService: CartService) {
+  }
 
   newSize(event) {
     this.size = event;
@@ -33,9 +45,14 @@ export class MobileProductComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.cartService.itemAdded$.subscribe(r => this.addCardBtnDisabled = !r);
   }
 
   saveToCart() {
     this.add.emit(this.size);
+  }
+
+  saveToFavorites() {
+    this.addFavorite.emit(this.size);
   }
 }

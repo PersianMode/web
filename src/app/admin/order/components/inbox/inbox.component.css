@@ -22,3 +22,7 @@ mat-header-cell, mat-cell{
   height: 72px;
   position: relative;
 }
+
+mat-cell{
+  overflow: visible !important;
+}

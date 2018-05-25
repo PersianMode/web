@@ -5,7 +5,7 @@ import {
   MatInputModule,
   MatMenuModule,
   MatOptionModule, MatRadioModule, MatSelectModule, MatStepperModule,
-  MatToolbarModule
+  MatToolbarModule, MatSnackBarModule, MatSlideToggleModule, MatButtonToggleModule,
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -23,6 +23,7 @@ import {AddressTableComponent} from './components/address-table/address-table.co
 import { DobComponent } from './components/dob/dob.component';
 import {DragulaModule} from 'ng2-dragula';
 import { LogoHeaderComponent } from './components/logo-header/logo-header.component';
+import { SizePickerComponent } from './components/size-picker/size-picker.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,8 @@ import { LogoHeaderComponent } from './components/logo-header/logo-header.compon
     AddressTableComponent,
     DobComponent,
     LogoHeaderComponent,
+    SizePickerComponent,
+
 ],
   imports: [
     FormsModule,
@@ -60,6 +63,9 @@ import { LogoHeaderComponent } from './components/logo-header/logo-header.compon
     MatCheckboxModule,
     FileUploadModule,
     MatStepperModule,
+    MatSnackBarModule,
+    MatSlideToggleModule,
+    MatButtonToggleModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),
@@ -76,6 +82,7 @@ import { LogoHeaderComponent } from './components/logo-header/logo-header.compon
     AddressTableComponent,
     DobComponent,
     LogoHeaderComponent,
+    SizePickerComponent
   ]
 })
 export class SharedModule {

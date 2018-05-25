@@ -411,11 +411,11 @@ export class SubMenuComponent implements OnInit {
 
     if (!this.selectedItem || this.selectedItem.info.section.split('/')[1] !== tempSectionName) {
       if (isNewItem) {
-        res['column'] = tempColumns.length && tempItems[0].length ? Math.max(...tempColumns
+        res['column'] = tempColumns.length && tempItems[Object.keys(tempItems)[0]].length ? Math.max(...tempColumns
           .map(el => tempItems[el])
           .reduce((a, b) => (a || []).concat(b || []))
           .map(el => el.info.column)) : 1;
-        res['row'] = (tempColumns.length && tempItems[0].length ? Math.max(...tempColumns
+        res['row'] = (tempColumns.length && tempItems[Object.keys(tempItems)[0]].length ? Math.max(...tempColumns
           .map(el => tempItems[el])
           .reduce((a, b) => (a || []).concat(b || []))
           .map(el => el.info.row)) : 0) + 1;
@@ -464,6 +464,7 @@ export class SubMenuComponent implements OnInit {
   clearFields() {
     this.subMenuForm.reset();
     this.selectedItem = null;
+    this.subMenuForm.controls['area'].enable();
   }
 
   fieldChanged() {

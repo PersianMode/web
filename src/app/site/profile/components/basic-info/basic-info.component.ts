@@ -39,6 +39,14 @@ export class BasicInfoComponent implements OnInit {
   passCampatible = true;
   changedDob;
   changeDobFlag = false;
+  balance = 0;
+  loyaltyPoints = 0;
+  loyaltyPointsValue = 0;
+  loyaltyValue = 70;
+  balanceFa = '';
+  loyaltyPointsFa = '';
+  loyaltyPointsValueFa = '';
+
   constructor(private authService: AuthService, private httpService: HttpService) {
   }
 
@@ -53,11 +61,19 @@ export class BasicInfoComponent implements OnInit {
     this.changedDob = this.customerBasicInfo.dob;
     this.title = 'اطلاعات کاربر';
     this.formTitle.emit(this.title);
+    this.httpService.get(`customer/balance`).subscribe(res => {
+      this.balance = res.balance;
+      this.loyaltyPoints = res.loyalty_points;
+      this.loyaltyPointsValue = res.loyalty_points * this.loyaltyValue;
+      this.balanceFa = this.balance.toLocaleString('fa');
+      this.loyaltyPointsFa = this.loyaltyPoints.toLocaleString('fa');
+      this.loyaltyPointsValueFa = this.loyaltyPointsValue.toLocaleString('fa');;
+    });
   }
 
   private formatDob() {
     const dob = moment(this.customerBasicInfo.dob);
-    this.birthDate = [dob.jDate(), dob.jMonth() + 1,  dob.jYear()].map(r => r.toLocaleString('fa', {useGrouping: false})).join(' / ');
+    this.birthDate = [dob.jDate(), dob.jMonth() + 1, dob.jYear()].map(r => r.toLocaleString('fa', {useGrouping: false})).join(' / ');
   }
 
   dobChange(dob) {
@@ -116,7 +132,7 @@ export class BasicInfoComponent implements OnInit {
     this.authService.userDetails.national_id = this.customerBasicInfo.national_id;
     this.authService.userDetails.dob = this.customerBasicInfo.dob;
     this.authService.userDetails.username = this.customerBasicInfo.username;
-    this.authService.isLoggedIn.next(true);
+    this.authService.isLoggedIn.next(this.authService.userDetails);
     this.httpService.post('editUserBasicInfo', this.customerBasicInfo).subscribe(
       (res) => {
         this.ngOnInit();
@@ -149,7 +165,8 @@ export class BasicInfoComponent implements OnInit {
     if ((name !== this.customerBasicInfo.name && (name !== '' || this.customerBasicInfo.name !== null))
       || (surname !== this.customerBasicInfo.surname && (surname !== '' || this.customerBasicInfo.surname !== null))
       || (username !== this.customerBasicInfo.username && (username !== '' || this.customerBasicInfo.username !== null))
-      || ((this.customerBasicInfo.national_id && national_id !== this.customerBasicInfo.national_id) || (isUndefined(this.customerBasicInfo.national_id) && national_id !== ''))) {
+      || ((this.customerBasicInfo.national_id && national_id !== this.customerBasicInfo.national_id)
+        || (isUndefined(this.customerBasicInfo.national_id) && national_id !== ''))) {
       this.anyChanges = true;
     }
   }
@@ -190,6 +207,7 @@ export class BasicInfoComponent implements OnInit {
       (er) => console.error('Error when subscribing on userInfo form valueChanges: ', er)
     );
   }
+
   checkCompatibilityOfNewPass() {
     this.passCampatible = true;
     let newPass = (this.changePassForm.controls['newPass'].value === null ||
@@ -199,7 +217,7 @@ export class BasicInfoComponent implements OnInit {
     let retypePass = (this.changePassForm.controls['retypePass'].value === null ||
       isUndefined(this.changePassForm.controls['retypePass'].value)) ? '' : this.changePassForm.controls['retypePass'].value;
     retypePass = retypePass.trim();
-    if ( newPass !== null && retypePass !== null && newPass !== retypePass)
+    if (newPass !== null && retypePass !== null && newPass !== retypePass)
       this.passCampatible = false;
     else {
       this.passCampatible = true;
@@ -218,7 +236,8 @@ export class BasicInfoComponent implements OnInit {
     this.changeed_pass_obj.old_pass = this.changePassForm.controls['oldPass'].value;
     this.changeed_pass_obj.new_pass = this.changePassForm.controls['newPass'].value;
     this.changeed_pass_obj.retype_new_pass = this.changePassForm.controls['retypePass'].value;
-    if ((this.changeed_pass_obj.new_pass !== this.changeed_pass_obj.retype_new_pass) || (this.changeed_pass_obj.old_pass === this.changeed_pass_obj.new_pass)) {
+    if ((this.changeed_pass_obj.new_pass !== this.changeed_pass_obj.retype_new_pass)
+      || (this.changeed_pass_obj.old_pass === this.changeed_pass_obj.new_pass)) {
       this.errorMsgOld = 'اطلاعات جهت تغییر کلمه عبور درست وارد نشده است';
       this.errorMsgNew = this.errorMsgOld;
       this.errorMsgRetype = this.errorMsgOld;
@@ -228,8 +247,7 @@ export class BasicInfoComponent implements OnInit {
       });
       this.initChangePassForm();
       console.error('Cannot change user pass, new entered pass are not compatible: ');
-    }
-    else {
+    } else {
       this.httpService.post('changePassword', this.changeed_pass_obj).subscribe(
         (res) => {
           this.ngOnInit();

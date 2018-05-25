@@ -1,0 +1,86 @@
+<div *ngIf="!profileWishList.length">هیچ محصولی در لیست علاقمندی‌های شما موجود نمی باشد.</div>
+<mat-table *ngIf="!isMobile && profileWishList.length" [dataSource]="profileWishList"
+           class="example-container mat-elevation-z8">
+  <ng-container matColumnDef="col_no">
+    <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
+    <mat-cell class="w50" *matCellDef="let wishItem">{{(profileWishList.indexOf(wishItem)+1).toLocaleString('fa')}}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="thumbnail">
+    <mat-header-cell class="w200" *matHeaderCellDef mat-sort-header>تصویر</mat-header-cell>
+    <mat-cell class="w200" *matCellDef="let wishItem">
+      <div class="image-wrapper"><a
+        (click)="navigateToProduct(wishItem.wish_list.product_id, wishItem.wish_list.product_color_id)">
+        <img src="{{getThumbnailURL(wishItem.product[0])}}">
+      </a></div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>نام کالا</mat-header-cell>
+    <mat-cell *matCellDef="let wishItem" class="wish-item-name" (click)="navigateToProduct(wishItem.wish_list.product_id, wishItem.wish_list.product_color_id)">
+      {{wishItem.product[0].name}}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="size">
+    <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>اندازه</mat-header-cell>
+    <mat-cell class="w50" *matCellDef="let wishItem">
+      <!--{{makePersianNumber(wishItem.product[0].instances[0].size, false)}}-->
+      <span *ngIf="wishItem.wish_list.product_instance_id">{{wishItem.product[0].displaySize}}</span>
+      <span *ngIf="!wishItem.wish_list.product_instance_id">-</span>
+    </mat-cell>
+  </ng-container>
+
+
+
+  <ng-container matColumnDef="date">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>زمان ثبت</mat-header-cell>
+    <mat-cell *matCellDef="let wishItem">
+      {{wishItem.jalali_date}}
+      <br>
+      {{wishItem.time}}
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="delete">
+    <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>حذف</mat-header-cell>
+    <mat-cell class="w50" *matCellDef="let wishItem">
+      <a class="clickable-link" (click)="deletWishItem(wishItem.wish_list._id)">
+        <mat-icon>delete</mat-icon>
+      </a>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns:displayedColumns"></mat-row>
+</mat-table>
+<div *ngIf="isMobile && profileWishList.length">
+  <div *ngFor="let wishItem of profileWishList; let i = index">
+    <mat-card class="wish-list-data">
+      <mat-card-content>
+        <div>
+          <a (click)="navigateToProduct(wishItem.product[0]._id, wishItem.product[0].instances[0].product_color_id)">
+            <img src="{{getThumbnailURL(wishItem.product[0])}}">
+          </a>
+        </div>
+        <div>
+          <b>{{wishItem.product[0].name}}</b>
+        </div>
+        <div>
+          <span>اندازه : </span>
+          <span>{{wishItem.product[0].displaySize}}</span>
+          <!--<span>{{makePersianNumber(wishItem.product[0].instances[0].size, false)}}</span>-->
+        </div>
+        <div>
+          <span>تاریخ و زمان ثبت کالا : </span>
+          <span>{{wishItem.jalali_date}} , {{wishItem.time}}</span>
+        </div>
+        <div class="trash-style"><a (click)="deletWishItem(wishItem.wish_list._id)">
+          <mat-icon>delete</mat-icon>
+        </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

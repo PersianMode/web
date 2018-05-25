@@ -1,17 +1,23 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
+import {isDevMode} from '@angular/core';
 
 @Injectable()
 export class HttpService {
 
-  public static PRODUCT_IMAGE_PATH = '/images/product-image/';
-  public static Host = 'http://localhost:3000';
+
+  public static PRODUCT_IMAGE_PATH = 'images/product-image';
+  public static Host;
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {
+    HttpService.Host = this.isInDevMode() ? 'http://localhost:3000' : 'http://173.249.11.153';
   }
 
+  isInDevMode() {
+    return isDevMode();
+  }
 
   get(url): Observable<any> {
     return this.http.get(this.serverAddress + url, {observe: 'response'}).map(data => data.body);

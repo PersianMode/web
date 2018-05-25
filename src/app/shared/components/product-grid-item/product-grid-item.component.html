@@ -17,10 +17,10 @@
       </div>
       <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
     </div>
-    <p>{{data.colors.length.toLocaleString('fa')}} رنگ <span *ngIf="soldOut" class="soldOut">موجود نیست</span></p>
+    <p>{{data.colors.length.toLocaleString('fa')}} رنگ <span *ngIf="soldOut" class="soldOut">تمام شد</span></p>
     <h2>{{data.name}}</h2>
     <h3>{{desc}}</h3>
-    <h4>{{price}} تومان</h4>
+    <h4 [class.overridden]="discounted">{{price}} تومان</h4> <h4 *ngIf="discounted">{{discountedPrice}} تومان</h4>
   </span>
   </div>
 </div>
@@ -37,8 +37,8 @@
     </div>
     <h2>{{data.name}}</h2>
     <h3>{{desc}}</h3>
-    <h4>{{price}} تومان</h4>
-    <p>{{data.colors.length.toLocaleString('fa')}}رنگ</p>
+    <h4 [class.overridden]="discounted">{{price}} تومان</h4> <h4 *ngIf="discounted">{{discountedPrice}} تومان</h4>
+    <p>{{data.colors.length.toLocaleString('fa')}} رنگ</p>
   </span>
   </div>
 </div>

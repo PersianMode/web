@@ -1,8 +1,8 @@
 <mat-input-container class="field" style="direction: ltr;">
-  <input matInput type="text" placeholder="{{placeholder}}" [matAutocomplete]="auto" [formControl]="suggestionCtrl" style="direction: ltr"/>
-  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addItem($event)" >
-    <mat-option *ngFor="let item of filteredItems" [value]="item._id"  style="text-align: left">
-
+  <input matInput type="text" placeholder="{{placeholder}}" [matAutocomplete]="auto" [formControl]="suggestionCtrl" [style.direction]="textDirection"
+    [style.text-align]="textDirection === 'ltr' ? 'left' : 'right'" />
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addItem($event)">
+    <mat-option *ngFor="let item of filteredItems" [value]="item._id" [style.text-align]="textDirection === 'ltr' ? 'left' : 'right'">
       <span *ngIf="name === targetEnum.collection.toString()" style="direction: ltr; text-align: left;">
         {{item.name}}
       </span>

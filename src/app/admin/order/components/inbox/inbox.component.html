@@ -1,7 +1,12 @@
 <mat-card>
+  
   <mat-card-content>
     <div class="example-container mat-elevation-z8">
-      
+
+      <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
+        <mat-icon aria-label="Example icon-button with a heart icon">cached</mat-icon>
+      </button>
+  
       <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
         (matSortChange)="onSortChange($event)">
 
@@ -24,7 +29,7 @@
           <mat-cell *matCellDef="let element">
             <mat-icon *ngIf="!!element.is_collect">check</mat-icon>
             <mat-icon *ngIf="!element.is_collect">clear</mat-icon>
-         
+
           </mat-cell>
         </ng-container>
 
@@ -39,7 +44,7 @@
         </ng-container>
 
         <ng-container matColumnDef="used_balance">
-          <mat-header-cell *matHeaderCellDef> موجودی</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> بالانس </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.used_balance}}</mat-cell>
         </ng-container>
 
@@ -68,14 +73,23 @@
         <ng-container matColumnDef="process">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <button mat-button color="primary" (click)="process(element)">انتخاب</button>
+            <button mat-button color="primary" (click)="process(element)">{{getProcessTitle(element)}}</button>
           </mat-cell>
         </ng-container>
-        
+
+        <ng-container *ngIf="isSalesManager" matColumnDef="refund">
+          <mat-header-cell *matHeaderCellDef>بازگشت هزینه</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-button color="warn" (click)="refund(element)">بازگشت هزینه</button>
+          </mat-cell>
+        </ng-container>
+
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
       </mat-table>
 
+      
       <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
     </div>
 

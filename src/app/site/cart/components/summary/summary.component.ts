@@ -56,7 +56,7 @@ export class SummaryComponent implements OnInit {
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
-      (data) => this.isLoggedIn = data,
+      (data) => this.isLoggedIn = this.authService.userIsLoggedIn(),
       (err) => {
         console.error('Cannot subscribe to isLoggedIn in authService: ', err);
       }
@@ -70,6 +70,11 @@ export class SummaryComponent implements OnInit {
       .catch(err => {
         console.error('Cannot get user balance and loyalty: ', err);
       });
+
+    this.cartService.cartItems.subscribe(() => {
+      this.total = this.cartService.calculateTotal();
+      this.discount = this.cartService.calculateDiscount(!!this.coupon_code);
+    });
   }
 
   changeCouponVisibility() {

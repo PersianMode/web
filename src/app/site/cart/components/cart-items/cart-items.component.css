@@ -58,15 +58,18 @@ section {
   margin-right: 8px;
   display: inline-block;
 }
+section span {
+  margin-right: 20px;
+}
 .soldOut {
   color: red;
   position: absolute;
   display: inline-block;
   z-index: 10;
   font-weight: 200;
-  font-size: 300%;
-  font-family: iranyekan,sans-serif;
-  opacity: .6;
+  font-size: 500%;
+  font-family: irankharazmi,sans-serif;
+  opacity: .35;
 }
 
 @media (min-width: 600px) {
@@ -78,6 +81,7 @@ section {
   .thumbnail img {
     width: 220px;
     min-height: 220px;
+    border: 1px solid #ccc;
   }
   .btn-container {
     position: absolute;
@@ -89,7 +93,7 @@ section {
     max-width: calc(100% - 260px);
   }
   .soldOut {
-    transform: rotate(-45deg) translateY(30px);
+    transform: rotate(-45deg) translateX(17px) translateY(-17px);
   }
 }
 
@@ -100,6 +104,7 @@ section {
 
   .thumbnail img {
     width: 100%;
+    border: 1px solid #ccc;
   }
 
   .item-name-and-data {
@@ -116,4 +121,9 @@ section {
   box-shadow: none;
   margin: 5px;
   border: rgba(255,0,0,.4) dashed 2px;
+}
+
+img[src=""] {
+  content:url("data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
+
 }

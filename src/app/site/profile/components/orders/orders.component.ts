@@ -17,7 +17,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 })
 export class OrdersComponent implements OnInit, OnDestroy {
   profileOrder = [];
-  displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'used_point', 'address', 'view_details'];
+  displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'discount', 'used_point', 'address', 'view_details'];
   isMobile = false;
   selectedOrder;
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
@@ -26,7 +26,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
               protected progressService: ProgressService) {
     this.isMobile = this.responsiveService.isMobile;
   }
-
   ngOnInit() {
     this.profileOrderService.orderArray.subscribe(result => {
       if (!result.length)
@@ -34,6 +33,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
       this.profileOrder = result;
       this.profileOrder.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.order_time));
     });
+    this.isMobile = this.responsiveService.isMobile;
     this.profileOrderService.getAllOrders();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }

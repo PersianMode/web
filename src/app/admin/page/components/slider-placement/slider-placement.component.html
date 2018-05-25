@@ -12,13 +12,13 @@
           <mat-input-container class="input-field">
             <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
                    [(ngModel)]="upsertSlider.text"
-                   (ngModelChange)="changeField($event)"/>
+                   (ngModelChange)="changeField()"/>
           </mat-input-container>
         </div>
         <div fxFlex="35" style="width: 100%">
           <mat-input-container dir="ltr" class="input-field">
-            <input matInput type="text" class="menu-field" placeholder="آدرس" [(ngModel)]="upsertSlider.href"
-                   (ngModelChange)="changeField($event)"/>
+            <input matInput type="text" class="menu-field left-text" placeholder="آدرس" [(ngModel)]="upsertSlider.href"
+                   (ngModelChange)="changeField()"/>
           </mat-input-container>
         </div>
       </div>
@@ -51,7 +51,10 @@
   </div>
   <div class="demo-list" [dragula]="'slider-bag'" [dragulaModel]="sliders">
     <div *ngFor="let item of sliders" class="top-menu-item" (click)="selectItem(item)">
-      <img [src]="getURL(item.info.imgUrl)" alt="">
+      <img [style.width]="item.imgWidth? item.imgWidth + 'px': '40px'"
+           [style.marginLeft]="item.imgMarginLeft ? item.imgMarginLeft + 'px' : 0"
+           [style.marginTop]="item.imgMarginTop ? item.imgMarginTop + 'px' : 0"
+           [src]="getURL(item.info.imgUrl)" alt="">
       <label class="content">{{item.info.text}}</label>
     </div>
   </div>

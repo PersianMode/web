@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {PageService} from '../../services/page.service';
+import {HttpService} from '../../services/http.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {DictionaryService} from '../../services/dictionary.service';
 
 @Component({
   selector: 'app-collection-header',
@@ -18,11 +21,16 @@ export class CollectionHeaderComponent implements OnInit {
   };
   persistedList = false;
   searchIsFocused = false;
-  menu = {};
+  menu: any = {};
   placements: any = {};
   topMenu = [];
+  searchPhrase = null;
+  searchResultList = [];
+  searchWaiting = false;
 
-  constructor(private router: Router, private pageService: PageService) {
+  constructor(private router: Router, private pageService: PageService,
+    private httpService: HttpService, private sanitizer: DomSanitizer,
+    private dictionaryService: DictionaryService) {
   }
 
   ngOnInit() {
@@ -32,9 +40,9 @@ export class CollectionHeaderComponent implements OnInit {
         this.topMenu
           .sort((x, y) => x.info.column - y.info.column)
           .forEach(r => {
-          r.routerLink = ['/'].concat(r.info.href.split('/'));
-          r.type = r.info.section ? r.info.section : r.routerLink[2];
-        });
+            r.routerLink = ['/'].concat(r.info.href.split('/'));
+            r.type = r.info.section ? r.info.section : r.routerLink[2];
+          });
         const subMenu = data.filter(r => r.variable_name === 'subMenu');
         const sections = Array.from(new Set(subMenu.map(r => r.info.section)));
         this.placements = {};
@@ -62,6 +70,7 @@ export class CollectionHeaderComponent implements OnInit {
 
   showList(type) {
     setTimeout(() => {
+      this.searchUnfocused();
       this.hiddenGenderMenu = false;
       this.selected[type] = true;
       this.menu = this.placements[type + 'Menu'];
@@ -78,10 +87,13 @@ export class CollectionHeaderComponent implements OnInit {
 
   searchFocused() {
     this.searchIsFocused = true;
+    if (this.searchPhrase)
+      this.searchProduct();
   }
 
   searchUnfocused() {
     this.searchIsFocused = false;
+    this.searchResultList = [];
   }
 
   persistList() {
@@ -104,5 +116,67 @@ export class CollectionHeaderComponent implements OnInit {
 
   getKeyList(list) {
     return Object.keys(list);
+  }
+
+  searchProduct() {
+    if (!this.searchPhrase) {
+      this.searchResultList = [];
+      return;
+    }
+
+    this.searchWaiting = true;
+    this.httpService.post('search/Product', {
+      options: {
+        phrase: this.searchPhrase,
+      },
+      offset: 0,
+      limit: 5,
+    }).subscribe(
+      (data) => {
+        this.searchResultList = [];
+        if (data.data) {
+          data.data.forEach(el => {
+            this.searchResultList.push({
+              id: el._id,
+              name: el.name,
+              brand: this.dictionaryService.translateWord(el.brand.name),
+              type: this.dictionaryService.translateWord(el.product_type.name),
+              imgUrl: this.getProductThumbnail(el)
+            });
+          });
+        }
+        this.searchWaiting = false;
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  selectProduct(product) {
+    this.router.navigate([`/product/${product.id}`]);
+    this.searchIsFocused = false;
+    this.searchResultList = [];
+  }
+
+  getProductThumbnail(product) {
+    const img = (product.colors && product.colors.length) ?
+      product.colors.filter(el => el.image && el.image.thumbnail) :
+      null;
+    return img && img.length ?
+      this.sanitizer.bypassSecurityTrustResourceUrl([
+        HttpService.Host,
+        HttpService.PRODUCT_IMAGE_PATH,
+        product._id,
+        img[0]._id,
+        img[0].image.thumbnail
+      ].join('/')) :
+      'assets/nike-brand.jpg';
+  }
+
+  @HostListener('document:click', ['$event'])
+  public documentClick(e: any): void {
+    if (!e.path.some(el => el.id === 'search-area'))
+      this.searchUnfocused();
   }
 }

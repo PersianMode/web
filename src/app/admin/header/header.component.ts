@@ -12,12 +12,14 @@ import {links} from '../../shared/lib/links';
 })
 export class HeaderComponent implements OnInit {
   navLinks = [
-    {label: 'کلکسیون‌ها', path: '/agent/collections', active: false},
+    {label: 'کالکشن‌ها', path: '/agent/collections', active: false},
     {label: 'محصولات', path: '/agent/products', active: false},
+    {label: 'کمپین‌ها', path: '/agent/campaigns', active: false},
     {label: 'صفحه‌ها', path: '/agent/pages', active: false},
     {label: 'دیکشنری ', path: '/agent/dictionary', active: false},
+    {label: 'محصولات تمام شده ', path: '/agent/soldouts', active: false},
     {label: 'بارگذاری فایل', path: '/agent/uploads', active: false},
-    {label: 'سفارش ها', path: '/agent/orders', active: false},
+    {label: 'سفارش‌ها', path: '/agent/orders', active: false},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;
@@ -28,18 +30,18 @@ export class HeaderComponent implements OnInit {
   bufferValue: any;
   btnLabel = null;
   constructor(private authService: AuthService, private router: Router,
-              private progressService: ProgressService) {
+    private progressService: ProgressService) {
   }
 
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
-      (data) => {
-        this.isLoggedIn = data;
+      (data: any) => {
+        this.isLoggedIn = this.authService.userIsLoggedIn();
         this.btnLabel = data ? this.authService.userDetails.displayName : 'Logout';
 
         this.navLinks.forEach(link => {
           const foundLink = links.find(x => x.address === link.path);
-          link.active = this.authService.userDetails.accessLevel === foundLink.access;
+          link.active = foundLink.access.find(x => x === this.authService.userDetails.accessLevel) >= 0;
         });
 
       }

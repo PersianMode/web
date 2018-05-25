@@ -9,7 +9,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 export class OrderAddressComponent implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<OrderAddressComponent>,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {

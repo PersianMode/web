@@ -1,6 +1,8 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {FormControl} from '@angular/forms';
+import {AuthService} from '../../../../shared/services/auth.service';
+import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 
 @Component({
   selector: 'app-barcode-checker',
@@ -11,16 +13,17 @@ export class BarcodeCheckerComponent implements OnInit {
 
   isOK: boolean;
   barcodeCtrl: FormControl;
-
+  
   constructor(private dialogRef: MatDialogRef<BarcodeCheckerComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: any) {}
+    @Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService) {}
 
 
 
   ngOnInit() {
 
+    
     this.barcodeCtrl = new FormControl();
-   
+
     this.barcodeCtrl.valueChanges.debounceTime(150).subscribe(
       (res) => {
 

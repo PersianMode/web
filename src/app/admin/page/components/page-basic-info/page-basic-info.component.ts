@@ -21,6 +21,7 @@ export class PageBasicInfoComponent implements OnInit {
   originalForm: IPageInfo = null;
   form: FormGroup;
   collection: ICollection = null;
+  isTitleValid = false;
 
   anyChanges = false;
   upsertBtnShouldDisabled = false;
@@ -58,11 +59,13 @@ export class PageBasicInfoComponent implements OnInit {
   initForm() {
     this.form = new FormBuilder().group({
       address: [, [Validators.required]],
+      title: [],
       is_app: [false],
       content: []
 
     }, {});
   }
+
   initPageInfo() {
     if (!this.id) {
       return;
@@ -75,8 +78,8 @@ export class PageBasicInfoComponent implements OnInit {
         data = data[0];
         this.form.controls['address'].setValue(data.address);
         this.form.controls['is_app'].setValue(data.is_app);
+        this.form.controls['title'].setValue(data.page_info && data.page_info.title ? data.page_info.title : null);
         this.form.controls['content'].setValue((data.page_info && data.page_info.content) ? data.page_info.content : null);
-
         if (data.collection) {
           this.collection = {
             _id: data.collection._id,
@@ -99,17 +102,22 @@ export class PageBasicInfoComponent implements OnInit {
         this.upsertBtnShouldDisabled = false;
       }
     );
-
   }
 
   setCollection(collection: any) {
     this.collection = collection;
+    this.fieldChanged();
+  }
+
+  removeCollection() {
+    this.collection = null;
+    this.fieldChanged();
   }
 
   submitPage() {
-
     const data = {
       address: this.form.controls['address'].value,
+      title: this.form.controls['title'].value,
       is_app: this.form.controls['is_app'].value,
       collection_id: this.collection ? this.collection._id : null,
       content: this.form.controls['content'].value
@@ -134,19 +142,26 @@ export class PageBasicInfoComponent implements OnInit {
         this.anyChanges = false;
 
         this.id = result._id;
+        this.originalForm = result;
+        if (this.originalForm.collection) {
+          this.collection = {
+            _id: this.originalForm.collection._id,
+            name: this.originalForm.collection.name,
+          };
+        }
         this.searchPagePlacements();
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
       },
       (error) => {
-        this.snackBar.open(`Cannot ${ !this.id ? 'add' : 'update' } ' this page. Try again`, null, {
+        this.snackBar.open(`Cannot ${!this.id ? 'add' : 'update'} ' this page. Try again`, null, {
           duration: 3200,
         });
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
-        console.log(error);
+        console.error(error);
       }
     );
 
@@ -179,13 +194,18 @@ export class PageBasicInfoComponent implements OnInit {
         }
       },
       (err) => {
-        console.log('Error in dialog: ', err);
+        console.error('Error in dialog: ', err);
       }
     );
   }
 
-
   fieldChanged() {
+    if ((this.form.controls['is_app'].value || (this.form.controls['address'].value &&
+        (this.form.controls['address'].value === 'home' || this.form.controls['address'].value.includes('collection')))) ||
+      this.form.controls['title'].value)
+      this.isTitleValid = true;
+    else
+      this.isTitleValid = false;
     const previewContent = this.form.controls['content'].value;
     this.contentEl.nativeElement.innerHTML = '';
     if (previewContent)
@@ -198,23 +218,34 @@ export class PageBasicInfoComponent implements OnInit {
 
     Object.keys(this.form.controls).forEach(el => {
       let formValue = this.form.controls[el].value;
-      let originalValue = this.originalForm[el];
+      let originalValue = el.toLowerCase() === 'title' ? this.originalForm.page_info[el] : this.originalForm[el];
 
-      if (typeof formValue === 'string')
+      if (typeof formValue === 'string') {
         if (formValue && formValue.trim().length <= 0)
           formValue = null;
         else if (formValue)
           formValue = formValue.trim();
+      } else
+        formValue = formValue !== null && formValue !== undefined ? formValue : null;
 
-      if (typeof originalValue === 'string')
+      if (typeof originalValue === 'string') {
         if (originalValue && originalValue.trim().length <= 0)
           originalValue = null;
         else if (originalValue)
           originalValue = originalValue.trim();
+      } else
+        originalValue = originalValue !== null && originalValue !== undefined ? originalValue : null;
 
       if (formValue !== originalValue && (formValue !== '' || originalValue !== null))
         this.anyChanges = true;
     });
+
+    if (this.originalForm.collection && this.collection && this.collection._id !== this.originalForm.collection._id)
+      this.anyChanges = true;
+    else if (!this.originalForm.collection && this.collection)
+      this.anyChanges = true;
+    else if (this.originalForm.collection && !this.collection)
+      this.anyChanges = true;
   }
 
   searchPagePlacements() {
@@ -300,5 +331,4 @@ export class PageBasicInfoComponent implements OnInit {
         break;
     }
   }
-
 }

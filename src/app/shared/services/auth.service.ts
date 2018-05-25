@@ -7,9 +7,9 @@ import {SocketService} from './socket.service';
 @Injectable()
 export class AuthService {
   private defaultDisplayName = 'Anonymous user';
-  isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isLoggedIn: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isVerified: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  userDetails: any;
+  userDetails: any = {};
   warehouses: any[] = [];
 
 
@@ -25,17 +25,17 @@ export class AuthService {
       this.httpService.get((tempUrl.includes('agent') || tempUrl.includes('?preview') ? 'agent/' : '') + 'validUser').subscribe(
         (data) => {
           this.populateUserDetails(data);
-          this.isLoggedIn.next(!!data.username);
+          this.isLoggedIn.next(data);
           this.isVerified.next(!!data.is_verified);
 
           if (this.userDetails.warehouse_id) {
-            this.socketService.init(this.userDetails.warehouse_id);
+            this.socketService.init();
           }
           data.username ? resolve() : reject();
         },
         (err) => {
           this.populateUserDetails();
-          this.isLoggedIn.next(false);
+          this.isLoggedIn.next({});
           reject(err);
         });
 
@@ -63,7 +63,6 @@ export class AuthService {
         mobile_no: null,
         national_id: null,
         warehouse_id: null,
-        socket_token: null
       };
     }
   }
@@ -83,23 +82,23 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.httpService.post(
         (this.router.url.includes('agent') ? 'agent/' : '') + 'login', info).subscribe(
-        (data) => {
-          this.populateUserDetails(data);
-          this.isLoggedIn.next(true);
-          this.isVerified.next(data.is_verified ? data.is_verified : false);
-          if (this.userDetails.warehouse_id) {
-            this.socketService.init(this.userDetails.warehouse_id);
+          (data) => {
+            this.populateUserDetails(data);
+            this.isLoggedIn.next(data);
+            this.isVerified.next(data.is_verified ? data.is_verified : false);
+            if (this.userDetails.warehouse_id) {
+              this.socketService.init();
+            }
+            resolve();
+          },
+          (err) => {
+            this.isLoggedIn.next({});
+            this.isVerified.next(false);
+            console.error('Error in login: ', err);
+            this.populateUserDetails();
+            reject(err);
           }
-          resolve();
-        },
-        (err) => {
-          this.isLoggedIn.next(false);
-          this.isVerified.next(false);
-          console.error('Error in login: ', err);
-          this.populateUserDetails();
-          reject(err);
-        }
-      );
+        );
     });
   }
 
@@ -108,7 +107,7 @@ export class AuthService {
       this.httpService.get('logout').subscribe(
         (data) => {
           // const rt = (this.router.url.includes('admin') ? 'admin/' : '') + 'login';
-          this.isLoggedIn.next(false);
+          this.isLoggedIn.next({});
           this.isVerified.next(data.is_verified ? data.is_verified : false);
           this.populateUserDetails();
           // this.router.navigate([rt]);
@@ -128,5 +127,11 @@ export class AuthService {
     this.httpService.get('warehouse/all').subscribe(res => {
       this.warehouses = res;
     });
+  }
+
+
+  public userIsLoggedIn(): boolean {
+    const currentState = this.isLoggedIn.getValue();
+    return currentState ? currentState && currentState.username : false;
   }
 }

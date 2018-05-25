@@ -19,7 +19,11 @@ import {
   MatOptionModule,
   MatAutocompleteModule,
   MatCheckboxModule,
-  MatStepperModule, MatRadioModule
+  MatStepperModule, MatRadioModule,
+  MatSnackBarModule,
+  MatProgressSpinnerModule,
+  MatListModule,
+  MatSliderModule
 } from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';
@@ -36,6 +40,7 @@ import {RouterModule} from '@angular/router';
 import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 import {AuthGuard} from './auth.guard';
 import {OrderLinesComponent} from './profile/components/order-lines/order-lines.component';
+import { ForgotPasswordComponent } from './login/components/forgot-password/forgot-password.component';
 
 @NgModule({
   imports: [
@@ -60,7 +65,11 @@ import {OrderLinesComponent} from './profile/components/order-lines/order-lines.
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
     DpDatePickerModule,
+    MatListModule,
+    MatSliderModule,
     SharedModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
@@ -74,6 +83,7 @@ import {OrderLinesComponent} from './profile/components/order-lines/order-lines.
     MobileHeaderComponent,
     SiteComponent,
     LoginComponent,
+    ForgotPasswordComponent,
     OauthHandlerComponent,
     RegisterComponent,
     UpsertAddressComponent,
