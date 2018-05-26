@@ -1013,6 +1013,13 @@ p {
   overflow-y: auto;
 }
 
+.selected-to-revert {
+  background-color: #263f66 !important;
+}
+
+.selected-to-revert-img {
+  border: #263f66 dashed thick !important;
+}
 .mat-list-text {
   padding-left: 20px !important;
   font-family: iranyekan, sans-serif;

@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
-  MatSnackBarModule, MatTabsModule, MatTooltipModule
+  MatSnackBarModule, MatTabsModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {PageRouting} from './page.routing';
@@ -68,6 +68,8 @@ import {AppFeedPlacementComponent} from './components/app-feed-placement/app-fee
     ColorPickerModule,
     MatTooltipModule,
     MatExpansionModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   entryComponents: [
     EditPanelComponent,
