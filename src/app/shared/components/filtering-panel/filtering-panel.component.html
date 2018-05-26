@@ -15,7 +15,7 @@
       <div class="checkbox-title">{{fo.name_fa}}</div>
     </mat-expansion-panel-header>
     <div *ngFor="let v of filter_options[i].values;let j=index" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
-      <mat-checkbox *ngIf="fo.name !== 'color' && fo.name !== 'size' && fo.name !=='price'"
+      <mat-checkbox *ngIf="fo.name !== 'color' && fo.name !== 'size' && fo.name !=='price' && fo.name !== 'discount'"
                     (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
         <span class="check-box-text">{{filter_options[i].values_fa[j]}}</span>
       </mat-checkbox>
@@ -23,6 +23,10 @@
     <div *ngIf="fo.name==='price'">
       <p-slider [(ngModel)]="rangeValues" [range]="true" [min]="minPrice" [max]="maxPrice" (onChange)="formatPrices()" (onSlideEnd)="priceRangeChange()"></p-slider>
       <span style="float:left">{{selectedMinPriceFormatted}} تومان</span><span>{{selectedMaxPriceFormatted}} تومان</span>
+    </div>
+    <div *ngIf="fo.name === 'discount'">
+      <p-slider [(ngModel)]="discountRangeValues" [range]="true" [min]="minDiscount" [max]="maxDiscount" (onChange)="formatDiscount()" (onSlideEnd)="discountRangeChange()"></p-slider>
+      <span style="float: left">{{selectedMinDiscountFormatted}} درصد</span><span>{{selectedMaxDiscountFormatted}} درصد</span>
     </div>
     <span *ngIf="fo.name === 'color'">
       <span *ngFor="let v of filter_options[i].values; let j = index" class="color-span" (click)="getValue(fo.name, v)"
