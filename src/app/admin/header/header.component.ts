@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit {
     {label: 'کمپین‌ها', path: '/agent/campaigns', active: false},
     {label: 'صفحه‌ها', path: '/agent/pages', active: false},
     {label: 'دیکشنری ', path: '/agent/dictionary', active: false},
+    {label: 'محصولات تمام شده ', path: '/agent/soldouts', active: false},
     {label: 'بارگذاری فایل', path: '/agent/uploads', active: false},
     {label: 'سفارش‌ها', path: '/agent/orders', active: false},
   ];
