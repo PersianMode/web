@@ -218,6 +218,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
     this.is_searching = true;
     this.searchProductList = [];
     if (!this.searchPhrase) {
+      this.searchCollectionList = [];
       return;
     }
 
@@ -255,6 +256,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   searchCollection() {
     this.searchCollectionList = [];
     if (!this.searchPhrase) {
+      this.searchProductList = [];
       return;
     }
     this.httpService.post('search/Collection', {
