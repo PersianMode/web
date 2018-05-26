@@ -69,7 +69,6 @@ export class ProductService {
     const size = Array.from(new Set([...products.filter(r => r.product_type !== 'FOOTWEAR').map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
 
-    //extract shoes size
     let shoesSizeMen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
       .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'MENS')
       .map(r => Object.keys(r.sizesInventory))

@@ -109,6 +109,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       return this.dict.translateWord(size);
     return this.dict.USToEU(size, 'WOMENS');
   }
+
   getValue(name, value) {
     this.isChecked[name][value] = !this.isChecked[name][value];
     this.expanded[name] = true;
