@@ -6,6 +6,8 @@ import {DictionaryService} from './dictionary.service';
 import {imagePathFixer} from '../lib/imagePathFixer';
 import {discountCalc} from '../lib/discountCalc';
 import {productColorMap} from '../lib/colorNameMap';
+import {resolve} from 'path';
+import {reject} from 'q';
 
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
@@ -225,10 +227,10 @@ export class ProductService {
           .filter(r => r.product_color_id === color._id)
           .map(r => {
             const inventory = r.inventory.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0);
-              if (!data.sizesInventory[r.size]) {
-                data.sizesInventory[r.size] = {};
-              }
-              data.sizesInventory[r.size][color._id] = inventory;
+            if (!data.sizesInventory[r.size]) {
+              data.sizesInventory[r.size] = {};
+            }
+            data.sizesInventory[r.size][color._id] = inventory;
             return {
               value: r.size,
               disabled: inventory <= 0,
@@ -240,7 +242,37 @@ export class ProductService {
     });
   }
 
-  loadProducts(collection_id) {
+  updateProducts(updatedProducts) {
+    updatedProducts.forEach(product => {
+      const found = this.products.findIndex(r => r._id === product._id);
+      this.enrichProductData(product);
+      if (found >= 0) {
+        this.products[found] = product;
+      };
+    })
+  }
+
+  loadProducts(productIds) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('product/getMultiple', {productIds})
+        .subscribe(data => {
+          if (data) {
+            data.forEach(product => {
+              const found = this.products.findIndex(r => r._id === product._id);
+              this.enrichProductData(product);
+              if (found >= 0) {
+                this.products[found] = product;
+              };
+            })
+          }
+          resolve(data)
+
+        });
+    });
+
+  }
+
+  loadCollectionProducts(collection_id) {
     this.sortInput = null;
     this.httpService.get('collection/product/' + collection_id)
       .subscribe(

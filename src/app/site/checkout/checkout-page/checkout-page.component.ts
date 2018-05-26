@@ -4,6 +4,8 @@ import {CheckoutService} from '../../../shared/services/checkout.service';
 import {HttpService} from '../../../shared/services/http.service';
 import {CartService} from '../../../shared/services/cart.service';
 import {TitleService} from '../../../shared/services/title.service';
+import {ProductService} from '../../../shared/services/product.service';
+import {MatDialog} from '@angular/material';
 
 @Component({
   selector: 'app-checkout-page',
@@ -18,9 +20,21 @@ export class CheckoutPageComponent implements OnInit {
   balanceValue = 0;
   loyaltyPoint = 0;
   paymentType = PaymentType;
-  disabled = false;
+  disabled: boolean = false;
+  changeMessage: string = '';
 
-  constructor(private checkoutService: CheckoutService, private httpService: HttpService, private cartService: CartService, private titleService: TitleService) {
+  soldOuts: any[];
+  discountChanges: any[];
+  priceChanges: any[];
+
+  hasChangeError: boolean = false;
+
+
+  constructor(private checkoutService: CheckoutService,
+    private httpService: HttpService,
+    private cartService: CartService,
+    private titleService: TitleService,
+    private productService: ProductService) {
   }
 
   ngOnInit() {
@@ -34,7 +48,31 @@ export class CheckoutPageComponent implements OnInit {
         }
       }
     );
-    this.checkoutService.finalCheck();
+    this.checkoutService.finalCheck().subscribe(res => {
+
+      this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
+      this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
+      this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
+
+      if ((this.soldOuts && this.soldOuts.length) ||
+        (this.discountChanges && this.discountChanges.length) ||
+        (this.priceChanges && this.priceChanges.length)) {
+
+        this.hasChangeError = this.soldOuts && this.soldOuts.length;
+        if (this.hasChangeError)
+          this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
+        if (this.discountChanges && this.discountChanges.length)
+          this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
+        if (this.priceChanges && this.priceChanges.length)
+          this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
+
+        this.productService.updateProducts(res);
+
+      }
+
+    }, err => {
+
+    });
     this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = res.balance;
@@ -44,7 +82,7 @@ export class CheckoutPageComponent implements OnInit {
         console.error('Cannot get balance and loyalty points of customer: ', err);
       });
 
-    this.checkoutService.isValid$.subscribe(r => this.disabled = !r);
+    this.checkoutService.isValid$.subscribe(r => this.disabled = (!r && !this.soldOuts));
   }
 
   changePaymentType(data) {
