@@ -60,6 +60,9 @@ export class AppSubMenuComponent implements OnInit {
     if (!this.dragulaService.find(this.itemBagName))
       this.dragulaService.setOptions(this.itemBagName, {
         direction: 'vertical',
+        moves: () => {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe(value => {
