@@ -29,6 +29,11 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   maxPrice;
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
+  discountRangeValues: any;
+  minDiscount;
+  maxDiscount;
+  selectedMinDiscountFormatted = '';
+  selectedMaxDiscountFormatted = '';
 
   filter_options$: any;
 
@@ -37,7 +42,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.filter_options$ =  this.productService.filtering$.subscribe(r => {
+    this.filter_options$ = this.productService.filtering$.subscribe(r => {
       this.filter_options = r;
       this.filter_options.forEach(el => {
         const found = this.current_filter_state.find(cfs => cfs.name === el.name);
@@ -60,6 +65,17 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
         this.rangeValues = [prices.values[0], prices.values[1]];
         this.formatPrices();
+      }
+
+      const discount = r.find(fo => fo.name === 'discount');
+      if (discount && discount.values.length) {
+        if (!this.minDiscount)
+          this.minDiscount = discount.values[0];
+        if (!this.maxDiscount)
+          this.maxDiscount = discount.values[1];
+
+        this.discountRangeValues = [discount.values[0], discount.values[1]];
+        this.formatDiscount();
       }
 
       for (const col in this.isChecked.color) {
@@ -92,7 +108,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.formatPrices();
     this.productService.applyFilters(this.current_filter_state, 'price');
     this.expanded.price = true;
-
   }
 
   getValue(name, value) {
@@ -151,8 +166,19 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     }
     this.sortedByChange.emit(this.sortedBy);
   }
+
   ngOnDestroy(): void {
     this.filter_options$.unsubscribe();
   }
 
+  formatDiscount() {
+    [this.selectedMinDiscountFormatted, this.selectedMaxDiscountFormatted] = this.discountRangeValues.map(priceFormatter);
+  }
+
+  discountRangeChange() {
+    this.current_filter_state.find(r => r.name === 'discount').values = this.discountRangeValues;
+    this.formatDiscount();
+    this.productService.applyFilters(this.current_filter_state, 'discount');
+    this.expanded.discount = true;
+  }
 }
