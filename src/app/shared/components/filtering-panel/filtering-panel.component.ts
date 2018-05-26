@@ -27,9 +27,10 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   rangeValues: any;
   minPrice;
   maxPrice;
-  isEU = false;
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
+  isEU = false;
+  isEUSubescriber: any;
 
   filter_options$: any;
 
@@ -38,6 +39,8 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.isEU = this.productService.collectionIsEU;
+    this.isEUSubescriber = this.productService.collectionIsEUObject.subscribe(value => this.isEU = value);
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
       this.filter_options = r;
       this.filter_options.forEach(el => {
@@ -96,12 +99,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   }
 
-  changeSizeType() {
-    this.isEU = !this.isEU;
-  }
-
-  logMethod(ins){
-    console.log(ins);
+  changeSizeType(fo) {
+    this.isChecked[fo]=[];
+    this.productService.changeCollectionIsEU(this.current_filter_state);
   }
 
   shoesSize(size) {
@@ -109,7 +109,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       return this.dict.translateWord(size);
     return this.dict.USToEU(size, 'WOMENS');
   }
-
   getValue(name, value) {
     this.isChecked[name][value] = !this.isChecked[name][value];
     this.expanded[name] = true;
@@ -169,6 +168,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.filter_options$.unsubscribe();
+    this.isEUSubescriber.unsubscribe();
   }
 
 }

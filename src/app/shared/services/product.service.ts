@@ -50,6 +50,8 @@ export class ProductService {
   product$: ReplaySubject<any> = new ReplaySubject<any>();
   collectionTags: any = {};
   collectionTagsAfterFilter: any = {};
+  collectionIsEU = false;
+  collectionIsEUObject: ReplaySubject<boolean> = new ReplaySubject<boolean>();
 
   private sortInput;
   private collectionId;
@@ -66,7 +68,9 @@ export class ProductService {
 
     const size = Array.from(new Set([...products.filter(r => r.product_type !== 'FOOTWEAR').map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
-    const shoesSizeMen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
+
+    //extract shoes size
+    let shoesSizeMen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
       .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'MENS')
       .map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
@@ -74,6 +78,14 @@ export class ProductService {
       .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'WOMENS')
       .map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
+
+    if (this.collectionIsEU) {
+      shoesSizeMen.forEach((v, key) => shoesSizeMen[key] = this.dict.USToEU(v, 'MENS'));
+      shoesSizeWomen.forEach((v, key) => shoesSizeWomen[key] = this.dict.USToEU(v, 'WOMENS'));
+    }
+    let shoesSize = new Set([].concat(shoesSizeMen, shoesSizeWomen));
+    // let shoesSize = new Set([].concat(shoesSizeMen, shoesSizeWomen));
+
     const color = Array.from(new Set([...products.map(productColorMap)
       .reduce((x, y) => x.concat(y), []).reduce((x, y) => x.concat(y), [])]));
 
@@ -86,8 +98,6 @@ export class ProductService {
       const maxPrice = Math.max(...price);
       price = [minPrice, maxPrice];
     }
-    const shoesSize = {mens: shoesSizeMen, womens: shoesSizeWomen};
-    // const shoesSize = shoesSizeMen;
     tags = {brand, type, price, size, shoesSize, color};
 
     if (trigger && trigger !== 'price') {
@@ -107,31 +117,18 @@ export class ProductService {
     } else {
       this.collectionTags = tags;
     }
-    console.log(tags);
     const emittedValue = [];
     for (const name in tags) {
       if (tags.hasOwnProperty(name)) {
         const found = filters.find(r => r.name === name);
-        if (name !== 'shoesSize') {
-          const values = Array.from(tags[name]);
-          if (values.length > 1 || (found && found.values.length)) {
-            emittedValue.push({
-              name: name,
-              name_fa: this.dict.translateWord(name),
-              values,
-              values_fa: values.map((r: string | number) => name !== 'color' ? this.dict.translateWord(r) : this.dict.convertColor(r + ''))
-            });
-          }
-        } else {
-          const values = tags['shoesSize'];
-          console.log(values);
-          if (values.length > 1 || (found && found.values.length)) {
-            emittedValue.push({
-              name: name,
-              name_fa: this.dict.translateWord(name),
-              values,
-            });
-          }
+        const values = Array.from(tags[name]);
+        if (values.length > 1 || (found && found.values.length)) {
+          emittedValue.push({
+            name: name,
+            name_fa: this.dict.translateWord(name),
+            values,
+            values_fa: values.map((r: string | number) => name !== 'color' ? this.dict.translateWord(r) : this.dict.convertColor(r + ''))
+          });
         }
       }
     }
@@ -167,8 +164,12 @@ export class ProductService {
           this.filteredProducts.forEach((p, pi) => {
             if (p.product_type !== 'FOOTWEAR')
               return this.filteredProducts[pi].instances = p.instances;
+            if (!this.collectionIsEU)
+              return this.filteredProducts[pi].instances = p.instances
+                .filter(i => Array.from(f.values).includes(i.size));
+            const gender = p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase();
             return this.filteredProducts[pi].instances = p.instances
-              .filter(i => Array.from(f.values).includes(i.size))
+              .filter(i => Array.from(f.values).includes(this.dict.USToEU(i.size, gender)));
           });
           this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
             .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
@@ -259,10 +260,10 @@ export class ProductService {
           .filter(r => r.product_color_id === color._id)
           .map(r => {
             const inventory = r.inventory.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0);
-              if (!data.sizesInventory[r.size]) {
-                data.sizesInventory[r.size] = {};
-              }
-              data.sizesInventory[r.size][color._id] = inventory;
+            if (!data.sizesInventory[r.size]) {
+              data.sizesInventory[r.size] = {};
+            }
+            data.sizesInventory[r.size][color._id] = inventory;
             return {
               value: r.size,
               disabled: inventory <= 0,
@@ -337,5 +338,15 @@ export class ProductService {
       }
     }
     this.productList$.next(sortedProducts);
+  }
+
+  changeCollectionIsEU(filterState) {
+    filterState.forEach((e, key) => {
+      if (e.name === 'shoesSize')
+        filterState[key].values = [];
+    });
+    this.collectionIsEU = !this.collectionIsEU;
+    this.collectionIsEUObject.next(this.collectionIsEU);
+    this.applyFilters(filterState, '');
   }
 }
