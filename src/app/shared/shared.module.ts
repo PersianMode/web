@@ -5,14 +5,13 @@ import {
   MatInputModule,
   MatMenuModule,
   MatOptionModule, MatRadioModule, MatSelectModule, MatStepperModule,
-  MatToolbarModule, MatSnackBarModule,
+  MatToolbarModule, MatSnackBarModule, MatSlideToggleModule, MatButtonToggleModule,
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SearchFieldsComponent} from './components/search-fields/search-fields.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {AbstractSearchComponent} from './components/abstract-search/abstract-search.component';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {RemovingConfirmComponent} from './components/removing-confirm/removing-confirm.component';
 import {BidiModule} from '@angular/cdk/bidi';
 import {PanelsComponent} from './components/panels/panels.component';
@@ -24,6 +23,7 @@ import {AddressTableComponent} from './components/address-table/address-table.co
 import {DobComponent} from './components/dob/dob.component';
 import {DragulaModule} from 'ng2-dragula';
 import {LogoHeaderComponent} from './components/logo-header/logo-header.component';
+import {SizePickerComponent} from './components/size-picker/size-picker.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +37,7 @@ import {LogoHeaderComponent} from './components/logo-header/logo-header.componen
     AddressTableComponent,
     DobComponent,
     LogoHeaderComponent,
+    SizePickerComponent,
   ],
   imports: [
     MatSlideToggleModule,
@@ -63,6 +64,7 @@ import {LogoHeaderComponent} from './components/logo-header/logo-header.componen
     FileUploadModule,
     MatStepperModule,
     MatSnackBarModule,
+    MatButtonToggleModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),
@@ -79,6 +81,7 @@ import {LogoHeaderComponent} from './components/logo-header/logo-header.componen
     AddressTableComponent,
     DobComponent, MatSlideToggleModule,
     LogoHeaderComponent,
+    SizePickerComponent
   ]
 })
 export class SharedModule {

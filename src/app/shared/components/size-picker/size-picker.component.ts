@@ -40,6 +40,14 @@ export class SizePickerComponent implements OnInit {
     this.setProductSize();
   }
 
+  @Input()
+  set selectedSize(value) {
+    if (value)
+      this.val = value;
+  }
+
+  @Input() displayTitle = true;
+
   @Output('value') value = new EventEmitter();
   val = '';
 
