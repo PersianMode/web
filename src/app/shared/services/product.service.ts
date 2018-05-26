@@ -74,7 +74,7 @@ export class ProductService {
       .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'MENS')
       .map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
-    const shoesSizeWomen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
+    let shoesSizeWomen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
       .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'WOMENS')
       .map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
@@ -83,8 +83,8 @@ export class ProductService {
       shoesSizeMen.forEach((v, key) => shoesSizeMen[key] = this.dict.USToEU(v, 'MENS'));
       shoesSizeWomen.forEach((v, key) => shoesSizeWomen[key] = this.dict.USToEU(v, 'WOMENS'));
     }
-    let shoesSize = new Set([].concat(shoesSizeMen, shoesSizeWomen));
-    // let shoesSize = new Set([].concat(shoesSizeMen, shoesSizeWomen));
+
+    let shoesSize = new Set([].concat(shoesSizeWomen, shoesSizeMen));
 
     const color = Array.from(new Set([...products.map(productColorMap)
       .reduce((x, y) => x.concat(y), []).reduce((x, y) => x.concat(y), [])]));
