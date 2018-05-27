@@ -58,3 +58,12 @@
   margin-left: 5px;
   margin-right: 5px;
 }
+
+.address-field {
+  margin-top: 30px;
+}
+
+.text-field {
+  padding-top: 26px;
+  padding-right: 30px;
+}

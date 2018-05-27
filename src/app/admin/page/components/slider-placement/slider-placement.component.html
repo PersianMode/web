@@ -4,28 +4,25 @@
                     [pos]="pos"
                     (imageSettingsChanged)="imageSettingsChanged($event)"></app-slider-preview>
 <div class="bottom-part">
-  <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
-       fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
-    <div fxFlex="50" style="width: 100%">
-      <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column">
-        <div fxFlex="65" style="width: 100%">
+  <div fxLayoutAlign="center center">
+    <div class="full-width">
+      <div fxLayout="column">
+        <div class="full-width">
           <mat-input-container class="input-field">
             <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
                    [(ngModel)]="upsertSlider.text"
                    (ngModelChange)="changeField()"/>
           </mat-input-container>
         </div>
-        <div fxFlex="50" fxLayout="row">
-          <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true"
+        <div fxLayout="row" class="address-field">
+          <app-suggestion fxFlex="50" [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true" [default]="setClear"
                           (add)="upsertSlider.href=$event.address" (field)="upsertSlider.href=$event">
           </app-suggestion>
-          <div fxFlex="50" *ngIf="upsertSlider.href">
-            <h3  fxFlex="30" dir="ltr" style="text-align:center">{{upsertSlider.href}}</h3>
-          </div>
+          <div fxFlex="50" class="text-field" *ngIf="upsertSlider.href"> {{upsertSlider.href}} </div>
         </div>
       </div>
     </div>
-    <div fxFlex="20" class="button-area">
+    <div class="button-area">
       <button mat-mini-fab color="primary" (click)="modifyItem(upsertSlider.isEdit)"
               [disabled]="sliderApplyDisability()">
         <mat-icon>

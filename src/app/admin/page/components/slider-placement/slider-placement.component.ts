@@ -15,7 +15,7 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 })
 export class SliderPlacementComponent implements OnInit {
   @Input() pageId = null;
-
+  setClear: boolean = false;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -97,15 +97,17 @@ export class SliderPlacementComponent implements OnInit {
   changeField() {
     const text = this.upsertSlider ? this.upsertSlider.text.trim().toLowerCase() : '';
     const href = this.upsertSlider ? this.upsertSlider.href.trim().toLowerCase() : '';
-
     if (this.upsertSlider && this.upsertSlider.isEdit && text && href &&
-      this.sliders.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1)
+      this.sliders.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1){
       this.sliderChanged = true;
-    else
-      this.sliderChanged = false;
+      this.setClear = false;
+    }
+  else
+    this.sliderChanged = false;
   }
 
   clearFields() {
+    this.setClear = true;
     this.upsertSlider = {
       text: '',
       href: '',

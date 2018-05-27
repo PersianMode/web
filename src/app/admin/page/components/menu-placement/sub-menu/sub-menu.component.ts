@@ -23,6 +23,7 @@ enum ItemArea {
 export class SubMenuComponent implements OnInit {
   @Input() pageId = null;
   insertedAddress: string;
+  setClear = false;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -469,6 +470,8 @@ export class SubMenuComponent implements OnInit {
     this.subMenuForm.reset();
     this.selectedItem = null;
     this.subMenuForm.controls['area'].enable();
+    this.setClear = true;
+    this.insertedAddress = '';
   }
 
   fieldChanged() {

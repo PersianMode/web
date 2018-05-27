@@ -10,7 +10,7 @@
             </mat-input-container>
           </div>
           <div fxLayout="row" class="address-field">
-            <app-suggestion fxFlex="50" [name]="'Page'" [placeholder]="'آدرس'" [hasReturn]="true"
+            <app-suggestion fxFlex="50" [name]="'Page'" [placeholder]="'آدرس'" [hasReturn]="true"  [default]="setClear"
                  (add)="insertedAddress=$event.address" (field)="insertedAddress=$event" >
             </app-suggestion>
             <div fxFlex="50" class="text-field" *ngIf="insertedAddress">{{ insertedAddress }}</div>

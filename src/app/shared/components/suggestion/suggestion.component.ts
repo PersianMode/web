@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
 // import {Observable} from "rxjs/Observable";
@@ -6,18 +6,20 @@ import {HttpService} from '../../services/http.service';
 import 'rxjs/add/operator/debounceTime';
 import {ProgressService} from '../../services/progress.service';
 import {TargetEnum} from '../../enum/target.enum';
+import {log} from 'util';
 
 @Component({
   selector: 'app-suggestion',
   templateUrl: './suggestion.component.html',
   styleUrls: ['./suggestion.component.css']
 })
-export class SuggestionComponent implements OnInit {
+export class SuggestionComponent implements OnInit, OnChanges {
   @Input() name = '';
   @Input() placeholder: string = null;
   @Input() fieldName = '';
   @Input() currentIds: number[] = [];
   @Input() hasReturn = false;
+  @Input() default: boolean;
 
   @Output() add = new EventEmitter<any>();
   @Output() field = new EventEmitter<any>();
@@ -48,6 +50,12 @@ export class SuggestionComponent implements OnInit {
         this.filteredItems = [];
       }
     );
+  }
+
+  ngOnChanges() {
+    if (this.default) {
+      this.suggestionCtrl.setValue('');
+    }
   }
 
   addItem(data) {

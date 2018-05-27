@@ -17,7 +17,7 @@
           </mat-select>
         </div>
         <div>
-          <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'"
+          <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [default]="setClear"
                           (add)="urlAddress=$event.address" (field)="urlAddress=$event" >
           </app-suggestion>
           <div fxFlex="50" *ngIf="urlAddress">

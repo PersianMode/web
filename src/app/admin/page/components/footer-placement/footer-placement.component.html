@@ -1,19 +1,18 @@
 <div class="inner-placement-div">
-  <div>
+  <div fxLayout="column">
     <label class="part-title">لینک‌های متنی</label>
-    <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
-      fxLayoutAlign.xs="center center">
-      <div fxFlex="25" class="full-width input-item">
-        <mat-input-container class="full-width input-item persian-field">
-          <input matInput type="text" class="input-item" placeholder="متن" [(ngModel)]="selectedTextLink.text" (ngModelChange)="checkTextchanges()"
-          />
+    <div fxLayout="column">
+      <div class="full-width" >
+        <mat-input-container class="input-field">
+          <input matInput type="text" class="persian-field menu-field" placeholder="متن" [(ngModel)]="selectedTextLink.text"
+                 (ngModelChange)="checkTextchanges()"/>
         </mat-input-container>
       </div>
-      <div fxFlex="25" class="full-width input-item">
-        <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true"
+      <div fxLayout="row" class="address-field">
+        <app-suggestion fxFlex="50"  [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true" [default]="setClear"
                         (add)="selectedTextLink.href=$event.address" (field)="selectedTextLink.href=$event" >
         </app-suggestion>
-        <div fxFlex="50" *ngIf="selectedTextLink.href">{{selectedTextLink.href}}</div>
+        <div fxFlex="50"  class="text-field" *ngIf="selectedTextLink.href">{{selectedTextLink.href}}</div>
       </div>
       <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
         <mat-checkbox [(ngModel)]="selectedTextLink.is_header" (ngModelChange)="checkTextchanges()">
@@ -21,7 +20,7 @@
           <span *ngIf="!selectedTextLink.is_header">زیر عنوان</span>
         </mat-checkbox>
       </div>
-      <div fxFlex="25">
+      <div fxFlex="35">
         <button mat-mini-fab color="primary" [disabled]="!textAnyChanges" (click)="modifyTextLink()">
           <mat-icon>
             <i class="material-icons" *ngIf="selectedTextLink._id">create</i>

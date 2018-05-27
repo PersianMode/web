@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {IPlacement} from '../../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -14,6 +14,7 @@ import {duration} from 'jalali-moment';
   styleUrls: ['./top-menu.component.css']
 })
 export class TopMenuComponent implements OnInit {
+  setClear: boolean = false;
   @Input() pageId = null;
 
   @Input()
@@ -58,7 +59,6 @@ export class TopMenuComponent implements OnInit {
     });
   }
 
-
   removeItem() {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
@@ -99,11 +99,13 @@ export class TopMenuComponent implements OnInit {
         }
       });
   }
+
   openSnackBar(message: string) {
     this.sncakBar.open(message, null, {
       duration: 2000,
     });
   }
+
   selectItem(value) {
     this.upsertTopMenuItem = {
       text: value.info.text,
@@ -148,7 +150,7 @@ export class TopMenuComponent implements OnInit {
   }
 
   modifyItem(isEdit) {
-    if (!this.upsertTopMenuItem.href) {
+    if (!this.upsertTopMenuItem.href || this.upsertTopMenuItem.href.length === 1) {
       this.openSnackBar('وارد کردن آدرس برای صفحه الزامی است');
       return;
     }
@@ -212,6 +214,7 @@ export class TopMenuComponent implements OnInit {
   }
 
   clearFields() {
+    this.setClear = true;
     this.upsertTopMenuItem = {
       text: '',
       href: '',
@@ -220,7 +223,6 @@ export class TopMenuComponent implements OnInit {
       section: '',
       isEdit: false,
     };
-
     this.itemSelected.emit(null);
   }
 
@@ -228,9 +230,10 @@ export class TopMenuComponent implements OnInit {
     const text = this.upsertTopMenuItem.text.trim().toLowerCase();
     const href = this.upsertTopMenuItem.href ? this.upsertTopMenuItem.href.trim().toLowerCase() : '';
     if (this.upsertTopMenuItem.isEdit && text && href &&
-      this.topMenuItems.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1)
+      this.topMenuItems.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1) {
       this.topMenuChanged = true;
-    else
+      this.setClear = false;
+    } else
       this.topMenuChanged = false;
   }
 

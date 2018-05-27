@@ -16,7 +16,8 @@ import {DomSanitizer} from '@angular/platform-browser';
   styleUrls: ['./app-feed-placement.component.css']
 })
 export class AppFeedPlacementComponent implements OnInit {
-  insertedAddress = '#';
+  insertedAddress = '1';
+  setClear: boolean = false;
   @Input() pageId = null;
   @Input()
   set placements(value: IPlacement[]) {
@@ -183,6 +184,7 @@ export class AppFeedPlacementComponent implements OnInit {
   }
 
   clearFields() {
+    this.setClear = true;
     this.feedForm.reset();
     this.selectedItem = null;
   }
@@ -217,6 +219,7 @@ export class AppFeedPlacementComponent implements OnInit {
   }
 
   private fieldChanged() {
+    this.setClear = false;
     if (!this.selectedItem) {
       this.anyChanges = !!this.imageUrlAddress;
       return;

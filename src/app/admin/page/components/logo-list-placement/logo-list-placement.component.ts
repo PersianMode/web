@@ -14,7 +14,7 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 })
 export class LogoListPlacementComponent implements OnInit {
   @Input() pageId = null;
-
+  setClear = false;
   @Input()
   set placements(value) {
     if (value) {
@@ -93,6 +93,7 @@ export class LogoListPlacementComponent implements OnInit {
   }
 
   clearFields() {
+    this.setClear = true;
     this.upsertLogo = {
       text: '',
       href: '',
@@ -120,6 +121,7 @@ export class LogoListPlacementComponent implements OnInit {
       const topChange = (logoStyle && logoStyle.top || 0) === upsertStyle.top;
       const rightChange = (logoStyle && logoStyle.right || 0) === upsertStyle.right;
       this.imageChanged = !(widthChange && heightChange && topChange && rightChange);
+      this.setClear = false;
     } else {
       this.imageChanged = false;
     }
