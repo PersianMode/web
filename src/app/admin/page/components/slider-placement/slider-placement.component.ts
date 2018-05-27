@@ -7,6 +7,7 @@ import {Pos} from './slider-preview/slider-preview.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-slider-placement',
@@ -16,6 +17,7 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 export class SliderPlacementComponent implements OnInit {
   @Input() pageId = null;
   setClear: boolean = false;
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -50,15 +52,20 @@ export class SliderPlacementComponent implements OnInit {
   bagName = 'slider-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private sanitizer: DomSanitizer,
-              private dialog: MatDialog) {
+    private progressService: ProgressService, private sanitizer: DomSanitizer,
+    private dialog: MatDialog, private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
     this.clearFields();
 
     if (!this.dragulaService.find(this.bagName))
-      this.dragulaService.setOptions(this.bagName, {direction: 'vertical',});
+      this.dragulaService.setOptions(this.bagName, {
+        direction: 'vertical',
+        moves: () => {
+          return this.canEdit;
+        }
+      });
 
     this.dragulaService.dropModel.subscribe(value => {
       if (this.bagName === value[0])
@@ -103,10 +110,10 @@ export class SliderPlacementComponent implements OnInit {
       this.setClear = false;
     }
   else
-    this.sliderChanged = false;
+     this.sliderChanged = false;
   }
 
-  clearFields() {
+  clearFields(){
     this.setClear = true;
     this.upsertSlider = {
       text: '',
@@ -152,9 +159,7 @@ export class SliderPlacementComponent implements OnInit {
     };
     this.pos = Object.assign({}, this.upsertSlider.style);
   }
-  removeAddress() {
-    this.upsertSlider.href = null;
-  }
+
   removeItem() {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',

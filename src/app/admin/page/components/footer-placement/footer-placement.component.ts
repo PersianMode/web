@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, HostListener} from '@angular/core';
 import {HttpService} from '../../../../shared/services/http.service';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {DragulaService} from 'ng2-dragula';
@@ -7,6 +7,7 @@ import {FormGroup, FormBuilder} from '@angular/forms';
 import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-footer-placement',
@@ -16,13 +17,25 @@ import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
 export class FooterPlacementComponent implements OnInit {
   @Input() pageId = null;
   setClear: boolean = false;
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value.length) {
       this.arrangeTextLinkItems(value.filter(el => el.variable_name.toLowerCase() === 'site_link'));
 
       this.socialLinkItems = [];
-      this.socialLinkItems = value.filter(el => el.variable_name.toLowerCase() === 'social_link');
+      this.socialLinkItems = value
+        .filter(el => el.variable_name.toLowerCase() === 'social_link')
+        .sort((a, b) => {
+          if (a.info.column > b.info.column)
+            return 1;
+          else if (a.info.column < b.info.column)
+            return -1;
+          return 0;
+        });
+    } else {
+      this.socialLinkItems = [];
+      this.siteLinkItems = [];
     }
   }
 
@@ -89,18 +102,25 @@ export class FooterPlacementComponent implements OnInit {
   newEmptyColumn = [];
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-    private progressService: ProgressService, private dialog: MatDialog) {}
+    private progressService: ProgressService, private dialog: MatDialog,
+    private revertService: RevertPlacementService) {}
 
 
   ngOnInit() {
     if (!this.dragulaService.find(this.socialBag))
       this.dragulaService.setOptions(this.socialBag, {
         direction: 'horizontal',
+        moves: () => {
+          return this.canEdit;
+        }
       });
 
     if (!this.dragulaService.find(this.textBag))
       this.dragulaService.setOptions(this.textBag, {
-
+        direction: 'horizontal',
+        moves: () => {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe(value => {
@@ -193,31 +213,43 @@ export class FooterPlacementComponent implements OnInit {
   }
 
   selectIcon(icon) {
-    if (icon.info && this.socialLinkItems.find(el => el.info.href === icon.info.href))
-      this.selectedSocialNetwork = {
-        _id: icon._id,
-        href: icon.info.href,
-        text: icon.info.text,
-        column: icon.info.column,
-      };
-    else
-      this.selectedSocialNetwork = {
-        _id: null,
-        href: null,
-        text: icon.text,
-        column: null,
-      };
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(icon.component_name + (icon.variable_name ? '-' + icon.variable_name : ''), icon);
+    } else if (this.canEdit) {
+      if (icon.info && this.socialLinkItems.find(el => el.info.href === icon.info.href))
+        this.selectedSocialNetwork = {
+          _id: icon._id,
+          href: icon.info.href,
+          text: icon.info.text,
+          column: icon.info.column,
+        };
+      else
+        this.selectedSocialNetwork = {
+          _id: null,
+          href: null,
+          text: icon.text,
+          column: null,
+        };
+    }
   }
 
   selectTextItem(item) {
-    this.selectedTextLink = {
-      _id: item._id,
-      href: item.info.href,
-      text: item.info.text,
-      column: item.info.column,
-      row: item.info.row,
-      is_header: item.info.hasOwnProperty('is_header') ? item.info.is_header : false,
-    };
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item);
+    } else if (this.canEdit) {
+      this.selectedTextLink = {
+        _id: item._id,
+        href: item.info.href,
+        text: item.info.text,
+        column: item.info.column,
+        row: item.info.row,
+        is_header: item.info.hasOwnProperty('is_header') ? item.info.is_header : false,
+      };
+    }
+  }
+
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   modifyTextLink() {
@@ -287,7 +319,7 @@ export class FooterPlacementComponent implements OnInit {
         .map(el => this.siteLinkItems[el])
         .reduce((a, b) => (a || []).concat(b || []))
         .map(el => el.info.column)) : 1;
-      res['row'] = ( tempColumns && tempColumns.length && this.siteLinkItems[0] && this.siteLinkItems[0].length ? Math.max(...tempColumns
+      res['row'] = (tempColumns && tempColumns.length && this.siteLinkItems[0] && this.siteLinkItems[0].length ? Math.max(...tempColumns
         .map(el => this.siteLinkItems[el])
         .reduce((a, b) => (a || []).concat(b || []))
         .map(el => el.info.row)) : 0) + 1;
@@ -544,5 +576,15 @@ export class FooterPlacementComponent implements OnInit {
       return true;
     const lastColumn = Math.max(...Object.keys(this.siteLinkItems).map(el => parseInt(el, 10)));
     return this.hasNewColumn || !this.siteLinkItems[lastColumn].length;
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.revertService.setRevertMode(true);
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.revertService.setRevertMode(false);
   }
 }

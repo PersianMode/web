@@ -12,6 +12,57 @@
   background-color: #E5E5E5;
 }
 
+.search-brand, .search-type, .search-article_no {
+  font-size: 0.6em;
+  color: gray;
+}
+
+.search-title {
+  font-size: 0.8em;
+  color: black;
+  text-align: center;
+  font-weight: bolder;
+  margin-top: 3px;
+}
+
+.search-item {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-weight: normal !important;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.search-name {
+  font-size: 0.8em;
+  color: black;
+  font-weight: bold;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-item-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.second-search-item {
+  text-align: right;
+  margin: 3px;
+  margin-right: 10px;
+}
+
+.search-address {
+  font-size: 0.8em;
+  color: gray;
+  margin-right: 10px;
+  font-weight: bold;
+
+}
+
 .mobile-header button{
   background-color: transparent;
 }
@@ -87,6 +138,7 @@
   font-size: 14px;
   z-index: 4;
 }
+
 #header-cart span:nth-child(2) {
   z-index: 3;
   right: -3px;
@@ -94,8 +146,10 @@
   opacity: .8;
   position:absolute;
 }
+
 #header-cart span:nth-child(3) {
 }
+
 a{
   color: black !important;
 }

@@ -1,0 +1,28 @@
+.right-part {
+  left: auto;
+  right: 0px;
+}
+
+.left-part {
+  left: 0px;
+  right: auto;
+  font-size: 0.7em;
+  top: -75px;
+}
+
+.title-part {
+  bottom: 20px;
+  position: absolute;
+}
+
+.cart-title-area {
+  position: relative;
+}
+
+.title {
+  font-size: unset !important;
+}
+
+.all-items-check {
+  margin-left: 10px;
+}

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 import {IPlacement} from '../../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -7,6 +7,7 @@ import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
+import {RevertPlacementService} from '../../../../../shared/services/revert-placement.service';
 
 
 enum ItemArea {
@@ -24,6 +25,7 @@ export class SubMenuComponent implements OnInit {
   @Input() pageId = null;
   insertedAddress: string;
   setClear = false;
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -82,13 +84,17 @@ export class SubMenuComponent implements OnInit {
   leftAreaHasNewColumn = false;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-    private progressService: ProgressService, private dialog: MatDialog, private snackBar: MatSnackBar) {
+    private progressService: ProgressService, private dialog: MatDialog,
+    private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
+        moves: () => {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe((value) => {
@@ -326,10 +332,14 @@ export class SubMenuComponent implements OnInit {
     });
   }
   selectItem(value) {
-    this.selectedItem = value;
-    this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
-    this.setFormValue(value.info);
-    this.anyChanges = false;
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
+    } else if (this.canEdit) {
+      this.selectedItem = value;
+      this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
+      this.setFormValue(value.info);
+      this.anyChanges = false;
+    }
   }
 
   modifyItem() {
@@ -533,5 +543,19 @@ export class SubMenuComponent implements OnInit {
         return this.leftAreaHasNewColumn || !this.leftAreaItems[lastColumn].length;
       }
     }
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.revertService.setRevertMode(true);
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.revertService.setRevertMode(false);
+  }
+
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 }

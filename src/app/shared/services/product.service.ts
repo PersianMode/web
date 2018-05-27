@@ -74,14 +74,27 @@ export class ProductService {
       price = [];
     } else {
       price = products.map(r => r.base_price);
-      const minPrice = Math.min(...price);
-      const maxPrice = Math.max(...price);
+      const minPrice = price && price.length ? Math.min(...price) : 0;
+      const maxPrice = price && price.length ? Math.max(...price) : 0;
       price = [minPrice, maxPrice];
+    }
+
+    let discount;
+    if (trigger === 'discount') {
+      discount = [];
+    } else {
+      discount = this.products.map(r => r.discount);
+      const minDiscount = discount && discount.length ? Math.min(...discount) : 0;
+      const maxDiscount = discount && discount.length ? Math.max(...discount) : 0;
+      discount = [minDiscount, maxDiscount];
     }
 
     tags = {brand, type, price, size, color};
 
-    if (trigger && trigger !== 'price') {
+    if (discount && discount.length && discount[0] !== discount[1])
+      tags.discount = discount;
+
+    if (trigger && trigger !== 'price' && trigger !== 'discount') {
       tags[trigger] = this.collectionTags[trigger] ? this.collectionTags[trigger] : [];
     }
 
@@ -141,6 +154,8 @@ export class ProductService {
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
         } else if (f.name === 'price') {
           this.filteredProducts = this.filteredProducts.filter(p => p.discountedPrice >= f.values[0] && p.discountedPrice <= f.values[1]);
+        } else if (f.name === 'discount') {
+          this.filteredProducts = this.filteredProducts.filter(p => p.discount >= f.values[0] && p.discount <= f.values[1]);
         } else {
           this.filteredProducts = this.filteredProducts
             .filter(p => p.tags.filter(t => Array.from(f.values).includes(t.name)).length);
@@ -225,12 +240,10 @@ export class ProductService {
           .filter(r => r.product_color_id === color._id)
           .map(r => {
             const inventory = r.inventory.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0);
-            if (inventory) {
-              if (!data.sizesInventory[r.size]) {
-                data.sizesInventory[r.size] = {};
-              }
-              data.sizesInventory[r.size][color._id] = inventory;
+            if (!data.sizesInventory[r.size]) {
+              data.sizesInventory[r.size] = {};
             }
+            data.sizesInventory[r.size][color._id] = inventory;
             return {
               value: r.size,
               disabled: inventory <= 0,

@@ -85,3 +85,11 @@
   padding-top: 26px;
   padding-right: 30px;
 }
+
+.selected-to-revert-logo {
+  box-shadow: 0 0 10px 1px indigo !important;
+  -webkit-box-shadow: 0 0 10px 1px indigo !important;
+  box-shadow: 0.5px 22px 5px 1.01px indigo, 0.5px -19px 5px 1.01px indigo !important;
+  box-shadow: 0.5px 0px 5px 1.01px indigo !important;
+  box-shadow: 0px -14px 4px -1px #263f66, 0px 16px 4px -1px #263f66 !important;
+}

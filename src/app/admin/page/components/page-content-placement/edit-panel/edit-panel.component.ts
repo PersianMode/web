@@ -1,6 +1,9 @@
 import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
+import {DragulaService} from 'ng2-dragula';
+import {HttpService} from '../../../../../shared/services/http.service';
+import {ProgressService} from '../../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-edit-panel',
@@ -30,11 +33,11 @@ export class EditPanelComponent implements OnInit {
       value: 'quarter',
     }
   ];
-  areaPosition = [
-    ['left-top', 'center-top', 'right-top'],
-    ['left-center', 'center-center', 'right-center'],
-    ['left-bottom', 'center-bottom', 'right-bottom'],
-  ];
+  areaPosition: any = {
+    'top': ['left-top', 'center-top', 'right-top'],
+    'center': ['left-center', 'center-center', 'right-center'],
+    'bottom': ['left-bottom', 'center-bottom', 'right-bottom'],
+  };
   selectedArea = {
     pos: null,
     title: null,
@@ -67,9 +70,11 @@ export class EditPanelComponent implements OnInit {
   imageUrl = '';
   pageId = null;
   isAdd = true;
+  selectedAreaToSwitch: any = null;
 
   constructor(public dialogRef: MatDialogRef<EditPanelComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar, private dragulaService: DragulaService, private httpService: HttpService,
+    private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -92,6 +97,41 @@ export class EditPanelComponent implements OnInit {
     }
   }
 
+  changeAreaPosition(source, target) {
+    const sourceArea = this.areas.find(item => item.pos.toLowerCase() === source.toLowerCase());
+    const targetArea = this.areas.find(item => item.pos.toLowerCase() === target.toLowerCase());
+
+    this.selectedAreaToSwitch = null;
+
+    if (targetArea)
+      targetArea.pos = source;
+    if (sourceArea)
+      sourceArea.pos = target;
+
+    console.log(this.placement);
+
+    this.progressService.enable();
+    this.httpService.post('placement', {
+      page_id: this.pageId,
+      placements: [
+        {
+          _id: this.placement._id,
+          info: this.placement.info,
+        }
+      ]
+    }).subscribe(
+      (data) => {
+        this.progressService.disable();
+      },
+      (err) => {
+        console.error('Cannot upsert an item: ', err);
+        this.progressService.disable();
+      }
+    );
+
+    this.setArea(target);
+  }
+
   showImageAreas() {
     if (!this.rowTemplate)
       return false;
@@ -110,6 +150,11 @@ export class EditPanelComponent implements OnInit {
   }
 
   setArea(pos) {
+    if (this.selectedAreaToSwitch) {
+      this.changeAreaPosition(this.selectedAreaToSwitch, pos);
+      return;
+    }
+
     let obj = null;
     if (!this.isAdd)
       obj = this.areas.find(el => el.pos.toLowerCase() === pos.toLowerCase());
@@ -311,5 +356,17 @@ export class EditPanelComponent implements OnInit {
     return {
       component_name: 'main',
     };
+  }
+
+  getRowPositions() {
+    return Object.keys(this.areaPosition);
+  }
+
+  changePosition(pos) {
+    this.selectedAreaToSwitch = this.selectedAreaToSwitch ? null : pos;
+    if (this.selectedAreaToSwitch)
+      this.snackBar.open('روی خانه ی مقصد جهت جا به جایی کلیک کنید', null, {
+        duration: 2000,
+      });
   }
 }

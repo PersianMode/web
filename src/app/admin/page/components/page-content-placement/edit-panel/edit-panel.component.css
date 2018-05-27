@@ -20,6 +20,10 @@
   background-color: rgba(176,182,180,0.68);
 }
 
+.selected-to-switch {
+  background-color: #42587c !important;
+}
+
 .text-field {
   display: inline-block;
   width: 300px;

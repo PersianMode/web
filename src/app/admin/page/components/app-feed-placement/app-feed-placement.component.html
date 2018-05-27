@@ -43,9 +43,8 @@
     </div>
   </form>
   <div class="demo-list demo-area" [dragula]="bagName" [dragulaModel]="placementList">
-    <div *ngFor="let item of placementList" (click)="selectItem(item)" class="feed-container">
-      <img [src]="getImageUrl(item.info.imgUrl)" class="feed-image"
-      />
+    <div *ngFor="let item of placementList" (click)="selectItem(item)" class="feed-container" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(item)}">
+      <img [src]="getImageUrl(item.info.imgUrl)" class="feed-image" />
       <div></div>
       <div class="feed-title">
         <label class="menu-item persian-field">{{item.info.text}}</label>

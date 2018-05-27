@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, HostListener} from '@angular/core';
 import {IPlacement} from '../../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -6,6 +6,7 @@ import {ProgressService} from '../../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
+import {RevertPlacementService} from '../../../../../shared/services/revert-placement.service';
 import {duration} from 'jalali-moment';
 
 @Component({
@@ -16,7 +17,7 @@ import {duration} from 'jalali-moment';
 export class TopMenuComponent implements OnInit {
   setClear: boolean = false;
   @Input() pageId = null;
-
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -43,14 +44,17 @@ export class TopMenuComponent implements OnInit {
   bagName = 'top-menu-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private dialog: MatDialog, private sncakBar: MatSnackBar) {
-
+    private progressService: ProgressService, private dialog: MatDialog,
+    private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'horizontal',
+        moves: () => {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe((value) => {
@@ -107,15 +111,23 @@ export class TopMenuComponent implements OnInit {
   }
 
   selectItem(value) {
-    this.upsertTopMenuItem = {
-      text: value.info.text,
-      href: value.info.href,
-      id: value._id,
-      column: value.info.column,
-      isEdit: true,
-      section: value.info.section,
-    };
-    this.itemSelected.emit(this.upsertTopMenuItem.section);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
+    } else {
+      this.upsertTopMenuItem = {
+        text: value.info.text,
+        href: value.info.href,
+        id: value._id,
+        column: value.info.column,
+        isEdit: true,
+        section: value.info.section,
+      };
+      this.itemSelected.emit(this.upsertTopMenuItem.section);
+    }
+  }
+
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   changeTopMenuColumn(args) {
@@ -223,6 +235,7 @@ export class TopMenuComponent implements OnInit {
       section: '',
       isEdit: false,
     };
+
     this.itemSelected.emit(null);
   }
 
@@ -243,5 +256,15 @@ export class TopMenuComponent implements OnInit {
     } else {
       return !this.upsertTopMenuItem.text || !this.upsertTopMenuItem.href || !this.upsertTopMenuItem.section;
     }
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.revertService.setRevertMode(true);
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.revertService.setRevertMode(false);
   }
 }

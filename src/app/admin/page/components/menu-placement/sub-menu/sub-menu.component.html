@@ -49,15 +49,16 @@
   <div class="demo-list">
     <div class="menu-area">
       <div *ngFor="let column of headerAreaColumns" [dragula]="'sub-menu-bag'" [dragulaModel]="headerAreaItems[column]" class="menu-column">
-        <div *ngFor="let item of headerAreaItems[column]" class="menu-item" (click)="selectItem(item)" [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString()}">
+        <div *ngFor="let item of headerAreaItems[column]" class="menu-item" (click)="selectItem(item)" [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString(), 'selected-to-revert': !canEdit && isSelectedToRevert(item)}">
           <label class="content header">{{item.info.text}}</label>
         </div>
       </div>
       <div *ngIf="headerAreaHasNewColumn" class="menu-column empty-column" [dragula]="'sub-menu-bag'" [dragulaModel]="headerAreaNewEmptyList">
         &nbsp;
       </div>
-      <div class="menu-column">
-        <button mat-icon-button (click)="addColumn('header')" [disabled]="addColumnDisability('header')" [matTooltip]="'افزودن ستون'" [matTooltipPosition]="'above'">
+      <div class="menu-column" *ngIf="canEdit">
+        <button mat-icon-button (click)="addColumn('header')" [disabled]="addColumnDisability('header')" [matTooltip]="'افزودن ستون'"
+          [matTooltipPosition]="'above'">
           <mat-icon aria-label="add column">add_circle_outline</mat-icon>
         </button>
       </div>
@@ -65,15 +66,16 @@
 
     <div class="menu-area middle-menu">
       <div *ngFor="let column of middleAreaColumns" [dragula]="'sub-menu-bag'" [dragulaModel]="middleAreaItems[column]" class="menu-column">
-        <div *ngFor="let item of middleAreaItems[column]; first as isFirst" class="menu-item" (click)="selectItem(item)" [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString(), 'header-container': item.info.is_header}">
+        <div *ngFor="let item of middleAreaItems[column]; first as isFirst" class="menu-item" (click)="selectItem(item)" [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString(), 'header-container': item.info.is_header, 'selected-to-revert': !canEdit && isSelectedToRevert(item)}">
           <label class="content" [class.header]="isFirst || item.info.is_header">{{item.info.text}}</label>
         </div>
       </div>
       <div *ngIf="middleAreaHasNewColumn" class="menu-column empty-column" [dragula]="'sub-menu-bag'" [dragulaModel]="middleAreaNewEmptyList">
         &nbsp;
       </div>
-      <div class="menu-column">
-        <button mat-icon-button (click)="addColumn('middle')" [disabled]="addColumnDisability('middle')" [matTooltip]="'افزودن ستون'" [matTooltipPosition]="'above'">
+      <div class="menu-column" *ngIf="canEdit">
+        <button mat-icon-button (click)="addColumn('middle')" [disabled]="addColumnDisability('middle')" [matTooltip]="'افزودن ستون'"
+          [matTooltipPosition]="'above'">
           <mat-icon aria-label="add column">add_circle_outline</mat-icon>
         </button>
       </div>
@@ -81,15 +83,16 @@
 
     <div class="menu-area">
       <div *ngFor="let column of leftAreaColumns" [dragula]="'sub-menu-bag'" [dragulaModel]="leftAreaItems[column]" class="menu-column">
-        <div *ngFor="let item of leftAreaItems[column]; first as isFirst" class="menu-item" (click)="selectItem(item)" [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString(), 'header-container': item.info.is_header}">
+        <div *ngFor="let item of leftAreaItems[column]; first as isFirst" class="menu-item" (click)="selectItem(item)" [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString(), 'header-container': item.info.is_header, 'selected-to-revert': !canEdit && isSelectedToRevert(item)}">
           <label class="content" [class.header]="isFirst || item.info.is_header">{{item.info.text}}</label>
         </div>
       </div>
       <div *ngIf="leftAreaHasNewColumn" class="menu-column empty-column" [dragula]="'sub-menu-bag'" [dragulaModel]="leftAreaNewEmptyList">
         &nbsp;
       </div>
-      <div class="menu-column">
-        <button mat-icon-button (click)="addColumn('left')" [disabled]="addColumnDisability('left')" [matTooltip]="'افزودن ستون'" [matTooltipPosition]="'above'">
+      <div class="menu-column" *ngIf="canEdit">
+        <button mat-icon-button (click)="addColumn('left')" [disabled]="addColumnDisability('left')" [matTooltip]="'افزودن ستون'"
+          [matTooltipPosition]="'above'">
           <mat-icon aria-label="add column">add_circle_outline</mat-icon>
         </button>
       </div>
