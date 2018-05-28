@@ -86,13 +86,18 @@ export class ProductService {
     const color = Array.from(new Set([...products.map(productColorMap)
       .reduce((x, y) => x.concat(y), []).reduce((x, y) => x.concat(y), [])]));
 
-    let price;
+    let price = [];
+    let minPrice;
+    let maxPrice;
     if (trigger === 'price') {
       price = [];
     } else {
-      price = products.map(r => r.base_price);
-      const minPrice = price && price.length ? Math.min(...price) : 0;
-      const maxPrice = price && price.length ? Math.max(...price) : 0;
+
+      const pricesHelper = products.map(product => product.instances.map(instance => instance.discountedPrice));
+      const prices=[].concat(...pricesHelper);
+      const minPrice = prices && prices.length ? Math.min(...prices) : 0;
+      const maxPrice = prices && prices.length ? Math.max(...prices) : 0;
+
       price = [minPrice, maxPrice];
     }
     
@@ -159,7 +164,8 @@ export class ProductService {
         } else if (f.name === 'color') {
           this.filteredProducts
             .forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
-              .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').find(x=> x.includes(v)) : false).length));
+              .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').find(a => a.includes(v)) : false).length));
+
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
         } else if (f.name === 'size') {
           this.filteredProducts.forEach((p, pi) => {
@@ -186,6 +192,13 @@ export class ProductService {
             .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
         } else if (f.name === 'price') {
+          let filteredProductBefore = this.filteredProducts;
+          this.filteredProducts = [];
+          filteredProductBefore.forEach((product, key) => {
+            if ((product.instances.filter(instance => instance.discountedPrice >= f.values[0] && instance.discountedPrice <= f.values[1])).length > 0) {
+              this.filteredProducts.push(product);
+            }
+          });
           this.filteredProducts = this.filteredProducts.filter(p => p.discountedPrice >= f.values[0] && p.discountedPrice <= f.values[1]);
         } else if (f.name === 'discount') {
           this.filteredProducts = this.filteredProducts.filter(p => p.discount >= f.values[0] && p.discount <= f.values[1]);
