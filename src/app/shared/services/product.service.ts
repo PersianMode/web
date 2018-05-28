@@ -91,13 +91,27 @@ export class ProductService {
       price = [];
     } else {
       price = products.map(r => r.base_price);
-      const minPrice = Math.min(...price);
-      const maxPrice = Math.max(...price);
+      const minPrice = price && price.length ? Math.min(...price) : 0;
+      const maxPrice = price && price.length ? Math.max(...price) : 0;
       price = [minPrice, maxPrice];
     }
+    
+    let discount;
+    if (trigger === 'discount') {
+      discount = [];
+    } else {
+      discount = this.products.map(r => r.discount);
+      const minDiscount = discount && discount.length ? Math.min(...discount) : 0;
+      const maxDiscount = discount && discount.length ? Math.max(...discount) : 0;
+      discount = [minDiscount, maxDiscount];
+    }
+
     tags = {brand, type, price, size, shoesSize, color};
 
-    if (trigger && trigger !== 'price') {
+    if (discount && discount.length && discount[0] !== discount[1])
+      tags.discount = discount;
+
+    if (trigger && trigger !== 'price' && trigger !== 'discount') {
       tags[trigger] = this.collectionTags[trigger] ? this.collectionTags[trigger] : [];
     }
 
@@ -145,7 +159,7 @@ export class ProductService {
         } else if (f.name === 'color') {
           this.filteredProducts
             .forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
-              .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').includes(v) : false).length));
+              .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').find(x=> x.includes(v)) : false).length));
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
         } else if (f.name === 'size') {
           this.filteredProducts.forEach((p, pi) => {
@@ -173,6 +187,8 @@ export class ProductService {
           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
         } else if (f.name === 'price') {
           this.filteredProducts = this.filteredProducts.filter(p => p.discountedPrice >= f.values[0] && p.discountedPrice <= f.values[1]);
+        } else if (f.name === 'discount') {
+          this.filteredProducts = this.filteredProducts.filter(p => p.discount >= f.values[0] && p.discount <= f.values[1]);
         } else {
           this.filteredProducts = this.filteredProducts
             .filter(p => p.tags.filter(t => Array.from(f.values).includes(t.name)).length);

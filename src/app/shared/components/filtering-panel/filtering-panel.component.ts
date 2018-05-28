@@ -31,6 +31,11 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   selectedMaxPriceFormatted = '';
   isEU = false;
   isEUSubescriber: any;
+  discountRangeValues: any;
+  minDiscount;
+  maxDiscount;
+  selectedMinDiscountFormatted = '';
+  selectedMaxDiscountFormatted = '';
 
   filter_options$: any;
 
@@ -39,8 +44,10 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.isEU = this.productService.collectionIsEU;
     this.isEUSubescriber = this.productService.collectionIsEUObject.subscribe(value => this.isEU = value);
+
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
       this.filter_options = r;
       this.filter_options.forEach(el => {
@@ -64,6 +71,17 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
         this.rangeValues = [prices.values[0], prices.values[1]];
         this.formatPrices();
+      }
+
+      const discount = r.find(fo => fo.name === 'discount');
+      if (discount && discount.values.length) {
+        if (!this.minDiscount)
+          this.minDiscount = discount.values[0];
+        if (!this.maxDiscount)
+          this.maxDiscount = discount.values[1];
+
+        this.discountRangeValues = [discount.values[0], discount.values[1]];
+        this.formatDiscount();
       }
 
       for (const col in this.isChecked.color) {
@@ -96,7 +114,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.formatPrices();
     this.productService.applyFilters(this.current_filter_state, 'price');
     this.expanded.price = true;
-
   }
 
   changeSizeType(fo) {
@@ -172,4 +189,14 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.isEUSubescriber.unsubscribe();
   }
 
+  formatDiscount() {
+    [this.selectedMinDiscountFormatted, this.selectedMaxDiscountFormatted] = this.discountRangeValues.map(priceFormatter);
+  }
+
+  discountRangeChange() {
+    this.current_filter_state.find(r => r.name === 'discount').values = this.discountRangeValues;
+    this.formatDiscount();
+    this.productService.applyFilters(this.current_filter_state, 'discount');
+    this.expanded.discount = true;
+  }
 }

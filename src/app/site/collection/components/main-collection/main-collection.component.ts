@@ -58,8 +58,10 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   showWaitingSpinner = false;
   lazyRows = 10;
 
-  constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-              private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService, private titleService: TitleService) {
+  constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
+    @Inject(WINDOW) private window, private pageService: PageService,
+    private responsiveService: ResponsiveService, private productService: ProductService,
+    private titleService: TitleService) {
   }
 
   ngOnInit() {
@@ -67,17 +69,18 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
       this.pageName = 'collection/' + params.get('typeName');
       this.pageService.getPage(this.pageName);
       this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
-          this.title = res.title;
-          if (res && res['collection_id']) {
-            this.productService.loadProducts(res['collection_id']);
-          } else {
-            this.products = [];
-            this.collectionNameFa = '';
-            this.productService.emptyFilters();
-            console.error('-> ', `${this.pageName} is getting empty data for page`);
-          }
-        },
+        this.title = res.title;
+        if (res && res['collection_id']) {
+          this.productService.loadProducts(res['collection_id']);
+        } else {
+          this.products = [];
+          this.collectionNameFa = '';
+          this.productService.emptyFilters();
+          console.error('-> ', `${this.pageName} is getting empty data for page`);
+        }
+      },
         err => {
+          console.error('Error when subscribing on pageInfo: ', err);
         }
       );
     });
