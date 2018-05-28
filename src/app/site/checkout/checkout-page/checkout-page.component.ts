@@ -58,7 +58,7 @@ export class CheckoutPageComponent implements OnInit {
         (this.discountChanges && this.discountChanges.length) ||
         (this.priceChanges && this.priceChanges.length)) {
 
-        this.hasChangeError = this.soldOuts && this.soldOuts.length;
+        this.hasChangeError =!! this.soldOuts && !!this.soldOuts.length;
         if (this.hasChangeError)
           this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
         if (this.discountChanges && this.discountChanges.length)
