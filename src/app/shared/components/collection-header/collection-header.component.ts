@@ -236,6 +236,14 @@ export class CollectionHeaderComponent implements OnInit {
       'assets/nike-brand.jpg';
   }
 
+  onClose() {
+    this.searchPhrase = null;
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+    this.searchWaiting = false;
+    this.searchIsFocused = false;
+  }
+
   @HostListener('document:click', ['$event'])
   public documentClick(e: any): void {
     if (!e.path.some(el => el.id === 'search-area'))

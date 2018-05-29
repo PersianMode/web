@@ -7,6 +7,11 @@
   min-width: 250px;
   padding: 3px;
   z-index: 100;
+  width: 40%;
+  background-color: lightcyan;
+  position: fixed;
+  left: 2px;
+  top: 109px;
 }
 
 .search-item {
@@ -62,4 +67,12 @@ hr {
   border-style: dashed;
   border-width: 0.5px;
   border-color: gray;
+}
+
+.close-search {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  cursor: pointer;
+  font-size: 20px;
 }
