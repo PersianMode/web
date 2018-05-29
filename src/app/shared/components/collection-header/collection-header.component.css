@@ -3,8 +3,9 @@
 }
 
 .search-result-panel {
+  direction: ltr;
   background-color: white;
-  min-width: 250px;
+  min-width: 300px;
   padding: 3px;
   z-index: 100;
   width: 50%;
@@ -21,7 +22,7 @@
 }
 
 .search-name {
-  font-size: 0.5em;
+  font-size: 0.45em;
   color: black;
   white-space: pre-wrap;
   overflow: hidden;
@@ -40,8 +41,8 @@
 }
 
 .search-item-image {
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
 }
 
 .second-search-item {
