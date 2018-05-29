@@ -3,10 +3,15 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
+
 
 enum RegStatus {
   Register = 'Register',
-  Verify = 'Verify'
+  Verify = 'Verify',
+  PreferenceSize = 'PreferenceSize',
+  PreferenceBrand = 'PreferenceBrand',
+  PreferenceTags = 'PreferenceTags',
 };
 
 @Component({
@@ -15,6 +20,20 @@ enum RegStatus {
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  shoesUS = [];
+  productType = 'footwear';
+  sizeSelected;
+  brandSelected;
+  tagsSelected;
+  brandsType = [];
+  tagsType = [];
+  shoesSize;
+  preferences = {
+    preferred_size: null,
+    preferred_brands: [],
+    preferred_tags: [],
+    username: null
+  };
   @Output() closeDialog = new EventEmitter<boolean>();
   dob = null;
   dateObject = null;
@@ -26,7 +45,7 @@ export class RegisterComponent implements OnInit {
   curStatus = RegStatus.Register;
   code = null;
 
-  constructor(private httpService: HttpService, private authService: AuthService) {
+  constructor(private httpService: HttpService, private authService: AuthService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
@@ -123,22 +142,84 @@ export class RegisterComponent implements OnInit {
   }
 
   checkCode() {
+    this.httpService.get('tags/Category').subscribe(tags => {
+      tags.forEach(el => {
+        this.tagsType.push({name: this.dict.translateWord(el.name.trim()), '_id': el._id});
+      });
+    });
     this.httpService.post('register/verify', {
       code: this.code,
       username: this.registerForm.controls['username'].value,
     }).subscribe(
       (data) => {
+        // login service
         this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
-          .then(res => {
-            this.closeDialog.emit(true);
-          })
-          .catch(err => {
-            console.error('Cannot login: ', err);
-          });
+        .then(res => {
+          this.preferences.username = this.registerForm.controls['username'].value;
+          this.curStatus = this.regStatus.PreferenceTags;
+        })
+        .catch(err => {
+          console.error('Cannot login: ', err);
+        });
       },
       (err) => {
         console.error('Cannot verify registration: ', err);
       }
     );
+  }
+
+  setTags(tags) {
+    this.preferences.preferred_tags = tags.selectedOptions.selected.map(item => item.value);
+    this.httpService.get('../../../../../assets/shoesSize.json').subscribe(res => {
+      if (this.gender === 'm') {
+        res.men.forEach(element => {
+          this.shoesUS.push({value: element['us'], disabled: false, displayValue:  element['us']});
+        });
+      } else {
+        res.women.forEach(element => {
+          this.shoesUS.push({value: element['us'], disabled: false, displayValue:  element['us']});
+        });
+      }
+      this.shoesSize = this.shoesUS;
+    });
+    return this.curStatus = this.regStatus.PreferenceSize;
+  }
+
+  setSize() {
+    this.httpService.get('brand').subscribe(brands => {
+      brands.forEach(el => {
+        this.brandsType.push({name: this.dict.translateWord(el.name.trim()), '_id': el._id});
+      });
+    });
+    return this.curStatus = this.regStatus.PreferenceBrand;
+  }
+
+  selectedSize(event) {
+    this.preferences.preferred_size = event;
+  }
+
+
+  setBrand(brands) {
+    this.preferences.preferred_brands = brands.selectedOptions.selected.map(item => item.value);
+    this.httpService.post(`customer/preferences`, {
+      username: this.preferences.username,
+      preferred_brands: this.preferences.preferred_brands,
+      preferred_tags: this.preferences.preferred_tags,
+      preferred_size: this.preferences.preferred_size
+    }).subscribe(response => {
+      this.closeDialog.emit(true);
+    });
+  }
+
+  backToCheckCode() {
+    return this.curStatus = this.regStatus.Verify;
+  }
+
+  backToSetSize() {
+    return this.curStatus = this.regStatus.PreferenceSize;
+  }
+
+  backToSetTags() {
+    return this.curStatus = this.regStatus.PreferenceTags;
   }
 }

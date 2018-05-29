@@ -1,0 +1,9 @@
+.row{
+  margin-top: 10px;
+}
+
+td, mat-cell, mat-header-cell{
+  text-align: center !important;
+  font-family: iranyekan, sans-serif;
+
+}
