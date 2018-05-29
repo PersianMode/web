@@ -35,12 +35,12 @@
       <hr *ngIf="searchCollectionList.length">
       <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element, false)"
            fxLayout="row" fxLayoutAlign="start start">
-        <div *ngIf="element.pages && element.pages.length" fxFlex="40">
-          <div class="search-name">{{element.name}}</div>
-        </div>
         <div *ngIf="element.pages && element.pages.length" fxFlex="60"
              class="second-search-item">
           <div class="search-address">{{element.name_fa}}</div>
+        </div>
+        <div *ngIf="element.pages && element.pages.length" fxFlex="40">
+          <div class="search-name" style="text-align: left">{{element.name}}</div>
         </div>
       </div>
     </div>
