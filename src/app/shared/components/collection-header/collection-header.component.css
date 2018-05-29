@@ -7,8 +7,7 @@
   min-width: 250px;
   padding: 3px;
   z-index: 100;
-  width: 40%;
-  background-color: lightcyan;
+  width: 50%;
   position: fixed;
   left: 2px;
   top: 109px;
@@ -22,7 +21,7 @@
 }
 
 .search-name {
-  font-size: 0.8em;
+  font-size: 0.5em;
   color: black;
   white-space: pre-wrap;
   overflow: hidden;
@@ -41,8 +40,8 @@
 }
 
 .search-item-image {
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
 }
 
 .second-search-item {

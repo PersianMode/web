@@ -17,34 +17,67 @@
     <mat-icon *ngIf="searchPhrase" (click)="onClose()" class="close-search">clear</mat-icon>
   </div>
   <div *ngIf="!searchWaiting && (searchProductList.length || searchCollectionList.length)"
-       class="search-result-panel">
-    <div *ngIf="searchProductList.length" class="search-title">{{'محصولات'}}</div>
-    <hr *ngIf="searchProductList.length">
-    <div *ngFor="let element of searchProductList" class="search-item" (click)="selectSearchResult(element, true)"
-         fxLayout="row" fxLayoutAlign="start start">
-      <div fxFlex="80">
-        <div class="search-name">{{element.name}}</div>
-        <div class="search-brand">{{element.brand}}{{' - '}}{{element.tags}}</div>
-        <div class="search-type">{{element.type}}</div>
-        <div class="search-article_no">{{'article_no : '}}{{element.instances}}</div>
-      </div>
-      <div fxFlex="20" class="second-search-item">
-        <img [src]="element.imgUrl" class="search-item-image"/>
-      </div>
-    </div>
-    <br *ngIf="searchCollectionList.length">
-    <div *ngIf="searchCollectionList.length" class="search-title">{{'مجموعه ها'}}</div>
-    <hr *ngIf="searchCollectionList.length">
-    <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element, false)"
-         fxLayout="row" fxLayoutAlign="start start">
-      <div *ngIf="element.pages && element.pages.length" fxFlex="60"
-           class="second-search-item">
-        <div class="search-address">{{element.name_fa}}</div>
-      </div>
-      <div *ngIf="element.pages && element.pages.length" fxFlex="40">
-        <div class="search-name" style="text-align: left">{{element.name}}</div>
+       class="search-result-panel" fxLayout="col" fxLayout.sm="row" fxLayoutAlign="start start">
+    <div fxFlex="65" style="height:100%;">
+      <div *ngFor="let row of rows" fxLayout="row" fxLayout.sm="col">
+        <div *ngFor="let element of row" fxFlex="50" fxLayout="row" class="search-item">
+          <div fxFlex="35" class="second-search-item">
+            <img [src]="element.imgUrl" class="search-item-image"/>
+          </div>
+          <div fxFlex="65">
+            <div style="height: 20%"></div>
+            <div style="height: 60%">
+              <div class="search-name">{{element.name}}</div>
+              <div class="search-brand">{{element.brand}}{{' - '}}{{element.tags}}</div>
+              <div class="search-type">{{element.type}}</div>
+              <div class="search-article_no">{{'article_no : '}}{{element.instances}}</div>
+            </div>
+            <div style="height: 20%"></div>
+          </div>
+        </div>
       </div>
     </div>
+    <div  *ngIf="searchCollectionList && searchCollectionList.length" fxFlex="35" style="background-color: #f7f7f7; height: 100%">
+      <div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element, false)"
+           fxLayout="row" fxLayoutAlign="start start">
+        <div *ngIf="element.pages && element.pages.length" fxFlex="60"
+             class="second-search-item">
+          <div class="search-address">{{element.name_fa}}</div>
+        </div>
+        <div *ngIf="element.pages && element.pages.length" fxFlex="40">
+          <div class="search-name" style="text-align: left">{{element.name}}</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!--<div *ngIf="searchProductList.length" class="search-title">{{'محصولات'}}</div>-->
+    <!--<hr *ngIf="searchProductList.length">-->
+    <!--<div *ngFor="let element of searchProductList" class="search-item" (click)="selectSearchResult(element, true)"-->
+    <!--fxLayout="row" fxLayoutAlign="start start">-->
+    <!--<div fxFlex="80">-->
+    <!--<div class="search-name">{{element.name}}</div>-->
+    <!--<div class="search-brand">{{element.brand}}{{' - '}}{{element.tags}}</div>-->
+    <!--<div class="search-type">{{element.type}}</div>-->
+    <!--<div class="search-article_no">{{'article_no : '}}{{element.instances}}</div>-->
+    <!--</div>-->
+    <!--<div fxFlex="20" class="second-search-item">-->
+    <!--<img [src]="element.imgUrl" class="search-item-image"/>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<br *ngIf="searchCollectionList.length">-->
+    <!--<div *ngIf="searchCollectionList.length" class="search-title">{{'مجموعه ها'}}</div>-->
+    <!--<hr *ngIf="searchCollectionList.length">-->
+    <!--<div *ngFor="let element of searchCollectionList" class="search-item" (click)="selectSearchResult(element, false)"-->
+    <!--fxLayout="row" fxLayoutAlign="start start">-->
+    <!--<div *ngIf="element.pages && element.pages.length" fxFlex="60"-->
+    <!--class="second-search-item">-->
+    <!--<div class="search-address">{{element.name_fa}}</div>-->
+    <!--</div>-->
+    <!--<div *ngIf="element.pages && element.pages.length" fxFlex="40">-->
+    <!--<div class="search-name" style="text-align: left">{{element.name}}</div>-->
+    <!--</div>-->
+    <!--</div>-->
   </div>
   <div *ngIf="searchWaiting" class="search-result-panel">
     <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
