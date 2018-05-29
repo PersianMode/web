@@ -28,6 +28,8 @@ export class CollectionHeaderComponent implements OnInit {
   searchProductList = [];
   searchCollectionList = [];
   searchWaiting = false;
+  rows: any = [];
+
 
   constructor(private router: Router, private pageService: PageService,
               private httpService: HttpService, private sanitizer: DomSanitizer,
@@ -138,7 +140,7 @@ export class CollectionHeaderComponent implements OnInit {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 5,
+      limit: 8,
     }).subscribe(
       (data) => {
         this.searchProductList = [];
@@ -155,6 +157,7 @@ export class CollectionHeaderComponent implements OnInit {
             });
           });
         }
+        this.alignRow();
         this.searchCollection();
       },
       (err) => {
@@ -236,6 +239,38 @@ export class CollectionHeaderComponent implements OnInit {
         img[0].image.thumbnail
       ].join('/')) :
       'assets/nike-brand.jpg';
+  }
+
+  alignRow() {
+    if (this.searchProductList.length <= 0) {
+      this.rows = [];
+      return;
+    }
+    this.rows = [];
+    let chunk = [], counter = 0;
+    for (const sp in this.searchProductList) {
+      if (this.searchProductList.hasOwnProperty(sp)) {
+        chunk.push(this.searchProductList[sp]);
+        counter++;
+
+        if (counter >= 2) {
+          counter = 0;
+          this.rows.push(chunk);
+          chunk = [];
+        }
+      }
+    }
+    if (counter > 0) {
+      this.rows.push(chunk);
+    }
+  }
+
+  onClose() {
+    this.searchPhrase = null;
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+    this.searchWaiting = false;
+    this.searchIsFocused = false;
   }
 
   @HostListener('document:click', ['$event'])

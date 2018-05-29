@@ -91,7 +91,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid && this.gender) {
-      let data: any = {};
+      const data: any = {};
       Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
       data.gender = this.gender;
       data.dob = this.dob;
@@ -195,7 +195,6 @@ export class RegisterComponent implements OnInit {
   }
 
   selectedSize(event) {
-    console.log('selectedSize', event);
     this.preferences.preferred_size = event;
   }
 

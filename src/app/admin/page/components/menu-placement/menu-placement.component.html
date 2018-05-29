@@ -1,7 +1,10 @@
 <div class="inner-placement-div">
-  <app-top-menu [pageId]="pageId" [placements]="topMenuItems" (modifyPlacement)="modify($event)" (itemSelected)="showSubMenu($event)"></app-top-menu>
+  <app-top-menu [pageId]="pageId" [placements]="topMenuItems" (modifyPlacement)="modify($event)" [canEdit]="canEdit" (itemSelected)="showSubMenu($event)"
+    (selectToRevert)="passToRevert($event)"></app-top-menu>
 </div>
 <div *ngIf="selectedSection">
-  <app-sub-menu *ngIf="!isApp" [pageId]="pageId" [placements]="subMenuItems" (modifyPlacement)="modify($event)" [section]="selectedSection"></app-sub-menu>
-  <app-app-sub-menu *ngIf="isApp && validAddress()" [pageId]="pageId" [placements]="subMenuItems" (modifyPlacement)="modify($event)" [section]="selectedSection"></app-app-sub-menu>
+  <app-sub-menu *ngIf="!isApp" [pageId]="pageId" [placements]="subMenuItems" (modifyPlacement)="modify($event)" [canEdit]="canEdit"
+    [section]="selectedSection" (selectToRevert)="passToRevert($event)"></app-sub-menu>
+  <app-app-sub-menu *ngIf="isApp && validAddress()" [pageId]="pageId" [placements]="subMenuItems" (modifyPlacement)="modify($event)"
+    [canEdit]="canEdit" [section]="selectedSection" (selectToRevert)="passToRevert($event)"></app-app-sub-menu>
 </div>

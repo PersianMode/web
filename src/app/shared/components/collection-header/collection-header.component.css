@@ -7,6 +7,10 @@
   min-width: 250px;
   padding: 3px;
   z-index: 100;
+  width: 50%;
+  position: fixed;
+  left: 2px;
+  top: 109px;
 }
 
 .search-item {
@@ -17,7 +21,7 @@
 }
 
 .search-name {
-  font-size: 0.8em;
+  font-size: 0.5em;
   color: black;
   white-space: pre-wrap;
   overflow: hidden;
@@ -36,12 +40,12 @@
 }
 
 .search-item-image {
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
 }
 
 .second-search-item {
-  text-align: left;
+  text-align: right;
   margin: 3px;
 }
 
@@ -62,4 +66,12 @@ hr {
   border-style: dashed;
   border-width: 0.5px;
   border-color: gray;
+}
+
+.close-search {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  cursor: pointer;
+  font-size: 20px;
 }
