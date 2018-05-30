@@ -139,7 +139,7 @@ export class CollectionHeaderComponent implements OnInit {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 8,
+      limit: 6,
     }).subscribe(
       (data) => {
         this.searchProductList = [];
@@ -176,7 +176,7 @@ export class CollectionHeaderComponent implements OnInit {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 5,
+      limit: 6,
     }).subscribe(
       (data) => {
         this.searchCollectionList = [];
