@@ -130,6 +130,7 @@ export class CollectionHeaderComponent implements OnInit {
     this.searchProductList = [];
     if (!this.searchPhrase) {
       this.searchProductList = [];
+      this.searchCollectionList = [];
       return;
     }
 
@@ -169,6 +170,7 @@ export class CollectionHeaderComponent implements OnInit {
     this.searchCollectionList = [];
     if (!this.searchPhrase) {
       this.searchCollectionList = [];
+      this.searchProductList = [];
       return;
     }
     this.httpService.post('search/Collection', {
