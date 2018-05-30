@@ -1,0 +1,66 @@
+.card-container {
+  direction: rtl;
+}
+
+.table thead {
+  font-family: irankharazmi;
+  font-weight: bold;
+}
+
+.table tbody {
+  font-family: irankharazmi;
+}
+
+.table td {
+  direction: rtl;
+}
+
+.table td:nth-child(1) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(2) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(3) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(4) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(5) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(6) {
+  padding: 2px 10px 2px 0;
+}
+
+.little-right-margin {
+  margin-right: 20px;
+}
+
+.right-alignment {
+  direction: rtl;
+  text-align: right;
+}
+
+.table {
+  margin: 20px;
+}
+
+.button-area {
+  margin-right: 20px;
+}
+
+.name-field {
+  direction: rtl;
+  text-align: right !important;
+}
+
+.score-field {
+  text-align: right !important;
+}
