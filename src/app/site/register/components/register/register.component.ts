@@ -3,10 +3,12 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
+import {MatSnackBar} from '@angular/material';
 
 enum RegStatus {
   Register = 'Register',
-  Verify = 'Verify'
+  Verify = 'Verify',
+  MobileRegistered = 'MobileRegistered',
 };
 
 @Component({
@@ -26,7 +28,8 @@ export class RegisterComponent implements OnInit {
   curStatus = RegStatus.Register;
   code = null;
 
-  constructor(private httpService: HttpService, private authService: AuthService) {
+  constructor(private httpService: HttpService, private authService: AuthService,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -107,13 +110,27 @@ export class RegisterComponent implements OnInit {
   resendCode() {
     this.httpService.post('register/resend', {
       username: this.registerForm.controls['username'].value,
-      code: this.code
+      // code: this.code
     }).subscribe(
       (data) => {
-        console.log('New code is sent: ', data);
+        this.snackBar.open('کد فعال سازی به موبایلتان ارسال شد', null, {duration: 2300});
       },
       (err) => {
-        console.error('Cannot send new code: ', err);
+        console.error('Cannot send new verification code: ', err);
+      }
+    );
+  }
+
+  resendEmailActivationCode() {
+    this.httpService.post('user/auth/link', {
+      username: this.registerForm.controls['username'].value,
+      is_forgot_mail: false,
+    }).subscribe(
+      data => {
+        this.snackBar.open('کد فعال سازی با موفقیت ارسال شد', null, {duration: 2300});
+      }, err => {
+        this.snackBar.open('خطا در ارسال کد', null, {duration: 1000});
+        console.error('error in sending activation code: ', err);
       }
     );
   }
@@ -133,10 +150,13 @@ export class RegisterComponent implements OnInit {
             this.closeDialog.emit(true);
           })
           .catch(err => {
-            console.error('Cannot login: ', err);
+            // correct code but not verified via email
+            this.curStatus = this.regStatus.MobileRegistered;
+            // console.error('Cannot login: ', err);
           });
       },
       (err) => {
+        // wrong verification code
         console.error('Cannot verify registration: ', err);
       }
     );

@@ -7,6 +7,7 @@ import {AuthService} from '../../services/auth.service';
 import {PageService} from '../../services/page.service';
 import {WINDOW} from '../../services/window.service';
 import {CartService} from '../../services/cart.service';
+import {LoginStatus} from '../../../site/login/components/login/login.component';
 
 @Component({
   selector: 'app-header',
@@ -48,7 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       data => {
         data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => (+a) + (+b)) : 0;
         if (+data) {
-          this.cartNumbers = (+data).toLocaleString( 'fa', {useGrouping: false});
+          this.cartNumbers = (+data).toLocaleString('fa', {useGrouping: false});
         } else {
           this.cartNumbers = '';
         }
@@ -62,26 +63,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
   login() {
     this.authService.checkValidation(this.router.url)
       .then(() => {
-        this.authService.isVerified.subscribe(
-          (data) => {
-            if (!data && this.window.innerWidth >= 960)
-              this.dialog.open(GenDialogComponent, {
-                width: '500px',
-                data: {
-                  componentName: this.dialogEnum.oauthOtherDetails,
-                  extraData: {
-                    status: 'verify',
-                  }
-                }
-              });
-          }
-        );
+        return new Promise((innerResolve, innerReject) => {
+          this.authService.isVerified.subscribe(
+            (data) => {
+              if (!data) {
+                return innerReject('header::authService->isVerified is false');
+              }
+            }
+          );
+        });
       })
       .catch(err => {
         this.dialog.open(GenDialogComponent, {
           width: '500px',
           data: {
             componentName: this.dialogEnum.login,
+            extraData: {
+              loginStatus: LoginStatus.Login
+            }
           }
         });
       });

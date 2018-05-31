@@ -22,11 +22,13 @@
     </li>
     <li *ngIf="!isLoggedIn || !isVerified">
       <a (click)="login()" class="faWrapper clickable-link" aria-label="Sign In or Register"><i
-        class="fa fa-sign-in fa-flip-horizontal loginIcon"></i></a>
+        class="fa fa-sign-in fa-flip-horizontal loginIcon"></i>
+      </a>
     </li>
     <li *ngIf="isLoggedIn && isVerified">
       <a (click)="logout()" class="faWrapper clickable-link" aria-label="Sign Out">
-        <i class="fa fa-sign-out fa-flip-horizontal loginIcon"></i></a>
+        <i class="fa fa-sign-out fa-flip-horizontal loginIcon"></i>
+      </a>
     </li>
   </ul>
 </nav>

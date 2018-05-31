@@ -22,7 +22,7 @@ export class SocketService {
   }
 
   public init() {
-    this.orderLineSocket = io(HttpService.Host );
+    this.orderLineSocket = io(HttpService.Host);
   }
 
   getOrderLineMessage() {

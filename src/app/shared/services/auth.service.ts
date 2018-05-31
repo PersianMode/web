@@ -4,18 +4,40 @@ import {HttpService} from './http.service';
 import {Router} from '@angular/router';
 import {SocketService} from './socket.service';
 
+export const VerificationErrors = {
+  notVerified: {
+    status: 420,
+    error: 'Customer is not verified yet',
+  },
+  notMobileVerified: {
+    status: 421,
+    error: 'Customer\'s mobile is not verified yet',
+  },
+  notEmailVerified: {
+    status: 422,
+    error: 'Customer\'s email is not verified yet',
+  },
+};
+
 @Injectable()
 export class AuthService {
   private defaultDisplayName = 'Anonymous user';
   isLoggedIn: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isVerified: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   userDetails: any = {};
+  tempUserData: any = {};
   warehouses: any[] = [];
 
 
   constructor(private httpService: HttpService, private router: Router, private socketService: SocketService) {
     this.populateUserDetails();
     this.getWarehouses();
+
+    this.isLoggedIn.subscribe(data => {
+      if (data && Object.keys(data).length > 0) {
+        this.tempUserData = {};
+      }
+    });
   }
 
   checkValidation(url) {
@@ -24,6 +46,7 @@ export class AuthService {
 
       this.httpService.get((tempUrl.includes('agent') || tempUrl.includes('?preview') ? 'agent/' : '') + 'validUser').subscribe(
         (data) => {
+          console.log('data from validUser: ', data);
           this.populateUserDetails(data);
           this.isLoggedIn.next(data);
           this.isVerified.next(!!data.is_verified);
@@ -36,7 +59,19 @@ export class AuthService {
         (err) => {
           this.populateUserDetails();
           this.isLoggedIn.next({});
+
+          // on the condition that the user exists but not verified on each aspect
+          // better practice to check existence of error message in err.error
           reject(err);
+          // Object.keys(VerificationErrors).forEach(ver => {
+          //   if (err.status === VerificationErrors[ver].status)
+          //     reject(VerificationErrors[ver]);
+          // });
+          console.error('error in validUser!', err);
+          // reject({
+          //   status: 403,
+          //   error: err
+          // });
         });
 
     });
@@ -82,23 +117,36 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.httpService.post(
         (this.router.url.includes('agent') ? 'agent/' : '') + 'login', info).subscribe(
-          (data) => {
-            this.populateUserDetails(data);
-            this.isLoggedIn.next(data);
-            this.isVerified.next(data.is_verified ? data.is_verified : false);
-            if (this.userDetails.warehouse_id) {
-              this.socketService.init();
-            }
-            resolve();
-          },
-          (err) => {
-            this.isLoggedIn.next({});
-            this.isVerified.next(false);
-            console.error('Error in login: ', err);
-            this.populateUserDetails();
-            reject(err);
+        (data) => {
+          this.populateUserDetails(data);
+          this.isLoggedIn.next(data);
+          this.isVerified.next(data.is_verified ? data.is_verified : false);
+          if (this.userDetails.warehouse_id) {
+            this.socketService.init();
           }
-        );
+          resolve();
+        },
+        (err) => {
+          this.isLoggedIn.next({});
+          this.isVerified.next(false);
+          console.error('Error in login: ', err);
+          this.populateUserDetails();
+          reject(err);
+        }
+      );
+    });
+  }
+
+  activateEmail(link) {
+    return new Promise((resolve, reject) => {
+      this.httpService.get(`user/activate/link/${link}`).subscribe(
+        data => {
+          resolve(data);
+        }, err => {
+          console.error('could not activate via this link: ', err);
+          reject(err);
+        }
+      );
     });
   }
 

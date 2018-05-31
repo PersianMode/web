@@ -85,7 +85,7 @@
           <div fxFlex="13" class="input-container">
             <div class="dob" [class.input-error]="seen.dob && !dob">
               <span>تاریخ تولد: </span>
-            <app-dob [date]="dob" (change)="changeDob($event)"></app-dob>
+              <app-dob [date]="dob" (change)="changeDob($event)"></app-dob>
             </div>
             <label class="field-error dp-hint"
                    *ngIf="!dob && seen['dob'] && curFocus !== 'dob'">لطفا
@@ -125,14 +125,17 @@
     </div>
     <div *ngIf="curStatus === regStatus.Verify">
       <div fxLayout="column" fxLayoutAlign="center center">
-        <div fxFlex="33">
+        <div fxFlex="33" style="margin-top: 10px;">
+          <div class="center">ایمیلی حاوی لینک فعال سازی برایتان ارسال شده است.</div>
+        </div>
+        <div fxFlex="33" style="margin-top: 10px;">
           <div class="center">لطفا کد ارسال شده به شماره همراه وارد شده را</div>
           <div class="center">در بخش زیر وارد کنید</div>
         </div>
         <div fxFlex="33" class="box-center input-container">
           <input class="input-field" type="number" [(ngModel)]="code" placeholder="کد"/>
         </div>
-        <div fxFlex="33" class="full-width">
+        <div fxFlex="33" class="full-width" style="margin-top: 10px;">
           <div fxLayout="row" fxLayoutAlign="center center">
             <div fxFlex="50" class="div-btn inform-btn clickable-link" (click)="resendCode()">
               <label>ارسال مجدد کد</label>
@@ -144,6 +147,26 @@
           <div>
             <div class="div-btn inform-btn clickable-link" (click)="checkCode()">
               <label>ارسال کد</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="curStatus === regStatus.MobileRegistered">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxFlex="33" style="margin-top: 10px;">
+          <div class="center">ایمیلی حاوی لینک فعال سازی برایتان ارسال شده است.</div>
+        </div>
+        <div fxFlex="33" style="margin-top: 10px;">
+          <div class="center">از طریق لینک ارسال شده اقدام به ورود نمایید.</div>
+        </div>
+        <div fxFlex="33" class="full-width" style="margin-top: 10px;">
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="50" class="div-btn inform-btn clickable-link" (click)="resendEmailActivationCode()">
+              <label>ارسال مجدد کد</label>
+            </div>
+            <div fxFlex="50" class="div-btn inform-btn clickable-link" (click)="backToRegister()">
+              <label>تغییر اطلاعات</label>
             </div>
           </div>
         </div>
