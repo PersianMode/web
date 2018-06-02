@@ -1,10 +1,10 @@
-import {Component, OnInit, HostListener} from '@angular/core';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {PageService} from '../../services/page.service';
-import {HttpService} from '../../services/http.service';
-import {DomSanitizer} from '@angular/platform-browser';
-import {DictionaryService} from '../../services/dictionary.service';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { PageService } from '../../services/page.service';
+import { HttpService } from '../../services/http.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { DictionaryService } from '../../services/dictionary.service';
 
 @Component({
   selector: 'app-collection-header',
@@ -32,8 +32,8 @@ export class CollectionHeaderComponent implements OnInit {
 
 
   constructor(private router: Router, private pageService: PageService,
-              private httpService: HttpService, private sanitizer: DomSanitizer,
-              private dictionaryService: DictionaryService) {
+    private httpService: HttpService, private sanitizer: DomSanitizer,
+    private dictionaryService: DictionaryService) {
   }
 
   ngOnInit() {
@@ -192,7 +192,7 @@ export class CollectionHeaderComponent implements OnInit {
           });
         }
         this.searchCollectionList.forEach(el => {
-            this.getCollectionPages(el);
+          this.getCollectionPages(el);
         });
         this.searchWaiting = false;
       },
