@@ -1,0 +1,20 @@
+<div class="div-lable"> {{costLabel}}</div>
+<br>
+<div *ngFor="let c of cityArray" class="city-del-cost" fxLayout="row"
+     fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+  <div fxFlex="50" style="margin-right: 5px">
+    {{c}}
+  </div>
+  <div fxFlex="50">
+    <input type="number">
+  </div>
+</div>
+<div style="text-align: center; width: 100%">
+  <div fxLayout="row" class="submit-edit-cost-btn">
+    <button mat-button fxFlex="50" class="action-button">تایید قیمت ها
+    </button>
+    <button mat-button fxFlex="50" class="action-button" >
+      ویرایش قیمت ها
+    </button>
+  </div>
+</div>

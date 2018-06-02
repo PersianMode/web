@@ -1,0 +1,9 @@
+<div class="style-select-wrapper main">
+  <div class="div-lable"> {{cityLabel}} </div>
+  <select class="select-style"
+          (change)="setNewProvince($event.target.value)">
+    <option *ngFor="let pa of provinceArray" [value]="pa.name">
+      {{pa.name}}
+    </option>
+  </select>
+</div>

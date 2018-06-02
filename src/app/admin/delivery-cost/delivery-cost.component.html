@@ -1,0 +1,28 @@
+<mat-card class="example-container mat-elevation-z8 main">
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span>بازه زمانی ارسال</span>
+          </ng-template>
+          <app-duration (selectedDuration) = "deliverySettingBaseOnDuration($event)"></app-duration>
+        </mat-tab>
+        <mat-tab *ngIf="showSettingTabs">
+          <ng-template mat-tab-label>
+            <span>شهر(ها)</span>
+          </ng-template>
+          <app-cities (selectedCities) = "addCityToArray($event)" [durationObject] = "durationObject" [cityLabel] = "cityLabel"></app-cities>
+        </mat-tab>
+        <mat-tab *ngIf="showSettingTabs">
+          <ng-template mat-tab-label>
+            <span>هزینه ارسال</span>
+          </ng-template>
+          <app-cost [cityArray] = "cityArray" [costLabel]="costLabel"></app-cost>
+        </mat-tab>
+        <mat-tab *ngIf="showSettingTabs">
+          <ng-template mat-tab-label>
+            <span>تخفیف بر اساس امتیاز وفاداری</span>
+          </ng-template>
+          <app-loyalty-discount></app-loyalty-discount>
+        </mat-tab>
+      </mat-tab-group>
+</mat-card>
