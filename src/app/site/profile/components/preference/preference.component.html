@@ -1,0 +1,28 @@
+<div>
+  <div class="preferred-part">
+    <div>
+      <h3>سایز</h3>
+    </div>
+    <app-size-picker [sizes]="shoesSize" [displayTitle]="false" [gender]="gender" [productType]="'footwear'" (value)="selectSize($event)" [selectedSize]="preferred_size"></app-size-picker>
+  </div>
+  <div class="preferred-part">
+    <div>
+      <h3>برندها</h3>
+    </div>
+    <div>
+      <div *ngFor="let brand of brandList" class="box" (click)="selectBrand(brand)" [ngClass]="{'selected-preferred': isSelectedBrand(brand)}">
+        <label class="preferred-name">{{brand.name}}</label>
+      </div>
+    </div>
+  </div>
+  <div class="preferred-part">
+    <div>
+      <h3>برچسب ها</h3>
+    </div>
+    <div>
+      <div *ngFor="let tag of tagList" class="box" (click)="selectTag(tag)" [ngClass]="{'selected-preferred': isSelectedTag(tag)}">
+        <label class="preferred-name">{{tag.name}}</label>
+      </div>
+    </div>
+  </div>
+</div>
