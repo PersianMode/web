@@ -4,6 +4,8 @@ import {HttpService} from '../../shared/services/http.service';
 import {ProgressService} from '../../shared/services/progress.service';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
+import {priceFormatter} from '../../shared/lib/priceFormatter';
+
 
 @Component({
   selector: 'app-loyalty-group',
@@ -59,6 +61,22 @@ export class LoyaltyGroupComponent implements OnInit {
     if (!this.anyChanges)
       return;
 
+    if (this.loyaltyGroups.find(el => el.min_score === this.lgForm.controls['min_score'].value &&
+     (!this.selectedGroup || (el._id !== this.selectedGroup._id)))) {
+      this.snackBar.open('در حال حاضر حداقل امتیاز وارد شده وجود دارد. مقدار را تغییر دهید', null, {
+        duration: 3200,
+      });
+      return;
+    }
+
+    if (this.loyaltyGroups.find(el => el.name.trim() === this.lgForm.controls['name'].value.trim() &&
+    (!this.selectedGroup || (el._id !== this.selectedGroup._id)))) {
+      this.snackBar.open('در حال حاضر نام وارد شده وجود دارد. مقدار را تغییر دهید', null, {
+        duration: 3200,
+      });
+      return;
+    }
+
     this.progressService.enable();
     this.httpService.post('loyaltygroup', {
       _id: this.selectedGroup ? this.selectedGroup._id : null,
@@ -83,6 +101,7 @@ export class LoyaltyGroupComponent implements OnInit {
 
         this.progressService.disable();
         this.lgForm.reset();
+        this.selectedGroup = null;
       },
       err => {
         console.error('Cannot upsert loyalty group: ', err);
@@ -145,5 +164,14 @@ export class LoyaltyGroupComponent implements OnInit {
           this.anyChanges = true;
       });
     }
+  }
+
+  clearFields() {
+    this.selectedGroup = null;
+    this.lgForm.reset();
+  }
+
+  formatter(number) {
+    return priceFormatter(number);
   }
 }
