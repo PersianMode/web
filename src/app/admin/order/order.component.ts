@@ -20,13 +20,5 @@ export class OrderComponent implements OnInit {
     this.titleService.setTitleWithOutConstant('ادمین: سفارش‌ها');
   }
 
-  // showModal() {
-  //   const _orderId = '5b0c03fdc923734254c99e01';
-  //   const _orderLineId = '5b0c03fdc923734254c99e05';
-  //   this.dialog.open(TicketComponent, {
-  //       width: '1000px',
-  //       data: {_orderId, _orderLineId}
-  //   });
-  // }
 
 }

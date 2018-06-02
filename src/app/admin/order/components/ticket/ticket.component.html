@@ -3,7 +3,7 @@
 <div class="example-container mat-elevation-z8" dir="rtl">
   
 
-  <mat-table #table [dataSource]="dataSource" class="example-table" >
+  <mat-table *ngIf="dataSource;else otherContent" #table [dataSource]="dataSource" class="example-table" >
 
     <!-- position -->
     <ng-container matColumnDef="position">
@@ -18,9 +18,9 @@
     </ng-container>
 
     <!-- warehouse_name -->
-    <ng-container matColumnDef="warehouse_name">
+    <ng-container matColumnDef="receiver">
       <mat-header-cell *matHeaderCellDef> نام انبار </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.warehouse_name}}</mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.receiver}}</mat-cell>
     </ng-container>
 
     <!-- desc -->
@@ -50,7 +50,11 @@
       <mat-cell dir="ltr" *matCellDef="let element"> {{element.timestamp}}</mat-cell>
     </ng-container>
 
-
+    <ng-template *ngIf="!dataSource" #otherContent>
+      <mat-cell>
+        <h1> تیکتی برای این سفارش یافت نشد </h1>
+      </mat-cell>
+    </ng-template>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>

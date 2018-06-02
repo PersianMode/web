@@ -90,7 +90,7 @@
                     <p><b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p>
                 </td>
                 <td>
-                    <button mat-button color="primary">تیکت ها</button>
+                    <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
                 </td>
                 <td>
                     <button mat-button color="primary" (click)='scanProduct(detail.order, ol)'>{{getOrderLineProcessTitle(ol)}}</button>
