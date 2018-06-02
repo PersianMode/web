@@ -60,7 +60,7 @@ export class LoyaltyGroupComponent implements OnInit {
       return;
 
     this.progressService.enable();
-    this.httpService.post('loyaltygroup/modify', {
+    this.httpService.post('loyaltygroup', {
       _id: this.selectedGroup ? this.selectedGroup._id : null,
       name: this.lgForm.controls['name'].value,
       min_score: this.lgForm.controls['min_score'].value,
@@ -75,8 +75,14 @@ export class LoyaltyGroupComponent implements OnInit {
             name: this.lgForm.controls['name'].value,
             min_score: this.lgForm.controls['min_score'].value,
           });
+        } else {
+          const curObj = this.loyaltyGroups.find(el => el._id === res._id);
+          curObj.name = this.lgForm.controls['name'].value;
+          curObj.min_score = this.lgForm.controls['min_score'].value;
         }
+
         this.progressService.disable();
+        this.lgForm.reset();
       },
       err => {
         console.error('Cannot upsert loyalty group: ', err);
@@ -131,7 +137,7 @@ export class LoyaltyGroupComponent implements OnInit {
   }
 
   fieldChanged() {
-    this.anyChanges = !this.selectedGroup || false;
+    this.anyChanges = !this.selectedGroup;
 
     if (this.selectedGroup) {
       Object.keys(this.lgForm.controls).forEach(el => {
