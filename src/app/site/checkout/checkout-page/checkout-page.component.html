@@ -10,6 +10,9 @@
             <mat-expansion-panel-header>خلاصه</mat-expansion-panel-header>
               <app-checkout-summary [total]="total" [discount]="discount" [usedBalance]="usedBalance"
                                     [usedLoyaltyPoint]="usedLoyaltyPoint"></app-checkout-summary>
+
+              <p *ngIf="changeMessage" style="color: orangered; font-weight: bold">{{changeMessage}}</p>
+              <a *ngIf="hasChangeError"  routerLink="/cart" >بازگشت به سبد خرید</a>
           </mat-expansion-panel>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
@@ -25,7 +28,7 @@
             <app-address-table [isProfile]="false"></app-address-table>
           </mat-expansion-panel>
         </mat-accordion>
-        <button mat-raised-button style="padding:10px;margin:15px;font-size:12pt;background: black;color:white;width:calc(100% - 30px)" (click)="checkout()" [disabled]="disabled" [style.background]="disabled ? 'gray' : 'black'">پرداخت</button>
+        <button mat-raised-button style="padding:10px;margin:15px;font-size:12pt;background: black;color:white;width:calc(100% - 30px)" (click)="checkout()" [disabled]="disabled || hasChangeError" [style.background]="disabled || hasChangeError ? 'gray' : 'black'">پرداخت</button>
       </div>
     </div>
   </div>

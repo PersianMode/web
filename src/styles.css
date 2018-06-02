@@ -1028,3 +1028,7 @@ p {
 .mat-pseudo-checkbox-checked {
   background: #999999 !important;
 }
+
+.mat-input-element {
+  font-family: iranyekan, sans-serif !important;
+}

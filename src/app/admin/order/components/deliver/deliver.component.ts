@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -15,8 +15,9 @@ import {ProgressService} from '../../../../shared/services/progress.service';
   templateUrl: './deliver.component.html',
   styleUrls: ['./deliver.component.css']
 })
-export class DeliverComponent implements OnInit {
+export class DeliverComponent implements OnInit, OnDestroy {
 
+  
   @Output() newDeliverCount = new EventEmitter();
 
 
@@ -43,6 +44,9 @@ export class DeliverComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  socketObserver: any = null;
+ 
+
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
@@ -52,14 +56,17 @@ export class DeliverComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.load();
+    // this.load();
 
-    this.socketService.getOrderLineMessage().subscribe(msg => {
-      if (this.processDialogRef)
-        this.processDialogRef.close();
+    this.socketObserver = this.socketService.getOrderLineMessage();
+    if (this.socketObserver) {
+      this.socketObserver.subscribe(msg => {
+        if (this.processDialogRef)
+          this.processDialogRef.close();
 
-      this.load();
-    });
+        // this.load();
+      });
+    }
   }
 
   load() {
@@ -72,7 +79,7 @@ export class DeliverComponent implements OnInit {
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
 
-    this.httpService.post('search/Order', {options, offset, limit}).subscribe(res => {
+    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.resultsLength = res.total;
       this.dataSource.data = res.data;
 
@@ -153,5 +160,8 @@ export class DeliverComponent implements OnInit {
   onPageChange($event: any) {
     this.load();
   }
-
+  ngOnDestroy(): void {
+    if (this.socketObserver)
+      this.socketObserver.unsubscribe();
+  }
 }

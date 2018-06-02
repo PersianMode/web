@@ -22,11 +22,12 @@ export class SocketService {
   }
 
   public init() {
-    this.orderLineSocket = io(HttpService.Host );
+    this.orderLineSocket = io(HttpService.Host);
   }
 
   getOrderLineMessage() {
-    return this.orderLineObservable;
+    if (this.orderLineSocket)
+      return this.orderLineObservable;
   }
 
   disconnect() {

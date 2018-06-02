@@ -42,7 +42,10 @@ export class CollectionProductComponent implements OnInit {
         this.snackBar.open('product added to collection successfully.', null, {
           duration: 3200
         });
-        this.products.push(expObj);
+        this.products.push(Object.assign(expObj, {
+          brand: data.brand.name,
+          product_type: data.product_type.name,
+        }));
         this.progressService.disable();
 
       }, err => {
