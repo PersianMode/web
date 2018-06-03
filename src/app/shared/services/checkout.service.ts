@@ -25,8 +25,8 @@ export class CheckoutService {
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private cartService: CartService, private httpService: HttpService,
-              private authService: AuthService, private snackBar: MatSnackBar,
-              private router: Router) {
+    private authService: AuthService, private snackBar: MatSnackBar,
+    private router: Router) {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
@@ -79,11 +79,10 @@ export class CheckoutService {
         price: r.price,
         count: r.count - (r.reserved ? r.reserved : 0),
         quantity: r.quantity,
+        discount: r.discount
       }));
-    this.httpService.post('finalCheck', cartItems)
-      .subscribe(res => {
-        console.log(res);
-      }, err => console.error(err));
+    return this.httpService.post('finalCheck', cartItems)
+
   }
 
   getLoyaltyBalance() {
@@ -151,11 +150,11 @@ export class CheckoutService {
 
   private accumulateData() {
     return {
-      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems() ,
+      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.address,
       customerData: this.customerData,
-      transaction_id: 'xyz' + Math.floor( Math.random() * 100000 ),
+      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
       used_point: 0,
       used_balance: 0,
       total_amount: this.total,

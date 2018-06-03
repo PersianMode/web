@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -10,42 +10,55 @@ import {STATUS} from '../../../../shared/enum/status.enum';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {BarcodeCheckerComponent} from '../barcode-checker/barcode-checker.component';
 import {ProgressService} from '../../../../shared/services/progress.service';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+import * as moment from 'jalali-moment';
+
+
 
 @Component({
   selector: 'app-order-inbox',
   templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.css']
+  styleUrls: ['./inbox.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
+      state('expanded', style({height: '*', visibility: 'visible'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
-export class InboxComponent implements OnInit {
+export class InboxComponent implements OnInit, OnDestroy {
+
 
 
   @Output() newInboxCount = new EventEmitter();
 
   displayedColumns = [
     'position',
-    'product',
-    'is_collect',
-    'barcode',
-    'price',
-    'used_point',
-    'used_balance',
     'customer',
+    'is_collect',
+    'order_time',
+    'total_order_lines',
     'address',
+    'used_balance',
     'status',
-    'process'
+    'process_order'
   ];
 
   dataSource = new MatTableDataSource();
+  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
+  expandedElement: any;
 
-  pageSize = 20;
+  pageSize = 10;
   resultsLength: Number;
 
   processDialogRef;
 
-  isSalesManager: boolean;
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  socketObserver: any = null;
+
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
@@ -57,21 +70,17 @@ export class InboxComponent implements OnInit {
 
   ngOnInit() {
 
-    this.isSalesManager = this.authService.userDetails.accessLevel === AccessLevel.SalesManager;
-
-    if (this.isSalesManager)
-      this.displayedColumns.push('refund')
-
     this.load();
 
+    this.socketObserver = this.socketService.getOrderLineMessage();
+    if (this.socketObserver) {
+      this.socketObserver.subscribe(msg => {
+        if (this.processDialogRef)
+          this.processDialogRef.close();
 
-
-    this.socketService.getOrderLineMessage().subscribe(msg => {
-      if (this.processDialogRef)
-        this.processDialogRef.close();
-
-      this.load();
-    });
+        this.load();
+      });
+    }
   }
 
   load() {
@@ -86,10 +95,13 @@ export class InboxComponent implements OnInit {
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
 
-    this.httpService.post('search/Order', {options, offset, limit}).subscribe(res => {
+    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
       this.newInboxCount.emit(res.total);
-      this.dataSource.data = res.data;
+
+      const rows = [];
+      res.data.forEach(order => rows.push(order, {detailRow: true, order}));
+      this.dataSource.data = rows;
       this.resultsLength = res.data.length ? res.data.length : 0;
       console.log('-> ', this.dataSource.data);
     }, err => {
@@ -100,173 +112,107 @@ export class InboxComponent implements OnInit {
   }
 
 
-  getIndex(element) {
-    return this.dataSource.data.indexOf(element) + 1;
+  getIndex(order) {
+
+    let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
+    if (index === 0)
+      index = 1;
+    return index
   }
 
-  getProductDetail(element) {
+  getDate(orderTime) {
+    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss')
+  }
 
-    const product_color = element.product_colors.find(x => x._id === element.instance.product_color_id);
+  getProductDetail(orderLine) {
+
+    const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
     const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      [HttpService.Host,
-      HttpService.PRODUCT_IMAGE_PATH,
-      element.product_id,
-      product_color._id,
-      product_color.image.thumbnail].join('/')
+      imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id)
       : null;
     return {
-      name: element.product_name,
+      name: orderLine.instance.product_name,
       thumbnailURL,
       color: product_color ? product_color.name : null,
       color_code: product_color ? product_color.code : null,
-      size: element.instance.size,
-      product_id: element.product_id
+      size: orderLine.instance.size,
+      product_id: orderLine.instance.product_id
     };
   }
 
-  showDetial(element) {
+  showDetial(orderLine) {
     this.processDialogRef = this.dialog.open(ProductViewerComponent, {
       width: '400px',
-      data: this.getProductDetail(element)
+      data: this.getProductDetail(orderLine)
     });
   }
 
 
-  getStatus(element) {
+  getOrderStatus(order) {
 
-    const orderStatus = OrderStatus.find(x => x.status === element.tickets.status);
-    return orderStatus ? orderStatus.name : 'نامشخص';
-
+    return '';
+  }
+  getOrderLineStatus(orderLine) {
+    if (orderLine && orderLine.tickets)
+      return OrderStatus.find(x => x.status === orderLine.tickets.find(x => !x.is_processed).status).name;
   }
 
-  showAddress(element) {
+  showAddress(order) {
 
-    if (!element.address) {
+    if (!order.address) {
       this.openSnackBar('order line has no address !');
       return;
     }
 
     this.processDialogRef = this.dialog.open(OrderAddressComponent, {
       width: '400px',
-      data: {address: element.address, is_collect: !!element.is_collect}
+      data: {address: order.address, is_collect: !!order.is_collect}
     });
 
 
   }
 
-  getProcessTitle(element) {
-    if (element.tickets.status === STATUS.default) {
+  getOrderLineProcessTitle(orderLine) {
+
+    const foundActiveTicket = orderLine.tickets.find(x => !x.is_processed);
+
+    if (foundActiveTicket.status === STATUS.default) {
       return 'اضافه به انبار آنلاین'
-    }
-    else if (element.tickets.status === STATUS.WaitForOnlineWarehouse) {
+    } else if (foundActiveTicket.status === STATUS.WaitForOnlineWarehouse) {
       return 'درخواست مجدد به انبار آنلاین'
-    } else if (element.tickets.status === STATUS.WaitForInvoice) {
-      return 'درخواست مجدد صدور فاکتور'
-    } else if (element.tickets.status === STATUS.InternalDelivery) {
-      return 'اعلام دریافت محصول'
-    } else if (element.tickets.status === STATUS.NotExists) {
-      return ''
-    }
-
-  }
-  process(element) {
-
-    if (element.tickets.status === STATUS.WaitForOnlineWarehouse) {
-      this.requestOnlineWarehouse(element._id, element.order_line_id);
-    } else if (element.tickets.status === STATUS.WaitForInvoice) {
-      this.requestInvoice(element._id, element.order_line_id);
-    } else if (element.tickets.status === STATUS.default ||
-      element.tickets.status === STATUS.InternalDelivery) {
-      this.scanProduct(element);
     }
   }
 
-  scanProduct(element) {
+  scanProduct(order, orderLine) {
     this.processDialogRef = this.dialog.open(BarcodeCheckerComponent, {
       width: '400px',
-      data: {barcode: element.instance.barcode}
+      data: {barcode: orderLine.instance.barcode}
     });
     this.processDialogRef.afterClosed().subscribe(isMatched => {
       if (isMatched)
-        this.makeDesicion(element);
+        this.makeDesicion(order,orderLine);
     });
   }
 
-  requestOnlineWarehouse(orderId, orderLineId) {
-    this.progressService.enable();
-    this.httpService.post('order/offline/requestOnlineWarehouse', {
-      orderId,
-      orderLineId
-    }).subscribe(res => {
-      this.progressService.disable();
-      this.openSnackBar('درخواست به انبار آنلاین با موفقیت انجام شد')
-    }, err => {
-      this.progressService.disable();
-      this.openSnackBar('خطا در درخواست به انبار آنلاین')
-    })
+  makeDesicion(order, orderLine) {
+
+    const foundActiveTicket = orderLine.tickets.find(x => !x.is_processed);
+
+    if (foundActiveTicket.status === STATUS.default || foundActiveTicket.status === STATUS.WaitForOnlineWarehouse)
+      this.addToOnlineWarehouse(order,orderLine);
   }
-
-  requestInvoice(orderId, orderLineId) {
-    this.progressService.enable();
-    this.httpService.post('order/offline/requestInvoice', {
-      orderId,
-      orderLineId
-    }).subscribe(res => {
-      this.progressService.disable();
-      this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد')
-    }, err => {
-      this.progressService.disable();
-      this.openSnackBar('خطا در درخواست صدور مجدد فاکتور')
-    })
-  }
-
-  makeDesicion(element) {
-
-    if (element.tickets.status === STATUS.default)
-      this.addToOnlineWarehouse(element);
-    if (element.tickets.status === STATUS.InternalDelivery)
-      this.receiveAgreement(element);
-  }
-
-  addToOnlineWarehouse(element) {
+  
+  addToOnlineWarehouse(order, orderLine) {
     this.progressService.enable();
     this.httpService.post('order/ticket/onlineWarehouse', {
-      orderId: element._id,
-      orderLineId: element.order_line_id
+      orderId: order._id,
+      orderLineId: orderLine.order_line_id,
+      barcode: orderLine.instance.barcode
     }).subscribe(res => {
       this.progressService.disable();
       this.openSnackBar('درخواست به انبار آنلاین با موفقیت ارسال شد');
     }, err => {
       this.openSnackBar('خطا در اضافه نمودن محصول به انبار آنلاین');
-      this.progressService.disable();
-    });
-  }
-
-
-  receiveAgreement(element) {
-    this.progressService.enable();
-
-    const body: any = {
-      orderId: element._id,
-      orderLineId: element.order_line_id
-    };
-    if (element.is_collect) {
-      const destionationWarehouse = this.authService.warehouses.find(x => x.address._id === element.address._id);
-      if (!destionationWarehouse) {
-        this.openSnackBar('فروشگاه مقصد پیدا نشد');
-        return;
-      }
-      if (destionationWarehouse._id !== this.authService.userDetails.warehouse_id)
-        body.toWarehouseId = destionationWarehouse._id;
-    }
-
-
-
-    this.httpService.post('order/ticket/receive', body).subscribe(res => {
-      this.progressService.disable();
-      this.openSnackBar('اعلام رسید محصول به انبار با موفقیت ارسال شد');
-    }, err => {
-      this.openSnackBar('خطا در اعلام رسید محصول به انبار');
       this.progressService.disable();
     });
   }
@@ -285,6 +231,11 @@ export class InboxComponent implements OnInit {
 
   onPageChange($event: any) {
     this.load();
+  }
+
+  ngOnDestroy(): void {
+    if (this.socketObserver)
+      this.socketObserver.unsubscribe();
   }
 
 }
