@@ -18,7 +18,7 @@
     </mat-expansion-panel-header>
     <div *ngFor="let v of filter_options[i].values;let j=index"
          [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
-      <mat-checkbox *ngIf="fo.name !== 'color' && fo.name !== 'size'&& fo.name!=='shoesSize' && fo.name !=='price'" && fo.name !== 'discount'"
+      <mat-checkbox *ngIf="fo.name !== 'color' && fo.name !== 'size'&& fo.name!=='shoesSize' && fo.name !=='price' && fo.name !== 'discount'"
                     (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
         <span class="check-box-text">{{filter_options[i].values_fa[j]}}</span>
       </mat-checkbox>
