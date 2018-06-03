@@ -9,6 +9,5 @@ export let links: any[] = [
   {address: '/agent/uploads', access: [AccessLevel.ContentManager]},
   {address: '/agent/orders', access: [AccessLevel.SalesManager, AccessLevel.ShopClerk]},
   {address: '/agent/soldouts', access: [AccessLevel.ContentManager]},
-  {address: '/agent/delivery', access: [AccessLevel.SalesManager]},
+  {address: '/agent/loyaltygroup', access: [AccessLevel.SalesManager]},
 ];
-
