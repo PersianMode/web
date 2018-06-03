@@ -12,6 +12,7 @@ export class DeliveryCostComponent implements OnInit {
   cityArray = [];
   cityLabel;
   costLabel;
+  loyaltyLabel;
   constructor() { }
 
   ngOnInit() {
@@ -27,12 +28,12 @@ export class DeliveryCostComponent implements OnInit {
     };
     this.cityLabel = ' : ' + 'شهرهای قابل انتخاب برای تحویل ' + this.durationObject.name ;
     this.costLabel = ' : ' + 'هزینه ارسال به تفکیک شهر برای تحویل ' + this.durationObject.name ;
+    this.loyaltyLabel = ' : ' + 'تخفیف به تفکیک امتیاز وفاداری برای تحویل ' + this.durationObject.name ;
 
   }
 
   addCityToArray($event) {
-    this.cityArray.push($event);
-    console.log(this.cityArray);
+    this.cityArray = this.cityArray.slice().concat([$event]);
   }
 
 }

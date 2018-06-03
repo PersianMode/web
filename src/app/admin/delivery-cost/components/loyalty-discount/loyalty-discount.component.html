@@ -1,3 +1,11 @@
-<p>
-  loyalty-discount works!
-</p>
+<div class="div-lable"> {{loyaltyLabel}}</div>
+<br>
+<div *ngFor="let dcl of deliveryCostList" class="city-del-cost" fxLayout="row"
+     fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+  <div fxFlex="50" style="margin-right: 5px">
+    {{dcl.name}}
+  </div>
+  <div fxFlex="50">
+    <input type="number" [(ngModel)]="dcl.value">
+  </div>
+</div>

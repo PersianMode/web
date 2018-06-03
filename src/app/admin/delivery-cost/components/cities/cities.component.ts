@@ -23,8 +23,8 @@ export class CitiesComponent implements OnInit {
       }
     );
   }
-  setNewProvince(newProvince) {
-    this.selectedCities.emit(newProvince);
+  setNewCity(newCity) {
+    this.selectedCities.emit(newCity);
   }
 
 }

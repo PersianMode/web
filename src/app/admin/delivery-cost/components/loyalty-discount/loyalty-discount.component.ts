@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import {HttpService} from '../../../../shared/services/http.service';
 
 @Component({
   selector: 'app-loyalty-discount',
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./loyalty-discount.component.css']
 })
 export class LoyaltyDiscountComponent implements OnInit {
-
-  constructor() { }
+  @Input() loyaltyLabel;
+  loyaltyNameList;
+  constructor(private httpService: HttpService) { }
 
   ngOnInit() {
+    this.httpService.get(`loyaltygroup`).subscribe(res => {
+      this.loyaltyNameList = res;
+    }, err => {
+      console.error();
+    });
+    console.log('--------', this.loyaltyNameList);
   }
-
 }

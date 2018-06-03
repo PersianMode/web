@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 
 @Component({
   selector: 'app-cost',
@@ -6,11 +6,34 @@ import { Component, OnInit, Input} from '@angular/core';
   styleUrls: ['./cost.component.css']
 })
 export class CostComponent implements OnInit {
-  @Input() cityArray;
+  finalCoctList;
+  @Input()
+  set cityArray(value) {
+    if (value && value.length) {
+      value.forEach(el => {
+        if (!this.deliveryCostList.map(i => i.name).includes(el))
+          this.deliveryCostList.push({
+            name: el,
+            value: null,
+          });
+      });
+    }
+    else
+      this.deliveryCostList = [];
+  }
+
   @Input() costLabel;
-  constructor() { }
+
+  deliveryCostList = [];
+
+  constructor() {
+  }
 
   ngOnInit() {
+  }
+
+  submitCost() {
+    this.finalCoctList = this.deliveryCostList;
   }
 
 }
