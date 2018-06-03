@@ -36,4 +36,7 @@ export class DeliveryCostComponent implements OnInit {
     this.cityArray = this.cityArray.slice().concat([$event]);
   }
 
+  submitTotalInfo() {
+  }
+
 }

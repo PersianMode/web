@@ -1,11 +1,17 @@
-<div class="div-lable"> {{loyaltyLabel}}</div>
+<div class="div-lable"> {{loyalty_label}}</div>
 <br>
-<div *ngFor="let dcl of deliveryCostList" class="city-del-cost" fxLayout="row"
+<div *ngFor="let ln of loyaltyNameList" class="city-del-cost" fxLayout="row"
      fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-  <div fxFlex="50" style="margin-right: 5px">
-    {{dcl.name}}
+  <div fxFlex="50" style="margin-right: 5px; font-weight: bold">
+    {{ln.name}}
   </div>
   <div fxFlex="50">
-    <input type="number" [(ngModel)]="dcl.value">
+    <input type="number" [(ngModel)]="ln.value">
+  </div>
+</div>
+<div style="text-align: center; width: 100%; margin-top: 50px">
+  <div style="width: 100%">
+    <button mat-button style="background-color: #d9d9d9" (click)="submitTotalInfo()">تایید تخفیف ها
+    </button>
   </div>
 </div>

@@ -6,7 +6,7 @@ import {Component, OnInit, Input} from '@angular/core';
   styleUrls: ['./cost.component.css']
 })
 export class CostComponent implements OnInit {
-  finalCoctList;
+  finalCostList;
   @Input()
   set cityArray(value) {
     if (value && value.length) {
@@ -17,8 +17,7 @@ export class CostComponent implements OnInit {
             value: null,
           });
       });
-    }
-    else
+    } else
       this.deliveryCostList = [];
   }
 
@@ -33,7 +32,7 @@ export class CostComponent implements OnInit {
   }
 
   submitCost() {
-    this.finalCoctList = this.deliveryCostList;
+    this.finalCostList = this.deliveryCostList;
   }
 
 }
