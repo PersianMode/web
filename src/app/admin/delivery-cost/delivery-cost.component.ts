@@ -28,7 +28,7 @@ export class DeliveryCostComponent implements OnInit {
     };
     this.cityLabel = ' : ' + 'شهرهای قابل انتخاب برای تحویل ' + this.durationObject.name ;
     this.costLabel = ' : ' + 'هزینه ارسال به تفکیک شهر برای تحویل ' + this.durationObject.name ;
-    this.loyaltyLabel = ' : ' + 'تخفیف به تفکیک امتیاز وفاداری برای تحویل ' + this.durationObject.name ;
+    this.loyaltyLabel = ' : ' + 'درصد تخفیف به تفکیک امتیاز وفاداری برای تحویل ' + this.durationObject.name ;
 
   }
 

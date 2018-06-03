@@ -7,7 +7,7 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./cities.component.css']
 })
 export class CitiesComponent implements OnInit {
-  provinceArray: any;
+  cityArray: any;
   @Input() durationObject;
   @Input() cityLabel;
 
@@ -17,7 +17,7 @@ export class CitiesComponent implements OnInit {
   ngOnInit() {
     this.http.get('assets/province.json').subscribe(
       (info: any) => {
-        this.provinceArray = info;
+        this.cityArray = info;
       }, err => {
         console.log('err: ', err);
       }
