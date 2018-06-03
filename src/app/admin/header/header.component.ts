@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
     {label: 'بارگذاری فایل', path: '/agent/uploads', active: false},
     {label: 'سفارش‌ها', path: '/agent/orders', active: false},
     {label: 'گروه وفاداری', path: '/agent/loyaltygroup', active: false},
+    {label: 'ارسال', path: '/agent/delivery', active: false},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;

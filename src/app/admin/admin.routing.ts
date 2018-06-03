@@ -21,6 +21,11 @@ const Admin_ROUTES: Routes = [
         loadChildren: 'app/admin/loyalty-group/loyaltygroup.module#LoyaltyGroupModule',
         canActivate: [AdminAuthGuard]
       },
+      {
+        path: 'delivery',
+        loadChildren: 'app/admin/delivery/delivery.module#DeliveryModule',
+        canActivate: [AdminAuthGuard]
+      }
     ]
   },
 ];

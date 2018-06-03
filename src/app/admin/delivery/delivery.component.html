@@ -1,0 +1,64 @@
+<mat-card class="card-container">
+  <div>
+    <h2>
+      <label>لیست سفارشات</label>
+    </h2>
+
+    <div>
+      <mat-table #table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">ردیف</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{formatter(element.position)}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delivery_date">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تاریخ ارسال</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.delivery_date}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delivery_time">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">زمان ارسال</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.delivery_time}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delivery_agent">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مسئول ارسال</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.delivery_agent}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="order_code">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">کد سفارش</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.order_code}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="order_line_count">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تعداد کالا</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.order_line_count}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="is_delivered">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تحویل گرفته شده</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            <div *ngIf="element.is_delivered">
+              <mat-icon style="color: green" aria-label="delivered">check</mat-icon>
+            </div>
+            <div *ngIf="!element.is_delivered">
+                <mat-icon style="color: red" aria-label="not delivered">close</mat-icon>
+              </div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+    <div dir="ltr">
+      <mat-paginator [length]="totalRecords" [pageIndex]="offset / limit" [pageSize]="limit" [pageSizeOptions]="[5, 10, 20, 50]"
+        (page)="changePageSetting($event)">
+      </mat-paginator>
+    </div>
+  </div>
+  <div *ngIf="selectedDelivery">
+    <h3></h3>
+  </div>
+</mat-card>
