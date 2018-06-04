@@ -25,12 +25,13 @@ export class CollectionHeaderComponent implements OnInit {
   placements: any = {};
   topMenu = [];
   searchPhrase = null;
-  searchResultList = [];
+  searchProductList = [];
+  searchCollectionList = [];
   searchWaiting = false;
 
   constructor(private router: Router, private pageService: PageService,
-    private httpService: HttpService, private sanitizer: DomSanitizer,
-    private dictionaryService: DictionaryService) {
+              private httpService: HttpService, private sanitizer: DomSanitizer,
+              private dictionaryService: DictionaryService) {
   }
 
   ngOnInit() {
@@ -85,17 +86,6 @@ export class CollectionHeaderComponent implements OnInit {
     }, 100);
   }
 
-  searchFocused() {
-    this.searchIsFocused = true;
-    if (this.searchPhrase)
-      this.searchProduct();
-  }
-
-  searchUnfocused() {
-    this.searchIsFocused = false;
-    this.searchResultList = [];
-  }
-
   persistList() {
     this.persistedList = true;
   }
@@ -118,9 +108,26 @@ export class CollectionHeaderComponent implements OnInit {
     return Object.keys(list);
   }
 
+  searchFocused() {
+    this.searchIsFocused = true;
+    if (this.searchPhrase)
+      this.searchProduct();
+    else {
+      this.searchProductList = [];
+      this.searchCollectionList = [];
+    }
+  }
+
+  searchUnfocused() {
+    this.searchIsFocused = false;
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+  }
+
   searchProduct() {
+    this.searchProductList = [];
     if (!this.searchPhrase) {
-      this.searchResultList = [];
+      this.searchProductList = [];
       return;
     }
 
@@ -133,18 +140,55 @@ export class CollectionHeaderComponent implements OnInit {
       limit: 5,
     }).subscribe(
       (data) => {
-        this.searchResultList = [];
+        this.searchProductList = [];
         if (data.data) {
           data.data.forEach(el => {
-            this.searchResultList.push({
+            this.searchProductList.push({
               id: el._id,
               name: el.name,
               brand: this.dictionaryService.translateWord(el.brand.name),
               type: this.dictionaryService.translateWord(el.product_type.name),
-              imgUrl: this.getProductThumbnail(el)
+              imgUrl: this.getProductThumbnail(el),
+              tags: this.dictionaryService.translateWord(el.tags.name),
+              instances: el.instances.article_no,
             });
           });
         }
+        this.searchCollection();
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  searchCollection() {
+    this.searchCollectionList = [];
+    if (!this.searchPhrase) {
+      this.searchCollectionList = [];
+      return;
+    }
+    this.httpService.post('search/Collection', {
+      options: {
+        phrase: this.searchPhrase,
+      },
+      offset: 0,
+      limit: 5,
+    }).subscribe(
+      (data) => {
+        this.searchCollectionList = [];
+        if (data.data) {
+          data.data.forEach(el => {
+            this.searchCollectionList.push({
+              id: el._id,
+              name: el.name,
+              name_fa: el.name_fa,
+            });
+          });
+        }
+        this.searchCollectionList.forEach(el => {
+            this.getCollectionPages(el);
+        });
         this.searchWaiting = false;
       },
       (err) => {
@@ -153,10 +197,28 @@ export class CollectionHeaderComponent implements OnInit {
       });
   }
 
-  selectProduct(product) {
-    this.router.navigate([`/product/${product.id}`]);
+  getCollectionPages(el) {
+    this.httpService.post('collectionPages', {
+      collection_id: el.id,
+    }).subscribe(
+      (data) => {
+        el.pages = data;
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  selectSearchResult(element, isProduct) {
+    if (isProduct)
+      this.router.navigate([`/product/${element.id}`]);
+    else
+      this.router.navigate([`${element.pages[0].address}`]);
+
     this.searchIsFocused = false;
-    this.searchResultList = [];
+    this.searchProductList = [];
+    this.searchCollectionList = [];
   }
 
   getProductThumbnail(product) {

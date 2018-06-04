@@ -1,5 +1,5 @@
 <div class="sub-menu-area">
-  <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="appSubMenuForm">
+  <form (ngSubmit)="modifyItem()" class="fields-area" [formGroup]="appSubMenuForm" *ngIf="canEdit">
     <div class="form-controller">
       <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
         fxLayoutAlign.xs="center center">
@@ -58,28 +58,34 @@
   </form>
   <div class="demo-area demo-list">
     <div *ngFor="let section of getSectionList(); first as isFirst; last as isLast">
-      <div class="section-container">
+      <div class="section-container" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(section, 'section')}">
         <img *ngIf="filteredSubMenuItems[section].details.info.imgUrl" [src]="getImage(filteredSubMenuItems[section].details.info.imgUrl)"
           class="section-image" />
         <div *ngIf="!filteredSubMenuItems[section].details.info.imgUrl" class="section-image no-image">
           &nbsp;
         </div>
         <div class="section-title persian-field">
-          <div>
+          <div *ngIf="canEdit">
             <button mat-icon-button (click)="move(false, section)" [disabled]="isFirst || moveButtonsShouldDisabled" class="move-button">
               <mat-icon aria-label="انتقال به بالا">expand_less</mat-icon>
             </button>
           </div>
+          <div *ngIf="!canEdit">
+            &nbsp;
+          </div>
           <div (click)="showSubItems(section)">{{filteredSubMenuItems[section].details.info.text}}</div>
-          <div>
+          <div *ngIf="canEdit">
             <button mat-icon-button (click)="move(true, section)" [disabled]="isLast || moveButtonsShouldDisabled" class="move-button">
               <mat-icon aria-label="انتقال به پایین">expand_more</mat-icon>
             </button>
           </div>
+          <div *ngIf="!canEdit">
+            &nbsp;
+          </div>
         </div>
       </div>
       <div *ngIf="selectedSectionSubMenu === section" [dragula]="itemBagName" [dragulaModel]="filteredSubMenuItems[section].items">
-        <div *ngFor="let item of filteredSubMenuItems[section].items" (click)="selectItem(item)" class="menu-item" [ngClass]="{'selected-item': selectedItem && selectedItem._id === item._id}">
+        <div *ngFor="let item of filteredSubMenuItems[section].items" (click)="selectItem(item)" class="menu-item" [ngClass]="{'selected-item': selectedItem && selectedItem._id === item._id, 'selected-to-revert': !canEdit && isSelectedToRevert(item, 'item')}">
           <label class="menu-item">{{item.info.text}}</label>
         </div>
       </div>

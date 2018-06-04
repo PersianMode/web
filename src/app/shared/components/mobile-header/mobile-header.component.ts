@@ -1,10 +1,13 @@
-import {Component, Inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {WINDOW} from '../../services/window.service';
 import {CartService} from '../../services/cart.service';
-import {priceFormatter} from '../../lib/priceFormatter';
 import {PageService} from '../../services/page.service';
+import {DictionaryService} from '../../services/dictionary.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {HttpService} from '../../services/http.service';
+import {ResponsiveService} from '../../services/responsive.service';
 
 @Component({
   selector: 'app-mobile-header',
@@ -31,12 +34,22 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   display_name;
   cartNumbers = '';
   itemSubs;
+  is_searching = false;
+  searchIsFocused = false;
+  searchPhrase = null;
+  searchProductList = [];
+  searchCollectionList = [];
+  searchWaiting = false;
+  curHeight;
 
   constructor(private authService: AuthService, private router: Router,
-    @Inject(WINDOW) private window, private cartService: CartService, private pageService: PageService) {
+    @Inject(WINDOW) private window, private cartService: CartService, private pageService: PageService,
+              private httpService: HttpService, private sanitizer: DomSanitizer,
+              private dictionaryService: DictionaryService, private responsiveService: ResponsiveService) {
   }
 
   ngOnInit() {
+    this.curHeight = this.responsiveService.curHeight;
     this.authService.isLoggedIn.subscribe(
       (data) => {
         this.isLoggedIn = this.authService.userIsLoggedIn();
@@ -184,6 +197,137 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
       });
 
     this.sideNav.close();
+  }
+
+  searchFocused() {
+    this.searchIsFocused = true;
+    if (this.searchPhrase)
+      this.searchProduct();
+    else {
+      this.searchProductList = [];
+      this.searchCollectionList = [];
+    }
+  }
+
+  searchUnfocused() {
+    this.searchIsFocused = false;
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+  }
+  searchProduct() {
+    this.is_searching = true;
+    this.searchProductList = [];
+    if (!this.searchPhrase) {
+      return;
+    }
+
+    this.searchWaiting = true;
+    this.httpService.post('search/Product', {
+      options: {
+        phrase: this.searchPhrase,
+      },
+      offset: 0,
+      limit: 5,
+    }).subscribe(
+      (data) => {
+        this.searchProductList = [];
+        if (data.data) {
+          data.data.forEach(el => {
+            this.searchProductList.push({
+              id: el._id,
+              name: el.name,
+              brand: this.dictionaryService.translateWord(el.brand.name),
+              type: this.dictionaryService.translateWord(el.product_type.name),
+              imgUrl: this.getProductThumbnail(el),
+              tags: this.dictionaryService.translateWord(el.tags.name),
+              instances: el.instances.article_no,
+            });
+          });
+        }
+        this.searchCollection();
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  searchCollection() {
+    this.searchCollectionList = [];
+    if (!this.searchPhrase) {
+      return;
+    }
+    this.httpService.post('search/Collection', {
+      options: {
+        phrase: this.searchPhrase,
+      },
+      offset: 0,
+      limit: 5,
+    }).subscribe(
+      (data) => {
+        this.searchCollectionList = [];
+        if (data.data) {
+          data.data.forEach(el => {
+            this.searchCollectionList.push({
+              id: el._id,
+              name: el.name,
+              name_fa: el.name_fa,
+            });
+          });
+        }
+        this.searchCollectionList.forEach(el => {
+          this.getCollectionPages(el);
+        });
+        this.searchWaiting = false;
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  getCollectionPages(el) {
+    this.httpService.post('collectionPages', {
+      collection_id: el.id,
+    }).subscribe(
+      (data) => {
+        el.pages = data;
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  selectSearchResult(element, isProduct) {
+    this.searchIsFocused = false;
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+    if (isProduct) {
+      this.router.navigate([`/product/${element.id}`]);
+    } else if (!isProduct) {
+      this.router.navigate([`${element.pages[0].address}`]);
+    }
+    this.is_searching = false;
+  }
+
+  getProductThumbnail(product) {
+    const img = (product.colors && product.colors.length) ?
+      product.colors.filter(el => el.image && el.image.thumbnail) :
+      null;
+    return img && img.length ?
+      this.sanitizer.bypassSecurityTrustResourceUrl([
+        HttpService.Host,
+        HttpService.PRODUCT_IMAGE_PATH,
+        product._id,
+        img[0]._id,
+        img[0].image.thumbnail
+      ].join('/')) :
+      'assets/nike-brand.jpg';
+  }
+
+  closeSearch() {
+    this.is_searching = false;
   }
 
   logout() {
