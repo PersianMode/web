@@ -37,22 +37,19 @@
             </mat-error>
           </mat-input-container>
         </div>
-        <div style="text-align: right" class="field-container" fxFlex="30">
-          <mat-form-field style="text-align:right; width: 100%" tabindex="3">
-            <mat-select placeholder="انتخاب شهر برای این بازه زمانی" formControlName="city"
-                        (focus)="setSeen('city')"
-                        (blur)="curFocus = null"
-                        tabindex="3">
-              <mat-option *ngFor="let city of cityArray" style="text-align:right" [value]="city.name">
-                {{city.name}}
-              </mat-option>
-            </mat-select>
-            <mat-hint>شهر مورد نظر را انتخاب کنید</mat-hint>
-            <mat-error *ngIf="durationForm.controls['city'].hasError('required')
-            && seen['city'] && curFocus !== 'city'">
-              انتخاب حداقل یک شهرالزامی است
+        <div fxFlex="30" class="field-container">
+          <mat-input-container class="field farsi">
+            <input matInput type="number" placeholder="هزینه ارسال برای تهران" formControlName="city_cost"
+                   role="city_cost"
+                   (focus)="setSeen('city_cost')"
+                   (blur)="curFocus = null"
+                   tabindex="3"/>
+            <mat-hint>هزینه ارسال را وارد کنید</mat-hint>
+            <mat-error *ngIf="durationForm.controls['city_cost'].hasError('required')
+               && seen['city_cost'] && curFocus !== 'city_cost'">
+              وارد هزینه ارسال الزامی است
             </mat-error>
-          </mat-form-field>
+          </mat-input-container>
         </div>
       </div>
     </form>

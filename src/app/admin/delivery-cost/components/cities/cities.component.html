@@ -1,9 +1,0 @@
-<div class="style-select-wrapper main">
-  <div class="div-lable"> {{cityLabel}} </div>
-  <select class="select-style"
-          (change)="setNewCity($event.target.value)">
-    <option *ngFor="let ca of cityArray" [value]="ca.name">
-      {{ca.name}}
-    </option>
-  </select>
-</div>

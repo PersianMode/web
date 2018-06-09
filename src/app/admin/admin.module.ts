@@ -14,8 +14,6 @@ import {HeaderComponent} from './header/header.component';
 import {AdminAuthGuard} from './admin.auth.guard';
 import { DeliveryCostComponent } from './delivery-cost/delivery-cost.component';
 import { DurationComponent } from './delivery-cost/components/duration/duration.component';
-import { CitiesComponent } from './delivery-cost/components/cities/cities.component';
-import { CostComponent } from './delivery-cost/components/cost/cost.component';
 import { LoyaltyDiscountComponent } from './delivery-cost/components/loyalty-discount/loyalty-discount.component';
 
 

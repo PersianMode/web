@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {HttpService} from '../../../../shared/services/http.service';
 import {MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-duration-form',
@@ -13,7 +14,6 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 })
 export class DurationFormComponent implements OnInit {
   duration_id: string = null;
-  cityArray: any;
   durationForm: FormGroup = null;
   loyaltyNameList;
   seen: any = {};
@@ -32,13 +32,6 @@ export class DurationFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get('assets/province.json').subscribe(
-      (info: any) => {
-        this.cityArray = info;
-      }, err => {
-        console.log('err: ', err);
-      }
-    );
     this.getLoyaltyGroup();
     this.initForm();
     this.route.params.subscribe(
@@ -85,7 +78,7 @@ export class DurationFormComponent implements OnInit {
       delivery_duration: [null, [
         Validators.required,
       ]],
-      city: [null, [
+      city_cost: [null, [
         Validators.required,
       ]],
     });
@@ -105,12 +98,13 @@ export class DurationFormComponent implements OnInit {
     this.upsertBtnShouldDisabled = true;
     this.httpService.get(`deliveryduration/${this.duration_id}`).subscribe(
       (data) => {
-        console.log(data);
         this.loadedDurationInfo = data;
         this.durationForm.controls['duration_name'].setValue(data.name);
         this.durationForm.controls['delivery_duration'].setValue(data.duration_value);
-        this.durationForm.controls['city'].setValue(data.duration_cities[0].name);
-        data.duration_loyalty_info.forEach(el => this.costValue[el.name] = el.price);
+        this.durationForm.controls['city_cost'].setValue(data.duration_cities[0].delivery_cost);
+        data.duration_loyalty_info.forEach(el => {
+          this.costValue[el.name] = el.price;
+        });
         this.upsertBtnShouldDisabled = false;
         this.progressService.disable();
       },
@@ -136,13 +130,13 @@ export class DurationFormComponent implements OnInit {
     this.anyChanges = false;
     const duration_name = this.durationForm.controls['duration_name'].value ? this.durationForm.controls['duration_name'].value : '';
     const duration_value = this.durationForm.controls['delivery_duration'].value ? this.durationForm.controls['delivery_duration'].value : '';
-    const city = this.durationForm.controls['city'].value;
+    const city_cost = this.durationForm.controls['city_cost'].value;
     const loaded_name = this.loadedDurationInfo.name;
     const loaded_duration_value = this.loadedDurationInfo.duration_value;
-    const loaded_city = this.loadedDurationInfo.duration_cities[0].name;
+    const loaded_city_cost = this.loadedDurationInfo.duration_cities[0].name;
     if ((duration_name !== loaded_name && (duration_name !== '' || loaded_name !== null)) ||
       (duration_value !== loaded_duration_value && (duration_value !== '' || loaded_duration_value !== null)) ||
-      (city !== loaded_city && (city !== '' || loaded_city !== null))) {
+      (city_cost !== loaded_city_cost && (city_cost !== '' || loaded_city_cost !== null))) {
       this.anyChanges = true;
     }
   }
@@ -166,6 +160,7 @@ export class DurationFormComponent implements OnInit {
     const tempValue = loaded_duration_loyalty_info.filter(l => l._id === item._id);
     if (tempValue[0].price !== this.costValue[item.name])
       this.anyFiledChanges = true;
+
   }
 
   saveDurationInfo(id: string = null) {
@@ -176,10 +171,7 @@ export class DurationFormComponent implements OnInit {
       duration_value: this.durationForm.controls['delivery_duration'].value,
       duration_cities: [{
         'name': 'تهران',
-        'delivery_cost': 5000
-      }, {
-        'name': 'کاشان',
-        'delivery_cost': 2000
+        'delivery_cost': this.durationForm.controls['city_cost'].value,
       }
       ],
       duration_loyalty_info: this.formLoyaltyInfo,
@@ -191,11 +183,17 @@ export class DurationFormComponent implements OnInit {
           duration: 2300,
         });
         this.progressService.disable();
-        this.durationForm.reset();
-        this.loyaltyNameList.forEach(el => {
-          this.costValue[el.name] = null;
-          this.seen[el.name] = false;
-        });
+        if (!this.duration_id) {
+          this.durationForm.reset();
+          this.loyaltyNameList.forEach(el => {
+            this.costValue[el.name] = null;
+            this.seen[el.name] = false;
+          });
+        }
+        else {
+          this.anyChanges = false;
+          this.anyFiledChanges = false;
+        }
       },
       err => {
         console.error('Cannot upsert delivery duration info: ', err);

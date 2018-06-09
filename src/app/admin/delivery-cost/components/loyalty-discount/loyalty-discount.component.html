@@ -1,14 +1,53 @@
 <div class="div-lable"> {{loyalty_label}}</div>
 <br>
-<div *ngFor="let ln of loyaltyNameList" class="city-del-cost" fxLayout="row"
-     fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
-  <div fxFlex="50" style="margin-right: 5px; font-weight: bold">
-    {{ln.name}}
-  </div>
-  <div fxFlex="50">
-    <input type="number" [(ngModel)]="ln.value">
-  </div>
+<div>
+  <form [formGroup]="discountForm" (ngSubmit)="upsertdiscount()">
+    <mat-input-container class="name-field">
+      <input matInput type="text" placeholder="نام گروه" formControlName="name" />
+    </mat-input-container>
+    <mat-input-container class="score-field">
+      <input matInput type="number" placeholder="درصد تخفیف" formControlName="discount_precent" />
+    </mat-input-container>
+    <button mat-mini-fab class="button-area" type="submit" color="primary" [disabled]="!discountForm.valid || !anyChanges">
+      <mat-icon aria-label="done" *ngIf="selectedGroup">done</mat-icon>
+      <mat-icon aria-label="add" *ngIf="!selectedGroup">add</mat-icon>
+    </button>
+    <button mat-mini-fab color="primary" type="button" color="primary" *ngIf="selectedGroup" (click)="clearFields()">
+      <i class="fa fa-eraser"></i>
+    </button>
+  </form>
 </div>
+
+
+<div class="center-content">
+  <table class="table little-right-margin">
+    <thead>
+      <td>نام گروه وفاداری</td>
+      <td>درصد تخفیف</td>
+      <td>ویرایش</td>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ll of loyaltyList">
+        <td>{{ll.name}}</td>
+        <td>{{ll.min_score}}</td>
+        <td>
+          <button mat-icon-button (click)="edit(ll._id)" color="primary">
+            <mat-icon aria-label="edit">edit</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--<div *ngFor="let ln of loyaltyNameList" class="city-del-cost" fxLayout="row"-->
+     <!--fxLayout.sm="column" fxLayout.xs="column" dir="rtl">-->
+  <!--<div fxFlex="50" style="margin-right: 5px;">-->
+    <!--درصد تخفیف برای گروه وفاداری {{ln.name}}-->
+  <!--</div>-->
+  <!--<div fxFlex="50">-->
+    <!--<input type="number" [(ngModel)]="ln.value">-->
+  <!--</div>-->
+<!--</div>-->
 <div style="text-align: center; width: 100%; margin-top: 50px">
   <div style="width: 100%">
     <button mat-button style="background-color: #d9d9d9" (click)="submitTotalInfo()">تایید تخفیف ها
