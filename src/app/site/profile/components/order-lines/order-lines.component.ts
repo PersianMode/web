@@ -6,10 +6,10 @@ import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order
 import {MatDialogRef, MatDialog} from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {OrderStatus} from '../../../../shared/lib/order_status';
-import {AuthService} from '../../../../shared/services/auth.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import { ResponsiveService } from '../../../../shared/services/responsive.service';
 
 
 
@@ -19,6 +19,8 @@ import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
   styleUrls: ['./order-lines.component.css']
 })
 export class OrderLinesComponent implements OnInit {
+  orderObject: any;
+  isMobile = false;
   orderInfo: any;
   orderLines = [];
   noDuplicateOrderLine = [];
@@ -28,7 +30,9 @@ export class OrderLinesComponent implements OnInit {
   constructor(private profileOrderService: ProfileOrderService,
               private dialog: MatDialog,
               private location: Location, private router: Router,
-              private auth: AuthService, private dict: DictionaryService) {
+              private dict: DictionaryService,
+              private responsiveService: ResponsiveService) {
+    this.isMobile = this.responsiveService.isMobile;
   }
 
   ngOnInit() {
@@ -37,6 +41,8 @@ export class OrderLinesComponent implements OnInit {
     this.removeDuplicates(this.orderLines);
     this.orderStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
+    this.isMobile = this.responsiveService.isMobile;
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }
 
   removeDuplicates(arr) {
@@ -102,16 +108,20 @@ export class OrderLinesComponent implements OnInit {
   }
 
   returnOrder(ol) {
-    const rmDialog = this.dialog.open(GenDialogComponent, {
-      width: '700px',
-      data: {
-        componentName: DialogEnum.orderReturnComponent,
-        orderInfo: {
-          orderLineId: ol.order_line_id,
-          orderId: this.orderInfo.orderId,
-        },
-        userInfo: this.auth.userDetails
-      }
-    });
+    this.orderObject = {
+      orderLineid: ol.order_line_id,
+      orderId: this.orderInfo.orderId
+    };
+    this.profileOrderService.orderData = this.orderObject;
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/profile/orderline/return`]);
+    } else {
+      const rmDialog = this.dialog.open(GenDialogComponent, {
+        width: '700px',
+        data: {
+          componentName: DialogEnum.orderReturnComponent
+        }
+      });
+    }
   }
 }

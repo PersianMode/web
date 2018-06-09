@@ -24,7 +24,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 import { WishListComponent } from './components/wish-list/wish-list.component';
 import { PreferenceComponent } from './components/preference/preference.component';
-import { OrderReturnComponent } from './components/order-return/order-return.component';
 
 @NgModule({
   imports: [
