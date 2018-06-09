@@ -6,10 +6,9 @@ import {Component, OnInit, Input} from '@angular/core';
   styleUrls: ['./delivery-cost.component.css']
 })
 export class DeliveryCostComponent implements OnInit {
-
-  showSettingTabs = false;
-  durationObject: any = {};
+  showTabs = false;
   loyaltyLabel;
+  durationObject: any = {};
 
   constructor() {
   }
@@ -17,22 +16,20 @@ export class DeliveryCostComponent implements OnInit {
   ngOnInit() {
   }
 
-  deliverySettingBaseOnDuration(eventObj) {
-    if (eventObj.duration_id && eventObj.name &&
-      eventObj.duration_value &&
-      eventObj.duration_cities && eventObj.duration_loyalty_info ) {
-        this.showSettingTabs = true;
+  deliverySetting(eventObj) {
+    if (eventObj._id && eventObj.name &&
+      eventObj.delivery_days &&
+      eventObj.cities && eventObj.delivery_loyalty ) {
+        this.showTabs = true;
     }
+    // TODO : else case to notify compelete info for select duration (navigate to form)
     this.durationObject = {
-      duration_id: eventObj.duration_id,
+      _id: eventObj._id,
       name: eventObj.name,
-      duration_value: eventObj.duration_value,
-      duration_cities: eventObj.duration_cities,
+      delivery_days: eventObj.delivery_days,
+      cities: eventObj.cities,
+      delivery_loyalty: eventObj.delivery_loyalty,
     };
     this.loyaltyLabel = ' : ' + ' تحویل ' + this.durationObject.name;
   }
-
-  submitTotalInfo() {
-  }
-
 }

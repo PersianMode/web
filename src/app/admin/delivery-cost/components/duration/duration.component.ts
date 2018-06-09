@@ -10,20 +10,9 @@ import {MatSnackBar} from '@angular/material';
   styleUrls: ['./duration.component.css']
 })
 export class DurationComponent implements OnInit {
-  deliveryDurations = [
-    // {
-    //   name: 'سه روزه', value: 3,
-    //   cities: [{
-    //     name: 'تهران',
-    //     value: 'Tehran'
-    //   }],
-    //   loyalty_points: [
-    //     {Golden: 5000}, {silver: 2500}, {buroonze: 1000}
-    //   ]
-    // }
-  ];
-  durationObject: any = {};
+  durations = [];
   editBtnShouldDisabled = true;
+  selected_duration: any = {};
 
   @Output() selectedDuration = new EventEmitter();
 
@@ -32,13 +21,13 @@ export class DurationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getDeliveryDurations();
+    this.getDurations();
   }
 
-  getDeliveryDurations() {
+  getDurations() {
     this.progressService.enable();
     this.httpService.get('deliveryduration').subscribe(data => {
-      this.deliveryDurations = data;
+      this.durations = data;
       this.progressService.disable();
     }, err => {
       this.progressService.disable();
@@ -50,16 +39,15 @@ export class DurationComponent implements OnInit {
   }
 
   changeDuration(item) {
-    console.log('select item :', item);
     this.editBtnShouldDisabled = false;
-    this.durationObject = {
-      duration_id: item._id,
+    this.selected_duration = {
+      _id: item._id,
       name: item.name,
-      duration_value: item.duration_value,
-      duration_cities: item.duration_cities,
-      duration_loyalty_info: item.duration_loyalty_info
+      delivery_days: item.duration_value,
+      cities: item.duration_cities,
+      delivery_loyalty: item.duration_loyalty_info
     };
-    this.selectedDuration.emit(this.durationObject);
+    this.selectedDuration.emit(this.selected_duration);
   }
 
   openForm(id: string = null) {

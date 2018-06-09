@@ -3,6 +3,7 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ProgressService} from '../../../../shared/services/progress.service';
+import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 
 @Component({
   selector: 'app-loyalty-discount',
@@ -17,6 +18,8 @@ export class LoyaltyDiscountComponent implements OnInit {
   loyaltyDiscountList = [];
   discountForm: FormGroup = null;
 
+  @Input() selectedDuration;
+
   @Input()
   set loyaltyLabel(value) {
     this.loyalty_label = value;
@@ -30,7 +33,6 @@ export class LoyaltyDiscountComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-
     this.discountForm.valueChanges.subscribe(() => this.fieldChanged());
     this.getGroups();
   }
@@ -46,7 +48,6 @@ export class LoyaltyDiscountComponent implements OnInit {
     });
   }
 
-
   getGroups() {
     this.httpService.get('loyaltygroup').subscribe(
       data => {
@@ -54,24 +55,27 @@ export class LoyaltyDiscountComponent implements OnInit {
       },
       err => {
         console.error('Cannot get loyalty groups: ', err);
-        this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+        this.snackBar.open('سیستم قادر به دریافت اطلاعات گروه های وفاداری نیست. دوباره تلاش کنید', null, {
           duration: 3200,
         });
       }
     );
   }
 
-  upsertdiscount(id) {
+
+  upsertDiscount(id) {
   }
 
   fieldChanged() {
-    this.anyChanges = !this.selectedGroup;
-
+    this.anyChanges = false;
+    const formName = this.discountForm.controls['name'].value;
+    const objName = this.selectedGroup.name;
+    const formDiscount = this.discountForm.controls['discount_percent'].value;
+    const objDiscount = this.selectedGroup.discount;
     if (this.selectedGroup) {
-      Object.keys(this.discountForm.controls).forEach(el => {
-        if (this.selectedGroup[el] !== this.discountForm.controls[el].value)
-          this.anyChanges = true;
-      });
+      if (formDiscount !== objDiscount && (formDiscount !== '' || objDiscount !== null)
+      || (formName !== objName && (formName !== '' || objName !== null)))
+        this.anyChanges = true;
     }
   }
 
@@ -82,7 +86,22 @@ export class LoyaltyDiscountComponent implements OnInit {
         this.loyaltyDiscountList.push(el);
     });
   }
-  edit(id){
 
+  submitTotalInfo() {
+  };
+
+  editDiscount(item) {
+    this.selectedGroup = item;
+    this.discountForm.controls['name'].setValue(item.name);
+    this.discountForm.controls['discount_percent'].setValue(item.discount ? item.discount : null);
+  }
+
+  clearFields() {
+    this.selectedGroup = null;
+    this.discountForm.reset();
+  }
+
+  formatter(number) {
+    return priceFormatter(number);
   }
 }
