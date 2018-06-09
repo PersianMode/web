@@ -1,0 +1,17 @@
+<mat-card class="card-container">
+  <div style="text-align: left">
+    <button mat-mini-fab color="primary" (click)="openForm(durationObject.duration_id)" [disabled] = editBtnShouldDisabled>
+      <mat-icon aria-label="add">edit</mat-icon>
+    </button>
+    <button mat-mini-fab color="primary" (click)="openForm()" [disabled]=false>
+      <mat-icon aria-label="add">add</mat-icon>
+    </button>
+  </div>
+  <div class="main">
+    <mat-radio-group>
+      <div *ngFor="let dd of deliveryDurations" style="margin-right: 8px; margin-top: 5px">
+        <mat-radio-button [value]="dd.duration_value" (change)="changeDuration(dd)">{{dd.name}}</mat-radio-button>
+      </div>
+    </mat-radio-group>
+  </div>
+</mat-card>

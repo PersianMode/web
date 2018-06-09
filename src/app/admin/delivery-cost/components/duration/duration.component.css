@@ -1,0 +1,10 @@
+.main{
+    direction: rtl;
+    margin: 5px;
+    margin-top: 10px !important;
+}
+.card-container {
+  direction: rtl;
+}
+
+

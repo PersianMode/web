@@ -1,0 +1,95 @@
+<mat-card class="card-view">
+  <mat-card-header style="direction:rtl">
+    <mat-card-title>
+      <h2 style="font-family: iranyekan"> {{ duration_id ? 'ویرایش بازه زمانی' : 'افزودن بازه زمانی' }} </h2>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="modifyDuration()" [formGroup]="durationForm">
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+           fxLayoutAlign.xs="center center" dir="rtl">
+        <div fxFlex="30" class="field-container">
+          <mat-input-container class="field farsi">
+            <input matInput type="text" placeholder="عنوان بازه زمانی" formControlName="duration_name"
+                   role="duration_name"
+                   (focus)="setSeen('duration_name')"
+                   (blur)="curFocus = null"
+                   tabindex="1"/>
+            <mat-hint>عنوان بازه زمانی را وارد کنید</mat-hint>
+            <mat-error
+              *ngIf="durationForm.controls['duration_name'].hasError('required')
+              && seen['duration_name'] && curFocus !== 'duration_name'">
+              وارد کردن عنوان بازه زمانی الزامی است
+            </mat-error>
+          </mat-input-container>
+        </div>
+        <div fxFlex="30" class="field-container">
+          <mat-input-container class="field farsi">
+            <input matInput type="number" placeholder="مدت زمان ارسال" formControlName="delivery_duration"
+                   role="delivery_duration"
+                   (focus)="setSeen('delivery_duration')"
+                   (blur)="curFocus = null"
+                   tabindex="2"/>
+            <mat-hint>مدت زمان ارسال را وارد کنید</mat-hint>
+            <mat-error *ngIf="durationForm.controls['delivery_duration'].hasError('required')
+               && seen['delivery_duration'] && curFocus !== 'delivery_duration'">
+              وارد کردن مدت زمان ارسال الزامی است
+            </mat-error>
+          </mat-input-container>
+        </div>
+        <div style="text-align: right" class="field-container" fxFlex="30">
+          <mat-form-field style="text-align:right; width: 100%" tabindex="3">
+            <mat-select placeholder="انتخاب شهر برای این بازه زمانی" formControlName="city"
+                        (focus)="setSeen('city')"
+                        (blur)="curFocus = null"
+                        tabindex="3">
+              <mat-option *ngFor="let city of cityArray" style="text-align:right" [value]="city.name">
+                {{city.name}}
+              </mat-option>
+            </mat-select>
+            <mat-hint>شهر مورد نظر را انتخاب کنید</mat-hint>
+            <mat-error *ngIf="durationForm.controls['city'].hasError('required')
+            && seen['city'] && curFocus !== 'city'">
+              انتخاب حداقل یک شهرالزامی است
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <div *ngFor="let fl of formLoyaltyInfo; let i = index " fxLayout="row" fxLayout.xs="column"
+         fxLayoutAlign="start start"
+         fxLayoutAlign.xs="center center" dir="rtl" style="margin-top: 20px;">
+      <div fxFlex="40"
+           style="font-family: iranyekan; position: relative; top: 25px; font-wieght:bolder; font-size: 14px">ارزش
+        هر امتیاز وفاداری {{fl.name}} برای این بازه زمانی
+      </div>
+      <div fxFlex="30" class="field-container">
+        <mat-input-container>
+          <input matInput type="number" placeholder="ارزش امتیاز {{fl.name}}"
+                 (focus)="setSeen(fl.name)"
+                 (blur)="curFocus = null"
+                 tabindex="4"
+                 [class.input-error]="seen[fl.name] && !costValue[fl.name]"
+                 [(ngModel)]="costValue[fl.name]" (ngModelChange)="changeValue(fl)"
+          />
+          <!--<mat-hint>امتیاز وفاداری {{lnl.name}} را تعیین کنید</mat-hint>-->
+        </mat-input-container>
+        <mat-error class="field-error" *ngIf="!costValue[fl.name] && seen[fl.name] && curFocus !== fl.name">
+          ارزش امتیاز وفاداری {{fl.name}} را تعیین کنید
+        </mat-error>
+      </div>
+      <div style="text-align: left; width: 100%;" fxFlex="30">
+        <div *ngIf="i === loyaltyNameList.length-1">
+          <button mat-button style="background-color: #d9d9d9; margin-top: 17px;
+               margin-left: 45px;" (click)="saveDurationInfo()"
+                  [disabled]="!durationForm.valid || !filedValidation
+                  || (duration_id && !anyChanges && !anyFiledChanges)"
+          >
+            تایید
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
