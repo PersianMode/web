@@ -53,6 +53,8 @@ export class DurationComponent implements OnInit {
   openForm(id: string = null) {
     this.router.navigate([`/agent/delivery/duration/${id}`]);
   }
+  removeDuration(id) {
+  }
 }
 
 
