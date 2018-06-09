@@ -72,10 +72,10 @@ export class DurationFormComponent implements OnInit {
 
   initForm() {
     this.durationForm = new FormBuilder().group({
-      duration_name: [null, [
+      name: [null, [
         Validators.required,
       ]],
-      delivery_duration: [null, [
+      delivery_days: [null, [
         Validators.required,
       ]],
       city_cost: [null, [
@@ -99,10 +99,10 @@ export class DurationFormComponent implements OnInit {
     this.httpService.get(`deliveryduration/${this.duration_id}`).subscribe(
       (data) => {
         this.loadedDurationInfo = data;
-        this.durationForm.controls['duration_name'].setValue(data.name);
-        this.durationForm.controls['delivery_duration'].setValue(data.duration_value);
-        this.durationForm.controls['city_cost'].setValue(data.duration_cities[0].delivery_cost);
-        data.duration_loyalty_info.forEach(el => {
+        this.durationForm.controls['name'].setValue(data.name);
+        this.durationForm.controls['delivery_days'].setValue(data.delivery_days);
+        this.durationForm.controls['city_cost'].setValue(data.cities[0].delivery_cost);
+        data.delivery_loyalty.forEach(el => {
           this.costValue[el.name] = el.price;
         });
         this.upsertBtnShouldDisabled = false;
@@ -128,14 +128,14 @@ export class DurationFormComponent implements OnInit {
       return;
     }
     this.anyChanges = false;
-    const duration_name = this.durationForm.controls['duration_name'].value ? this.durationForm.controls['duration_name'].value : '';
-    const duration_value = this.durationForm.controls['delivery_duration'].value ? this.durationForm.controls['delivery_duration'].value : '';
+    const name = this.durationForm.controls['name'].value ? this.durationForm.controls['name'].value : '';
+    const delivery_days = this.durationForm.controls['delivery_days'].value ? this.durationForm.controls['delivery_days'].value : '';
     const city_cost = this.durationForm.controls['city_cost'].value;
     const loaded_name = this.loadedDurationInfo.name;
-    const loaded_duration_value = this.loadedDurationInfo.duration_value;
-    const loaded_city_cost = this.loadedDurationInfo.duration_cities[0].name;
-    if ((duration_name !== loaded_name && (duration_name !== '' || loaded_name !== null)) ||
-      (duration_value !== loaded_duration_value && (duration_value !== '' || loaded_duration_value !== null)) ||
+    const loaded_delivery_days = this.loadedDurationInfo.delivery_days;
+    const loaded_city_cost = this.loadedDurationInfo.cities[0].delivery_cost;
+    if ((name !== loaded_name && (name !== '' || loaded_name !== null)) ||
+      (delivery_days !== loaded_delivery_days && (delivery_days !== '' || loaded_delivery_days !== null)) ||
       (city_cost !== loaded_city_cost && (city_cost !== '' || loaded_city_cost !== null))) {
       this.anyChanges = true;
     }
@@ -156,9 +156,9 @@ export class DurationFormComponent implements OnInit {
       });
     }
     ;
-    const loaded_duration_loyalty_info = this.loadedDurationInfo.duration_loyalty_info;
-    const tempValue = loaded_duration_loyalty_info.filter(l => l._id === item._id);
-    if (tempValue[0].price !== this.costValue[item.name])
+    const loaded_delivery_loyalty = this.loadedDurationInfo ? this.loadedDurationInfo.delivery_loyalty : [];
+    const tempValue = loaded_delivery_loyalty.filter(l => l._id === item._id);
+    if (tempValue[0] && tempValue[0].price !== this.costValue[item.name])
       this.anyFiledChanges = true;
 
   }
@@ -167,14 +167,14 @@ export class DurationFormComponent implements OnInit {
     this.formLoyaltyInfo.forEach(el => el.price = this.costValue[el.name]);
     let durationInfo = {
       _id: this.duration_id ? this.duration_id : null,
-      name: this.durationForm.controls['duration_name'].value,
-      duration_value: this.durationForm.controls['delivery_duration'].value,
-      duration_cities: [{
+      name: this.durationForm.controls['name'].value,
+      delivery_days: this.durationForm.controls['delivery_days'].value,
+      cities: [{
         'name': 'تهران',
         'delivery_cost': this.durationForm.controls['city_cost'].value,
       }
       ],
-      duration_loyalty_info: this.formLoyaltyInfo,
+      delivery_loyalty: this.formLoyaltyInfo,
     };
     this.progressService.enable();
     this.httpService.post('deliveryduration', durationInfo).subscribe(

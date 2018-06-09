@@ -10,29 +10,29 @@
            fxLayoutAlign.xs="center center" dir="rtl">
         <div fxFlex="30" class="field-container">
           <mat-input-container class="field farsi">
-            <input matInput type="text" placeholder="عنوان بازه زمانی" formControlName="duration_name"
-                   role="duration_name"
-                   (focus)="setSeen('duration_name')"
+            <input matInput type="text" placeholder="عنوان بازه زمانی" formControlName="name"
+                   role="name"
+                   (focus)="setSeen('name')"
                    (blur)="curFocus = null"
                    tabindex="1"/>
             <mat-hint>عنوان بازه زمانی را وارد کنید</mat-hint>
             <mat-error
-              *ngIf="durationForm.controls['duration_name'].hasError('required')
-              && seen['duration_name'] && curFocus !== 'duration_name'">
+              *ngIf="durationForm.controls['name'].hasError('required')
+              && seen['name'] && curFocus !== 'name'">
               وارد کردن عنوان بازه زمانی الزامی است
             </mat-error>
           </mat-input-container>
         </div>
         <div fxFlex="30" class="field-container">
           <mat-input-container class="field farsi">
-            <input matInput type="number" placeholder="مدت زمان ارسال" formControlName="delivery_duration"
-                   role="delivery_duration"
-                   (focus)="setSeen('delivery_duration')"
+            <input matInput type="number" placeholder="مدت زمان ارسال" formControlName="delivery_days"
+                   role="delivery_days"
+                   (focus)="setSeen('delivery_days')"
                    (blur)="curFocus = null"
                    tabindex="2"/>
             <mat-hint>مدت زمان ارسال را وارد کنید</mat-hint>
-            <mat-error *ngIf="durationForm.controls['delivery_duration'].hasError('required')
-               && seen['delivery_duration'] && curFocus !== 'delivery_duration'">
+            <mat-error *ngIf="durationForm.controls['delivery_days'].hasError('required')
+               && seen['delivery_days'] && curFocus !== 'delivery_days'">
               وارد کردن مدت زمان ارسال الزامی است
             </mat-error>
           </mat-input-container>

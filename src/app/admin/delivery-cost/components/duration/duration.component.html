@@ -10,7 +10,7 @@
   <div class="main">
     <mat-radio-group>
       <div *ngFor="let dd of durations" style="margin-right: 8px; margin-top: 5px">
-        <mat-radio-button [value]="dd.duration_value" (change)="changeDuration(dd)">{{dd.name}}</mat-radio-button>
+        <mat-radio-button [value]="dd.delivery_days" (change)="changeDuration(dd)">{{dd.name}}</mat-radio-button>
       </div>
     </mat-radio-group>
   </div>

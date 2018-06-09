@@ -17,6 +17,7 @@ export class LoyaltyDiscountComponent implements OnInit {
   selectedGroup = null;
   loyaltyDiscountList = [];
   discountForm: FormGroup = null;
+  upsertBtnShouldDisabled = true;
 
   @Input() selectedDuration;
 
@@ -63,7 +64,14 @@ export class LoyaltyDiscountComponent implements OnInit {
   }
 
 
-  upsertDiscount(id) {
+  upsertDiscount() {
+    this.upsertBtnShouldDisabled = true;
+    if (!this.anyChanges)
+      return;
+    this.selectedGroup.discount = this.discountForm.controls['discount_percent'].value;
+    if (!this.selectedDuration.delivery_loyalty.filter(el => !el.discount).length)
+      this.upsertBtnShouldDisabled = false;
+    this.discountForm.reset();
   }
 
   fieldChanged() {
@@ -74,7 +82,7 @@ export class LoyaltyDiscountComponent implements OnInit {
     const objDiscount = this.selectedGroup.discount;
     if (this.selectedGroup) {
       if (formDiscount !== objDiscount && (formDiscount !== '' || objDiscount !== null)
-      || (formName !== objName && (formName !== '' || objName !== null)))
+        || (formName !== objName && (formName !== '' || objName !== null)))
         this.anyChanges = true;
     }
   }
@@ -88,6 +96,23 @@ export class LoyaltyDiscountComponent implements OnInit {
   }
 
   submitTotalInfo() {
+    this.progressService.enable();
+     this.httpService.post('deliveryduration', this.selectedDuration).subscribe(
+       res => {
+         this.snackBar.open('تغییرات با موفقیت ثبت شدند', null, {
+           duration: 2300,
+         });
+         this.progressService.disable();
+           this.discountForm.reset();
+           this.upsertBtnShouldDisabled = true;
+       },
+       err => {
+         console.error('Cannot upsert delivery duration info: ', err);
+         this.snackBar.open('سیستم قادر به اعمال تغییرات شما نیست. دوباره تلاش کنید', null, {
+           duration: 3200,
+         });
+         this.progressService.disable();
+       });
   };
 
   editDiscount(item) {

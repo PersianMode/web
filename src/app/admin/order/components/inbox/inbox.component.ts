@@ -101,7 +101,6 @@ export class InboxComponent implements OnInit, OnDestroy {
       res.data.forEach(order => rows.push(order, {detailRow: true, order}));
       this.dataSource.data = rows;
       this.resultsLength = res.data.length ? res.data.length : 0;
-      console.log('-> ', this.dataSource.data);
     }, err => {
       this.progressService.disable();
       this.newInboxCount.emit(0);
@@ -233,8 +232,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-  //   if (this.socketObserver)
-  //     this.socketObserver.unsubscribe();
+    //   if (this.socketObserver)
+    //     this.socketObserver.unsubscribe();
   }
 
 }

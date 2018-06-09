@@ -43,9 +43,9 @@ export class DurationComponent implements OnInit {
     this.selected_duration = {
       _id: item._id,
       name: item.name,
-      delivery_days: item.duration_value,
-      cities: item.duration_cities,
-      delivery_loyalty: item.duration_loyalty_info
+      delivery_days: item.delivery_days,
+      cities: item.cities,
+      delivery_loyalty: item.delivery_loyalty
     };
     this.selectedDuration.emit(this.selected_duration);
   }
