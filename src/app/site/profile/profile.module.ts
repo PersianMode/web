@@ -18,12 +18,13 @@ import {
   MatRadioModule,
   MatTableModule,
   MatSlideToggleModule,
-  MatListModule
+  MatListModule,
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 import { WishListComponent } from './components/wish-list/wish-list.component';
 import { PreferenceComponent } from './components/preference/preference.component';
+import { OrderReturnComponent } from './components/order-return/order-return.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { PreferenceComponent } from './components/preference/preference.componen
     MatPaginatorModule,
     MatButtonModule,
     MatSlideToggleModule,
+
   ],
-  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent, WishListComponent, PreferenceComponent]
+  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent, WishListComponent, PreferenceComponent],
 })
 export class ProfileModule { }
