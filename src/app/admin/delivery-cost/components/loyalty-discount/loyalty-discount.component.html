@@ -26,7 +26,7 @@
     <td>ویرایش</td>
     </thead>
     <tbody>
-    <tr *ngFor="let item of selectedDuration.delivery_loyalty; let i = index" style="width: 100%">
+    <tr *ngFor="let item of selectedDuration.delivery_loyalty; let i = index">
       <td>{{formatter(i+1)}}</td>
       <td>{{item.name}}</td>
       <td>{{item.discount}}
@@ -36,10 +36,10 @@
           <mat-icon aria-label="edit">edit</mat-icon>
         </button>
       </td>
-      <td style="width: 50%">
+      <td class="button-td">
         <div *ngIf="i === selectedDuration.delivery_loyalty.length-1">
-          <div style="text-align: left">
-            <button mat-button style="background-color: #d9d9d9"
+          <div>
+            <button mat-button class="submit-all-discount"
                    [disabled]="upsertBtnShouldDisabled"   (click)="submitTotalInfo()">تایید تخفیف ها
             </button>
           </div>
