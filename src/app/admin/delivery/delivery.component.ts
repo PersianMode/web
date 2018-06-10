@@ -1,18 +1,24 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatSort, MatSnackBar, MatTableDataSource} from '@angular/material';
+import {MatSort, MatSnackBar, MatTableDataSource, MatDialog} from '@angular/material';
 import {HttpService} from '../../shared/services/http.service';
 import {ProgressService} from '../../shared/services/progress.service';
 import {FormControl} from '@angular/forms';
 import {SelectionModel} from '@angular/cdk/collections';
+import {DeliveryDetailsComponent} from './components/delivery-details/delivery-details.component';
+import * as moment from 'moment';
 
 export interface DeliveryItem {
+  _id: String;
   position: Number;
   delivery_date: Date;
   delivery_time: String;
   delivery_agent: String;
-  order_code: String;
-  order_line_count: Number;
+  shelf_code: String;
+  start_date: Date;
+  end_date: Date;
+  return: any;
   is_delivered: Boolean;
+  receiver_sender_name: String;
 }
 
 @Component({
@@ -35,10 +41,20 @@ export class DeliveryComponent implements OnInit {
   receiverNameCtrl: FormControl;
   receiverName = '';
   selectedDelivery = null;
-  displayedColumns = ['position', 'delivery_date', 'delivery_time', 'delivery_agent', 'order_code', 'order_line_count', 'is_delivered'];
+  deliveryItems = null;
+  displayedColumns = [
+    'position',
+    'delivery_date',
+    'delivery_time',
+    'delivery_agent',
+    'receiver_sender_name',
+    'shelf_code',
+    'is_delivered',
+    'view_details',
+  ];
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
-    private snackBar: MatSnackBar) {}
+    private snackBar: MatSnackBar, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.agentNameCtrl = new FormControl();
@@ -79,46 +95,31 @@ export class DeliveryComponent implements OnInit {
       receiverName: this.receiverName,
     }).subscribe(
       data => {
+        console.log('Data: ', data);
+
+        this.deliveryItems = data;
         const tempData = [];
         this.selection.clear();
         let counter = this.offset;
         data.forEach(el => {
           tempData.push({
+            _id: el._id,
+            return: el.return,
             position: ++counter,
-            delivery_date: el.end_date,
-            delivery_time: el.delivery_time,
+            delivery_date: el.slot ? moment(el.slot.date).format('YYYY-MM-DD') : null,
+            delivery_time: el.slot ? el.slot.time : null,
             delivery_agent: el.sender_name,
-            order_code: el.order_code,
+            shelf_code: el.shelf_code,
             order_line_count: el.order_line_count,
+            stat_date: moment(el.start_date).format('YYYY-MM-DD'),
+            end_date: moment(el.end_date).format('YYYY-MM-DD'),
+            receiver_sender_name: Object.keys(el.return).length
+              ? (el.from.customer ? (el.from.customer.first_name + el.from.customer.surname) : null)
+              : (el.to.customer ? (el.to.customer.first_name + el.to.customer.surname) : null),
             is_delivered: el.end_date ? true : false,
           });
         });
         this.dataSource.data = tempData;
-        // this.dataSource.data = [{
-        //   position: 1,
-        //   delivery_date: new Date(),
-        //   delivery_time: '10-18',
-        //   delivery_agent: 'Ali Alavi',
-        //   order_code: 'AB',
-        //   order_line_count: 2,
-        //   is_delivered: true,
-        // }, {
-        //   position: 2,
-        //   delivery_date: new Date(2017, 10, 10),
-        //   delivery_time: '18-22',
-        //   delivery_agent: 'Taghi Taghavi',
-        //   order_code: 'CE',
-        //   order_line_count: 5,
-        //   is_delivered: true,
-        // }, {
-        //   position: 3,
-        //   delivery_date: null,
-        //   delivery_time: null,
-        //   delivery_agent: null,
-        //   order_code: 'AB',
-        //   order_line_count: 2,
-        //   is_delivered: false,
-        // }];
 
         this.totalRecords = data.length > 0 ? data[0].total : 0;
         this.progressService.disable();
@@ -142,5 +143,13 @@ export class DeliveryComponent implements OnInit {
 
   formatter(p) {
     return (+p).toLocaleString('fa');
+  }
+
+  showDetails(id) {
+    this.dialog.open(DeliveryDetailsComponent, {
+      width: '600px',
+      disableClose: true,
+      data: {deliveryItem: this.deliveryItems.find(el => el._id === id)},
+    });
   }
 }

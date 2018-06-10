@@ -1,0 +1,9 @@
+.details-container {
+  direction: rtl;
+  padding: 8px;
+  margin: 2px;
+}
+
+.header-label {
+  font-weight: bold;
+}

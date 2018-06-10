@@ -4,23 +4,36 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DeliveryRouting} from './delivery.routing';
 import {DeliveryComponent} from './delivery.component';
 import {SharedModule} from '../../shared/shared.module';
-import {MatCardModule, MatButtonModule, MatTableModule, MatPaginatorModule, MatSortModule, MatIconModule} from '@angular/material';
+import {
+  MatCardModule,
+  MatButtonModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatIconModule,
+  MatDialogModule
+} from '@angular/material';
+import {DeliveryDetailsComponent} from './components/delivery-details/delivery-details.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
-  declarations: [DeliveryComponent],
+  declarations: [DeliveryComponent, DeliveryDetailsComponent],
   imports: [
     DeliveryRouting,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    FlexLayoutModule,
     MatCardModule,
     MatButtonModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatIconModule,
+    MatDialogModule,
   ],
+  entryComponents: [DeliveryDetailsComponent],
 })
 export class DeliveryModule {
 }

@@ -12,12 +12,12 @@
         </ng-container>
 
         <ng-container matColumnDef="delivery_date">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تاریخ ارسال</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تاریخ دریافت</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content"> {{element.delivery_date}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="delivery_time">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">زمان ارسال</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">بازه دریافتی</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content"> {{element.delivery_time}} </mat-cell>
         </ng-container>
 
@@ -26,14 +26,17 @@
           <mat-cell *matCellDef="let element" class="content"> {{element.delivery_agent}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="order_code">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">کد سفارش</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content"> {{element.order_code}} </mat-cell>
+        <ng-container matColumnDef="receiver_sender_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">نام مشتری</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            <span *ngIf="element.receiver_sender_name">{{element.receiver_sender_name}}</span>
+            <span *ngIf="!element.receiver_sender_name">-</span>
+          </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="order_line_count">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تعداد کالا</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content"> {{element.order_line_count}} </mat-cell>
+        <ng-container matColumnDef="shelf_code">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">کد سفارش</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.shelf_code}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="is_delivered">
@@ -43,8 +46,17 @@
               <mat-icon style="color: green" aria-label="delivered">check</mat-icon>
             </div>
             <div *ngIf="!element.is_delivered">
-                <mat-icon style="color: red" aria-label="not delivered">close</mat-icon>
-              </div>
+              <mat-icon style="color: red" aria-label="not delivered">close</mat-icon>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="view_details">
+          <mat-header-cell *matHeaderCellDef class="header">نمایش جزئیات</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content details-button">
+            <div (click)="showDetails(element._id)">
+              <mat-icon color="primary">details</mat-icon>
+            </div>
           </mat-cell>
         </ng-container>
 

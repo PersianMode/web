@@ -1,0 +1,94 @@
+<div class="details-container">
+  <div mat-dialog-title>
+    <button mat-icon-button (click)="closeDialog()" style="float: left">
+      <mat-icon aria-label="Close">close</mat-icon>
+    </button>
+    <h2>جزئیات ارسال</h2>
+  </div>
+  <mat-dialog-content>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>ارسال از</label>
+      </div>
+      <div fxFlex="70">
+        <label>{{getFromAddress()}}</label>
+      </div>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>ارسال به</label>
+      </div>
+      <div fxFlex="70">
+        <label>{{data.to?.address}}</label>
+      </div>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>ارسال کننده</label>
+      </div>
+      <div fxFlex="70">
+        <label *ngIf="hasDeliveryAgent()">{{data.delivery_agent}}</label>
+        <label *ngIf="!hasDeliveryAgent()">-</label>
+      </div>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label *ngIf="!data.return">دریافت کننده</label>
+        <label *ngIf="data.return">بازگشت داده</label>
+      </div>
+      <div fxFlex="70">
+        <label>{{data.customer.first_name + data.customer.surname}} - {{data.customer.mobile_no}}</label>
+      </div>
+      <hr/>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>نوع</label>
+      </div>
+      <div fxFlex="70">
+        <label *ngIf="data.return">بازگشتی</label>
+        <label *ngIf="!data.return">ارسالی</label>
+      </div>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>بازه</label>
+      </div>
+      <div fxFlex="70">
+        <label>{{data.slot}}</label>
+      </div>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>کد قفسه</label>
+      </div>
+      <div fxFlex="70">
+        <label>{{data.shelf_code}}</label>
+      </div>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>زمان ارسال</label>
+      </div>
+      <div fxFlex="70">
+        <label>{{data.start_date}}</label>
+      </div>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>زمان دریافت کالا</label>
+      </div>
+      <div fxFlex="70">
+        <label>{{data.end_date}}</label>
+      </div>
+    </div>
+  </mat-dialog-content>
+</div>

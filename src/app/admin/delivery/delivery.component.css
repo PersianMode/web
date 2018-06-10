@@ -9,9 +9,15 @@
   font-weight: bold !important;
   text-align: center !important;
   font-size: unset !important;
+  display: flex;
+  justify-content: center !important;
 }
 
 .content {
   font-family: iranyekan, sans-serif;
   text-align: center;
+}
+
+.details-button {
+  cursor: pointer;
 }
