@@ -4,7 +4,7 @@
                     [pos]="pos"
                     (imageSettingsChanged)="imageSettingsChanged($event)"></app-slider-preview>
 <div class="bottom-part">
-  <div fxLayoutAlign="center center">
+  <div fxLayoutAlign="center center"  *ngIf="canEdit">
     <div class="full-width">
       <div fxLayout="column">
         <div class="full-width">
