@@ -9,6 +9,26 @@
       </mat-radio-button>
     </mat-radio-group>
 </span>
+<div *ngIf="withDelivery">
+  <label class="label-field">زمان تحویل</label>
+  <mat-radio-group [(ngModel)]="deliveryPeriodDay" class="radio-field">
+      <mat-radio-button [value]="3">
+        <label>۳ روزه (مخصوص استان تهران)</label>
+      </mat-radio-button>
+      <mat-radio-button [value]="5">
+        <label>۵ روزه (مخصوص استان تهران)</label>
+      </mat-radio-button>
+    <mat-radio-button [value]="7">
+      <label>۷ روزه</label>
+    </mat-radio-button>
+    </mat-radio-group>
+  <label class="label-field">ساعت تحویل</label>
+  <mat-radio-group [(ngModel)]="deliveryHour" class="radio-field">
+    <mat-radio-button [value]="'10-18'">ساعت ۱۰ تا ۱۸</mat-radio-button>
+    <mat-radio-button [value]="'18-22'">ساعت ۱۸ تا ۲۲</mat-radio-button>
+  </mat-radio-group>
+</div>
+
 <span
   *ngIf="(withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
   class="newAddress-checkout" [class.newAddress-profile]="isProfile">
