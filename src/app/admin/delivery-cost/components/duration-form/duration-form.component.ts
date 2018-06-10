@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {HttpService} from '../../../../shared/services/http.service';
 import {MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {isUndefined} from 'util';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-duration-form',
@@ -28,7 +28,7 @@ export class DurationFormComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private http: HttpClient,
               private httpService: HttpService, private snackBar: MatSnackBar,
-              private progressService: ProgressService) {
+              private progressService: ProgressService, protected router: Router, private location: Location) {
   }
 
   ngOnInit() {
@@ -120,9 +120,6 @@ export class DurationFormComponent implements OnInit {
     );
   }
 
-  modifyDuration() {
-  }
-
   fieldChanged() {
     if (!this.duration_id) {
       return;
@@ -160,7 +157,6 @@ export class DurationFormComponent implements OnInit {
     const tempValue = loaded_delivery_loyalty.filter(l => l._id === item._id);
     if (tempValue[0] && tempValue[0].price !== this.costValue[item.name])
       this.anyFiledChanges = true;
-
   }
 
   saveDurationInfo(id: string = null) {
@@ -179,6 +175,8 @@ export class DurationFormComponent implements OnInit {
     this.progressService.enable();
     this.httpService.post('deliveryduration', durationInfo).subscribe(
       res => {
+        console.log(res);
+        this.duration_id = res._id;
         this.snackBar.open('تغییرات با موفقیت ثبت شدند', null, {
           duration: 2300,
         });
@@ -202,5 +200,10 @@ export class DurationFormComponent implements OnInit {
         });
         this.progressService.disable();
       });
+  }
+
+  backToComponent() {
+    this.router.navigate([`/agent/delivery/${this.duration_id}`]);
+    // this.location.back();
   }
 }

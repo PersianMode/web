@@ -5,7 +5,7 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form (ngSubmit)="modifyDuration()" [formGroup]="durationForm">
+    <form [formGroup]="durationForm">
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
            fxLayoutAlign.xs="center center" dir="rtl">
         <div fxFlex="30" class="field-container">
@@ -77,6 +77,10 @@
       </div>
       <div class="button-wrapper" fxFlex="30">
         <div *ngIf="i === loyaltyNameList.length-1">
+          <button mat-button class="submit-button" style="margin-left: 10px; !important;" (click)="backToComponent()"
+          >
+           بازگشت
+          </button>
           <button mat-button class="submit-button" (click)="saveDurationInfo()"
                   [disabled]="!durationForm.valid || !filedValidation
                   || (duration_id && !anyChanges && !anyFiledChanges)"

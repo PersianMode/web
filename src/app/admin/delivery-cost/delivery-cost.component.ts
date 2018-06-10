@@ -17,19 +17,25 @@ export class DeliveryCostComponent implements OnInit {
   }
 
   deliverySetting(eventObj) {
-    if (eventObj._id && eventObj.name &&
-      eventObj.delivery_days &&
-      eventObj.cities && eventObj.delivery_loyalty ) {
+    if (eventObj) {
+      if (eventObj._id && eventObj.name &&
+        eventObj.delivery_days &&
+        eventObj.cities && eventObj.delivery_loyalty) {
         this.showTabs = true;
+      }
+      // TODO : else case to notify compelete info for select duration (navigate to form)
+      this.durationObject = {
+        _id: eventObj._id,
+        name: eventObj.name,
+        delivery_days: eventObj.delivery_days,
+        cities: eventObj.cities,
+        delivery_loyalty: eventObj.delivery_loyalty,
+      };
+      this.loyaltyLabel = ' : ' + ' تحویل ' + this.durationObject.name;
     }
-    // TODO : else case to notify compelete info for select duration (navigate to form)
-    this.durationObject = {
-      _id: eventObj._id,
-      name: eventObj.name,
-      delivery_days: eventObj.delivery_days,
-      cities: eventObj.cities,
-      delivery_loyalty: eventObj.delivery_loyalty,
-    };
-    this.loyaltyLabel = ' : ' + ' تحویل ' + this.durationObject.name;
+    else {
+      this.durationObject = {};
+      this.showTabs = false;
+    }
   }
 }
