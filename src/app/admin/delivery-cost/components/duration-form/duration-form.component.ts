@@ -14,6 +14,7 @@ import {Location} from '@angular/common';
 })
 export class DurationFormComponent implements OnInit {
   duration_id: string = null;
+  addEditId: string = null;
   durationForm: FormGroup = null;
   loyaltyNameList;
   seen: any = {};
@@ -175,8 +176,7 @@ export class DurationFormComponent implements OnInit {
     this.progressService.enable();
     this.httpService.post('deliveryduration', durationInfo).subscribe(
       res => {
-        console.log(res);
-        this.duration_id = res._id;
+        this.addEditId = res._id;
         this.snackBar.open('تغییرات با موفقیت ثبت شدند', null, {
           duration: 2300,
         });
@@ -203,7 +203,7 @@ export class DurationFormComponent implements OnInit {
   }
 
   backToComponent() {
-    this.router.navigate([`/agent/delivery/${this.duration_id}`]);
-    // this.location.back();
+    let tempId = this.addEditId ? this.addEditId : this.duration_id;
+    this.router.navigate([`/agent/delivery/${tempId}`]);
   }
 }
