@@ -4,31 +4,30 @@ import {DeliveryCostComponent} from './delivery-cost.component';
 import {DeliveryCostRouting} from './delivery-cost.routing';
 import {SharedModule} from '../../shared/shared.module';
 import {
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDialogModule, MatDividerModule, MatIconModule, MatInputModule,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDialogModule, MatDividerModule, MatIconModule,
+  MatInputModule,
   MatPaginatorModule,
   MatProgressSpinnerModule, MatRadioButton,
-  MatRadioModule,
+  MatRadioModule, MatSelectModule,
   MatSnackBarModule,
   MatSortModule,
   MatTableModule, MatTabsModule,
   MatToolbarModule
 } from '@angular/material';
-
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {CitiesComponent} from './components/cities/cities.component';
-import {CostComponent} from './components/cost/cost.component';
 import {DurationComponent} from './components/duration/duration.component';
-import {LoyaltyDiscountComponent} from './components/loyalty-discount/loyalty-discount.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {DurationFormComponent} from './components/duration-form/duration-form.component';
+import {LoyaltyDiscountComponent} from './components/loyalty-discount/loyalty-discount.component';
+
 
 
 @NgModule({
   declarations: [
     DeliveryCostComponent,
-    CitiesComponent,
-    CostComponent,
     DurationComponent,
     LoyaltyDiscountComponent,
+    DurationFormComponent,
   ],
   imports: [
     DeliveryCostRouting,
@@ -38,6 +37,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     SharedModule,
     MatToolbarModule,
     MatButtonModule,
+    MatSelectModule,
     FlexLayoutModule,
     MatChipsModule,
     MatTableModule,

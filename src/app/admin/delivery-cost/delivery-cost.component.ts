@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 
 @Component({
   selector: 'app-delivery-cost',
@@ -6,37 +6,30 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./delivery-cost.component.css']
 })
 export class DeliveryCostComponent implements OnInit {
-
-  showSettingTabs = false;
-  durationObject: any = {};
-  cityArray = [];
-  cityLabel;
-  costLabel;
+  showTabs = false;
   loyaltyLabel;
-  constructor() { }
+  durationObject: any = {};
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
-  deliverySettingBaseOnDuration($event) {
-    this.cityArray = [];
-    if ($event.name && $event.value)
-      this.showSettingTabs = true;
+  deliverySetting(eventObj) {
+    if (eventObj._id && eventObj.name &&
+      eventObj.delivery_days &&
+      eventObj.cities && eventObj.delivery_loyalty ) {
+        this.showTabs = true;
+    }
+    // TODO : else case to notify compelete info for select duration (navigate to form)
     this.durationObject = {
-      name: $event.name,
-      value: $event.value
+      _id: eventObj._id,
+      name: eventObj.name,
+      delivery_days: eventObj.delivery_days,
+      cities: eventObj.cities,
+      delivery_loyalty: eventObj.delivery_loyalty,
     };
-    this.cityLabel = ' : ' + 'شهرهای قابل انتخاب برای تحویل ' + this.durationObject.name ;
-    this.costLabel = ' : ' + 'هزینه ارسال به تفکیک شهر برای تحویل ' + this.durationObject.name ;
-    this.loyaltyLabel = ' : ' + 'درصد تخفیف به تفکیک امتیاز وفاداری برای تحویل ' + this.durationObject.name ;
-
+    this.loyaltyLabel = ' : ' + ' تحویل ' + this.durationObject.name;
   }
-
-  addCityToArray($event) {
-    this.cityArray = this.cityArray.slice().concat([$event]);
-  }
-
-  submitTotalInfo() {
-  }
-
 }

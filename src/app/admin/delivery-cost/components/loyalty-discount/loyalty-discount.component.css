@@ -7,26 +7,71 @@
     direction: ltr !important;
 }
 
-.city-del-cost {
-    font-family: iranyekan;
-    margin-top: 8px;
-    width: 40%;
+.table tr {
+  width: 100%;
+}
+.table thead {
+  font-family: irankharazmi;
+  font-weight: bold;
 }
 
-.action-button {
-    text-align: center;
-    padding: 3px;
-    background-color: black;
-    color: white;
-    height: 35px !important;
-    border: 0;
-    margin: 1px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.table tbody {
+  font-family: irankharazmi;
 }
 
-.submit-edit-cost-btn {
-    margin-top: 20px;
-    width: 50%;
-    text-align: center;
+.table td {
+  direction: rtl;
+  font-family: iranyekan, sans-serif;
+}
+
+.table td:nth-child(1) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(2) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(3) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(4) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(5) {
+  padding: 2px 40px 2px 0;
+}
+
+.table td:nth-child(6) {
+  padding: 2px 10px 2px 0;
+}
+.button-td {
+  width: 40%;
+}
+
+.little-right-margin {
+  margin-right: 0px;
+}
+
+.table {
+  margin: 20px;
+  margin-right: 0px !important;
+}
+
+.button-area {
+  margin-right: 20px;
+}
+
+.name-field {
+  direction: rtl;
+  text-align: right !important;
+}
+
+.score-field {
+  text-align: right !important;
+}
+.submit-all-discount {
+  background-color: #d9d9d9;
 }

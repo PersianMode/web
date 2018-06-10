@@ -1,7 +1,20 @@
-<div class="main">
-  <mat-radio-group>
-    <div *ngFor="let dd of deliveryDurations" style="margin-right: 8px; margin-top: 5px">
-      <mat-radio-button [value]="dd.value" (change)="changeDuration(dd)">{{dd.name}}</mat-radio-button>
-    </div>
-  </mat-radio-group>
-</div>
+<mat-card class="card-container">
+  <div class="action-button">
+    <button mat-mini-fab color="primary" color="primary" (click)="removeDuration(selected_duration._id)" [disabled] = editBtnShouldDisabled>
+      <i class="fa fa-eraser"></i>
+    </button>
+    <button mat-mini-fab color="primary" (click)="openForm(selected_duration._id)" [disabled] = editBtnShouldDisabled>
+      <mat-icon aria-label="add">edit</mat-icon>
+    </button>
+    <button mat-mini-fab color="primary" (click)="openForm()" [disabled]=false>
+      <mat-icon aria-label="add">add</mat-icon>
+    </button>
+  </div>
+  <div class="main">
+    <mat-radio-group>
+      <div *ngFor="let d of durations" class="duration_name">
+        <mat-radio-button [value]="d.delivery_days" (change)="changeDuration(d)">{{d.name}}</mat-radio-button>
+      </div>
+    </mat-radio-group>
+  </div>
+</mat-card>
