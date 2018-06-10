@@ -69,14 +69,13 @@
                  [class.input-error]="seen[fl.name] && !costValue[fl.name]"
                  [(ngModel)]="costValue[fl.name]" (ngModelChange)="changeValue(fl)"
           />
-          <!--<mat-hint>امتیاز وفاداری {{lnl.name}} را تعیین کنید</mat-hint>-->
         </mat-input-container>
         <mat-error class="field-error" *ngIf="!costValue[fl.name] && seen[fl.name] && curFocus !== fl.name">
           ارزش امتیاز وفاداری {{fl.name}} را تعیین کنید
         </mat-error>
       </div>
       <div class="button-wrapper" fxFlex="40">
-        <div *ngIf="i === loyaltyNameList.length-1">
+        <div *ngIf="i === formLoyaltyInfo.length-1">
           <button mat-button class="submit-button" style="margin-left: 10px; !important;" (click)="backToComponent()"
           >
            بازگشت
