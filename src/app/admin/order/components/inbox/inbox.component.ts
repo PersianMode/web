@@ -15,7 +15,6 @@ import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
 
 
-
 @Component({
   selector: 'app-order-inbox',
   templateUrl: './inbox.component.html',
@@ -29,7 +28,6 @@ import * as moment from 'jalali-moment';
   ],
 })
 export class InboxComponent implements OnInit, OnDestroy {
-
 
 
   @Output() newInboxCount = new EventEmitter();
@@ -61,11 +59,11 @@ export class InboxComponent implements OnInit, OnDestroy {
 
 
   constructor(private httpService: HttpService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private authService: AuthService,
-    private socketService: SocketService,
-    private progressService: ProgressService) {
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private authService: AuthService,
+              private socketService: SocketService,
+              private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -103,7 +101,6 @@ export class InboxComponent implements OnInit, OnDestroy {
       res.data.forEach(order => rows.push(order, {detailRow: true, order}));
       this.dataSource.data = rows;
       this.resultsLength = res.data.length ? res.data.length : 0;
-      console.log('-> ', this.dataSource.data);
     }, err => {
       this.progressService.disable();
       this.newInboxCount.emit(0);
@@ -117,7 +114,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
     if (index === 0)
       index = 1;
-    return index
+    return index;
   }
 
   getDate(orderTime) {
@@ -152,6 +149,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
     return '';
   }
+
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets)
       return OrderStatus.find(x => x.status === orderLine.tickets.find(x => !x.is_processed).status).name;
@@ -190,7 +188,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     });
     this.processDialogRef.afterClosed().subscribe(isMatched => {
       if (isMatched)
-        this.makeDesicion(order,orderLine);
+        this.makeDesicion(order, orderLine);
     });
   }
 
@@ -199,9 +197,9 @@ export class InboxComponent implements OnInit, OnDestroy {
     const foundActiveTicket = orderLine.tickets.find(x => !x.is_processed);
 
     if (foundActiveTicket.status === STATUS.default || foundActiveTicket.status === STATUS.WaitForOnlineWarehouse)
-      this.addToOnlineWarehouse(order,orderLine);
+      this.addToOnlineWarehouse(order, orderLine);
   }
-  
+
   addToOnlineWarehouse(order, orderLine) {
     this.progressService.enable();
     this.httpService.post('order/ticket/onlineWarehouse', {
@@ -234,8 +232,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.socketObserver)
-      this.socketObserver.unsubscribe();
+    //   if (this.socketObserver)
+    //     this.socketObserver.unsubscribe();
   }
 
 }

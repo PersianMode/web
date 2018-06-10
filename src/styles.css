@@ -227,7 +227,7 @@ nav {
 .search-bar i {
   font-size: 18px;
   top: 2px;
-  right: 4px;
+  /*right: 4px;*/
 }
 
 .search-bar input {
