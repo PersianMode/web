@@ -51,14 +51,16 @@ export class DurationFormComponent implements OnInit {
         this.loyaltyNameList.forEach(el => {
           this.costValue.push(el.name);
         });
-        this.loyaltyNameList.forEach(el => {
-          this.formLoyaltyInfo.push({
-            _id: el._id,
-            name: el.name,
-            price: null,
-            discount: null
+        if (true) {
+          this.loyaltyNameList.forEach(el => {
+            this.formLoyaltyInfo.push({
+              _id: el._id,
+              name: el.name,
+              price: null,
+              discount: null
+            });
           });
-        });
+        }
         this.progressService.disable();
       },
       err => {
@@ -105,6 +107,7 @@ export class DurationFormComponent implements OnInit {
         this.durationForm.controls['city_cost'].setValue(data.cities[0].delivery_cost);
         data.delivery_loyalty.forEach(el => {
           this.costValue[el.name] = el.price;
+          this.formLoyaltyInfo.filter(item => item._id === el._id)[0].discount = el.discount;
         });
         this.upsertBtnShouldDisabled = false;
         this.progressService.disable();
@@ -139,8 +142,7 @@ export class DurationFormComponent implements OnInit {
       (city_cost !== loaded_city_cost && (city_cost !== '' || loaded_city_cost !== null))) {
       this.anyChanges = true;
     }
-
-    this.checkFiledValidation();
+    this.fieldValidation();
   }
 
   setSeen(item) {
@@ -149,7 +151,7 @@ export class DurationFormComponent implements OnInit {
   }
 
   changeValue(item) {
-    this.checkFiledValidation();
+    this.fieldValidation();
     this.anyFiledChanges = false;
     const loaded_delivery_loyalty = this.loadedDurationInfo ? this.loadedDurationInfo.delivery_loyalty : [];
     const tempValue = loaded_delivery_loyalty.filter(l => l._id === item._id);
@@ -157,7 +159,7 @@ export class DurationFormComponent implements OnInit {
       this.anyFiledChanges = true;
   }
 
-  checkFiledValidation() {
+  fieldValidation() {
     this.filedValidation = true;
     if (this.costValue && this.costValue.length) {
       this.costValue.forEach(el => {
@@ -210,7 +212,7 @@ export class DurationFormComponent implements OnInit {
   }
 
   backToComponent() {
-    const tempId = this.addEditId ? this.addEditId : this.duration_id;
+    let tempId = this.addEditId ? this.addEditId : this.duration_id;
     this.router.navigate([`/agent/delivery/${tempId}`]);
   }
 }

@@ -18,7 +18,10 @@ import {ProgressService} from '../../services/progress.service';
   styleUrls: ['./address-table.component.css']
 })
 export class AddressTableComponent implements OnInit {
+  addressSelected;
   @Input() isProfile = true;
+  @Input() isModify = true;
+  @Output() selectedChange = new EventEmitter();
   locs = {
     'ایران مال': [35.7545945, 51.1921283],
     'سانا': [35.8024766, 51.4552242],
@@ -206,4 +209,7 @@ export class AddressTableComponent implements OnInit {
     this.setBtnLabel();
   }
 
+  chooseAddress(address) {
+    this.selectedChange.emit(this.addressSelected);
+  }
 }
