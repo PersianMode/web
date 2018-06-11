@@ -1,0 +1,17 @@
+<mat-card class="example-container mat-elevation-z8 main">
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span>بازه زمانی ارسال</span>
+      </ng-template>
+      <app-duration (selectedDuration)="deliverySetting($event)"></app-duration>
+    </mat-tab>
+    <mat-tab *ngIf="showTabs">
+      <ng-template mat-tab-label>
+        <span>تخفیف بر اساس امتیاز وفاداری</span>
+      </ng-template>
+      <app-loyalty-discount [loyaltyLabel]="loyaltyLabel" [selectedDuration]="durationObject"></app-loyalty-discount>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>
+

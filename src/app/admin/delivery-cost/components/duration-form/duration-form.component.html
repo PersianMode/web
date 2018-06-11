@@ -1,0 +1,95 @@
+<mat-card class="card-view">
+  <mat-card-header>
+    <mat-card-title>
+      <h2> {{ duration_id ? 'ویرایش بازه زمانی' : 'افزودن بازه زمانی' }} </h2>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="durationForm">
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+           fxLayoutAlign.xs="center center" dir="rtl">
+        <div fxFlex="30" class="field-container">
+          <mat-input-container class="field farsi">
+            <input matInput type="text" placeholder="عنوان بازه زمانی" formControlName="name"
+                   role="name"
+                   (focus)="setSeen('name')"
+                   (blur)="curFocus = null"
+                   tabindex="1"/>
+            <mat-hint>عنوان بازه زمانی را وارد کنید</mat-hint>
+            <mat-error
+              *ngIf="durationForm.controls['name'].hasError('required')
+              && seen['name'] && curFocus !== 'name'">
+              وارد کردن عنوان بازه زمانی الزامی است
+            </mat-error>
+          </mat-input-container>
+        </div>
+        <div fxFlex="30" class="field-container">
+          <mat-input-container class="field farsi">
+            <input matInput type="number" placeholder="مدت زمان ارسال" formControlName="delivery_days"
+                   role="delivery_days"
+                   (focus)="setSeen('delivery_days')"
+                   (blur)="curFocus = null"
+                   tabindex="2"/>
+            <mat-hint>مدت زمان ارسال را وارد کنید</mat-hint>
+            <mat-error *ngIf="durationForm.controls['delivery_days'].hasError('required')
+               && seen['delivery_days'] && curFocus !== 'delivery_days'">
+              وارد کردن مدت زمان ارسال الزامی است
+            </mat-error>
+          </mat-input-container>
+        </div>
+        <div fxFlex="30" class="field-container">
+          <mat-input-container class="field farsi">
+            <input matInput type="number" placeholder="هزینه ارسال برای تهران" formControlName="city_cost"
+                   role="city_cost"
+                   (focus)="setSeen('city_cost')"
+                   (blur)="curFocus = null"
+                   tabindex="3"/>
+            <mat-hint>هزینه ارسال را وارد کنید</mat-hint>
+            <mat-error *ngIf="durationForm.controls['city_cost'].hasError('required')
+               && seen['city_cost'] && curFocus !== 'city_cost'">
+              وارد هزینه ارسال الزامی است
+            </mat-error>
+          </mat-input-container>
+        </div>
+      </div>
+    </form>
+    <div *ngFor="let fl of formLoyaltyInfo; let i = index " fxLayout="row" fxLayout.xs="column"
+         fxLayoutAlign="start start"
+         fxLayoutAlign.xs="center center" dir="rtl" class="loyalty-wrapper">
+      <div fxFlex="30"
+           class="loyalty-cost">ارزش
+        هر امتیاز وفاداری {{fl.name}} بر حسب تومان
+      </div>
+      <div fxFlex="30" class="field-container">
+        <mat-input-container>
+          <input matInput type="number" placeholder="ارزش امتیاز {{fl.name}}"
+                 (focus)="setSeen(fl.name)"
+                 (blur)="curFocus = null"
+                 tabindex="4"
+                 [class.input-error]="seen[fl.name] && !costValue[fl.name]"
+                 [(ngModel)]="costValue[fl.name]" (ngModelChange)="changeValue(fl)"
+          />
+          <!--<mat-hint>امتیاز وفاداری {{lnl.name}} را تعیین کنید</mat-hint>-->
+        </mat-input-container>
+        <mat-error class="field-error" *ngIf="!costValue[fl.name] && seen[fl.name] && curFocus !== fl.name">
+          ارزش امتیاز وفاداری {{fl.name}} را تعیین کنید
+        </mat-error>
+      </div>
+      <div class="button-wrapper" fxFlex="40">
+        <div *ngIf="i === loyaltyNameList.length-1">
+          <button mat-button class="submit-button" style="margin-left: 10px; !important;" (click)="backToComponent()"
+          >
+           بازگشت
+          </button>
+          <button mat-button class="submit-button" (click)="saveDurationInfo()"
+                  [disabled]="!durationForm.valid || !filedValidation
+                  || (duration_id && !anyChanges && !anyFiledChanges)"
+          >
+            تایید
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
