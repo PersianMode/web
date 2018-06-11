@@ -9,19 +9,19 @@
     <mat-card>
       <mat-card-content>
 
-        <div fxLayout="row" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" fxLayout.xs="column">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.xs="center center" fxLayout.xs="column">
           <div fxFlex="50">
             <label for=""> روز تحویل:</label>
-            <dp-date-picker dir="rtl" [(ngModel)]="dateObject" mode="day" placeholder="تاریخ" theme="dp-material"> </dp-date-picker>
+            <dp-date-picker class="label-field" dir="rtl" [(ngModel)]="dateObject" mode="day" placeholder="تاریخ" theme="dp-material"> </dp-date-picker>
           </div>
-          <div fxFlex="50" style="margin: 25px 30px;">
-            <label for=""> ساعت تحویل:</label>
-            <mat-radio-group class="example-radio-group" [(ngModel)]="timeReturn">
-              <mat-radio-button class="example-radio-button" *ngFor="let rt of returnTimes" [value]="rt.value" [checked]="rt.checked">
-                {{rt.time}}
-              </mat-radio-button>
+          <div fxFlex="50" style="margin-right: 50px">
+            <label class="">ساعت تحویل</label>
+            <mat-radio-group [(ngModel)]="timeReturn" class="label-field">
+              <mat-radio-button [value]="'10-18'">ساعت ۱۰ تا ۱۸</mat-radio-button>
+              <mat-radio-button [value]="'18-22'">ساعت ۱۸ تا ۲۲</mat-radio-button>
             </mat-radio-group>
           </div>
+
         </div>
       </mat-card-content>
       <mat-card-footer>

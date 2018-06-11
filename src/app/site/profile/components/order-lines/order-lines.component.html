@@ -5,9 +5,6 @@
 </div>
 <mat-card style="margin-bottom: 5px" *ngFor="let ol of noDuplicateOrderLine">
   <mat-card-content>
-    <button *ngIf="orderTime()" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrder(ol)">
-      <i class="fa fa-undo"></i>
-    </button>
     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column" dir="rtl">
       <div fxFlex="25">
         <a (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">

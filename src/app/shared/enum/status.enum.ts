@@ -11,10 +11,6 @@ export enum STATUS {
   OnDelivery= 10,
   Delivered= 11,
   NotExists= 12,
-<<<<<<< HEAD
-  Refund= 13
-=======
   Refund= 13,
   Return= 14
->>>>>>> master
 }

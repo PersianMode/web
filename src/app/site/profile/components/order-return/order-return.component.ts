@@ -1,17 +1,20 @@
 import { Component, OnInit, Inject, Input, Output, EventEmitter } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import * as moment from 'moment';
 import { HttpService } from 'app/shared/services/http.service';
 import { Location } from '@angular/common';
 import { ProfileOrderService } from '../../../../shared/services/profile-order.service';
+import { MatSnackBar } from '@angular/material';
+import {ProgressService} from '../../../../shared/services/progress.service';
+
 
 export interface ITicket {
-  receiver_id: string;
   desc: {
-    periodTime: string,
-    addressId: string,
-    periodDay: string
-  };
+    day: {
+      time_slot: string,
+      day_slot: string
+    },
+    address_id: string
+  }
 }
 @Component({
   selector: 'app-order-return',
@@ -23,27 +26,28 @@ export class OrderReturnComponent implements OnInit {
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
 
-  orderObject: any;
+  order: any;
+  orderLine: any;
   ticket: ITicket = {
-    receiver_id: '',
     desc: {
-      periodTime: '',
-      addressId: '',
-      periodDay: ''
+      day: {
+        time_slot: '',
+        day_slot: ''
+      },
+      address_id: ''
     }
   };
   addressObject;
   dateObject;
   timeReturn: string;
-  returnTimes = [{value: '10-18', time: '10-18', checked: true}, {value: '18-22', time: '18-22', checked: false}];
   constructor( private httpService: HttpService, private location: Location,
+    private snackBar: MatSnackBar,
+    private progressService: ProgressService,
     private profileOrderService: ProfileOrderService) { }
 
   ngOnInit() {
-    this.orderObject = this.profileOrderService.orderData;
-    this.httpService.get('warehouse/hup').subscribe(res => {
-      this.ticket.receiver_id = res._id;
-    });
+    this.order = {_id: this.profileOrderService.orderData.order.orderId};
+    this.orderLine = {_id: this.profileOrderService.orderData.orderLine.order_line_id};
   }
   cancelReturnOrder() {
     if (this.isNotMobile) {
@@ -59,11 +63,28 @@ export class OrderReturnComponent implements OnInit {
   }
 
   setReturnOrder() {
-    this.ticket.desc.addressId = this.addressObject._id;
-    this.ticket.desc.periodTime = this.timeReturn;
-    this.ticket.desc.periodDay =  moment(this.dateObject, 'jYYYY/jM/jD').format('YYYY-M-D');
-    console.log('ticket', this.ticket);
-    console.log('Order', this.orderObject);
+    this.ticket.desc.address_id = this.addressObject._id;
+    this.ticket.desc.day.time_slot = this.timeReturn;
+    this.ticket.desc.day.day_slot =  moment(this.dateObject, 'jYYYY/jM/jD').format('YYYY-M-D hh:mm:ss');
+    this.progressService.enable();
+    this.httpService.post('order/return', {order: this.order, orderLine: this.orderLine, desc: this.ticket.desc}).subscribe(
+      data => {
+        this.snackBar.open('عمیلات با موفقیت انجام گردید.', null, {
+          duration: 2000,
+        });
+        if (this.isNotMobile) {
+          this.closeDialog.emit(false);
+        } else {
+          this.location.back();
+        }
+      },
+      errr => {
+        this.snackBar.open('خطا در پایان کمپین. لطفا مجددا تلاش کنید', null, {
+          duration: 2700
+        });
+        this.progressService.disable();
+      }
+    );
   }
 
 }
