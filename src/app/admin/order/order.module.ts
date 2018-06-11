@@ -61,11 +61,7 @@ import { TicketComponent } from './components/ticket/ticket.component';
     MatCardModule,
     
   ],
-<<<<<<< HEAD
-  entryComponents: [OrderAddressComponent,  ProductViewerComponent, BarcodeCheckerComponent],
-=======
-  entryComponents: [OrderAddressComponent, SMOrderProcessComponent,  ProductViewerComponent, BarcodeCheckerComponent, TicketComponent],
->>>>>>> master
+  entryComponents: [OrderAddressComponent,  ProductViewerComponent, BarcodeCheckerComponent, TicketComponent],
 })
 export class OrderModule {
 }
