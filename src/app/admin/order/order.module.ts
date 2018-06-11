@@ -20,6 +20,7 @@ import { InboxComponent } from './components/inbox/inbox.component';
 import { ProductViewerComponent } from './components/product-viewer/product-viewer.component';
 import {DeliverComponent} from './components/deliver/deliver.component';
 import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-checker.component';
+import { TicketComponent } from './components/ticket/ticket.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-ch
     DeliverComponent,
     ProductViewerComponent,
     BarcodeCheckerComponent,
+    TicketComponent
   ],
   imports: [
     OrderRouting,
@@ -55,7 +57,7 @@ import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-ch
     MatTabsModule,
     MatCardModule
   ],
-  entryComponents: [OrderAddressComponent, SMOrderProcessComponent,  ProductViewerComponent, BarcodeCheckerComponent],
+  entryComponents: [OrderAddressComponent, SMOrderProcessComponent,  ProductViewerComponent, BarcodeCheckerComponent, TicketComponent],
 })
 export class OrderModule {
 }

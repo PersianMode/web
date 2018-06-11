@@ -13,6 +13,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
+import { TicketComponent } from '../ticket/ticket.component';
 
 
 
@@ -201,7 +202,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     if (foundActiveTicket.status === STATUS.default || foundActiveTicket.status === STATUS.WaitForOnlineWarehouse)
       this.addToOnlineWarehouse(order,orderLine);
   }
-  
+
   addToOnlineWarehouse(order, orderLine) {
     this.progressService.enable();
     this.httpService.post('order/ticket/onlineWarehouse', {
@@ -238,4 +239,12 @@ export class InboxComponent implements OnInit, OnDestroy {
       this.socketObserver.unsubscribe();
   }
 
+  showTicket(order, orderLine) {
+    const _orderId = order._id;
+    const _orderLineId = orderLine.order_line_id;
+    this.dialog.open(TicketComponent, {
+        width: '1000px',
+        data: {_orderId, _orderLineId}
+    });
+  }
 }
