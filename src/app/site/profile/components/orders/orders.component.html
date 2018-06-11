@@ -51,6 +51,16 @@
     ><i
       class="fa fa-eye"></i></a></mat-cell>
   </ng-container>
+  
+  <!-- return order -->
+  <!-- <ng-container matColumnDef="return_order">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> مرجوع سفارش</mat-header-cell>
+        <mat-cell *matCellDef="let order" style=" font-size: 20px">
+            <button class="clickable-link" (click)="returnOrder(order._id)" [disabled]="orderTime(order)">
+              <i class="fa fa-undo"></i>
+            </button>
+          </mat-cell>
+  </ng-container> -->
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns:displayedColumns"></mat-row>
