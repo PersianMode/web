@@ -209,10 +209,7 @@ export class AddressTableComponent implements OnInit {
     this.setBtnLabel();
   }
 
-<<<<<<< HEAD
   chooseAddress(address) {
     this.selectedChange.emit(this.addressSelected);
   }
-=======
->>>>>>> affd71a6e4d11d3f36b90ea710466a14ec3cb5cd
 }
