@@ -1,6 +1,7 @@
 
 <div class="main">
   <mat-tab-group dir="rtl">
+
     <mat-tab label="inbox">
       <ng-template mat-tab-label>
         <span>ورودی</span>
@@ -10,9 +11,11 @@
         </mat-chip-list>
       </ng-template>
 
-      <app-order-inbox (newInboxCount)="newInboxCount = $event"></app-order-inbox>
+      <app-order-inbox (OnNewInboxCount)="newInboxCount = $event" ></app-order-inbox>
 
     </mat-tab>
+
+    
     <mat-tab label="outbox">
       <ng-template mat-tab-label>
         <span>آماده تحویل</span>

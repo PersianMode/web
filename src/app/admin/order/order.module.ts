@@ -13,20 +13,19 @@ import {
   MatTableModule, MatTabsModule,
   MatToolbarModule
 } from '@angular/material';
-import {SMOrderProcessComponent} from './components/sm-order-process/sm-order-process.component';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { InboxComponent } from './components/inbox/inbox.component';
 import { ProductViewerComponent } from './components/product-viewer/product-viewer.component';
 import {DeliverComponent} from './components/deliver/deliver.component';
 import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-checker.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import { TicketComponent } from './components/ticket/ticket.component';
 
 
 @NgModule({
   declarations: [
     OrderComponent,
-    SMOrderProcessComponent,
     OrderAddressComponent,
     InboxComponent,
     DeliverComponent,
@@ -38,6 +37,7 @@ import { TicketComponent } from './components/ticket/ticket.component';
     OrderRouting,
     CommonModule,
     FormsModule,
+    FlexLayoutModule,
     ReactiveFormsModule,
     SharedModule,
     MatToolbarModule,
@@ -55,9 +55,10 @@ import { TicketComponent } from './components/ticket/ticket.component';
     MatIconModule,
     MatInputModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    
   ],
-  entryComponents: [OrderAddressComponent, SMOrderProcessComponent,  ProductViewerComponent, BarcodeCheckerComponent, TicketComponent],
+  entryComponents: [OrderAddressComponent,  ProductViewerComponent, BarcodeCheckerComponent, TicketComponent],
 })
 export class OrderModule {
 }
