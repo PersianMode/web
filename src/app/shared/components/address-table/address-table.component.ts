@@ -1,13 +1,16 @@
 import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {HttpService} from '../../services/http.service';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {AuthService} from '../../services/auth.service';
 import {ResponsiveService} from '../../services/responsive.service';
 import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
 import {CheckoutService} from '../../services/checkout.service';
+import {userInfo} from 'os';
+import {ProgressService} from '../../services/progress.service';
+
 
 @Component({
   selector: 'app-address-table',
@@ -24,6 +27,8 @@ export class AddressTableComponent implements OnInit {
     'سانا': [35.8024766, 51.4552242],
     'پالادیوم': [35.7975691, 51.4107673],
   };
+  deliveryPeriodDay = [3, 5, 7];
+  deliveryHour: {enum: ['10-18', '18-22']};
   loc = null;
   withDelivery = true;
   selectedCustomerAddress = -1;
@@ -36,7 +41,7 @@ export class AddressTableComponent implements OnInit {
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
     private dialog: MatDialog, private checkoutService: CheckoutService,
     private responsiveService: ResponsiveService, private router: Router,
-    private authService: AuthService) {
+    private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -177,6 +182,26 @@ export class AddressTableComponent implements OnInit {
   changeWithDelivery() {
     if (this.withDelivery) {
       this.addresses = this.checkoutService.addresses$.getValue();
+      this.progressService.enable();
+      this.httpService.post('loyaltygroup/', {
+        _id: this.authService.userDetails.userId,
+        deliveryPeriodDay: this.deliveryPeriodDay,
+      }).subscribe(
+        res => {
+          this.snackBar.open('تغییرات با موفقیت ثبت شدند', null, {
+            duration: 2000,
+          });
+
+          this.progressService.disable();
+        },
+        err => {
+          console.error('Cannot send delivery information: ', err);
+          this.snackBar.open('سیستم قادر به اعمال تغییرات شما نیست. دوباره تلاش کنید', null, {
+            duration: 2000,
+          });
+          this.progressService.disable();
+        });
+
     } else {
       this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
     }
@@ -184,7 +209,10 @@ export class AddressTableComponent implements OnInit {
     this.setBtnLabel();
   }
 
+<<<<<<< HEAD
   chooseAddress(address) {
     this.selectedChange.emit(this.addressSelected);
   }
+=======
+>>>>>>> affd71a6e4d11d3f36b90ea710466a14ec3cb5cd
 }
