@@ -78,11 +78,13 @@
         <div *ngIf="i === formLoyaltyInfo.length-1">
           <button mat-button class="submit-button" style="margin-left: 10px; !important;" (click)="backToComponent()"
           >
-           بازگشت
+            بازگشت
           </button>
           <button mat-button class="submit-button" (click)="saveDurationInfo()"
-                  [disabled]="!durationForm.valid || !filedValidation
-                  || (duration_id && !anyChanges && !anyFiledChanges)"
+                  [disabled]="!durationForm.valid ||
+                  (duration_id && !anyChanges && !anyFiledChanges) ||
+                  !filedValidation
+                 "
           >
             تایید
           </button>

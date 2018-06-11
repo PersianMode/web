@@ -22,12 +22,10 @@ import {CheckoutService} from './shared/services/checkout.service';
 import {ProfileOrderService} from './shared/services/profile-order.service';
 import {TitleService} from './shared/services/title.service';
 import {RevertPlacementService} from './shared/services/revert-placement.service';
-import { MyTestComponent } from './my-test/my-test.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MyTestComponent,
   ],
   imports: [
     routing,

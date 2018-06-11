@@ -126,10 +126,12 @@ export class DurationFormComponent implements OnInit {
       return;
     }
     this.anyChanges = false;
-    const name = this.durationForm.controls['name'].value ? this.durationForm.controls['name'].value : '';
+    let name = this.durationForm.controls['name'].value ? this.durationForm.controls['name'].value : '';
+    name = name.trim();
     const delivery_days = this.durationForm.controls['delivery_days'].value ? this.durationForm.controls['delivery_days'].value : '';
     const city_cost = this.durationForm.controls['city_cost'].value;
-    const loaded_name = this.loadedDurationInfo.name;
+    let loaded_name = this.loadedDurationInfo.name;
+    loaded_name = loaded_name.trim();
     const loaded_delivery_days = this.loadedDurationInfo.delivery_days;
     const loaded_city_cost = this.loadedDurationInfo.cities[0].delivery_cost;
     if ((name !== loaded_name && (name !== '' || loaded_name !== null)) ||
@@ -137,6 +139,8 @@ export class DurationFormComponent implements OnInit {
       (city_cost !== loaded_city_cost && (city_cost !== '' || loaded_city_cost !== null))) {
       this.anyChanges = true;
     }
+
+    this.checkFiledValidation();
   }
 
   setSeen(item) {
@@ -145,7 +149,15 @@ export class DurationFormComponent implements OnInit {
   }
 
   changeValue(item) {
+    this.checkFiledValidation();
     this.anyFiledChanges = false;
+    const loaded_delivery_loyalty = this.loadedDurationInfo ? this.loadedDurationInfo.delivery_loyalty : [];
+    const tempValue = loaded_delivery_loyalty.filter(l => l._id === item._id);
+    if (tempValue[0] && tempValue[0].price !== this.costValue[item.name])
+      this.anyFiledChanges = true;
+  }
+
+  checkFiledValidation() {
     this.filedValidation = true;
     if (this.costValue && this.costValue.length) {
       this.costValue.forEach(el => {
@@ -154,10 +166,6 @@ export class DurationFormComponent implements OnInit {
       });
     }
     ;
-    const loaded_delivery_loyalty = this.loadedDurationInfo ? this.loadedDurationInfo.delivery_loyalty : [];
-    const tempValue = loaded_delivery_loyalty.filter(l => l._id === item._id);
-    if (tempValue[0] && tempValue[0].price !== this.costValue[item.name])
-      this.anyFiledChanges = true;
   }
 
   saveDurationInfo(id: string = null) {
@@ -187,8 +195,7 @@ export class DurationFormComponent implements OnInit {
             this.costValue[el.name] = null;
             this.seen[el.name] = false;
           });
-        }
-        else {
+        } else {
           this.anyChanges = false;
           this.anyFiledChanges = false;
         }
@@ -203,7 +210,7 @@ export class DurationFormComponent implements OnInit {
   }
 
   backToComponent() {
-    let tempId = this.addEditId ? this.addEditId : this.duration_id;
+    const tempId = this.addEditId ? this.addEditId : this.duration_id;
     this.router.navigate([`/agent/delivery/${tempId}`]);
   }
 }
