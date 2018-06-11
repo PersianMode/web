@@ -126,7 +126,8 @@ export class DurationFormComponent implements OnInit {
       return;
     }
     this.anyChanges = false;
-    const name = this.durationForm.controls['name'].value ? this.durationForm.controls['name'].value : '';
+    let name = this.durationForm.controls['name'].value ? this.durationForm.controls['name'].value : '';
+    name = name.trim();
     const delivery_days = this.durationForm.controls['delivery_days'].value ? this.durationForm.controls['delivery_days'].value : '';
     const city_cost = this.durationForm.controls['city_cost'].value;
     const loaded_name = this.loadedDurationInfo.name;
@@ -137,6 +138,7 @@ export class DurationFormComponent implements OnInit {
       (city_cost !== loaded_city_cost && (city_cost !== '' || loaded_city_cost !== null))) {
       this.anyChanges = true;
     }
+    this.fieldValidation();
   }
 
   setSeen(item) {
@@ -145,7 +147,15 @@ export class DurationFormComponent implements OnInit {
   }
 
   changeValue(item) {
+    this.fieldValidation();
     this.anyFiledChanges = false;
+    const loaded_delivery_loyalty = this.loadedDurationInfo ? this.loadedDurationInfo.delivery_loyalty : [];
+    const tempValue = loaded_delivery_loyalty.filter(l => l._id === item._id);
+    if (tempValue[0] && tempValue[0].price !== this.costValue[item.name])
+      this.anyFiledChanges = true;
+  }
+
+  fieldValidation () {
     this.filedValidation = true;
     if (this.costValue && this.costValue.length) {
       this.costValue.forEach(el => {
@@ -154,10 +164,6 @@ export class DurationFormComponent implements OnInit {
       });
     }
     ;
-    const loaded_delivery_loyalty = this.loadedDurationInfo ? this.loadedDurationInfo.delivery_loyalty : [];
-    const tempValue = loaded_delivery_loyalty.filter(l => l._id === item._id);
-    if (tempValue[0] && tempValue[0].price !== this.costValue[item.name])
-      this.anyFiledChanges = true;
   }
 
   saveDurationInfo(id: string = null) {
