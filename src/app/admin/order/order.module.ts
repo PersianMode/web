@@ -19,11 +19,8 @@ import { InboxComponent } from './components/inbox/inbox.component';
 import { ProductViewerComponent } from './components/product-viewer/product-viewer.component';
 import {DeliverComponent} from './components/deliver/deliver.component';
 import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-checker.component';
-<<<<<<< HEAD
 import {FlexLayoutModule} from '@angular/flex-layout';
-=======
 import { TicketComponent } from './components/ticket/ticket.component';
->>>>>>> master
 
 
 @NgModule({
