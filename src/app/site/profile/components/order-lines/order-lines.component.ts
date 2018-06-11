@@ -103,14 +103,14 @@ export class OrderLinesComponent implements OnInit {
 
   orderTime() {
     const date =  ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
-    if (date > 0 ) return false;
+    if (date > 0) return false;
     else return true;
   }
 
   returnOrder(ol) {
     this.orderObject = {
-      orderLineid: ol.order_line_id,
-      orderId: this.orderInfo.orderId
+      orderLine: ol,
+      order: this.orderInfo
     };
     this.profileOrderService.orderData = this.orderObject;
     if (this.responsiveService.isMobile) {

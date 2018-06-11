@@ -10,6 +10,7 @@ export enum STATUS {
   DeliverySet= 9,
   OnDelivery= 10,
   Delivered= 11,
+  NotExists= 12,
   Refund= 13,
   Return= 14,
 }
