@@ -43,7 +43,7 @@ export class BarcodeCheckerComponent implements OnInit {
     );
   }
   checkBarcode(barcode) {
-    this.progressService.enable();
+    this.progressService.enable(); 
     this.httpService.post('order/dss/receive', {
       barcode
     }).subscribe(res => {

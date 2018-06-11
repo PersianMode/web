@@ -1,0 +1,6 @@
+dp-day-calendar .dp-day-calendar-container {
+    position: absolute !important;
+    top: -300px !important;
+    right: -300px !important;
+}
+  

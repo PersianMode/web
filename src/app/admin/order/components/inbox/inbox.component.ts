@@ -14,6 +14,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
 import {FormControl} from '@angular/forms';
+import { TicketComponent } from '../ticket/ticket.component';
 
 
 
@@ -182,8 +183,10 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   }
 
+
   isReadyForInvoice(order) {
     return false
+
   }
 
   openSnackBar(message: string) {
@@ -207,4 +210,12 @@ export class InboxComponent implements OnInit, OnDestroy {
       this.socketObserver.unsubscribe();
   }
 
+  showTicket(order, orderLine) {
+    const _orderId = order._id;
+    const _orderLineId = orderLine.order_line_id;
+    this.dialog.open(TicketComponent, {
+        width: '1000px',
+        data: {_orderId, _orderLineId}
+    });
+  }
 }

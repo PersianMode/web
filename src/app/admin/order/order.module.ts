@@ -19,7 +19,11 @@ import { InboxComponent } from './components/inbox/inbox.component';
 import { ProductViewerComponent } from './components/product-viewer/product-viewer.component';
 import {DeliverComponent} from './components/deliver/deliver.component';
 import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-checker.component';
+<<<<<<< HEAD
 import {FlexLayoutModule} from '@angular/flex-layout';
+=======
+import { TicketComponent } from './components/ticket/ticket.component';
+>>>>>>> master
 
 
 @NgModule({
@@ -30,6 +34,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     DeliverComponent,
     ProductViewerComponent,
     BarcodeCheckerComponent,
+    TicketComponent
   ],
   imports: [
     OrderRouting,
@@ -56,7 +61,11 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatCardModule,
     
   ],
+<<<<<<< HEAD
   entryComponents: [OrderAddressComponent,  ProductViewerComponent, BarcodeCheckerComponent],
+=======
+  entryComponents: [OrderAddressComponent, SMOrderProcessComponent,  ProductViewerComponent, BarcodeCheckerComponent, TicketComponent],
+>>>>>>> master
 })
 export class OrderModule {
 }

@@ -99,7 +99,7 @@
                     <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p>
                 </td>
                 <td>
-                  <button mat-button color="primary">تیکت ها</button>
+                  <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
                 </td>
               </tr>
             </table>
