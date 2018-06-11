@@ -9,7 +9,7 @@ import {TitleService} from '../../shared/services/title.service';
 export class OrderComponent implements OnInit {
 
   newInboxCount: number;
-  newDeliverCount: number;
+  readyToScanCount: number;
 
   constructor( private titleService: TitleService) {
   }

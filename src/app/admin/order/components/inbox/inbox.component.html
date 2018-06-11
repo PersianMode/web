@@ -1,10 +1,15 @@
 <mat-card>
 
   <mat-card-content>
+
+
     <div class="example-container mat-elevation-z8">
 
       <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
-        <mat-icon aria-label="Example icon-button with a heart icon">cached</mat-icon>
+        <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" (click)="batchScan()" style="margin-top: 10px;">
+        <mat-icon aria-label="icon-button with a reload icon">fiber_new</mat-icon>
       </button>
 
       <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
@@ -59,7 +64,7 @@
         <ng-container matColumnDef="process_order">
           <mat-header-cell *matHeaderCellDef mat-sort-header>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let order">
-            <button mat-button color="primary">پردازش</button>
+            <button mat-button color="primary" *ngIf='isReadyForInvoice(order)'>پردازش</button>
           </mat-cell>
 
         </ng-container>
@@ -78,25 +83,24 @@
                   </div>
                 </td>
                 <td>
-                    <p><b>بارکد:</b> {{ol.instance.barcode}}</p>
+                  <p>
+                    <b>بارکد:</b> {{ol.instance.barcode}}</p>
                 </td>
                 <td>
-                    <p><b>نام:</b> {{ol.instance.product_name}}</p>
+                  <p>
+                    <b>نام:</b> {{ol.instance.product_name}}</p>
                 </td>
                 <td>
-                    <p><b>سایز:</b> {{ol.instance.size}}</p>
+                  <p>
+                    <b>سایز:</b> {{ol.instance.size}}</p>
                 </td>
                 <td>
-                    <p><b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p>
+                  <p>
+                    <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p>
                 </td>
                 <td>
-                    <button mat-button color="primary">تیکت ها</button>
+                  <button mat-button color="primary">تیکت ها</button>
                 </td>
-                <td>
-                    <button mat-button color="primary" (click)='scanProduct(detail.order, ol)'>{{getOrderLineProcessTitle(ol)}}</button>
-                </td>
-
-
               </tr>
             </table>
 

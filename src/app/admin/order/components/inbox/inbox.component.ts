@@ -13,6 +13,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
+import {FormControl} from '@angular/forms';
 
 
 
@@ -32,7 +33,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
 
 
-  @Output() newInboxCount = new EventEmitter();
+  @Output() OnNewInboxCount = new EventEmitter();
 
   displayedColumns = [
     'position',
@@ -53,12 +54,11 @@ export class InboxComponent implements OnInit, OnDestroy {
   pageSize = 10;
   resultsLength: Number;
 
-  processDialogRef;
+  batchScanDialogRef;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   socketObserver: any = null;
-
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
@@ -75,12 +75,10 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.socketObserver = this.socketService.getOrderLineMessage();
     if (this.socketObserver) {
       this.socketObserver.subscribe(msg => {
-        if (this.processDialogRef)
-          this.processDialogRef.close();
-
         this.load();
       });
     }
+
   }
 
   load() {
@@ -97,16 +95,18 @@ export class InboxComponent implements OnInit, OnDestroy {
 
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
-      this.newInboxCount.emit(res.total);
 
       const rows = [];
-      res.data.forEach(order => rows.push(order, {detailRow: true, order}));
+      res.data.forEach(order => {
+        rows.push(order, {detailRow: true, order});
+      });
       this.dataSource.data = rows;
-      this.resultsLength = res.data.length ? res.data.length : 0;
+      this.resultsLength = res.total ? res.total : 0;
       console.log('-> ', this.dataSource.data);
+      this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
-      this.newInboxCount.emit(0);
+      this.OnNewInboxCount.emit(0);
       this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
     });
   }
@@ -140,8 +140,19 @@ export class InboxComponent implements OnInit, OnDestroy {
     };
   }
 
+  batchScan() {
+    this.batchScanDialogRef = this.dialog.open(BarcodeCheckerComponent, {
+      disableClose: true,
+      width: '960px',
+      height: '600px',
+    });
+    this.batchScanDialogRef.afterClosed().subscribe(res => {
+      this.load();
+    })
+
+  }
   showDetial(orderLine) {
-    this.processDialogRef = this.dialog.open(ProductViewerComponent, {
+    this.dialog.open(ProductViewerComponent, {
       width: '400px',
       data: this.getProductDetail(orderLine)
     });
@@ -160,61 +171,19 @@ export class InboxComponent implements OnInit, OnDestroy {
   showAddress(order) {
 
     if (!order.address) {
-      this.openSnackBar('order line has no address !');
+      this.openSnackBar('order line has no address!');
       return;
     }
 
-    this.processDialogRef = this.dialog.open(OrderAddressComponent, {
+    this.dialog.open(OrderAddressComponent, {
       width: '400px',
       data: {address: order.address, is_collect: !!order.is_collect}
     });
 
-
   }
 
-  getOrderLineProcessTitle(orderLine) {
-
-    const foundActiveTicket = orderLine.tickets.find(x => !x.is_processed);
-
-    if (foundActiveTicket.status === STATUS.default) {
-      return 'اضافه به انبار آنلاین'
-    } else if (foundActiveTicket.status === STATUS.WaitForOnlineWarehouse) {
-      return 'درخواست مجدد به انبار آنلاین'
-    }
-  }
-
-  scanProduct(order, orderLine) {
-    this.processDialogRef = this.dialog.open(BarcodeCheckerComponent, {
-      width: '400px',
-      data: {barcode: orderLine.instance.barcode}
-    });
-    this.processDialogRef.afterClosed().subscribe(isMatched => {
-      if (isMatched)
-        this.makeDesicion(order,orderLine);
-    });
-  }
-
-  makeDesicion(order, orderLine) {
-
-    const foundActiveTicket = orderLine.tickets.find(x => !x.is_processed);
-
-    if (foundActiveTicket.status === STATUS.default || foundActiveTicket.status === STATUS.WaitForOnlineWarehouse)
-      this.addToOnlineWarehouse(order,orderLine);
-  }
-  
-  addToOnlineWarehouse(order, orderLine) {
-    this.progressService.enable();
-    this.httpService.post('order/ticket/onlineWarehouse', {
-      orderId: order._id,
-      orderLineId: orderLine.order_line_id,
-      barcode: orderLine.instance.barcode
-    }).subscribe(res => {
-      this.progressService.disable();
-      this.openSnackBar('درخواست به انبار آنلاین با موفقیت ارسال شد');
-    }, err => {
-      this.openSnackBar('خطا در اضافه نمودن محصول به انبار آنلاین');
-      this.progressService.disable();
-    });
+  isReadyForInvoice(order) {
+    return false
   }
 
   openSnackBar(message: string) {
