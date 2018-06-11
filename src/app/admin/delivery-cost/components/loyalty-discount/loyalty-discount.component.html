@@ -1,0 +1,51 @@
+<div class="div-lable"> {{loyalty_label}}</div>
+<br>
+<div>
+  <form [formGroup]="discountForm" (ngSubmit)="upsertDiscount()">
+    <mat-input-container class="name-field">
+      <input matInput type="text" placeholder="نام گروه" formControlName="name" readonly/>
+    </mat-input-container>
+    <mat-input-container class="score-field">
+      <input matInput type="number" placeholder="درصد تخفیف" formControlName="discount_percent"/>
+    </mat-input-container>
+    <button mat-mini-fab class="button-area" type="submit" color="primary"
+            [disabled]="!discountForm.valid || !anyChanges">
+      <mat-icon aria-label="done">done</mat-icon>
+    </button>
+    <!--<button mat-mini-fab color="primary" type="button" color="primary" *ngIf="selectedGroup" (click)="clearFields()">-->
+      <!--<i class="fa fa-eraser"></i>-->
+    <!--</button>-->
+  </form>
+</div>
+<div class="center-content">
+  <table class="table little-right-margin">
+    <thead>
+    <td>شماره</td>
+    <td>نام گروه وفاداری</td>
+    <td>درصد تخفیف</td>
+    <td>ویرایش</td>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of selectedDuration.delivery_loyalty; let i = index">
+      <td>{{formatter(i+1)}}</td>
+      <td>{{item.name}}</td>
+      <td>{{item.discount}}
+      </td>
+      <td>
+        <button mat-icon-button (click)="editDiscount(item)" color="primary">
+          <mat-icon aria-label="edit">edit</mat-icon>
+        </button>
+      </td>
+      <td class="button-td">
+        <div *ngIf="i === selectedDuration.delivery_loyalty.length-1">
+          <div>
+            <button mat-button class="submit-all-discount"
+                   [disabled]="upsertBtnShouldDisabled"   (click)="submitTotalInfo()">تایید تخفیف ها
+            </button>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -118,7 +118,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
     if (index === 0)
       index = 1;
-    return index
+    return index;
   }
 
   getDate(orderTime) {
@@ -206,8 +206,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.socketObserver)
-      this.socketObserver.unsubscribe();
+    //   if (this.socketObserver)
+    //     this.socketObserver.unsubscribe();
   }
 
   showTicket(order, orderLine) {

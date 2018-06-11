@@ -12,5 +12,5 @@ export enum STATUS {
   Delivered= 11,
   NotExists= 12,
   Refund= 13,
-  Return= 14
+  Return= 14,
 }
