@@ -51,14 +51,14 @@ export class DurationFormComponent implements OnInit {
         this.loyaltyNameList.forEach(el => {
           this.costValue.push(el.name);
         });
-          this.loyaltyNameList.forEach(el => {
-            this.formLoyaltyInfo.push({
-              _id: el._id,
-              name: el.name,
-              price: null,
-              discount: null
-            });
+        this.loyaltyNameList.forEach(el => {
+          this.formLoyaltyInfo.push({
+            _id: el._id,
+            name: el.name,
+            price: null,
+            discount: null
           });
+        });
         this.progressService.disable();
       },
       err => {
