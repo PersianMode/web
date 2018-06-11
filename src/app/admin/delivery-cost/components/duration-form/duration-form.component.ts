@@ -51,7 +51,6 @@ export class DurationFormComponent implements OnInit {
         this.loyaltyNameList.forEach(el => {
           this.costValue.push(el.name);
         });
-        if (true) {
           this.loyaltyNameList.forEach(el => {
             this.formLoyaltyInfo.push({
               _id: el._id,
@@ -60,7 +59,6 @@ export class DurationFormComponent implements OnInit {
               discount: null
             });
           });
-        }
         this.progressService.disable();
       },
       err => {
@@ -212,7 +210,7 @@ export class DurationFormComponent implements OnInit {
   }
 
   backToComponent() {
-    let tempId = this.addEditId ? this.addEditId : this.duration_id;
+    const tempId = this.addEditId ? this.addEditId : this.duration_id;
     this.router.navigate([`/agent/delivery/${tempId}`]);
   }
 }
