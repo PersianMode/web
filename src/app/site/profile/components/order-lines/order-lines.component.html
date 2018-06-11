@@ -53,7 +53,7 @@
               تومان
             </div>
             <div style="height: 20%">
-                <button *ngIf="orderTime()" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrder(ol)">
+                <button *ngIf="orderTime(ol)" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrder(ol)">
                     <i class="fa fa-undo"></i>
                   </button>
             </div>

@@ -39,7 +39,7 @@ export class OrderLinesComponent implements OnInit {
     this.orderInfo = this.profileOrderService.orderData;
     this.orderLines = this.orderInfo.dialog_order.order_lines;
     this.removeDuplicates(this.orderLines);
-    this.orderStatus(this.noDuplicateOrderLine);
+    // this.orderStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
@@ -87,24 +87,25 @@ export class OrderLinesComponent implements OnInit {
     return (+a).toLocaleString('fa', {useGrouping: isPrice});
   }
 
-  orderStatus(arr) {
-    let tickets = [];
-    let statusText = '';
-    arr.forEach(el => {
-      tickets = el.tickets;
-      statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
-      el.statusText = statusText;
-    });
-  }
+  // orderStatus(arr) {
+  //   let tickets = [];
+  //   let statusText = '';
+  //   arr.forEach(el => {
+  //     tickets = el.tickets;
+  //     statusText = el.tickets && OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
+  //     el.statusText = statusText;
+  //   });
+  // }
 
   getThumbnailURL(boughtColor, product) {
     return imagePathFixer(boughtColor.image.thumbnail, product._id, boughtColor._id);
   }
 
-  orderTime() {
+  orderTime(ol) {
     const date =  ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
-    if (date > 0) return false;
-    else return true;
+    const status = ol.tickets && ol.tickets.filter(ticket => ticket.status === 14);
+    if (date > 0 && !status.length) return true;
+    else return false;
   }
 
   returnOrder(ol) {
@@ -121,6 +122,11 @@ export class OrderLinesComponent implements OnInit {
         data: {
           componentName: DialogEnum.orderReturnComponent
         }
+      });
+      rmDialog.afterClosed().subscribe(res => {
+        this.orderInfo = this.profileOrderService.orderData;
+        this.orderLines = this.orderInfo.dialog_order.order_lines;
+        this.closeDialog.emit(false);
       });
     }
   }

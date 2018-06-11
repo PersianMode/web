@@ -77,13 +77,8 @@ export class OrderReturnComponent implements OnInit {
         } else {
           this.location.back();
         }
-      },
-      errr => {
-        this.snackBar.open('خطا در پایان کمپین. لطفا مجددا تلاش کنید', null, {
-          duration: 2700
-        });
         this.progressService.disable();
-      }
+      },
     );
   }
 
