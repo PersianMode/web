@@ -185,7 +185,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
 
   isReadyForInvoice(order) {
-    return false
+    return false;
 
   }
 
@@ -196,7 +196,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   onSortChange($event: any) {
-
     this.paginator.pageIndex = 0;
     this.load();
   }
@@ -206,8 +205,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    //   if (this.socketObserver)
-    //     this.socketObserver.unsubscribe();
+      if (this.socketObserver)
+        this.socketObserver.unsubscribe();
   }
 
   showTicket(order, orderLine) {
