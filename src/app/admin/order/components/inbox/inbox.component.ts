@@ -14,8 +14,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
 import {FormControl} from '@angular/forms';
-import { TicketComponent } from '../ticket/ticket.component';
-
+import {TicketComponent} from '../ticket/ticket.component';
 
 
 @Component({
@@ -31,7 +30,6 @@ import { TicketComponent } from '../ticket/ticket.component';
   ],
 })
 export class InboxComponent implements OnInit, OnDestroy {
-
 
 
   @Output() OnNewInboxCount = new EventEmitter();
@@ -62,11 +60,11 @@ export class InboxComponent implements OnInit, OnDestroy {
   socketObserver: any = null;
 
   constructor(private httpService: HttpService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private authService: AuthService,
-    private socketService: SocketService,
-    private progressService: ProgressService) {
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private authService: AuthService,
+              private socketService: SocketService,
+              private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -152,6 +150,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     })
 
   }
+
   showDetial(orderLine) {
     this.dialog.open(ProductViewerComponent, {
       width: '400px',
@@ -164,6 +163,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
     return '';
   }
+
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets)
       return OrderStatus.find(x => x.status === orderLine.tickets.find(x => !x.is_processed).status).name;
@@ -185,7 +185,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
 
   isReadyForInvoice(order) {
-    return false
+    return false;
 
   }
 
@@ -196,7 +196,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   onSortChange($event: any) {
-
     this.paginator.pageIndex = 0;
     this.load();
   }
@@ -206,16 +205,16 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    //   if (this.socketObserver)
-    //     this.socketObserver.unsubscribe();
+    // if (this.socketObserver)
+    //   this.socketObserver.unsubscribe();
   }
 
   showTicket(order, orderLine) {
     const _orderId = order._id;
     const _orderLineId = orderLine.order_line_id;
     this.dialog.open(TicketComponent, {
-        width: '1000px',
-        data: {_orderId, _orderLineId}
+      width: '1000px',
+      data: {_orderId, _orderLineId}
     });
   }
 }
