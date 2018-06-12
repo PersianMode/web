@@ -7,6 +7,12 @@ import {priceFormatter} from '../../../shared/lib/priceFormatter';
   styleUrls: ['./checkout-summary.component.css']
 })
 export class CheckoutSummaryComponent implements OnInit {
+
+  @Input() showCostLabel;
+  @Input() deliveryCost;
+  @Input() deliveryDiscount;
+  @Input() noDuration;
+
   @Input()
   set total(value) {
     this._total = value;
@@ -63,6 +69,9 @@ export class CheckoutSummaryComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showCostLabel = true;
+    this.deliveryCost = 0;
+    this.deliveryDiscount = 0;
   }
 
   priceFormatter(p) {
