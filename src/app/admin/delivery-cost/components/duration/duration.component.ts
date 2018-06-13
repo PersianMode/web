@@ -54,6 +54,7 @@ export class DurationComponent implements OnInit {
     this.editBtnShouldDisabled = false;
     this.selected_duration = {
       _id: item._id,
+      is_c_and_c: false,
       name: item.name,
       delivery_days: item.delivery_days,
       cities: item.cities,
