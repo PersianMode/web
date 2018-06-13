@@ -35,7 +35,6 @@ export class CartService {
       isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
         const items = this.getItemsFromStorage();
-
         if (this.authService.userIsLoggedIn()) {
 
           if (items && items.length) {
@@ -62,6 +61,8 @@ export class CartService {
           this.getUserCart();
 
         } else if (items && items.length) {
+          const itemsCopy = cloneDeep(items);
+          this.cartItems2.next(itemsCopy);
           this.getItemsDetail(items);
         }
         else {
@@ -237,7 +238,6 @@ export class CartService {
   }
 
   private setCartItem(overallDetails, products, isUpdate = true) {
-
     const itemList = [];
 
 
