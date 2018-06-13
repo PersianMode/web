@@ -6,6 +6,8 @@ import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {discountCalc} from '../lib/discountCalc';
 import {ProductService} from './product.service';
+import * as cloneDeep from 'lodash/cloneDeep';
+
 
 const SNACK_CONFIG: MatSnackBarConfig = {
   duration: 3200,
@@ -15,11 +17,20 @@ const SNACK_CONFIG: MatSnackBarConfig = {
 @Injectable()
 export class CartService {
   cartItems: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  cartItems2: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private localStorageKey = 'cart';
   coupon_discount = 0;
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
   constructor(private httpService: HttpService, private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
+    this.cartItems.subscribe(data => {
+      if (data && data != [] && data.length > 0)
+        console.log('cartItem is ', data);
+    });
+    this.cartItems2.subscribe(data => {
+      if (data && data != [] && data.length > 0)
+        console.log('cartItem2 is ', data);
+    });
     this.authService.isLoggedIn.subscribe(
       isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
@@ -28,6 +39,7 @@ export class CartService {
         if (this.authService.userIsLoggedIn()) {
 
           if (items && items.length) {
+            this.cartItems2.next(items);
             items.forEach((el, i) => {
               this.httpService.post('order', {
                 product_id: el.product_id,
@@ -35,13 +47,13 @@ export class CartService {
                 number: el.quantity,
               })
                 .subscribe(() => {
-                  items.splice(i, 1);
-                  try {
-                    localStorage.setItem(this.localStorageKey, JSON.stringify(items));
-                  } catch (e) {
-                    console.error('could not update local storage after login', e);
-                  }
-                },
+                    items.splice(i, 1);
+                    try {
+                      localStorage.setItem(this.localStorageKey, JSON.stringify(items));
+                    } catch (e) {
+                      console.error('could not update local storage after login', e);
+                    }
+                  },
                   err => console.error('orders error: ', el, err)
                 );
             });
@@ -63,11 +75,14 @@ export class CartService {
   getUserCart() {
     this.httpService.get('cart/items').subscribe(
       res => {
+        const resCopy = cloneDeep(res);
+        this.cartItems2.next(resCopy);
         this.getItemsDetail(res);
       });
   }
 
   emptyCart() {
+    this.cartItems2.next([]);
     this.cartItems.next([]);
     if (!this.authService.userIsLoggedIn()) {
       try {
@@ -86,6 +101,7 @@ export class CartService {
       }).subscribe(
         () => {
           this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
+          this.cartItems2.next(this.cartItems2.getValue().filter(el => el.instance_id !== value.instance_id));
         },
         (err) => {
           console.error('Cannot delete item from cart: ', err);
@@ -99,6 +115,8 @@ export class CartService {
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
         this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
+        this.cartItems2.next(this.cartItems2.getValue().filter(el => el.instance_id !== value.instance_id));
+
       } catch (e) {
         this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, SNACK_CONFIG);
       }
@@ -107,6 +125,7 @@ export class CartService {
 
   updateItem(value) {
     let items = this.cartItems.getValue();
+    let items2 = this.cartItems2.getValue();
     const instanceChange = value.instance_id !== value.pre_instance_id;
     const update = () => {
       const curInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
@@ -122,8 +141,19 @@ export class CartService {
         count: instance.quantity,
       });
       if (instanceChange && curInstance)
-        items = items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
+        items = items.filter(el => el.product_id !== value.product_id || el._id !== value.pre_instance_id);
       this.cartItems.next(items);
+      const curInstance2 = items2.find(el => el.product_id === value.product_id && el._id === value.instance_id);
+      const newInstance2 = items2.find(el => el.product_id === value.product_id && el._id === value.pre_instance_id);
+      const product2 = curInstance2 || newInstance2;
+      Object.assign(product2, {
+        product_id: value.product_id,
+        instance_id: value.instance_id,
+        quantity: instanceChange && curInstance2 ? value.number + curInstance2.quantity : value.number,
+      });
+      if (instanceChange && curInstance2)
+        items2 = items2.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
+      this.cartItems2.next(items2);
     };
     // Should delete and add new product's instance
     if (this.authService.userIsLoggedIn()) {
@@ -137,10 +167,10 @@ export class CartService {
             product_instance_id: value.instance_id,
             number: value.number
           }).subscribe((dt) => {
-            update();
-          }, (err) => {
-            console.error('Cannot add new order-line to order in server: ', err);
-          }
+              update();
+            }, (err) => {
+              console.error('Cannot add new order-line to order in server: ', err);
+            }
           );
         },
         (err) => {
@@ -205,11 +235,12 @@ export class CartService {
     const inventory = instance.inventory;
     return inventory && inventory.length ? inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b) : 0;
   }
+
   private setCartItem(overallDetails, products, isUpdate = true) {
 
     const itemList = [];
 
-    
+
     if (!products || products.length <= 0)
       overallDetails = [];
 
@@ -348,6 +379,22 @@ export class CartService {
       }));
     }
     this.cartItems.next(currentValue);
+
+    const currentValue2 = this.cartItems2.getValue();
+    const object2 = {
+      product_id: item.product_id,
+      instance_id: item.product_instance_id,
+      quantity: 1,
+      order_id,
+    };
+    const found2 = currentValue2.find(r => r.product_id === object.product_id && r.instance_id === object.instance_id);
+    if (found2)
+      found2.quantity += 1;
+    else {
+      currentValue2.push(object2);
+    }
+    this.cartItems2.next(currentValue2);
+
   }
 
   getLoyaltyBalance() {
