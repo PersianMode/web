@@ -42,10 +42,10 @@
             </div>
             <div>
               <span>وضعیت سفارش : </span>
-              <span>{{ol.statusText}}</span>
+              <span>{{orderStatus(ol)}}</span>
             </div>
           </div>
-    
+
           <div fxFlex="30" class="total_price">
             <div style="height: 80%">
               <span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : (ol.product.instances.price ? ol.product.instances.price
@@ -53,9 +53,12 @@
               تومان
             </div>
             <div style="height: 20%">
-                <button *ngIf="orderTime(ol)" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrder(ol)">
-                    <i class="fa fa-undo"></i>
-                  </button>
+              <button *ngIf="!checkReturnOrderLine(ol) && checkCancelOrderLine(ol)" matTooltip="کنسل کردن خرید" class="clickable-link" (click)="cancelOrderLine(ol)">
+                <i class="fa fa-times"></i>
+              </button>
+              <button *ngIf="checkReturnOrderLine(ol)" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrderLine(ol)">
+                <i class="fa fa-undo"></i>
+              </button>
             </div>
             <!--<div class="submit-cancel-change-btn">-->
             <!--<button mat-button class="action-button"-->

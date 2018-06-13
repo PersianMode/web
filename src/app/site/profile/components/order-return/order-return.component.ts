@@ -14,7 +14,7 @@ export interface ITicket {
       day_slot: string
     },
     address_id: string
-  }
+  };
 }
 @Component({
   selector: 'app-order-return',
@@ -72,6 +72,7 @@ export class OrderReturnComponent implements OnInit {
         this.snackBar.open('عمیلات با موفقیت انجام گردید.', null, {
           duration: 2000,
         });
+        this.changeOrderLine(this.orderLine);
         if (this.isNotMobile) {
           this.closeDialog.emit(false);
         } else {
@@ -80,6 +81,17 @@ export class OrderReturnComponent implements OnInit {
         this.progressService.disable();
       },
     );
+  }
+
+  changeOrderLine(ol) {
+    const updateOrderLines = [];
+    this.profileOrderService.orderData.order.dialog_order.order_lines.forEach(el => {
+      if (el.order_line_id === ol._id) {
+        el['returnFlag'] = true;
+        updateOrderLines.push(el);
+      } else updateOrderLines.push(el);
+    });
+    this.profileOrderService.orderData.order.dialog_order.order_lines = updateOrderLines;
   }
 
 }

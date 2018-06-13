@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {Router} from '@angular/router';
 import {dateFormatter} from '../../../../shared/lib/dateFormatter';
@@ -47,23 +47,27 @@ export class OrdersComponent implements OnInit, OnDestroy {
     return (+a).toLocaleString('fa', {useGrouping: isPrice});
   }
 
-  goToOrderLines(orderId) {
-    this.selectedOrder = {
-      orderId: orderId,
-      dialog_order: this.profileOrder.find(el => el._id === orderId),
-    };
-    this.profileOrderService.orderData = this.selectedOrder;
-    if (this.responsiveService.isMobile) {
-      this.router.navigate([`/profile/orderlines`]);
-    } else {
-      const rmDialog = this.dialog.open(GenDialogComponent, {
-        width: '700px',
-        data: {
-          componentName: DialogEnum.orderLinesComponent,
-        }
-      });
-    }
-  };
+   goToOrderLines(orderId) {
+     this.profileOrderService.getAllOrders();
+     setTimeout(() => {
+
+       this.selectedOrder = {
+         orderId: orderId,
+         dialog_order: this.profileOrder.find(el => el._id === orderId),
+       };
+       this.profileOrderService.orderData = this.selectedOrder;
+       if (this.responsiveService.isMobile) {
+         this.router.navigate([`/profile/orderlines`]);
+       } else {
+         const rmDialog = this.dialog.open(GenDialogComponent, {
+           width: '700px',
+           data: {
+             componentName: DialogEnum.orderLinesComponent,
+           }
+         });
+       }
+     }, 500);
+   };
 
   ngOnDestroy() {
   };

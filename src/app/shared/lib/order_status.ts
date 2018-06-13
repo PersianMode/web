@@ -6,6 +6,7 @@ export let OrderStatus: any[] = [
   {name: 'انتظار تجمیع', title: 'در حال پردازش', status: STATUS.WaitForAggregation},
   {name: 'آماده انتقال داخلی', title: 'در حال پردازش', status: STATUS.ReadyForInternalDelivery},
   {name: 'در حال انتقال داخلی', title: 'در حال پردازش', status: STATUS.OnInternalDelivery},
+  {name: 'در حال آماده صدور فاکتور', title: 'در حال پردازش', status: STATUS.ReadyForInvoice},
   {name: 'آماده صدور فاکتور', title: 'در حال پردازش', status: STATUS.WaitForInvoice},
   {name: 'فاکتور صادر شده', title: 'در حال پردازش', status: STATUS.InvoiceVerified},
   {name: 'آماده تحویل', title: 'آماده تحویل', status: STATUS.ReadyToDeliver},

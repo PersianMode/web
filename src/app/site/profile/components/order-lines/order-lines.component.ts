@@ -3,14 +3,17 @@ import {ProfileOrderService} from '../../../../shared/services/profile-order.ser
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
-import {MatDialogRef, MatDialog} from '@angular/material';
+import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {OrderStatus} from '../../../../shared/lib/order_status';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import { ResponsiveService } from '../../../../shared/services/responsive.service';
-
+import { RemovingConfirmComponent } from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import { HttpService } from '../../../../shared/services/http.service';
+import { ProgressService } from '../../../../shared/services/progress.service';
+import {STATUS} from '../../../../shared/enum/status.enum';
 
 
 @Component({
@@ -29,6 +32,9 @@ export class OrderLinesComponent implements OnInit {
 
   constructor(private profileOrderService: ProfileOrderService,
               private dialog: MatDialog,
+              private httpService: HttpService,
+              private snackBar: MatSnackBar,
+              private progressService: ProgressService,
               private location: Location, private router: Router,
               private dict: DictionaryService,
               private responsiveService: ResponsiveService) {
@@ -87,28 +93,28 @@ export class OrderLinesComponent implements OnInit {
     return (+a).toLocaleString('fa', {useGrouping: isPrice});
   }
 
-  // orderStatus(arr) {
-  //   let tickets = [];
-  //   let statusText = '';
-  //   arr.forEach(el => {
-  //     tickets = el.tickets;
-  //     statusText = el.tickets && OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
-  //     el.statusText = statusText;
-  //   });
-  // }
+  orderStatus(ol) {
+    return  ol.tickets.length > 0 ? OrderStatus.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
+    // let tickets = [];
+    // arr.forEach(el => {
+    //   tickets = el.tickets;
+    //   el['statusText'] = el.tickets && OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
+    // });
+  }
 
   getThumbnailURL(boughtColor, product) {
     return imagePathFixer(boughtColor.image.thumbnail, product._id, boughtColor._id);
   }
 
-  orderTime(ol) {
+  checkReturnOrderLine(ol) {
     const date =  ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
-    const status = ol.tickets && ol.tickets.filter(ticket => ticket.status === 14);
-    if (date > 0 && !status.length) return true;
+    const statusReturn = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Return);
+    const statusDelivered = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Delivered);
+    if (statusDelivered.length && !statusReturn.length && date > 0 && !ol['returnFlag'] ) return true;
     else return false;
   }
 
-  returnOrder(ol) {
+  returnOrderLine(ol) {
     this.orderObject = {
       orderLine: ol,
       order: this.orderInfo
@@ -124,10 +130,65 @@ export class OrderLinesComponent implements OnInit {
         }
       });
       rmDialog.afterClosed().subscribe(res => {
-        this.orderInfo = this.profileOrderService.orderData;
-        this.orderLines = this.orderInfo.dialog_order.order_lines;
+        // this.orderInfo = this.profileOrderService.orderData;
+        // this.orderLines = this.orderInfo.dialog_order.order_lines;
         this.closeDialog.emit(false);
       });
     }
+  }
+
+  cancelOrderLine(ol) {
+    const orderLine = {_id: ol.order_line_id};
+    const order = {_id: this.orderInfo.orderId};
+
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+    rmDialog.afterClosed().subscribe(
+      status => {
+        if (status) {
+          this.progressService.enable();
+          // TODO send delete request
+          this.httpService.post(`order/cancel`, {order, orderLine}).subscribe(
+            data => {
+              this.openSnackBar('کالا مورد نظر با موفقیت کنسل شد.');
+              // this.isLoadingResults = false;
+              this.changeOrderLine(ol);
+              this.closeDialog.emit(false);
+              this.progressService.disable();
+            },
+            err => {
+              // this.isLoadingResults = false;
+              this.openSnackBar('خطا در هنگام کنسل کردن');
+              this.progressService.disable();
+            }
+          );
+        }
+      }, err => {
+        console.log('Error in dialog: ', err);
+      });
+  }
+
+  checkCancelOrderLine(ol) {
+    const status = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.OnDelivery);
+    if (!ol['cancelFlag'] && !status.length) return true;
+    else return false;
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 2000,
+    });
+  }
+
+  changeOrderLine(ol) {
+    const updateOrderLines = [];
+    this.orderInfo.dialog_order.order_lines.forEach(el => {
+      if (el.order_line_id === ol.order_line_id) {
+        el['cancelFlag'] = true;
+        updateOrderLines.push(el);
+      } else updateOrderLines.push(el);
+    });
+    this.orderInfo.dialog_order.order_lines = updateOrderLines;
   }
 }
