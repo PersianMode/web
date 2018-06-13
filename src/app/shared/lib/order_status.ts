@@ -15,4 +15,5 @@ export let OrderStatus: any[] = [
   {name: 'تحویل شده', title: 'تحویل شده', status: STATUS.Delivered},
   {name: 'ناموجود', title: 'ناموجود', status: STATUS.NotExists},
   {name: 'بازگشت هزینه', title: 'بازگشت هزینه', status: STATUS.Refund},
+  {name: 'لغو سفارش', title: 'لغو سفارش', status: STATUS.Cancel},
 ];
