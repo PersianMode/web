@@ -1,13 +1,16 @@
 import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {HttpService} from '../../services/http.service';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {AuthService} from '../../services/auth.service';
 import {ResponsiveService} from '../../services/responsive.service';
 import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
 import {CheckoutService} from '../../services/checkout.service';
+import {userInfo} from 'os';
+import {ProgressService} from '../../services/progress.service';
+
 
 @Component({
   selector: 'app-address-table',
@@ -15,12 +18,21 @@ import {CheckoutService} from '../../services/checkout.service';
   styleUrls: ['./address-table.component.css']
 })
 export class AddressTableComponent implements OnInit {
+  addressSelected;
   @Input() isProfile = true;
+  @Input() isModify = true;
+  @Output() selectedChange = new EventEmitter();
+  @Output() deliveryType = new EventEmitter();
+  @Output() durationType = new EventEmitter();
+  @Output() noDuration = new EventEmitter();
+
   locs = {
     'ایران مال': [35.7545945, 51.1921283],
     'سانا': [35.8024766, 51.4552242],
     'پالادیوم': [35.7975691, 51.4107673],
   };
+  deliveryPeriodDay = [];
+  deliveryHour: { enum: ['10-18', '18-22'] };
   loc = null;
   withDelivery = true;
   selectedCustomerAddress = -1;
@@ -29,15 +41,18 @@ export class AddressTableComponent implements OnInit {
   addresses = [];
   isMobile = false;
   isLoggedIn = false;
+  durations = [];
+
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
-    private dialog: MatDialog, private checkoutService: CheckoutService,
-    private responsiveService: ResponsiveService, private router: Router,
-    private authService: AuthService) {
+              private dialog: MatDialog, private checkoutService: CheckoutService,
+              private responsiveService: ResponsiveService, private router: Router,
+              private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
   ngOnInit() {
+    this.noDuration.emit(null);
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.authService.isLoggedIn.subscribe(r => {
       this.isLoggedIn = this.authService.userIsLoggedIn();
@@ -63,6 +78,8 @@ export class AddressTableComponent implements OnInit {
     });
 
     this.setState();
+
+    this.getDurations();
   }
 
   private setState() {
@@ -171,13 +188,56 @@ export class AddressTableComponent implements OnInit {
     }
   }
 
+  getDurations() {
+    this.httpService.get('deliveryduration').subscribe(
+      (data) => {
+        this.durations = data;
+        this.deliveryPeriodDay = data.map(el => el.delivery_days);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
   changeWithDelivery() {
+    this.deliveryType.emit(this.withDelivery);
     if (this.withDelivery) {
       this.addresses = this.checkoutService.addresses$.getValue();
+      // this.progressService.enable();
+      // this.httpService.post('loyaltygroup/', {
+      //   _id: this.authService.userDetails.userId,
+      //   deliveryPeriodDay: this.deliveryPeriodDay,
+      // }).subscribe(
+      //   res => {
+      //     this.snackBar.open('تغییرات با موفقیت ثبت شدند', null, {
+      //       duration: 2000,
+      //     });
+      //
+      //     this.progressService.disable();
+      //   },
+      //   err => {
+      //     console.error('Cannot send delivery information: ', err);
+      //     this.snackBar.open('سیستم قادر به اعمال تغییرات شما نیست. دوباره تلاش کنید', null, {
+      //       duration: 2000,
+      //     });
+      //     this.progressService.disable();
+      //   });
+
     } else {
       this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
     }
     this.setState();
     this.setBtnLabel();
+
+  }
+
+  changeDurationType(durationId) {
+    this.noDuration.emit(true);
+    this.durationType.emit(durationId);
+  }
+
+  chooseAddress(address) {
+    this.selectedChange.emit(this.addressSelected);
   }
 }

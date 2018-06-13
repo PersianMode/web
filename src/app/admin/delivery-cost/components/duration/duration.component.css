@@ -1,0 +1,17 @@
+.main{
+    direction: rtl;
+    margin: 5px;
+    margin-top: 10px !important;
+}
+.action-button {
+  text-align: left;
+}
+.card-container {
+  direction: rtl;
+}
+.duration_name {
+  margin-right: 8px;
+  margin-top: 5px
+}
+
+

@@ -58,8 +58,10 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   showWaitingSpinner = false;
   lazyRows = 10;
 
-  constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-              private pageService: PageService, private responsiveService: ResponsiveService, private productService: ProductService, private titleService: TitleService) {
+  constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
+    @Inject(WINDOW) private window, private pageService: PageService,
+    private responsiveService: ResponsiveService, private productService: ProductService,
+    private titleService: TitleService) {
   }
 
   ngOnInit() {
@@ -78,6 +80,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
           }
         },
         err => {
+          console.error('Error when subscribing on pageInfo: ', err);
         }
       );
     });

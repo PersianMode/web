@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {HttpService} from '../../../../shared/services/http.service';
 import {MatSnackBar} from '@angular/material';
@@ -14,7 +14,7 @@ export class CollectionProductComponent implements OnInit {
   @Input() collectionId: string;
 
   constructor(private router: Router, private httpService: HttpService, private progressService: ProgressService,
-              private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -22,7 +22,6 @@ export class CollectionProductComponent implements OnInit {
     this.progressService.enable();
     this.httpService.get(`collection/product/manual/${this.collectionId}`).subscribe(res => {
 
-      console.log('-> ', res  );
       if (res && res.products)
         this.products = res.products;
       this.progressService.disable();
@@ -43,7 +42,10 @@ export class CollectionProductComponent implements OnInit {
         this.snackBar.open('product added to collection successfully.', null, {
           duration: 3200
         });
-        this.products.push(expObj);
+        this.products.push(Object.assign(expObj, {
+          brand: data.brand.name,
+          product_type: data.product_type.name,
+        }));
         this.progressService.disable();
 
       }, err => {

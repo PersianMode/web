@@ -19,9 +19,7 @@
           <ng-container matColumnDef="thumbnail">
             <mat-header-cell *matHeaderCellDef> تصویر</mat-header-cell>
             <mat-cell *matCellDef="let element">
-              <div>
-                {{getPIThumbnail(element)}}
-              </div>
+              <img [src]="getPIThumbnail(element)" />
             </mat-cell>
           </ng-container>
 

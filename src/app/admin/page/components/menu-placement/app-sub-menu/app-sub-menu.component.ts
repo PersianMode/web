@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, HostListener} from '@angular/core';
 import {IPlacement} from '../../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -9,6 +9,7 @@ import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
 import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
 import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-dialog.component';
+import {RevertPlacementService} from '../../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-app-sub-menu',
@@ -17,6 +18,7 @@ import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-di
 })
 export class AppSubMenuComponent implements OnInit {
   @Input() pageId = null;
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -52,12 +54,15 @@ export class AppSubMenuComponent implements OnInit {
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private sanitizer: DomSanitizer,
-    private dialog: MatDialog) {}
+    private dialog: MatDialog, private revertService: RevertPlacementService) {}
 
   ngOnInit() {
     if (!this.dragulaService.find(this.itemBagName))
       this.dragulaService.setOptions(this.itemBagName, {
         direction: 'vertical',
+        moves: () => {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe(value => {
@@ -196,10 +201,23 @@ export class AppSubMenuComponent implements OnInit {
   }
 
   selectItem(value) {
-    this.selectedItem = value;
-    this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
-    this.setFormValue(value.info);
-    this.anyChanges = false;
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
+    } else if (this.canEdit) {
+      this.selectedItem = value;
+      this.selectedItem.info.is_header = this.selectedItem.info.is_header || false;
+      this.setFormValue(value.info);
+      this.anyChanges = false;
+    }
+  }
+
+  isSelectedToRevert(value, type) {
+    if (type === 'item')
+      return this.revertService.isSelected(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value._id);
+    else if (type === 'section') {
+      const item = this.filteredSubMenuItems[value].details;
+      return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
+    }
   }
 
   setFormValue(value = null) {
@@ -366,8 +384,13 @@ export class AppSubMenuComponent implements OnInit {
   }
 
   showSubItems(section) {
-    this.selectedSectionSubMenu = this.selectedSectionSubMenu === section ? null : section;
-    this.selectItem(this.filteredSubMenuItems[section].details);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      const id = this.filteredSubMenuItems[section].details._id;
+      this.revertService.select('app-sub-menu', this.filteredSubMenuItems[section].details);
+    } else {
+      this.selectedSectionSubMenu = this.selectedSectionSubMenu === section ? null : section;
+      this.selectItem(this.filteredSubMenuItems[section].details);
+    }
   }
 
   uploadImage() {
@@ -423,7 +446,16 @@ export class AppSubMenuComponent implements OnInit {
         console.error('Cannot update the order of section: ', err);
         this.moveButtonsShouldDisabled = false;
         this.progressService.disable();
-      }
-    )
+      });
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.revertService.setRevertMode(true);
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.revertService.setRevertMode(false);
   }
 }

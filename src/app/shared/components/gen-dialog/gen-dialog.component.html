@@ -5,4 +5,5 @@
         <app-upsert-address *ngIf="componentName === dialogEnum.upsertAddress" (closeDialog)="close()" [isNotMobile]="true"></app-upsert-address>
         <app-order-lines *ngIf="componentName === dialogEnum.orderLinesComponent" (closeDialog)="close()" [isNotMobile]="true"></app-order-lines>
         <app-forgot-password *ngIf="componentName === dialogEnum.forgotPassword" (closeDialog)="close()"></app-forgot-password>
+        <app-order-return *ngIf="componentName === dialogEnum.orderReturnComponent" (closeDialog)="close()" [isNotMobile]="true"></app-order-return>
 </div>

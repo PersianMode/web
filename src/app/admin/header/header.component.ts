@@ -20,6 +20,8 @@ export class HeaderComponent implements OnInit {
     {label: 'محصولات تمام شده ', path: '/agent/soldouts', active: false},
     {label: 'بارگذاری فایل', path: '/agent/uploads', active: false},
     {label: 'سفارش‌ها', path: '/agent/orders', active: false},
+    {label: 'تنظیمات هزینه ارسال', path: '/agent/delivery', active: false},
+    {label: 'گروه وفاداری', path: '/agent/loyaltygroup', active: false},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;
@@ -30,7 +32,7 @@ export class HeaderComponent implements OnInit {
   bufferValue: any;
   btnLabel = null;
   constructor(private authService: AuthService, private router: Router,
-    private progressService: ProgressService) {
+              private progressService: ProgressService) {
   }
 
   ngOnInit() {
