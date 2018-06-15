@@ -30,7 +30,8 @@ export class CheckoutSummaryComponent implements OnInit {
       value = 0;
 
     this._deliveryDiscount = value;
-    this.finalTotal = this.total + this.deliveryCost - value;
+    // this.finalTotal = this.total + this.deliveryCost - value;
+    this.finalTotal = this.total - value;
   }
 
   get deliveryDiscount() {
