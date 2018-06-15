@@ -25,7 +25,7 @@
     <td>میزان افزایش امتیاز وفاداری</td>
     <td>ویرایش</td>
     </thead>
-    <tbody>
+    <tbody *ngIf="clickAndCollectInfo && clickAndCollectInfo.add_point && clickAndCollectInfo.add_point.length">
     <tr *ngFor="let item of clickAndCollectInfo.add_point; let i = index">
       <td>{{formatter(i+1)}}</td>
       <td>{{item.name}}</td>

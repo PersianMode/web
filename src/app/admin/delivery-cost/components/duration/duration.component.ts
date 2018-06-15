@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
@@ -17,6 +17,7 @@ export class DurationComponent implements OnInit {
   selected_duration: any = {};
 
   @Output() selectedDuration = new EventEmitter();
+  @Input() durationId;
 
   constructor(protected router: Router, private httpService: HttpService,
               private progressService: ProgressService,
@@ -34,7 +35,8 @@ export class DurationComponent implements OnInit {
       this.route.params.subscribe(
         (params) => {
           this._id = params['id'] && params['id'] !== 'null' ? params['id'] : null;
-          if (this._id) {
+          if (this._id || this.durationId) {
+            this._id = this._id ? this._id : this.durationId;
             const item = data.filter(el => el._id === this._id);
             if (item) this.changeDuration(item[0]);
           }

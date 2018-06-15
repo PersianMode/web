@@ -23,8 +23,6 @@ export class DeliveryCostComponent implements OnInit {
       (params) => {
         this._id = params['id'] && params['id'] !== 'null' ? params['id'] : null;
         if (this._id) {
-          // const item = data.filter(el => el._id === this._id);
-          // if (item) this.changeDuration(item[0]);
           this.showDeliveryTab = true;
         }
       }
@@ -56,12 +54,14 @@ export class DeliveryCostComponent implements OnInit {
   }
 
   goToDeliveryTab() {
+    // this.showTabs = false;
+    // if (this._id) this.showTabs = true;
     this.showDeliveryTab = true;
     this.showCAndCTab = false;
   }
 
   goToCandCTab() {
-    this.showDeliveryTab = false
+    this.showDeliveryTab = false;
     this.showCAndCTab = true;
   }
 }

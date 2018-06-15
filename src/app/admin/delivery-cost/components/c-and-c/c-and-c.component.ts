@@ -14,11 +14,9 @@ export class CAndCComponent implements OnInit {
 
   clickAndCollectInfo;
   anyChanges = false;
-  selectedGroup = null;
+  selectedGroup: any = null;
   cAndCForm: FormGroup = null;
   upsertBtnShouldDisabled = true;
-  loyaltyList;
-  cAndCExist = false;
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
               private snackBar: MatSnackBar, private dialog: MatDialog) {
@@ -44,13 +42,11 @@ export class CAndCComponent implements OnInit {
   getClickAndCollect() {
     this.httpService.get('deliverycc').subscribe(
       data => {
-        console.log(data);
         if (!data.length) {
           this.getGroups();
-        } else
+        } else {
           this.clickAndCollectInfo = data[0];
-
-        console.log('data : ', this.clickAndCollectInfo);
+        }
       },
       err => {
         console.error('Cannot get click and collect delivery: ', err);
@@ -106,24 +102,17 @@ export class CAndCComponent implements OnInit {
     if (!this.anyChanges)
       return;
     this.selectedGroup.added_point = this.cAndCForm.controls['loyalty_point'].value;
-    if (!this.clickAndCollectInfo.filter(el => !el.added_point).length)
+    if (!this.clickAndCollectInfo.add_point.filter(el => !el.added_point).length)
       this.upsertBtnShouldDisabled = false;
     this.cAndCForm.reset();
   }
 
   submitTotalInfo() {
-    // const add_point = [];
-    // this.clickAndCollectInfo.forEach(el => add_point.push(el));
-    // const sendObj = {
-    //   is_c_and_c: true,
-    //   add_point: add_point,
-    // }
-    console.log('////////////////', this.clickAndCollectInfo);
-
+    if (this.clickAndCollectInfo.is_c_and_c === false)
+      return;
     this.progressService.enable();
-    this.httpService.post('deliveryduration', this.clickAndCollectInfo).subscribe(
+    this.httpService.post('deliverycc', this.clickAndCollectInfo).subscribe(
       res => {
-        console.log('*****', res);
         this.snackBar.open('تغییرات با موفقیت ثبت شدند', null, {
           duration: 2300,
         });
