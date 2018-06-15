@@ -1,10 +1,28 @@
-<mat-card class="example-container mat-elevation-z8 main">
-  <mat-tab-group>
+<mat-card class="mat-elevation-z8 main">
+  <div style="margin-bottom: 15px">
+    <div style="display: inline-block">
+      <div>
+        <button mat-button class="delivery-type"
+                (click)="goToDeliveryTab()">ارسال به درب منزل
+        </button>
+      </div>
+    </div>
+
+    <div style="display: inline-block">
+      <div>
+        <button mat-button class="delivery-type"
+                (click)="goToCandCTab()">تحویل در فروشگاه
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-tab-group *ngIf="showDeliveryTab">
     <mat-tab>
       <ng-template mat-tab-label>
         <span>بازه زمانی ارسال</span>
       </ng-template>
-      <app-duration (selectedDuration)="deliverySetting($event)"></app-duration>
+      <app-duration (selectedDuration)="deliverySetting($event)" [durationId]="durationObject._id ? durationObject._id : null"></app-duration>
     </mat-tab>
     <mat-tab *ngIf="showTabs">
       <ng-template mat-tab-label>
@@ -13,5 +31,8 @@
       <app-loyalty-discount [loyaltyLabel]="loyaltyLabel" [selectedDuration]="durationObject"></app-loyalty-discount>
     </mat-tab>
   </mat-tab-group>
+  <div *ngIf="showCAndCTab">
+    <app-c-and-c></app-c-and-c>
+  </div>
 </mat-card>
 

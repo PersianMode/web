@@ -1,19 +1,19 @@
-<div class="div-lable"> {{loyalty_label}}</div>
+<div class="div-lable"> {{'تحویل در فروشگاه'}}</div>
 <br>
 <div>
-  <form [formGroup]="discountForm" (ngSubmit)="upsertDiscount()">
+  <form [formGroup]="cAndCForm" (ngSubmit)="upsertLoyaltyPoint()">
     <mat-input-container class="name-field">
       <input matInput type="text" placeholder="نام گروه" formControlName="name" readonly/>
     </mat-input-container>
     <mat-input-container class="score-field">
-      <input matInput type="number" placeholder="درصد تخفیف" formControlName="discount_percent"/>
+      <input matInput type="number" placeholder="میزان افزایش امتیاز وفاداری" formControlName="loyalty_point"/>
     </mat-input-container>
     <button mat-mini-fab class="button-area" type="submit" color="primary"
-            [disabled]="!discountForm.valid || !anyChanges">
+            [disabled]="!cAndCForm.valid || !anyChanges">
       <mat-icon aria-label="done">done</mat-icon>
     </button>
     <!--<button mat-mini-fab color="primary" type="button" color="primary" *ngIf="selectedGroup" (click)="clearFields()">-->
-      <!--<i class="fa fa-eraser"></i>-->
+    <!--<i class="fa fa-eraser"></i>-->
     <!--</button>-->
   </form>
 </div>
@@ -22,25 +22,25 @@
     <thead>
     <td>شماره</td>
     <td>نام گروه وفاداری</td>
-    <td>درصد تخفیف</td>
+    <td>میزان افزایش امتیاز وفاداری</td>
     <td>ویرایش</td>
     </thead>
-    <tbody>
-    <tr *ngFor="let item of selectedDuration.delivery_loyalty; let i = index">
+    <tbody *ngIf="clickAndCollectInfo && clickAndCollectInfo.add_point && clickAndCollectInfo.add_point.length">
+    <tr *ngFor="let item of clickAndCollectInfo.add_point; let i = index">
       <td>{{formatter(i+1)}}</td>
       <td>{{item.name}}</td>
-      <td>{{item.discount}}
+      <td>{{item.added_point}}
       </td>
       <td>
-        <button mat-icon-button (click)="editDiscount(item)" color="primary">
+        <button mat-icon-button (click)="editPoint(item)" color="primary">
           <mat-icon aria-label="edit">edit</mat-icon>
         </button>
       </td>
       <td class="button-td">
-        <div *ngIf="i === selectedDuration.delivery_loyalty.length-1">
+        <div *ngIf="i === clickAndCollectInfo.add_point.length-1">
           <div>
             <button mat-button class="submit-all-discount"
-                   [disabled]="upsertBtnShouldDisabled" (click)="submitTotalInfo()">تایید تخفیف ها
+                    [disabled]="upsertBtnShouldDisabled" (click)="submitTotalInfo()">تایید امتیازهای وفاداری
             </button>
           </div>
         </div>
