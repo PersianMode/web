@@ -3,11 +3,14 @@ import {ProfileOrderService} from '../../../../shared/services/profile-order.ser
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef, MatDialog} from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {OrderStatus} from '../../../../shared/lib/order_status';
-import {AuthService} from '../../../../shared/services/auth.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import { ResponsiveService } from '../../../../shared/services/responsive.service';
+
 
 
 @Component({
@@ -16,6 +19,8 @@ import {DictionaryService} from '../../../../shared/services/dictionary.service'
   styleUrls: ['./order-lines.component.css']
 })
 export class OrderLinesComponent implements OnInit {
+  orderObject: any;
+  isMobile = false;
   orderInfo: any;
   orderLines = [];
   noDuplicateOrderLine = [];
@@ -23,8 +28,11 @@ export class OrderLinesComponent implements OnInit {
   @Output() closeDialog = new EventEmitter<boolean>();
 
   constructor(private profileOrderService: ProfileOrderService,
+              private dialog: MatDialog,
               private location: Location, private router: Router,
-              private auth: AuthService, private dict: DictionaryService) {
+              private dict: DictionaryService,
+              private responsiveService: ResponsiveService) {
+    this.isMobile = this.responsiveService.isMobile;
   }
 
   ngOnInit() {
@@ -33,6 +41,8 @@ export class OrderLinesComponent implements OnInit {
     this.removeDuplicates(this.orderLines);
     this.orderStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
+    this.isMobile = this.responsiveService.isMobile;
+    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }
 
   removeDuplicates(arr) {
@@ -89,5 +99,29 @@ export class OrderLinesComponent implements OnInit {
 
   getThumbnailURL(boughtColor, product) {
     return imagePathFixer(boughtColor.image.thumbnail, product._id, boughtColor._id);
+  }
+
+  orderTime() {
+    const date =  ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
+    if (date > 0 ) return false;
+    else return true;
+  }
+
+  returnOrder(ol) {
+    this.orderObject = {
+      orderLineid: ol.order_line_id,
+      orderId: this.orderInfo.orderId
+    };
+    this.profileOrderService.orderData = this.orderObject;
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/profile/orderline/return`]);
+    } else {
+      const rmDialog = this.dialog.open(GenDialogComponent, {
+        width: '700px',
+        data: {
+          componentName: DialogEnum.orderReturnComponent
+        }
+      });
+    }
   }
 }

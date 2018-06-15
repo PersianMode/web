@@ -1,8 +1,9 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-duration',
@@ -11,23 +12,34 @@ import {MatSnackBar} from '@angular/material';
 })
 export class DurationComponent implements OnInit {
   durations = [];
+  _id;
   editBtnShouldDisabled = true;
   selected_duration: any = {};
 
   @Output() selectedDuration = new EventEmitter();
 
   constructor(protected router: Router, private httpService: HttpService,
-              private progressService: ProgressService, private snackBar: MatSnackBar) {
+              private progressService: ProgressService,
+              private dialog: MatDialog, private snackBar: MatSnackBar, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
     this.getDurations();
   }
 
-  getDurations() {
+  getDurations(id: string = null) {
     this.progressService.enable();
     this.httpService.get('deliveryduration').subscribe(data => {
       this.durations = data;
+      this.route.params.subscribe(
+        (params) => {
+          this._id = params['id'] && params['id'] !== 'null' ? params['id'] : null;
+          if (this._id) {
+            const item = data.filter(el => el._id === this._id);
+            if (item) this.changeDuration(item[0]);
+          }
+        }
+      );
       this.progressService.disable();
     }, err => {
       this.progressService.disable();
@@ -53,7 +65,40 @@ export class DurationComponent implements OnInit {
   openForm(id: string = null) {
     this.router.navigate([`/agent/delivery/duration/${id}`]);
   }
+
   removeDuration(id) {
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+
+    rmDialog.afterClosed().subscribe(
+      status => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.delete(`deliveryduration/delete/${id}`).subscribe(
+            data => {
+              this.editBtnShouldDisabled = true;
+              this.selected_duration = {};
+              this.selectedDuration.emit(null);
+              this.durations = this.durations.filter(el => el._id !== id);
+              this.snackBar.open('بازه زمانی مورد نظر با موفقیت حذف شد', null, {
+                duration: 2300,
+              });
+              this.progressService.disable();
+
+            },
+            er => {
+              console.error('Cannot remove selected item: ', er);
+              this.snackBar.open('سیستم قادر به حذف این بازه زمانی نیست. دوباره تلاش کنید', null, {
+                duration: 3200,
+              });
+              this.progressService.disable();
+            });
+        }
+      },
+      err => {
+        console.error('Error when subscribing on rmDialog.afterClosed() function: ', err);
+      });
   }
 }
 

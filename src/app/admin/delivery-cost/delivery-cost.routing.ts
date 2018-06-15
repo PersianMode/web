@@ -5,6 +5,7 @@ import {DurationFormComponent} from './components/duration-form/duration-form.co
 
 const DELIVERY_COST_ROUTES: Routes = [
   {path: '', component: DeliveryCostComponent, pathMatch: 'full'},
+  {path: ':id', component: DeliveryCostComponent, pathMatch: 'full'},
   {path: 'duration/:id', component: DurationFormComponent},
 ];
 

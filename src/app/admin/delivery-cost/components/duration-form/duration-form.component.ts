@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {HttpService} from '../../../../shared/services/http.service';
 import {MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {isUndefined} from 'util';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-duration-form',
@@ -14,6 +14,7 @@ import {isUndefined} from 'util';
 })
 export class DurationFormComponent implements OnInit {
   duration_id: string = null;
+  addEditId: string = null;
   durationForm: FormGroup = null;
   loyaltyNameList;
   seen: any = {};
@@ -28,7 +29,7 @@ export class DurationFormComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private http: HttpClient,
               private httpService: HttpService, private snackBar: MatSnackBar,
-              private progressService: ProgressService) {
+              private progressService: ProgressService, protected router: Router, private location: Location) {
   }
 
   ngOnInit() {
@@ -104,6 +105,7 @@ export class DurationFormComponent implements OnInit {
         this.durationForm.controls['city_cost'].setValue(data.cities[0].delivery_cost);
         data.delivery_loyalty.forEach(el => {
           this.costValue[el.name] = el.price;
+          this.formLoyaltyInfo.filter(item => item._id === el._id)[0].discount = el.discount;
         });
         this.upsertBtnShouldDisabled = false;
         this.progressService.disable();
@@ -120,18 +122,17 @@ export class DurationFormComponent implements OnInit {
     );
   }
 
-  modifyDuration() {
-  }
-
   fieldChanged() {
     if (!this.duration_id) {
       return;
     }
     this.anyChanges = false;
-    const name = this.durationForm.controls['name'].value ? this.durationForm.controls['name'].value : '';
+    let name = this.durationForm.controls['name'].value ? this.durationForm.controls['name'].value : '';
+    name = name.trim();
     const delivery_days = this.durationForm.controls['delivery_days'].value ? this.durationForm.controls['delivery_days'].value : '';
     const city_cost = this.durationForm.controls['city_cost'].value;
-    const loaded_name = this.loadedDurationInfo.name;
+    let loaded_name = this.loadedDurationInfo.name;
+    loaded_name = loaded_name.trim();
     const loaded_delivery_days = this.loadedDurationInfo.delivery_days;
     const loaded_city_cost = this.loadedDurationInfo.cities[0].delivery_cost;
     if ((name !== loaded_name && (name !== '' || loaded_name !== null)) ||
@@ -139,6 +140,7 @@ export class DurationFormComponent implements OnInit {
       (city_cost !== loaded_city_cost && (city_cost !== '' || loaded_city_cost !== null))) {
       this.anyChanges = true;
     }
+    this.fieldValidation();
   }
 
   setSeen(item) {
@@ -147,7 +149,15 @@ export class DurationFormComponent implements OnInit {
   }
 
   changeValue(item) {
+    this.fieldValidation();
     this.anyFiledChanges = false;
+    const loaded_delivery_loyalty = this.loadedDurationInfo ? this.loadedDurationInfo.delivery_loyalty : [];
+    const tempValue = loaded_delivery_loyalty.filter(l => l._id === item._id);
+    if (tempValue[0] && tempValue[0].price !== this.costValue[item.name])
+      this.anyFiledChanges = true;
+  }
+
+  fieldValidation() {
     this.filedValidation = true;
     if (this.costValue && this.costValue.length) {
       this.costValue.forEach(el => {
@@ -156,16 +166,11 @@ export class DurationFormComponent implements OnInit {
       });
     }
     ;
-    const loaded_delivery_loyalty = this.loadedDurationInfo ? this.loadedDurationInfo.delivery_loyalty : [];
-    const tempValue = loaded_delivery_loyalty.filter(l => l._id === item._id);
-    if (tempValue[0] && tempValue[0].price !== this.costValue[item.name])
-      this.anyFiledChanges = true;
-
   }
 
   saveDurationInfo(id: string = null) {
     this.formLoyaltyInfo.forEach(el => el.price = this.costValue[el.name]);
-    let durationInfo = {
+    const durationInfo = {
       _id: this.duration_id ? this.duration_id : null,
       name: this.durationForm.controls['name'].value,
       delivery_days: this.durationForm.controls['delivery_days'].value,
@@ -179,6 +184,7 @@ export class DurationFormComponent implements OnInit {
     this.progressService.enable();
     this.httpService.post('deliveryduration', durationInfo).subscribe(
       res => {
+        this.addEditId = res._id;
         this.snackBar.open('تغییرات با موفقیت ثبت شدند', null, {
           duration: 2300,
         });
@@ -189,8 +195,7 @@ export class DurationFormComponent implements OnInit {
             this.costValue[el.name] = null;
             this.seen[el.name] = false;
           });
-        }
-        else {
+        } else {
           this.anyChanges = false;
           this.anyFiledChanges = false;
         }
@@ -202,5 +207,10 @@ export class DurationFormComponent implements OnInit {
         });
         this.progressService.disable();
       });
+  }
+
+  backToComponent() {
+    const tempId = this.addEditId ? this.addEditId : this.duration_id;
+    this.router.navigate([`/agent/delivery/${tempId}`]);
   }
 }
