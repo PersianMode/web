@@ -53,7 +53,7 @@
               تومان
             </div>
             <div style="height: 20%">
-              <button *ngIf="!checkReturnOrderLine(ol) && checkCancelOrderLine(ol)" matTooltip="کنسل کردن خرید" class="clickable-link" (click)="cancelOrderLine(ol)">
+              <button *ngIf="checkCancelOrderLine(ol)" matTooltip="کنسل کردن خرید" class="clickable-link" (click)="cancelOrderLine(ol)">
                 <i class="fa fa-times"></i>
               </button>
               <button *ngIf="checkReturnOrderLine(ol)" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrderLine(ol)">

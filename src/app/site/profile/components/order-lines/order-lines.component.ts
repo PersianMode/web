@@ -94,12 +94,7 @@ export class OrderLinesComponent implements OnInit {
   }
 
   orderStatus(ol) {
-    return  ol.tickets.length > 0 ? OrderStatus.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
-    // let tickets = [];
-    // arr.forEach(el => {
-    //   tickets = el.tickets;
-    //   el['statusText'] = el.tickets && OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
-    // });
+    return  ol.tickets.length !== 0 ? OrderStatus.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
   }
 
   getThumbnailURL(boughtColor, product) {
@@ -108,9 +103,9 @@ export class OrderLinesComponent implements OnInit {
 
   checkReturnOrderLine(ol) {
     const date =  ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
-    const statusReturn = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Return);
-    const statusDelivered = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Delivered);
-    if (statusDelivered.length && !statusReturn.length && date > 0 && !ol['returnFlag'] ) return true;
+    const statusHave = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Delivered);
+    const statusDontHave = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Return || ticket.status === STATUS.Cancel);
+    if (statusHave.length > 0 && statusDontHave.length === 0 && date > 0 && !ol['returnFlag'] ) return true;
     else return false;
   }
 
@@ -130,8 +125,6 @@ export class OrderLinesComponent implements OnInit {
         }
       });
       rmDialog.afterClosed().subscribe(res => {
-        // this.orderInfo = this.profileOrderService.orderData;
-        // this.orderLines = this.orderInfo.dialog_order.order_lines;
         this.closeDialog.emit(false);
       });
     }
@@ -152,13 +145,11 @@ export class OrderLinesComponent implements OnInit {
           this.httpService.post(`order/cancel`, {order, orderLine}).subscribe(
             data => {
               this.openSnackBar('کالا مورد نظر با موفقیت کنسل شد.');
-              // this.isLoadingResults = false;
               this.changeOrderLine(ol);
               this.closeDialog.emit(false);
               this.progressService.disable();
             },
             err => {
-              // this.isLoadingResults = false;
               this.openSnackBar('خطا در هنگام کنسل کردن');
               this.progressService.disable();
             }
@@ -170,9 +161,9 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkCancelOrderLine(ol) {
-    const status = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.OnDelivery);
-    const statusCancel = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Cancel);
-    if (!statusCancel.length && !ol['cancelFlag'] && !status.length) return true;
+    const haveStatus = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.OnDelivery || ticket.status === STATUS.Delivered);
+    const dontHaveStatus = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Cancel || ticket.status === STATUS.Return);
+    if (haveStatus.length > 0 && dontHaveStatus.length === 0  && !ol['cancelFlag']) return true;
     else return false;
   }
 
