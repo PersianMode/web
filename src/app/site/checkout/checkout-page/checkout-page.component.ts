@@ -22,19 +22,21 @@ export class CheckoutPageComponent implements OnInit {
   paymentType = PaymentType;
   disabled: boolean = false;
   changeMessage: string = '';
-
   soldOuts: any[];
   discountChanges: any[];
   priceChanges: any[];
-
+  showCostLabel: true;
   hasChangeError: boolean = false;
+  deliveryDiscount;
+  deliveryCost;
+  noDuration = null;
 
 
   constructor(private checkoutService: CheckoutService,
-    private httpService: HttpService,
-    private cartService: CartService,
-    private titleService: TitleService,
-    private productService: ProductService) {
+              private httpService: HttpService,
+              private cartService: CartService,
+              private titleService: TitleService,
+              private productService: ProductService) {
   }
 
   ngOnInit() {
@@ -103,7 +105,23 @@ export class CheckoutPageComponent implements OnInit {
     }
   }
 
+  showDiscountLabel(data) {
+    this.showCostLabel = data;
+  }
+
+  calculateDiscount(durationId) {
+    this.checkoutService.calculateDeliveryDiscount(durationId)
+      .then((res: any) => {
+        this.deliveryCost = res.res_delivery_cost;
+        this.deliveryDiscount = res.res_delivery_discount;
+      })
+      .catch(err => {
+        console.error('error occured in getting delivery cost and discount', err);
+      });
+  }
+
   checkout() {
     this.checkoutService.checkout();
+
   }
 }

@@ -9,19 +9,14 @@
       </mat-radio-button>
     </mat-radio-group>
 </span>
-<div *ngIf="isModify && withDelivery">
+<div *ngIf="isModify && withDelivery && !isProfile">
   <label class="label-field">زمان تحویل</label>
-  <mat-radio-group [(ngModel)]="deliveryPeriodDay" class="radio-field">
-      <mat-radio-button [value]="3">
-        <label>۳ روزه (مخصوص استان تهران)</label>
-      </mat-radio-button>
-      <mat-radio-button [value]="5">
-        <label>۵ روزه (مخصوص استان تهران)</label>
-      </mat-radio-button>
-    <mat-radio-button [value]="7">
-      <label>۷ روزه</label>
+  <mat-radio-group class="radio-field" [(ngModel)]="deliveryPeriodDay">
+    <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days" (change)="changeDurationType(d._id)" [class.radio-option] = "i > 0">
+      <label>{{d.name}}{{(d.delivery_days === 2 || d.delivery_days === 3) ? ' (مخصوص استان تهران)' : ''}}</label>
     </mat-radio-button>
-    </mat-radio-group>
+  </mat-radio-group>
+
   <label class="label-field">ساعت تحویل</label>
   <mat-radio-group [(ngModel)]="deliveryHour" class="radio-field">
     <mat-radio-button [value]="'10-18'">ساعت ۱۰ تا ۱۸</mat-radio-button>
@@ -40,14 +35,16 @@
     {{customerData.recipient_name + ' ' + customerData.recipient_surname}}
   </div>
 </span>
-<div *ngIf="addresses && addresses.length">
+<div *ngIf="addresses && addresses.length" [class.show-button]="addresses && addresses.length">
   <div *ngIf="!isMobile" class="rs-table field">
     <mat-card>
       <table class="field table">
         <thead>
         <tr>
           <th *ngIf="isModify;else anothercontent1" style="width: 5%"><b>ردیف</b></th>
-          <ng-template #anothercontent1><th style="width: 5%"><b>انتخاب</b></th></ng-template>
+          <ng-template #anothercontent1>
+            <th style="width: 5%"><b>انتخاب</b></th>
+          </ng-template>
           <th *ngIf="withDelivery"><b>مشخصات تحویل گیرنده</b></th>
           <th *ngIf="withDelivery && !isProfile"></th>
           <th *ngIf="!withDelivery">نام فروشگاه</th>
@@ -58,8 +55,11 @@
         </thead>
         <tbody>
         <tr *ngFor="let address of addresses; let i = index">
-          <td *ngIf="isModify;else anothercontent2" >{{makePersianNumber(i+1)}}</td>
-          <ng-template #anothercontent2><td><input type="radio" [value]="address" name="address" [(ngModel)]="addressSelected"  (change)="chooseAddress($event)"></td></ng-template>
+          <td *ngIf="isModify;else anothercontent2">{{makePersianNumber(i+1)}}</td>
+          <ng-template #anothercontent2>
+            <td><input type="radio" [value]="address" name="address" [(ngModel)]="addressSelected"
+                       (change)="chooseAddress($event)"></td>
+          </ng-template>
           <td *ngIf="withDelivery"><span *ngIf="address.recipient_name">
             نام تحویل گیرنده: <b><span *ngIf="address.recipient_title === 'f'"> خانم </span>
                                  <span *ngIf="address.recipient_title === 'm'"> آقای </span>
@@ -85,7 +85,7 @@
             استان {{address.province}} شهر {{address.city}}
             <br>
             {{address.district}} {{address.street}} {{address.no ? 'پلاک ' + makePersianNumber(address.no) : ''}}
-            {{address.unit ?  'واحد' + makePersianNumber(address.unit) : ''}}
+            {{address.unit ? 'واحد' + makePersianNumber(address.unit) : ''}}
           </td>
           <td *ngIf="withDelivery && !isProfile">
             <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddress===i"></mat-checkbox>
