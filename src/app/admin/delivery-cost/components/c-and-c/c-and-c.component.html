@@ -29,7 +29,7 @@
     <tr *ngFor="let item of clickAndCollectInfo.add_point; let i = index">
       <td>{{formatter(i+1)}}</td>
       <td>{{item.name}}</td>
-      <td>{{item.added_point}}
+      <td>{{formatter(item.added_point)}}
       </td>
       <td>
         <button mat-icon-button (click)="editPoint(item)" color="primary">
