@@ -39,9 +39,13 @@ export class AddressTableComponent implements OnInit {
   selectedWarehouseAddress = -1;
   addrBtnLabel = 'افزودن آدرس جدید';
   addresses = [];
+  tehranAddresses = [];
+  showAddresses = [];
   isMobile = false;
   isLoggedIn = false;
   durations = [];
+  durationId;
+  deliveryDays;
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
@@ -73,6 +77,7 @@ export class AddressTableComponent implements OnInit {
         else if (res.length === 1)
           this.selectedCustomerAddress = 0;
         this.addresses = res;
+        this.showAddresses = this.addresses;
         this.setState();
       }
     });
@@ -150,8 +155,9 @@ export class AddressTableComponent implements OnInit {
       });
       rmDialog.afterClosed().subscribe(
         () => {
-          if (this.withDelivery)
+          if (this.withDelivery) {
             this.checkoutService.getCustomerAddresses();
+          }
           this.setState();
         },
         (err) => {
@@ -204,6 +210,12 @@ export class AddressTableComponent implements OnInit {
     this.deliveryType.emit(this.withDelivery);
     if (this.withDelivery) {
       this.addresses = this.checkoutService.addresses$.getValue();
+      this.showAddresses = this.addresses;
+      if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 2 || this.deliveryDays === 3)) {
+        this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
+        this.showAddresses = this.tehranAddresses;
+      } else
+        this.showAddresses = this.addresses;
       // this.progressService.enable();
       // this.httpService.post('loyaltygroup/', {
       //   _id: this.authService.userDetails.userId,
@@ -226,18 +238,27 @@ export class AddressTableComponent implements OnInit {
 
     } else {
       this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+      this.showAddresses = this.addresses;
     }
     this.setState();
     this.setBtnLabel();
 
   }
 
-  changeDurationType(durationId) {
+  changeDurationType(durationId, deliveryDays) {
+    this.durationId = durationId;
+    this.deliveryDays = deliveryDays;
     this.noDuration.emit(true);
     this.durationType.emit(durationId);
+    if (this.addresses && this.addresses.length && (deliveryDays === 2 || deliveryDays === 3) {
+      this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
+      this.showAddresses = this.tehranAddresses;
+    } else
+      this.showAddresses = this.addresses;
   }
 
-  chooseAddress(address) {
+  chooseAddress($event) {
+    console.log($event);
     this.selectedChange.emit(this.addressSelected);
   }
 }

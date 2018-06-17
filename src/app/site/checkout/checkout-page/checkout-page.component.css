@@ -2,3 +2,30 @@ mat-panel-title {
   font-size: 1.4em;
   font-weight: bold;
 }
+
+.outer-div {
+  dir: ltr;
+}
+
+.middle-div-wrapper {
+  dir: rtl;
+}
+
+.middle-div {
+  padding: 10px;
+  width: 95%;
+}
+
+.payment-button {
+  padding:10px;
+  margin:15px;
+  font-size:12pt;
+  background: black;
+  color:white;
+  width:calc(100% - 30px);
+}
+
+/*p {*/
+  /*color: orangered; */
+  /*font-weight: bold*/
+/*}*/

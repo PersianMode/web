@@ -177,7 +177,7 @@ export class CheckoutService {
 
   calculateDeliveryDiscount(durationId) {
     let data = {
-      customer_id: this.authService.userDetails.userId,
+      customer_id: this.authService.userDetails.userId ? this.authService.userDetails.userId : null,
       duration_id: durationId
     };
     return new Promise((resolve, reject) => {
