@@ -244,7 +244,6 @@ export class AddressTableComponent implements OnInit {
     }
     this.setState();
     this.setBtnLabel();
-
   }
 
   changeDurationType(durationId, deliveryDays) {

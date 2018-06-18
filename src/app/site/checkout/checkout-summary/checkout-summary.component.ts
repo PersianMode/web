@@ -8,8 +8,22 @@ import {priceFormatter} from '../../../shared/lib/priceFormatter';
 })
 export class CheckoutSummaryComponent implements OnInit {
 
-  @Input() showCostLabel;
+  // @Input() showCostLabel;
   @Input() noDuration;
+
+  @Input()
+  set showCostLabel(value) {
+    this._showCostLabel = value;
+    if (!value) {
+      this.finalTotal = this.total;
+    } else {
+      this.finalTotal = this.total + this.deliveryCost - this.deliveryDiscount;
+    }
+  }
+
+  get showCostLabel() {
+    return this._showCostLabel;
+  }
 
 
   @Input()
@@ -91,6 +105,7 @@ export class CheckoutSummaryComponent implements OnInit {
   private _usedLoyaltyPoint = 0;
   private _deliveryCost = 0;
   private _deliveryDiscount = 0;
+  private _showCostLabel = true;
   finalTotal = 0;
 
   constructor() {
