@@ -16,8 +16,7 @@
       </div>
     </div>
   </div>
-
-  <mat-tab-group *ngIf="showDeliveryTab">
+  <mat-tab-group *ngIf="showDeliveryTab" (selectedTabChange)="notifyToSaveChanges()">
     <mat-tab>
       <ng-template mat-tab-label>
         <span>بازه زمانی ارسال</span>
@@ -28,7 +27,7 @@
       <ng-template mat-tab-label>
         <span>تخفیف بر اساس امتیاز وفاداری</span>
       </ng-template>
-      <app-loyalty-discount [loyaltyLabel]="loyaltyLabel" [selectedDuration]="durationObject"></app-loyalty-discount>
+      <app-loyalty-discount [loyaltyLabel]="loyaltyLabel" [selectedDuration]="durationObject" (leaveWithoutSubmitChanges)="showNotify($event)"></app-loyalty-discount>
     </mat-tab>
   </mat-tab-group>
   <div *ngIf="showCAndCTab">

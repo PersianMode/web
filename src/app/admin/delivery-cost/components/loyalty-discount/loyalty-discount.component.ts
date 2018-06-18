@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {HttpService} from '../../../../shared/services/http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -20,6 +20,7 @@ export class LoyaltyDiscountComponent implements OnInit {
   upsertBtnShouldDisabled = true;
 
   @Input() selectedDuration;
+  @Output() leaveWithoutSubmitChanges = new EventEmitter();
 
   @Input()
   set loyaltyLabel(value) {
@@ -71,6 +72,8 @@ export class LoyaltyDiscountComponent implements OnInit {
     if (!this.selectedDuration.delivery_loyalty.filter(el => !el.discount).length)
       this.upsertBtnShouldDisabled = false;
     this.discountForm.reset();
+
+    this.leaveWithoutSubmitChanges.emit(this.upsertBtnShouldDisabled);
   }
 
   fieldChanged() {
@@ -84,14 +87,6 @@ export class LoyaltyDiscountComponent implements OnInit {
         || (formName !== objName && (formName !== '' || objName !== null)))
         this.anyChanges = true;
     }
-  }
-
-  submitDiscount() {
-    this.loyaltyDiscountList = [];
-    this.loyaltyList.forEach(el => {
-      if (!this.loyaltyDiscountList.map(i => i.name).includes(el))
-        this.loyaltyDiscountList.push(el);
-    });
   }
 
   submitTotalInfo() {

@@ -1,5 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {ProgressService} from '../../shared/services/progress.service';
 
 @Component({
   selector: 'app-delivery-cost',
@@ -13,9 +16,10 @@ export class DeliveryCostComponent implements OnInit {
   showDeliveryTab: boolean = false;
   showCAndCTab: boolean = false;
   _id;
+  shouldNotify = false;
 
-  constructor(private route: ActivatedRoute) {
-
+  constructor(private route: ActivatedRoute, private dialog: MatDialog,
+              private snackBar: MatSnackBar, private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -54,8 +58,6 @@ export class DeliveryCostComponent implements OnInit {
   }
 
   goToDeliveryTab() {
-    // this.showTabs = false;
-    // if (this._id) this.showTabs = true;
     this.showDeliveryTab = true;
     this.showCAndCTab = false;
   }
@@ -63,5 +65,30 @@ export class DeliveryCostComponent implements OnInit {
   goToCandCTab() {
     this.showDeliveryTab = false;
     this.showCAndCTab = true;
+  }
+
+  showNotify(data) {
+    this.shouldNotify = !data;
+  }
+
+  notifyToSaveChanges() {
+    console.log('shouldNotify : ', this.shouldNotify);
+    if (this.shouldNotify) {
+      const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+        width: '400px',
+      });
+
+      rmDialog.afterClosed().subscribe(
+        status => {
+          if (status) {
+            this.shouldNotify = false;
+          }
+          }
+        ,
+          err => {
+            console.error('Error when subscribing on rmDialog.afterClosed() function: ', err);
+          }
+        );
+    }
   }
 }
