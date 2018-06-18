@@ -70,7 +70,7 @@ export class AddressTableComponent implements OnInit {
     }
     this.checkoutService.addresses$.subscribe(res => {
       if (res && res.length && this.withDelivery) {
-        if (this.addresses.length === res.length - 1) {
+        if (this.showAddresses.length === res.length - 1) {
           this.selectedCustomerAddress = res.length - 1;
         } else if (res.length === 1) {
           this.selectedCustomerAddress = 0;
