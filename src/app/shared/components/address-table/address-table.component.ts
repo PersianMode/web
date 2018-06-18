@@ -72,11 +72,8 @@ export class AddressTableComponent implements OnInit {
       if (res && res.length && this.withDelivery) {
         if (this.addresses.length === res.length - 1) {
           this.selectedCustomerAddress = res.length - 1;
-          console.log('+');
-        }
-        else if (res.length === 1) {
+        } else if (res.length === 1) {
           this.selectedCustomerAddress = 0;
-          console.log('-');
         }
         this.addresses = res;
         this.showAddresses = this.addresses;
