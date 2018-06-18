@@ -35,10 +35,9 @@
             </mat-expansion-panel-header>
 
 
-            <app-address-table [isProfile]="false" (deliveryType)="showDiscountLabel($event)"
-                               (noDuration)="noDuration = $event"  (durationType)="calculateDiscount($event)"></app-address-table>
-
-
+            <app-address-table [isProfile] = false (deliveryType)="showDiscountLabel($event)"
+                               (noDuration)="noDuration = $event"
+                               (durationType)="calculateDiscount($event)"></app-address-table>
           </mat-expansion-panel>
         </mat-accordion>
         <button mat-raised-button

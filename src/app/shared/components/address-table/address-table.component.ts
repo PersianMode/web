@@ -8,7 +8,6 @@ import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
 import {CheckoutService} from '../../services/checkout.service';
-import {userInfo} from 'os';
 import {ProgressService} from '../../services/progress.service';
 
 
@@ -68,6 +67,8 @@ export class AddressTableComponent implements OnInit {
       if (this.isProfile)
         this.withDelivery = true;
       this.changeWithDelivery();
+
+      console.log(this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress);
     }
 
     this.checkoutService.addresses$.subscribe(res => {
@@ -250,15 +251,16 @@ export class AddressTableComponent implements OnInit {
     this.deliveryDays = deliveryDays;
     this.noDuration.emit(true);
     this.durationType.emit(durationId);
-    if (this.addresses && this.addresses.length && (deliveryDays === 2 || deliveryDays === 3) {
+    if (this.addresses && this.addresses.length && (deliveryDays === 2 || deliveryDays === 3)) {
       this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
       this.showAddresses = this.tehranAddresses;
     } else
       this.showAddresses = this.addresses;
+
+    // this.selectedCustomerAddress = -2;
   }
 
   chooseAddress($event) {
-    console.log($event);
     this.selectedChange.emit(this.addressSelected);
   }
 }

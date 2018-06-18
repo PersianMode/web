@@ -58,8 +58,8 @@
         <tr *ngFor="let address of showAddresses; let i = index">
           <td *ngIf="isModify;else anothercontent2">{{makePersianNumber(i+1)}}</td>
           <ng-template #anothercontent2>
-            <td><input type="radio" [value]="address._id" name="address" [ngModel]="addressSelected"
-                                 (change) ="chooseAddress($event)"></td>
+            <td><input type="radio" [value]="address" name="address" [(ngModel)]="addressSelected"
+                       (change)="chooseAddress($event)"></td>
           </ng-template>
           <td *ngIf="withDelivery"><span *ngIf="address.recipient_name">
             نام تحویل گیرنده: <b><span *ngIf="address.recipient_title === 'f'"> خانم </span>
@@ -89,7 +89,7 @@
             {{address.unit ? 'واحد' + makePersianNumber(address.unit) : ''}}
           </td>
           <td *ngIf="withDelivery && !isProfile">
-            <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddress===i"></mat-checkbox>
+            <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddress === i"></mat-checkbox>
           </td>
           <td *ngIf="!withDelivery">
             <mat-checkbox class="check-box" [checked]="selectedWarehouseAddress===i"
