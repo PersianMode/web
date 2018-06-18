@@ -67,16 +67,17 @@ export class AddressTableComponent implements OnInit {
       if (this.isProfile)
         this.withDelivery = true;
       this.changeWithDelivery();
-
-      console.log(this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress);
     }
-
     this.checkoutService.addresses$.subscribe(res => {
       if (res && res.length && this.withDelivery) {
-        if (this.addresses.length === res.length - 1)
+        if (this.addresses.length === res.length - 1) {
           this.selectedCustomerAddress = res.length - 1;
-        else if (res.length === 1)
+          console.log('+');
+        }
+        else if (res.length === 1) {
           this.selectedCustomerAddress = 0;
+          console.log('-');
+        }
         this.addresses = res;
         this.showAddresses = this.addresses;
         this.setState();
@@ -95,8 +96,8 @@ export class AddressTableComponent implements OnInit {
       this.selectedWarehouseAddress,
       JSON.parse(localStorage.getItem('address')),
       this.withDelivery ?
-        this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
-        : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null,
+        this.selectedCustomerAddress >= 0 ? this.showAddresses[this.selectedCustomerAddress] : null
+        : this.selectedWarehouseAddress >= 0 ? this.showAddresses[this.selectedWarehouseAddress] : null,
     ];
   }
 
@@ -105,12 +106,12 @@ export class AddressTableComponent implements OnInit {
   }
 
   getLatitude() {
-    return this.addresses[this.selectedWarehouseAddress].loc ? this.addresses[this.selectedWarehouseAddress].loc.lat :
+    return this.showAddresses[this.selectedWarehouseAddress].loc ? this.showAddresses[this.selectedWarehouseAddress].loc.lat :
       this.loc ? this.loc[0] : 35.7322793;
   }
 
   getLongitude() {
-    return this.addresses[this.selectedWarehouseAddress].loc ? this.addresses[this.selectedWarehouseAddress].loc.long :
+    return this.showAddresses[this.selectedWarehouseAddress].loc ? this.showAddresses[this.selectedWarehouseAddress].loc.long :
       this.loc ? this.loc[1] : 51.2140536;
   }
 
@@ -126,7 +127,7 @@ export class AddressTableComponent implements OnInit {
         this.selectedWarehouseAddress = -1;
       } else {
         this.selectedWarehouseAddress = i;
-        this.loc = this.locs[this.addresses[this.selectedWarehouseAddress].name];
+        this.loc = this.locs[this.showAddresses[this.selectedWarehouseAddress].name];
       }
     }
     this.setState();
@@ -170,7 +171,7 @@ export class AddressTableComponent implements OnInit {
 
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
-    const tempAddress = (id || id === 0) ? this.addresses[id] : null;
+    const tempAddress = (id || id === 0) ? this.showAddresses[id] : null;
     this.checkoutService.addressData = {
       addressId: tempAddressId,
       partEdit: !this.isProfile || !this.authService.userIsLoggedIn(),
@@ -257,7 +258,7 @@ export class AddressTableComponent implements OnInit {
     } else
       this.showAddresses = this.addresses;
 
-    // this.selectedCustomerAddress = -2;
+    this.selectedCustomerAddress = 0;
   }
 
   chooseAddress($event) {
