@@ -1,8 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../shared/services/progress.service';
+import {SaveChangeConfirmComponent} from '../../shared/components/save-change-confirm/save-change-confirm.component';
 
 @Component({
   selector: 'app-delivery-cost',
@@ -68,6 +68,7 @@ export class DeliveryCostComponent implements OnInit {
     this.showDeliveryTab = false;
     this.showCAndCTab = true;
     this.shouldNotify = false;
+    this.saveDiscount = null;
   }
 
   showNotify(data) {
@@ -77,7 +78,7 @@ export class DeliveryCostComponent implements OnInit {
   notifyToSaveChanges() {
     this.saveDiscount = null;
     if (this.shouldNotify) {
-      const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      const rmDialog = this.dialog.open(SaveChangeConfirmComponent, {
         width: '400px',
       });
 

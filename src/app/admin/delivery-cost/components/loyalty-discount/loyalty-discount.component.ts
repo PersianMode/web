@@ -11,8 +11,8 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
   styleUrls: ['./loyalty-discount.component.css']
 })
 export class LoyaltyDiscountComponent implements OnInit {
-  loyalty_label;
-  loyaltyList;
+  // loyalty_label;
+  // loyaltyList;
   anyChanges = false;
   selectedGroup = null;
   discountForm: FormGroup = null;
@@ -22,16 +22,21 @@ export class LoyaltyDiscountComponent implements OnInit {
 
   @Input()
   set saveDiscountNotification(value) {
-    if (value === null)
+    if (value === null) {
       return;
+    }
     if (value) {
-      console.log('55');
       this.submitTotalInfo();
     } else {
-      console.log('66');
       this.progressService.enable();
       this.httpService.get(`deliveryduration/${this.selectedDuration._id}`).subscribe(data => {
-        this.selectedDuration.delivery_loyalty = data.delivery_loyalty;
+        data.delivery_loyalty.forEach(el => {
+          const del_loyalty = this.selectedDuration.delivery_loyalty.find(i => i._id === el._id);
+          del_loyalty.discount = el.discount;
+        });
+
+        // this.selectedDuration.delivery_loyalty = data.delivery_loyalty;
+        console.log('selectedDuration : ', this.selectedDuration);
         this.progressService.disable();
         this.snackBar.open('ثبت تغییرات به درخواست شما لغو گردید', null, {
           duration: 3200,
@@ -50,12 +55,12 @@ export class LoyaltyDiscountComponent implements OnInit {
 
   @Output() leaveWithoutSubmitChanges = new EventEmitter();
 
-  @Input()
-  set loyaltyLabel(value) {
-    this.loyalty_label = value;
-    if (this.loyaltyList && this.loyaltyList.length)
-      this.loyaltyList.forEach(el => el.value = null);
-  }
+  @Input() loyaltyLabel;
+  // set loyaltyLabel(value) {
+  //   this.loyalty_label = value;
+  //   if (this.loyaltyList && this.loyaltyList.length)
+  //     this.loyaltyList.forEach(el => el.value = null);
+  // }
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
               private snackBar: MatSnackBar, private dialog: MatDialog) {
@@ -64,7 +69,7 @@ export class LoyaltyDiscountComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.discountForm.valueChanges.subscribe(() => this.fieldChanged());
-    this.getGroups();
+    // this.getGroups();
   }
 
   initForm() {
@@ -78,19 +83,19 @@ export class LoyaltyDiscountComponent implements OnInit {
     });
   }
 
-  getGroups() {
-    this.httpService.get('loyaltygroup').subscribe(
-      data => {
-        this.loyaltyList = data;
-      },
-      err => {
-        console.error('Cannot get loyalty groups: ', err);
-        this.snackBar.open('سیستم قادر به دریافت اطلاعات گروه های وفاداری نیست. دوباره تلاش کنید', null, {
-          duration: 3200,
-        });
-      }
-    );
-  }
+  // getGroups() {
+  //   this.httpService.get('loyaltygroup').subscribe(
+  //     data => {
+  //       this.loyaltyList = data;
+  //     },
+  //     err => {
+  //       console.error('Cannot get loyalty groups: ', err);
+  //       this.snackBar.open('سیستم قادر به دریافت اطلاعات گروه های وفاداری نیست. دوباره تلاش کنید', null, {
+  //         duration: 3200,
+  //       });
+  //     }
+  //   );
+  // }
 
   upsertDiscount() {
     this.upsertBtnShouldDisabled = true;
@@ -100,6 +105,7 @@ export class LoyaltyDiscountComponent implements OnInit {
     if (!this.selectedDuration.delivery_loyalty.filter(el => !el.discount).length)
       this.upsertBtnShouldDisabled = false;
     this.discountForm.reset();
+
     this.leaveWithoutSubmitChanges.emit(this.upsertBtnShouldDisabled);
   }
 
