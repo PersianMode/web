@@ -56,11 +56,6 @@ export class LoyaltyDiscountComponent implements OnInit {
   @Output() leaveWithoutSubmitChanges = new EventEmitter();
 
   @Input() loyaltyLabel;
-  // set loyaltyLabel(value) {
-  //   this.loyalty_label = value;
-  //   if (this.loyaltyList && this.loyaltyList.length)
-  //     this.loyaltyList.forEach(el => el.value = null);
-  // }
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
               private snackBar: MatSnackBar, private dialog: MatDialog) {
@@ -82,20 +77,6 @@ export class LoyaltyDiscountComponent implements OnInit {
       ]]
     });
   }
-
-  // getGroups() {
-  //   this.httpService.get('loyaltygroup').subscribe(
-  //     data => {
-  //       this.loyaltyList = data;
-  //     },
-  //     err => {
-  //       console.error('Cannot get loyalty groups: ', err);
-  //       this.snackBar.open('سیستم قادر به دریافت اطلاعات گروه های وفاداری نیست. دوباره تلاش کنید', null, {
-  //         duration: 3200,
-  //       });
-  //     }
-  //   );
-  // }
 
   upsertDiscount() {
     this.upsertBtnShouldDisabled = true;
@@ -159,4 +140,18 @@ export class LoyaltyDiscountComponent implements OnInit {
   formatter(number) {
     return priceFormatter(number);
   }
+
+  // getGroups() {
+  //   this.httpService.get('loyaltygroup').subscribe(
+  //     data => {
+  //       this.loyaltyList = data;
+  //     },
+  //     err => {
+  //       console.error('Cannot get loyalty groups: ', err);
+  //       this.snackBar.open('سیستم قادر به دریافت اطلاعات گروه های وفاداری نیست. دوباره تلاش کنید', null, {
+  //         duration: 3200,
+  //       });
+  //     }
+  //   );
+  // }
 }
