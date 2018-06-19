@@ -52,6 +52,7 @@ export class CheckoutSummaryComponent implements OnInit {
     return this._deliveryDiscount;
   }
 
+  ////////////////////////////////////////////////////////////////
 
   @Input()
   set total(value) {

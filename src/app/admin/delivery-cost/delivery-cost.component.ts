@@ -17,6 +17,7 @@ export class DeliveryCostComponent implements OnInit {
   showCAndCTab: boolean = false;
   _id;
   shouldNotify = false;
+  saveDiscount = null;
 
   constructor(private route: ActivatedRoute, private dialog: MatDialog,
               private snackBar: MatSnackBar, private progressService: ProgressService) {
@@ -60,11 +61,13 @@ export class DeliveryCostComponent implements OnInit {
   goToDeliveryTab() {
     this.showDeliveryTab = true;
     this.showCAndCTab = false;
+    // this.shouldNotify = false;
   }
 
   goToCandCTab() {
     this.showDeliveryTab = false;
     this.showCAndCTab = true;
+    this.shouldNotify = false;
   }
 
   showNotify(data) {
@@ -72,7 +75,7 @@ export class DeliveryCostComponent implements OnInit {
   }
 
   notifyToSaveChanges() {
-    console.log('shouldNotify : ', this.shouldNotify);
+    this.saveDiscount = null;
     if (this.shouldNotify) {
       const rmDialog = this.dialog.open(RemovingConfirmComponent, {
         width: '400px',
@@ -82,6 +85,10 @@ export class DeliveryCostComponent implements OnInit {
         status => {
           if (status) {
             this.shouldNotify = false;
+            this.saveDiscount = true;
+          } else {
+            this.shouldNotify = false;
+            this.saveDiscount = false;
           }
           }
         ,

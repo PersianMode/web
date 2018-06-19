@@ -15,11 +15,39 @@ export class LoyaltyDiscountComponent implements OnInit {
   loyaltyList;
   anyChanges = false;
   selectedGroup = null;
-  loyaltyDiscountList = [];
   discountForm: FormGroup = null;
   upsertBtnShouldDisabled = true;
 
   @Input() selectedDuration;
+
+  @Input()
+  set saveDiscountNotification(value) {
+    if (value === null)
+      return;
+    if (value) {
+      console.log('55');
+      this.submitTotalInfo();
+    } else {
+      console.log('66');
+      this.progressService.enable();
+      this.httpService.get(`deliveryduration/${this.selectedDuration._id}`).subscribe(data => {
+        this.selectedDuration.delivery_loyalty = data.delivery_loyalty;
+        this.progressService.disable();
+        this.snackBar.open('ثبت تغییرات به درخواست شما لغو گردید', null, {
+          duration: 3200,
+        });
+      }, err => {
+        this.progressService.disable();
+        console.error('Cannot get loyalty groups: ', err);
+        this.snackBar.open('سیستم قادر به دریافت اطلاعات نیست. دوباره تلاش کنید', null, {
+          duration: 3200,
+        });
+      });
+    }
+    ;
+    this.upsertBtnShouldDisabled = true;
+  }
+
   @Output() leaveWithoutSubmitChanges = new EventEmitter();
 
   @Input()
@@ -72,7 +100,6 @@ export class LoyaltyDiscountComponent implements OnInit {
     if (!this.selectedDuration.delivery_loyalty.filter(el => !el.discount).length)
       this.upsertBtnShouldDisabled = false;
     this.discountForm.reset();
-
     this.leaveWithoutSubmitChanges.emit(this.upsertBtnShouldDisabled);
   }
 
@@ -101,6 +128,7 @@ export class LoyaltyDiscountComponent implements OnInit {
         this.progressService.disable();
         this.discountForm.reset();
         this.upsertBtnShouldDisabled = true;
+        this.leaveWithoutSubmitChanges.emit(this.upsertBtnShouldDisabled);
       },
       err => {
         console.error('Cannot upsert delivery duration info: ', err);

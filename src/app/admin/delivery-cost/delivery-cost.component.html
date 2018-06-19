@@ -27,7 +27,9 @@
       <ng-template mat-tab-label>
         <span>تخفیف بر اساس امتیاز وفاداری</span>
       </ng-template>
-      <app-loyalty-discount [loyaltyLabel]="loyaltyLabel" [selectedDuration]="durationObject" (leaveWithoutSubmitChanges)="showNotify($event)"></app-loyalty-discount>
+      <app-loyalty-discount [loyaltyLabel]="loyaltyLabel" [selectedDuration]="durationObject"
+                            [saveDiscountNotification]="saveDiscount"
+                            (leaveWithoutSubmitChanges)="showNotify($event)"></app-loyalty-discount>
     </mat-tab>
   </mat-tab-group>
   <div *ngIf="showCAndCTab">
