@@ -438,7 +438,7 @@ export class CartService {
       return Promise.resolve(false);
 
     return new Promise((resolve, reject) => {
-      if (this.cartItems && this.cartItems.getValue().length > 0)
+      if (this.cartItems2 && this.cartItems2.getValue().length > 0)
         this.httpService.post('coupon/code/valid', {
           product_ids: Array.from(new Set(this.cartItems.getValue().map(el => el.product_id))),
           coupon_code: coupon_code,
@@ -484,8 +484,8 @@ export class CartService {
   }
 
   getOrderId() {
-    if (this.cartItems.getValue().length)
-      return this.cartItems.getValue()[0].order_id;
+    if (this.cartItems2.getValue().length)
+      return this.cartItems2.getValue()[0].order_id;
     return null;
   }
 
