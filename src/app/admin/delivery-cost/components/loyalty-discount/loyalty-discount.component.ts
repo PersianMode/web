@@ -11,8 +11,6 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
   styleUrls: ['./loyalty-discount.component.css']
 })
 export class LoyaltyDiscountComponent implements OnInit {
-  // loyalty_label;
-  // loyaltyList;
   anyChanges = false;
   selectedGroup = null;
   discountForm: FormGroup = null;
@@ -34,8 +32,6 @@ export class LoyaltyDiscountComponent implements OnInit {
           const del_loyalty = this.selectedDuration.delivery_loyalty.find(i => i._id === el._id);
           del_loyalty.discount = el.discount;
         });
-
-        // this.selectedDuration.delivery_loyalty = data.delivery_loyalty;
         console.log('selectedDuration : ', this.selectedDuration);
         this.progressService.disable();
         this.snackBar.open('ثبت تغییرات به درخواست شما لغو گردید', null, {
@@ -64,7 +60,6 @@ export class LoyaltyDiscountComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.discountForm.valueChanges.subscribe(() => this.fieldChanged());
-    // this.getGroups();
   }
 
   initForm() {
@@ -140,18 +135,4 @@ export class LoyaltyDiscountComponent implements OnInit {
   formatter(number) {
     return priceFormatter(number);
   }
-
-  // getGroups() {
-  //   this.httpService.get('loyaltygroup').subscribe(
-  //     data => {
-  //       this.loyaltyList = data;
-  //     },
-  //     err => {
-  //       console.error('Cannot get loyalty groups: ', err);
-  //       this.snackBar.open('سیستم قادر به دریافت اطلاعات گروه های وفاداری نیست. دوباره تلاش کنید', null, {
-  //         duration: 3200,
-  //       });
-  //     }
-  //   );
-  // }
 }
