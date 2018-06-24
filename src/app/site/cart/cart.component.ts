@@ -23,13 +23,14 @@ export class CartComponent implements OnInit, OnDestroy {
   discountValue: any;
   dialogEnum = DialogEnum;
   subs: any;
+  subs2: any;
   isLoggedIn = false;
   valid = [];
   disabled = false;
   showWaitingSpinner = false;
 
   constructor(@Inject(WINDOW) private window, private cartService: CartService,
-    private authService: AuthService, private router: Router, public dialog: MatDialog, private titleService: TitleService) {
+              private authService: AuthService, private router: Router, public dialog: MatDialog, private titleService: TitleService) {
   }
 
   ngOnInit() {
@@ -40,6 +41,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.showHideSpinner(true);
     this.subs = this.cartService.cartItems.subscribe(data => {
+      console.log(data);
       const prevProductCount = this.products.length;
       this.products = [];
       data.forEach(r => {
@@ -60,6 +62,9 @@ export class CartComponent implements OnInit, OnDestroy {
 
       this.showHideSpinner(false);
     });
+    this.subs2 = this.cartService.cartItems2.subscribe(data => {
+      console.log(data);
+    });
   }
 
   goToRegister() {
@@ -77,6 +82,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+    this.subs2.unsubscribe();
   }
 
   updateProduct(data, currentProduct) {
