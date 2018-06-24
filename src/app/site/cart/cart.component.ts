@@ -51,6 +51,17 @@ export class CartComponent implements OnInit, OnDestroy {
           let product: any = data.filter(e => e._id === p.product_id)[0];
           let instance = product.instances.filter(i => i._id === p.instance_id)[0];
           let color = product.colors.filter(c => c._id === instance.product_color_id)[0];
+          let instances = [];
+          product.instances.forEach(instance => {
+            let newIncatnce = {
+              'price': instance.price,
+              'size': instance.size,
+              'instance_id': instance._id
+            };
+            newIncatnce['quantity'] = 0;
+            instance.inventory.forEach(inventory => newIncatnce['quantity'] += inventory.count - inventory.reserved);
+            instances.push(newIncatnce);
+          });
           item['base_price'] = product.base_price;
           item['color'] = {
             '_id': color._id,
@@ -63,7 +74,7 @@ export class CartComponent implements OnInit, OnDestroy {
           item['discountedPrice'] = instance.discountedPrice;
           item['instance_id'] = p.instance_id;
           item['instance_price'] = instance.price;
-          item['instances'] = product.instances;
+          item['instances'] = instances;
           item['name'] = product.name;
           item['order_id'] = p.order_id;
           item['price'] = instance.price;

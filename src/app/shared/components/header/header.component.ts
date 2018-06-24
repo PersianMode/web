@@ -43,8 +43,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         console.error('Cannot subscribe on isVerified: ', err);
         this.isVerified = false;
       }
-    ); 
-    this.itemSubs = this.cartService.cartItems.subscribe(
+    );
+    this.itemSubs = this.cartService.cartItems2.subscribe(
       data => {
         data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => (+a) + (+b)) : 0;
         if (+data) {

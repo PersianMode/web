@@ -22,14 +22,6 @@ export class CartService {
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
   constructor(private httpService: HttpService, private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
-    this.cartItems.subscribe(data => {
-      if (data && data != [] && data.length > 0)
-        console.log('cartItem is ', data);
-    });
-    this.cartItems2.subscribe(data => {
-      if (data && data != [] && data.length > 0)
-        console.log('cartItem2 is ', data);
-    });
     this.authService.isLoggedIn.subscribe(
       isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
