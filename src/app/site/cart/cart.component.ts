@@ -19,11 +19,13 @@ import {ProductService} from '../../shared/services/product.service';
 })
 export class CartComponent implements OnInit, OnDestroy {
   products = [];
+  products2 = [];
   numberOfProducts: any;
   totalPrice: any;
   discountValue: any;
   dialogEnum = DialogEnum;
   subs: any;
+  subs2: any;
   isLoggedIn = false;
   valid = [];
   disabled = false;
@@ -40,12 +42,33 @@ export class CartComponent implements OnInit, OnDestroy {
     );
 
     this.showHideSpinner(true);
-    this.subs = this.cartService.cartItems2.subscribe(carts => {
+    this.subs = this.cartService.cartItems.subscribe(data => {
+      const prevProductCount = this.products.length;
+      this.products = [];
+      data.forEach(r => {
+        this.valid.push(true);
+        const temp: any = {};
+        Object.assign(temp, r);
+        temp.thumbnail = imagePathFixer(temp.thumbnail, temp.product_id, temp.color.id);
+        this.products.push(temp);
+      });
+
+      if (this.products.length > 0) {
+        this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
+        this.totalPrice = this.cartService.calculateTotal();
+        this.calculateDiscount();
+      } else if (prevProductCount) {
+        this.router.navigate(['/']);
+      }
+      this.showHideSpinner(false);
+      console.log(this.products)
+    });
+    this.subs2 = this.cartService.cartItems2.subscribe(carts => {
       let productIds = [];
       carts.forEach(p => productIds.push(p.product_id));
       const prevProductCount = this.products.length;
       this.productService.loadProducts(productIds).then((data: any[]) => {
-        this.products = [];
+        this.products2 = [];
         carts.forEach(p => {
           let item = {};
           let product: any = data.filter(e => e._id === p.product_id)[0];
@@ -85,15 +108,16 @@ export class CartComponent implements OnInit, OnDestroy {
           item['thumbnail'] = color.image.thumbnail;
           item['type'] = product.type;
           item['_id'] = p.instance_id;
-          this.products.push(item);
+          this.products2.push(item);
         });
-        if (this.products.length > 0) {
-          this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
+        if (this.products2.length > 0) {
+          this.numberOfProducts = priceFormatter(this.products2.map(el => el.quantity).reduce((a, b) => a + b));
           this.totalPrice = this.cartService.calculateTotal();
           this.calculateDiscount();
         } else if (prevProductCount) {
           this.router.navigate(['/']);
         }
+        console.log(this.products2);
         this.showHideSpinner(false);
       });
     });
@@ -114,6 +138,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+    this.subs2.unsubscribe();
   }
 
   updateProduct(data, currentProduct) {

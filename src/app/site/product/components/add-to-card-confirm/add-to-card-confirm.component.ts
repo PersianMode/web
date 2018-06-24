@@ -40,7 +40,7 @@ export class AddToCardConfirmComponent implements OnInit {
     this.farsiPrice = '@ ' + priceFormatter(price) + ' تومان';
     this.discountedPrice = '@ ' + priceFormatter(this.data.instance.discountedPrice) + ' تومان';
     this.thumbnail = this.product.colors.find(r => this.data.instance.product_color_id === r._id).image.thumbnail;
-    this.cartService.cartItems.subscribe(items => {
+    this.cartService.cartItems2.subscribe(items => {
       const found = items.find(r => r.instance_id === this.data.instance._id && r.product_id === this.data.product.id);
       if (found) {
         this.countFa = found.quantity.toLocaleString('fa', {useGrouping: false}) + ' عدد ';

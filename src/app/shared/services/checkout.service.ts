@@ -27,7 +27,7 @@ export class CheckoutService {
   constructor(private cartService: CartService, private httpService: HttpService,
               private authService: AuthService, private snackBar: MatSnackBar,
               private router: Router) {
-    this.cartService.cartItems.subscribe(
+    this.cartService.cartItems2.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
     this.authService.isLoggedIn.subscribe(isLoggedIn => {
