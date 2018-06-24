@@ -215,26 +215,6 @@ export class AddressTableComponent implements OnInit {
         this.showAddresses = this.tehranAddresses;
       } else
         this.showAddresses = this.addresses;
-      // this.progressService.enable();
-      // this.httpService.post('loyaltygroup/', {
-      //   _id: this.authService.userDetails.userId,
-      //   deliveryPeriodDay: this.deliveryPeriodDay,
-      // }).subscribe(
-      //   res => {
-      //     this.snackBar.open('تغییرات با موفقیت ثبت شدند', null, {
-      //       duration: 2000,
-      //     });
-      //
-      //     this.progressService.disable();
-      //   },
-      //   err => {
-      //     console.error('Cannot send delivery information: ', err);
-      //     this.snackBar.open('سیستم قادر به اعمال تغییرات شما نیست. دوباره تلاش کنید', null, {
-      //       duration: 2000,
-      //     });
-      //     this.progressService.disable();
-      //   });
-
     } else {
       this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
       this.showAddresses = this.addresses;

@@ -66,6 +66,7 @@ export class DeliveryCostComponent implements OnInit {
 
   goToCandCTab() {
     this.showDeliveryTab = false;
+
     this.showCAndCTab = true;
     this.shouldNotify = false;
     this.saveDiscount = null;
