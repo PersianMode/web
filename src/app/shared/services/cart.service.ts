@@ -6,7 +6,6 @@ import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {discountCalc} from '../lib/discountCalc';
 import {ProductService} from './product.service';
-import * as cloneDeep from 'lodash/cloneDeep';
 
 
 const SNACK_CONFIG: MatSnackBarConfig = {
