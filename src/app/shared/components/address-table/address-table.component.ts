@@ -241,3 +241,4 @@ export class AddressTableComponent implements OnInit {
     this.selectedChange.emit(this.addressSelected);
   }
 }
+
