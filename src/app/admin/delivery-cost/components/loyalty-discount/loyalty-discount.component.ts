@@ -17,6 +17,7 @@ export class LoyaltyDiscountComponent implements OnInit {
   upsertBtnShouldDisabled = true;
 
   @Input() selectedDuration;
+  @Input() loyaltyLabel;
 
   @Input()
   set saveDiscountNotification(value) {
@@ -51,8 +52,6 @@ export class LoyaltyDiscountComponent implements OnInit {
 
   @Output() leaveWithoutSubmitChanges = new EventEmitter();
 
-  @Input() loyaltyLabel;
-
   constructor(private httpService: HttpService, private progressService: ProgressService,
               private snackBar: MatSnackBar, private dialog: MatDialog) {
   }
@@ -82,7 +81,7 @@ export class LoyaltyDiscountComponent implements OnInit {
       this.upsertBtnShouldDisabled = false;
     this.discountForm.reset();
 
-    this.leaveWithoutSubmitChanges.emit(this.upsertBtnShouldDisabled);
+    this.leaveWithoutSubmitChanges.emit(this.upsertBtnShouldDisabled);  // emit the value(maybe true maybe false) to notify save changes dialog (if need) while change tabs
   }
 
   fieldChanged() {
@@ -110,7 +109,7 @@ export class LoyaltyDiscountComponent implements OnInit {
         this.progressService.disable();
         this.discountForm.reset();
         this.upsertBtnShouldDisabled = true;
-        this.leaveWithoutSubmitChanges.emit(this.upsertBtnShouldDisabled);
+        this.leaveWithoutSubmitChanges.emit(this.upsertBtnShouldDisabled);  // always emit true, so means no need to show save change dialog window while changing tabs
       },
       err => {
         console.error('Cannot upsert delivery duration info: ', err);

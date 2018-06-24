@@ -72,11 +72,14 @@ export class DeliveryCostComponent implements OnInit {
   }
 
   showNotify(data) {
-    this.shouldNotify = !data;
+    this.shouldNotify = !data; // variable 'shouldNotify' says if dialog window whould be open or not by tab changes,
+                              // and component waite for tab changing to use this variable's value to open dialog or not
   }
 
-  notifyToSaveChanges() {
-    this.saveDiscount = null;
+  notifyToSaveChanges() {      // depend on value of shouldNotify, dialog whould open or not(call by tab changes)
+    this.saveDiscount = null;  // this variable will pass to internall component as input to mange changes save or cancel
+                               // its value will be set in afterCloes function, based on cliking ok or cancel button
+
     if (this.shouldNotify) {
       const rmDialog = this.dialog.open(SaveChangeConfirmComponent, {
         width: '400px',
