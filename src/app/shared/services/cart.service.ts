@@ -38,7 +38,6 @@ export class CartService {
         if (this.authService.userIsLoggedIn()) {
 
           if (items && items.length) {
-            this.cartItems2.next(items);
             items.forEach((el, i) => {
               this.httpService.post('order', {
                 product_id: el.product_id,
@@ -61,8 +60,6 @@ export class CartService {
           this.getUserCart();
 
         } else if (items && items.length) {
-          const itemsCopy = cloneDeep(items);
-          this.cartItems2.next(itemsCopy);
           this.getItemsDetail(items);
         }
         else {
@@ -76,8 +73,6 @@ export class CartService {
   getUserCart() {
     this.httpService.get('cart/items').subscribe(
       res => {
-        const resCopy = cloneDeep(res);
-        this.cartItems2.next(resCopy);
         this.getItemsDetail(res);
       });
   }
@@ -144,8 +139,8 @@ export class CartService {
       if (instanceChange && curInstance)
         items = items.filter(el => el.product_id !== value.product_id || el._id !== value.pre_instance_id);
       this.cartItems.next(items);
-      const curInstance2 = items2.find(el => el.product_id === value.product_id && el._id === value.instance_id);
-      const newInstance2 = items2.find(el => el.product_id === value.product_id && el._id === value.pre_instance_id);
+      const curInstance2 = items2.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
+      const newInstance2 = items2.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
       const product2 = curInstance2 || newInstance2;
       Object.assign(product2, {
         product_id: value.product_id,
@@ -239,6 +234,7 @@ export class CartService {
 
   private setCartItem(overallDetails, products, isUpdate = true) {
     const itemList = [];
+    const itemList2 = [];
 
 
     if (!products || products.length <= 0)
@@ -294,13 +290,23 @@ export class CartService {
         el.instances = instances;
 
         itemList.push(el);
+        itemList2.push({
+          'instance_id': el.instance_id,
+          'order_id': el.order_id,
+          'product_id': el.product_id,
+          'quantity': el.quantity
+        });
       }
     });
 
-    if (isUpdate)
+    if (isUpdate) {
       this.cartItems.next(this.cartItems.getValue().concat(itemList));
-    else
+      this.cartItems2.next(this.cartItems2.getValue().concat(itemList2));
+    }
+    else {
       this.cartItems.next(itemList);
+      this.cartItems2.next(itemList2);
+    }
   }
 
   private getItemsFromStorage() {

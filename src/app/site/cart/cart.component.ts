@@ -41,8 +41,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.showHideSpinner(true);
     this.subs = this.cartService.cartItems.subscribe(data => {
-      console.log(data);
-      const prevProductCount = this.products.length;
+        const prevProductCount = this.products.length;
       this.products = [];
       data.forEach(r => {
         this.valid.push(true);
@@ -63,7 +62,7 @@ export class CartComponent implements OnInit, OnDestroy {
       this.showHideSpinner(false);
     });
     this.subs2 = this.cartService.cartItems2.subscribe(data => {
-      console.log(data);
+      // console.log('subs 2 asafasf ', data);
     });
   }
 
