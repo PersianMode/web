@@ -11,8 +11,9 @@
 </span>
 <div *ngIf="withDelivery && !isProfile">
   <label class="label-field">زمان تحویل</label>
-  <mat-radio-group class="radio-field" [(ngModel)]="deliveryPeriodDay">
-    <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days" (change)="changeDurationType(d._id)" [class.radio-option] = "i > 0">
+  <mat-radio-group class="radio-field">
+    <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days"
+                      (change)="changeDurationType(d._id, d.delivery_days)" [checked]="d._id === (durationId ? durationId : null)" [class.radio-option] = "i > 0">
       <label>{{d.name}}{{(d.delivery_days === 2 || d.delivery_days === 3) ? ' (مخصوص استان تهران)' : ''}}</label>
     </mat-radio-button>
   </mat-radio-group>
@@ -25,7 +26,7 @@
 </div>
 
 <span
-  *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
+  *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!showAddresses || !showAddresses.length)) || (!withDelivery && !isLoggedIn)"
   class="newAddress-checkout" [class.newAddress-profile]="isProfile">
   <button mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
   <div class="recipient" *ngIf="!withDelivery && customerData && customerData.recipient_name">
@@ -35,7 +36,7 @@
     {{customerData.recipient_name + ' ' + customerData.recipient_surname}}
   </div>
 </span>
-<div *ngIf="addresses && addresses.length" [class.show-button]="addresses && addresses.length">
+<div *ngIf="showAddresses && showAddresses.length" [class.show-button]="showAddresses && showAddresses.length">
   <div *ngIf="!isMobile" class="rs-table field">
     <mat-card>
       <table class="field table">
@@ -54,7 +55,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let address of addresses; let i = index">
+        <tr *ngFor="let address of showAddresses; let i = index">
           <td *ngIf="isModify;else anothercontent2">{{makePersianNumber(i+1)}}</td>
           <ng-template #anothercontent2>
             <td><input type="radio" [value]="address" name="address" [(ngModel)]="addressSelected"
@@ -88,7 +89,7 @@
             {{address.unit ? 'واحد' + makePersianNumber(address.unit) : ''}}
           </td>
           <td *ngIf="withDelivery && !isProfile">
-            <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddress===i"></mat-checkbox>
+            <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddress === i"></mat-checkbox>
           </td>
           <td *ngIf="!withDelivery">
             <mat-checkbox class="check-box" [checked]="selectedWarehouseAddress===i"
@@ -103,7 +104,7 @@
     </mat-card>
   </div>
   <div *ngIf="isMobile">
-    <div *ngFor="let address of addresses; let i = index">
+    <div *ngFor="let address of showAddresses; let i = index">
       <mat-card>
         <mat-card-content>
           <div>

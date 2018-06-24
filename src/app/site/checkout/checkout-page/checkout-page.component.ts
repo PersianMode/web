@@ -15,6 +15,8 @@ import {MatDialog} from '@angular/material';
 export class CheckoutPageComponent implements OnInit {
   total = 0;
   discount = 0;
+  deliveryDiscount;
+  deliveryCost;
   usedBalance = 0;
   usedLoyaltyPoint = 0;
   balanceValue = 0;
@@ -26,10 +28,8 @@ export class CheckoutPageComponent implements OnInit {
   discountChanges: any[];
   priceChanges: any[];
   showCostLabel: true;
-  hasChangeError: boolean = false;
-  deliveryDiscount;
-  deliveryCost;
   noDuration = null;
+  hasChangeError: boolean = false;
 
 
   constructor(private checkoutService: CheckoutService,
@@ -110,14 +110,16 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   calculateDiscount(durationId) {
-    this.checkoutService.calculateDeliveryDiscount(durationId)
-      .then((res: any) => {
-        this.deliveryCost = res.res_delivery_cost;
-        this.deliveryDiscount = res.res_delivery_discount;
-      })
-      .catch(err => {
-        console.error('error occured in getting delivery cost and discount', err);
-      });
+    if (durationId) {
+      this.checkoutService.calculateDeliveryDiscount(durationId)
+        .then((res: any) => {
+          this.deliveryCost = res.res_delivery_cost;
+          this.deliveryDiscount = res.res_delivery_discount;
+        })
+        .catch(err => {
+          console.error('error occured in getting delivery cost and discount', err);
+        });
+    }
   }
 
   checkout() {
