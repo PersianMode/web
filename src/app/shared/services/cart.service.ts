@@ -106,20 +106,20 @@ export class CartService {
   }
 
   updateItem(value) {
-    let items2 = this.cartItems.getValue();
+    let items = this.cartItems.getValue();
     const instanceChange = value.instance_id !== value.pre_instance_id;
     const update = () => {
-      const curInstance2 = items2.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
-      const newInstance2 = items2.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
-      const product2 = curInstance2 || newInstance2;
-      Object.assign(product2, {
+      const curInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
+      const newInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
+      const product = curInstance || newInstance;
+      Object.assign(product, {
         product_id: value.product_id,
         instance_id: value.instance_id,
-        quantity: instanceChange && curInstance2 ? value.number + curInstance2.quantity : value.number,
+        quantity: instanceChange && curInstance ? value.number + curInstance.quantity : value.number,
       });
-      if (instanceChange && curInstance2)
-        items2 = items2.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
-      this.cartItems.next(items2);
+      if (instanceChange && curInstance)
+        items = items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
+      this.cartItems.next(items);
     };
     // Should delete and add new product's instance
     if (this.authService.userIsLoggedIn()) {
@@ -203,7 +203,7 @@ export class CartService {
   }
 
   private setCartItem(overallDetails, products, isUpdate = true) {
-    const itemList2 = [];
+    const itemList = [];
 
 
     if (!products || products.length <= 0)
@@ -216,7 +216,7 @@ export class CartService {
         el.instance_id = el._id;
       const foundProudct = products.find(i => i._id === el.product_id);
       if (foundProudct) {
-        itemList2.push({
+        itemList.push({
           'instance_id': el.instance_id,
           'order_id': el.order_id,
           'product_id': el.product_id,
@@ -226,10 +226,10 @@ export class CartService {
     });
 
     if (isUpdate) {
-      this.cartItems.next(this.cartItems.getValue().concat(itemList2));
+      this.cartItems.next(this.cartItems.getValue().concat(itemList));
     }
     else {
-      this.cartItems.next(itemList2);
+      this.cartItems.next(itemList);
     }
   }
 
@@ -276,27 +276,20 @@ export class CartService {
 
   private addToCart(item, order_id = null) {
     this.itemAdded$.next(true);
+    const currentValue = this.cartItems.getValue();
     const object = {
       product_id: item.product_id,
-      productType: item.type,
       instance_id: item.product_instance_id,
       quantity: 1,
       order_id,
     };
-    const currentValue2 = this.cartItems.getValue();
-    const object2 = {
-      product_id: item.product_id,
-      instance_id: item.product_instance_id,
-      quantity: 1,
-      order_id,
-    };
-    const found2 = currentValue2.find(r => r.product_id === object.product_id && r.instance_id === object.instance_id);
-    if (found2)
-      found2.quantity += 1;
+    const found = currentValue.find(r => r.product_id === object.product_id && r.instance_id === object.instance_id);
+    if (found)
+      found.quantity += 1;
     else {
-      currentValue2.push(object2);
+      currentValue.push(object);
     }
-    this.cartItems.next(currentValue2);
+    this.cartItems.next(currentValue);
 
   }
 
