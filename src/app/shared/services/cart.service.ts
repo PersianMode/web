@@ -407,8 +407,9 @@ export class CartService {
     });
   }
 
-  calculateDiscount(considerCoupon = false) {
-    return this.cartItems.getValue()
+  calculateDiscount(cartData,considerCoupon = false) {
+    console.log(cartData);
+    return cartData
       .map(r => Object.assign({}, {
         p: r.price ? r.price : 0,
         d: r.discountedPrice ? r.discountedPrice : 0,
@@ -418,9 +419,9 @@ export class CartService {
       .reduce((x, y) => x + y, 0);
   }
 
-  calculateTotal() {
-    if (this.cartItems && this.cartItems.getValue().length > 0) {
-      return this.cartItems.getValue()
+  calculateTotal(cartData) {
+    if (cartData && cartData.length > 0) {
+      return cartData
         .filter(el => el.count && el.quantity <= el.count)
         .map(el => el.price * el.quantity)
         .reduce((a, b) => (+a) + (+b), 0);
@@ -440,12 +441,12 @@ export class CartService {
     return new Promise((resolve, reject) => {
       if (this.cartItems2 && this.cartItems2.getValue().length > 0)
         this.httpService.post('coupon/code/valid', {
-          product_ids: Array.from(new Set(this.cartItems.getValue().map(el => el.product_id))),
+          product_ids: Array.from(new Set(this.cartItems2.getValue().map(el => el.product_id))),
           coupon_code: coupon_code,
         }).subscribe(
           (data) => {
             data = data[0];
-            const someItems = this.cartItems.getValue().filter(el => el.product_id === data.product_id);
+            const someItems = this.cartItems2.getValue().filter(el => el.product_id === data.product_id);
             if (someItems && someItems.length > 0) {
               someItems.forEach(el => {
                 el['coupon_discount'] = 1 - data.discount;
@@ -478,7 +479,7 @@ export class CartService {
   }
 
   getCheckoutItems() {
-    return this.cartItems.getValue()
+    return this.cartItems2.getValue()
       .map(r => Object.assign({},
         {product_id: r.product_id, product_instance_id: r.instance_id, number: r.quantity}));
   }

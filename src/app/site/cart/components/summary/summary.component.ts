@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {CartService} from '../../../../shared/services/cart.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.css']
 })
-export class SummaryComponent implements OnInit {
+export class SummaryComponent implements OnInit, OnChanges {
   @Input()
   set total(value) {
     this._total = value;
@@ -37,7 +37,9 @@ export class SummaryComponent implements OnInit {
   get discount() {
     return this._discount;
   }
+
   @Input() disabled;
+  @Input() productsData;
   @Output() recalculateDiscount = new EventEmitter();
   private _total: any;
   private _discount: any = 0;
@@ -71,10 +73,16 @@ export class SummaryComponent implements OnInit {
         console.error('Cannot get user balance and loyalty: ', err);
       });
 
-    this.cartService.cartItems.subscribe(() => {
-      this.total = this.cartService.calculateTotal();
-      this.discount = this.cartService.calculateDiscount(!!this.coupon_code);
+    this.cartService.cartItems2.subscribe(() => {
+      if (this.productsData) {
+        this.total = this.cartService.calculateTotal(this.productsData);
+        this.discount = this.cartService.calculateDiscount(this.productsData, !!this.coupon_code);
+      }
     });
+  }
+
+  ngOnChanges() {
+    this.ngOnInit();
   }
 
   changeCouponVisibility() {
