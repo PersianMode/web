@@ -42,85 +42,89 @@ export class CartComponent implements OnInit, OnDestroy {
     );
 
     this.showHideSpinner(true);
-    this.subs = this.cartService.cartItems.subscribe(data => {
-      const prevProductCount = this.products.length;
-      this.products = [];
-      data.forEach(r => {
-        this.valid.push(true);
-        const temp: any = {};
-        Object.assign(temp, r);
-        temp.thumbnail = imagePathFixer(temp.thumbnail, temp.product_id, temp.color.id);
-        this.products.push(temp);
-      });
-
-      if (this.products.length > 0) {
-        this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
-        this.totalPrice = this.cartService.calculateTotal();
-        this.calculateDiscount();
-      } else if (prevProductCount) {
-        this.router.navigate(['/']);
-      }
-      this.showHideSpinner(false);
-      console.log(this.products)
-    });
-    this.subs2 = this.cartService.cartItems2.subscribe(carts => {
-      let productIds = [];
-      carts.forEach(p => productIds.push(p.product_id));
-      const prevProductCount = this.products.length;
-      this.productService.loadProducts(productIds).then((data: any[]) => {
-        this.products2 = [];
-        carts.forEach(p => {
-          let item = {};
-          let product: any = data.filter(e => e._id === p.product_id)[0];
-          let instance = product.instances.filter(i => i._id === p.instance_id)[0];
-          let color = product.colors.filter(c => c._id === instance.product_color_id)[0];
-          let instances = [];
-          product.instances.forEach(instance => {
-            let newIncatnce = {
-              'price': instance.price,
-              'size': instance.size,
-              'instance_id': instance._id
-            };
-            newIncatnce['quantity'] = 0;
-            instance.inventory.forEach(inventory => newIncatnce['quantity'] += inventory.count - inventory.reserved);
-            instances.push(newIncatnce);
-          });
-          item['base_price'] = product.base_price;
-          item['color'] = {
-            '_id': color._id,
-            'color_id': color.color_id,
-            'name': color.name
-          };
-          item['count'] = 0;
-          instance.inventory.forEach(inventory => item['count'] += inventory.count - inventory.reserved);
-          item['discount'] = product.discount;
-          item['discountedPrice'] = instance.discountedPrice;
-          item['instance_id'] = p.instance_id;
-          item['instance_price'] = instance.price;
-          item['instances'] = instances;
-          item['name'] = product.name;
-          item['order_id'] = p.order_id;
-          item['price'] = instance.price;
-          item['product_id'] = p.product_id;
-          item['quantity'] = p.quantity;
-          item['size'] = instance.size;
-          item['tags'] = product.tags;
-          item['thumbnail'] = color.image.thumbnail;
-          item['type'] = product.type;
-          item['_id'] = p.instance_id;
-          this.products2.push(item);
+    let a = 1;
+    if (a === 1)
+      this.subs = this.cartService.cartItems.subscribe(data => {
+        const prevProductCount = this.products.length;
+        this.products = [];
+        data.forEach(r => {
+          this.valid.push(true);
+          const temp: any = {};
+          Object.assign(temp, r);
+          temp.thumbnail = imagePathFixer(temp.thumbnail, temp.product_id, temp.color.id);
+          this.products.push(temp);
         });
-        if (this.products2.length > 0) {
-          this.numberOfProducts = priceFormatter(this.products2.map(el => el.quantity).reduce((a, b) => a + b));
+
+        if (this.products.length > 0) {
+          this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
           this.totalPrice = this.cartService.calculateTotal();
           this.calculateDiscount();
         } else if (prevProductCount) {
           this.router.navigate(['/']);
         }
-        console.log(this.products2);
         this.showHideSpinner(false);
+        console.log(this.products[0]);
       });
-    });
+    else
+      this.subs2 = this.cartService.cartItems2.subscribe(carts => {
+        let productIds = [];
+        carts.forEach(p => productIds.push(p.product_id));
+        const prevProductCount = this.products.length;
+        this.productService.loadProducts(productIds).then((data: any[]) => {
+          this.products = [];
+          carts.forEach(p => {
+            let item = {};
+            let product: any = data.filter(e => e._id === p.product_id)[0];
+            let instance = product.instances.filter(i => i._id === p.instance_id)[0];
+            let color = product.colors.filter(c => c._id === instance.product_color_id)[0];
+            let instances = [];
+            product.instances.forEach(instance => {
+              let newIncatnce = {
+                'price': instance.price,
+                'size': instance.size,
+                'instance_id': instance._id
+              };
+              newIncatnce['quantity'] = 0;
+              instance.inventory.forEach(inventory => newIncatnce['quantity'] += inventory.count - inventory.reserved);
+              instances.push(newIncatnce);
+            });
+            item['base_price'] = product.base_price;
+            item['color'] = {
+              '_id': color._id,
+              'color_id': color.color_id,
+              'name': color.name
+            };
+            item['count'] = 0;
+            instance.inventory.forEach(inventory => item['count'] += inventory.count - inventory.reserved);
+            item['discount'] = product.discount;
+            item['discountedPrice'] = instance.discountedPrice;
+            item['instance_id'] = p.instance_id;
+            item['instance_price'] = instance.price;
+            item['instances'] = instances;
+            item['name'] = product.name;
+            item['order_id'] = p.order_id;
+            item['price'] = instance.price;
+            item['product_id'] = p.product_id;
+            item['quantity'] = p.quantity;
+            item['size'] = instance.size;
+            item['tags'] = product.tags;
+            item['thumbnail'] = color.image.thumbnail;
+            item['type'] = product.type;
+            item['_id'] = p.instance_id;
+            this.products.push(item);
+          });
+          if (this.products.length > 0) {
+            this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
+            this.totalPrice = this.cartService.calculateTotal();
+            this.calculateDiscount();
+          } else if (prevProductCount) {
+            this.router.navigate(['/']);
+          }
+          console.log(this.products[0]);
+          console.log(this.cartService.cartItems.getValue()[0]);
+          this.showHideSpinner(false);
+        });
+      });
   }
 
   goToRegister() {
