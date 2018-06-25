@@ -237,8 +237,30 @@ export class AddressTableComponent implements OnInit {
     this.selectedCustomerAddress = 0;
   }
 
+
+  // changeDurationType(durationId, deliveryDays) {
+  //   let selectedCustomerAddressID = this.showAddresses[this.selectedCustomerAddress]._id;
+  //   this.durationId = durationId;
+  //   this.deliveryDays = deliveryDays;
+  //   this.noDuration.emit(true);
+  //   this.durationType.emit(durationId);
+  //   if (this.addresses && this.addresses.length && (deliveryDays === 2 || deliveryDays === 3)) {
+  //     this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
+  //     this.showAddresses = this.tehranAddresses;
+  //   } else
+  //     this.showAddresses = this.addresses;
+  //   this.selectedCustomerAddress = 0;
+  //   for (let i = 0; i < this.showAddresses.length; i++) {
+  //     if (this.showAddresses[i]._id === selectedCustomerAddressID)
+  //       this.selectedCustomerAddress = i;
+  //   }
+  //   if (this.showAddresses.length < 1)
+  //     this.selectedCustomerAddress = -1;
+  // }
+
   chooseAddress($event) {
     this.selectedChange.emit(this.addressSelected);
   }
+
 }
 

@@ -86,7 +86,7 @@ export class CheckoutService {
         quantity: r.quantity,
         discount: r.discount
       }));
-    return this.httpService.post('finalCheck', cartItems)
+    return this.httpService.post('finalCheck', cartItems);
 
   }
 
@@ -95,7 +95,8 @@ export class CheckoutService {
       this.cartService.getLoyaltyBalance()
         .then((res: any) => {
           this.balance = res.balance;
-          this.loyaltyPointValue = res.loyalty_points * this.loyaltyValue;
+          // this.loyaltyPointValue = res.loyalty_points * this.loyaltyValue;
+          this.loyaltyPointValue = res.loyalty_points;
 
           resolve({
             balance: this.balance,
@@ -171,6 +172,7 @@ export class CheckoutService {
 
   checkout() {
     const data = this.accumulateData();
+    console.log('data :: ',data);
     this.httpService.post('checkout', data)
       .subscribe(res => {
           this.cartService.emptyCart();
