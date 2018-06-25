@@ -11,7 +11,30 @@
         <label>ارسال از</label>
       </div>
       <div fxFlex="70">
-        <label>{{getFromAddress()}}</label>
+        <div>
+          <label>استان</label>
+          <label>{{getAddressPart('from', 'province')}}</label>
+        </div>
+        <div>
+          <label>شهر</label>
+          <label>{{getAddressPart('from', 'city')}}</label>
+        </div>
+        <div>
+          <label>منطقه</label>
+          <label>{{getAddressPart('from', 'district')}}</label>
+        </div>
+        <div>
+          <label>خیابان</label>
+          <label>{{getAddressPart('from', 'street')}}</label>
+        </div>
+        <div>
+          <label>پلاک</label>
+          <label>{{getAddressPart('from', 'no')}}</label>
+        </div>
+        <div>
+          <label>واحد</label>
+          <label>{{getAddressPart('from', 'unit')}}</label>
+        </div>
       </div>
     </div>
     <hr/>
@@ -20,7 +43,30 @@
         <label>ارسال به</label>
       </div>
       <div fxFlex="70">
-        <label>{{data.to?.address}}</label>
+        <div>
+          <label>استان</label>
+          <label>{{getAddressPart('to', 'province')}}</label>
+        </div>
+        <div>
+          <label>شهر</label>
+          <label>{{getAddressPart('to', 'city')}}</label>
+        </div>
+        <div>
+          <label>منطقه</label>
+          <label>{{getAddressPart('to', 'district')}}</label>
+        </div>
+        <div>
+          <label>خیابان</label>
+          <label>{{getAddressPart('to', 'street')}}</label>
+        </div>
+        <div>
+          <label>پلاک</label>
+          <label>{{getAddressPart('to', 'no')}}</label>
+        </div>
+        <div>
+          <label>واحد</label>
+          <label>{{getAddressPart('to', 'unit')}}</label>
+        </div>
       </div>
     </div>
     <hr/>
@@ -29,18 +75,21 @@
         <label>ارسال کننده</label>
       </div>
       <div fxFlex="70">
-        <label *ngIf="hasDeliveryAgent()">{{data.delivery_agent}}</label>
-        <label *ngIf="!hasDeliveryAgent()">-</label>
+        <mat-select class="select-label" placeholder="انتخاب ارسال کننده" [ngModel]="data.delivery_agent._id" (change)="deliveryAgentChange($event)">
+          <mat-option *ngFor="let dg of deliveryAgentList" [value]="dg._id">
+            {{dg.first_name}} - {{dg.surname}}
+          </mat-option>
+        </mat-select>
       </div>
     </div>
     <hr/>
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
-        <label *ngIf="!data.return">دریافت کننده</label>
-        <label *ngIf="data.return">بازگشت داده</label>
+        <label *ngIf="!data.is_return">دریافت کننده</label>
+        <label *ngIf="data.is_return">بازگشت دهنده</label>
       </div>
       <div fxFlex="70">
-        <label>{{data.customer.first_name + data.customer.surname}} - {{data.customer.mobile_no}}</label>
+        <label>{{getCustomerDetails()}}</label>
       </div>
       <hr/>
     </div>
@@ -50,8 +99,8 @@
         <label>نوع</label>
       </div>
       <div fxFlex="70">
-        <label *ngIf="data.return">بازگشتی</label>
-        <label *ngIf="!data.return">ارسالی</label>
+        <label *ngIf="data.is_return">بازگشتی</label>
+        <label *ngIf="!data.is_return">ارسالی</label>
       </div>
     </div>
     <hr/>
@@ -63,8 +112,8 @@
         <label>{{data.slot}}</label>
       </div>
     </div>
-    <hr/>
-    <div fxLayout="row" fxLayoutAlign="start center">
+    <hr *ngIf="isHubClerk" />
+    <div fxLayout="row" fxLayoutAlign="start center" *ngIf="isHubClerk">
       <div fxFlex="30" class="header-label">
         <label>کد قفسه</label>
       </div>
@@ -78,16 +127,61 @@
         <label>زمان ارسال</label>
       </div>
       <div fxFlex="70">
-        <label>{{data.start_date}}</label>
+        <div fxLayout="row" fxLayoutAlign="center center" style="direction: ltr;">
+          <div fxFlex="50" class="date-time">
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" placeholder="انتخاب تاریخ ارسال" [(ngModel)]="start_date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" class="date-time">
+            <div class="time">
+              <mat-input-container>
+                <input matInput type="number" min="0" max="59" placeholder="دقیقه" [(ngModel)]="start_time.m" (ngModelChange)="changeStartTime('m')"/>
+              </mat-input-container>
+            </div>
+            <div class="time">
+              <mat-input-container>
+                <input matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="start_time.h" (ngModelChange)="changeStartTime('h')"/>
+              </mat-input-container>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <hr/>
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
-        <label>زمان دریافت کالا</label>
+        <label>حداکثر زمان دریافت</label>
       </div>
       <div fxFlex="70">
-        <label>{{data.end_date}}</label>
+        <label>{{data.end}}</label>
+      </div>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>زمان شروع به ارسال</label>
+      </div>
+      <div fxFlex="70">
+        <label>{{data.delivery_start}}</label>
+      </div>
+    </div>
+    <hr/>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" class="header-label">
+        <label>زمان تحویل کالا به مقصد</label>
+      </div>
+      <div fxFlex="70">
+        <label>{{data.delivery_end}}</label>
+      </div>
+    </div>
+    <div class="button-area" style="direction: ltr">
+      <div>
+        <button mat-icon-button (click)="saveChanges()" [disabled]="noChanges()">
+          <mat-icon aria-label="save changes">done</mat-icon>
+        </button>
       </div>
     </div>
   </mat-dialog-content>

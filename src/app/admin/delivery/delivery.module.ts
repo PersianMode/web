@@ -11,7 +11,11 @@ import {
   MatPaginatorModule,
   MatSortModule,
   MatIconModule,
-  MatDialogModule
+  MatDialogModule,
+  MatSelectModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatInputModule
 } from '@angular/material';
 import {DeliveryDetailsComponent} from './components/delivery-details/delivery-details.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -32,6 +36,10 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatSortModule,
     MatIconModule,
     MatDialogModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule,
   ],
   entryComponents: [DeliveryDetailsComponent],
 })

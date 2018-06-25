@@ -7,3 +7,15 @@
 .header-label {
   font-weight: bold;
 }
+
+.select-label {
+  font-family: iranyekan, sans-serif;
+}
+
+.date-time {
+  margin: 5px;
+}
+
+.time {
+  display: inline-block;
+}

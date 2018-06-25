@@ -12,8 +12,8 @@
         </ng-container>
 
         <ng-container matColumnDef="delivery_date">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تاریخ دریافت</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content"> {{element.delivery_date}} </mat-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">حداکثر تاریخ دریافت</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.end}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="delivery_time">
@@ -34,7 +34,7 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="shelf_code">
+        <ng-container matColumnDef="shelf_code" *ngIf="isHubClerk()">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">کد سفارش</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content"> {{element.shelf_code}} </mat-cell>
         </ng-container>

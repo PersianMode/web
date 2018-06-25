@@ -5,7 +5,9 @@ import {ProgressService} from '../../shared/services/progress.service';
 import {FormControl} from '@angular/forms';
 import {SelectionModel} from '@angular/cdk/collections';
 import {DeliveryDetailsComponent} from './components/delivery-details/delivery-details.component';
+import {AccessLevel} from '../../shared/enum/accessLevel.enum';
 import * as moment from 'moment';
+import {AuthService} from '../../shared/services/auth.service';
 
 export interface DeliveryItem {
   _id: String;
@@ -14,9 +16,11 @@ export interface DeliveryItem {
   delivery_time: String;
   delivery_agent: String;
   shelf_code: String;
-  start_date: Date;
-  end_date: Date;
-  return: any;
+  start: Date;
+  end: Date;
+  delivery_start: Date;
+  delivery_end: Date;
+  is_return: Boolean;
   is_delivered: Boolean;
   receiver_sender_name: String;
 }
@@ -52,11 +56,16 @@ export class DeliveryComponent implements OnInit {
     'is_delivered',
     'view_details',
   ];
+  deliveryAgentList = [];
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
-    private snackBar: MatSnackBar, private dialog: MatDialog) {}
+    private snackBar: MatSnackBar, private dialog: MatDialog,
+    private authService: AuthService) {}
 
   ngOnInit() {
+    if (!this.isHubClerk())
+      this.displayedColumns = this.displayedColumns.filter(el => el.toLowerCase() !== 'shelf_code');
+
     this.agentNameCtrl = new FormControl();
     this.agentNameCtrl.valueChanges.debounceTime(500).subscribe(
       (data) => {
@@ -85,6 +94,7 @@ export class DeliveryComponent implements OnInit {
     );
 
     this.getDeliveryItems();
+    this.getDeliveryAgents();
   }
 
   getDeliveryItems() {
@@ -104,16 +114,18 @@ export class DeliveryComponent implements OnInit {
         data.forEach(el => {
           tempData.push({
             _id: el._id,
-            return: el.return,
+            is_return: el.is_return,
             position: ++counter,
-            delivery_date: el.slot ? moment(el.slot.date).format('YYYY-MM-DD') : null,
-            delivery_time: el.slot ? el.slot.time : null,
+            delivery_date: moment(el.end).format('YYYY-MM-DD'),
+            delivery_time: el.slot ? el.slot : null,
             delivery_agent: el.sender_name,
             shelf_code: el.shelf_code,
             order_line_count: el.order_line_count,
-            stat_date: moment(el.start_date).format('YYYY-MM-DD'),
-            end_date: moment(el.end_date).format('YYYY-MM-DD'),
-            receiver_sender_name: Object.keys(el.return).length
+            start: moment(el.start_date).format('YYYY-MM-DD'),
+            end: moment(el.end_date).format('YYYY-MM-DD'),
+            delivery_start: moment(el.delivery_start).format('YYYY-MM-DD'),
+            delivery_end: moment(el.delivery_end).format('YYYY-MM-DD'),
+            receiver_sender_name: el.is_return
               ? (el.from.customer ? (el.from.customer.first_name + el.from.customer.surname) : null)
               : (el.to.customer ? (el.to.customer.first_name + el.to.customer.surname) : null),
             is_delivered: el.end_date ? true : false,
@@ -134,6 +146,16 @@ export class DeliveryComponent implements OnInit {
     );
   }
 
+  getDeliveryAgents() {
+    this.httpService.get('delivery/agent').subscribe(
+      data => {
+        this.deliveryAgentList = data;
+      },
+      err => {
+        console.error('Cannot get delivery agent list: ', err);
+      });
+  }
+
   changePageSetting(data) {
     this.limit = data.pageSize ? data.pageSize : 10;
     this.offset = data.pageIndex * this.limit;
@@ -149,7 +171,15 @@ export class DeliveryComponent implements OnInit {
     this.dialog.open(DeliveryDetailsComponent, {
       width: '600px',
       disableClose: true,
-      data: {deliveryItem: this.deliveryItems.find(el => el._id === id)},
+      data: {
+        deliveryItem: this.deliveryItems.find(el => el._id === id),
+        agentList: this.deliveryAgentList,
+        isHubClerk: this.isHubClerk(),
+      },
     });
+  }
+
+  isHubClerk() {
+    return this.authService.userDetails.isAgent && +this.authService.userDetails.accessLevel === AccessLevel.HubClerk;
   }
 }

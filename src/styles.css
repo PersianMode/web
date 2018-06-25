@@ -1032,3 +1032,8 @@ p {
 .mat-input-element {
   font-family: iranyekan, sans-serif !important;
 }
+
+.mat-option {
+  text-align: right !important;
+  font-family: iranyekan, sans-serif;  
+}
