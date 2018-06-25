@@ -62,7 +62,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
       (data) => this.isVerified = data,
       (err) => console.error('Cannot subscribe to isVerified: ', err)
     );
-    this.itemSubs = this.cartService.cartItems2.subscribe(
+    this.itemSubs = this.cartService.cartItems.subscribe(
       data => {
         data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => +a + +b, 0) : 0;
         if (data)

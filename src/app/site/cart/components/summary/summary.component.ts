@@ -73,7 +73,7 @@ export class SummaryComponent implements OnInit, OnChanges {
         console.error('Cannot get user balance and loyalty: ', err);
       });
 
-    this.cartService.cartItems2.subscribe(() => {
+    this.cartService.cartItems.subscribe(() => {
       if (this.productsData) {
         this.total = this.cartService.calculateTotal(this.productsData);
         this.discount = this.cartService.calculateDiscount(this.productsData, !!this.coupon_code);

@@ -4,7 +4,6 @@ import {AuthService} from './auth.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {discountCalc} from '../lib/discountCalc';
 import {ProductService} from './product.service';
 
 
@@ -16,7 +15,6 @@ const SNACK_CONFIG: MatSnackBarConfig = {
 @Injectable()
 export class CartService {
   cartItems: BehaviorSubject<any> = new BehaviorSubject<any>([]);
-  cartItems2: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   private localStorageKey = 'cart';
   coupon_discount = 0;
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
@@ -69,7 +67,6 @@ export class CartService {
   }
 
   emptyCart() {
-    this.cartItems2.next([]);
     this.cartItems.next([]);
     if (!this.authService.userIsLoggedIn()) {
       try {
@@ -88,7 +85,6 @@ export class CartService {
       }).subscribe(
         () => {
           this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
-          this.cartItems2.next(this.cartItems2.getValue().filter(el => el.instance_id !== value.instance_id));
         },
         (err) => {
           console.error('Cannot delete item from cart: ', err);
@@ -102,7 +98,6 @@ export class CartService {
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
         this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
-        this.cartItems2.next(this.cartItems2.getValue().filter(el => el.instance_id !== value.instance_id));
 
       } catch (e) {
         this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, SNACK_CONFIG);
@@ -111,25 +106,9 @@ export class CartService {
   }
 
   updateItem(value) {
-    let items = this.cartItems.getValue();
-    let items2 = this.cartItems2.getValue();
+    let items2 = this.cartItems.getValue();
     const instanceChange = value.instance_id !== value.pre_instance_id;
     const update = () => {
-      const curInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
-      const newInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
-      const product = curInstance || newInstance;
-      const instance = product.instances.find(r => (r.instance_id || r._id) === value.instance_id);
-      Object.assign(product, {
-        product_id: value.product_id,
-        instance_id: value.instance_id,
-        quantity: instanceChange && curInstance ? value.number + curInstance.quantity : value.number,
-        price: instance.price ? instance.price : product.price,
-        size: instance.size,
-        count: instance.quantity,
-      });
-      if (instanceChange && curInstance)
-        items = items.filter(el => el.product_id !== value.product_id || el._id !== value.pre_instance_id);
-      this.cartItems.next(items);
       const curInstance2 = items2.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
       const newInstance2 = items2.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
       const product2 = curInstance2 || newInstance2;
@@ -140,7 +119,7 @@ export class CartService {
       });
       if (instanceChange && curInstance2)
         items2 = items2.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
-      this.cartItems2.next(items2);
+      this.cartItems.next(items2);
     };
     // Should delete and add new product's instance
     if (this.authService.userIsLoggedIn()) {
@@ -224,7 +203,6 @@ export class CartService {
   }
 
   private setCartItem(overallDetails, products, isUpdate = true) {
-    const itemList = [];
     const itemList2 = [];
 
 
@@ -236,51 +214,8 @@ export class CartService {
     overallDetails.forEach(el => {
       if (!el.instance_id)
         el.instance_id = el._id;
-
       const foundProudct = products.find(i => i._id === el.product_id);
-      let instances = [];
-
       if (foundProudct) {
-        const foundInstance = foundProudct.instances
-          .find(i => i._id === el.instance_id);
-
-        if (foundInstance) {
-          const colorId = foundInstance.product_color_id;
-
-          el.discount = foundProudct.discount;
-          el.name = foundProudct.name;
-          el.size = foundInstance.size;
-          el.base_price = foundProudct.base_price;
-          el.instance_price = foundInstance.price;
-          el.price = el.instance_price ? el.instance_price : el.base_price;
-          el.tags = foundProudct.tags;
-          el.type = foundProudct.product_type;
-          el.count = this.inventoryCount(foundInstance);
-          el.discountedPrice = discountCalc(el.price, el.discount)
-
-          const tempColorImage = foundProudct.colors.find(i => i._id && i._id === colorId);
-          el.thumbnail = tempColorImage ? tempColorImage.image.thumbnail : null;
-
-          el.color = tempColorImage ? {
-            id: tempColorImage._id,
-            color_id: tempColorImage.color_id,
-            name: tempColorImage.name,
-          } : {};
-
-          foundProudct.instances.forEach(item => {
-            if (item.product_color_id === colorId)
-              instances.push({
-                instance_id: item._id,
-                size: item.size,
-                price: item.price,
-                quantity: this.inventoryCount(item),
-              });
-          });
-        }
-
-        el.instances = instances;
-
-        itemList.push(el);
         itemList2.push({
           'instance_id': el.instance_id,
           'order_id': el.order_id,
@@ -291,12 +226,10 @@ export class CartService {
     });
 
     if (isUpdate) {
-      this.cartItems.next(this.cartItems.getValue().concat(itemList));
-      this.cartItems2.next(this.cartItems2.getValue().concat(itemList2));
+      this.cartItems.next(this.cartItems.getValue().concat(itemList2));
     }
     else {
-      this.cartItems.next(itemList);
-      this.cartItems2.next(itemList2);
+      this.cartItems.next(itemList2);
     }
   }
 
@@ -343,7 +276,6 @@ export class CartService {
 
   private addToCart(item, order_id = null) {
     this.itemAdded$.next(true);
-    const currentValue = this.cartItems.getValue();
     const object = {
       product_id: item.product_id,
       productType: item.type,
@@ -351,33 +283,7 @@ export class CartService {
       quantity: 1,
       order_id,
     };
-    const found = currentValue.find(r => r.product_id === object.product_id && r.instance_id === object.instance_id);
-    if (found)
-      found.quantity += 1;
-    else {
-      const instance = item.instances.find(r => r._id === object.instance_id);
-      const color = item.colors.find(r => r._id === instance.product_color_id);
-      currentValue.push(Object.assign(object, {
-        size: instance.size,
-        color,
-        count: instance.inventory.map(r => r.count).reduce((x, y) => +x + +y, 0),
-
-        instances: item.instances
-          .filter(r => r.product_color_id === color._id)
-          .map(r => Object.assign(r, {quantity: r.inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b, 0)})),
-
-        tags: item.tags,
-        name: item.name,
-        price: instance.price,
-        discountedPrice: item.discountedPrice,
-        discount: item.discount,
-        thumbnail: color.image.thumbnail,
-        product_color_id: instance.product_color_id,
-      }));
-    }
-    this.cartItems.next(currentValue);
-
-    const currentValue2 = this.cartItems2.getValue();
+    const currentValue2 = this.cartItems.getValue();
     const object2 = {
       product_id: item.product_id,
       instance_id: item.product_instance_id,
@@ -390,7 +296,7 @@ export class CartService {
     else {
       currentValue2.push(object2);
     }
-    this.cartItems2.next(currentValue2);
+    this.cartItems.next(currentValue2);
 
   }
 
@@ -408,7 +314,6 @@ export class CartService {
   }
 
   calculateDiscount(cartData,considerCoupon = false) {
-    console.log(cartData);
     return cartData
       .map(r => Object.assign({}, {
         p: r.price ? r.price : 0,
@@ -439,14 +344,14 @@ export class CartService {
       return Promise.resolve(false);
 
     return new Promise((resolve, reject) => {
-      if (this.cartItems2 && this.cartItems2.getValue().length > 0)
+      if (this.cartItems && this.cartItems.getValue().length > 0)
         this.httpService.post('coupon/code/valid', {
-          product_ids: Array.from(new Set(this.cartItems2.getValue().map(el => el.product_id))),
+          product_ids: Array.from(new Set(this.cartItems.getValue().map(el => el.product_id))),
           coupon_code: coupon_code,
         }).subscribe(
           (data) => {
             data = data[0];
-            const someItems = this.cartItems2.getValue().filter(el => el.product_id === data.product_id);
+            const someItems = this.cartItems.getValue().filter(el => el.product_id === data.product_id);
             if (someItems && someItems.length > 0) {
               someItems.forEach(el => {
                 el['coupon_discount'] = 1 - data.discount;
@@ -479,14 +384,14 @@ export class CartService {
   }
 
   getCheckoutItems() {
-    return this.cartItems2.getValue()
+    return this.cartItems.getValue()
       .map(r => Object.assign({},
         {product_id: r.product_id, product_instance_id: r.instance_id, number: r.quantity}));
   }
 
   getOrderId() {
-    if (this.cartItems2.getValue().length)
-      return this.cartItems2.getValue()[0].order_id;
+    if (this.cartItems.getValue().length)
+      return this.cartItems.getValue()[0].order_id;
     return null;
   }
 
