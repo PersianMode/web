@@ -91,7 +91,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid && this.gender) {
-      let data: any = {};
+      const data: any = {};
       Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
       data.gender = this.gender;
       data.dob = this.dob;
