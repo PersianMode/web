@@ -27,7 +27,7 @@
         </ng-container>
 
         <ng-container matColumnDef="receiver_sender_name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">نام مشتری</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">نام مشتری / فروشگاه</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">
             <span *ngIf="element.receiver_sender_name">{{element.receiver_sender_name}}</span>
             <span *ngIf="!element.receiver_sender_name">-</span>
@@ -35,7 +35,7 @@
         </ng-container>
 
         <ng-container matColumnDef="shelf_code" *ngIf="isHubClerk()">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">کد سفارش</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">کد قفسه</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content"> {{element.shelf_code}} </mat-cell>
         </ng-container>
 

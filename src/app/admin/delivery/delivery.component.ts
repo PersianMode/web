@@ -125,8 +125,8 @@ export class DeliveryComponent implements OnInit {
             delivery_end: moment(el.delivery_end).format('YYYY-MM-DD'),
             receiver_sender_name: el.is_return
               ? (el.from.customer ? (el.from.customer.first_name + el.from.customer.surname) : null)
-              : (el.to.customer ? (el.to.customer.first_name + el.to.customer.surname) : null),
-            is_delivered: el.end_date ? true : false,
+              : (Object.keys(el.to.customer).length ? (el.to.customer.first_name + el.to.customer.surname) : el.to.warehouse.name),
+            is_delivered: el.delivery_end ? true : false,
           });
         });
         this.dataSource.data = tempData;
@@ -179,5 +179,9 @@ export class DeliveryComponent implements OnInit {
 
   isHubClerk() {
     return this.authService.userDetails.isAgent && +this.authService.userDetails.accessLevel === AccessLevel.HubClerk;
+  }
+
+  getCustomerInventoryName(element) {
+    return Object.keys(element.to.customer).length ? element.to.customer.recipient_name : element.to.warehouse.name;
   }
 }

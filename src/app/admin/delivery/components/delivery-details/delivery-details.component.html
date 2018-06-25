@@ -12,28 +12,28 @@
       </div>
       <div fxFlex="70">
         <div>
-          <label>استان</label>
-          <label>{{getAddressPart('from', 'province')}}</label>
+          <div class="address-part address-title">استان</div>
+          <div class="address-part">{{getAddressPart('from', 'province')}}</div>
         </div>
         <div>
-          <label>شهر</label>
-          <label>{{getAddressPart('from', 'city')}}</label>
+          <div class="address-part address-title">شهر</div>
+          <div class="address-part">{{getAddressPart('from', 'city')}}</div>
         </div>
         <div>
-          <label>منطقه</label>
-          <label>{{getAddressPart('from', 'district')}}</label>
+          <div class="address-part address-title">منطقه</div>
+          <div class="address-part">{{getAddressPart('from', 'district')}}</div>
         </div>
         <div>
-          <label>خیابان</label>
-          <label>{{getAddressPart('from', 'street')}}</label>
+          <div class="address-part address-title">خیابان</div>
+          <div class="address-part">{{getAddressPart('from', 'street')}}</div>
         </div>
         <div>
-          <label>پلاک</label>
-          <label>{{getAddressPart('from', 'no')}}</label>
+          <div class="address-part address-title">پلاک</div>
+          <div class="address-part">{{getAddressPart('from', 'no')}}</div>
         </div>
         <div>
-          <label>واحد</label>
-          <label>{{getAddressPart('from', 'unit')}}</label>
+          <div class="address-part address-title">واحد</div>
+          <div class="address-part">{{getAddressPart('from', 'unit')}}</div>
         </div>
       </div>
     </div>
@@ -44,28 +44,28 @@
       </div>
       <div fxFlex="70">
         <div>
-          <label>استان</label>
-          <label>{{getAddressPart('to', 'province')}}</label>
+          <div class="address-part address-title">استان</div>
+          <div class="address-part">{{getAddressPart('to', 'province')}}</div>
         </div>
         <div>
-          <label>شهر</label>
-          <label>{{getAddressPart('to', 'city')}}</label>
+          <div class="address-part address-title">شهر</div>
+          <div class="address-part">{{getAddressPart('to', 'city')}}</div>
         </div>
         <div>
-          <label>منطقه</label>
-          <label>{{getAddressPart('to', 'district')}}</label>
+          <div class="address-part address-title">منطقه</div>
+          <div class="address-part">{{getAddressPart('to', 'district')}}</div>
         </div>
         <div>
-          <label>خیابان</label>
-          <label>{{getAddressPart('to', 'street')}}</label>
+          <div class="address-part address-title">خیابان</div>
+          <div class="address-part">{{getAddressPart('to', 'street')}}</div>
         </div>
         <div>
-          <label>پلاک</label>
-          <label>{{getAddressPart('to', 'no')}}</label>
+          <div class="address-part address-title">پلاک</div>
+          <div class="address-part">{{getAddressPart('to', 'no')}}</div>
         </div>
         <div>
-          <label>واحد</label>
-          <label>{{getAddressPart('to', 'unit')}}</label>
+          <div class="address-part address-title">واحد</div>
+          <div class="address-part">{{getAddressPart('to', 'unit')}}</div>
         </div>
       </div>
     </div>
@@ -89,7 +89,8 @@
         <label *ngIf="data.is_return">بازگشت دهنده</label>
       </div>
       <div fxFlex="70">
-        <label>{{getCustomerDetails()}}</label>
+        <label>{{getDestinationName()}}</label>
+        <label class="phone_number">{{getDestinationPhone()}}</label>
       </div>
       <hr/>
     </div>

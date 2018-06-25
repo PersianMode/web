@@ -73,10 +73,22 @@ export class DeliveryDetailsComponent implements OnInit {
     this.deliveryAgentId = data.value;
   }
 
-  getCustomerDetails() {
+  getDestinationName() {
     const tf = this.data.is_return ? 'from' : 'to';
-    const name = this.data[tf].customer.address.recipient_name + ' ' + this.data[tf].customer.address.recipient_surname;
-    return name + (this.data[tf].customer.address.recipient_mobile_no ? ' - ' + this.data[tf].customer.address.recipient_mobile_no : '');
+
+    if (Object.keys(this.data[tf].customer).length)
+      return this.data[tf].customer.address.recipient_name + ' ' + this.data[tf].customer.address.recipient_surname;
+    else
+      return this.data[tf].warehouse.name;
+  }
+
+  getDestinationPhone() {
+    const tf = this.data.is_return ? 'from' : 'to';
+
+    if (Object.keys(this.data[tf].customer).length)
+      return this.data[tf].customer.address.recipient_mobile_no ? this.data[tf].customer.address.recipient_mobile_no : '';
+    else
+      return this.data[tf].warehouse.phone ? this.data[tf].warehouse.phone : '';
   }
 
   saveChanges() {
