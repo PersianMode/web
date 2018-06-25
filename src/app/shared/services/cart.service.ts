@@ -6,7 +6,6 @@ import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {ProductService} from './product.service';
 
-
 const SNACK_CONFIG: MatSnackBarConfig = {
   duration: 3200,
   direction: 'rtl',
@@ -98,7 +97,6 @@ export class CartService {
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
         this.cartItems.next(this.cartItems.getValue().filter(el => el.instance_id !== value.instance_id));
-
       } catch (e) {
         this.snackBar.open('ذخیره سبد در حالت Private و بدون login ممکن نیست.', null, SNACK_CONFIG);
       }
@@ -205,7 +203,6 @@ export class CartService {
   private setCartItem(overallDetails, products, isUpdate = true) {
     const itemList = [];
 
-
     if (!products || products.length <= 0)
       overallDetails = [];
 
@@ -225,12 +222,10 @@ export class CartService {
       }
     });
 
-    if (isUpdate) {
+    if (isUpdate)
       this.cartItems.next(this.cartItems.getValue().concat(itemList));
-    }
-    else {
+    else
       this.cartItems.next(itemList);
-    }
   }
 
   private getItemsFromStorage() {
@@ -306,7 +301,7 @@ export class CartService {
     });
   }
 
-  calculateDiscount(cartData,considerCoupon = false) {
+  calculateDiscount(cartData, considerCoupon = false) {
     return cartData
       .map(r => Object.assign({}, {
         p: r.price ? r.price : 0,

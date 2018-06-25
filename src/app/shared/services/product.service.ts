@@ -58,13 +58,7 @@ export class ProductService {
   private sortInput;
   private collectionId;
 
-
-
   constructor(private httpService: HttpService, private dict: DictionaryService) {
-    this.product$.subscribe(data => {
-      if (data && data != [] && data.length > 0)
-        console.log('product$ is ', data);
-    });
   }
 
   extractFilters(filters = [], trigger = '') {
