@@ -1,7 +1,9 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import * as moment from 'moment';
+import {SaveChangeConfirmComponent} from '../../../../shared/components/save-change-confirm/save-change-confirm.component';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-delivery-details',
@@ -11,7 +13,7 @@ import * as moment from 'moment';
 export class DeliveryDetailsComponent implements OnInit {
   deliveryAgentList = [];
   isHubClerk = false;
-  newDeliveryAgentId = null;
+  deliveryAgentId = null;
   start_date = null;
   start_time = {
     m: null,
@@ -19,29 +21,39 @@ export class DeliveryDetailsComponent implements OnInit {
   };
 
   constructor(private dialogRef: MatDialogRef<DeliveryDetailsComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
-    private httpService: HttpService, private dialog: MatDialog) {}
+    private httpService: HttpService, private dialog: MatDialog, private progressService: ProgressService,
+    private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.deliveryAgentList = this.data.agentList;
     this.isHubClerk = this.data.isHubClerk;
     this.data = this.data.deliveryItem;
+    this.deliveryAgentId = this.data.delivery_agent ? this.data.delivery_agent._id : null;
 
-    console.log(moment(this.data.start).format('YYYY-MM-DD'));
-    console.log(moment(this.data.start).format('hh'));
-    console.log(moment(this.data.start).format('mm'));
-
-    this.start_date = moment(this.data.start).format('YYYY-MM-DD');
+    this.start_date = this.data.start ? moment(this.data.start).format('YYYY-MM-DD') : null;
     this.start_time = {
-      h: +moment(this.data.start).format('hh'),
-      m: +moment(this.data.start).format('mm'),
+      h: this.data.start ? +moment(this.data.start).format('hh') : null,
+      m: this.data.start ? +moment(this.data.start).format('mm') : null,
     };
   }
 
   closeDialog() {
     if (!this.noChanges()) {
-      // ToDo: Should display confirmation on leave message to user
-      console.log('Do you want leave without saving changes?');
-      this.dialogRef.close();
+      const confirmOnLeave = this.dialog.open(SaveChangeConfirmComponent, {
+        width: '400px',
+      });
+
+      confirmOnLeave.afterClosed().subscribe(
+        status => {
+          if (status) {
+            this.saveChanges()
+              .then(res => {
+                this.dialogRef.close();
+              });
+          } else
+            this.dialogRef.close();
+        }
+      );
     } else
       this.dialogRef.close();
   }
@@ -58,7 +70,7 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   deliveryAgentChange(data) {
-    this.newDeliveryAgentId = data.value;
+    this.deliveryAgentId = data.value;
   }
 
   getCustomerDetails() {
@@ -68,14 +80,53 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   saveChanges() {
-    console.log('saved');
+    return new Promise((resolve, reject) => {
+      const updateObj = {_id: this.data._id};
+      if (this.deliveryAgentId)
+        updateObj['delivery_agent_id'] = this.deliveryAgentId;
+
+      if (this.start_date) {
+        if (this.start_time.m && this.start_time.h) {
+          this.start_date = new Date(this.start_date);
+          this.start_date.setHours(this.start_time.h, this.start_time.m);
+        }
+
+        updateObj['start'] = this.start_date;
+      }
+
+      this.progressService.enable();
+      this.httpService.post('delivery', updateObj).subscribe(
+        data => {
+          this.data.start = this.start_date;
+          if (this.deliveryAgentId) {
+            const dlAgent = this.deliveryAgentList.find(el => el._id === this.deliveryAgentId);
+            this.data.delivery_agent.first_name = dlAgent.first_name;
+            this.data.delivery_agent.surname = dlAgent.surname;
+            this.data.delivery_agent.username = dlAgent.username;
+            this.data.delivery_agent._id = this.deliveryAgentId;
+          }
+          this.snackBar.open('تغییرات با موفقیت ثبت شد', null, {
+            duration: 2300,
+          });
+          this.progressService.disable();
+          resolve();
+        },
+        err => {
+          console.error('Cannot save changes on delivery: ', err);
+          this.snackBar.open('ثبت تغییرات با خطا مواجه شد. دوباره تلاش کنید', null, {
+            duration: 3200,
+          });
+          this.progressService.disable();
+          reject();
+        });
+    });
   }
 
   noChanges() {
     let noChange = true;
 
-    if ((this.newDeliveryAgentId && this.newDeliveryAgentId !== this.data.delivery_agent._id) ||
-      (!this.newDeliveryAgentId && this.data.delivery_agent._id))
+    if ((this.deliveryAgentId && this.deliveryAgentId !== this.data.delivery_agent._id) ||
+      (!this.deliveryAgentId && this.data.delivery_agent._id))
       noChange = false;
 
     const sd = moment(this.data.start).format('YYYY-MM-DD');
@@ -84,11 +135,13 @@ export class DeliveryDetailsComponent implements OnInit {
       m: +moment(this.data.start).format('mm'),
     };
 
-    if (this.data.start && (this.start_time.m !== st.m || this.start_time.h !== st.h))
+    if ((this.data.start && this.start_date !== sd) || (!this.data.start && this.start_date))
       noChange = false;
-
-    if (this.data.start && this.start_date !== sd)
-      noChange = false;
+    else if (this.start_date) {
+      if ((this.data.start && (this.start_time.m !== st.m || this.start_time.h !== st.h)) ||
+        (!this.data.start && this.start_time.m && this.start_time.h))
+        noChange = false;
+    }
 
     return noChange;
   }
@@ -105,5 +158,9 @@ export class DeliveryDetailsComponent implements OnInit {
       else if (this.start_time.h > 23)
         this.start_time.h = 23;
     }
+  }
+
+  getEndDate() {
+    return moment(this.data.end).format('YYYY-MM-DD');
   }
 }

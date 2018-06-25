@@ -23,7 +23,7 @@
 
         <ng-container matColumnDef="delivery_agent">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مسئول ارسال</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content"> {{element.delivery_agent}} </mat-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.delivery_agent.first_name}} {{element.delivery_agent.surname}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="receiver_sender_name">

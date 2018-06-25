@@ -12,7 +12,6 @@ import {AuthService} from '../../shared/services/auth.service';
 export interface DeliveryItem {
   _id: String;
   position: Number;
-  delivery_date: Date;
   delivery_time: String;
   delivery_agent: String;
   shelf_code: String;
@@ -116,13 +115,12 @@ export class DeliveryComponent implements OnInit {
             _id: el._id,
             is_return: el.is_return,
             position: ++counter,
-            delivery_date: moment(el.end).format('YYYY-MM-DD'),
             delivery_time: el.slot ? el.slot : null,
-            delivery_agent: el.sender_name,
+            delivery_agent: el.delivery_agent,
             shelf_code: el.shelf_code,
             order_line_count: el.order_line_count,
-            start: moment(el.start_date).format('YYYY-MM-DD'),
-            end: moment(el.end_date).format('YYYY-MM-DD'),
+            start: el.start ? moment(el.start).format('YYYY-MM-DD') : null,
+            end: el.end ? moment(el.end).format('YYYY-MM-DD') : null,
             delivery_start: moment(el.delivery_start).format('YYYY-MM-DD'),
             delivery_end: moment(el.delivery_end).format('YYYY-MM-DD'),
             receiver_sender_name: el.is_return
