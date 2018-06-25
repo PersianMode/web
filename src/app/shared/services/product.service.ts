@@ -96,13 +96,13 @@ export class ProductService {
     } else {
 
       const pricesHelper = products.map(product => product.instances.map(instance => instance.discountedPrice));
-      const prices=[].concat(...pricesHelper);
+      const prices = [].concat(...pricesHelper);
       const minPrice = prices && prices.length ? Math.min(...prices) : 0;
       const maxPrice = prices && prices.length ? Math.max(...prices) : 0;
 
       price = [minPrice, maxPrice];
     }
-    
+
     let discount;
     if (trigger === 'discount') {
       discount = [];
@@ -309,8 +309,8 @@ export class ProductService {
       this.enrichProductData(product);
       if (found >= 0) {
         this.products[found] = product;
-      };
-    })
+      }
+    });
   }
 
   loadProducts(productIds) {
@@ -323,8 +323,8 @@ export class ProductService {
               this.enrichProductData(product);
               if (found >= 0) {
                 this.products[found] = product;
-              };
-            })
+              }
+            });
           }
           resolve(data)
 

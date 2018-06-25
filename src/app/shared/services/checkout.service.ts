@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 @Injectable()
 export class CheckoutService {
   dataIsReady: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private productData;
   private paymentType = PaymentType;
   private selectedPaymentType = this.paymentType.cash;
   private loyaltyValue = 0;
@@ -67,12 +68,16 @@ export class CheckoutService {
     }
   }
 
+  setProductData(data) {
+    this.productData = data;
+  }
+
   setPaymentType(pt) {
     this.selectedPaymentType = pt;
   }
 
   finalCheck() {
-    const cartItems = this.cartService.cartItems.getValue()
+    const cartItems = this.productData
       .map(r => Object.assign({}, {
         product_id: r.product_id,
         product_instance_id: r.instance_id,
@@ -102,9 +107,8 @@ export class CheckoutService {
   }
 
   getTotalDiscount() {
-    this.total = this.cartService.calculateTotal();
-    this.discount = this.cartService.calculateDiscount(true);
-
+    this.total = this.cartService.calculateTotal(this.productData);
+    this.discount = this.cartService.calculateDiscount(this.productData, true);
     return {
       total: this.total,
       discount: this.discount,
