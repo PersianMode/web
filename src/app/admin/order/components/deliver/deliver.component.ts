@@ -45,7 +45,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   socketObserver: any = null;
- 
+
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
@@ -161,7 +161,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
     this.load();
   }
   ngOnDestroy(): void {
-    if (this.socketObserver)
-      this.socketObserver.unsubscribe();
+    // if (this.socketObserver)
+    //   this.socketObserver.unsubscribe();
   }
 }

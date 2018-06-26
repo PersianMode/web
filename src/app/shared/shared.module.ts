@@ -24,6 +24,7 @@ import {DobComponent} from './components/dob/dob.component';
 import {DragulaModule} from 'ng2-dragula';
 import {LogoHeaderComponent} from './components/logo-header/logo-header.component';
 import {SizePickerComponent} from './components/size-picker/size-picker.component';
+import { SaveChangeConfirmComponent } from './components/save-change-confirm/save-change-confirm.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {SizePickerComponent} from './components/size-picker/size-picker.componen
     DobComponent,
     LogoHeaderComponent,
     SizePickerComponent,
+    SaveChangeConfirmComponent,
   ],
   imports: [
     MatSlideToggleModule,
@@ -72,10 +74,12 @@ import {SizePickerComponent} from './components/size-picker/size-picker.componen
   ],
   entryComponents: [
     RemovingConfirmComponent,
+    SaveChangeConfirmComponent,
   ],
   exports: [SuggestionComponent,
     SearchFieldsComponent,
     RemovingConfirmComponent,
+    SaveChangeConfirmComponent,
     PanelsComponent,
     UploaderComponent,
     AddressTableComponent,

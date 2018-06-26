@@ -16,7 +16,16 @@
       <span class="co-right-text">امتیاز وفاداری</span>
       <span class="co-left-text">{{priceFormatter(usedLoyaltyPoint)}}- تومان </span>
     </div>
-    <div class="final-price">
+    <br>
+    <div *ngIf="showCostLabel">
+      <span class="co-right-text">هزینه ارسال</span>
+      <span class="co-left-text" [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryCost)}} تومان </span>
+    </div>
+    <div *ngIf="showCostLabel" class="no-duration-selected">
+      <span class="co-right-text">تخفیف ارسال</span>
+      <span class="co-left-text" [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryDiscount)}} تومان </span>
+    </div>
+    <div class="final-price" >
       <span class="co-right-text">قیمت نهایی</span>
       <span class="co-left-text">{{priceFormatter(finalTotal)}} تومان </span>
     </div>
