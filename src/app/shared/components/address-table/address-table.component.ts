@@ -7,6 +7,7 @@ import {ResponsiveService} from '../../services/responsive.service';
 import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
+import {time_slotEnum} from '../../enum/time_slot.enum';
 import {CheckoutService} from '../../services/checkout.service';
 import {ProgressService} from '../../services/progress.service';
 
@@ -18,6 +19,7 @@ import {ProgressService} from '../../services/progress.service';
 })
 export class AddressTableComponent implements OnInit {
   addressSelected;
+  time_slot = time_slotEnum;
   @Input() isProfile = true;
   @Input() isModify = true;
   @Output() selectedChange = new EventEmitter();
@@ -31,7 +33,12 @@ export class AddressTableComponent implements OnInit {
     'پالادیوم': [35.7975691, 51.4107673],
   };
   deliveryPeriodDay = [];
-  deliveryHour: { enum: ['10-18', '18-22'] };
+  // deliveryHour: { enum: ['10-18', '18-22'] };
+  deliveryHour = [
+      this.time_slot.time10to18,
+      this.time_slot.time18to22,
+  ];
+  delivery_time = null;
   loc = null;
   withDelivery = true;
   selectedCustomerAddress = -1;
@@ -55,6 +62,7 @@ export class AddressTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.delivery_time = null;
     this.noDuration.emit(null);
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.authService.isLoggedIn.subscribe(r => {
@@ -235,6 +243,11 @@ export class AddressTableComponent implements OnInit {
       this.showAddresses = this.addresses;
 
     this.selectedCustomerAddress = 0;
+  }
+
+  changeDeliveryHour(time) {
+    console.log(time);
+    this.delivery_time = time;
   }
 
 

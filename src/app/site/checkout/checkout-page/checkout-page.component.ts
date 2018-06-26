@@ -122,8 +122,7 @@ export class CheckoutPageComponent implements OnInit {
     }
   }
 
-  checkout() {
+  checkout(durationId) {
     this.checkoutService.checkout();
-
   }
 }
