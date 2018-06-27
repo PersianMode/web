@@ -35,8 +35,8 @@ export class AddressTableComponent implements OnInit {
   deliveryPeriodDay = [];
   // deliveryHour: { enum: ['10-18', '18-22'] };
   deliveryHour = [
-      this.time_slot.time10to18,
-      this.time_slot.time18to22,
+    this.time_slot.time10to18,
+    this.time_slot.time18to22,
   ];
   delivery_time = null;
   loc = null;
@@ -103,6 +103,9 @@ export class AddressTableComponent implements OnInit {
       this.withDelivery ?
         this.selectedCustomerAddress >= 0 ? this.showAddresses[this.selectedCustomerAddress] : null
         : this.selectedWarehouseAddress >= 0 ? this.showAddresses[this.selectedWarehouseAddress] : null,
+
+      this.withDelivery ? this.deliveryDays : null,
+      this.withDelivery ? this.delivery_time : null
     ];
   }
 
@@ -213,6 +216,12 @@ export class AddressTableComponent implements OnInit {
     );
   }
 
+  setDeliveryTime(deliveryTime) {
+    this.delivery_time = deliveryTime;
+    this.setState();
+
+  }
+
   changeWithDelivery() {
     this.deliveryType.emit(this.withDelivery);
     if (this.withDelivery) {
@@ -243,13 +252,9 @@ export class AddressTableComponent implements OnInit {
       this.showAddresses = this.addresses;
 
     this.selectedCustomerAddress = 0;
-  }
 
-  changeDeliveryHour(time) {
-    console.log(time);
-    this.delivery_time = time;
+    this.setState();
   }
-
 
   // changeDurationType(durationId, deliveryDays) {
   //   let selectedCustomerAddressID = this.showAddresses[this.selectedCustomerAddress]._id;

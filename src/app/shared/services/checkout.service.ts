@@ -155,6 +155,14 @@ export class CheckoutService {
     return !this._ads[0];
   }
 
+  private get delivery_days() {
+    return this._ads[5];
+  }
+
+  private get time_slot() {
+    return this._ads[6];
+  }
+
   private accumulateData() {
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
@@ -167,12 +175,14 @@ export class CheckoutService {
       total_amount: this.total,
       discount: this.discount,
       is_collect: this.is_collect,
+      duration_days: this.delivery_days,
+      time_slot: this.time_slot
     };
   }
 
   checkout() {
     const data = this.accumulateData();
-    console.log('data :: ',data);
+    console.log('data :: ', data);
     this.httpService.post('checkout', data)
       .subscribe(res => {
           this.cartService.emptyCart();
