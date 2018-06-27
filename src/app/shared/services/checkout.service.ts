@@ -176,7 +176,8 @@ export class CheckoutService {
       discount: this.discount,
       is_collect: this.is_collect,
       duration_days: this.delivery_days,
-      time_slot: this.time_slot
+      time_slot: this.time_slot,
+      paymentType: this.selectedPaymentType,
     };
   }
 

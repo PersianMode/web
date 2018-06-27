@@ -92,6 +92,10 @@ export class CheckoutPageComponent implements OnInit {
     this.usedLoyaltyPoint = 0;
 
     switch (data) {
+      case this.paymentType.cash: {
+        this.checkoutService.setPaymentType(data);
+      }
+        break;
       case this.paymentType.balance: {
         this.usedBalance = this.balanceValue;
         this.checkoutService.setPaymentType(data);
