@@ -104,7 +104,8 @@ export class CheckoutSummaryComponent implements OnInit {
   private _deliveryDiscount = 0;
   private _showCostLabel = true;
   finalTotal = 0;
-
+  @Input() earnedLoyaltyPoint;
+  @Input() showEarnPointLabel;
   constructor() {
   }
 
@@ -112,6 +113,7 @@ export class CheckoutSummaryComponent implements OnInit {
     this.showCostLabel = true;
     this.deliveryCost = 0;
     this.deliveryDiscount = 0;
+    this.earnedLoyaltyPoint = 0;
   }
 
   priceFormatter(p) {

@@ -13,7 +13,10 @@
             <app-checkout-summary [total]="total" [discount] = "discount" [usedBalance] = "usedBalance"
                                   [usedLoyaltyPoint] = "usedLoyaltyPoint" [deliveryCost]="deliveryCost"
                                   [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
-                                  [showCostLabel]="showCostLabel" [noDuration]="noDuration"></app-checkout-summary>
+                                  [earnedLoyaltyPoint]="earnedLoyaltyPoint"
+                                  [showCostLabel]="showCostLabel"
+                                  [showEarnPointLabel]="showEarnPointLabel"
+                                  [noDuration]="noDuration"></app-checkout-summary>
 
             <p *ngIf="changeMessage" style="color: orangered; font-weight: bold">{{changeMessage}}</p>
             <a *ngIf="hasChangeError" routerLink="/cart">بازگشت به سبد خرید</a>
@@ -35,7 +38,7 @@
             </mat-expansion-panel-header>
 
 
-            <app-address-table [isProfile] = false (deliveryType)="showDiscountLabel($event)"
+            <app-address-table [isProfile] = false (deliveryType)="setCostLabel($event)"
                                (noDuration)="noDuration = $event"
                                (durationType)="calculateDiscount($event)"></app-address-table>
           </mat-expansion-panel>

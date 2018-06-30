@@ -5,7 +5,9 @@ import {HttpService} from '../../../shared/services/http.service';
 import {CartService} from '../../../shared/services/cart.service';
 import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {ProgressService} from '../../../shared/services/progress.service';
+import {AuthService} from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -30,13 +32,21 @@ export class CheckoutPageComponent implements OnInit {
   showCostLabel: true;
   noDuration = null;
   hasChangeError: boolean = false;
+  loyaltyGroups = [];
+  addPointArray = [];
+  selectedPaymentType = 0;
+  earnedLoyaltyPoint = 0;
+  system_offline_offer = 25000;
+  showEarnPointLabel = true;
+
 
 
   constructor(private checkoutService: CheckoutService,
-              private httpService: HttpService,
+              private httpService: HttpService, private authService: AuthService,
               private cartService: CartService,
               private titleService: TitleService,
-              private productService: ProductService) {
+              private productService: ProductService, private snackBar: MatSnackBar,
+              private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -85,11 +95,55 @@ export class CheckoutPageComponent implements OnInit {
       });
 
     this.checkoutService.isValid$.subscribe(r => this.disabled = (!r && !this.soldOuts));
+    if (!this.authService.userDetails.userId) {
+      this.showEarnPointLabel = false;
+      this.earnedLoyaltyPoint = 0;
+    }
+    else {
+      this.showEarnPointLabel = true;
+      this.getLoyaltyGroup();
+      this.getAddLoyaltyPoints();
+    }
+  }
+
+  getLoyaltyGroup() {
+    this.progressService.enable();
+    this.httpService.get('loyaltygroup').subscribe(
+      data => {
+        this.loyaltyGroups = data;
+        this.progressService.disable();
+      },
+      err => {
+        console.error('Cannot get loyalty groups: ', err);
+        this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+          duration: 3200,
+        });
+        this.progressService.disable();
+      }
+    );
+  }
+
+  getAddLoyaltyPoints() {
+    this.progressService.enable();
+    this.httpService.get('deliverycc').subscribe(
+      data => {
+        this.addPointArray = data[0].add_point;
+        this.progressService.disable();
+      },
+      err => {
+        console.error('Cannot get loyalty groups: ', err);
+        this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+          duration: 3200,
+        });
+        this.progressService.disable();
+      }
+    );
   }
 
   changePaymentType(data) {
     this.usedBalance = 0;
     this.usedLoyaltyPoint = 0;
+    this.selectedPaymentType = data;
 
     switch (data) {
       case this.paymentType.cash: {
@@ -107,10 +161,52 @@ export class CheckoutPageComponent implements OnInit {
       }
         break;
     }
+
+    this.calculateEarnPoint();
   }
 
-  showDiscountLabel(data) {
+  setCostLabel(data) {
     this.showCostLabel = data;
+    this.calculateEarnPoint();
+  }
+
+
+  calculateEarnPoint() {
+    let scoreArray;
+    let maxScore;
+    let customer_loyaltyGroup;
+    let valid_loyaltyGroups;
+
+    if (!this.authService.userDetails.userId) {
+      this.earnedLoyaltyPoint = 0;
+      this.showEarnPointLabel = false;
+      return;
+    }
+
+    if (this.selectedPaymentType === 2)
+      this.earnedLoyaltyPoint = 0;
+
+    else if (this.showCostLabel) {
+      // calculate earn point
+      this.earnedLoyaltyPoint =  Math.floor(this.total / this.system_offline_offer);
+    }
+    else if (!this.showCostLabel) {
+      // calculate earn point in C&C mode
+      valid_loyaltyGroups = this.loyaltyGroups.filter(el => el.min_score <= this.loyaltyPoint);
+
+      if (!valid_loyaltyGroups.length) {
+        scoreArray = this.loyaltyGroups.map(el => el.min_score);
+        maxScore = Math.min(...scoreArray);
+        customer_loyaltyGroup = this.loyaltyGroups.filter(el => el.min_score === maxScore);
+      }
+      else {
+        scoreArray = valid_loyaltyGroups.map(el => el.min_score);
+        maxScore = Math.max(...scoreArray);
+        customer_loyaltyGroup = valid_loyaltyGroups.filter(el => el.min_score === maxScore);
+      }
+      this.earnedLoyaltyPoint = parseInt(this.addPointArray.filter(el => el.name === customer_loyaltyGroup[0].name)[0].added_point)
+        +  Math.floor(this.total / this.system_offline_offer);
+    }
   }
 
   calculateDiscount(durationId) {
