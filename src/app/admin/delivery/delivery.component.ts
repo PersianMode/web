@@ -72,7 +72,7 @@ export class DeliveryComponent implements OnInit {
         this.transferee = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();
       }, err => {
-        console.log('Couldn\'t refresh when receiver name is changed: ', err);
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
       }
     );
 
@@ -81,7 +81,7 @@ export class DeliveryComponent implements OnInit {
         this.agentName = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();
       }, err => {
-        console.log('Couldn\'t refresh when agent name is changed: ', err);
+        console.error('Couldn\'t refresh when agent name is changed: ', err);
       }
     );
 
@@ -116,7 +116,6 @@ export class DeliveryComponent implements OnInit {
 
         if (data && data.length) {
           data = data[0];
-          console.log('Data: ', data);
 
           this.deliveryItems = data.result;
           this.selection.clear();
