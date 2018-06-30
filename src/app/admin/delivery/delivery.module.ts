@@ -16,7 +16,8 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MatInputModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatCheckboxModule
 } from '@angular/material';
 import {DeliveryDetailsComponent} from './components/delivery-details/delivery-details.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -42,6 +43,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatNativeDateModule,
     MatInputModule,
     MatSnackBarModule,
+    MatCheckboxModule,
   ],
   entryComponents: [DeliveryDetailsComponent],
 })

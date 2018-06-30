@@ -3,22 +3,51 @@
     <h2>
       <label>لیست سفارشات</label>
     </h2>
-
+    <div class="search-area">
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxFlex="50" class="filtering-box">
+          <mat-input-container class="filtering-field">
+            <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری" [formControl]="receiverSearchCtrl">
+          </mat-input-container>
+        </div>
+        <div fxFlex="50" class="filtering-box">
+          <mat-input-container class="filtering-field">
+            <input class="filtering-field" matInput type="text" placeholder="مسئول ارسال" [formControl]="agentSearchCtrl">
+          </mat-input-container>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxFlex="50" class="filtering-box">
+          <mat-form-field class="filtering-field">
+            <input matInput [matDatepicker]="picker" placeholder="انتخاب حداکثر تاریخ ارسال" [(ngModel)]="endDateSearch" (ngModelChange)="getDeliveryItems()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50" class="filtering-box" style="margin-top: 20px">
+          <mat-checkbox class="filtering-field" [ngModel]="isDelivered" (change)="changeDeliverStatus()" [indeterminate]="isDelivered === null">
+            <span *ngIf="isDelivered === true" class="checkbox-label">تحویل داده شده</span>
+            <span *ngIf="isDelivered === false" class="checkbox-label">تحویل داده نشده</span>
+            <span *ngIf="isDelivered === null" class="checkbox-label">همه موارد</span>
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
     <div>
       <mat-table #table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">ردیف</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef class="header">ردیف</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content"> {{formatter(element.position)}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="delivery_date">
+        <ng-container matColumnDef="end">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">حداکثر تاریخ دریافت</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content"> {{element.end}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="delivery_time">
+        <ng-container matColumnDef="slot">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">بازه دریافتی</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content"> {{element.delivery_time}} </mat-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.slot}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="delivery_agent">

@@ -39,16 +39,12 @@ export class DeliveryComponent implements OnInit {
   selection = null;
   sortColumn = null;
   direction = 'asc';
-  agentNameCtrl: FormControl;
-  agentName = '';
-  receiverNameCtrl: FormControl;
-  receiverName = '';
   selectedDelivery = null;
   deliveryItems = null;
   displayedColumns = [
     'position',
-    'delivery_date',
-    'delivery_time',
+    'end',
+    'slot',
     'delivery_agent',
     'receiver_sender_name',
     'shelf_code',
@@ -56,6 +52,12 @@ export class DeliveryComponent implements OnInit {
     'view_details',
   ];
   deliveryAgentList = [];
+  receiverSearchCtrl = new FormControl();
+  agentSearchCtrl = new FormControl();
+  isDelivered = null;
+  endDateSearch = null;
+  transferee = null;
+  agentName = null;
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
     private snackBar: MatSnackBar, private dialog: MatDialog,
@@ -65,19 +67,21 @@ export class DeliveryComponent implements OnInit {
     if (!this.isHubClerk())
       this.displayedColumns = this.displayedColumns.filter(el => el.toLowerCase() !== 'shelf_code');
 
-    this.agentNameCtrl = new FormControl();
-    this.agentNameCtrl.valueChanges.debounceTime(500).subscribe(
-      (data) => {
-        this.agentName = data;
+    this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.transferee = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();
+      }, err => {
+        console.log('Couldn\'t refresh when receiver name is changed: ', err);
       }
     );
 
-    this.receiverNameCtrl = new FormControl();
-    this.receiverNameCtrl.valueChanges.debounceTime(500).subscribe(
-      (data) => {
-        this.receiverName = data;
+    this.agentSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.agentName = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();
+      }, err => {
+        console.log('Couldn\'t refresh when agent name is changed: ', err);
       }
     );
 
@@ -86,7 +90,7 @@ export class DeliveryComponent implements OnInit {
 
     this.sort.sortChange.subscribe(
       data => {
-        this.sortColumn = data.active;
+        this.sortColumn = data.active === 'receiver_sender_name' ? 'name' : data.active;
         this.direction = data.direction;
         this.getDeliveryItems();
       }
@@ -98,40 +102,48 @@ export class DeliveryComponent implements OnInit {
 
   getDeliveryItems() {
     this.progressService.enable();
-    this.httpService.post('delivery/items/' + this.offset + '/' + this.limit, {
+    this.httpService.post('delivery/items/' + (this.offset ? this.offset : 0) + '/' + (this.limit ? this.limit : 10), {
       sort_column: this.sortColumn,
       agentName: this.agentName,
-      receiverName: this.receiverName,
+      transferee: this.transferee,
+      direction: this.direction,
+      endDate: this.endDateSearch,
+      isDelivered: this.isDelivered,
     }).subscribe(
       data => {
-        console.log('Data: ', data);
-
-        this.deliveryItems = data;
+        this.deliveryItems = [];
         const tempData = [];
-        this.selection.clear();
-        let counter = this.offset;
-        data.forEach(el => {
-          tempData.push({
-            _id: el._id,
-            is_return: el.is_return,
-            position: ++counter,
-            delivery_time: el.slot ? el.slot : null,
-            delivery_agent: el.delivery_agent,
-            shelf_code: el.shelf_code,
-            order_line_count: el.order_line_count,
-            start: el.start ? moment(el.start).format('YYYY-MM-DD') : null,
-            end: el.end ? moment(el.end).format('YYYY-MM-DD') : null,
-            delivery_start: moment(el.delivery_start).format('YYYY-MM-DD'),
-            delivery_end: moment(el.delivery_end).format('YYYY-MM-DD'),
-            receiver_sender_name: el.is_return
-              ? (el.from.customer ? (el.from.customer.first_name + el.from.customer.surname) : null)
-              : (Object.keys(el.to.customer).length ? (el.to.customer.first_name + el.to.customer.surname) : el.to.warehouse.name),
-            is_delivered: el.delivery_end ? true : false,
-          });
-        });
-        this.dataSource.data = tempData;
 
-        this.totalRecords = data.length > 0 ? data[0].total : 0;
+        if (data && data.length) {
+          data = data[0];
+          console.log('Data: ', data);
+
+          this.deliveryItems = data.result;
+          this.selection.clear();
+          let counter = this.offset;
+          data.result.forEach(el => {
+            tempData.push({
+              _id: el._id,
+              is_return: el.is_return,
+              position: ++counter,
+              slot: el.slot ? el.slot : null,
+              delivery_agent: el.delivery_agent,
+              shelf_code: el.shelf_code,
+              order_line_count: el.order_line_count,
+              start: el.start ? moment(el.start).format('YYYY-MM-DD') : null,
+              end: el.end ? moment(el.end).format('YYYY-MM-DD') : null,
+              delivery_start: moment(el.delivery_start).format('YYYY-MM-DD'),
+              delivery_end: moment(el.delivery_end).format('YYYY-MM-DD'),
+              receiver_sender_name: el.is_return
+                ? (el.from.customer ? (el.from.customer.first_name + el.from.customer.surname) : null)
+                : (Object.keys(el.to.customer).length ? (el.to.customer.first_name + el.to.customer.surname) : el.to.warehouse.name),
+              is_delivered: el.delivery_end ? true : false,
+            });
+          });
+        }
+
+        this.dataSource.data = tempData;
+        this.totalRecords = data && data.total ? data.total : 0;
         this.progressService.disable();
       },
       err => {
@@ -183,5 +195,16 @@ export class DeliveryComponent implements OnInit {
 
   getCustomerInventoryName(element) {
     return Object.keys(element.to.customer).length ? element.to.customer.recipient_name : element.to.warehouse.name;
+  }
+
+  changeDeliverStatus() {
+    if (this.isDelivered === null)
+      this.isDelivered = true;
+    else if (this.isDelivered === true)
+      this.isDelivered = false;
+    else if (this.isDelivered === false)
+      this.isDelivered = null;
+
+    this.getDeliveryItems();
   }
 }

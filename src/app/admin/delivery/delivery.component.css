@@ -21,3 +21,22 @@
 .details-button {
   cursor: pointer;
 }
+
+.search-area {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.filtering-field {
+  width: 100%;
+  line-height: 23px;
+  text-align: right;
+}
+
+.filtering-box {
+  margin: 5px;
+}
+
+.checkbox-label {
+  margin-right: 5px;
+}
