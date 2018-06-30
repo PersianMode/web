@@ -4,7 +4,6 @@ import {AuthService} from './auth.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {discountCalc} from '../lib/discountCalc';
 import {ProductService} from './product.service';
 
 const SNACK_CONFIG: MatSnackBarConfig = {
@@ -24,7 +23,6 @@ export class CartService {
       isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
         const items = this.getItemsFromStorage();
-
         if (this.authService.userIsLoggedIn()) {
 
           if (items && items.length) {
@@ -35,13 +33,13 @@ export class CartService {
                 number: el.quantity,
               })
                 .subscribe(() => {
-                  items.splice(i, 1);
-                  try {
-                    localStorage.setItem(this.localStorageKey, JSON.stringify(items));
-                  } catch (e) {
-                    console.error('could not update local storage after login', e);
-                  }
-                },
+                    items.splice(i, 1);
+                    try {
+                      localStorage.setItem(this.localStorageKey, JSON.stringify(items));
+                    } catch (e) {
+                      console.error('could not update local storage after login', e);
+                    }
+                  },
                   err => console.error('orders error: ', el, err)
                 );
             });
@@ -112,14 +110,10 @@ export class CartService {
       const curInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
       const newInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
       const product = curInstance || newInstance;
-      const instance = product.instances.find(r => (r.instance_id || r._id) === value.instance_id);
       Object.assign(product, {
         product_id: value.product_id,
         instance_id: value.instance_id,
         quantity: instanceChange && curInstance ? value.number + curInstance.quantity : value.number,
-        price: instance.price ? instance.price : product.price,
-        size: instance.size,
-        count: instance.quantity,
       });
       if (instanceChange && curInstance)
         items = items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
@@ -137,10 +131,10 @@ export class CartService {
             product_instance_id: value.instance_id,
             number: value.number
           }).subscribe((dt) => {
-            update();
-          }, (err) => {
-            console.error('Cannot add new order-line to order in server: ', err);
-          }
+              update();
+            }, (err) => {
+              console.error('Cannot add new order-line to order in server: ', err);
+            }
           );
         },
         (err) => {
@@ -205,11 +199,10 @@ export class CartService {
     const inventory = instance.inventory;
     return inventory && inventory.length ? inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b) : 0;
   }
-  private setCartItem(overallDetails, products, isUpdate = true) {
 
+  private setCartItem(overallDetails, products, isUpdate = true) {
     const itemList = [];
 
-    
     if (!products || products.length <= 0)
       overallDetails = [];
 
@@ -218,51 +211,14 @@ export class CartService {
     overallDetails.forEach(el => {
       if (!el.instance_id)
         el.instance_id = el._id;
-
       const foundProudct = products.find(i => i._id === el.product_id);
-      let instances = [];
-
       if (foundProudct) {
-        const foundInstance = foundProudct.instances
-          .find(i => i._id === el.instance_id);
-
-        if (foundInstance) {
-          const colorId = foundInstance.product_color_id;
-
-          el.discount = foundProudct.discount;
-          el.name = foundProudct.name;
-          el.size = foundInstance.size;
-          el.base_price = foundProudct.base_price;
-          el.instance_price = foundInstance.price;
-          el.price = el.instance_price ? el.instance_price : el.base_price;
-          el.tags = foundProudct.tags;
-          el.type = foundProudct.product_type;
-          el.count = this.inventoryCount(foundInstance);
-          el.discountedPrice = discountCalc(el.price, el.discount)
-
-          const tempColorImage = foundProudct.colors.find(i => i._id && i._id === colorId);
-          el.thumbnail = tempColorImage ? tempColorImage.image.thumbnail : null;
-
-          el.color = tempColorImage ? {
-            id: tempColorImage._id,
-            color_id: tempColorImage.color_id,
-            name: tempColorImage.name,
-          } : {};
-
-          foundProudct.instances.forEach(item => {
-            if (item.product_color_id === colorId)
-              instances.push({
-                instance_id: item._id,
-                size: item.size,
-                price: item.price,
-                quantity: this.inventoryCount(item),
-              });
-          });
-        }
-
-        el.instances = instances;
-
-        itemList.push(el);
+        itemList.push({
+          'instance_id': el.instance_id,
+          'order_id': el.order_id,
+          'product_id': el.product_id,
+          'quantity': el.quantity
+        });
       }
     });
 
@@ -318,7 +274,6 @@ export class CartService {
     const currentValue = this.cartItems.getValue();
     const object = {
       product_id: item.product_id,
-      productType: item.type,
       instance_id: item.product_instance_id,
       quantity: 1,
       order_id,
@@ -327,27 +282,10 @@ export class CartService {
     if (found)
       found.quantity += 1;
     else {
-      const instance = item.instances.find(r => r._id === object.instance_id);
-      const color = item.colors.find(r => r._id === instance.product_color_id);
-      currentValue.push(Object.assign(object, {
-        size: instance.size,
-        color,
-        count: instance.inventory.map(r => r.count).reduce((x, y) => +x + +y, 0),
-
-        instances: item.instances
-          .filter(r => r.product_color_id === color._id)
-          .map(r => Object.assign(r, {quantity: r.inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b, 0)})),
-
-        tags: item.tags,
-        name: item.name,
-        price: instance.price,
-        discountedPrice: item.discountedPrice,
-        discount: item.discount,
-        thumbnail: color.image.thumbnail,
-        product_color_id: instance.product_color_id,
-      }));
+      currentValue.push(object);
     }
     this.cartItems.next(currentValue);
+
   }
 
   getLoyaltyBalance() {
@@ -363,8 +301,8 @@ export class CartService {
     });
   }
 
-  calculateDiscount(considerCoupon = false) {
-    return this.cartItems.getValue()
+  calculateDiscount(cartData, considerCoupon = false) {
+    return cartData
       .map(r => Object.assign({}, {
         p: r.price ? r.price : 0,
         d: r.discountedPrice ? r.discountedPrice : 0,
@@ -374,9 +312,9 @@ export class CartService {
       .reduce((x, y) => x + y, 0);
   }
 
-  calculateTotal() {
-    if (this.cartItems && this.cartItems.getValue().length > 0) {
-      return this.cartItems.getValue()
+  calculateTotal(cartData) {
+    if (cartData && cartData.length > 0) {
+      return cartData
         .filter(el => el.count && el.quantity <= el.count)
         .map(el => el.price * el.quantity)
         .reduce((a, b) => (+a) + (+b), 0);
