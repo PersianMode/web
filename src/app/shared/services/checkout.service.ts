@@ -167,10 +167,12 @@ export class CheckoutService {
       discount: this.discount,
       is_collect: this.is_collect,
     };
+
   }
 
   checkout() {
     const data = this.accumulateData();
+    console.log('88888' ,data);
     this.httpService.post('checkout', data)
       .subscribe(res => {
           this.cartService.emptyCart();

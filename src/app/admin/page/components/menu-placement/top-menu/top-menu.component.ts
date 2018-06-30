@@ -45,7 +45,7 @@ export class TopMenuComponent implements OnInit {
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog,
-    private revertService: RevertPlacementService) {
+    private revertService: RevertPlacementService, private snackbar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -105,7 +105,7 @@ export class TopMenuComponent implements OnInit {
   }
 
   openSnackBar(message: string) {
-    this.sncakBar.open(message, null, {
+    this.snackbar.open(message, null, {
       duration: 2000,
     });
   }

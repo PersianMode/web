@@ -85,7 +85,7 @@ export class SubMenuComponent implements OnInit {
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog,
-    private revertService: RevertPlacementService) {
+    private revertService: RevertPlacementService, private snackbar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -327,7 +327,7 @@ export class SubMenuComponent implements OnInit {
     }
   }
   openSnackBar(message: string) {
-    this.snackBar.open(message, null, {
+    this.snackbar.open(message, null, {
       duration: 2000,
     });
   }
