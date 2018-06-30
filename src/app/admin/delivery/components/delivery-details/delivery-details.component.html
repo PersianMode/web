@@ -75,7 +75,8 @@
         <label>ارسال کننده</label>
       </div>
       <div fxFlex="70">
-        <mat-select class="select-label" placeholder="انتخاب ارسال کننده" [ngModel]="data.delivery_agent._id" (change)="deliveryAgentChange($event)">
+        <mat-select [disabled]="data.delivery_end || data.delivery_start" class="select-label" placeholder="انتخاب ارسال کننده" [ngModel]="data.delivery_agent._id"
+          (change)="deliveryAgentChange($event)">
           <mat-option *ngFor="let dg of deliveryAgentList" [value]="dg._id">
             {{dg.first_name}} - {{dg.surname}}
           </mat-option>
@@ -130,23 +131,24 @@
       <div fxFlex="70">
         <div fxLayout="row" fxLayoutAlign="center center" style="direction: ltr;">
           <div fxFlex="50" class="date-time">
-            <mat-form-field>
-              <input matInput [matDatepicker]="picker" placeholder="انتخاب تاریخ ارسال" [(ngModel)]="start_date">
+            <mat-form-field class="inner-date-time">
+              <input [disabled]="data.delivery_end || data.delivery_start" matInput [matDatepicker]="picker" placeholder="انتخاب تاریخ ارسال"
+                [(ngModel)]="start_date">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
           </div>
-          <div fxFlex="50" class="date-time">
-            <div class="time">
-              <mat-input-container>
-                <input matInput type="number" min="0" max="59" placeholder="دقیقه" [(ngModel)]="start_time.m" (ngModelChange)="changeStartTime('m')"/>
-              </mat-input-container>
-            </div>
-            <div class="time">
-              <mat-input-container>
-                <input matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="start_time.h" (ngModelChange)="changeStartTime('h')"/>
-              </mat-input-container>
-            </div>
+          <div fxFlex="25" class="date-time">
+            <mat-input-container class="inner-date-time">
+              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="59" placeholder="دقیقه"
+                [(ngModel)]="start_time.m" (ngModelChange)="changeStartTime('m')" />
+            </mat-input-container>
+          </div>
+          <div fxFlex="25" class="date-time">
+            <mat-input-container class="inner-date-time">
+              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="start_time.h"
+                (ngModelChange)="changeStartTime('h')" />
+            </mat-input-container>
           </div>
         </div>
       </div>
@@ -166,7 +168,14 @@
         <label>زمان شروع به ارسال</label>
       </div>
       <div fxFlex="70">
-        <label>{{data.delivery_start}}</label>
+        <div>
+          <label class="inner-label">تاریخ</label>
+          <label>{{getFormattedDate(data.delivery_start)}}</label>
+        </div>
+        <div>
+          <label class="inner-label">ساعت</label>
+          <label>{{getFormattedClock(data.delivery_start)}}</label>
+        </div>
       </div>
     </div>
     <hr/>
@@ -175,7 +184,14 @@
         <label>زمان تحویل کالا به مقصد</label>
       </div>
       <div fxFlex="70">
-        <label>{{data.delivery_end}}</label>
+        <div>
+          <label class="inner-label">تاریخ</label>
+          <label>{{getFormattedDate(data.delivery_end)}}</label>
+        </div>
+        <div>
+          <label class="inner-label">ساعت</label>
+          <label>{{getFormattedClock(data.delivery_end)}}</label>
+        </div>
       </div>
     </div>
     <div class="button-area" style="direction: ltr">

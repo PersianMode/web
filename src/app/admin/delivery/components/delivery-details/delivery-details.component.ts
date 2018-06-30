@@ -175,4 +175,16 @@ export class DeliveryDetailsComponent implements OnInit {
   getEndDate() {
     return moment(this.data.end).format('YYYY-MM-DD');
   }
+
+  getFormattedDate(date) {
+    if (!date)
+      return '';
+    return moment(date).format('YYYY-MM-DD');
+  }
+
+  getFormattedClock(date) {
+    if (!date)
+      return '';
+    return moment(date).format('HH:mm:ss');
+  }
 }

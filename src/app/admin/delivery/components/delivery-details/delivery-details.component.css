@@ -32,3 +32,13 @@
 .address-part {
   display: inline-block;
 }
+
+.inner-lable {
+  font-weight: bolder;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.inner-date-time {
+  width: 100%;
+}
