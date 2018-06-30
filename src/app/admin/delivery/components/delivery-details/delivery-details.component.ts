@@ -92,6 +92,23 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   saveChanges() {
+    if (moment(this.start_date, 'YYYY-MM-DD').isBefore(moment(moment().format('YYYY-MM-DD')), 'day')) {
+      this.snackBar.open('تاریخ انتخاب شده معتبر نمی باشد', null, {
+        duration: 3200,
+      });
+      return Promise.reject('invalid start date');
+    } else if (moment(this.start_date, 'YYYY-MM-DD').isSame(moment(moment().format('YYYY-MM-DD')), 'day')) {
+      const currentHour = moment().format('HH');
+      const currentMinute = moment().format('mm');
+
+      if (this.start_time.h < currentHour || this.start_time.m <= currentMinute) {
+        this.snackBar.open('زمان انتخاب شده معتبر نمی باشد', null, {
+          duration: 3200,
+        });
+        return Promise.reject('invalid start time');
+      }
+    }
+
     return new Promise((resolve, reject) => {
       const updateObj = {_id: this.data._id};
       if (this.deliveryAgentId)

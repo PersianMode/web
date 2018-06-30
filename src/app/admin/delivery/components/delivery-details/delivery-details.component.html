@@ -140,14 +140,14 @@
           </div>
           <div fxFlex="25" class="date-time">
             <mat-input-container class="inner-date-time">
-              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="59" placeholder="دقیقه"
-                [(ngModel)]="start_time.m" (ngModelChange)="changeStartTime('m')" />
+              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="start_time.h"
+                (ngModelChange)="changeStartTime('h')" />
             </mat-input-container>
           </div>
           <div fxFlex="25" class="date-time">
             <mat-input-container class="inner-date-time">
-              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="start_time.h"
-                (ngModelChange)="changeStartTime('h')" />
+              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="59" placeholder="دقیقه"
+                [(ngModel)]="start_time.m" (ngModelChange)="changeStartTime('m')" />
             </mat-input-container>
           </div>
         </div>
