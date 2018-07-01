@@ -10,7 +10,9 @@ import { TicketComponent } from './components/ticket/ticket.component';
 })
 export class OrderComponent implements OnInit {
 
+
   newInboxCount: number;
+  newOutboxCount: number;
   readyToScanCount: number;
 
   constructor( private dialog: MatDialog, private titleService: TitleService) {

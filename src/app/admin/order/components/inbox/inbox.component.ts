@@ -47,7 +47,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   ];
 
   dataSource = new MatTableDataSource();
-  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   expandedElement: any;
 
   pageSize = 10;
@@ -66,6 +65,8 @@ export class InboxComponent implements OnInit, OnDestroy {
               private socketService: SocketService,
               private progressService: ProgressService) {
   }
+
+  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   ngOnInit() {
 
@@ -120,7 +121,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   getDate(orderTime) {
-    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss')
+    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
   }
 
   getProductDetail(orderLine) {
@@ -147,7 +148,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     });
     this.batchScanDialogRef.afterClosed().subscribe(res => {
       this.load();
-    })
+    });
 
   }
 
@@ -166,7 +167,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets)
-      return OrderStatus.find(x => x.status === orderLine.tickets.find(x => !x.is_processed).status).name;
+      return OrderStatus.find(x => x.status === orderLine.tickets.find(y => !y.is_processed).status).name;
   }
 
   showAddress(order) {
