@@ -17,13 +17,15 @@ import {
   MatNativeDateModule,
   MatInputModule,
   MatSnackBarModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 import {DeliveryDetailsComponent} from './components/delivery-details/delivery-details.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import { DeliveryTrackingComponent } from './components/delivery-tracking/delivery-tracking.component';
 
 @NgModule({
-  declarations: [DeliveryComponent, DeliveryDetailsComponent],
+  declarations: [DeliveryComponent, DeliveryDetailsComponent, DeliveryTrackingComponent],
   imports: [
     DeliveryRouting,
     CommonModule,
@@ -44,8 +46,9 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatInputModule,
     MatSnackBarModule,
     MatCheckboxModule,
+    MatProgressSpinnerModule,
   ],
-  entryComponents: [DeliveryDetailsComponent],
+  entryComponents: [DeliveryDetailsComponent, DeliveryTrackingComponent],
 })
 export class DeliveryModule {
 }

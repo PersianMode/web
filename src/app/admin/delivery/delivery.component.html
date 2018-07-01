@@ -2,6 +2,9 @@
   <div>
     <h2>
       <label>لیست سفارشات</label>
+      <button mat-icon-button (click)="getDeliveryItems()">
+        <mat-icon color="primary" aria-label="refresh">refresh</mat-icon>
+      </button>
     </h2>
     <div class="search-area">
       <div fxLayout="row" fxLayoutAlign="center start">
@@ -26,7 +29,7 @@
         </div>
         <div fxFlex="50" class="filtering-box" style="margin-top: 20px">
           <mat-checkbox class="filtering-field" [ngModel]="isDelivered" (change)="changeDeliverStatus()" [indeterminate]="isDelivered === null">
-            <span *ngIf="isDelivered === true" class="checkbox-label">تحویل داده شده</span>
+            <span *ngIf="isDelivered" class="checkbox-label">تحویل داده شده</span>
             <span *ngIf="isDelivered === false" class="checkbox-label">تحویل داده نشده</span>
             <span *ngIf="isDelivered === null" class="checkbox-label">همه موارد</span>
           </mat-checkbox>
@@ -76,6 +79,15 @@
             </div>
             <div *ngIf="!element.is_delivered">
               <mat-icon style="color: red" aria-label="not delivered">close</mat-icon>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tracking">
+          <mat-header-cell *matHeaderCellDef class="header">رهگیری</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content details-button">
+            <div (click)="showTracking(element._id)">
+              <mat-icon color="primary">zoom_in</mat-icon>
             </div>
           </mat-cell>
         </ng-container>

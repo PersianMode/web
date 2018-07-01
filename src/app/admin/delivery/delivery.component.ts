@@ -8,6 +8,7 @@ import {DeliveryDetailsComponent} from './components/delivery-details/delivery-d
 import {AccessLevel} from '../../shared/enum/accessLevel.enum';
 import * as moment from 'moment';
 import {AuthService} from '../../shared/services/auth.service';
+import {DeliveryTrackingComponent} from './components/delivery-tracking/delivery-tracking.component';
 
 export interface DeliveryItem {
   _id: String;
@@ -49,6 +50,7 @@ export class DeliveryComponent implements OnInit {
     'receiver_sender_name',
     'shelf_code',
     'is_delivered',
+    'tracking',
     'view_details',
   ];
   deliveryAgentList = [];
@@ -185,6 +187,13 @@ export class DeliveryComponent implements OnInit {
         agentList: this.deliveryAgentList,
         isHubClerk: this.isHubClerk(),
       },
+    });
+  }
+
+  showTracking(id) {
+    this.dialog.open(DeliveryTrackingComponent, {
+      width: '600px',
+      data: {deliveryItem: this.deliveryItems.find(el => el._id === id)},
     });
   }
 
