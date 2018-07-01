@@ -9,6 +9,7 @@ import {AccessLevel} from '../../shared/enum/accessLevel.enum';
 import * as moment from 'moment';
 import {AuthService} from '../../shared/services/auth.service';
 import {DeliveryTrackingComponent} from './components/delivery-tracking/delivery-tracking.component';
+import {STATUS} from '../../shared/enum/status.enum';
 
 export interface DeliveryItem {
   _id: String;
@@ -138,7 +139,7 @@ export class DeliveryComponent implements OnInit {
               receiver_sender_name: el.is_return
                 ? (el.from.customer ? (el.from.customer.first_name + el.from.customer.surname) : null)
                 : (Object.keys(el.to.customer).length ? (el.to.customer.first_name + el.to.customer.surname) : el.to.warehouse.name),
-              is_delivered: el.delivery_end ? true : false,
+              is_delivered: this.deliveryIsDone(el),
             });
           });
         }
@@ -214,5 +215,9 @@ export class DeliveryComponent implements OnInit {
       this.isDelivered = null;
 
     this.getDeliveryItems();
+  }
+
+  deliveryIsDone(item) {
+    return item.status_list && item.status_list.find(el => el.is_processed && el.status === STATUS.Delivered);
   }
 }

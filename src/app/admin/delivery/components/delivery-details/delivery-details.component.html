@@ -132,22 +132,22 @@
         <div fxLayout="row" fxLayoutAlign="center center" style="direction: ltr;">
           <div fxFlex="50" class="date-time">
             <mat-form-field class="inner-date-time">
-              <input [disabled]="data.delivery_end || data.delivery_start" matInput [matDatepicker]="picker" placeholder="انتخاب تاریخ ارسال"
+              <input [disabled]="data.delivery_end || data.delivery_start" matInput [matDatepicker]="start_picker" placeholder="انتخاب تاریخ ارسال"
                 [(ngModel)]="start_date">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
+              <mat-datepicker-toggle matSuffix [for]="start_picker"></mat-datepicker-toggle>
+              <mat-datepicker #start_picker></mat-datepicker>
             </mat-form-field>
           </div>
           <div fxFlex="25" class="date-time">
             <mat-input-container class="inner-date-time">
               <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="start_time.h"
-                (ngModelChange)="changeStartTime('h')" />
+                (ngModelChange)="changeTime('start', 'h')" />
             </mat-input-container>
           </div>
           <div fxFlex="25" class="date-time">
             <mat-input-container class="inner-date-time">
               <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="59" placeholder="دقیقه"
-                [(ngModel)]="start_time.m" (ngModelChange)="changeStartTime('m')" />
+                [(ngModel)]="start_time.m" (ngModelChange)="changeTime('start', 'm')" />
             </mat-input-container>
           </div>
         </div>
@@ -159,7 +159,28 @@
         <label>حداکثر زمان دریافت</label>
       </div>
       <div fxFlex="70">
-        <label>{{getEndDate()}}</label>
+        <div fxLayout="row" fxLayoutAlign="center center" style="direction: ltr;">
+          <div fxFlex="50" class="date-time">
+            <mat-form-field class="inner-date-time">
+              <input [disabled]="data.delivery_end || data.delivery_start" matInput [matDatepicker]="end_picker" placeholder="انتخاب حداکثر تاریخ دریافت"
+                [(ngModel)]="end_date">
+              <mat-datepicker-toggle matSuffix [for]="end_picker"></mat-datepicker-toggle>
+              <mat-datepicker #end_picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div fxFlex="25" class="date-time">
+            <mat-input-container class="inner-date-time">
+              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="end_time.h"
+                (ngModelChange)="changeTime('end', 'h')" />
+            </mat-input-container>
+          </div>
+          <div fxFlex="25" class="date-time">
+            <mat-input-container class="inner-date-time">
+              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="59" placeholder="دقیقه"
+                [(ngModel)]="end_time.m" (ngModelChange)="changeTime('end', 'm')" />
+            </mat-input-container>
+          </div>
+        </div>
       </div>
     </div>
     <hr/>

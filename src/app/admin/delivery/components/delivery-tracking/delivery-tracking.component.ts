@@ -19,8 +19,6 @@ export class DeliveryTrackingComponent implements OnInit {
 
   ngOnInit() {
     this.data = this.data.deliveryItem;
-
-    console.log(this.data);
   }
 
   closeDialog() {

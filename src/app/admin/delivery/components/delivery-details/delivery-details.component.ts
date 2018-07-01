@@ -19,6 +19,11 @@ export class DeliveryDetailsComponent implements OnInit {
     m: null,
     h: null,
   };
+  end_date = null;
+  end_time = {
+    m: null,
+    h: null,
+  };
 
   constructor(private dialogRef: MatDialogRef<DeliveryDetailsComponent>, @Inject(MAT_DIALOG_DATA) public data: any,
     private httpService: HttpService, private dialog: MatDialog, private progressService: ProgressService,
@@ -34,6 +39,11 @@ export class DeliveryDetailsComponent implements OnInit {
     this.start_time = {
       h: this.data.start ? +moment(this.data.start).format('hh') : null,
       m: this.data.start ? +moment(this.data.start).format('mm') : null,
+    };
+    this.end_date = this.data.end ? moment(this.data.end).format('YYYY-MM-DD') : null;
+    this.end_time = {
+      h: this.data.end ? +moment(this.data.end).format('hh') : null,
+      m: this.data.end ? +moment(this.data.end).format('mm') : null,
     };
   }
 
@@ -93,7 +103,7 @@ export class DeliveryDetailsComponent implements OnInit {
 
   saveChanges() {
     if (moment(this.start_date, 'YYYY-MM-DD').isBefore(moment(moment().format('YYYY-MM-DD')), 'day')) {
-      this.snackBar.open('تاریخ انتخاب شده معتبر نمی باشد', null, {
+      this.snackBar.open('تاریخ شروع انتخاب شده معتبر نمی باشد', null, {
         duration: 3200,
       });
       return Promise.reject('invalid start date');
@@ -102,12 +112,14 @@ export class DeliveryDetailsComponent implements OnInit {
       const currentMinute = moment().format('mm');
 
       if (this.start_time.h < currentHour || this.start_time.m <= currentMinute) {
-        this.snackBar.open('زمان انتخاب شده معتبر نمی باشد', null, {
+        this.snackBar.open('زمان شروع انتخاب شده معتبر نمی باشد', null, {
           duration: 3200,
         });
         return Promise.reject('invalid start time');
       }
     }
+
+    // Check end date with valid end date
 
     return new Promise((resolve, reject) => {
       const updateObj = {_id: this.data._id};
@@ -123,10 +135,20 @@ export class DeliveryDetailsComponent implements OnInit {
         updateObj['start'] = this.start_date;
       }
 
+      if (this.end_date) {
+        if (this.end_time.m && this.end_time.h) {
+          this.end_date = new Date(this.end_date);
+          this.end_date.setHours(this.end_time.h, this.end_time.m);
+        }
+
+        updateObj['end'] = this.end_date;
+      }
+
       this.progressService.enable();
       this.httpService.post('delivery', updateObj).subscribe(
         data => {
-          this.data.start = this.start_date;
+          this.data.start = this.start_date ? this.start_date : this.data.start;
+          this.data.end = this.end_date ? this.end_date : this.data.end;
           if (this.deliveryAgentId) {
             const dlAgent = this.deliveryAgentList.find(el => el._id === this.deliveryAgentId);
             this.data.delivery_agent.first_name = dlAgent.first_name;
@@ -168,29 +190,40 @@ export class DeliveryDetailsComponent implements OnInit {
       noChange = false;
     else if (this.start_date) {
       if ((this.data.start && (this.start_time.m !== st.m || this.start_time.h !== st.h)) ||
-        (!this.data.start && this.start_time.m && this.start_time.h))
+        (!this.data.start && (this.start_time.m || this.start_time.h)))
+        noChange = false;
+    }
+
+    const ed = moment(this.data.end).format('YYYY-MM-DD');
+    const et = {
+      h: +moment(this.data.end).format('hh'),
+      m: +moment(this.data.end).format('mm'),
+    };
+
+    if ((this.data.end && this.end_date !== ed) || (!this.data.end && this.end_date))
+      noChange = false;
+    else if (this.end_date) {
+      if ((this.data.end && (this.end_time.m !== et.m || this.end_time.h !== et.h)) ||
+        (!this.data.end && (this.end_time.m || this.end_time.h)))
         noChange = false;
     }
 
     return noChange;
   }
 
-  changeStartTime(part) {
+  changeTime(bound, part) {
+    bound = bound + '_time';
     if (part === 'm') {
-      if (this.start_time.m < 0)
-        this.start_time.m = 0;
-      else if (this.start_time.m > 59)
-        this.start_time.m = 59;
+      if (this[bound].m < 0)
+        this[bound].m = 0;
+      else if (this[bound].m > 59)
+        this[bound].m = 59;
     } else if (part === 'h') {
-      if (this.start_time.h < 0)
-        this.start_time.h = 0;
-      else if (this.start_time.h > 23)
-        this.start_time.h = 23;
+      if (this[bound].h < 0)
+        this[bound].h = 0;
+      else if (this[bound].h > 23)
+        this[bound].h = 23;
     }
-  }
-
-  getEndDate() {
-    return moment(this.data.end).format('YYYY-MM-DD');
   }
 
   getFormattedDate(date) {
