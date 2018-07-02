@@ -46,7 +46,7 @@ export class DeliveryComponent implements OnInit {
   displayedColumns = [
     'position',
     'end',
-    'slot',
+    'min_slot',
     'delivery_agent',
     'receiver_sender_name',
     'shelf_code',
@@ -115,36 +115,16 @@ export class DeliveryComponent implements OnInit {
     }).subscribe(
       data => {
         this.deliveryItems = [];
-        const tempData = [];
 
         if (data && data.length) {
           data = data[0];
 
           this.deliveryItems = data.result;
           this.selection.clear();
-          let counter = this.offset;
-          data.result.forEach(el => {
-            tempData.push({
-              _id: el._id,
-              is_return: el.is_return,
-              position: ++counter,
-              slot: el.slot ? el.slot : null,
-              delivery_agent: el.delivery_agent,
-              shelf_code: el.shelf_code,
-              order_line_count: el.order_line_count,
-              start: el.start ? moment(el.start).format('YYYY-MM-DD') : null,
-              end: el.end ? moment(el.end).format('YYYY-MM-DD') : null,
-              delivery_start: moment(el.delivery_start).format('YYYY-MM-DD'),
-              delivery_end: moment(el.delivery_end).format('YYYY-MM-DD'),
-              receiver_sender_name: el.is_return
-                ? (el.from.customer ? (el.from.customer.first_name + el.from.customer.surname) : null)
-                : (Object.keys(el.to.customer).length ? (el.to.customer.first_name + el.to.customer.surname) : el.to.warehouse.name),
-              is_delivered: this.deliveryIsDone(el),
-            });
-          });
-        }
+          this.setDataSource(this.deliveryItems);
+        } else
+          this.setDataSource([]);
 
-        this.dataSource.data = tempData;
         this.totalRecords = data && data.total ? data.total : 0;
         this.progressService.disable();
       },
@@ -156,6 +136,33 @@ export class DeliveryComponent implements OnInit {
         this.progressService.disable();
       }
     );
+  }
+
+  setDataSource(data) {
+    let counter = this.offset;
+    const tempData = [];
+
+    data.forEach(el => {
+      tempData.push({
+        _id: el._id,
+        is_return: el.is_return,
+        position: ++counter,
+        min_slot: el.min_slot ? el.min_slot : null,
+        delivery_agent: el.delivery_agent,
+        shelf_code: el.shelf_code,
+        order_line_count: el.order_line_count,
+        start: el.start ? moment(el.start).format('YYYY-MM-DD') : null,
+        end: el.end ? moment(el.end).format('YYYY-MM-DD') : null,
+        delivery_start: moment(el.delivery_start).format('YYYY-MM-DD'),
+        delivery_end: moment(el.delivery_end).format('YYYY-MM-DD'),
+        receiver_sender_name: el.is_return
+          ? (el.from.customer ? (el.from.customer.first_name + el.from.customer.surname) : null)
+          : (Object.keys(el.to.customer).length ? (el.to.customer.first_name + el.to.customer.surname) : el.to.warehouse.name),
+        is_delivered: this.deliveryIsDone(el),
+      });
+    });
+
+    this.dataSource.data = tempData;
   }
 
   getDeliveryAgents() {
@@ -180,7 +187,7 @@ export class DeliveryComponent implements OnInit {
   }
 
   showDetails(id) {
-    this.dialog.open(DeliveryDetailsComponent, {
+    const detailsDialog = this.dialog.open(DeliveryDetailsComponent, {
       width: '600px',
       disableClose: true,
       data: {
@@ -189,6 +196,8 @@ export class DeliveryComponent implements OnInit {
         isHubClerk: this.isHubClerk(),
       },
     });
+
+    detailsDialog.afterClosed().subscribe(() => this.setDataSource(this.deliveryItems));
   }
 
   showTracking(id) {
@@ -219,5 +228,10 @@ export class DeliveryComponent implements OnInit {
 
   deliveryIsDone(item) {
     return item.status_list && item.status_list.find(el => el.is_processed && el.status === STATUS.Delivered);
+  }
+
+  isAfterMaxValidEndDate(id) {
+    const delItem = this.deliveryItems.find(el => el._id === id);
+    return moment(delItem.end, 'YYYY-MM-DD').isAfter(moment(delItem.min_end, 'YYYY-MM-DD'));
   }
 }

@@ -111,7 +111,7 @@
         <label>بازه</label>
       </div>
       <div fxFlex="70">
-        <label>{{data.slot}}</label>
+        <label>{{data.min_slot.lower_bound}} - {{data.min_slot.upper_bound}}</label>
       </div>
     </div>
     <hr *ngIf="isHubClerk" />
@@ -156,14 +156,14 @@
     <hr/>
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
-        <label>حداکثر زمان دریافت</label>
+        <label>زمان دریافت</label>
       </div>
       <div fxFlex="70">
         <div fxLayout="row" fxLayoutAlign="center center" style="direction: ltr;">
           <div fxFlex="50" class="date-time">
             <mat-form-field class="inner-date-time">
               <input [disabled]="data.delivery_end || data.delivery_start" matInput [matDatepicker]="end_picker" placeholder="انتخاب حداکثر تاریخ دریافت"
-                [(ngModel)]="end_date">
+                [(ngModel)]="end_date" [style.color]="isAfterMaxValidDate() ? 'red' : 'black'">
               <mat-datepicker-toggle matSuffix [for]="end_picker"></mat-datepicker-toggle>
               <mat-datepicker #end_picker></mat-datepicker>
             </mat-form-field>
@@ -171,16 +171,24 @@
           <div fxFlex="25" class="date-time">
             <mat-input-container class="inner-date-time">
               <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="end_time.h"
-                (ngModelChange)="changeTime('end', 'h')" />
+                (ngModelChange)="changeTime('end', 'h')" [style.color]="isAfterMaxValidDate(true) ? 'red' : 'black'"/>
             </mat-input-container>
           </div>
           <div fxFlex="25" class="date-time">
             <mat-input-container class="inner-date-time">
               <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="59" placeholder="دقیقه"
-                [(ngModel)]="end_time.m" (ngModelChange)="changeTime('end', 'm')" />
+                [(ngModel)]="end_time.m" (ngModelChange)="changeTime('end', 'm')" [style.color]="isAfterMaxValidDate(true) ? 'red' : 'black'"/>
             </mat-input-container>
           </div>
         </div>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="30" classs="header-label">
+        <label>(حداکثر زمان دریافت)</label>
+      </div>
+      <div fxFlex="70">
+        <label style="direction: ltr">{{getMaxValidEndDate()}}</label>
       </div>
     </div>
     <hr/>

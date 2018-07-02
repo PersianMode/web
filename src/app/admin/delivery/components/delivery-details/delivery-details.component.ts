@@ -4,6 +4,7 @@ import {HttpService} from '../../../../shared/services/http.service';
 import * as moment from 'moment';
 import {SaveChangeConfirmComponent} from '../../../../shared/components/save-change-confirm/save-change-confirm.component';
 import {ProgressService} from '../../../../shared/services/progress.service';
+import {ExpiredDateDialogComponent} from '../expired-date-dialog/expired-date-dialog.component';
 
 @Component({
   selector: 'app-delivery-details',
@@ -37,12 +38,12 @@ export class DeliveryDetailsComponent implements OnInit {
 
     this.start_date = this.data.start ? moment(this.data.start).format('YYYY-MM-DD') : null;
     this.start_time = {
-      h: this.data.start ? +moment(this.data.start).format('hh') : null,
+      h: this.data.start ? +moment(this.data.start).format('HH') : null,
       m: this.data.start ? +moment(this.data.start).format('mm') : null,
     };
     this.end_date = this.data.end ? moment(this.data.end).format('YYYY-MM-DD') : null;
     this.end_time = {
-      h: this.data.end ? +moment(this.data.end).format('hh') : null,
+      h: this.data.end ? +moment(this.data.end).format('HH') : null,
       m: this.data.end ? +moment(this.data.end).format('mm') : null,
     };
   }
@@ -51,6 +52,7 @@ export class DeliveryDetailsComponent implements OnInit {
     if (!this.noChanges()) {
       const confirmOnLeave = this.dialog.open(SaveChangeConfirmComponent, {
         width: '400px',
+        disableClose: true,
       });
 
       confirmOnLeave.afterClosed().subscribe(
@@ -58,14 +60,14 @@ export class DeliveryDetailsComponent implements OnInit {
           if (status) {
             this.saveChanges()
               .then(res => {
-                this.dialogRef.close();
+                this.dialogRef.close(this.data);
               });
           } else
             this.dialogRef.close();
         }
       );
     } else
-      this.dialogRef.close();
+      this.dialogRef.close(this.data);
   }
 
   hasDeliveryAgent() {
@@ -102,12 +104,12 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   saveChanges() {
-    if (moment(this.start_date, 'YYYY-MM-DD').isBefore(moment(moment().format('YYYY-MM-DD')), 'day')) {
+    if (moment(this.start_date, 'YYYY-MM-DD').isBefore(moment(moment().format('YYYY-MM-DD')))) {
       this.snackBar.open('تاریخ شروع انتخاب شده معتبر نمی باشد', null, {
         duration: 3200,
       });
       return Promise.reject('invalid start date');
-    } else if (moment(this.start_date, 'YYYY-MM-DD').isSame(moment(moment().format('YYYY-MM-DD')), 'day')) {
+    } else if (moment(this.start_date, 'YYYY-MM-DD').isSame(moment(moment().format('YYYY-MM-DD')))) {
       const currentHour = moment().format('HH');
       const currentMinute = moment().format('mm');
 
@@ -119,8 +121,28 @@ export class DeliveryDetailsComponent implements OnInit {
       }
     }
 
-    // Check end date with valid end date
+    // Check end date and rise warning when end date is after maximum valid end date for delivery items
+    if (this.isAfterMaxValidDate() || this.isAfterMaxValidDate(true)) {
+      const dateConfirmation = this.dialog.open(ExpiredDateDialogComponent, {
+        width: '400px',
+      });
 
+      return new Promise((resolve, reject) => {
+        dateConfirmation.afterClosed().subscribe(
+          status => {
+            if (status) {
+              this.upsertDeliveryDetails()
+                .then(resolve)
+                .catch(reject);
+            }
+          });
+      });
+    }
+
+    return this.upsertDeliveryDetails();
+  }
+
+  private upsertDeliveryDetails() {
     return new Promise((resolve, reject) => {
       const updateObj = {_id: this.data._id};
       if (this.deliveryAgentId)
@@ -180,13 +202,13 @@ export class DeliveryDetailsComponent implements OnInit {
       (!this.deliveryAgentId && this.data.delivery_agent._id))
       noChange = false;
 
-    const sd = moment(this.data.start).format('YYYY-MM-DD');
     const st = {
-      h: +moment(this.data.start).format('hh'),
+      h: +moment(this.data.start).format('HH'),
       m: +moment(this.data.start).format('mm'),
     };
 
-    if ((this.data.start && this.start_date !== sd) || (!this.data.start && this.start_date))
+    if ((this.data.start && !moment(this.start_date, 'YYYY-MM-DD').isSame(moment(this.data.start, 'YYYY-MM-DD'))) ||
+      (!this.data.start && this.start_date))
       noChange = false;
     else if (this.start_date) {
       if ((this.data.start && (this.start_time.m !== st.m || this.start_time.h !== st.h)) ||
@@ -194,13 +216,13 @@ export class DeliveryDetailsComponent implements OnInit {
         noChange = false;
     }
 
-    const ed = moment(this.data.end).format('YYYY-MM-DD');
     const et = {
-      h: +moment(this.data.end).format('hh'),
+      h: +moment(this.data.end).format('HH'),
       m: +moment(this.data.end).format('mm'),
     };
 
-    if ((this.data.end && this.end_date !== ed) || (!this.data.end && this.end_date))
+    if ((this.data.end && !moment(this.end_date, 'YYYY-MM-DD').isSame(moment(this.data.end, 'YYYY-MM-DD'))) ||
+      (!this.data.end && this.end_date))
       noChange = false;
     else if (this.end_date) {
       if ((this.data.end && (this.end_time.m !== et.m || this.end_time.h !== et.h)) ||
@@ -236,5 +258,23 @@ export class DeliveryDetailsComponent implements OnInit {
     if (!date)
       return '';
     return moment(date).format('HH:mm:ss');
+  }
+
+  getMaxValidEndDate() {
+    return moment(this.data.min_end).format('YYYY-MM-DD');
+  }
+
+  isAfterMaxValidDate(isTime = false) {
+    const isAfterValidDate = moment(this.end_date, 'YYYY-MM-DD').isAfter(moment(this.data.min_end, 'YYYY-MM-DD'));
+
+    if (isAfterValidDate)
+      return true;
+
+    if (isTime &&
+      moment(this.end_date, 'YYYY-MM-DD').isSame(moment(this.data.min_end, 'YYYY-MM-DD')) &&
+      this.end_time.h > this.data.min_slot.upper_bound)
+      return true;
+    else
+      return false;
   }
 }

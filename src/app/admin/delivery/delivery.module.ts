@@ -23,9 +23,10 @@ import {
 import {DeliveryDetailsComponent} from './components/delivery-details/delivery-details.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { DeliveryTrackingComponent } from './components/delivery-tracking/delivery-tracking.component';
+import { ExpiredDateDialogComponent } from './components/expired-date-dialog/expired-date-dialog.component';
 
 @NgModule({
-  declarations: [DeliveryComponent, DeliveryDetailsComponent, DeliveryTrackingComponent],
+  declarations: [DeliveryComponent, DeliveryDetailsComponent, DeliveryTrackingComponent, ExpiredDateDialogComponent],
   imports: [
     DeliveryRouting,
     CommonModule,
@@ -48,7 +49,7 @@ import { DeliveryTrackingComponent } from './components/delivery-tracking/delive
     MatCheckboxModule,
     MatProgressSpinnerModule,
   ],
-  entryComponents: [DeliveryDetailsComponent, DeliveryTrackingComponent],
+  entryComponents: [DeliveryDetailsComponent, DeliveryTrackingComponent, ExpiredDateDialogComponent],
 })
 export class DeliveryModule {
 }
