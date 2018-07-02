@@ -51,7 +51,8 @@ export class LoginComponent implements OnInit {
 
       let warehouseId;
 
-      if (+this.loginForm.controls['loginAs'].value === AccessLevel.ShopClerk) {
+      if (+this.loginForm.controls['loginAs'].value === AccessLevel.ShopClerk ||
+        +this.loginForm.controls['loginAs'].value === AccessLevel.HubClerk) {
         warehouseId = this.loginForm.controls['warehouse_id'].value;
         if (!warehouseId) {
           this.openSnackBar('فروشگاه مورد نظر را انتخاب کنید');
@@ -100,20 +101,23 @@ export class LoginComponent implements OnInit {
       if (option === AccessLevel.ShopClerk.toString()) {
         this.showClerkWarehouses = true;
         this.loginForm.controls['warehouse_id'].setValue(this.getClerkWarehouses()[0]._id);
-      }
-      else if (option === AccessLevel.HubClerk.toString()) {
+      } else if (option === AccessLevel.HubClerk.toString()) {
         this.showClerkWarehouses = false;
-        this.loginForm.controls['warehouse_id'].setValue(this.getClerkWarehouses().find(x => x.is_hub));
-      }
-      else{
+        this.loginForm.controls['warehouse_id'].setValue(this.getClerkWarehouses(true)[0]._id);
+
+        console.log(this.loginForm.controls['warehouse_id'].value);
+
+      } else {
         this.showClerkWarehouses = false;
         this.loginForm.controls['warehouse_id'].setValue(null);
       }
     }
   }
 
-  getClerkWarehouses() {
-    return this.authService.warehouses.sort((a, b) => a.priority > b.priority ? 1 : a.priority < b.priority ? -1 : 0);
+  getClerkWarehouses(isHub = false) {
+    return this.authService.warehouses
+      .filter(x => x.is_hub === isHub)
+      .sort((a, b) => a.priority > b.priority ? 1 : a.priority < b.priority ? -1 : 0);
   }
 
   openSnackBar(message: string) {
