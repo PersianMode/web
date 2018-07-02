@@ -36,12 +36,12 @@ export class DeliveryDetailsComponent implements OnInit {
     this.data = this.data.deliveryItem;
     this.deliveryAgentId = this.data.delivery_agent ? this.data.delivery_agent._id : null;
 
-    this.start_date = this.data.start ? moment(this.data.start).format('YYYY-MM-DD') : null;
+    this.start_date = this.data.start ? this.data.start : null;
     this.start_time = {
       h: this.data.start ? +moment(this.data.start).format('HH') : null,
       m: this.data.start ? +moment(this.data.start).format('mm') : null,
     };
-    this.end_date = this.data.end ? moment(this.data.end).format('YYYY-MM-DD') : null;
+    this.end_date = this.data.end ? this.data.end : null;
     this.end_time = {
       h: this.data.end ? +moment(this.data.end).format('HH') : null,
       m: this.data.end ? +moment(this.data.end).format('mm') : null,
