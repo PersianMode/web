@@ -9,27 +9,26 @@ import {priceFormatter} from '../../../shared/lib/priceFormatter';
 export class CheckoutSummaryComponent implements OnInit {
 
   @Input() noDuration;
+  ignoreDeliveryItems = false;
 
   @Input()
   set showCostLabel(value) {
     this._showCostLabel = value;
-    if (!value) {
-      this.finalTotal = this.total;
-    } else {
-      this.finalTotal = this.total + this.deliveryCost - this.deliveryDiscount;
-    }
+    this.ignoreDeliveryItems = !!!value;
+
+    this.calculateFinalTotal();
   }
 
   get showCostLabel() {
     return this._showCostLabel;
   }
 
-
   @Input()
   set deliveryCost(value) {
     this._deliveryCost = value;
     if (value) {
-      this.finalTotal = this.total + value;
+      // this.finalTotal = this.total + value;
+      this.calculateFinalTotal();
     }
   }
 
@@ -43,7 +42,7 @@ export class CheckoutSummaryComponent implements OnInit {
       value = 0;
 
     this._deliveryDiscount = value;
-    this.finalTotal = this.total + this.deliveryCost - value;
+    this.calculateFinalTotal();
   }
 
   get deliveryDiscount() {
@@ -54,7 +53,7 @@ export class CheckoutSummaryComponent implements OnInit {
   set total(value) {
     this._total = value;
     if (value) {
-      this.finalTotal = value - this.discount;
+      this.finalTotal = value;
     }
   }
 
@@ -68,7 +67,7 @@ export class CheckoutSummaryComponent implements OnInit {
       value = 0;
 
     this._discount = value;
-    this.finalTotal = this.total ? this.total - value : 0;
+    this.calculateFinalTotal();
   }
 
   get discount() {
@@ -78,7 +77,7 @@ export class CheckoutSummaryComponent implements OnInit {
   @Input()
   set usedBalance(value) {
     this._usedBalance = value;
-    this.finalTotal = this.total - this.discount - this.usedLoyaltyPoint - this._usedBalance;
+    this.calculateFinalTotal();
   }
 
   get usedBalance() {
@@ -88,11 +87,15 @@ export class CheckoutSummaryComponent implements OnInit {
   @Input()
   set usedLoyaltyPoint(value) {
     this._usedLoyaltyPoint = value;
-    this.finalTotal = this.total - this.discount - this.usedLoyaltyPoint - this._usedBalance;
+    this.calculateFinalTotal();
   }
 
   get usedLoyaltyPoint() {
     return this._usedLoyaltyPoint;
+  }
+
+  calculateFinalTotal() {
+    this.finalTotal = this.total + (this.ignoreDeliveryItems ? 0 : this.deliveryCost - this.deliveryDiscount) - this.usedBalance - this.usedLoyaltyPoint - this.discount;
   }
 
 
@@ -106,6 +109,7 @@ export class CheckoutSummaryComponent implements OnInit {
   finalTotal = 0;
   @Input() earnedLoyaltyPoint;
   @Input() showEarnPointLabel;
+
   constructor() {
   }
 
