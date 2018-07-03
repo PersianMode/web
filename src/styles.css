@@ -20,7 +20,7 @@ a {
   outline: none;
 }
 
-h1 {
+h1, h2 {
   font-family: irankharazmi, sans-serif;
 }
 
@@ -1031,4 +1031,9 @@ p {
 
 .mat-input-element {
   font-family: iranyekan, sans-serif !important;
+}
+
+.mat-option {
+  text-align: right !important;
+  font-family: iranyekan, sans-serif;  
 }
