@@ -67,7 +67,7 @@ export class OrderReturnComponent implements OnInit {
     this.ticket.desc.day.time_slot = this.timeReturn;
     this.ticket.desc.day.day_slot =  moment(this.dateObject, 'jYYYY/jM/jD').format('YYYY-M-D hh:mm:ss');
     this.progressService.enable();
-    this.httpService.post('order/return', {order: this.order, orderLine: this.orderLine, desc: this.ticket.desc}).subscribe(
+    this.httpService.post('order/return', {orderId: this.order._id, orderLineId: this.orderLine._id, desc: this.ticket.desc}).subscribe(
       data => {
         this.snackBar.open('عمیلات با موفقیت انجام گردید.', null, {
           duration: 2000,

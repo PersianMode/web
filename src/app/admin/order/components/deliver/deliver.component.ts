@@ -12,6 +12,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { TicketComponent } from '../ticket/ticket.component';
 
 
 
@@ -160,8 +161,12 @@ export class DeliverComponent implements OnInit, OnDestroy {
 
 
   getOrderStatus(order) {
-
-    return '';
+    const _orderId = order._id;
+    const tickeByReceiver = true;
+    this.dialog.open(TicketComponent, {
+      width: '1000px',
+      data: {_orderId, tickeByReceiver}
+    });
   }
 
   getOrderLineStatus(orderLine) {

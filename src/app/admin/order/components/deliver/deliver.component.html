@@ -55,7 +55,9 @@
 
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{getOrderStatus(order)}}</mat-cell>
+          <mat-cell *matCellDef="let order">
+            <button mat-button color="primary" (click)="getOrderStatus(order)">نمایش</button>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="process_order">
@@ -95,9 +97,9 @@
                   <p>
                     <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p>
                 </td>
-                <td>
+                <!-- <td>
                   <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
-                </td>
+                </td> -->
               </tr>
             </table>
 

@@ -131,8 +131,6 @@ export class OrderLinesComponent implements OnInit {
   }
 
   cancelOrderLine(ol) {
-    const orderLine = {_id: ol.order_line_id};
-    const order = {_id: this.orderInfo.orderId};
 
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
@@ -142,7 +140,7 @@ export class OrderLinesComponent implements OnInit {
         if (status) {
           this.progressService.enable();
           // TODO send delete request
-          this.httpService.post(`order/cancel`, {order, orderLine}).subscribe(
+          this.httpService.post(`order/cancel`, {orderId: this.orderInfo.orderId, orderLineId: ol.order_line_id}).subscribe(
             data => {
               this.openSnackBar('کالا مورد نظر با موفقیت کنسل شد.');
               this.changeOrderLine(ol);
