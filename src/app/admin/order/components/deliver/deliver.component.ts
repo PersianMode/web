@@ -30,11 +30,6 @@ import { TicketComponent } from '../ticket/ticket.component';
 })
 export class DeliverComponent implements OnInit, OnDestroy {
 
-<<<<<<< HEAD
-=======
-
-  @Output() newDeliverCount = new EventEmitter();
->>>>>>> 9e078672069cec4192e28cdc8e2fedd23a4dff83
 
 
   @Output() OnNewOutboxCount = new EventEmitter();
