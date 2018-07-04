@@ -6,6 +6,8 @@ import {DictionaryService} from './dictionary.service';
 import {imagePathFixer} from '../lib/imagePathFixer';
 import {discountCalc} from '../lib/discountCalc';
 import {productColorMap} from '../lib/colorNameMap';
+import {resolve} from 'path';
+import {reject} from 'q';
 
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
@@ -94,13 +96,13 @@ export class ProductService {
     } else {
 
       const pricesHelper = products.map(product => product.instances.map(instance => instance.discountedPrice));
-      const prices=[].concat(...pricesHelper);
+      const prices = [].concat(...pricesHelper);
       const minPrice = prices && prices.length ? Math.min(...prices) : 0;
       const maxPrice = prices && prices.length ? Math.max(...prices) : 0;
 
       price = [minPrice, maxPrice];
     }
-    
+
     let discount;
     if (trigger === 'discount') {
       discount = [];
@@ -301,7 +303,37 @@ export class ProductService {
     });
   }
 
-  loadProducts(collection_id) {
+  updateProducts(updatedProducts) {
+    updatedProducts.forEach(product => {
+      const found = this.products.findIndex(r => r._id === product._id);
+      this.enrichProductData(product);
+      if (found >= 0) {
+        this.products[found] = product;
+      }
+    });
+  }
+
+  loadProducts(productIds) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('product/getMultiple', {productIds})
+        .subscribe(data => {
+          if (data) {
+            data.forEach(product => {
+              const found = this.products.findIndex(r => r._id === product._id);
+              this.enrichProductData(product);
+              if (found >= 0) {
+                this.products[found] = product;
+              }
+            });
+          }
+          resolve(data)
+
+        });
+    });
+
+  }
+
+  loadCollectionProducts(collection_id) {
     this.sortInput = null;
     this.httpService.get('collection/product/' + collection_id)
       .subscribe(

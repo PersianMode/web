@@ -23,7 +23,8 @@ import {
   MatSnackBarModule,
   MatProgressSpinnerModule,
   MatListModule,
-  MatSliderModule
+  MatSliderModule,
+  MatTooltipModule
 } from '@angular/material';
 import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';
@@ -40,6 +41,7 @@ import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert
 import {AuthGuard} from './auth.guard';
 import {OrderLinesComponent} from './profile/components/order-lines/order-lines.component';
 import { ForgotPasswordComponent } from './login/components/forgot-password/forgot-password.component';
+import { OrderReturnComponent } from './profile/components/order-return/order-return.component';
 
 @NgModule({
   imports: [
@@ -70,6 +72,7 @@ import { ForgotPasswordComponent } from './login/components/forgot-password/forg
     MatListModule,
     MatSliderModule,
     SharedModule,
+    MatTooltipModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),
@@ -88,6 +91,7 @@ import { ForgotPasswordComponent } from './login/components/forgot-password/forg
     UpsertAddressComponent,
     GenDialogComponent,
     OrderLinesComponent,
+    OrderReturnComponent,
   ],
   entryComponents: [GenDialogComponent],
   providers: [AuthGuard]

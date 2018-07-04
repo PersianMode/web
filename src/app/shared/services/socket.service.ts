@@ -26,7 +26,8 @@ export class SocketService {
   }
 
   getOrderLineMessage() {
-    return this.orderLineObservable;
+    if (this.orderLineSocket)
+      return this.orderLineObservable;
   }
 
   disconnect() {

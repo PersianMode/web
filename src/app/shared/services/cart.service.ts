@@ -4,7 +4,7 @@ import {AuthService} from './auth.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {discountCalc} from '../lib/discountCalc';
+import {ProductService} from './product.service';
 
 const SNACK_CONFIG: MatSnackBarConfig = {
   duration: 3200,
@@ -18,42 +18,50 @@ export class CartService {
   coupon_discount = 0;
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
-  constructor(private httpService: HttpService, private authService: AuthService, private snackBar: MatSnackBar) {
+  constructor(private httpService: HttpService, private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
     this.authService.isLoggedIn.subscribe(
       isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
         const items = this.getItemsFromStorage();
+        if (this.authService.userIsLoggedIn()) {
 
-        if (this.authService.userIsLoggedIn() && items && items.length) {
-          items.forEach((el, i) => {
-            this.httpService.post('order', {
-              product_id: el.product_id,
-              product_instance_id: el.instance_id,
-              number: el.quantity,
-            })
-              .subscribe(() => {
-                  items.splice(i, 1);
-                  try {
-                    localStorage.setItem(this.localStorageKey, JSON.stringify(items));
-                  } catch (e) {
-                    console.error('could not update local storage after login', e);
-                  }
-                },
-                err => console.error('orders error: ', el, err)
-              );
-          });
-        } else if (!items && items.length) {
-          this.setCartItem([], false);
+          if (items && items.length) {
+            items.forEach((el, i) => {
+              this.httpService.post('order', {
+                product_id: el.product_id,
+                product_instance_id: el.instance_id,
+                number: el.quantity,
+              })
+                .subscribe(() => {
+                    items.splice(i, 1);
+                    try {
+                      localStorage.setItem(this.localStorageKey, JSON.stringify(items));
+                    } catch (e) {
+                      console.error('could not update local storage after login', e);
+                    }
+                  },
+                  err => console.error('orders error: ', el, err)
+                );
+            });
+          }
+
+          this.getUserCart();
+
+        } else if (items && items.length) {
+          this.getItemsDetail(items);
+        }
+        else {
+          this.setCartItem(null, [], false);
         }
 
-        this.getItemsDetail(items && items.length ? items : null)
-          .then(res => {
-            this.setCartItem(res, false);
-          })
-          .catch(err => {
-            console.error('Cannot fetch cart items: ', err);
-            this.setCartItem([]);
-          });
+
+      });
+  }
+
+  getUserCart() {
+    this.httpService.get('cart/items').subscribe(
+      res => {
+        this.getItemsDetail(res);
       });
   }
 
@@ -102,14 +110,10 @@ export class CartService {
       const curInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.instance_id);
       const newInstance = items.find(el => el.product_id === value.product_id && el.instance_id === value.pre_instance_id);
       const product = curInstance || newInstance;
-      const instance = product.instances.find(r => (r.instance_id || r._id) === value.instance_id);
       Object.assign(product, {
         product_id: value.product_id,
         instance_id: value.instance_id,
         quantity: instanceChange && curInstance ? value.number + curInstance.quantity : value.number,
-        price: instance.price ? instance.price : product.price,
-        size: instance.size,
-        count: instance.quantity,
       });
       if (instanceChange && curInstance)
         items = items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
@@ -171,30 +175,51 @@ export class CartService {
     }
   }
 
-  getItemsDetail(items) {
-    return new Promise((resolve, reject) => {
-      this.httpService.post('cart/items', {data: items}).subscribe(
-        (rs: any) => {
-          resolve(rs);
-        },
-        (err) => {
-          reject(err);
-        });
-    });
+  getItemsDetail(overallDetails) {
+    this.productService.loadProducts(overallDetails.map(x => x.product_id))
+      .then(res => {
+        try {
+          this.setCartItem(overallDetails, res, false);
+        }
+        catch (err) {
+          console.error('-> ', err);
+        }
+      })
+      .catch(err => {
+        try {
+          this.setCartItem(null, [], false);
+        }
+        catch (err) {
+          console.error('-> ', err);
+        }
+      })
   }
 
-  private setCartItem(items, isUpdate = true) {
+  inventoryCount(instance) {
+    const inventory = instance.inventory;
+    return inventory && inventory.length ? inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b) : 0;
+  }
+
+  private setCartItem(overallDetails, products, isUpdate = true) {
     const itemList = [];
 
-    items.forEach((el: any) => {
-      const objItem: any = Object.assign({}, el);
-      const price = el.instance_price ? el.instance_price : el.base_price;
-      Object.assign(objItem, {
-        productType: el.type,
-        price,
-        discountedPrice: discountCalc(price, el.discount),
-      });
-      itemList.push(objItem);
+    if (!products || products.length <= 0)
+      overallDetails = [];
+
+    this.productService.updateProducts(products);
+
+    overallDetails.forEach(el => {
+      if (!el.instance_id)
+        el.instance_id = el._id;
+      const foundProudct = products.find(i => i._id === el.product_id);
+      if (foundProudct) {
+        itemList.push({
+          'instance_id': el.instance_id,
+          'order_id': el.order_id,
+          'product_id': el.product_id,
+          'quantity': el.quantity
+        });
+      }
     });
 
     if (isUpdate)
@@ -249,7 +274,6 @@ export class CartService {
     const currentValue = this.cartItems.getValue();
     const object = {
       product_id: item.product_id,
-      productType: item.type,
       instance_id: item.product_instance_id,
       quantity: 1,
       order_id,
@@ -258,27 +282,10 @@ export class CartService {
     if (found)
       found.quantity += 1;
     else {
-      const instance = item.instances.find(r => r._id === object.instance_id);
-      const color = item.colors.find(r => r._id === instance.product_color_id);
-      currentValue.push(Object.assign(object, {
-        size: instance.size,
-        color,
-        count: instance.inventory.map(r => r.count).reduce((x, y) => +x + +y, 0),
-
-        instances: item.instances
-          .filter(r => r.product_color_id === color._id)
-          .map(r => Object.assign(r, {quantity: r.inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b, 0)})),
-
-        tags: item.tags,
-        name: item.name,
-        price: instance.price,
-        discountedPrice: item.discountedPrice,
-        discount: item.discount,
-        thumbnail: color.image.thumbnail,
-        product_color_id: instance.product_color_id,
-      }));
+      currentValue.push(object);
     }
     this.cartItems.next(currentValue);
+
   }
 
   getLoyaltyBalance() {
@@ -294,20 +301,20 @@ export class CartService {
     });
   }
 
-  calculateDiscount(considerCoupon = false) {
-    return this.cartItems.getValue()
+  calculateDiscount(cartData, considerCoupon = false) {
+    return cartData
       .map(r => Object.assign({}, {
         p: r.price ? r.price : 0,
         d: r.discountedPrice ? r.discountedPrice : 0,
         q: r.quantity ? r.quantity : 1,
       }))
       .map(r => r.q * (r.p - r.d))
-      .reduce((x, y) => x + y , 0);
+      .reduce((x, y) => x + y, 0);
   }
 
-  calculateTotal() {
-    if (this.cartItems && this.cartItems.getValue().length > 0) {
-      return this.cartItems.getValue()
+  calculateTotal(cartData) {
+    if (cartData && cartData.length > 0) {
+      return cartData
         .filter(el => el.count && el.quantity <= el.count)
         .map(el => el.price * el.quantity)
         .reduce((a, b) => (+a) + (+b), 0);
