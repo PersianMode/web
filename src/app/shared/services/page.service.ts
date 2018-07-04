@@ -19,7 +19,7 @@ export class PageService {
   public fileTypes: any;
 
   constructor(private httpService: HttpService, private authService: AuthService,
-    private route: ActivatedRoute, private htp: HttpClient) {
+    private route: ActivatedRoute, private http: HttpClient) {
     route.queryParams.subscribe(params => {
       if (params.hasOwnProperty('preview'))
         this.getPage(`home?preview=&date=` + params.date, false);
