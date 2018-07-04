@@ -10,6 +10,7 @@
       <label class="center">هر محصول NIKE</label>
     </div>
   </div>
+
   <div style="margin: 25px;" *ngIf="loginStatus == Status.Login">
     <form (ngSubmit)="login()" [formGroup]="loginForm">
       <div fxLayout="column" fxLayoutAlign="center center">
@@ -71,6 +72,7 @@
     <label>عضو نیستید؟</label>
     <a class="clickable-link" style="text-decoration: underline;" (click)="goToRegister()">به ما بپیوندید</a>
   </div>
+
   <div style="margin: 25px;" *ngIf="loginStatus != Status.Login">
     <div *ngIf="(loginStatus === Status.ActivatingLink || loginStatus === Status.InvalidLink)">
       <div fxLayout="column" fxLayoutAlign="center center">
@@ -87,6 +89,7 @@
         </div>
       </div>
     </div>
+
     <div *ngIf="(loginStatus === Status.NotVerified || loginStatus === Status.VerifiedEmail)">
       <div fxLayout="column" fxLayoutAlign="center center">
         <div fxFlex="33" style="margin-top: 10px;">
@@ -113,6 +116,7 @@
         </div>
       </div>
     </div>
+
     <div *ngIf="loginStatus === Status.VerifiedMobile">
       <div fxLayout="column" fxLayoutAlign="center center">
         <div fxFlex="33" style="margin-top: 10px;">
@@ -133,5 +137,85 @@
         </div>
       </div>
     </div>
+
+    <div *ngIf="loginStatus === Status.SetMobileNumber">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxFlex="80" fxFlex.sm="100" fxFlex.xs="100" fxFlexOffset="10" fxFlexOffset.sm="0" fxFlexOffset.xs="0">
+          <div>
+            <label>برای تکمیل ثبت نام لطفا شماره تلفن همراه خود را وارد کنید</label>
+          </div>
+          <div class="input-container">
+            <input class="input-field" type="text" [(ngModel)]="mobile_no" (ngModelChange)="checkMobilePattern()"
+                   placeholder="تلفن همراه"
+                   [ngClass]="mobileHasError ? 'input-error' : null"/>
+          </div>
+          <div class="field-error" *ngIf="mobileHasError">
+            <label>لطفا شماره تلفن معتبری وارد کنید</label>
+          </div>
+          <div class="div-btn inform-btn clickable-link" (click)="addMobileNumber()">
+            <label>ارسال</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Setting the preferences -->
+    <!-- tags -->
+    <div *ngIf="loginStatus === Status.PreferenceTags">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <h1>انتخاب دسته بندی</h1>
+        <mat-selection-list #tags>
+          <mat-list-option *ngFor="let tag of tagsType" [value]="tag" dir="rtl">
+            {{tag.name}}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="setTags(tags)">
+          <label>مرحله بعدی</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- sizes -->
+    <div *ngIf="loginStatus === Status.PreferenceSize">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxLayout="column" fxLayoutAlign="center center">
+          <app-size-picker [sizes]="shoesSize" [gender]="gender" [productType]="productType"
+                           (value)="selectedSize($event)"></app-size-picker>
+        </div>
+      </div>
+      <br>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="setSize()">
+          <label>مرحله بعدی</label>
+        </div>
+        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="backToSetTags()">
+          <label>مرحله قبل</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- brands -->
+    <div *ngIf="loginStatus === Status.PreferenceBrand">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <h1>انتخاب برند</h1>
+        <mat-selection-list #brands>
+          <mat-list-option *ngFor="let brand of brandsType" [value]="brand">
+            {{brand.name}}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="setBrand(brands)">
+          <label>مرحله بعد</label>
+        </div>
+        <div fxFlex="33" class="div-btn inform-btn clickable-link" (click)="backToSetSize()">
+          <label>مرحله قبل</label>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>

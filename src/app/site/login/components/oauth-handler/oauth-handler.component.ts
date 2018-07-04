@@ -17,8 +17,12 @@ const expiredLinkStatusCode = 437;
 export class OauthHandlerComponent implements OnInit {
   dialogEnum = DialogEnum;
 
+  inlineLogin = false;
+  finalLoginStatus: LoginStatus = LoginStatus.Login;
   isFromActivationLink = false;
   isValidActivationLink = true;
+  shouldGoToSetMobile = false;
+  shouldGoToPreferences = false;
 
   constructor(private authService: AuthService, private router: Router,
               @Inject(WINDOW) private window, public dialog: MatDialog,
@@ -28,24 +32,35 @@ export class OauthHandlerComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       return new Promise((resolve, reject) => {
-        // first check if we're sent from an activation link or not
         if (params['link']) {
-          return this.authService.activateEmail(params['link'])
-            .then(data => resolve(data))
-            .catch(err => reject(err));
-        }
-        resolve(false);
+          // if sent from google callback (to set mobile or preferences)
+          if (params['link'] === 'setMobile') {
+            resolve({method: 'google'});
+          } else if (params['link'] === 'setPreferences') {
+            resolve({method: 'preferences'});
+          } else {
+            // if sent from activation link
+            return this.authService.activateEmail(params['link'])
+              .then(data => resolve({data, method: 'email'}))
+              .catch(err => reject(err));
+          }
+        } else
+          resolve(false);
       })
         .then(res => {
-          if (res) {
+          if (res['method'] === 'email') {
             this.isFromActivationLink = true;
+          } else if (res['method'] === 'google') {
+            this.shouldGoToSetMobile = true;
+          } else if (res['method'] === 'preferences') {
+            this.shouldGoToPreferences = true;
           }
         })
         .catch(err => {
           if (err && err.status === expiredLinkStatusCode) {
             this.isValidActivationLink = false;
           } else {
-            console.error('error in activating via link: ', err);
+            console.error('error: ', err);
           }
         })
         .then(res => {
@@ -59,7 +74,11 @@ export class OauthHandlerComponent implements OnInit {
                 if (!data) {
                   return innerReject('oath-handler::authService->isVerified is false');
                 } else {
-                  this.router.navigate(['/home']);
+                  if (!this.shouldGoToPreferences) {
+                    this.returnBack();
+                  } else {
+                    return innerReject('go to preferences page first!');
+                  }
                 }
               }
             );
@@ -67,25 +86,33 @@ export class OauthHandlerComponent implements OnInit {
         })
         .catch(err => {
           console.error('error: ', err);
+          this.finalLoginStatus = this.shouldGoToSetMobile ? LoginStatus.SetMobileNumber :
+            (this.shouldGoToPreferences ? LoginStatus.PreferenceTags :
+              (this.isFromActivationLink ? LoginStatus.ActivatingLink :
+                (!this.isValidActivationLink ? LoginStatus.InvalidLink : LoginStatus.Login)));
+
           if (this.window.innerWidth >= 960) {
             const rmDialog = this.dialog.open(GenDialogComponent, {
               width: '500px',
               data: {
                 componentName: this.dialogEnum.login,
                 extraData: {
-                  loginStatus: this.isFromActivationLink ? LoginStatus.ActivatingLink :
-                    (!this.isValidActivationLink ? LoginStatus.InvalidLink : LoginStatus.Login)
+                  loginStatus: this.finalLoginStatus
                 }
               }
             });
             rmDialog.afterClosed().subscribe(data => {
               if (data)
-                this.router.navigate(['home']);
+                this.returnBack();
             });
           } else {
-            this.router.navigate(['login']);
+            this.inlineLogin = true;
           }
         });
     });
+  }
+
+  returnBack() {
+    this.router.navigate(['home']);
   }
 }

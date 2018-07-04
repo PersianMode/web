@@ -1,20 +1,22 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
-import {AuthService} from '../../../../shared/services/auth.service';
+import {AuthService, VerificationErrors} from '../../../../shared/services/auth.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {WINDOW} from '../../../../shared/services/window.service';
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import {LoginStatus} from '../../../login/components/login/login.component';
+import {Router} from '@angular/router';
 
 enum RegStatus {
   Register = 'Register',
   Verify = 'Verify',
   MobileRegistered = 'MobileRegistered',
-  PreferenceSize = 'PreferenceSize',
-  PreferenceBrand = 'PreferenceBrand',
-  PreferenceTags = 'PreferenceTags',
-};
+}
 
 @Component({
   selector: 'app-register',
@@ -22,20 +24,6 @@ enum RegStatus {
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  shoesUS = [];
-  productType = 'footwear';
-  sizeSelected;
-  brandSelected;
-  tagsSelected;
-  brandsType = [];
-  tagsType = [];
-  shoesSize;
-  preferences = {
-    preferred_size: null,
-    preferred_brands: [],
-    preferred_tags: [],
-    username: null
-  };
   @Output() closeDialog = new EventEmitter<boolean>();
   dob = null;
   dateObject = null;
@@ -46,9 +34,12 @@ export class RegisterComponent implements OnInit {
   regStatus = RegStatus;
   curStatus = RegStatus.Register;
   code = null;
+  dialogEnum = DialogEnum;
 
   constructor(private httpService: HttpService, private authService: AuthService,
-              private snackBar: MatSnackBar, private dict: DictionaryService) {
+              private snackBar: MatSnackBar, private dict: DictionaryService,
+              @Inject(WINDOW) private window, public dialog: MatDialog,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -159,28 +150,53 @@ export class RegisterComponent implements OnInit {
   }
 
   checkCode() {
-    this.httpService.get('tags/Category').subscribe(tags => {
-      tags.forEach(el => {
-        this.tagsType.push({name: this.dict.translateWord(el.name.trim()), '_id': el._id});
-      });
-    });
     this.httpService.post('register/verify', {
-      code: this.code,
       username: this.registerForm.controls['username'].value,
+      code: this.code,
     }).subscribe(
       (data) => {
-        // login service
         this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
-          .then(res => {
-            this.preferences.username = this.registerForm.controls['username'].value;
-            this.curStatus = this.regStatus.PreferenceTags;
-            // this.closeDialog.emit(true);
+        // comes here when customer activates via email BEFORE activating mobile, which rarely happens!
+        // this way, they get logged in and the next time they try logging in, they will be setting preferences
+          .then(userObj => {
+            if (userObj['is_preferences_set']) {
+              this.closeDialog.emit(true);
+              return;
+            }
+
+            if (this.window.innerWidth >= 960) {
+              const rmDialog = this.dialog.open(GenDialogComponent, {
+                width: '500px',
+                data: {
+                  componentName: this.dialogEnum.login,
+                  extraData: {
+                    loginStatus: LoginStatus.PreferenceTags
+                  }
+                }
+              });
+              rmDialog.afterOpen().subscribe(() => {
+                this.closeDialog.emit(false);
+              });
+              rmDialog.afterClosed().subscribe(resp => {
+                if (resp) {
+                  this.closeDialog.emit(true);
+                  this.router.navigate(['home']);
+                }
+              });
+            } else {
+              this.router.navigate(['../login/oauth/setPreferences']);
+            }
           })
+          // the usual way is verifying through mobile, but email is stayed put for later
+          // so depending on status code, we can understand that customer is verified by mobile or not
           .catch(err => {
-            // correct code but not verified via email
-            // TODO: Merge happened here -> could cause problem!
-            this.curStatus = this.regStatus.MobileRegistered;
-            // console.error('Cannot login: ', err);
+            if (err.status === VerificationErrors.notEmailVerified.status) {
+              // mobile activated
+              this.curStatus = this.regStatus.MobileRegistered;
+            } else {
+              // wrong verification code
+              console.error('error in logging in:', err);
+            }
           });
       },
       (err) => {
@@ -188,60 +204,5 @@ export class RegisterComponent implements OnInit {
         console.error('Cannot verify registration: ', err);
       }
     );
-  }
-
-  setTags(tags) {
-    this.preferences.preferred_tags = tags.selectedOptions.selected.map(item => item.value);
-    this.httpService.get('../../../../../assets/shoesSize.json').subscribe(res => {
-      if (this.gender === 'm') {
-        res.men.forEach(element => {
-          this.shoesUS.push({value: element['us'], disabled: false, displayValue:  element['us']});
-        });
-      } else {
-        res.women.forEach(element => {
-          this.shoesUS.push({value: element['us'], disabled: false, displayValue:  element['us']});
-        });
-      }
-      this.shoesSize = this.shoesUS;
-    });
-    return this.curStatus = this.regStatus.PreferenceSize;
-  }
-
-  setSize() {
-    this.httpService.get('brand').subscribe(brands => {
-      brands.forEach(el => {
-        this.brandsType.push({name: this.dict.translateWord(el.name.trim()), '_id': el._id});
-      });
-    });
-    return this.curStatus = this.regStatus.PreferenceBrand;
-  }
-
-  selectedSize(event) {
-    this.preferences.preferred_size = event;
-  }
-
-
-  setBrand(brands) {
-    this.preferences.preferred_brands = brands.selectedOptions.selected.map(item => item.value);
-    this.httpService.post(`customer/preferences`, {
-      username: this.preferences.username,
-      preferred_brands: this.preferences.preferred_brands,
-      preferred_tags: this.preferences.preferred_tags,
-      preferred_size: this.preferences.preferred_size
-    }).subscribe(response => {
-      this.closeDialog.emit(true);
-    });
-  }
-
-  backToCheckCode() {
-    return this.curStatus = this.regStatus.Verify;
-  }
-
-  backToSetSize() {
-    return this.curStatus = this.regStatus.PreferenceSize;
-  }
-
-  backToSetTags() {
-    return this.curStatus = this.regStatus.PreferenceTags;
   }
 }

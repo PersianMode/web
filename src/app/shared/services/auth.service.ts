@@ -34,7 +34,7 @@ export class AuthService {
     this.getWarehouses();
 
     this.isLoggedIn.subscribe(data => {
-      if (data && Object.keys(data).length > 0) {
+      if (data && Object.keys(data).filter(el => data[el]).length > 1) {
         this.tempUserData = {};
       }
     });
@@ -45,8 +45,8 @@ export class AuthService {
       const tempUrl = url.toLowerCase();
 
       this.httpService.get((tempUrl.includes('agent') || tempUrl.includes('?preview') ? 'agent/' : '') + 'validUser').subscribe(
+        // 'verified user' and 'not logged in user' comes here, but the latter is rejected at the final line
         (data) => {
-          console.log('data from validUser: ', data);
           this.populateUserDetails(data);
           this.isLoggedIn.next(data);
           this.isVerified.next(!!data.is_verified);
@@ -54,24 +54,18 @@ export class AuthService {
           if (this.userDetails.warehouse_id) {
             this.socketService.init();
           }
-          data.username ? resolve() : reject();
+          data.username ? resolve(data) : reject();
         },
+        // 'no such user' and 'unverified user' comes here
         (err) => {
+          console.error('error in validUser!', err);
+
           this.populateUserDetails();
           this.isLoggedIn.next({});
 
           // on the condition that the user exists but not verified on each aspect
           // better practice to check existence of error message in err.error
           reject(err);
-          // Object.keys(VerificationErrors).forEach(ver => {
-          //   if (err.status === VerificationErrors[ver].status)
-          //     reject(VerificationErrors[ver]);
-          // });
-          console.error('error in validUser!', err);
-          // reject({
-          //   status: 403,
-          //   error: err
-          // });
         });
 
     });
@@ -120,11 +114,11 @@ export class AuthService {
         (data) => {
           this.populateUserDetails(data);
           this.isLoggedIn.next(data);
-          this.isVerified.next(data.is_verified ? data.is_verified : false);
+          this.isVerified.next(!!data.is_verified);
           if (this.userDetails.warehouse_id) {
             this.socketService.init();
           }
-          resolve();
+          resolve(data);
         },
         (err) => {
           this.isLoggedIn.next({});
@@ -141,9 +135,23 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.httpService.get(`user/activate/link/${link}`).subscribe(
         data => {
-          resolve(data);
+          resolve(data); // returns is_verified level too
         }, err => {
           console.error('could not activate via this link: ', err);
+          reject(err);
+        }
+      );
+    });
+  }
+
+  addMobileNumber(mobile_no) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post(`register/mobile`, {mobile_no}).subscribe(
+        data => {
+          resolve(data);
+        },
+        err => {
+          console.error('could not set mobile number: ', err);
           reject(err);
         }
       );

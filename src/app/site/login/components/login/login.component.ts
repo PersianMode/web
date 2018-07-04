@@ -7,15 +7,20 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {HttpService} from '../../../../shared/services/http.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
 export enum LoginStatus {
   Login = 'Login',
-  ActivatingLink = 'ActivatingLink',  // which means the status that someone has confirmed their email
-  InvalidLink = 'InvalidLink',        // which means the status that someone used an invalid link
-  NotVerified = 'NotVerified',        // which means the status that nothing has been verified!
-  VerifiedMobile = 'VerifiedMobile',  // which means the status that mobile has been verified
-  VerifiedEmail = 'VerifiedEmail',    // which means the status that email has been verified
-  VerifiedBoth = 'VerifiedBoth',      // which means the status that both things has been verified
+  ActivatingLink = 'ActivatingLink',    // which means the status that someone has confirmed their email
+  InvalidLink = 'InvalidLink',          // which means the status that someone used an invalid link
+  SetMobileNumber = 'SetMobileNumber',  // which means the status that the user should set their mobile
+  NotVerified = 'NotVerified',          // which means the status that nothing has been verified!
+  VerifiedMobile = 'VerifiedMobile',    // which means the status that mobile has been verified
+  VerifiedEmail = 'VerifiedEmail',      // which means the status that email has been verified
+  VerifiedBoth = 'VerifiedBoth',        // which means the status that both things has been verified
+  PreferenceSize = 'PreferenceSize',    // which means the status that we are setting the preferred size
+  PreferenceBrand = 'PreferenceBrand',  // which means the status that we are setting the preferred brand
+  PreferenceTags = 'PreferenceTags',    // which means the status that we are setting the preferred tags
 };
 
 @Component({
@@ -32,14 +37,41 @@ export class LoginComponent implements OnInit {
   curFocus = null;
   Status = LoginStatus;
   code = null;
+  mobileHasError = false;
+  mobile_no = null;
+
+  // Preferences
+  gender = null;
+  is_preferences_set;
+  shoesUS = [];
+  productType = 'footwear';
+  brandsType = [];
+  tagsType = [];
+  shoesSize;
+  preferences = {
+    preferred_size: null,
+    preferred_brands: [],
+    preferred_tags: [],
+    username: null
+  };
 
   constructor(private authService: AuthService, private router: Router,
               @Inject(WINDOW) private window, public dialog: MatDialog,
-              private snackBar: MatSnackBar, private httpService: HttpService) {
+              private snackBar: MatSnackBar, private httpService: HttpService,
+              private dict: DictionaryService) {
   }
 
   ngOnInit() {
     this.initForm();
+    this.getTagTypes();
+  }
+
+  getTagTypes() {
+    this.httpService.get('tags/Category').subscribe(tags => {
+      tags.forEach(el => {
+        this.tagsType.push({name: this.dict.translateWord(el.name.trim()), '_id': el._id});
+      });
+    });
   }
 
   initForm() {
@@ -79,17 +111,10 @@ export class LoginComponent implements OnInit {
         username: this.loginForm.controls['username'].value,
         password: this.loginForm.controls['password'].value,
       };
-      this.authService.login(this.authService.tempUserData['username'], this.authService.tempUserData['password'])
-        .then(data => {
-          this.authService.tempUserData = {};
-          this.closeDialog.emit(true);
-          this.router.navigate(['home']);
-        })
+      this.tryLoggingIn()
         .catch(err => {
           // there are two possibilities here
           // one is that the user is not verified yet, and another is that the credentials are invalid
-
-          // here's where everything should take action :D
           switch (err.status) {
             case VerificationErrors.notVerified.status:
               this.loginStatus = LoginStatus.NotVerified;
@@ -106,6 +131,21 @@ export class LoginComponent implements OnInit {
               break;
           }
         });
+    }
+  }
+
+  outRouteOnPreferencesCondition(iPS, g) {
+    if (iPS)
+      this.is_preferences_set = iPS;
+    if (g)
+      this.gender = g;
+
+    if (this.is_preferences_set) {
+      this.closeDialog.emit(true);
+      this.router.navigate(['home']);
+    } else {
+      this.loginStatus = LoginStatus.PreferenceTags;
+      this.is_preferences_set = true;
     }
   }
 
@@ -189,20 +229,129 @@ export class LoginComponent implements OnInit {
       code: this.code,
     }).subscribe(
       (data) => {
-        this.authService.login(this.authService.tempUserData['username'], this.authService.tempUserData['password'])
-          .then(res => {
-            this.closeDialog.emit(true);
-          })
-          .catch(err => {
-            // correct code but not verified via email
-            this.loginStatus = this.Status.VerifiedMobile;
-            // console.error('Cannot login: ', err);
-          });
+        if (this.loginStatus === this.Status.VerifiedEmail) { // came from google login
+          this.authService.checkValidation(this.router.url)
+            .then(userData => {
+              this.outRouteOnPreferencesCondition(userData['is_preferences_set'], userData['gender'] || 'm');
+            })
+            .catch(err => {
+              // might be real error
+              // or
+              // might close register page, activates via email, then enters the code in the login page
+
+              // try the latter
+              this.tryLoggingIn()
+                .catch(error => {
+                  // so it's the former
+                  console.error('not validated!', err, error);
+                  this.closeDialog.emit(true);
+                  this.router.navigate(['home']);
+                });
+            });
+        } else {
+          this.tryLoggingIn()
+            .catch(err => {
+              // correct code but not verified via email
+              this.loginStatus = this.Status.VerifiedMobile;
+            });
+        }
       },
       (err) => {
         // wrong verification code
         console.error('Cannot verify registration: ', err);
       }
     );
+  }
+
+  tryLoggingIn() {
+    return new Promise((resolve, reject) => {
+      this.authService.login(this.authService.tempUserData['username'] || this.loginForm.controls['username'].value,
+        this.authService.tempUserData['password'] || this.loginForm.controls['password'].value)
+        .then(userData => {
+          this.authService.tempUserData = {};
+          this.outRouteOnPreferencesCondition(userData['is_preferences_set'], userData['gender'] || 'm');
+          resolve();
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  addMobileNumber() { // only when came from google login
+    if (this.mobile_no && !this.mobileHasError) {
+      this.authService.addMobileNumber(this.mobile_no)
+        .then(data => {
+          this.loginStatus = this.Status.VerifiedEmail;
+        })
+        .catch(err => {
+        });
+    }
+  }
+
+  // Preferences
+  setTags(tags) {
+    this.preferences.preferred_tags = tags.selectedOptions.selected.map(item => item.value);
+    this.httpService.get('../../../../../assets/shoesSize.json').subscribe(res => {
+      this.shoesUS = [];
+      if (this.gender === 'm') {
+        res.men.forEach(element => {
+          this.shoesUS.push({value: element['us'], disabled: false, displayValue: element['us']});
+        });
+      } else {
+        res.women.forEach(element => {
+          this.shoesUS.push({value: element['us'], disabled: false, displayValue: element['us']});
+        });
+      }
+      this.shoesSize = this.shoesUS;
+
+      // set brands in here so we don't need to wait in the next step
+      this.httpService.get('brand').subscribe(brands => {
+        this.brandsType = [];
+        brands.forEach(el => {
+          this.brandsType.push({name: this.dict.translateWord(el.name.trim()), '_id': el._id});
+        });
+      });
+    });
+    this.loginStatus = this.Status.PreferenceSize;
+  }
+
+  setSize() {
+    this.loginStatus = this.Status.PreferenceBrand;
+  }
+
+  selectedSize(event) {
+    this.preferences.preferred_size = event;
+  }
+
+
+  setBrand(brands) {
+    this.preferences.preferred_brands = brands.selectedOptions.selected.map(item => item.value);
+    // this API should be called anyway to disable the setting preferences steps
+    this.httpService.post(`customer/preferences`, {
+      preferred_brands: this.preferences.preferred_brands,
+      preferred_tags: this.preferences.preferred_tags,
+      preferred_size: this.preferences.preferred_size
+    }).subscribe(response => {
+      this.closeDialog.emit(true);
+      this.router.navigate(['home']);
+    }, err => {
+      console.error('error occurred in submitting preferences: ', err);
+    });
+  }
+
+  backToSetSize() {
+    this.loginStatus = this.Status.PreferenceSize;
+  }
+
+  backToSetTags() {
+    this.loginStatus = this.Status.PreferenceTags;
+  }
+
+  checkMobilePattern() {
+    if ((/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/).test(this.mobile_no))
+      this.mobileHasError = false;
+    else
+      this.mobileHasError = true;
   }
 }
