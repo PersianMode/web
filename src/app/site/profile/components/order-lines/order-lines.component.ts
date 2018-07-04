@@ -103,10 +103,12 @@ export class OrderLinesComponent implements OnInit {
 
   checkReturnOrderLine(ol) {
     const date =  ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
-    const statusHave = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Delivered);
-    const statusDontHave = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Return || ticket.status === STATUS.Cancel);
-    if (statusHave.length > 0 && statusDontHave.length === 0 && date > 0 && !ol['returnFlag'] ) return true;
-    else return false;
+    console.log('date', date);
+
+    ol.tickets.find(tk =>
+       tk.status === STATUS.Delivered && ( tk.status !== STATUS.Cancel || tk.status !== STATUS.Return)
+       && !ol['returnFlag'] && date > 0
+    );
   }
 
   returnOrderLine(ol) {
@@ -159,10 +161,16 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkCancelOrderLine(ol) {
-    const haveStatus = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.OnDelivery || ticket.status === STATUS.Delivered);
-    const dontHaveStatus = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Cancel || ticket.status === STATUS.Return);
-    if (haveStatus.length > 0 && dontHaveStatus.length === 0  && !ol['cancelFlag']) return true;
-    else return false;
+    ol.tickets.find(tk =>
+      (tk.status === STATUS.OnDelivery || tk.status === STATUS.Delivered ) && ( tk.status !== STATUS.Cancel || tk.status !== STATUS.Return)
+       && !ol['cancelFlag']
+    );
+
+    // const haveStatus = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.OnDelivery ||
+      //  ticket.status === STATUS.Delivered || ticket.status === STATUS.Cancel || ticket.status === STATUS.Return);
+    // const dontHaveStatus = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Cancel || ticket.status === STATUS.Return);
+    // if (!haveStatus && ol['cancelFlag']) return false;
+    // else return true;
   }
 
   openSnackBar(message: string) {
