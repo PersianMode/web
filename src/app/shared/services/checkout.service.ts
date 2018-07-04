@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 @Injectable()
 export class CheckoutService {
   dataIsReady: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private productData;
   private paymentType = PaymentType;
   private selectedPaymentType = this.paymentType.cash;
   private loyaltyValue = 0;
@@ -67,23 +68,26 @@ export class CheckoutService {
     }
   }
 
+  setProductData(data) {
+    this.productData = data;
+  }
+
   setPaymentType(pt) {
     this.selectedPaymentType = pt;
   }
 
   finalCheck() {
-    const cartItems = this.cartService.cartItems.getValue()
+    const cartItems = this.productData
       .map(r => Object.assign({}, {
         product_id: r.product_id,
         product_instance_id: r.instance_id,
         price: r.price,
         count: r.count - (r.reserved ? r.reserved : 0),
         quantity: r.quantity,
+        discount: r.discount
       }));
-    this.httpService.post('finalCheck', cartItems)
-      .subscribe(res => {
-        console.log(res);
-      }, err => console.error(err));
+    return this.httpService.post('finalCheck', cartItems)
+
   }
 
   getLoyaltyBalance() {
@@ -103,9 +107,8 @@ export class CheckoutService {
   }
 
   getTotalDiscount() {
-    this.total = this.cartService.calculateTotal();
-    this.discount = this.cartService.calculateDiscount(true);
-
+    this.total = this.cartService.calculateTotal(this.productData);
+    this.discount = this.cartService.calculateDiscount(this.productData, true);
     return {
       total: this.total,
       discount: this.discount,
@@ -138,9 +141,11 @@ export class CheckoutService {
       }
     }
   }
+
   private get customerData() {
     return this._ads[3];
   }
+
   private get address() {
     return this._ads[4];
   }
@@ -151,11 +156,11 @@ export class CheckoutService {
 
   private accumulateData() {
     return {
-      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems() ,
+      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.address,
       customerData: this.customerData,
-      transaction_id: 'xyz' + Math.floor( Math.random() * 100000 ),
+      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
       used_point: 0,
       used_balance: 0,
       total_amount: this.total,
@@ -168,9 +173,26 @@ export class CheckoutService {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
       .subscribe(res => {
-        this.cartService.emptyCart();
-        this.router.navigate(['/', 'profile']);
-      },
+          this.cartService.emptyCart();
+          this.router.navigate(['/', 'profile']);
+        },
         err => console.error(err));
   }
+
+  calculateDeliveryDiscount(durationId) {
+    let data = {
+      customer_id: this.authService.userDetails.userId ? this.authService.userDetails.userId : null,
+      duration_id: durationId
+    };
+    return new Promise((resolve, reject) => {
+      this.httpService.post('/calculate/order/price', data)
+        .subscribe(res => {
+            resolve(res);
+          },
+          err => {
+            reject();
+          });
+    });
+  }
+
 }

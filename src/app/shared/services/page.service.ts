@@ -5,6 +5,7 @@ import {HttpService} from './http.service';
 import {Subject} from 'rxjs/Subject';
 import {AuthService} from './auth.service';
 import {HttpClient} from '@angular/common/http';
+import {ActivatedRoute} from '@angular/router';
 
 const defaultComponents = ['menu', 'slider', 'logos', 'footer'];
 
@@ -18,9 +19,14 @@ export class PageService {
   public fileTypes: any;
 
   constructor(private httpService: HttpService, private authService: AuthService,
-              private http: HttpClient) {
+    private route: ActivatedRoute, private htp: HttpClient) {
+    route.queryParams.subscribe(params => {
+      if (params.hasOwnProperty('preview'))
+        this.getPage(`home?preview=&date=` + params.date, false);
+      else
+        this.getPage('home', false);
+    });
     this.getFileTypes();
-    this.getPage('home', false);
   }
 
   private classifyPlacements(pageName, data) {
@@ -54,11 +60,18 @@ export class PageService {
 
   getPage(pageName, emit = true) {
     const i = setInterval(() => { // All other pages should wait for initialisation of Home placements
-      if (pageName === 'home' || this.homeWasLoaded) {
+      if (pageName === 'home' || pageName.includes('?preview') || this.homeWasLoaded) {
         clearInterval(i);
         if (!this.cache[pageName]) {
+          const originalPageName = pageName;
           pageName = pageName.toLowerCase().includes('?preview') ? pageName.substr(0, pageName.indexOf('?preview')) : pageName;
-          this.httpService.post('page' + (this.authService.userDetails.isAgent ? '/cm/preview' : ''), {address: pageName}).subscribe(
+          const plcDate = originalPageName.toLowerCase().includes('?preview') && originalPageName.toLowerCase().includes('&date=') ?
+            originalPageName.toLowerCase().substr(originalPageName.toLowerCase().indexOf('&date=') + 6) :
+            null;
+          this.httpService.post('page' + (this.authService.userDetails.isAgent ? '/cm/preview' : ''), {
+            address: pageName,
+            date: plcDate,
+          }).subscribe(
             (data: any) => {
               if (data && data.placement && data.placement.length) {
                 this.cache[pageName] = {

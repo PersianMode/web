@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, Output, HostListener} from '@angular/core';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -9,6 +9,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
 import {UploadImageDialogComponent} from '../menu-placement/upload-image-dialog/upload-image-dialog.component';
 import {DomSanitizer} from '@angular/platform-browser';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-app-feed-placement',
@@ -17,6 +18,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 })
 export class AppFeedPlacementComponent implements OnInit {
   @Input() pageId = null;
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value)
@@ -34,12 +36,16 @@ export class AppFeedPlacementComponent implements OnInit {
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog,
-    private snackBar: MatSnackBar, private sanitizer: DomSanitizer) {}
+    private snackBar: MatSnackBar, private sanitizer: DomSanitizer,
+    private revertService: RevertPlacementService) {}
 
   ngOnInit() {
     if (!this.dragulaService.find(this.bagName))
       this.dragulaService.setOptions(this.bagName, {
         direction: 'vertical',
+        moves: () => {
+          return this.canEdit;
+        }
       });
 
     this.dragulaService.dropModel.subscribe(value => {
@@ -203,8 +209,16 @@ export class AppFeedPlacementComponent implements OnInit {
   }
 
   selectItem(item) {
-    this.selectedItem = item;
-    this.setFormValue(item.info);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item);
+    } else {
+      this.selectedItem = item;
+      this.setFormValue(item.info);
+    }
+  }
+
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   setFormValue(value = null) {
@@ -269,5 +283,15 @@ export class AppFeedPlacementComponent implements OnInit {
 
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + url);
     }
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.revertService.setRevertMode(true);
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.revertService.setRevertMode(false);
   }
 }
