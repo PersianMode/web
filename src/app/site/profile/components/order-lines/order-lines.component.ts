@@ -161,7 +161,7 @@ export class OrderLinesComponent implements OnInit {
 
   checkCancelOrderLine(ol) {
     return ol.tickets.find(tk =>
-      (tk.status === STATUS.OnDelivery || tk.status === STATUS.Delivered )
+      (tk.status !== STATUS.OnDelivery && tk.status !== STATUS.Delivered )
        && ( tk.status !== STATUS.Cancel || tk.status !== STATUS.Return)
        && !ol['cancelFlag']
       );
