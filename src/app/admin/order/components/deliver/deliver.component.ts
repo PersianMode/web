@@ -17,7 +17,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 })
 export class DeliverComponent implements OnInit, OnDestroy {
 
-  
+
   @Output() newDeliverCount = new EventEmitter();
 
 
@@ -45,7 +45,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   socketObserver: any = null;
- 
+
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,

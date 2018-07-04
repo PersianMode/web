@@ -17,7 +17,6 @@ import {FormControl} from '@angular/forms';
 import {TicketComponent} from '../ticket/ticket.component';
 
 
-
 @Component({
   selector: 'app-order-inbox',
   templateUrl: './inbox.component.html',
@@ -31,7 +30,6 @@ import {TicketComponent} from '../ticket/ticket.component';
   ],
 })
 export class InboxComponent implements OnInit, OnDestroy {
-
 
 
   @Output() OnNewInboxCount = new EventEmitter();
@@ -60,11 +58,11 @@ export class InboxComponent implements OnInit, OnDestroy {
   socketObserver: any = null;
 
   constructor(private httpService: HttpService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private authService: AuthService,
-    private socketService: SocketService,
-    private progressService: ProgressService) {
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private authService: AuthService,
+              private socketService: SocketService,
+              private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -116,7 +114,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
     if (index === 0)
       index = 1;
-    return index
+    return index;
   }
 
   getDate(orderTime) {
@@ -150,6 +148,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     })
 
   }
+
   showDetial(orderLine) {
     this.dialog.open(ProductViewerComponent, {
       width: '400px',
@@ -205,7 +204,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   onSortChange($event: any) {
-
     this.paginator.pageIndex = 0;
     this.load();
   }

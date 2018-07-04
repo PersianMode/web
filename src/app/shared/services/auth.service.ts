@@ -82,23 +82,23 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.httpService.post(
         (this.router.url.includes('agent') ? 'agent/' : '') + 'login', info).subscribe(
-          (data) => {
-            this.populateUserDetails(data);
-            this.isLoggedIn.next(data);
-            this.isVerified.next(data.is_verified ? data.is_verified : false);
-            if (this.userDetails.warehouse_id) {
-              this.socketService.init();
-            }
-            resolve();
-          },
-          (err) => {
-            this.isLoggedIn.next({});
-            this.isVerified.next(false);
-            console.error('Error in login: ', err);
-            this.populateUserDetails();
-            reject(err);
+        (data) => {
+          this.populateUserDetails(data);
+          this.isLoggedIn.next(data);
+          this.isVerified.next(data.is_verified ? data.is_verified : false);
+          if (this.userDetails.warehouse_id) {
+            this.socketService.init();
           }
-        );
+          resolve();
+        },
+        (err) => {
+          this.isLoggedIn.next({});
+          this.isVerified.next(false);
+          console.error('Error in login: ', err);
+          this.populateUserDetails();
+          reject(err);
+        }
+      );
     });
   }
 

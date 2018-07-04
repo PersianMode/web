@@ -3,10 +3,16 @@
 }
 
 .search-result-panel {
+  direction: ltr;
   background-color: white;
-  min-width: 250px;
+  min-width: 300px;
   padding: 3px;
   z-index: 100;
+  width: 50%;
+  position: fixed;
+  left: 2px;
+  top: 109px;
+  height: 300px;
 }
 
 .search-item {
@@ -17,7 +23,7 @@
 }
 
 .search-name {
-  font-size: 0.8em;
+  font-size: 0.45em;
   color: black;
   white-space: pre-wrap;
   overflow: hidden;
@@ -36,12 +42,12 @@
 }
 
 .search-item-image {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
 }
 
 .second-search-item {
-  text-align: left;
+  text-align: right;
   margin: 3px;
 }
 
@@ -62,4 +68,12 @@ hr {
   border-style: dashed;
   border-width: 0.5px;
   border-color: gray;
+}
+
+.close-search {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  cursor: pointer;
+  font-size: 20px;
 }

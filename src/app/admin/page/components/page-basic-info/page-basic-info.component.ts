@@ -42,7 +42,6 @@ export class PageBasicInfoComponent implements OnInit {
       (params) => {
         this.id = params['id'] && params['id'] !== 'null' ? params['id'] : null;
         this.initPageInfo();
-
       }
     );
 
