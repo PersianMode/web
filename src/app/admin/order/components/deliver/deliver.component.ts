@@ -17,7 +17,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 })
 export class DeliverComponent implements OnInit, OnDestroy {
 
-  
+
   @Output() newDeliverCount = new EventEmitter();
 
 
@@ -161,6 +161,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
     this.load();
   }
   ngOnDestroy(): void {
+    // ToDo: uncomment below code
     // if (this.socketObserver)
     //   this.socketObserver.unsubscribe();
   }
