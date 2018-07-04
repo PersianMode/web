@@ -2,21 +2,18 @@
 
   <mat-card-content>
 
-
+    <app-barcode-checker></app-barcode-checker>
     <div class="example-container mat-elevation-z8">
 
       <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
         <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
-      </button>
-      <button mat-icon-button color="primary" (click)="batchScan()" style="margin-top: 10px;">
-        <mat-icon aria-label="icon-button with a reload icon">fiber_new</mat-icon>
       </button>
 
       <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
         (matSortChange)="onSortChange($event)">
 
         <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell> 
           <mat-cell *matCellDef="let order"> {{getIndex(order)}}</mat-cell>
         </ng-container>
 
@@ -51,22 +48,12 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="used_balance">
-          <mat-header-cell *matHeaderCellDef> بالانس </mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.used_balance}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{getOrderStatus(order)}}</mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="process_order">
-          <mat-header-cell *matHeaderCellDef mat-sort-header>پردازش</mat-header-cell>
+        
+        <ng-container matColumnDef="process">
+          <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let order">
-            <button mat-button color="primary" *ngIf='isReadyForInvoice(order)'>پردازش</button>
+            <button mat-button color="primary" *ngIf='isReadyForInvoice(order)' (click)='requestInvoice(order)'>صدور فاکتور</button>
           </mat-cell>
-
         </ng-container>
 
 
@@ -75,35 +62,32 @@
           <mat-cell *matCellDef="let detail">
 
 
-            <table class='orderLineDetail'>
-              <tr *ngFor='let ol of detail.order.order_lines'>
-                <td>
-                  <div class="imgWrapper">
-                    <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetial(ol)">
-                  </div>
-                </td>
-                <td>
-                  <p>
-                    <b>بارکد:</b> {{ol.instance.barcode}}</p>
-                </td>
-                <td>
-                  <p>
-                    <b>نام:</b> {{ol.instance.product_name}}</p>
-                </td>
-                <td>
-                  <p>
-                    <b>سایز:</b> {{ol.instance.size}}</p>
-                </td>
-                <td>
-                  <p>
-                    <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p>
-                </td>
-                <td>
-                  <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
-                </td>
-              </tr>
-            </table>
-
+            <ul *ngFor='let ol of detail.order.order_lines'>
+              <li>
+                <div class="imgWrapper">
+                  <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetial(ol)">
+                </div>
+              </li>
+              <li>
+                <span>
+                  <b>بارکد:</b> {{ol.instance.barcode}}</span>
+              </li>
+              <li>
+                <span>
+                  <b>نام:</b> {{ol.instance.product_name}}</span>
+              </li>
+              <li>
+                <span>
+                  <b>سایز:</b> {{ol.instance.size}}</span>
+              </li>
+              <li>
+                <span>
+                  <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</span>
+              </li>
+              <li>
+                <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
+              </li>
+            </ul>
 
           </mat-cell>
         </ng-container>

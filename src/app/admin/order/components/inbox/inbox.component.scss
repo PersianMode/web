@@ -18,6 +18,10 @@ mat-header-cell, mat-cell{
   transition: all .5s ease-out;
 }
 
+.imgWrapper {
+  display: inline;
+}
+
 .imgWrapper img{
   height: 72px;
   position: relative;
@@ -51,6 +55,10 @@ mat-header-cell, mat-cell{
   max-height: 500px;
 }
 
-.orderLineDetail {
-  width: 100%;
+ul{
+  text-align: right
+}
+ul li{
+  display: inline;
+  margin-left: 20px;
 }
