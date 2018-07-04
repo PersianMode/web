@@ -161,7 +161,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
     this.load();
   }
   ngOnDestroy(): void {
-    // ToDo: uncomment below code
     // if (this.socketObserver)
     //   this.socketObserver.unsubscribe();
   }

@@ -41,9 +41,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     'order_time',
     'total_order_lines',
     'address',
-    'used_balance',
-    'status',
-    'process_order'
+    'process'
   ];
 
   dataSource = new MatTableDataSource();
@@ -159,14 +157,11 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
 
-  getOrderStatus(order) {
-
-    return '';
-  }
-
   getOrderLineStatus(orderLine) {
-    if (orderLine && orderLine.tickets)
-      return OrderStatus.find(x => x.status === orderLine.tickets.find(x => !x.is_processed).status).name;
+    if (orderLine && orderLine.tickets) {
+      const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
+      return OrderStatus.find(x => x.status === lastTicket.status).name
+    }
   }
 
   showAddress(order) {
@@ -185,8 +180,21 @@ export class InboxComponent implements OnInit, OnDestroy {
 
 
   isReadyForInvoice(order) {
-    return false;
+    return order.order_lines.every(x => {
+      const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
+      return lastTicket && !lastTicket.is_processed && lastTicket.status === STATUS.ReadyForInvoice;
 
+    })
+  }
+
+  requestInvoice(order) {
+    this.httpService.post('order/ticket/invoice', {
+      orderId: order._id
+    }).subscribe(res => {
+
+    }, err => {
+
+    })
   }
 
   openSnackBar(message: string) {
@@ -205,7 +213,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // ToDo: uncomment below code
     // if (this.socketObserver)
     //   this.socketObserver.unsubscribe();
   }
