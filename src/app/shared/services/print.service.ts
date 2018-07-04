@@ -15,7 +15,7 @@ export class PrintService {
       'width=840,height=1200,scrollbars=no,menubar=no,toolbar=no,'
       + 'location=no,status=no,titlebar=no');
     if (!popup) {
-      this.snackBar.open('Print pop-up is blocked by browser. Enable pop-ups from this page.', null, {
+      this.snackBar.open('Print pop-up is blocked by browser. Enable pop-ups from this page and click on print button.', null, {
         verticalPosition: 'top',
         duration: 4000,
       });

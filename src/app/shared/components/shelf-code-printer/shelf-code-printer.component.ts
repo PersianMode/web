@@ -12,6 +12,10 @@ export class ShelfCodePrinterComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.shelfCodePrinter();
+  }
+
+  shelfCodePrinter() {
     this.printService.printShelfCode('XY');
   }
 
