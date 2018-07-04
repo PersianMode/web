@@ -42,7 +42,7 @@ export class BasicInfoComponent implements OnInit {
   balance = 0;
   loyaltyPoints = 0;
   loyaltyPointsValue = 0;
-  loyaltyValue = 70;
+  loyaltyValue = 400;
   balanceFa = '';
   loyaltyPointsFa = '';
   loyaltyPointsValueFa = '';

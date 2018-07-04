@@ -212,6 +212,6 @@ export class DurationFormComponent implements OnInit {
 
   backToComponent() {
     const tempId = this.addEditId ? this.addEditId : this.duration_id;
-    this.router.navigate([`/agent/delivery/${tempId}`]);
+    this.router.navigate([`/agent/deliverycost/${tempId}`]);
   }
 }

@@ -37,6 +37,7 @@ export class CheckoutPageComponent implements OnInit {
   selectedPaymentType = 0;
   earnedLoyaltyPoint = 0;
   system_offline_offer = 25000;
+  loyaltyValue = 400;  // system_offline offer this
   showEarnPointLabel = true;
 
 
@@ -156,7 +157,7 @@ export class CheckoutPageComponent implements OnInit {
       }
         break;
       case this.paymentType.loyaltyPoint: {
-        this.usedLoyaltyPoint = this.loyaltyPoint;
+        this.usedLoyaltyPoint = this.loyaltyPoint * this.loyaltyValue;
         this.checkoutService.setPaymentType(data);
       }
         break;
@@ -194,7 +195,7 @@ export class CheckoutPageComponent implements OnInit {
       // calculate earn point in C&C mode
       valid_loyaltyGroups = this.loyaltyGroups.filter(el => el.min_score <= this.loyaltyPoint);
 
-      if (!valid_loyaltyGroups.length) {
+      if(!valid_loyaltyGroups.length) {
         scoreArray = this.loyaltyGroups.map(el => el.min_score);
         maxScore = Math.min(...scoreArray);
         customer_loyaltyGroup = this.loyaltyGroups.filter(el => el.min_score === maxScore);
@@ -207,6 +208,7 @@ export class CheckoutPageComponent implements OnInit {
       this.earnedLoyaltyPoint = parseInt(this.addPointArray.filter(el => el.name === customer_loyaltyGroup[0].name)[0].added_point)
         +  Math.floor(this.total / this.system_offline_offer);
     }
+    this.checkoutService.setEarnSpentPoint(this.earnedLoyaltyPoint);
   }
 
   calculateDiscount(durationId) {
@@ -222,7 +224,7 @@ export class CheckoutPageComponent implements OnInit {
     }
   }
 
-  checkout(durationId) {
+  checkout() {
     this.checkoutService.checkout();
   }
 }

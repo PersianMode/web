@@ -19,6 +19,8 @@ export class CheckoutService {
   private discount = 0;
   private loyaltyPointValue = 0;
   private balance = 0;
+  private earnSpentPointObj: any = {};
+
   warehouseAddresses = [];
   private _ads: any = null;
   addressData: IAddressInfo;
@@ -74,6 +76,16 @@ export class CheckoutService {
 
   setPaymentType(pt) {
     this.selectedPaymentType = pt;
+  }
+
+  setEarnSpentPoint(et) {
+    this.earnSpentPointObj = {
+      delivery_spent: 0,
+      shop_spent: 0,
+      delivery_value: 0,
+      shop_value: 0,
+      earn_point: et,
+    };
   }
 
   finalCheck() {
@@ -178,6 +190,7 @@ export class CheckoutService {
       duration_days: this.delivery_days,
       time_slot: this.time_slot,
       paymentType: this.selectedPaymentType,
+      loyalty: this.earnSpentPointObj,
     };
   }
 
@@ -207,5 +220,4 @@ export class CheckoutService {
           });
     });
   }
-
 }
