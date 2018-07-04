@@ -102,13 +102,12 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkReturnOrderLine(ol) {
-    const date =  ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
-    console.log('date', date);
-
-    ol.tickets.find(tk =>
-       tk.status === STATUS.Delivered && ( tk.status !== STATUS.Cancel || tk.status !== STATUS.Return)
-       && !ol['returnFlag'] && date > 0
-    );
+    const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14 ) ;
+    return ol.tickets.find(tk => tk.status === STATUS.Delivered
+      && (tk.status !== STATUS.Return || tk.status !== STATUS.Cancel)
+      && !ol['returnFlag']
+      && date > Date.now()
+      );
   }
 
   returnOrderLine(ol) {
@@ -161,16 +160,11 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkCancelOrderLine(ol) {
-    ol.tickets.find(tk =>
-      (tk.status === STATUS.OnDelivery || tk.status === STATUS.Delivered ) && ( tk.status !== STATUS.Cancel || tk.status !== STATUS.Return)
+    return ol.tickets.find(tk =>
+      (tk.status === STATUS.OnDelivery || tk.status === STATUS.Delivered )
+       && ( tk.status !== STATUS.Cancel || tk.status !== STATUS.Return)
        && !ol['cancelFlag']
-    );
-
-    // const haveStatus = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.OnDelivery ||
-      //  ticket.status === STATUS.Delivered || ticket.status === STATUS.Cancel || ticket.status === STATUS.Return);
-    // const dontHaveStatus = ol.tickets && ol.tickets.filter(ticket => ticket.status === STATUS.Cancel || ticket.status === STATUS.Return);
-    // if (!haveStatus && ol['cancelFlag']) return false;
-    // else return true;
+      );
   }
 
   openSnackBar(message: string) {
