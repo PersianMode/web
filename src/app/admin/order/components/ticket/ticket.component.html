@@ -3,7 +3,7 @@
 <div class="example-container mat-elevation-z8" dir="rtl">
   
 
-  <mat-table *ngIf="dataSource;else otherContent" #table [dataSource]="dataSource" class="example-table" >
+  <mat-table *ngIf="dataSource" #table [dataSource]="dataSource" class="example-table" >
 
     <!-- position -->
     <ng-container matColumnDef="position">
