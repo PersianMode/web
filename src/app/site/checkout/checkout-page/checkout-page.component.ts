@@ -37,9 +37,8 @@ export class CheckoutPageComponent implements OnInit {
   selectedPaymentType = 0;
   earnedLoyaltyPoint = 0;
   system_offline_offer = 25000;
-  loyaltyValue = 400;  // system_offline offer this
+  loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
-
 
 
   constructor(private checkoutService: CheckoutService,
@@ -105,6 +104,9 @@ export class CheckoutPageComponent implements OnInit {
       this.getLoyaltyGroup();
       this.getAddLoyaltyPoints();
     }
+
+    this.checkoutService.setPaymentType(this.paymentType.cash);
+
   }
 
   getLoyaltyGroup() {
@@ -142,6 +144,7 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   changePaymentType(data) {
+    console.log('payment type :', data);
     this.usedBalance = 0;
     this.usedLoyaltyPoint = 0;
     this.selectedPaymentType = data;
@@ -171,7 +174,6 @@ export class CheckoutPageComponent implements OnInit {
     this.calculateEarnPoint();
   }
 
-
   calculateEarnPoint() {
     let scoreArray;
     let maxScore;
@@ -189,13 +191,13 @@ export class CheckoutPageComponent implements OnInit {
 
     else if (this.showCostLabel) {
       // calculate earn point
-      this.earnedLoyaltyPoint =  Math.floor(this.total / this.system_offline_offer);
+      this.earnedLoyaltyPoint = Math.floor(this.total / this.system_offline_offer);
     }
     else if (!this.showCostLabel) {
       // calculate earn point in C&C mode
       valid_loyaltyGroups = this.loyaltyGroups.filter(el => el.min_score <= this.loyaltyPoint);
 
-      if(!valid_loyaltyGroups.length) {
+      if (!valid_loyaltyGroups.length) {
         scoreArray = this.loyaltyGroups.map(el => el.min_score);
         maxScore = Math.min(...scoreArray);
         customer_loyaltyGroup = this.loyaltyGroups.filter(el => el.min_score === maxScore);
@@ -206,7 +208,7 @@ export class CheckoutPageComponent implements OnInit {
         customer_loyaltyGroup = valid_loyaltyGroups.filter(el => el.min_score === maxScore);
       }
       this.earnedLoyaltyPoint = parseInt(this.addPointArray.filter(el => el.name === customer_loyaltyGroup[0].name)[0].added_point)
-        +  Math.floor(this.total / this.system_offline_offer);
+        + Math.floor(this.total / this.system_offline_offer);
     }
     this.checkoutService.setEarnSpentPoint(this.earnedLoyaltyPoint);
   }

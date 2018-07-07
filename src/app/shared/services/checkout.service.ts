@@ -196,7 +196,6 @@ export class CheckoutService {
 
   checkout() {
     const data = this.accumulateData();
-    console.log('data :: ', data);
     this.httpService.post('checkout', data)
       .subscribe(res => {
           this.cartService.emptyCart();
