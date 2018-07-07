@@ -21,6 +21,7 @@ import {DeliverComponent} from './components/deliver/deliver.component';
 import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-checker.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { TicketComponent } from './components/ticket/ticket.component';
+import { SmInboxComponent } from './components/sm-inbox/sm-inbox.component';
 
 
 @NgModule({ 
@@ -31,7 +32,8 @@ import { TicketComponent } from './components/ticket/ticket.component';
     DeliverComponent,
     ProductViewerComponent,
     BarcodeCheckerComponent,
-    TicketComponent
+    TicketComponent,
+    SmInboxComponent
   ],
   imports: [
     OrderRouting,

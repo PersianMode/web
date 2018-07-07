@@ -1,4 +1,3 @@
-
 <div class="main">
   <mat-tab-group dir="rtl">
 
@@ -11,19 +10,24 @@
         </mat-chip-list>
       </ng-template>
 
-      <app-order-inbox (OnNewInboxCount)="newInboxCount = $event" ></app-order-inbox>
-
+      <div *ngIf="!isSalesManager">
+        <app-order-inbox (OnNewInboxCount)="newInboxCount = $event"></app-order-inbox>
+      </div>
+      <div *ngIf="isSalesManager">
+        <app-sm-inbox (OnNewInboxCount)="newInboxCount = $event"></app-sm-inbox>
+      </div>
     </mat-tab>
 
-    
+
     <mat-tab label="outbox">
       <ng-template mat-tab-label>
-        <span>آماده تحویل</span>
+        <span *ngIf="!isSalesManager">آماده تحویل</span>
+        <span *ngIf="isSalesManager">پیگیری سفارش‌ها</span>
         <mat-chip-list *ngIf="newDeliverCount">
           <mat-chip color="accent" selected="true">{{newDeliverCount}}</mat-chip>
         </mat-chip-list>
       </ng-template>
-      <app-deliver (newDeliverCount)="newDeliverCount = $event"> </app-deliver>
+      <app-deliver (newDeliverCount)="newDeliverCount = $event"></app-deliver>
 
     </mat-tab>
 
