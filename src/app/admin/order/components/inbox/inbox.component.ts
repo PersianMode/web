@@ -15,6 +15,7 @@ import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
 import {FormControl} from '@angular/forms';
 import {TicketComponent} from '../ticket/ticket.component';
+import {last} from 'rxjs/operators';
 
 
 @Component({
@@ -57,11 +58,11 @@ export class InboxComponent implements OnInit, OnDestroy {
   socketObserver: any = null;
 
   constructor(private httpService: HttpService,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private authService: AuthService,
-              private socketService: SocketService,
-              private progressService: ProgressService) {
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
+    private socketService: SocketService,
+    private progressService: ProgressService) {
   }
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
@@ -183,7 +184,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   isReadyForInvoice(order) {
     return order.order_lines.every(x => {
       const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
-      return lastTicket && !lastTicket.is_processed && lastTicket.status === STATUS.ReadyForInvoice;
+      return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice || lastTicket.status === STATUS.WaitForInvoice);
 
     })
   }
@@ -192,8 +193,9 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.httpService.post('order/ticket/invoice', {
       orderId: order._id
     }).subscribe(res => {
-
+      this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد')
     }, err => {
+      this.openSnackBar('خطا به هنگام درخواست صدور فاکتور')
 
     })
   }
