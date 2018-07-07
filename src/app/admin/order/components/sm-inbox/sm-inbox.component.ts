@@ -95,8 +95,20 @@ export class SmInboxComponent implements OnInit {
       this.dataSource.data = rows;
       this.resultsLength = res.total ? res.total : 0;
       console.log('-> ', this.dataSource.data);
-      this.dataSource.data.forEach((k, i) => {
-        // let returnAddressId=k.
+      this.dataSource.data.forEach((o: any) => {
+        if (o.order_lines) {
+
+          o.order_lines.forEach(ol => {
+            let lastTicket = ol.tickets[ol.tickets.length - 1];
+            if (lastTicket.status === 10) {
+              ol.isDelivered = true;
+              ol.returnTime = lastTicket.desc.day_slot;
+            }
+            else {
+              ol.isDelivered = false;
+            }
+          });
+        }
       });
       this.OnNewInboxCount.emit(res.total);
     }, err => {
@@ -162,8 +174,17 @@ export class SmInboxComponent implements OnInit {
     }
   }
 
-  showAddress(order) {
+  showAddress(order, order_line = -1) {
     console.log(order);
+    let finalAddress = order.address;
+    if (order_line !== -1) {
+      let ticketsOfOrderLine = order.order_lines.find(x => x.order_line_id.toString() === order_line).tickets;
+      let lastTicketOfOrderLine = ticketsOfOrderLine[ticketsOfOrderLine.length - 1];
+      if (lastTicketOfOrderLine && lastTicketOfOrderLine.status === 10) {
+        let returnAddressId = lastTicketOfOrderLine.desc.reciver_id.toString();
+        finalAddress = order.customer.addresses.find(x => x._id.toString() === returnAddressId)
+      }
+    }
     if (!order.address) {
       this.openSnackBar('order line has no address!');
       return;
@@ -171,7 +192,7 @@ export class SmInboxComponent implements OnInit {
 
     this.dialog.open(OrderAddressComponent, {
       width: '400px',
-      data: {address: order.address, is_collect: !!order.is_collect}
+      data: {address: finalAddress, is_collect: !!order.is_collect}
     });
 
   }

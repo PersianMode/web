@@ -29,12 +29,12 @@
 
         <!--tarikhe bazagasht-->
 
-        <ng-container matColumnDef="address">
-          <mat-header-cell *matHeaderCellDef>آدرس</mat-header-cell>
-          <mat-cell *matCellDef="let order">
-            <button mat-button color="primary" (click)="showAddress(order)">نمایش</button>
-          </mat-cell>
-        </ng-container>
+        <!--<ng-container matColumnDef="address">-->
+          <!--<mat-header-cell *matHeaderCellDef>آدرس</mat-header-cell>-->
+          <!--<mat-cell *matCellDef="let order">-->
+            <!--<button mat-button color="primary" (click)="showAddress(order)">نمایش</button>-->
+          <!--</mat-cell>-->
+        <!--</ng-container>-->
 
         <!-- Expanded Content Column - The order lines rows is made up of this one column -->
         <ng-container matColumnDef="expandedDetail">
@@ -64,11 +64,12 @@
                   <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</span>
               </li>
               <li>
-                <span>
-                  <b>تاریخ بازگشت</b> {{getOrderLineStatus(ol)}}</span>
+                <span *ngIf="ol.isDelivered">
+                  <b>تاریخ بازگشت</b> {{getDate(ol.returnTime)}}
+                </span>
               </li>
               <li>
-                <button mat-button color="primary" (click)="showAddress(detail.order)">نمایش آدرس</button>
+                <button mat-button color="primary" (click)="showAddress(detail.order,ol.order_line_id)">نمایش آدرس</button>
               </li>
               <li>
                 <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
