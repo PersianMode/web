@@ -55,6 +55,7 @@ export class DeliveryComponent implements OnInit {
     'view_details',
   ];
   deliveryAgentList = [];
+  // farhad
   receiverSearchCtrl = new FormControl();
   agentSearchCtrl = new FormControl();
   isDelivered = null;
@@ -102,7 +103,7 @@ export class DeliveryComponent implements OnInit {
     this.getDeliveryItems();
     this.getDeliveryAgents();
   }
-
+  // farhad
   getDeliveryItems() {
     this.progressService.enable();
     this.httpService.post('delivery/items/' + (this.offset ? this.offset : 0) + '/' + (this.limit ? this.limit : 10), {

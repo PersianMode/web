@@ -11,7 +11,10 @@ import {
   MatSnackBarModule,
   MatSortModule,
   MatTableModule, MatTabsModule,
-  MatToolbarModule
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatToolbarModule,
+  MatSelectModule
 } from '@angular/material';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -22,8 +25,7 @@ import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-ch
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { TicketComponent } from './components/ticket/ticket.component';
 
-
-@NgModule({ 
+@NgModule({
   declarations: [
     OrderComponent,
     OrderAddressComponent,
@@ -56,7 +58,9 @@ import { TicketComponent } from './components/ticket/ticket.component';
     MatInputModule,
     MatTabsModule,
     MatCardModule,
-    
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule
   ],
   entryComponents: [OrderAddressComponent,  ProductViewerComponent, TicketComponent],
 })

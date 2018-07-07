@@ -1,5 +1,39 @@
 <mat-card>
-
+  <!-- search inputs -->
+  <div *ngIf="showSearchBoxes" class="search-area" >
+    <div fxLayout="row" fxLayoutAlign="center start">
+      <div fxFlex="50" class="filtering-box">
+        <mat-input-container class="filtering-field">
+          <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری" [formControl]="receiverSearchCtrl">
+        </mat-input-container>
+      </div>
+      <div fxFlex="50" class="filtering-box">
+        <mat-input-container class="filtering-field">
+          <input class="filtering-field" matInput type="text" placeholder="مسئول ارسال" [formControl]="agentSearchCtrl">
+        </mat-input-container>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center start">
+      <div fxFlex="50" class="filtering-box">
+        <mat-form-field class="filtering-field">
+          <input matInput [matDatepicker]="picker" placeholder="تاریخ ثبت سفارش" [(ngModel)]="addingTime" (ngModelChange)="load()">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div fxFlex="50" class="filtering-box">
+      <mat-form-field class="filtering-field">
+          <mat-select placeholder="وضعیت سفارش" [formControl]="statusSearchCtrl">
+            <mat-option *ngFor="let status of listStatus" [value]="status.value">
+              {{status.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  
+  <!-- tables for items -->
   <mat-card-content>
 
 

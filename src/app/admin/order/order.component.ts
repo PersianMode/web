@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TitleService} from '../../shared/services/title.service';
 import { MatDialog } from '@angular/material';
 import { TicketComponent } from './components/ticket/ticket.component';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-upload',
@@ -15,11 +16,17 @@ export class OrderComponent implements OnInit {
   readyToScanCount: number;
   newOutboxCount: number;
   newDeliverCount: number;
-
-  constructor( private dialog: MatDialog, private titleService: TitleService) {
+  isSalesManager = false;
+  outboxName = 'صندوق خروجی';
+  constructor( private dialog: MatDialog, private titleService: TitleService, private authService: AuthService) {
   }
 
   ngOnInit() {
+    if(this.authService.userDetails.access_level === 1 ) {
+      this.isSalesManager = true;
+      this.outboxName = 'پیگیری سفارشات';
+    }
+
     this.titleService.setTitleWithOutConstant('ادمین: سفارش‌ها');
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -13,6 +13,7 @@ import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { TicketComponent } from '../ticket/ticket.component';
+import { FormControl } from '@angular/forms';
 
 
 
@@ -33,7 +34,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
 
 
   @Output() OnNewOutboxCount = new EventEmitter();
-
+  @Input('ifSalesManager') ifSalesManager;
   displayedColumns = [
     'position',
     'customer',
@@ -53,6 +54,23 @@ export class DeliverComponent implements OnInit, OnDestroy {
   resultsLength: Number;
 
   batchScanDialogRef;
+  showSearchBoxes = false;
+
+  // farhad input fields
+  statusSearchCtrl = new FormControl();
+  receiverSearchCtrl = new FormControl();
+  agentSearchCtrl = new FormControl();
+
+  warehouseName = null;
+  agentName = null;
+  isStatus = null;
+  addingTime = null;
+  listStatus = [
+    {value: STATUS.ReadyToDeliver, viewValue: OrderStatus.find(s => s.status === STATUS.ReadyToDeliver).name},
+    {value: STATUS.DeliverySet, viewValue: OrderStatus.find(s => s.status === STATUS.DeliverySet).name},
+    {value: STATUS.OnDelivery, viewValue: OrderStatus.find(s => s.status === STATUS.OnDelivery).name},
+    {value: STATUS.Delivered, viewValue: OrderStatus.find(s => s.status === STATUS.Delivered).name},
+  ]
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -69,6 +87,41 @@ export class DeliverComponent implements OnInit, OnDestroy {
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   ngOnInit() {
+    if (this.ifSalesManager) {
+      this.showSearchBoxes = true;
+    }
+    // farhad new
+    this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.warehouseName = data.trim() !== '' ? data.trim() : null;
+        // this.getDeliveryItems();
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+      }
+    );
+
+    this.agentSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.agentName = data.trim() !== '' ? data.trim() : null;
+        // this.getDeliveryItems();
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when agent name is changed: ', err);
+      }
+    );
+
+    this.statusSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.isStatus = data;
+        // this.getDeliveryItems();
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when agent name is changed: ', err);
+      }
+    );
+
+
 
     this.load();
     this.socketObserver = this.socketService.getOrderLineMessage();
@@ -85,6 +138,12 @@ export class DeliverComponent implements OnInit, OnDestroy {
     this.progressService.enable();
 
     const options = {
+    // farhad serach with post body
+      agentName: this.agentName,
+      transferee: this.warehouseName,
+      addingTime: this.addingTime,
+      status: this.isStatus,
+
       sort: this.sort.active,
       dir: this.sort.direction,
       // change inbox to outbox when API created
@@ -111,6 +170,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
     });
   }
 
+ 
 
   getIndex(order) {
 
