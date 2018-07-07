@@ -12,8 +12,9 @@ export class OrderComponent implements OnInit {
 
 
   newInboxCount: number;
-  newOutboxCount: number;
   readyToScanCount: number;
+  newOutboxCount: number;
+  newDeliverCount: number;
 
   constructor( private dialog: MatDialog, private titleService: TitleService) {
   }
