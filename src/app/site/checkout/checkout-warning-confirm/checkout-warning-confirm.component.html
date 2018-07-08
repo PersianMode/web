@@ -1,0 +1,31 @@
+<div class="main">
+  <div class="header">
+    <div>
+      <i class="fa fa-check"></i>
+      <span>به سبد خرید افزوده شد:</span>
+    </div>
+    <mat-icon aria-label="close" (click)="closeDialog()" style="cursor: pointer;">clear</mat-icon>
+  </div>
+  <div class="body" fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column">
+    <div class="thumbnail" fxFlex="32" fxFlex.xs="45" fxFlex.sm="45">
+      <img src="{{thumbnail}}">
+    </div>
+    <div class="item-data-and-name" fxFlex="68" fxFlex.xs="55" fxFlex.sm="55">
+      <h4>
+        <div>{{product.name}}</div>
+      </h4>
+      <div class="item-data">
+        <span>اندازه: </span>
+        <section>{{selectedSize.toLocaleString('fa')}}</section>
+      </div>
+      <div class="item-data">
+        <span>  تعداد:</span>
+        <section>{{countFa}}</section>
+        <p [class.overridden]="product.discount">{{farsiPrice}}</p><p *ngIf="product.discount">{{discountedPrice}}</p>
+      </div>
+      <div class="bag-btn">
+        <button mat-button (click)="navigateToCart()">دیدن سبد خرید</button>
+      </div>
+    </div>
+  </div>
+</div>

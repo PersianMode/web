@@ -5,6 +5,9 @@ import {HttpService} from '../../../shared/services/http.service';
 import {CartService} from '../../../shared/services/cart.service';
 import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
+import {MatDialog} from '@angular/material';
+import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
+
 
 @Component({
   selector: 'app-checkout-page',
@@ -29,13 +32,15 @@ export class CheckoutPageComponent implements OnInit {
   showCostLabel: true;
   noDuration = null;
   hasChangeError: boolean = false;
+  isWarningSeen = false;
 
 
   constructor(private checkoutService: CheckoutService,
-    private httpService: HttpService,
-    private cartService: CartService,
-    private titleService: TitleService,
-    private productService: ProductService) {
+              private dialog: MatDialog,
+              private httpService: HttpService,
+              private cartService: CartService,
+              private titleService: TitleService,
+              private productService: ProductService) {
   }
 
   ngOnInit() {
@@ -101,10 +106,10 @@ export class CheckoutPageComponent implements OnInit {
   finalCheckItems() {
     return new Promise((resolve, reject) => {
       this.checkoutService.finalCheck().subscribe(res => {
+        console.log(res);
         this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
         this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
         this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
-
         if ((this.soldOuts && this.soldOuts.length) ||
           (this.discountChanges && this.discountChanges.length) ||
           (this.priceChanges && this.priceChanges.length)) {
@@ -115,17 +120,44 @@ export class CheckoutPageComponent implements OnInit {
 
           if (this.hasChangeError)
             this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
-          if (this.discountChanges && this.discountChanges.length)
+          else if (this.discountChanges && this.discountChanges.length)
             this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
-          if (this.priceChanges && this.priceChanges.length)
+          else if (this.priceChanges && this.priceChanges.length)
             this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
 
           this.productService.updateProducts(res);
+          let haveWarning = (this.discountChanges && this.discountChanges.length) ||
+            (this.priceChanges && this.priceChanges.length);
+          let haveError = (this.soldOuts && this.soldOuts.length);
 
-          if (this.changeMessage)
+
+          if (haveError) {
+            console.log('1');
             reject();
-          else
+          }
+          else if (!haveError && haveWarning) {
+            console.log('2');
+            if (!this.isWarningSeen) {
+              console.log('3');
+              this.isWarningSeen = true;
+              reject();
+            } else {
+              console.log('4');
+              const rmDialog = this.dialog.open(CheckoutWarningConfirmComponent, {
+                position: {top: '108px', right: '0px'},
+                width: '750px',
+                data: {
+                  warning:this.changeMessage
+                }
+              });
+              resolve();
+              //  open a massage to check if customer is ok with the change or not
+            }
+          }
+          else {
+            console.log('5');
             resolve();
+          }
         }
       }, err => {
         reject();
