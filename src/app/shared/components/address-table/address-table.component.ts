@@ -259,10 +259,12 @@ export class AddressTableComponent implements OnInit {
     if (this.showAddresses.length < 1)
       this.selectedCustomerAddress = -1;
 
+
     this.setState();
   }
 
   chooseAddress($event) {
+    console.log(1);
     this.selectedChange.emit(this.addressSelected);
   }
 
