@@ -45,7 +45,16 @@
               </button>
             </div>
             <a>
-              <img [src]="getUrl(item.info.imgUrl)" class="full-width"/>
+              <!--<img [src]="getUrl(item.info.imgUrl)" class="full-width"/>-->
+              <img
+                *ngIf="item.info.mediaType === 'image'"
+                [src]="getUrl(item.info.imgUrl)" class="full-width"/>
+              <video #player
+                     *ngIf="item.info.mediaType === 'video'"
+                     class="full-width" autoplay loop>
+                <source [src]="getUrl(item.info.imgUrl)" type="{{item.info.fileType && item.info.fileType['mime']}}">
+                مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
+              </video>
             </a>
             <div *ngFor="let ar of item.info.areas">
               <div

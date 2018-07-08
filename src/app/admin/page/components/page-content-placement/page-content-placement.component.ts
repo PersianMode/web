@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild, HostListener} from '@angular/core';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../enum/placement.modify.type.enum';
@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material';
 import {EditPanelComponent} from './edit-panel/edit-panel.component';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {DomSanitizer} from '@angular/platform-browser';
+import {PageService} from '../../../../shared/services/page.service';
 import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
@@ -29,6 +30,7 @@ export class PageContentPlacementComponent implements OnInit {
 
   @Input() pageId = null;
   @Output() modifyPlacement = new EventEmitter();
+  @ViewChild('player') player;
 
   _placements = [];
   modifiedPlacementList = {};
@@ -36,7 +38,7 @@ export class PageContentPlacementComponent implements OnInit {
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
               private dialog: MatDialog, private sanitizer: DomSanitizer,
-              private revertService: RevertPlacementService) {
+              private revertService: RevertPlacementService, private pageService: PageService) {
   }
 
   ngOnInit() {
@@ -100,7 +102,8 @@ export class PageContentPlacementComponent implements OnInit {
           placements: [value],
           placement: data.new_placement,
         });
-
+        if (this.player)
+          this.player.nativeElement.load();
         this.progressService.disable();
       },
       (err) => {
@@ -114,6 +117,8 @@ export class PageContentPlacementComponent implements OnInit {
     Object.keys(destination_obj).forEach(el => {
       if (source_obj[el])
         destination_obj[el] = source_obj[el];
+      else if (destination_obj[el] && !source_obj[el] && el === 'fileType')
+        delete destination_obj[el];
     });
   }
 
@@ -238,7 +243,9 @@ export class PageContentPlacementComponent implements OnInit {
       if (!this.modifiedPlacementList[el.info.row])
         this.modifiedPlacementList[el.info.row] = [];
 
-      this.modifiedPlacementList[el.info.row].push(el);
+      const tempEl = Object.assign(el);
+      tempEl.info['mediaType'] = this.getFileTypeFromExtension(el.info.fileType && el.info.fileType['ext'], el.info.imgUrl);
+      this.modifiedPlacementList[el.info.row].push(tempEl);
     });
   }
 
@@ -347,6 +354,34 @@ export class PageContentPlacementComponent implements OnInit {
         this.moveButtonsShouldDisabled = false;
       }
     );
+  }
+
+  getFileTypeFromExtension(ext, url) {
+    let imgs = this.pageService.fileTypes['images'].filter(el => el === ext);
+    if (imgs.length > 0)
+      return 'image';
+
+    let vds = this.pageService.fileTypes['videos'].filter(el => el === ext);
+    if (vds.length > 0)
+      return 'video';
+
+    // if nothing found, we can only check with the extension!
+    if (!url)
+      return;
+
+    let extension = url.split('.');
+    extension = extension[extension.length - 1];
+    // console.log('local extension:', extension);
+    imgs = this.pageService.fileTypes['images'].filter(el => el === extension);
+    if (imgs.length > 0)
+      return 'image';
+
+    vds = this.pageService.fileTypes['videos'].filter(el => el === extension);
+    if (vds.length > 0)
+      return 'video';
+
+    // default fallback
+    return 'image';
   }
 
   @HostListener('document:keydown.control', ['$event'])
