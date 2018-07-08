@@ -7,6 +7,7 @@ import {PaymentType} from '../enum/payment.type.enum';
 import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
+import {ReplaySubject} from 'rxjs/Rx';
 
 @Injectable()
 export class CheckoutService {
@@ -20,6 +21,8 @@ export class CheckoutService {
   private loyaltyPointValue = 0;
   private balance = 0;
   private earnSpentPointObj: any = {};
+  loyaltyGroups: ReplaySubject<any> = new ReplaySubject<any>();
+  addPointArray: ReplaySubject<any> = new ReplaySubject<any>();
 
   warehouseAddresses = [];
   private _ads: any = null;
@@ -27,14 +30,17 @@ export class CheckoutService {
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
+
   constructor(private cartService: CartService, private httpService: HttpService,
               private authService: AuthService, private snackBar: MatSnackBar,
               private router: Router) {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
-    this.authService.isLoggedIn.subscribe(isLoggedIn => {
+    this.authService.isVerified.subscribe(isLoggedIn => {
       this.getCustomerAddresses(this.authService.userIsLoggedIn());
+      this.getLoyaltyGroup();
+      this.getAddLoyaltyPoints();
     });
 
     this.httpService.get('warehouse').subscribe(res => {
@@ -117,6 +123,33 @@ export class CheckoutService {
         })
         .catch(err => reject(err));
     });
+  }
+
+  getLoyaltyGroup() {
+    this.httpService.get('loyaltygroup')
+      .subscribe(res => {
+          this.loyaltyGroups.next(res);
+        },
+        err => {
+          console.error('Cannot get loyalty groups: ', err);
+          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+            duration: 3200,
+          });
+        });
+  }
+
+
+  getAddLoyaltyPoints() {
+    this.httpService.get('deliverycc')
+      .subscribe(res => {
+          this.addPointArray.next(res);
+        },
+        err => {
+          console.error('Cannot get loyalty groups: ', err);
+          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+            duration: 3200,
+          });
+        });
   }
 
   getTotalDiscount() {
@@ -219,4 +252,5 @@ export class CheckoutService {
           });
     });
   }
+
 }

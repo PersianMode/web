@@ -25,8 +25,8 @@
     </mat-radio-button>
   </mat-radio-group>
 </div>
-<div style="direction: ltr; !important;">
-  <button [class.newAddress-checkout]="!isProfile" mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
+<div style="direction: ltr;">
+  <button mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
 </div>
 <span
   *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!showAddresses || !showAddresses.length)) || (!withDelivery && !isLoggedIn)"
