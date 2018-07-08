@@ -23,7 +23,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import { TicketComponent } from './components/ticket/ticket.component';
 
 
-@NgModule({
+@NgModule({ 
   declarations: [
     OrderComponent,
     OrderAddressComponent,
@@ -58,7 +58,7 @@ import { TicketComponent } from './components/ticket/ticket.component';
     MatCardModule,
     
   ],
-  entryComponents: [OrderAddressComponent,  ProductViewerComponent, BarcodeCheckerComponent, TicketComponent],
+  entryComponents: [OrderAddressComponent,  ProductViewerComponent, TicketComponent],
 })
 export class OrderModule {
 }

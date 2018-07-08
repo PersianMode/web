@@ -9,8 +9,7 @@ import {OrderStatus} from '../../../../shared/lib/order_status';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
-import { ResponsiveService } from '../../../../shared/services/responsive.service';
-
+import {ResponsiveService} from '../../../../shared/services/responsive.service';
 
 
 @Component({
@@ -92,7 +91,9 @@ export class OrderLinesComponent implements OnInit {
     let statusText = '';
     arr.forEach(el => {
       tickets = el.tickets;
-      statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
+      if (tickets.length)
+        statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
+      else statusText = 'خطای وضعیت در دیتا بیس';
       el.statusText = statusText;
     });
   }
@@ -102,8 +103,8 @@ export class OrderLinesComponent implements OnInit {
   }
 
   orderTime() {
-    const date =  ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
-    if (date > 0 ) return false;
+    const date = ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
+    if (date > 0) return false;
     else return true;
   }
 

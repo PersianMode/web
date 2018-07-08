@@ -98,53 +98,17 @@ export class CheckoutPageComponent implements OnInit {
     if (!this.authService.userDetails.userId) {
       this.showEarnPointLabel = false;
       this.earnedLoyaltyPoint = 0;
-    }
-    else {
+    } else {
       this.showEarnPointLabel = true;
-      this.getLoyaltyGroup();
-      this.getAddLoyaltyPoints();
+      this.checkoutService.loyaltyGroups.subscribe(data => this.loyaltyGroups = data);
+      this.checkoutService.addPointArray.subscribe(data => this.addPointArray = data[0].add_point);
     }
 
-    this.checkoutService.setPaymentType(this.paymentType.cash);
-
-  }
-
-  getLoyaltyGroup() {
-    this.progressService.enable();
-    this.httpService.get('loyaltygroup').subscribe(
-      data => {
-        this.loyaltyGroups = data;
-        this.progressService.disable();
-      },
-      err => {
-        console.error('Cannot get loyalty groups: ', err);
-        this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
-          duration: 3200,
-        });
-        this.progressService.disable();
-      }
-    );
-  }
-
-  getAddLoyaltyPoints() {
-    this.progressService.enable();
-    this.httpService.get('deliverycc').subscribe(
-      data => {
-        this.addPointArray = data[0].add_point;
-        this.progressService.disable();
-      },
-      err => {
-        console.error('Cannot get loyalty groups: ', err);
-        this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
-          duration: 3200,
-        });
-        this.progressService.disable();
-      }
-    );
+    // this.checkoutService.setPaymentType(this.paymentType.cash);
+    this.checkoutService.setPaymentType(this.paymentType[this.selectedPaymentType]);
   }
 
   changePaymentType(data) {
-    console.log('payment type :', data);
     this.usedBalance = 0;
     this.usedLoyaltyPoint = 0;
     this.selectedPaymentType = data;
