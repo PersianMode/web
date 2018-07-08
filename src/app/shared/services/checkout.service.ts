@@ -86,7 +86,7 @@ export class CheckoutService {
         quantity: r.quantity,
         discount: r.discount
       }));
-    return this.httpService.post('finalCheck', cartItems)
+    return this.httpService.post('finalCheck', cartItems);
 
   }
 
