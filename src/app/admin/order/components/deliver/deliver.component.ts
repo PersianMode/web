@@ -34,7 +34,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
 
 
   @Output() OnNewOutboxCount = new EventEmitter();
-  @Input('ifSalesManager') ifSalesManager;
   displayedColumns = [
     'position',
     'customer',
@@ -54,7 +53,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
   resultsLength: Number;
 
   batchScanDialogRef;
-  showSearchBoxes = false;
 
   // farhad input fields
   statusSearchCtrl = new FormControl();
@@ -70,7 +68,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
     {value: STATUS.DeliverySet, viewValue: OrderStatus.find(s => s.status === STATUS.DeliverySet).name},
     {value: STATUS.OnDelivery, viewValue: OrderStatus.find(s => s.status === STATUS.OnDelivery).name},
     {value: STATUS.Delivered, viewValue: OrderStatus.find(s => s.status === STATUS.Delivered).name},
-  ]
+  ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -87,9 +85,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   ngOnInit() {
-    if (this.ifSalesManager) {
-      this.showSearchBoxes = true;
-    }
     // farhad new
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
@@ -170,7 +165,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
     });
   }
 
- 
+
 
   getIndex(order) {
 

@@ -13,7 +13,7 @@
 
       <app-sm-inbox *ngIf="isSalesManager"  (OnNewInboxCount)="newInboxCount = $event" ></app-sm-inbox>
 
-      <app-order-inbox *ngIf="isSalesManager"  *ngIf="!isSalesManager" (OnNewInboxCount)="newInboxCount = $event" ></app-order-inbox>
+      <app-order-inbox  *ngIf="!isSalesManager" (OnNewInboxCount)="newInboxCount = $event" ></app-order-inbox>
       
 
     </mat-tab>
@@ -26,7 +26,11 @@
           <mat-chip color="accent" selected="true">{{newOutboxCount}}</mat-chip>
         </mat-chip-list>
       </ng-template>
-      <app-deliver (OnNewOutboxCount)="newOutboxCount = $event" [ifSalesManager]="isSalesManager"> </app-deliver>
+      <!-- handle search with inputs -->
+      <app-search-handle></app-search-handle>
+
+      <app-sm-deliver  *ngIf="isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sm-deliver>
+      <app-deliver  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-deliver>
 
     </mat-tab>
 
