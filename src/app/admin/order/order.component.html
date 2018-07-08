@@ -11,7 +11,10 @@
         </mat-chip-list>
       </ng-template>
 
-      <app-order-inbox (OnNewInboxCount)="newInboxCount = $event" ></app-order-inbox>
+      <app-sm-inbox *ngIf="isSalesManager"  (OnNewInboxCount)="newInboxCount = $event" ></app-sm-inbox>
+
+      <app-order-inbox *ngIf="isSalesManager"  *ngIf="!isSalesManager" (OnNewInboxCount)="newInboxCount = $event" ></app-order-inbox>
+      
 
     </mat-tab>
 
