@@ -7,6 +7,7 @@ import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
 import {MatDialog} from '@angular/material';
 import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class CheckoutPageComponent implements OnInit {
               private httpService: HttpService,
               private cartService: CartService,
               private titleService: TitleService,
+              private router: Router,
               private productService: ProductService) {
   }
 
@@ -123,7 +125,8 @@ export class CheckoutPageComponent implements OnInit {
             this.productService.updateProducts(res);
             if (this.changeMessage) {
               this.dialog.open(CheckoutWarningConfirmComponent, {
-                position: {top: '108px', right: '200px'},
+
+                position: {},
                 width: '400px',
                 data: {
                   isError: (!!this.soldOuts && !!this.soldOuts.length),
@@ -132,7 +135,13 @@ export class CheckoutPageComponent implements OnInit {
               }).afterClosed().subscribe(x => {
                 if (x)
                   resolve();
-                reject();
+                else {
+                  if (!!this.soldOuts && !!this.soldOuts.length){
+                    this.router.navigate(['/', 'cart']);
+                    reject();
+                  } else
+                    reject();
+                }
               });
             }
             else {
