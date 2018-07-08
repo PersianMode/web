@@ -66,6 +66,7 @@ export class EditPanelComponent implements OnInit {
   saveButtonShouldBeDisabled = true;
   urlAddress = '';
   imageUrl = '';
+  fileType = {};
   pageId = null;
   isAdd = true;
   selectedAreaToSwitch: any = null;
@@ -303,7 +304,7 @@ export class EditPanelComponent implements OnInit {
   }
 
   saveChanges() {
-    this.dialogRef.close({
+    const resultObj = {
       type: !this.isAdd ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
       placement: {
         _id: this.placement ? this.placement._id : null,
@@ -317,7 +318,12 @@ export class EditPanelComponent implements OnInit {
           subTitle: this.hasSubTitle ? this.subTitle : null,
         }
       }
-    });
+    };
+
+    if (this.isAdd)
+      resultObj.placement.info['fileType'] = this.placement && this.placement._id ? this.fileType : null;
+
+    this.dialogRef.close(resultObj);
   }
 
   closeDialog() {
@@ -333,13 +339,14 @@ export class EditPanelComponent implements OnInit {
 
   imageUploaded(data) {
     if (data.length > 0) {
-      this.snackBar.open('تصویر بارگذاری شد', null, {
+      this.snackBar.open('با موفقیت بارگذاری شد', null, {
         duration: 2300,
       });
       this.saveButtonShouldBeDisabled = false;
       if (this.isAdd) {
         this.imageUrl = data[0].downloadURL;
         this.placement = {_id: data[0].placementId};
+        this.fileType = data[0].fileType;
       } else
         this.imageUrl = data[0];
     } else

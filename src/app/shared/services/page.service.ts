@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {IPageInfo} from '../../admin/page/interfaces/IPageInfo.interface';
+// import {ReplaySubject} from 'rxjs/ReplaySubject';
+// import {IPageInfo} from '../../admin/page/interfaces/IPageInfo.interface';
 import {Subject} from 'rxjs/Subject';
 import {AuthService} from './auth.service';
+import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 
 const defaultComponents = ['menu', 'slider', 'logos', 'footer'];
@@ -15,15 +16,17 @@ export class PageService {
   placement$: Subject<any[]> = new Subject<any[]>();
   pageInfo$: Subject<any[]> = new Subject<any[]>();
   private homeWasLoaded = false;
+  public fileTypes: any;
 
   constructor(private httpService: HttpService, private authService: AuthService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, private http: HttpClient) {
     route.queryParams.subscribe(params => {
       if (params.hasOwnProperty('preview'))
         this.getPage(`home?preview=&date=` + params.date, false);
       else
         this.getPage('home', false);
     });
+    this.getFileTypes();
   }
 
   private classifyPlacements(pageName, data) {
@@ -100,6 +103,14 @@ export class PageService {
   }
 
   getFilterOptions() {
+  }
+
+  getFileTypes() {
+    this.http.get('assets/fileType.json').subscribe(info => {
+      this.fileTypes = info;
+    }, err => {
+      console.error('error in getting file types: ', err);
+    });
   }
 
 }
