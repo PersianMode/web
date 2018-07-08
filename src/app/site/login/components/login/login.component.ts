@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   curFocus = null;
 
   constructor(private authService: AuthService, private router: Router,
-    @Inject(WINDOW) private window, public dialog: MatDialog) {
+              @Inject(WINDOW) private window, public dialog: MatDialog) {
   }
 
   ngOnInit() {

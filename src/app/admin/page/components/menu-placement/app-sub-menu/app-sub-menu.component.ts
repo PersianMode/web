@@ -19,6 +19,7 @@ import {RevertPlacementService} from '../../../../../shared/services/revert-plac
 export class AppSubMenuComponent implements OnInit {
   @Input() pageId = null;
   @Input() canEdit = true;
+
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -26,6 +27,7 @@ export class AppSubMenuComponent implements OnInit {
       this.getRelatedItems();
     }
   }
+
   @Input()
   set section(value) {
     if (value !== this.selectedSection) {
@@ -38,6 +40,7 @@ export class AppSubMenuComponent implements OnInit {
     if (value)
       this.getRelatedItems();
   }
+
   @Output() modifyPlacement = new EventEmitter();
 
   itemBagName = 'app-sub-menu-bag';
@@ -89,8 +92,8 @@ export class AppSubMenuComponent implements OnInit {
       new_section: [null],
       is_header: [false],
     }, {
-        validator: this.checkEnteredSection,
-      });
+      validator: this.checkEnteredSection,
+    });
   }
 
   private checkEnteredSection(AC: AbstractControl) {
