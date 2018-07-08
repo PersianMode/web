@@ -2,57 +2,11 @@
 
 <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start streach" fxLayoutAlign.xs="center center" dir="rtl">
 
-  <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
+  <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
     <img src="/assets/logos/barcode.png" class="logo">
     <mat-form-field class="example-full-width">
       <input matInput placeholder="" [formControl]="barcodeCtrl">
     </mat-form-field>
   </div>
-  <div fxFlex="50" fxLayout="column" fxLayoutAlign="center center">
-    <h1>XY</h1>
-  </div>
-
-</div>
-<div fxLayout="row" fxLayout.xs="column" dir="rtl">
-
-  <table class="field mat-elevation-z1" style="width: 100%;">
-    <thead>
-      <td style="width: 10%">
-        <b>ردیف</b>
-      </td>
-      <td style="width: 20%">
-        <b>تصویر</b>
-      </td>
-      <td style="width: 50%;">
-        <b>نام</b>
-      </td>
-      <td style="width: 10%;">
-        <b>سایز</b>
-      </td>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of products; let i = index">
-        <td>{{i+1}}</td>
-        <td>
-          <img class="thumbnail" [src]="product.thumbnailURL" style="width: 50px; height: 50px;">
-        </td>
-        <td style="direction: ltr">{{product.name}}</td>
-        <td>{{product.size}}</td>
-        <td>
-          <button mat-icon-button (click)="removeProduct(product.barcode)" color="warn">
-            <mat-icon aria-label="clear">delete</mat-icon>
-          </button>
-        </td>
-
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div fxLayout="row">
-
-  <div fxFlex="100" fxLayout="column" fxLayoutAlign="start start" style="margin: 10px 0">
-    <button mat-raised-button color="warn" (click)="close()">بستن</button>
-  </div>
-
+  
 </div>
