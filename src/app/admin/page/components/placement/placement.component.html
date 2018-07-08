@@ -1,62 +1,3 @@
-<<<<<<< HEAD
-<mat-card dir="rtl">
-  <mat-card-content>
-    <mat-card-title class="cart-title-area">
-      <div class="right-part title-part">
-        <label class="title">چینش و جایگاه عناصر</label>
-      </div>
-      <div class="left-part title-part">
-        <mat-checkbox class="all-items-check" [labelPosition]="'before'" color="primary" [(ngModel)]="allOldPlacementItems" (change)="selectAllItems()" [indeterminate]="revertItemsCount > 0 && revertItemsCount !== placements.length">
-          <span>({{revertItemsCount}}) مورد</span>
-        </mat-checkbox>
-        <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="تاریخ" [(ngModel)]="placement_date" (ngModelChange)="placementDateIsChanged()">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <button mat-icon-button (click)="goToToday()" matTooltip="امروز" matTooltipPosition="above">
-          <mat-icon>
-            <i class="material-icons">adjust</i>
-          </mat-icon>
-        </button>
-      </div>
-    </mat-card-title>
-    <mat-tab-group class="placement-tab">
-      <mat-tab label="منو" *ngIf="!isApp || pageAddress.toLowerCase() === 'my_shop'">
-        <app-menu-placement [placements]="getRelatedPlacements('menu')" [pageId]="pageId" [isApp]="isApp" [address]="pageAddress"
-          [canEdit]="canEdit()" (modifyPlacement)="modify($event)"></app-menu-placement>
-      </mat-tab>
-      <mat-tab label="لوگو" *ngIf="!isApp">
-        <app-logo-list-placement [placements]="getRelatedPlacements('logos')" [pageId]="pageId" (modifyPlacement)="modify($event)"
-          [canEdit]="canEdit()" (reloadPlacements)="reload($event)"></app-logo-list-placement>
-      </mat-tab>
-      <mat-tab label="اسلایدر" *ngIf="!isApp">
-        <app-slider-placement [placements]="getRelatedPlacements('slider')" [pageId]="pageId" (modifyPlacement)="modify($event)"
-          [canEdit]="canEdit()" (reloadPlacements)="reload($event)"></app-slider-placement>
-      </mat-tab>
-      <mat-tab label="صفحه" *ngIf="!isApp">
-        <app-page-content-placement [placements]="getRelatedPlacements('main')" [pageId]="pageId" (modifyPlacement)="modify($event)"
-          [canEdit]="canEdit()"></app-page-content-placement>
-      </mat-tab>
-      <mat-tab label="پاصفحه" *ngIf="!isApp">
-        <app-footer-placement [placements]="getRelatedPlacements('footer')" [pageId]="pageId" (modifyPlacement)="modify($event)"
-          [canEdit]="canEdit()"></app-footer-placement>
-      </mat-tab>
-      <mat-tab label="خوراک" *ngIf="isApp && pageAddress.toLowerCase() === 'feed'">
-        <app-app-feed-placement [placements]="getRelatedPlacements('feed')" [pageId]="pageId" (modifyPlacement)="modify($event)"
-          [canEdit]="canEdit()"></app-app-feed-placement>
-      </mat-tab>
-    </mat-tab-group>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button *ngIf="canEdit()" (click)="finalize(true)" [disabled]="finalizeRevertShouldDisabled">تثبیت تغییرات</button>
-    <button mat-raised-button *ngIf="canEdit()" (click)="finalize(false)" [disabled]="finalizeRevertShouldDisabled">برگرداندن تغییرات
-    </button>
-    <button mat-raised-button (click)="preview()" [disabled]="previewShouldDisabled" *ngIf="!isApp">پیش نمایش صفحه</button>
-    <button mat-raised-button (click)="revertToToday()" [disabled]="revertShouldBeDisabled" *ngIf="!canEdit() && revertItemsCount > 0">برگرداندن موارد</button>
-  </mat-card-actions>
-</mat-card>
-=======
 <mat-card dir="rtl">
   <mat-card-content>
     <mat-card-title class="cart-title-area">
@@ -129,4 +70,3 @@
     </button>
   </mat-card-actions>
 </mat-card>
->>>>>>> ce66802f487ed15e4affdf252327bf155d7f3cc2
