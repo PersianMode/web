@@ -241,6 +241,7 @@ export class AddressTableComponent implements OnInit {
   }
 
   changeDurationType(durationId, deliveryDays) {
+    let selectedCustomerAddressID = this.showAddresses[this.selectedCustomerAddress]._id;
     this.durationId = durationId;
     this.deliveryDays = deliveryDays;
     this.noDuration.emit(true);
@@ -250,8 +251,13 @@ export class AddressTableComponent implements OnInit {
       this.showAddresses = this.tehranAddresses;
     } else
       this.showAddresses = this.addresses;
-
     this.selectedCustomerAddress = 0;
+    for (let i = 0; i < this.showAddresses.length; i++) {
+      if (this.showAddresses[i]._id === selectedCustomerAddressID)
+        this.selectedCustomerAddress = i;
+    }
+    if (this.showAddresses.length < 1)
+      this.selectedCustomerAddress = -1;
 
     this.setState();
   }
