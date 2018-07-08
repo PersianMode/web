@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .hr-style {
   border: 0.5px solid #555;
   margin: 0 0;
@@ -98,3 +99,105 @@ mat-icon {
 .show-button {
   margin-top: 55px;
 }
+=======
+.hr-style {
+  border: 0.5px solid #555;
+  margin: 0 0;
+}
+
+tr {
+  border-top: 1px solid #ccc;
+}
+
+tr:first-child {
+  border-top: 1px solid black;
+  margin-top: 15px;
+}
+
+table {
+  border-collapse: collapse;
+  border: 0;
+  width: 100%;
+  font-family: iranyekan, sans-serif;
+}
+
+tbody {
+  border: 0;
+}
+
+td {
+  padding: 10px;
+}
+
+th {
+  text-align: justify;
+  padding: 0px 10px 10px 0px;
+}
+
+.new-Address {
+  margin-top: 30px;
+  color: #00a4e4;
+}
+
+mat-card {
+  margin-top: 20px;
+  font-family: iranyekan, sans-serif;
+  margin: 10px;
+}
+
+.check-box-div {
+  line-height: 37px;
+  display: inline-block;
+  width: calc(50% - 10px);
+  padding-right: 10px;
+}
+.edit-button{
+  direction: ltr;
+}
+
+.newAddress-checkout {
+ float: left;
+}
+
+.newAddress-profile {
+  width: calc(100% - 10px);
+}
+
+.newAddress button {
+  padding: 10px;
+  margin-right: 10px;
+}
+
+h3 {
+  margin-right: 10px;
+}
+
+.map-div {
+  margin: 10px;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+.label-field {
+  display: block;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  font-size: 20px;
+}
+
+.radio-field {
+  padding-right: 10px;
+  display: inline-block;
+}
+
+.radio-option {
+  margin-right: 10px;
+}
+
+.show-button {
+  margin-top: 55px;
+}
+>>>>>>> ce66802f487ed15e4affdf252327bf155d7f3cc2

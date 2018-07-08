@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div *ngIf="curWidth >= 960" class="full-width">
   <div *ngFor="let key of getKeyList(placements)">
     <h2 *ngIf="placements[key].topTitle"
@@ -55,3 +56,76 @@
   </div>
 </div>
 
+=======
+<div *ngIf="curWidth >= 960" class="full-width">
+  <div *ngFor="let key of getKeyList(placements)">
+    <h2 *ngIf="placements[key].topTitle"
+        [style.color]="placements[key].topTitle.titleColor ? placements[key].topTitle.titleColor : null"
+        class="top-title">
+      {{placements[key].topTitle.title}}</h2>
+    <div fxLayout="row"
+         fxLayoutAlign="start start">
+      <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs" class="container">
+        <a (click)="directToUrl(im.href)">
+          <img *ngIf="im.mediaType === 'image'"
+               [src]="im.imgUrl" class="full-width"/>
+          <video *ngIf="im.mediaType === 'video'"
+                 class="full-width" autoplay loop>
+            <source [src]="im.imgUrl" type="{{im.fileType && im.fileType['mime']}}">
+            مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
+          </video>
+        </a>
+        <div *ngFor="let ar of im.areas">
+          <div
+            [style.font-size]="(placements[key].type === 'full' && placements[key].imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
+            [ngClass]="ar.pos">
+            <h1 *ngIf="ar.title" [style.color]="ar.titleColor ? ar.titleColor : null">{{ar.title}}</h1>
+            <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null"><b>{{ar.text}}</b></div>
+            <div *ngIf="ar.buttonText" style="margin-top: 5%;">
+              <button mat-raised-button class="shop-button" [style.color]="ar.buttonColor ? ar.buttonColor : 'black'"
+                      [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'">
+                <b *ngIf="ar.buttonText">{{ar.buttonText}}</b>
+                <b *ngIf="ar.buttonText === undefined">خرید آنلاین</b>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="im.subTitle" [style.color]="im.subTitle.titleColor ? im.subTitle.titleColor : null"
+             class="sub-title">
+          <b>{{im.subTitle.title}}</b></div>
+        <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null"
+             class="sub-title">{{im.subTitle.text}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="curWidth < 960">
+  <div *ngFor="let key of getKeyList(placements)" class="container">
+    <h2 *ngIf="placements[key].topTitle" class="title-mobile"
+        style="margin-bottom: 0px;">{{placements[key].topTitle.title}}</h2>
+    <div fxLayout="row"
+         fxLayoutAlign="center center" fxLayout.sm="column" fxLayout.xs="column">
+      <div [fxFlex]="100" *ngFor="let im of placements[key].imgs">
+        <a (click)="directToUrl(im.href)">
+          <img *ngIf="im.mediaType === 'image'" [src]="im.imgUrl"
+               class="full-width"/>
+          <video *ngIf="im.mediaType === 'video'" class="full-width"
+                 autoplay loop>
+            <source [src]="im.imgUrl" type="{{im.fileType && im.fileType['mime']}}">
+            مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
+          </video>
+        </a>
+        <div *ngFor="let ar of im.areas">
+          <h2 *ngIf="ar.title" class="title-mobile" style="margin-bottom: 30px;margin-top: 0px;">
+            {{ar.title}}</h2>
+        </div>
+        <div *ngIf="im.subTitle" class="title-mobile"><b>{{im.subTitle.title}}</b></div>
+        <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px; color: gray;">{{im.subTitle.text}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+>>>>>>> ce66802f487ed15e4affdf252327bf155d7f3cc2
