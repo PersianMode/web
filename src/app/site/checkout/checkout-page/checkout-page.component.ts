@@ -107,7 +107,7 @@ export class CheckoutPageComponent implements OnInit {
     // this.checkoutService.setPaymentType(this.paymentType.cash);
     this.checkoutService.setPaymentType(this.paymentType[this.selectedPaymentType]);
   }
-  
+
   changePaymentType(data) {
     this.usedBalance = 0;
     this.usedLoyaltyPoint = 0;
