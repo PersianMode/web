@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators, AbstractControl} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService, VerificationErrors} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
@@ -8,20 +8,7 @@ import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-d
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
-
-export enum LoginStatus {
-  Login = 'Login',
-  ActivatingLink = 'ActivatingLink',    // which means the status that someone has confirmed their email
-  InvalidLink = 'InvalidLink',          // which means the status that someone used an invalid link
-  SetMobileNumber = 'SetMobileNumber',  // which means the status that the user should set their mobile
-  NotVerified = 'NotVerified',          // which means the status that nothing has been verified!
-  VerifiedMobile = 'VerifiedMobile',    // which means the status that mobile has been verified
-  VerifiedEmail = 'VerifiedEmail',      // which means the status that email has been verified
-  VerifiedBoth = 'VerifiedBoth',        // which means the status that both things has been verified
-  PreferenceSize = 'PreferenceSize',    // which means the status that we are setting the preferred size
-  PreferenceBrand = 'PreferenceBrand',  // which means the status that we are setting the preferred brand
-  PreferenceTags = 'PreferenceTags',    // which means the status that we are setting the preferred tags
-};
+import {LoginStatus} from '../../login-status.enum';
 
 @Component({
   selector: 'app-login',

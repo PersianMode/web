@@ -106,4 +106,32 @@ export class PanelsComponent implements OnInit {
     else if (typeof link === 'object')
       return link['changingThisBreaksApplicationSecurity'];
   }
+
+  getFileTypeFromExtension(ext, url) {
+    let imgs = this.pageService.fileTypes['images'].filter(el => el === ext);
+    if (imgs.length > 0)
+      return 'image';
+
+    let vds = this.pageService.fileTypes['videos'].filter(el => el === ext);
+    if (vds.length > 0)
+      return 'video';
+
+    // if nothing found, we can only check with the extension!
+    if (!url)
+      return;
+
+    let extension = url.split('.');
+    extension = extension[extension.length - 1];
+    // console.log('local extension:', extension);
+    imgs = this.pageService.fileTypes['images'].filter(el => el === extension);
+    if (imgs.length > 0)
+      return 'image';
+
+    vds = this.pageService.fileTypes['videos'].filter(el => el === extension);
+    if (vds.length > 0)
+      return 'video';
+
+    // default fallback
+    return 'image';
+  }
 }

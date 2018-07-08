@@ -5,9 +5,11 @@ import {WINDOW} from '../../../../shared/services/window.service';
 import {MatDialog} from '@angular/material';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
-import {LoginStatus} from '../login/login.component';
+import {LoginStatus} from '../../login-status.enum';
 
 const expiredLinkStatusCode = 437;
+const setMobilePage = 'setMobile';
+const setPreferencesPage = 'setPreferences';
 
 @Component({
   selector: 'app-oauth-handler',
@@ -34,9 +36,9 @@ export class OauthHandlerComponent implements OnInit {
       return new Promise((resolve, reject) => {
         if (params['link']) {
           // if sent from google callback (to set mobile or preferences)
-          if (params['link'] === 'setMobile') {
+          if (params['link'].toLowerCase() === setMobilePage.toLowerCase()) {
             resolve({method: 'google'});
-          } else if (params['link'] === 'setPreferences') {
+          } else if (params['link'].toLowerCase() === setPreferencesPage.toLowerCase()) {
             resolve({method: 'preferences'});
           } else {
             // if sent from activation link

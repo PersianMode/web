@@ -7,7 +7,7 @@ import {AuthService} from '../../services/auth.service';
 import {PageService} from '../../services/page.service';
 import {WINDOW} from '../../services/window.service';
 import {CartService} from '../../services/cart.service';
-import {LoginStatus} from '../../../site/login/components/login/login.component';
+import {LoginStatus} from '../../../site/login/login-status.enum';
 
 @Component({
   selector: 'app-header',

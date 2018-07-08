@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -9,14 +9,9 @@ import {MatDialog, MatSnackBar} from '@angular/material';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
-import {LoginStatus} from '../../../login/components/login/login.component';
+import {LoginStatus} from '../../../login/login-status.enum';
 import {Router} from '@angular/router';
-
-enum RegStatus {
-  Register = 'Register',
-  Verify = 'Verify',
-  MobileRegistered = 'MobileRegistered',
-}
+import {RegStatus} from '../../register-status.enum';
 
 @Component({
   selector: 'app-register',
