@@ -1,3 +1,17 @@
+.main {
+  width: 100%;
+  font-family: iranyekan, sans-serif;
+  direction: rtl;
+}
+
+.main div {
+  display: inline-block;
+}
+
+.body {
+  direction: rtl;
+}
+
 .payment-button {
   text-align: center;
   font-weight: bold;
@@ -56,16 +70,6 @@
   border-radius: 12px;
   padding: 2px;
   background: forestgreen;
-}
-
-.main {
-  width: 100%;
-  font-family: iranyekan, sans-serif;
-  direction: rtl;
-}
-
-.main div {
-  display: inline-block;
 }
 .item-data {
   display: block !important;
@@ -127,9 +131,6 @@ img {
   padding-right: 15px;
 }
 
-.body {
-  direction: rtl;
-}
 
 .thumbnail {
   min-width: 225px;
