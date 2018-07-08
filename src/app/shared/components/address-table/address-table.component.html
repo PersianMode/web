@@ -21,11 +21,13 @@
 
   <label class="label-field">ساعت تحویل</label>
   <mat-radio-group [(ngModel)]="delivery_time" class="radio-field">
-    <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">{{dh}}</mat-radio-button>
+    <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">{{dh}}
+    </mat-radio-button>
   </mat-radio-group>
 </div>
-
-<button [class.newAddress-checkout]="!isProfile"  mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
+<div style="direction: ltr; !important;">
+  <button [class.newAddress-checkout]="!isProfile" mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
+</div>
 <span
   *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!showAddresses || !showAddresses.length)) || (!withDelivery && !isLoggedIn)"
   class="newAddress-checkout" [class.newAddress-profile]="isProfile">
