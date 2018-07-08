@@ -9,36 +9,22 @@ import {Router} from '@angular/router';
 })
 export class CheckoutWarningConfirmComponent implements OnInit {
 
-  name = null;
-  product: any;
-  cartNumbers = null;
-  selectedSize = null;
-  farsiPrice = null;
-  discountedPrice = null;
-  thumbnail;
-  countFa;
+  haveError = false;
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<CheckoutWarningConfirmComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private router: Router) {
   }
 
   ngOnInit() {
-    console.log(this.data);
-    // this.cartNumbers = 0;
-    // this.name = (this.data && this.data.name) ? this.data.name : null;
-    // this.product = this.data.product;
-    // const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-    // const price = this.data.instance.price ? this.data.instance.price : this.product.base_price;
-    // this.thumbnail = this.product.colors.find(r => this.data.instance.product_color_id === r._id).image.thumbnail;
+    this.haveError = this.data.isError;
   }
 
-  closeDialog() {
-    this.dialogRef.close();
+  rejectOrCloseWarning() {
+    this.dialogRef.close(false);
   }
 
-  navigateToCart() {
-    this.router.navigate(['/', 'cart']);
-    this.dialogRef.close();
+  acceptWarning() {
+    this.dialogRef.close(true);
   }
 }
 

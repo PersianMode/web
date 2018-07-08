@@ -15,8 +15,6 @@
                                   [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
                                   [showCostLabel]="showCostLabel" [noDuration]="noDuration"></app-checkout-summary>
 
-            <p *ngIf="changeMessage" style="color: orangered; font-weight: bold">{{changeMessage}}</p>
-            <a *ngIf="hasChangeError" routerLink="/cart">بازگشت به سبد خرید</a>
           </mat-expansion-panel>
           <mat-expansion-panel>
             <mat-expansion-panel-header>
@@ -42,8 +40,8 @@
         </mat-accordion>
         <button mat-raised-button
                 class="payment-button"
-                (click)="checkout()" [disabled]="disabled || hasChangeError"
-                [style.background]="disabled || hasChangeError ? 'gray' : 'black'">پرداخت
+                (click)="checkout()" [disabled]="disabled"
+                [style.background]="disabled ? 'gray' : 'black'">پرداخت
         </button>
       </div>
     </div>

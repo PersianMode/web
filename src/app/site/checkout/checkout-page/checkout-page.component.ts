@@ -32,8 +32,6 @@ export class CheckoutPageComponent implements OnInit {
   showCostLabel: true;
   noDuration = null;
   hasChangeError: boolean = false;
-  isWarningSeen = false;
-
 
   constructor(private checkoutService: CheckoutService,
               private dialog: MatDialog,
@@ -106,62 +104,45 @@ export class CheckoutPageComponent implements OnInit {
   finalCheckItems() {
     return new Promise((resolve, reject) => {
       this.checkoutService.finalCheck().subscribe(res => {
-        console.log(res);
-        this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
-        this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
-        this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
-        if ((this.soldOuts && this.soldOuts.length) ||
-          (this.discountChanges && this.discountChanges.length) ||
-          (this.priceChanges && this.priceChanges.length)) {
+          console.log(res);
+          this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
+          this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
+          this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
+          if ((this.soldOuts && this.soldOuts.length) ||
+            (this.discountChanges && this.discountChanges.length) ||
+            (this.priceChanges && this.priceChanges.length)) {
+            this.changeMessage = '';
 
-          this.hasChangeError = !!this.soldOuts && !!this.soldOuts.length;
+            if (!!this.soldOuts && !!this.soldOuts.length)
+              this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
+            else if (this.discountChanges && this.discountChanges.length)
+              this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
+            else if (this.priceChanges && this.priceChanges.length)
+              this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
 
-          this.changeMessage = '';
-
-          if (this.hasChangeError)
-            this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
-          else if (this.discountChanges && this.discountChanges.length)
-            this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
-          else if (this.priceChanges && this.priceChanges.length)
-            this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
-
-          this.productService.updateProducts(res);
-          let haveWarning = (this.discountChanges && this.discountChanges.length) ||
-            (this.priceChanges && this.priceChanges.length);
-          let haveError = (this.soldOuts && this.soldOuts.length);
-
-
-          if (haveError) {
-            console.log('1');
-            reject();
-          }
-          else if (!haveError && haveWarning) {
-            console.log('2');
-            if (!this.isWarningSeen) {
-              console.log('3');
-              this.isWarningSeen = true;
-              reject();
-            } else {
-              console.log('4');
-              const rmDialog = this.dialog.open(CheckoutWarningConfirmComponent, {
-                position: {top: '108px', right: '0px'},
-                width: '750px',
+            this.productService.updateProducts(res);
+            if (this.changeMessage) {
+              this.dialog.open(CheckoutWarningConfirmComponent, {
+                position: {top: '108px', right: '200px'},
+                width: '400px',
                 data: {
-                  warning:this.changeMessage
+                  isError: (!!this.soldOuts && !!this.soldOuts.length),
+                  warning: this.changeMessage
                 }
+              }).afterClosed().subscribe(x => {
+                if (x)
+                  resolve();
+                reject();
               });
+            }
+            else {
               resolve();
-              //  open a massage to check if customer is ok with the change or not
             }
           }
-          else {
-            console.log('5');
-            resolve();
-          }
-        }
-      }, err => {
-        reject();
-      });
+        },
+        err => {
+          reject();
+        });
     });
   }
 
