@@ -13,7 +13,8 @@
   <label class="label-field">زمان تحویل</label>
   <mat-radio-group class="radio-field">
     <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days"
-                      (change)="changeDurationType(d._id, d.delivery_days)" [checked]="d._id === (durationId ? durationId : null)" [class.radio-option] = "i > 0">
+                      (change)="changeDurationType(d._id, d.delivery_days)"
+                      [checked]="d._id === (durationId ? durationId : null)" [class.radio-option]="i > 0">
       <label>{{d.name}}{{(d.delivery_days === 2 || d.delivery_days === 3) ? ' (مخصوص استان تهران)' : ''}}</label>
     </mat-radio-button>
   </mat-radio-group>
@@ -24,10 +25,10 @@
   </mat-radio-group>
 </div>
 
+<button [class.newAddress-checkout]="!isProfile"  mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
 <span
   *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!showAddresses || !showAddresses.length)) || (!withDelivery && !isLoggedIn)"
   class="newAddress-checkout" [class.newAddress-profile]="isProfile">
-  <button mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
   <div class="recipient" *ngIf="!withDelivery && customerData && customerData.recipient_name">
     <b>نام تحویل گیرنده:</b>
     <span *ngIf="customerData.recipient_title === 'f'"> خانم </span>
