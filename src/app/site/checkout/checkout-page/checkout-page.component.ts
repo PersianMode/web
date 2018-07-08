@@ -136,11 +136,9 @@ export class CheckoutPageComponent implements OnInit {
                 if (x)
                   resolve();
                 else {
-                  if (!!this.soldOuts && !!this.soldOuts.length){
+                  if (!!this.soldOuts && !!this.soldOuts.length)
                     this.router.navigate(['/', 'cart']);
-                    reject();
-                  } else
-                    reject();
+                  reject();
                 }
               });
             }
