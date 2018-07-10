@@ -47,19 +47,13 @@ export class SmDeliverComponent implements OnInit {
 
   statusSearchCtrl = new FormControl();
   receiverSearchCtrl = new FormControl();
-  agentSearchCtrl = new FormControl();
+  invoiceNoCtrl = new FormControl();
 
-  warehouseName = null;
-  agentName = null;
+  warehouseOrCutomerName = null;
+  invoiceNo = null;
   isStatus = null;
   addingTime = null;
-
-  listStatus = [
-    {value: STATUS.ReadyToDeliver, viewValue: OrderStatus.find(s => s.status === STATUS.ReadyToDeliver).name},
-    {value: STATUS.DeliverySet, viewValue: OrderStatus.find(s => s.status === STATUS.DeliverySet).name},
-    {value: STATUS.OnDelivery, viewValue: OrderStatus.find(s => s.status === STATUS.OnDelivery).name},
-    {value: STATUS.Delivered, viewValue: OrderStatus.find(s => s.status === STATUS.Delivered).name},
-  ];
+  listStatus: {name: string, status: number}[];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -76,19 +70,21 @@ export class SmDeliverComponent implements OnInit {
   }
 
   ngOnInit() {
+    // set status
+    this.listStatus = OrderStatus.map(el => ({name: el.name, status: el.status}));
 
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
-        this.warehouseName = data.trim() !== '' ? data.trim() : null;
+        this.warehouseOrCutomerName = data.trim() !== '' ? data.trim() : null;
         this.load();
       }, err => {
         console.error('Couldn\'t refresh when receiver name is changed: ', err);
       }
     );
 
-    this.agentSearchCtrl.valueChanges.debounceTime(500).subscribe(
+    this.invoiceNoCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
-        this.agentName = data.trim() !== '' ? data.trim() : null;
+        this.invoiceNo = data.trim() !== '' ? data.trim() : null;
         this.load();
       }, err => {
         console.error('Couldn\'t refresh when agent name is changed: ', err);
@@ -120,6 +116,11 @@ export class SmDeliverComponent implements OnInit {
     this.progressService.enable();
 
     const options = {
+      invoiceNo: this.invoiceNo,
+      transferee: this.warehouseOrCutomerName,
+      addingTime: this.addingTime,
+      status: this.isStatus,
+
       sort: this.sort.active,
       dir: this.sort.direction,
       // type: 'outbox',
@@ -131,7 +132,8 @@ export class SmDeliverComponent implements OnInit {
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
       const rows = [];
-      res.data.forEach(order => {
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
       this.dataSource.data = rows;
@@ -160,13 +162,13 @@ export class SmDeliverComponent implements OnInit {
   }
 
 
-  getIndex(order) {
+  // getIndex(order) {
 
-    let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
-    if (index === 0)
-      index = 1;
-    return index;
-  }
+  //   let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
+  //   if (index === 0)
+  //     index = 1;
+  //   return index;
+  // }
 
   getDate(orderTime) {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');

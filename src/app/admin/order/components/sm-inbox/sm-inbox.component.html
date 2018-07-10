@@ -13,7 +13,7 @@
 
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{getIndex(order)}}</mat-cell>
+          <mat-cell *matCellDef="let order"> {{order.index}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="customer">

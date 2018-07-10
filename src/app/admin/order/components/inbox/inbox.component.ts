@@ -96,7 +96,8 @@ export class InboxComponent implements OnInit, OnDestroy {
       this.progressService.disable();
 
       const rows = [];
-      res.data.forEach(order => {
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
       this.dataSource.data = rows;
@@ -112,11 +113,11 @@ export class InboxComponent implements OnInit, OnDestroy {
 
 
   getIndex(order) {
-
-    let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
-    if (index === 0)
-      index = 1;
-    return index;
+    
+    // let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
+    // if (index === 0)
+    //   index = 1;
+    // return index;
   }
 
   getDate(orderTime) {
@@ -184,20 +185,19 @@ export class InboxComponent implements OnInit, OnDestroy {
   isReadyForInvoice(order) {
     return order.order_lines.every(x => {
       const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
-      return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice || lastTicket.status === STATUS.WaitForInvoice);
-
-    })
+      return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice ||
+         lastTicket.status === STATUS.WaitForInvoice);
+    });
   }
 
   requestInvoice(order) {
     this.httpService.post('order/ticket/invoice', {
       orderId: order._id
     }).subscribe(res => {
-      this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد')
+      this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد');
     }, err => {
-      this.openSnackBar('خطا به هنگام درخواست صدور فاکتور')
-
-    })
+      this.openSnackBar('خطا به هنگام درخواست صدور فاکتور');
+    });
   }
 
   openSnackBar(message: string) {

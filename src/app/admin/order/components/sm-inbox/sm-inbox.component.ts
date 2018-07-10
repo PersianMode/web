@@ -88,7 +88,8 @@ export class SmInboxComponent implements OnInit {
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
       const rows = [];
-      res.data.forEach(order => {
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
       this.dataSource.data = rows;
@@ -117,13 +118,13 @@ export class SmInboxComponent implements OnInit {
   }
 
 
-  getIndex(order) {
+  // getIndex(order) {
 
-    let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
-    if (index === 0)
-      index = 1;
-    return index;
-  }
+  //   let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
+  //   if (index === 0)
+  //     index = 1;
+  //   return index;
+  // }
 
   getDate(orderTime) {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');

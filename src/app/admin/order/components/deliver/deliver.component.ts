@@ -43,7 +43,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
     'address',
     'used_balance',
     'status',
-    'process_order'
+    // 'process_order'
   ];
 
   dataSource = new MatTableDataSource();
@@ -147,7 +147,8 @@ export class DeliverComponent implements OnInit, OnDestroy {
       this.progressService.disable();
 
       const rows = [];
-      res.data.forEach(order => {
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
       this.dataSource.data = rows;
@@ -163,13 +164,13 @@ export class DeliverComponent implements OnInit, OnDestroy {
 
 
 
-  getIndex(order) {
+  // getIndex(order) {
 
-    let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
-    if (index === 0)
-      index = 1;
-    return index;
-  }
+  //   let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
+  //   if (index === 0)
+  //     index = 1;
+  //   return index;
+  // }
 
   getDate(orderTime) {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
@@ -213,10 +214,9 @@ export class DeliverComponent implements OnInit, OnDestroy {
 
   getOrderStatus(order) {
     const _orderId = order._id;
-    const tickeByReceiver = true;
     this.dialog.open(TicketComponent, {
       width: '1000px',
-      data: {_orderId, tickeByReceiver}
+      data: {_orderId, tickeByReceiver : true}
     });
   }
 
@@ -240,10 +240,9 @@ export class DeliverComponent implements OnInit, OnDestroy {
   }
 
 
-  isReadyForInvoice(order) {
-    return false;
-
-  }
+  // isReadyForInvoice(order) {
+  //   return false;
+  // }
 
   openSnackBar(message: string) {
     this.snackBar.open(message, null, {
