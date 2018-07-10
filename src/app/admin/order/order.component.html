@@ -26,9 +26,6 @@
           <mat-chip color="accent" selected="true">{{newOutboxCount}}</mat-chip>
         </mat-chip-list>
       </ng-template>
-      <!-- handle search with inputs -->
-      <app-search-handle></app-search-handle>
-
       <app-sm-deliver  *ngIf="isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sm-deliver>
       <app-deliver  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-deliver>
 

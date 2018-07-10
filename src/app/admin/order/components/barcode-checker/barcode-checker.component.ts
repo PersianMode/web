@@ -13,7 +13,6 @@ export class BarcodeCheckerComponent implements OnInit {
 
   barcodeCtrl: FormControl;
 
-  
 
   constructor(private httpService: HttpService,
     private snackBar: MatSnackBar,
@@ -46,8 +45,8 @@ export class BarcodeCheckerComponent implements OnInit {
       console.log('-> ', res);
     }, err => {
       this.progressService.disable();
-      this.openSnackBar('خطا به هنگام اسکن محصول')
-    })
+      this.openSnackBar('خطا به هنگام اسکن محصول');
+    });
 
 
   }

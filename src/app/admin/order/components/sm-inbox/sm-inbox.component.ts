@@ -62,8 +62,6 @@ export class SmInboxComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('logg bezar bebin');
-    
     this.load();
 
     this.socketObserver = this.socketService.getOrderLineMessage();
@@ -88,10 +86,7 @@ export class SmInboxComponent implements OnInit {
     const limit = this.pageSize;
 
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
-      console.log('res', res);
-      
       this.progressService.disable();
-      
       const rows = [];
       res.data.forEach(order => {
         rows.push(order, {detailRow: true, order});
@@ -103,12 +98,11 @@ export class SmInboxComponent implements OnInit {
         if (o.order_lines) {
 
           o.order_lines.forEach(ol => {
-            let lastTicket = ol.tickets[ol.tickets.length - 1];
+            const lastTicket = ol.tickets[ol.tickets.length - 1];
             if (lastTicket.status === 10) {
               ol.isDelivered = true;
               ol.returnTime = lastTicket.desc.day_slot;
-            }
-            else {
+            } else {
               ol.isDelivered = false;
             }
           });
@@ -132,7 +126,7 @@ export class SmInboxComponent implements OnInit {
   }
 
   getDate(orderTime) {
-    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss')
+    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
   }
 
   getProductDetail(orderLine) {
@@ -159,7 +153,7 @@ export class SmInboxComponent implements OnInit {
     });
     this.batchScanDialogRef.afterClosed().subscribe(res => {
       this.load();
-    })
+    });
 
   }
 
@@ -174,7 +168,7 @@ export class SmInboxComponent implements OnInit {
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets) {
       const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return OrderStatus.find(x => x.status === lastTicket.status).name
+      return OrderStatus.find(x => x.status === lastTicket.status).name;
     }
   }
 
@@ -182,11 +176,11 @@ export class SmInboxComponent implements OnInit {
     console.log(order);
     let finalAddress = order.address;
     if (order_line !== -1) {
-      let ticketsOfOrderLine = order.order_lines.find(x => x.order_line_id.toString() === order_line).tickets;
-      let lastTicketOfOrderLine = ticketsOfOrderLine[ticketsOfOrderLine.length - 1];
+      const ticketsOfOrderLine = order.order_lines.find(x => x.order_line_id.toString() === order_line).tickets;
+      const lastTicketOfOrderLine = ticketsOfOrderLine[ticketsOfOrderLine.length - 1];
       if (lastTicketOfOrderLine && lastTicketOfOrderLine.status === 10) {
-        let returnAddressId = lastTicketOfOrderLine.desc.reciver_id.toString();
-        finalAddress = order.customer.addresses.find(x => x._id.toString() === returnAddressId)
+        const returnAddressId = lastTicketOfOrderLine.desc.reciver_id.toString();
+        finalAddress = order.customer.addresses.find(x => x._id.toString() === returnAddressId);
       }
     }
     if (!order.address) {
@@ -205,20 +199,20 @@ export class SmInboxComponent implements OnInit {
   isReadyForInvoice(order) {
     return order.order_lines.every(x => {
       const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
-      return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice || lastTicket.status === STATUS.WaitForInvoice);
-
-    })
+      return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice ||
+         lastTicket.status === STATUS.WaitForInvoice);
+    });
   }
 
   requestInvoice(order) {
     this.httpService.post('order/ticket/invoice', {
       orderId: order._id
     }).subscribe(res => {
-      this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد')
+      this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد');
     }, err => {
-      this.openSnackBar('خطا به هنگام درخواست صدور فاکتور')
+      this.openSnackBar('خطا به هنگام درخواست صدور فاکتور');
 
-    })
+    });
   }
 
   openSnackBar(message: string) {
@@ -236,10 +230,10 @@ export class SmInboxComponent implements OnInit {
     this.load();
   }
 
-  ngOnDestroy(): void {
+  // ngOnDestroy(): void {
     // if (this.socketObserver)
     //   this.socketObserver.unsubscribe();
-  }
+  // }
 
   showTicket(order, orderLine) {
     const _orderId = order._id;

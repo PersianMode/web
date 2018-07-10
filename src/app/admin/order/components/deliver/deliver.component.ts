@@ -85,11 +85,10 @@ export class DeliverComponent implements OnInit, OnDestroy {
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   ngOnInit() {
-    // farhad new
+
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
         this.warehouseName = data.trim() !== '' ? data.trim() : null;
-        // this.getDeliveryItems();
         this.load();
       }, err => {
         console.error('Couldn\'t refresh when receiver name is changed: ', err);
@@ -99,7 +98,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
     this.agentSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
         this.agentName = data.trim() !== '' ? data.trim() : null;
-        // this.getDeliveryItems();
         this.load();
       }, err => {
         console.error('Couldn\'t refresh when agent name is changed: ', err);
@@ -109,7 +107,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
     this.statusSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
         this.isStatus = data;
-        // this.getDeliveryItems();
         this.load();
       }, err => {
         console.error('Couldn\'t refresh when agent name is changed: ', err);
@@ -133,7 +130,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
     this.progressService.enable();
 
     const options = {
-    // farhad serach with post body
       agentName: this.agentName,
       transferee: this.warehouseName,
       addingTime: this.addingTime,

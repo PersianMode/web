@@ -26,7 +26,6 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import { TicketComponent } from './components/ticket/ticket.component';
 import { SmInboxComponent } from './components/sm-inbox/sm-inbox.component';
 import { SmDeliverComponent } from './components/sm-deliver/sm-deliver.component';
-import { SearchHandleComponent } from './components/search-handle/search-handle.component';
 
 @NgModule({
   declarations: [
@@ -38,8 +37,7 @@ import { SearchHandleComponent } from './components/search-handle/search-handle.
     ProductViewerComponent,
     BarcodeCheckerComponent,
     TicketComponent,
-    SmDeliverComponent,
-    SearchHandleComponent
+    SmDeliverComponent
   ],
   imports: [
     OrderRouting,

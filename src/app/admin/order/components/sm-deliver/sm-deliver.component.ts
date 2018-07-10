@@ -13,6 +13,7 @@ import { AuthService } from '../../../../shared/services/auth.service';
 import { SocketService } from '../../../../shared/services/socket.service';
 import { ProgressService } from '../../../../shared/services/progress.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-sm-deliver',
@@ -44,6 +45,22 @@ export class SmDeliverComponent implements OnInit {
 
   batchScanDialogRef;
 
+  statusSearchCtrl = new FormControl();
+  receiverSearchCtrl = new FormControl();
+  agentSearchCtrl = new FormControl();
+
+  warehouseName = null;
+  agentName = null;
+  isStatus = null;
+  addingTime = null;
+
+  listStatus = [
+    {value: STATUS.ReadyToDeliver, viewValue: OrderStatus.find(s => s.status === STATUS.ReadyToDeliver).name},
+    {value: STATUS.DeliverySet, viewValue: OrderStatus.find(s => s.status === STATUS.DeliverySet).name},
+    {value: STATUS.OnDelivery, viewValue: OrderStatus.find(s => s.status === STATUS.OnDelivery).name},
+    {value: STATUS.Delivered, viewValue: OrderStatus.find(s => s.status === STATUS.Delivered).name},
+  ];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   socketObserver: any = null;
@@ -59,6 +76,34 @@ export class SmDeliverComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.warehouseName = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+      }
+    );
+
+    this.agentSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.agentName = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when agent name is changed: ', err);
+      }
+    );
+
+    this.statusSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.isStatus = data;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when agent name is changed: ', err);
+      }
+    );
+
     this.load();
 
     this.socketObserver = this.socketService.getOrderLineMessage();
