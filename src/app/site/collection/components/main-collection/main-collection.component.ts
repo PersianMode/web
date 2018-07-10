@@ -59,9 +59,9 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   lazyRows = 10;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
-    @Inject(WINDOW) private window, private pageService: PageService,
-    private responsiveService: ResponsiveService, private productService: ProductService,
-    private titleService: TitleService) {
+              @Inject(WINDOW) private window, private pageService: PageService,
+              private responsiveService: ResponsiveService, private productService: ProductService,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {

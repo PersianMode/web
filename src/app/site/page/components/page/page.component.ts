@@ -13,7 +13,8 @@ export class PageComponent implements OnInit {
   pageName = '';
   content = '';
 
-  constructor(private route: ActivatedRoute, private pageService: PageService,private titleService: TitleService) {
+  constructor(private route: ActivatedRoute, private pageService: PageService,
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
