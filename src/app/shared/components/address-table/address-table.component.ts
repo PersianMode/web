@@ -33,10 +33,9 @@ export class AddressTableComponent implements OnInit {
     'پالادیوم': [35.7975691, 51.4107673],
   };
   deliveryPeriodDay = [];
-  // deliveryHour: { enum: ['10-18', '18-22'] };
   deliveryHour = [
-    this.time_slot.time10to18,
-    this.time_slot.time18to22,
+    'ساعت ' + (this.time_slot.time10to18.lower_bound).toLocaleString('fa') + 'تا ' + (this.time_slot.time10to18.upper_bound).toLocaleString('fa'),
+    'ساعت ' + (this.time_slot.time18to22.lower_bound).toLocaleString('fa') + 'تا ' + (this.time_slot.time18to22.upper_bound).toLocaleString('fa'),
   ];
   delivery_time = null;
   loc = null;

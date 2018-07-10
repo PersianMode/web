@@ -38,7 +38,7 @@
       <span>{{selectedMaxDiscountFormatted}} درصد</span>
     </div>
     <span *ngIf="fo.name==='color' ">
-      <span *ngFor="let v of filter_options[i].values; let j=i ndex " class="color-span "
+      <span *ngFor="let v of filter_options[i].values; let j=index " class="color-span "
             (click)="getValue(fo.name, v) " style="cursor: pointer; "
             matTooltip="{{translatedColor[v]}} " matTooltipShowDelay="500 ">
         <svg height="26 " width="26 ">
