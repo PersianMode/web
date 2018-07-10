@@ -93,7 +93,7 @@ export class OrderLinesComponent implements OnInit {
       tickets = el.tickets;
       if (tickets.length)
         statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
-      else statusText = 'خطای وضعیت در دیتا بیس';
+      else statusText = '--';
       el.statusText = statusText;
     });
   }
