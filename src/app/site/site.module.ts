@@ -36,7 +36,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RegisterComponent} from './register/components/register/register.component';
 import {OauthHandlerComponent} from './login/components/oauth-handler/oauth-handler.component';
 import {SharedModule} from '../shared/shared.module';
-import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
 import {RouterModule} from '@angular/router';
 import {UpsertAddressComponent} from '../shared/components/upsert-address/upsert-address.component';
 import {AuthGuard} from './auth.guard';
@@ -91,7 +90,6 @@ import { OrderReturnComponent } from './profile/components/order-return/order-re
     RegisterComponent,
     UpsertAddressComponent,
     GenDialogComponent,
-    OtherDetailsComponent,
     OrderLinesComponent,
     OrderReturnComponent,
   ],
