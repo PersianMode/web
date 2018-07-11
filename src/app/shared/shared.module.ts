@@ -25,6 +25,7 @@ import {DragulaModule} from 'ng2-dragula';
 import {LogoHeaderComponent} from './components/logo-header/logo-header.component';
 import {SizePickerComponent} from './components/size-picker/size-picker.component';
 import { SaveChangeConfirmComponent } from './components/save-change-confirm/save-change-confirm.component';
+import { ShelfCodePrinterComponent } from './components/shelf-code-printer/shelf-code-printer.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { SaveChangeConfirmComponent } from './components/save-change-confirm/sav
     LogoHeaderComponent,
     SizePickerComponent,
     SaveChangeConfirmComponent,
+    ShelfCodePrinterComponent,
   ],
   imports: [
     MatSlideToggleModule,
@@ -78,6 +80,7 @@ import { SaveChangeConfirmComponent } from './components/save-change-confirm/sav
   ],
   exports: [SuggestionComponent,
     SearchFieldsComponent,
+    ShelfCodePrinterComponent,
     RemovingConfirmComponent,
     SaveChangeConfirmComponent,
     PanelsComponent,

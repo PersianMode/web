@@ -6,7 +6,8 @@
     </button>
   </div>
   <div class="demo-area center-content">
-    <div fxLayout="row" fxLayoutAlign="start start" *ngFor="let key of getKeyList(modifiedPlacementList); first as vIsFirst; last as vIsLast">
+    <div fxLayout="row" fxLayoutAlign="start start"
+         *ngFor="let key of getKeyList(modifiedPlacementList); first as vIsFirst; last as vIsLast">
       <div fxFlex="10" class="move-button" *ngIf="canEdit">
         <div>
           <button mat-icon-button (click)="move('up', key)" [disabled]="vIsFirst || moveButtonsShouldDisabled">
@@ -21,16 +22,20 @@
       </div>
       <div fxFlex="90" class="content">
         <div *ngIf="modifiedPlacementList[key][0].info.topTitle">
-          <h2 *ngIf="modifiedPlacementList[key][0].info.topTitle.title" [style.color]="modifiedPlacementList[key][0].info.topTitle.titleColor ? modifiedPlacementList[key][0].info.topTitle.titleColor : null"
-            class="top-title">
+          <h2 *ngIf="modifiedPlacementList[key][0].info.topTitle.title"
+              [style.color]="modifiedPlacementList[key][0].info.topTitle.titleColor ? modifiedPlacementList[key][0].info.topTitle.titleColor : null"
+              class="top-title">
             {{modifiedPlacementList[key][0].info.topTitle.title}}</h2>
-          <h3 *ngIf="modifiedPlacementList[key][0].info.topTitle.text" [style.color]="modifiedPlacementList[key][0].info.topTitle.textColor ? modifiedPlacementList[key][0].info.topTitle.textColor : null"
-            class="top-text">
+          <h3 *ngIf="modifiedPlacementList[key][0].info.topTitle.text"
+              [style.color]="modifiedPlacementList[key][0].info.topTitle.textColor ? modifiedPlacementList[key][0].info.topTitle.textColor : null"
+              class="top-text">
             {{modifiedPlacementList[key][0].info.topTitle.text}}</h3>
         </div>
         <div fxLayout="row" fxLayoutAlign="start start">
-          <div [fxFlex]="getRowParts(item)" *ngFor="let item of modifiedPlacementList[key]; first as hIsFirst; last as hIsLast" class="container"
-            (click)="selectedPanel(item)" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(item)}">
+          <div [fxFlex]="getRowParts(item)"
+               *ngFor="let item of modifiedPlacementList[key]; first as hIsFirst; last as hIsLast" class="container"
+               (click)="selectedPanel(item)"
+               [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(item)}">
             <div class="controller-area" *ngIf="canEdit">
               <button mat-icon-button (click)="openEditDialog(item)" class="controller-button">
                 <mat-icon aria-label="Edit">create</mat-icon>
@@ -40,27 +45,43 @@
               </button>
             </div>
             <a>
-              <img [src]="getUrl(item.info.imgUrl)" class="full-width" />
+              <!--<img [src]="getUrl(item.info.imgUrl)" class="full-width"/>-->
+              <img
+                *ngIf="item.info.mediaType === 'image'"
+                [src]="getUrl(item.info.imgUrl)" class="full-width"/>
+              <video #player
+                     *ngIf="item.info.mediaType === 'video'"
+                     class="full-width" autoplay loop>
+                <source [src]="getUrl(item.info.imgUrl)" type="{{item.info.fileType && item.info.fileType['mime']}}">
+                مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
+              </video>
             </a>
             <div *ngFor="let ar of item.info.areas">
-              <div [style.font-size]="(item.info.panel_type === 'full' && item.info.areas.length === 1)  ? '1.5em' : '0.9em'" [ngClass]="ar.pos">
+              <div
+                [style.font-size]="(item.info.panel_type === 'full' && item.info.areas.length === 1)  ? '1.5em' : '0.9em'"
+                [ngClass]="ar.pos">
                 <h1 *ngIf="ar.title" [style.color]="ar.titleColor ? ar.titleColor : null">{{ar.title}}</h1>
                 <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null">
                   <b>{{ar.text}}</b>
                 </div>
                 <div *ngIf="ar.buttonText" style="margin-top: 5%;">
-                  <button mat-raised-button class="shop-button" [style.color]="ar.buttonColor ? ar.buttonColor : 'black'" [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'"
-                    (click)="tempClick()">
+                  <button mat-raised-button class="shop-button"
+                          [style.color]="ar.buttonColor ? ar.buttonColor : 'black'"
+                          [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'"
+                          (click)="tempClick()">
                     <b *ngIf="ar.buttonText">{{ar.buttonText}}</b>
                     <b *ngIf="ar.buttonText === undefined">خرید آنلاین</b>
                   </button>
                 </div>
               </div>
             </div>
-            <div *ngIf="item.info.subTitle" [style.color]="item.info.subTitle.titleColor ? item.info.subTitle.titleColor : null" class="sub-title">
+            <div *ngIf="item.info.subTitle"
+                 [style.color]="item.info.subTitle.titleColor ? item.info.subTitle.titleColor : null" class="sub-title">
               <b>{{item.info.subTitle.title}}</b>
             </div>
-            <div *ngIf="item.info.subTitle" [style.color]="item.info.subTitle.textColor ? item.info.subTitle.textColor : null" class="sub-title">{{item.info.subTitle.text}}
+            <div *ngIf="item.info.subTitle"
+                 [style.color]="item.info.subTitle.textColor ? item.info.subTitle.textColor : null" class="sub-title">
+              {{item.info.subTitle.text}}
             </div>
             <div class="move-button" *ngIf="canEdit">
               <button mat-icon-button (click)="move('right', item)" [disabled]="hIsFirst || moveButtonsShouldDisabled">

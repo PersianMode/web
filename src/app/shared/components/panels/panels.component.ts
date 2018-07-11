@@ -1,11 +1,10 @@
-import {Component, HostListener, Inject, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {AuthService} from '../../services/auth.service';
 import {PageService} from '../../services/page.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
 import {Router} from '@angular/router';
-
 
 @Component({
   selector: 'app-panels',
@@ -18,8 +17,8 @@ export class PanelsComponent implements OnInit {
   placements: any = [];
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
-    private pageService: PageService, private sanitizer: DomSanitizer,
-    private router: Router) {
+              private pageService: PageService, private sanitizer: DomSanitizer,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -51,6 +50,8 @@ export class PanelsComponent implements OnInit {
               href: r.info.href,
               areas: r.info.areas,
               imgUrl: this.getUrl(r.info.imgUrl),
+              fileType: r.info.fileType,
+              mediaType: this.getFileTypeFromExtension(r.info.fileType && r.info.fileType['ext'], this.getImageLink(r.info.imgUrl)),
               subTitle: r.info.subTitle,
               type: r.info.panel_type,
             });
@@ -74,10 +75,14 @@ export class PanelsComponent implements OnInit {
 
   getRowParts(item) {
     switch (item.type.toLowerCase()) {
-      case 'full': return 100;
-      case 'half': return 50;
-      case 'third': return 33;
-      case 'quarter': return 25;
+      case 'full':
+        return 100;
+      case 'half':
+        return 50;
+      case 'third':
+        return 33;
+      case 'quarter':
+        return 25;
     }
   }
 
@@ -93,5 +98,40 @@ export class PanelsComponent implements OnInit {
     } else {
       this.router.navigate([url]);
     }
+  }
+
+  getImageLink(link) {
+    if (typeof link === 'string')
+      return link;
+    else if (typeof link === 'object')
+      return link['changingThisBreaksApplicationSecurity'];
+  }
+
+  getFileTypeFromExtension(ext, url) {
+    let imgs = this.pageService.fileTypes['images'].filter(el => el === ext);
+    if (imgs.length > 0)
+      return 'image';
+
+    let vds = this.pageService.fileTypes['videos'].filter(el => el === ext);
+    if (vds.length > 0)
+      return 'video';
+
+    // if nothing found, we can only check with the extension!
+    if (!url)
+      return;
+
+    let extension = url.split('.');
+    extension = extension[extension.length - 1];
+    // console.log('local extension:', extension);
+    imgs = this.pageService.fileTypes['images'].filter(el => el === extension);
+    if (imgs.length > 0)
+      return 'image';
+
+    vds = this.pageService.fileTypes['videos'].filter(el => el === extension);
+    if (vds.length > 0)
+      return 'video';
+
+    // default fallback
+    return 'image';
   }
 }

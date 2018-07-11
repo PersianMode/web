@@ -5,10 +5,9 @@ import {CommonModule} from '@angular/common';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatCheckboxModule, MatDialogModule, MatInputModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { OtherDetailsComponent } from './components/other-details/other-details.component';
 
 // @NgModule({
-//   declarations: [LoginComponent, OtherDetailsComponent],
+//   declarations: [LoginComponent],
 //   imports: [
 //     LoginRouting,
 //     CommonModule,
