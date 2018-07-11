@@ -90,23 +90,24 @@ export class AddressTableComponent implements OnInit {
     });
 
     this.setState();
-
     this.getDurations();
   }
 
   private setState() {
-    this.checkoutService.addressState = [
-      this.withDelivery,
-      this.selectedCustomerAddress,
-      this.selectedWarehouseAddress,
-      JSON.parse(localStorage.getItem('address')),
-      this.withDelivery ?
-        this.selectedCustomerAddress >= 0 ? this.showAddresses[this.selectedCustomerAddress] : null
-        : this.selectedWarehouseAddress >= 0 ? this.showAddresses[this.selectedWarehouseAddress] : null,
+    if (!this.isProfile) {
+      this.checkoutService.addressState = [
+        this.withDelivery,
+        this.selectedCustomerAddress,
+        this.selectedWarehouseAddress,
+        JSON.parse(localStorage.getItem('address')),
+        this.withDelivery ?
+          this.selectedCustomerAddress >= 0 ? this.showAddresses[this.selectedCustomerAddress] : null
+          : this.selectedWarehouseAddress >= 0 ? this.showAddresses[this.selectedWarehouseAddress] : null,
 
-      this.withDelivery ? this.deliveryDays : null,
-      this.withDelivery ? this.delivery_time : null
-    ];
+        this.withDelivery ? this.deliveryDays : null,
+        this.withDelivery ? this.delivery_time : null
+      ];
+    }
   }
 
   private setBtnLabel() {
@@ -241,7 +242,9 @@ export class AddressTableComponent implements OnInit {
   }
 
   changeDurationType(durationId, deliveryDays) {
-    let selectedCustomerAddressID = this.showAddresses[this.selectedCustomerAddress]._id;
+    let selectedCustomerAddressID = -1;
+    if (this.selectedCustomerAddress > -1)
+      selectedCustomerAddressID = this.showAddresses[this.selectedCustomerAddress]._id;
     this.durationId = durationId;
     this.deliveryDays = deliveryDays;
     this.noDuration.emit(true);
@@ -252,19 +255,19 @@ export class AddressTableComponent implements OnInit {
     } else
       this.showAddresses = this.addresses;
     this.selectedCustomerAddress = 0;
-    for (let i = 0; i < this.showAddresses.length; i++) {
-      if (this.showAddresses[i]._id === selectedCustomerAddressID)
-        this.selectedCustomerAddress = i;
+    if (selectedCustomerAddressID !== -1){
+      for (let i = 0; i < this.showAddresses.length; i++) {
+        if (this.showAddresses[i]._id === selectedCustomerAddressID)
+          this.selectedCustomerAddress = i;
+      }
     }
     if (this.showAddresses.length < 1)
       this.selectedCustomerAddress = -1;
-
 
     this.setState();
   }
 
   chooseAddress($event) {
-    console.log(1);
     this.selectedChange.emit(this.addressSelected);
   }
 

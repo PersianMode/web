@@ -60,8 +60,8 @@ export class CheckoutService {
   private checkValidity() {
     const data = this.accumulateData();
     const il = this.authService.userIsLoggedIn();
-    this.isValid$.next(data.total_amount &&
-      (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
+    this.isValid$.next(!!(data.total_amount && data.address && data.duration_days && data.time_slot &&
+      (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id)));
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {

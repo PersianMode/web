@@ -137,7 +137,7 @@
             <mat-checkbox *ngIf="withDelivery" [checked]="selectedCustomerAddress===i"
                           (change)="setAddress(i)"></mat-checkbox>
             <mat-checkbox *ngIf="!withDelivery" [checked]="selectedWarehouseAddress===i"
-                          (change)="setAddress(i)"></mat-checkbox>
+                          (change)="setAddress( i)"></mat-checkbox>
           </div>
           <br>
         </mat-card-content>
