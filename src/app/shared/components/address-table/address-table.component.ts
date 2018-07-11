@@ -255,7 +255,7 @@ export class AddressTableComponent implements OnInit {
     } else
       this.showAddresses = this.addresses;
     this.selectedCustomerAddress = 0;
-    if (selectedCustomerAddressID !== -1){
+    if (selectedCustomerAddressID !== -1) {
       for (let i = 0; i < this.showAddresses.length; i++) {
         if (this.showAddresses[i]._id === selectedCustomerAddressID)
           this.selectedCustomerAddress = i;
