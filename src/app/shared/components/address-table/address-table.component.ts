@@ -7,6 +7,7 @@ import {ResponsiveService} from '../../services/responsive.service';
 import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
+import {time_slotEnum} from '../../enum/time_slot.enum';
 import {CheckoutService} from '../../services/checkout.service';
 import {ProgressService} from '../../services/progress.service';
 
@@ -18,6 +19,7 @@ import {ProgressService} from '../../services/progress.service';
 })
 export class AddressTableComponent implements OnInit {
   addressSelected;
+  time_slot = time_slotEnum;
   @Input() isProfile = true;
   @Input() isModify = true;
   @Output() selectedChange = new EventEmitter();
@@ -31,7 +33,12 @@ export class AddressTableComponent implements OnInit {
     'پالادیوم': [35.7975691, 51.4107673],
   };
   deliveryPeriodDay = [];
-  deliveryHour: { enum: ['10-18', '18-22'] };
+  // deliveryHour: { enum: ['10-18', '18-22'] };
+  deliveryHour = [
+    this.time_slot.time10to18,
+    this.time_slot.time18to22,
+  ];
+  delivery_time = null;
   loc = null;
   withDelivery = true;
   selectedCustomerAddress = -1;
@@ -55,6 +62,7 @@ export class AddressTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.delivery_time = null;
     this.noDuration.emit(null);
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.authService.isLoggedIn.subscribe(r => {
@@ -82,20 +90,24 @@ export class AddressTableComponent implements OnInit {
     });
 
     this.setState();
-
     this.getDurations();
   }
 
   private setState() {
-    this.checkoutService.addressState = [
-      this.withDelivery,
-      this.selectedCustomerAddress,
-      this.selectedWarehouseAddress,
-      JSON.parse(localStorage.getItem('address')),
-      this.withDelivery ?
-        this.selectedCustomerAddress >= 0 ? this.showAddresses[this.selectedCustomerAddress] : null
-        : this.selectedWarehouseAddress >= 0 ? this.showAddresses[this.selectedWarehouseAddress] : null,
-    ];
+    if (!this.isProfile) {
+      this.checkoutService.addressState = [
+        this.withDelivery,
+        this.selectedCustomerAddress,
+        this.selectedWarehouseAddress,
+        JSON.parse(localStorage.getItem('address')),
+        this.withDelivery ?
+          this.selectedCustomerAddress >= 0 ? this.showAddresses[this.selectedCustomerAddress] : null
+          : this.selectedWarehouseAddress >= 0 ? this.showAddresses[this.selectedWarehouseAddress] : null,
+
+        this.withDelivery ? this.deliveryDays : null,
+        this.withDelivery ? this.delivery_time : null
+      ];
+    }
   }
 
   private setBtnLabel() {
@@ -205,6 +217,12 @@ export class AddressTableComponent implements OnInit {
     );
   }
 
+  setDeliveryTime(deliveryTime) {
+    this.delivery_time = deliveryTime;
+    this.setState();
+
+  }
+
   changeWithDelivery() {
     this.deliveryType.emit(this.withDelivery);
     if (this.withDelivery) {
@@ -224,6 +242,9 @@ export class AddressTableComponent implements OnInit {
   }
 
   changeDurationType(durationId, deliveryDays) {
+    let selectedCustomerAddressID = -1;
+    if (this.selectedCustomerAddress > -1)
+      selectedCustomerAddressID = this.showAddresses[this.selectedCustomerAddress]._id;
     this.durationId = durationId;
     this.deliveryDays = deliveryDays;
     this.noDuration.emit(true);
@@ -233,12 +254,22 @@ export class AddressTableComponent implements OnInit {
       this.showAddresses = this.tehranAddresses;
     } else
       this.showAddresses = this.addresses;
-
     this.selectedCustomerAddress = 0;
+    if (selectedCustomerAddressID !== -1) {
+      for (let i = 0; i < this.showAddresses.length; i++) {
+        if (this.showAddresses[i]._id === selectedCustomerAddressID)
+          this.selectedCustomerAddress = i;
+      }
+    }
+    if (this.showAddresses.length < 1)
+      this.selectedCustomerAddress = -1;
+
+    this.setState();
   }
 
   chooseAddress($event) {
     this.selectedChange.emit(this.addressSelected);
   }
+
 }
 
