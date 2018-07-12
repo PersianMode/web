@@ -123,8 +123,7 @@ export class SmDeliverComponent implements OnInit {
 
       sort: this.sort.active,
       dir: this.sort.direction,
-      // type: 'outbox',
-      type: 'inbox'
+      type: 'outbox',
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;

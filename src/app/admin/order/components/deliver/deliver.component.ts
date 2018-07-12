@@ -46,7 +46,8 @@ export class DeliverComponent implements OnInit, OnDestroy {
     // 'process_order'
   ];
 
-  dataSource = new MatTableDataSource();
+  dataSourceOne = new MatTableDataSource();
+  dataSourceTwo = new MatTableDataSource();
   expandedElement: any;
 
   pageSize = 10;
@@ -126,40 +127,23 @@ export class DeliverComponent implements OnInit, OnDestroy {
   }
 
   load() {
-
     this.progressService.enable();
+    // get data with last_ticket and receiver_id is that mine
+    this.firstApiCall();
+    // get data have tickets includes readyToDeliverd and is not last_ticket and receiver_id is that mine
+    this.secondApiCall();
+  }
 
-    const options = {
-      agentName: this.agentName,
-      transferee: this.warehouseName,
-      addingTime: this.addingTime,
-      status: this.isStatus,
+  loadTableUp() {
+    this.progressService.enable();
+    // get data with last_ticket and receiver_id is that mine
+    this.firstApiCall();
+  }
 
-      sort: this.sort.active,
-      dir: this.sort.direction,
-      // change inbox to outbox when API created
-      type: 'inbox'
-    };
-    const offset = this.paginator.pageIndex * +this.pageSize;
-    const limit = this.pageSize;
-
-    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
-      this.progressService.disable();
-
-      const rows = [];
-      res.data.forEach((order, index) => {
-        order['index'] = index + 1;
-        rows.push(order, {detailRow: true, order});
-      });
-      this.dataSource.data = rows;
-      this.resultsLength = res.total ? res.total : 0;
-      console.log('-> ', this.dataSource.data);
-      // this.OnNewOutboxCount.emit(res.total);
-    }, err => {
-      this.progressService.disable();
-      // this.OnNewOutboxCount.emit(0);
-      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
-    });
+  loadTableDown() {
+    this.progressService.enable();
+    // get data have tickets includes readyToDeliverd and is not last_ticket and receiver_id is that mine
+    this.secondApiCall();
   }
 
 
@@ -220,10 +204,10 @@ export class DeliverComponent implements OnInit, OnDestroy {
     });
   }
 
-  getOrderLineStatus(orderLine) {
-    if (orderLine && orderLine.tickets)
-      return OrderStatus.find(x => x.status === orderLine.tickets.find(y => !y.is_processed).status).name;
-  }
+  // getOrderLineStatus(orderLine) {
+  //   if (orderLine && orderLine.tickets)
+  //     return OrderStatus.find(x => x.status === orderLine.tickets.find(y => !y.is_processed).status).name;
+  // }
 
   showAddress(order) {
 
@@ -271,5 +255,116 @@ export class DeliverComponent implements OnInit, OnDestroy {
     //   width: '1000px',
     //   data: {_orderId, _orderLineId}
     // });
+  }
+
+  ApiCall(newOption: boolean) {
+    const options = {
+      agentName: this.agentName,
+      transferee: this.warehouseName,
+      addingTime: this.addingTime,
+      status: this.isStatus,
+
+      sort: this.sort.active,
+      dir: this.sort.direction,
+      type: 'outbox'
+    };
+    if (newOption) {
+      options['last_ticket'] = true;
+    }
+
+    console.log('options', options);
+    const offset = this.paginator.pageIndex * +this.pageSize;
+    const limit = this.pageSize;
+
+    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+      this.progressService.disable();
+      const rows_one = [];
+      const rows_two = [];
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
+        if (options['last_ticket'])
+          rows_one.push(order, {detailRow: true, order});
+        else
+          rows_two.push(order, {detailRow: true, order});
+      });
+      this.dataSourceOne.data = rows_one;
+      this.dataSourceTwo.data = rows_two;
+      this.resultsLength = res.total ? res.total : 0;
+      console.log('dataSourceOne-> ', this.dataSourceOne.data);
+      console.log('dataSourceTwo-> ', this.dataSourceTwo.data);
+      // this.OnNewOutboxCount.emit(res.total);
+    }, err => {
+      this.progressService.disable();
+      // this.OnNewOutboxCount.emit(0);
+      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
+    });
+  }
+
+  firstApiCall() {
+    const options = {
+      agentName: this.agentName,
+      transferee: this.warehouseName,
+      addingTime: this.addingTime,
+      status: this.isStatus,
+
+      sort: this.sort.active,
+      dir: this.sort.direction,
+      type: 'outbox',
+      last_ticket: true
+    };
+
+    const offset = this.paginator.pageIndex * +this.pageSize;
+    const limit = this.pageSize;
+
+    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+      this.progressService.disable();
+      const rows = [];
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
+        rows.push(order, {detailRow: true, order});
+      });
+      this.dataSourceOne.data = rows;
+      this.resultsLength = res.total ? res.total : 0;
+      console.log('dataSourceOne-> ', this.dataSourceOne.data);
+      // this.OnNewOutboxCount.emit(res.total);
+    }, err => {
+      this.progressService.disable();
+      // this.OnNewOutboxCount.emit(0);
+      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
+    });
+  }
+
+  secondApiCall() {
+    const options = {
+      agentName: this.agentName,
+      transferee: this.warehouseName,
+      addingTime: this.addingTime,
+      status: this.isStatus,
+
+      sort: this.sort.active,
+      dir: this.sort.direction,
+      type: 'outbox',
+      last_ticket: false
+    };
+
+    const offset = this.paginator.pageIndex * +this.pageSize;
+    const limit = this.pageSize;
+
+    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+      this.progressService.disable();
+      const rows = [];
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
+        rows.push(order, {detailRow: true, order});
+      });
+      this.dataSourceTwo.data = rows;
+      this.resultsLength = res.total ? res.total : 0;
+      console.log('dataSourceTwo-> ', this.dataSourceTwo.data);
+      // this.OnNewOutboxCount.emit(res.total);
+    }, err => {
+      this.progressService.disable();
+      // this.OnNewOutboxCount.emit(0);
+      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
+    });
   }
 }
