@@ -22,6 +22,7 @@ import {STATUS} from '../../../../shared/enum/status.enum';
   styleUrls: ['./order-lines.component.css']
 })
 export class OrderLinesComponent implements OnInit {
+  stautsCancel: boolean;
   orderObject: any;
   isMobile = false;
   orderInfo: any;
@@ -55,14 +56,15 @@ export class OrderLinesComponent implements OnInit {
     const instancArr = [];
     arr.forEach(el => {
       const gender = el.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-      if (instancArr.indexOf(el.product_instance._id) === -1) {
+      // if (instancArr.indexOf(el.product_instance._id) === -1) {
         instancArr.push(el.product_instance._id);
         el.quantity = 1;
         el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
         this.noDuplicateOrderLine.push(el);
-      } else {
-        this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
-      }
+      // }
+      // else {
+      //   this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
+      // }
     });
   }
 
@@ -160,11 +162,11 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkCancelOrderLine(ol) {
-    return ol.tickets.find(tk =>
-      (tk.status !== STATUS.OnDelivery && tk.status !== STATUS.Delivered )
-       && ( tk.status !== STATUS.Cancel || tk.status !== STATUS.Return)
+    return ol.tickets.every(tk =>
+      tk.status !== STATUS.OnDelivery && tk.status !== STATUS.Delivered
+       && tk.status !== STATUS.Cancel && tk.status !== STATUS.Return
        && !ol['cancelFlag']
-      );
+    );
   }
 
   openSnackBar(message: string) {

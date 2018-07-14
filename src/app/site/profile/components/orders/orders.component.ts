@@ -10,6 +10,7 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import * as moment from 'jalali-moment';
 import { OrderReturnComponent } from '../order-return/order-return.component';
+import { OrderCancelComponent } from '../order-cancel/order-cancel.component';
 
 
 
@@ -49,24 +50,24 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
    goToOrderLines(orderId) {
      this.profileOrderService.getAllOrders();
-     setTimeout(() => {
 
-       this.selectedOrder = {
-         orderId: orderId,
-         dialog_order: this.profileOrder.find(el => el._id === orderId),
-       };
-       this.profileOrderService.orderData = this.selectedOrder;
-       if (this.responsiveService.isMobile) {
-         this.router.navigate([`/profile/orderlines`]);
-       } else {
-         const rmDialog = this.dialog.open(GenDialogComponent, {
-           width: '700px',
-           data: {
-             componentName: DialogEnum.orderLinesComponent,
-           }
-         });
-       }
-     }, 500);
+     this.selectedOrder = {
+       orderId: orderId,
+       dialog_order: this.profileOrder.find(el => el._id === orderId),
+     };
+     this.profileOrderService.orderData = this.selectedOrder;
+     if (this.responsiveService.isMobile) {
+       this.router.navigate([`/profile/orderlines`]);
+     } else {
+       const rmDialog = this.dialog.open(GenDialogComponent, {
+         width: '700px',
+         data: {
+           componentName: DialogEnum.orderLinesComponent,
+         }
+       }).afterClosed().subscribe(res => {
+        this.profileOrderService.getAllOrders();
+       });
+     }
    };
 
   ngOnDestroy() {
