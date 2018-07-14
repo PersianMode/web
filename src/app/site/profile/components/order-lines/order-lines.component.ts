@@ -61,7 +61,7 @@ export class OrderLinesComponent implements OnInit {
         el.quantity = 1;
         el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
         this.noDuplicateOrderLine.push(el);
-      // }
+      // } 
       // else {
       //   this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
       // }

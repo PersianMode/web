@@ -72,7 +72,7 @@ export class SmDeliverComponent implements OnInit {
   ngOnInit() {
     // set status
     this.listStatus = OrderStatus.map(el => ({name: el.name, status: el.status}));
-
+    this.listStatus.push({name: 'همه موارد', status: null});
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
         this.warehouseOrCutomerName = data.trim() !== '' ? data.trim() : null;
