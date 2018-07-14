@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogEnum} from '../../enum/dialog.components.enum';
-import {ProfileOrderService} from '../../services/profile-order.service';
 
 @Component({
   selector: 'app-gen-dialog',
@@ -11,7 +10,7 @@ import {ProfileOrderService} from '../../services/profile-order.service';
 export class GenDialogComponent implements OnInit {
   componentName = null;
   dialogEnum = DialogEnum;
-  extraData = {};
+  extraData: any = {};
 
   constructor(public dialogRef: MatDialogRef<GenDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) { }
 
