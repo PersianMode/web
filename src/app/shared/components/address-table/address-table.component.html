@@ -21,7 +21,7 @@
 
   <label class="label-field">ساعت تحویل</label>
   <mat-radio-group [(ngModel)]="delivery_time" class="radio-field">
-    <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">{{dh}}
+    <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">{{getDeliveryTimeDisplay(dh)}}
     </mat-radio-button>
   </mat-radio-group>
 </div>
