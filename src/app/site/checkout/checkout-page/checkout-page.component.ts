@@ -157,7 +157,7 @@ export class CheckoutPageComponent implements OnInit {
       // calculate earn point
       this.earnedLoyaltyPoint = Math.floor(this.total / this.system_offline_offer);
     }
-    else if (!this.showCostLabel) {
+    else {
       // calculate earn point in C&C mode
       valid_loyaltyGroups = this.loyaltyGroups.filter(el => el.min_score <= this.loyaltyPoint);
 
