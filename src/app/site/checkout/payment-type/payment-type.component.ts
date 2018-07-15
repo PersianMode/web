@@ -73,6 +73,7 @@ export class PaymentTypeComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.selectedType.emit(this.selectedPaymentType);
   }
 
   paymentTypeChanged() {

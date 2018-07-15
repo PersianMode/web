@@ -29,16 +29,15 @@ export class ProductBasicFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() product: any = null;
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar, private router: Router,
-    public dialog: MatDialog, private progressService: ProgressService) {
+              public dialog: MatDialog, private progressService: ProgressService) {
   }
 
   ngOnInit() {
     this.initForm();
   }
+
   ngOnChanges(changes: SimpleChanges): void {
-
     if (this.product && this.product._id) {
-
       if (!this.productBasicForm) {
         this.initForm();
       }
@@ -46,30 +45,31 @@ export class ProductBasicFormComponent implements OnInit, OnChanges, OnDestroy {
       this.originalProduct = Object.assign({}, this.product);
       this.productBasicForm.controls['name'].setValue(this.product.name);
       this.productBasicForm.controls['base_price'].setValue(this.product.base_price);
-      this.productBasicForm.controls['product_type'].setValue(this.product.product_type.product_type_id);
-      this.productBasicForm.controls['brand'].setValue(this.product.brand.brand_id);
+      if (this.types)
+        this.productBasicForm.controls['product_type'].setValue(this.types.find(el => el.name.toLowerCase() === this.product.product_type.toLowerCase())._id);
+      if (this.brands)
+        this.productBasicForm.controls['brand'].setValue(this.brands.find(el => el.name.toLowerCase() === this.product.brand.toLowerCase())._id);
       this.productBasicForm.controls['desc'].setValue(this.product.desc);
-
     }
 
   }
 
   initForm() {
     this.productBasicForm = new FormBuilder().group({
-      name: [null, [
-        Validators.required,
-      ]],
-      base_price: [null, [
-        Validators.required,
-      ]],
-      product_type: [null, [
-        Validators.required,
-      ]],
-      brand: [null, [
-        Validators.required,
-      ]],
-      desc: [null]
-    },
+        name: [null, [
+          Validators.required,
+        ]],
+        base_price: [null, [
+          Validators.required,
+        ]],
+        product_type: [null, [
+          Validators.required,
+        ]],
+        brand: [null, [
+          Validators.required,
+        ]],
+        desc: [null]
+      },
       {
         validator: this.basicInfoValidation
       });
