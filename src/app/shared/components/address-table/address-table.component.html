@@ -9,7 +9,7 @@
       </mat-radio-button>
     </mat-radio-group>
 </span>
-<div *ngIf="withDelivery && !isProfile">
+<div *ngIf="isModify && withDelivery && !isProfile">
   <label class="label-field">زمان تحویل</label>
   <mat-radio-group class="radio-field">
     <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days"

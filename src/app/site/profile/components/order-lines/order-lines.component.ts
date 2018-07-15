@@ -3,14 +3,17 @@ import {ProfileOrderService} from '../../../../shared/services/profile-order.ser
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
-import {MatDialogRef, MatDialog} from '@angular/material';
+import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {OrderStatus} from '../../../../shared/lib/order_status';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import { ResponsiveService } from '../../../../shared/services/responsive.service';
-
+import { RemovingConfirmComponent } from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import { HttpService } from '../../../../shared/services/http.service';
+import { ProgressService } from '../../../../shared/services/progress.service';
+import {STATUS} from '../../../../shared/enum/status.enum';
 
 
 @Component({
@@ -29,6 +32,9 @@ export class OrderLinesComponent implements OnInit {
 
   constructor(private profileOrderService: ProfileOrderService,
               private dialog: MatDialog,
+              private httpService: HttpService,
+              private snackBar: MatSnackBar,
+              private progressService: ProgressService,
               private location: Location, private router: Router,
               private dict: DictionaryService,
               private responsiveService: ResponsiveService) {
@@ -39,7 +45,7 @@ export class OrderLinesComponent implements OnInit {
     this.orderInfo = this.profileOrderService.orderData;
     this.orderLines = this.orderInfo.dialog_order.order_lines;
     this.removeDuplicates(this.orderLines);
-    this.orderStatus(this.noDuplicateOrderLine);
+    // this.orderStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
@@ -87,30 +93,27 @@ export class OrderLinesComponent implements OnInit {
     return (+a).toLocaleString('fa', {useGrouping: isPrice});
   }
 
-  orderStatus(arr) {
-    let tickets = [];
-    let statusText = '';
-    arr.forEach(el => {
-      tickets = el.tickets;
-      statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
-      el.statusText = statusText;
-    });
+  orderStatus(ol) {
+    return  ol.tickets.length !== 0 ? OrderStatus.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
   }
 
   getThumbnailURL(boughtColor, product) {
     return imagePathFixer(boughtColor.image.thumbnail, product._id, boughtColor._id);
   }
 
-  orderTime() {
-    const date =  ((+new Date(this.orderInfo.dialog_order.order_time)) + (1000 * 60 * 60 * 24 * 14)) - (+new Date());
-    if (date > 0 ) return false;
-    else return true;
+  checkReturnOrderLine(ol) {
+    const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14 ) ;
+    return ol.tickets.find(tk => tk.status === STATUS.Delivered
+      && (tk.status !== STATUS.Return || tk.status !== STATUS.Cancel)
+      && !ol['returnFlag']
+      && date > Date.now()
+      );
   }
 
-  returnOrder(ol) {
+  returnOrderLine(ol) {
     this.orderObject = {
-      orderLineid: ol.order_line_id,
-      orderId: this.orderInfo.orderId
+      orderLine: ol,
+      order: this.orderInfo
     };
     this.profileOrderService.orderData = this.orderObject;
     if (this.responsiveService.isMobile) {
@@ -122,6 +125,62 @@ export class OrderLinesComponent implements OnInit {
           componentName: DialogEnum.orderReturnComponent
         }
       });
+      rmDialog.afterClosed().subscribe(res => {
+        this.closeDialog.emit(false);
+      });
     }
+  }
+
+  cancelOrderLine(ol) {
+
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+    rmDialog.afterClosed().subscribe(
+      status => {
+        if (status) {
+          this.progressService.enable();
+          // TODO send delete request
+          this.httpService.post(`order/cancel`, {orderId: this.orderInfo.orderId, orderLineId: ol.order_line_id}).subscribe(
+            data => {
+              this.openSnackBar('کالا مورد نظر با موفقیت کنسل شد.');
+              this.changeOrderLine(ol);
+              this.closeDialog.emit(false);
+              this.progressService.disable();
+            },
+            err => {
+              this.openSnackBar('خطا در هنگام کنسل کردن');
+              this.progressService.disable();
+            }
+          );
+        }
+      }, err => {
+        console.log('Error in dialog: ', err);
+      });
+  }
+
+  checkCancelOrderLine(ol) {
+    return ol.tickets.find(tk =>
+      (tk.status !== STATUS.OnDelivery && tk.status !== STATUS.Delivered )
+       && ( tk.status !== STATUS.Cancel || tk.status !== STATUS.Return)
+       && !ol['cancelFlag']
+      );
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 2000,
+    });
+  }
+
+  changeOrderLine(ol) {
+    const updateOrderLines = [];
+    this.orderInfo.dialog_order.order_lines.forEach(el => {
+      if (el.order_line_id === ol.order_line_id) {
+        el['cancelFlag'] = true;
+        updateOrderLines.push(el);
+      } else updateOrderLines.push(el);
+    });
+    this.orderInfo.dialog_order.order_lines = updateOrderLines;
   }
 }

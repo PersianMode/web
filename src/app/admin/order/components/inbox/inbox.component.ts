@@ -67,6 +67,8 @@ export class InboxComponent implements OnInit, OnDestroy {
     private progressService: ProgressService) {
   }
 
+  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
+
   ngOnInit() {
 
     this.load();
@@ -120,7 +122,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   getDate(orderTime) {
-    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss')
+    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
   }
 
   getProductDetail(orderLine) {
@@ -147,7 +149,7 @@ export class InboxComponent implements OnInit, OnDestroy {
     });
     this.batchScanDialogRef.afterClosed().subscribe(res => {
       this.load();
-    })
+    });
 
   }
 
@@ -162,7 +164,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets) {
       const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return OrderStatus.find(x => x.status === lastTicket.status).name
+      return OrderStatus.find(x => x.status === lastTicket.status).name;
     }
   }
 

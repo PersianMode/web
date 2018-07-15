@@ -23,8 +23,13 @@ export class TicketComponent implements OnInit {
 
   ngOnInit() {
     const dataArr = [];
-    this.httpService.get(`order/ticket/history/${this.data._orderId}/${this.data._orderLineId}`)
-      .map(data => data[0].tickets)
+    let httpRequestUrl;
+    if (this.data.tickeByReceiver) {
+      httpRequestUrl = this.httpService.get(`order/ticket/history/${this.data._orderId}`);
+    } else {
+      httpRequestUrl = this.httpService.get(`order/ticket/history/${this.data._orderId}/${this.data._orderLineId}`);
+    }
+    httpRequestUrl.map(data => data[0].tickets)
       .subscribe(tickets => {
         // loop each of ticket
         tickets.sort((a, b) => (+new Date(b.timestamp)) - (+new Date(a.timestamp)))

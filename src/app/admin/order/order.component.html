@@ -18,12 +18,12 @@
     
     <mat-tab label="outbox">
       <ng-template mat-tab-label>
-        <span>آماده تحویل</span>
-        <mat-chip-list *ngIf="newDeliverCount">
-          <mat-chip color="accent" selected="true">{{newDeliverCount}}</mat-chip>
+        <span>صندوق خروجی</span>
+        <mat-chip-list *ngIf="newOutboxCount">
+          <mat-chip color="accent" selected="true">{{newOutboxCount}}</mat-chip>
         </mat-chip-list>
       </ng-template>
-      <app-deliver (newDeliverCount)="newDeliverCount = $event"> </app-deliver>
+      <app-deliver (OnNewOutboxCount)="newOutboxCount = $event"> </app-deliver>
 
     </mat-tab>
 

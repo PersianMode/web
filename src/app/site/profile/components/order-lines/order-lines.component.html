@@ -5,9 +5,6 @@
 </div>
 <mat-card style="margin-bottom: 5px" *ngFor="let ol of noDuplicateOrderLine">
   <mat-card-content>
-    <button *ngIf="orderTime()" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrder(ol)">
-      <i class="fa fa-undo"></i>
-    </button>
     <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column" dir="rtl">
       <div fxFlex="25">
         <a (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">
@@ -45,10 +42,10 @@
             </div>
             <div>
               <span>وضعیت سفارش : </span>
-              <span>{{ol.statusText}}</span>
+              <span>{{orderStatus(ol)}}</span>
             </div>
           </div>
-    
+
           <div fxFlex="30" class="total_price">
             <div style="height: 80%">
               <span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : (ol.product.instances.price ? ol.product.instances.price
@@ -56,9 +53,12 @@
               تومان
             </div>
             <div style="height: 20%">
-                <button *ngIf="orderTime()" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrder(ol)">
-                    <i class="fa fa-undo"></i>
-                  </button>
+              <button *ngIf="checkCancelOrderLine(ol)" matTooltip="کنسل کردن خرید" class="clickable-link" (click)="cancelOrderLine(ol)">
+                <i class="fa fa-times"></i>
+              </button>
+              <button *ngIf="checkReturnOrderLine(ol)" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrderLine(ol)">
+                <i class="fa fa-undo"></i>
+              </button>
             </div>
             <!--<div class="submit-cancel-change-btn">-->
             <!--<button mat-button class="action-button"-->

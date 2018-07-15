@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy} from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -9,139 +9,188 @@ import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {STATUS} from '../../../../shared/enum/status.enum';
 import {ProductViewerComponent} from 'app/admin/order/components/product-viewer/product-viewer.component';
 import {ProgressService} from '../../../../shared/services/progress.service';
+import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+import * as moment from 'jalali-moment';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import { TicketComponent } from '../ticket/ticket.component';
+
+
 
 @Component({
   selector: 'app-deliver',
   templateUrl: './deliver.component.html',
-  styleUrls: ['./deliver.component.css']
+  styleUrls: ['./deliver.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
+      state('expanded', style({height: '*', visibility: 'visible'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class DeliverComponent implements OnInit, OnDestroy {
 
 
-  @Output() newDeliverCount = new EventEmitter();
 
+  @Output() OnNewOutboxCount = new EventEmitter();
 
   displayedColumns = [
     'position',
-    'product',
-    'is_collect',
-    'barcode',
-    'price',
-    'used_point',
-    'used_balance',
     'customer',
+    'is_collect',
+    'order_time',
+    'total_order_lines',
     'address',
-    'status'
+    'used_balance',
+    'status',
+    'process_order'
   ];
 
   dataSource = new MatTableDataSource();
+  expandedElement: any;
 
-  resultsLength = 0;
-  pageSize = 20;
+  pageSize = 10;
+  resultsLength: Number;
 
-  processDialogRef;
+  batchScanDialogRef;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
   socketObserver: any = null;
 
-
   constructor(private httpService: HttpService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private authService: AuthService,
-    private socketService: SocketService,
-    private progeressService: ProgressService) {
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private authService: AuthService,
+              private socketService: SocketService,
+              private progressService: ProgressService) {
   }
 
-  ngOnInit() {
-    // this.load();
+  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
+  ngOnInit() {
+
+    this.load();
     this.socketObserver = this.socketService.getOrderLineMessage();
     if (this.socketObserver) {
       this.socketObserver.subscribe(msg => {
-        if (this.processDialogRef)
-          this.processDialogRef.close();
-
-        // this.load();
+        this.load();
       });
     }
+
   }
 
   load() {
-    this.progeressService.enable();
+
+    this.progressService.enable();
+
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
-      type: 'readyToDeliver'
+      // change inbox to outbox when API created
+      type: 'inbox'
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
 
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
-      this.resultsLength = res.total;
-      this.dataSource.data = res.data;
+      this.progressService.disable();
 
-
-      this.newDeliverCount.emit(this.resultsLength);
-
-      this.progeressService.disable();
+      const rows = [];
+      res.data.forEach(order => {
+        rows.push(order, {detailRow: true, order});
+      });
+      this.dataSource.data = rows;
+      this.resultsLength = res.total ? res.total : 0;
       console.log('-> ', this.dataSource.data);
+      // this.OnNewOutboxCount.emit(res.total);
     }, err => {
-      this.progeressService.disable();
-      this.resultsLength = 0;
+      this.progressService.disable();
+      // this.OnNewOutboxCount.emit(0);
       this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
     });
   }
 
 
-  getIndex(element) {
-    return this.dataSource.data.indexOf(element) + 1;
+  getIndex(order) {
+
+    let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
+    if (index === 0)
+      index = 1;
+    return index;
   }
 
-  getProductDetail(element) {
+  getDate(orderTime) {
+    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
+  }
 
-    const product_color = element.product_colors.find(x => x._id === element.instance.product_color_id);
+  getProductDetail(orderLine) {
+
+    const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
     const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      [HttpService.Host,
-      HttpService.PRODUCT_IMAGE_PATH,
-      element.product_id,
-      product_color._id,
-      product_color.image.thumbnail].join('/')
+      imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id)
       : null;
     return {
-      name: element.product_name,
+      name: orderLine.instance.product_name,
       thumbnailURL,
       color: product_color ? product_color.name : null,
       color_code: product_color ? product_color.code : null,
-      size: element.instance.size,
-      product_id: element.product_id
+      size: orderLine.instance.size,
+      product_id: orderLine.instance.product_id
     };
-
   }
 
-  showDetial(element) {
-    this.processDialogRef = this.dialog.open(ProductViewerComponent, {
+  // batchScan() {
+  //   this.batchScanDialogRef = this.dialog.open(BarcodeCheckerComponent, {
+  //     disableClose: true,
+  //     width: '960px',
+  //     height: '600px',
+  //   });
+  //   this.batchScanDialogRef.afterClosed().subscribe(res => {
+  //     this.load();
+  //   });
+
+  // }
+
+  showDetial(orderLine) {
+    this.dialog.open(ProductViewerComponent, {
       width: '400px',
-      data: this.getProductDetail(element)
+      data: this.getProductDetail(orderLine)
     });
   }
 
 
-  getStatus(element) {
+  getOrderStatus(order) {
+    const _orderId = order._id;
+    const tickeByReceiver = true;
+    this.dialog.open(TicketComponent, {
+      width: '1000px',
+      data: {_orderId, tickeByReceiver}
+    });
+  }
 
-    const orderStatus = OrderStatus.find(x => x.status === element.tickets.status);
-    return orderStatus ? orderStatus.name : 'نامشخص';
+  getOrderLineStatus(orderLine) {
+    if (orderLine && orderLine.tickets)
+      return OrderStatus.find(x => x.status === orderLine.tickets.find(y => !y.is_processed).status).name;
+  }
+
+  showAddress(order) {
+
+    if (!order.address) {
+      this.openSnackBar('order line has no address!');
+      return;
+    }
+
+    this.dialog.open(OrderAddressComponent, {
+      width: '400px',
+      data: {address: order.address, is_collect: !!order.is_collect}
+    });
 
   }
 
-  showAddress(element) {
 
-    this.processDialogRef = this.dialog.open(OrderAddressComponent, {
-      width: '400px',
-      data: {address: element.address, is_collect: !!element.is_collect}
-    });
+  isReadyForInvoice(order) {
+    return false;
 
   }
 
@@ -152,7 +201,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
   }
 
   onSortChange($event: any) {
-
     this.paginator.pageIndex = 0;
     this.load();
   }
@@ -160,8 +208,18 @@ export class DeliverComponent implements OnInit, OnDestroy {
   onPageChange($event: any) {
     this.load();
   }
+
   ngOnDestroy(): void {
     // if (this.socketObserver)
     //   this.socketObserver.unsubscribe();
+  }
+
+  showTicket(order, orderLine) {
+    // const _orderId = order._id;
+    // const _orderLineId = orderLine.order_line_id;
+    // this.dialog.open(TicketComponent, {
+    //   width: '1000px',
+    //   data: {_orderId, _orderLineId}
+    // });
   }
 }
