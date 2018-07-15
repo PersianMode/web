@@ -26,6 +26,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import { TicketComponent } from './components/ticket/ticket.component';
 import { SmInboxComponent } from './components/sm-inbox/sm-inbox.component';
 import { SmDeliverComponent } from './components/sm-deliver/sm-deliver.component';
+import { DeliveryShowComponent } from './components/delivery-show/delivery-show.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { SmDeliverComponent } from './components/sm-deliver/sm-deliver.component
     ProductViewerComponent,
     BarcodeCheckerComponent,
     TicketComponent,
-    SmDeliverComponent
+    SmDeliverComponent,
+    DeliveryShowComponent
   ],
   imports: [
     OrderRouting,
@@ -66,7 +68,7 @@ import { SmDeliverComponent } from './components/sm-deliver/sm-deliver.component
     MatNativeDateModule,
     MatSelectModule
   ],
-  entryComponents: [OrderAddressComponent,  ProductViewerComponent, TicketComponent],
+  entryComponents: [OrderAddressComponent,  ProductViewerComponent, TicketComponent, DeliveryShowComponent],
 })
 export class OrderModule {
 }

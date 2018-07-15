@@ -13,8 +13,8 @@ export class OrderComponent implements OnInit {
 
 
   newInboxCount: number;
-  readyToScanCount: number;
   newOutboxCount: number;
+  readyToScanCount: number;
   newDeliverCount: number;
   isSalesManager = false;
   outboxName = 'صندوق خروجی';

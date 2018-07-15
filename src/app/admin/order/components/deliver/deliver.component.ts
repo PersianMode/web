@@ -14,6 +14,7 @@ import * as moment from 'jalali-moment';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { TicketComponent } from '../ticket/ticket.component';
 import { FormControl } from '@angular/forms';
+import { DeliveryShowComponent } from '../delivery-show/delivery-show.component';
 
 
 
@@ -42,7 +43,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
     'total_order_lines',
     'address',
     'used_balance',
-    'status',
+    // 'status',
     // 'process_order'
   ];
 
@@ -256,50 +257,21 @@ export class DeliverComponent implements OnInit, OnDestroy {
     //   data: {_orderId, _orderLineId}
     // });
   }
-
-  ApiCall(newOption: boolean) {
-    const options = {
-      agentName: this.agentName,
-      transferee: this.warehouseName,
-      addingTime: this.addingTime,
-      status: this.isStatus,
-
-      sort: this.sort.active,
-      dir: this.sort.direction,
-      type: 'outbox'
-    };
-    if (newOption) {
-      options['last_ticket'] = true;
-    }
-
-    console.log('options', options);
-    const offset = this.paginator.pageIndex * +this.pageSize;
-    const limit = this.pageSize;
-
-    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
-      this.progressService.disable();
-      const rows_one = [];
-      const rows_two = [];
-      res.data.forEach((order, index) => {
-        order['index'] = index + 1;
-        if (options['last_ticket'])
-          rows_one.push(order, {detailRow: true, order});
-        else
-          rows_two.push(order, {detailRow: true, order});
-      });
-      this.dataSourceOne.data = rows_one;
-      this.dataSourceTwo.data = rows_two;
-      this.resultsLength = res.total ? res.total : 0;
-      console.log('dataSourceOne-> ', this.dataSourceOne.data);
-      console.log('dataSourceTwo-> ', this.dataSourceTwo.data);
-      // this.OnNewOutboxCount.emit(res.total);
-    }, err => {
-      this.progressService.disable();
-      // this.OnNewOutboxCount.emit(0);
-      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
+  showHistory(order, orderLine) {
+    const orderId = order._id;
+    const orderLineId = orderLine.order_line_id;
+    this.dialog.open(DeliveryShowComponent, {
+      width: '1000px',
+      data: {orderId, orderLineId}
     });
   }
 
+   removeDuplicates(myArr, prop) {
+    return myArr.filter((obj, pos, arr) => {
+        return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+    });
+  }
+  
   firstApiCall() {
     const options = {
       agentName: this.agentName,
@@ -321,15 +293,16 @@ export class DeliverComponent implements OnInit, OnDestroy {
       const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
+        order['order_lines'] = this.removeDuplicates(order['order_lines'], '_id');
         rows.push(order, {detailRow: true, order});
       });
       this.dataSourceOne.data = rows;
       this.resultsLength = res.total ? res.total : 0;
       console.log('dataSourceOne-> ', this.dataSourceOne.data);
-      // this.OnNewOutboxCount.emit(res.total);
+      this.OnNewOutboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
-      // this.OnNewOutboxCount.emit(0);
+      this.OnNewOutboxCount.emit(0);
       this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
     });
   }

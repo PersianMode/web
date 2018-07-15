@@ -86,12 +86,12 @@
           <mat-cell *matCellDef="let order"> {{order.used_balance}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="status">
+        <!-- <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
           <mat-cell *matCellDef="let order">
             <button mat-button color="primary" (click)="getOrderStatus(order)">نمایش</button>
           </mat-cell>
-        </ng-container>
+        </ng-container> -->
 
         <ng-container matColumnDef="process_order">
           <mat-header-cell *matHeaderCellDef mat-sort-header>پردازش</mat-header-cell>
@@ -130,9 +130,9 @@
                   <p>
                     <!-- <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p> -->
                 </td>
-                <!-- <td>
-                  <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
-                </td> -->
+                <td>
+                  <button mat-button color="primary" (click)='showHistory(detail.order, ol)'>تیکت ها</button>
+                </td>
               </tr>
             </table>
 
@@ -213,12 +213,12 @@
           <mat-cell *matCellDef="let order"> {{order.used_balance}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="status">
+        <!-- <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
           <mat-cell *matCellDef="let order">
             <button mat-button color="primary" (click)="getOrderStatus(order)">نمایش</button>
           </mat-cell>
-        </ng-container>
+        </ng-container> -->
 
         <ng-container matColumnDef="process_order">
           <mat-header-cell *matHeaderCellDef mat-sort-header>پردازش</mat-header-cell>
@@ -257,9 +257,9 @@
                   <p>
                     <!-- <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p> -->
                 </td>
-                <!-- <td>
-                  <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
-                </td> -->
+                <td>
+                  <button mat-button color="primary" (click)='showHistory(detail.order, ol)'>تیکت ها</button>
+                </td>
               </tr>
             </table>
 
