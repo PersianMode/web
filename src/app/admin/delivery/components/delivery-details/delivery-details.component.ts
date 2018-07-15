@@ -113,7 +113,7 @@ export class DeliveryDetailsComponent implements OnInit {
       const currentHour = moment().format('HH');
       const currentMinute = moment().format('mm');
 
-      if (this.start_time.h < currentHour || this.start_time.m <= currentMinute) {
+      if (this.start_time.h <= +currentHour && this.start_time.m <= +currentMinute) {
         this.snackBar.open('زمان شروع انتخاب شده معتبر نمی باشد', null, {
           duration: 3200,
         });
