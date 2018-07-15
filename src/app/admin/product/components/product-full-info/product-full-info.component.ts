@@ -74,7 +74,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
 
   getWarehouses(): any {
     this.httpService.get(`warehouse/all`).subscribe(res => {
-      this.warehouses = res;
+      this.warehouses = res.filter(el => !el.is_hub);
     }, err => {
       console.error();
     });

@@ -33,11 +33,8 @@ export class AddressTableComponent implements OnInit {
     'پالادیوم': [35.7975691, 51.4107673],
   };
   deliveryPeriodDay = [];
-  deliveryHour = [
-    'ساعت ' + (this.time_slot.time10to18.lower_bound).toLocaleString('fa') + 'تا ' + (this.time_slot.time10to18.upper_bound).toLocaleString('fa'),
-    'ساعت ' + (this.time_slot.time18to22.lower_bound).toLocaleString('fa') + 'تا ' + (this.time_slot.time18to22.upper_bound).toLocaleString('fa'),
-  ];
   delivery_time = null;
+  deliveryHour = [];
   loc = null;
   withDelivery = true;
   selectedCustomerAddress = -1;
@@ -54,9 +51,9 @@ export class AddressTableComponent implements OnInit {
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
-              private dialog: MatDialog, private checkoutService: CheckoutService,
-              private responsiveService: ResponsiveService, private router: Router,
-              private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
+    private dialog: MatDialog, private checkoutService: CheckoutService,
+    private responsiveService: ResponsiveService, private router: Router,
+    private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -67,6 +64,10 @@ export class AddressTableComponent implements OnInit {
     this.authService.isLoggedIn.subscribe(r => {
       this.isLoggedIn = this.authService.userIsLoggedIn();
     });
+
+    this.deliveryHour = [];
+    Object.keys(this.time_slot).forEach(el => this.deliveryHour.push(this.time_slot[el]));
+
     const state = this.checkoutService.addressState;
     if (state) {
       [this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress]
@@ -259,5 +260,8 @@ export class AddressTableComponent implements OnInit {
     this.selectedChange.emit(this.addressSelected);
   }
 
+  getDeliveryTimeDisplay(time_slot) {
+    return 'ساعت ' + (time_slot.lower_bound).toLocaleString('fa') + 'تا ' + (time_slot.upper_bound).toLocaleString('fa');
+  }
 }
 
