@@ -227,7 +227,7 @@ export class DeliveryComponent implements OnInit {
   }
 
   deliveryIsDone(item) {
-    return item.status_list && item.status_list.find(el => el.is_processed && el.status === STATUS.Delivered);
+    return item.status_list && item.status_list.find(el => el.is_processed && el.status === STATUS.OnDelivery);
   }
 
   isAfterMaxValidEndDate(id) {
