@@ -11,6 +11,8 @@ import {ProgressService} from '../../../../../shared/services/progress.service';
   styleUrls: ['./edit-panel.component.css']
 })
 export class EditPanelComponent implements OnInit {
+  insertedAddress = '';
+  setClear: boolean = false;
   placement = null;
   rowTemplate = null;
   rowTemplateList = [
@@ -188,6 +190,7 @@ export class EditPanelComponent implements OnInit {
   }
 
   removeArea() {
+    this.setClear = true;
     this.areas = this.areas.filter(el => el.pos.toLowerCase() !== this.selectedArea.pos);
     this.selectedArea = {
       pos: null,
@@ -232,6 +235,7 @@ export class EditPanelComponent implements OnInit {
   }
 
   changeField() {
+    this.setClear = false;
     this.saveButtonShouldBeDisabled = false;
     let anyChanges = false;
 

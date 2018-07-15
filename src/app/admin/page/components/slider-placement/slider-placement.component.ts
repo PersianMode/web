@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -16,6 +16,7 @@ import {RevertPlacementService} from '../../../../shared/services/revert-placeme
 })
 export class SliderPlacementComponent implements OnInit {
   @Input() pageId = null;
+  setClear: boolean = false;
   @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
@@ -103,15 +104,17 @@ export class SliderPlacementComponent implements OnInit {
   changeField() {
     const text = this.upsertSlider ? this.upsertSlider.text.trim().toLowerCase() : '';
     const href = this.upsertSlider ? this.upsertSlider.href.trim().toLowerCase() : '';
-
     if (this.upsertSlider && this.upsertSlider.isEdit && text && href &&
-      this.sliders.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1)
+      this.sliders.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1){
       this.sliderChanged = true;
-    else
-      this.sliderChanged = false;
+      this.setClear = false;
+    }
+  else
+     this.sliderChanged = false;
   }
 
-  clearFields() {
+  clearFields(){
+    this.setClear = true;
     this.upsertSlider = {
       text: '',
       href: '',
@@ -141,28 +144,20 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   selectItem(value) {
-    if (this.revertService.getRevertMode() && !this.canEdit) {
-      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
-    } else {
-      this.upsertSlider = {
-        text: value.info.text,
-        href: value.info.href,
-        id: value._id,
-        column: value.info.column,
-        isEdit: true,
-        imgUrl: value.info.imgUrl,
-        style: value.info.style || {
-          imgWidth: 40,
-          imgMarginLeft: 0,
-          imgMarginTop: 0,
-        },
-      };
-      this.pos = Object.assign({}, this.upsertSlider.style);
-    }
-  }
-
-  isSelectedToRevert(item) {
-    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
+    this.upsertSlider = {
+      text: value.info.text,
+      href: value.info.href,
+      id: value._id,
+      column: value.info.column,
+      isEdit: true,
+      imgUrl: value.info.imgUrl,
+      style: value.info.style || {
+        imgWidth: 40,
+        imgMarginLeft: 0,
+        imgMarginTop: 0,
+      },
+    };
+    this.pos = Object.assign({}, this.upsertSlider.style);
   }
 
   removeItem() {
@@ -299,15 +294,5 @@ export class SliderPlacementComponent implements OnInit {
         path = '/' + path;
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
     }
-  }
-
-  @HostListener('document:keydown.control', ['$event'])
-  keydown(event: KeyboardEvent) {
-    this.revertService.setRevertMode(true);
-  }
-
-  @HostListener('document:keyup.control', ['$event'])
-  keyup(event: KeyboardEvent) {
-    this.revertService.setRevertMode(false);
   }
 }

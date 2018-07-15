@@ -1,12 +1,13 @@
-import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, HostListener} from '@angular/core';
 import {IPlacement} from '../../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
 import {RevertPlacementService} from '../../../../../shared/services/revert-placement.service';
+import {duration} from 'jalali-moment';
 
 @Component({
   selector: 'app-top-menu',
@@ -14,6 +15,7 @@ import {RevertPlacementService} from '../../../../../shared/services/revert-plac
   styleUrls: ['./top-menu.component.css']
 })
 export class TopMenuComponent implements OnInit {
+  setClear: boolean = false;
   @Input() pageId = null;
   @Input() canEdit = true;
   @Input()
@@ -24,6 +26,7 @@ export class TopMenuComponent implements OnInit {
       this.changeField();
     }
   }
+
 
   @Output() modifyPlacement = new EventEmitter();
   @Output() itemSelected = new EventEmitter();
@@ -42,7 +45,7 @@ export class TopMenuComponent implements OnInit {
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog,
-    private revertService: RevertPlacementService) {
+    private revertService: RevertPlacementService, private snackbar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -101,6 +104,12 @@ export class TopMenuComponent implements OnInit {
       });
   }
 
+  openSnackBar(message: string) {
+    this.snackbar.open(message, null, {
+      duration: 2000,
+    });
+  }
+
   selectItem(value) {
     if (this.revertService.getRevertMode() && !this.canEdit) {
       this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
@@ -153,6 +162,10 @@ export class TopMenuComponent implements OnInit {
   }
 
   modifyItem(isEdit) {
+    if (!this.upsertTopMenuItem.href || this.upsertTopMenuItem.href.length === 1) {
+      this.openSnackBar('وارد کردن آدرس برای صفحه الزامی است');
+      return;
+    }
     this.progressService.enable();
     (isEdit ? this.httpService.post('placement', {
       page_id: this.pageId,
@@ -213,6 +226,7 @@ export class TopMenuComponent implements OnInit {
   }
 
   clearFields() {
+    this.setClear = true;
     this.upsertTopMenuItem = {
       text: '',
       href: '',
@@ -227,12 +241,12 @@ export class TopMenuComponent implements OnInit {
 
   changeField() {
     const text = this.upsertTopMenuItem.text.trim().toLowerCase();
-    const href = this.upsertTopMenuItem.href.trim().toLowerCase();
-
+    const href = this.upsertTopMenuItem.href ? this.upsertTopMenuItem.href.trim().toLowerCase() : '';
     if (this.upsertTopMenuItem.isEdit && text && href &&
-      this.topMenuItems.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1)
+      this.topMenuItems.findIndex(el => el.info.text.toLowerCase() === text && el.info.href.toLowerCase() === href) === -1) {
       this.topMenuChanged = true;
-    else
+      this.setClear = false;
+    } else
       this.topMenuChanged = false;
   }
 

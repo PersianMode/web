@@ -17,6 +17,8 @@ import {RevertPlacementService} from '../../../../shared/services/revert-placeme
   styleUrls: ['./app-feed-placement.component.css']
 })
 export class AppFeedPlacementComponent implements OnInit {
+  insertedAddress = '';
+  setClear: boolean = false;
   @Input() pageId = null;
   @Input() canEdit = true;
   @Input()
@@ -65,9 +67,7 @@ export class AppFeedPlacementComponent implements OnInit {
       text: [null, [
         Validators.required,
       ]],
-      href: [null, [
-        Validators.required,
-      ]]
+      href: [null]
     });
   }
 
@@ -137,7 +137,7 @@ export class AppFeedPlacementComponent implements OnInit {
           const newInfo = this.getItemInfo();
           const changedObj = this.placementList.find(el => el._id === this.selectedItem._id);
           changedObj.info.text = newInfo.text;
-          changedObj.info.href = newInfo.href;
+         changedObj.info.insertedAddress = newInfo.href;
         } else {
           const newInfo = this.getItemInfo(true);
           this.selectedItem = data.new_placement;
@@ -190,6 +190,7 @@ export class AppFeedPlacementComponent implements OnInit {
   }
 
   clearFields() {
+    this.setClear = true;
     this.feedForm.reset();
     this.selectedItem = null;
   }
@@ -197,7 +198,7 @@ export class AppFeedPlacementComponent implements OnInit {
   getItemInfo(isNewItem = false) {
     const res = {
       text: (this.feedForm.controls['text'].value ? this.feedForm.controls['text'].value : '').trim(),
-      href: (this.feedForm.controls['href'].value ? this.feedForm.controls['href'].value : '').trim(),
+      href: (this.insertedAddress ? this.insertedAddress : '').trim(),
       imgUrl: this.selectedItem ? this.selectedItem.info.imgUrl : this.imageUrlAddress,
     };
 
@@ -226,11 +227,12 @@ export class AppFeedPlacementComponent implements OnInit {
       this.feedForm.reset();
     else {
       this.feedForm.controls['text'].setValue(value.text);
-      this.feedForm.controls['href'].setValue(value.href);
+       this.insertedAddress = value.href;
     }
   }
 
   private fieldChanged() {
+    this.setClear = false;
     if (!this.selectedItem) {
       this.anyChanges = !!this.imageUrlAddress;
       return;
@@ -238,7 +240,7 @@ export class AppFeedPlacementComponent implements OnInit {
 
     this.anyChanges = false;
 
-    ['text', 'href'].forEach(el => {
+    ['text', 'insertedAddress'].forEach(el => {
       if (this.selectedItem.info[el] !== this.feedForm.controls[el].value)
         this.anyChanges = true;
     });

@@ -25,7 +25,6 @@ export class PageBasicInfoComponent implements OnInit {
 
   anyChanges = false;
   upsertBtnShouldDisabled = false;
-
   placements: IPlacement[] = null;
 
   @ViewChild('content') contentEl: ElementRef;

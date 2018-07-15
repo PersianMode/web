@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
 // import {Observable} from "rxjs/Observable";
@@ -6,19 +6,23 @@ import {HttpService} from '../../services/http.service';
 import 'rxjs/add/operator/debounceTime';
 import {ProgressService} from '../../services/progress.service';
 import {TargetEnum} from '../../enum/target.enum';
+import {log} from 'util';
 
 @Component({
   selector: 'app-suggestion',
   templateUrl: './suggestion.component.html',
   styleUrls: ['./suggestion.component.css']
 })
-export class SuggestionComponent implements OnInit {
+export class SuggestionComponent implements OnInit, OnChanges {
   @Input() name = '';
   @Input() placeholder: string = null;
   @Input() fieldName = '';
   @Input() currentIds: number[] = [];
-  @Output() add = new EventEmitter<any>();
+  @Input() hasReturn = false;
+  @Input() default: boolean;
 
+  @Output() add = new EventEmitter<any>();
+  @Output() field = new EventEmitter<any>();
   targetEnum = TargetEnum;
   textDirection = 'ltr';
 
@@ -27,6 +31,7 @@ export class SuggestionComponent implements OnInit {
 
   constructor(private httpService: HttpService, private progressService: ProgressService) {
   }
+
 
   ngOnInit() {
     if (!this.placeholder)
@@ -37,6 +42,9 @@ export class SuggestionComponent implements OnInit {
       (data) => {
         this.getTextDirection(data);
         this.filtering(data);
+        if (data && this.hasReturn) {
+          this.field.emit(data);
+        }
       },
       (err) => {
         this.filteredItems = [];
@@ -44,8 +52,14 @@ export class SuggestionComponent implements OnInit {
     );
   }
 
+  ngOnChanges() {
+    if (this.default) {
+      this.suggestionCtrl.setValue('');
+    }
+  }
+
   addItem(data) {
-    const item = this.filteredItems.filter(el => el._id.toLowerCase() === data.option.value.toLowerCase())[0];
+    const item = this.filteredItems.filter(el => el._id === data.option.value)[0];
     this.add.emit(item);
     this.suggestionCtrl.setValue('');
   }

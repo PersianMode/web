@@ -55,7 +55,7 @@
   margin-bottom: 3px;
 }
 
-.item { 
+.item {
   color: black !important;
 }
 
@@ -68,6 +68,17 @@
   width: 20px;
   height: 100px;
 }
+
+.address-field {
+  margin-top: 30px;
+}
+
+.text-field {
+  padding-top: 26px;
+  padding-right: 30px;
+}
+
+
 
 .selected-item {
   background-color: rgba(176,182,180,0.68);

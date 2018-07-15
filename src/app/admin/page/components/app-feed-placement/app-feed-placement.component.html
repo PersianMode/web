@@ -11,9 +11,12 @@
               </mat-input-container>
             </div>
             <div class="full-width">
-              <mat-input-container class="full-width persian-field">
-                <input matInput type="text" class="left-text" placeholder="آدرس" formControlName="href" />
-              </mat-input-container>
+              <app-suggestion class="full-width persian-field" [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true"  [default]="setClear"
+                              (add)="insertedAddress=$event.address" (field)="insertedAddress=$event" >
+              </app-suggestion>
+              <div fxFlex="50" *ngIf="insertedAddress">
+                <h3 fxFlex="50" dir="ltr" style="text-align:center"> {{insertedAddress}} </h3>
+              </div>
             </div>
           </div>
           <div fxFlex="60" class="full-width sub-item">

@@ -5,9 +5,10 @@ import {DragulaService} from 'ng2-dragula';
 import {ProgressService} from '../../../../../shared/services/progress.service';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
 import {RevertPlacementService} from '../../../../../shared/services/revert-placement.service';
+
 
 enum ItemArea {
   Header,
@@ -22,6 +23,8 @@ enum ItemArea {
 })
 export class SubMenuComponent implements OnInit {
   @Input() pageId = null;
+  insertedAddress: string;
+  setClear = false;
   @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
@@ -79,10 +82,10 @@ export class SubMenuComponent implements OnInit {
   middleAreaHasNewColumn = false;
   leftAreaNewEmptyList = [];
   leftAreaHasNewColumn = false;
-  
+
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
     private progressService: ProgressService, private dialog: MatDialog,
-    private revertService: RevertPlacementService) {
+    private revertService: RevertPlacementService, private snackbar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -111,9 +114,6 @@ export class SubMenuComponent implements OnInit {
       text: [null, [
         Validators.required,
       ]],
-      href: [null, [
-        Validators.required,
-      ]],
       area: [null, [
         Validators.required,
       ]],
@@ -129,7 +129,6 @@ export class SubMenuComponent implements OnInit {
       this.subMenuForm.controls['area'].enable();
     } else {
       this.subMenuForm.controls['text'].setValue(value.text);
-      this.subMenuForm.controls['href'].setValue(value.href);
       switch (value.section.toLowerCase().split('/')[1]) {
         case 'header':
           this.subMenuForm.controls['area'].setValue(this.itemArea.Header);
@@ -327,7 +326,11 @@ export class SubMenuComponent implements OnInit {
       );
     }
   }
-
+  openSnackBar(message: string) {
+    this.snackbar.open(message, null, {
+      duration: 2000,
+    });
+  }
   selectItem(value) {
     if (this.revertService.getRevertMode() && !this.canEdit) {
       this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
@@ -340,6 +343,9 @@ export class SubMenuComponent implements OnInit {
   }
 
   modifyItem() {
+    if (!this.insertedAddress || this.insertedAddress.length === 1) {
+      this.openSnackBar('وارد کردن آدرس برای صفحه الزامی است');
+      return; }
     this.progressService.enable();
     (this.selectedItem ? this.httpService.post('placement', {
       page_id: this.pageId,
@@ -370,7 +376,7 @@ export class SubMenuComponent implements OnInit {
           const newInfo = this.getItemInfo();
           const changedObj = this.subMenuItems.find(el => el._id === this.selectedItem._id);
           changedObj.info.text = newInfo.text;
-          changedObj.info.href = newInfo.href;
+          changedObj.info.insertedAddress = newInfo.insertedAddress;
           changedObj.info.is_header = newInfo.is_header;
         } else {
           const newInfo = this.getItemInfo(true);
@@ -390,7 +396,7 @@ export class SubMenuComponent implements OnInit {
   getItemInfo(isNewItem = false): any {
     const res = {
       text: (this.subMenuForm.controls['text'].value ? this.subMenuForm.controls['text'].value : '').trim(),
-      href: (this.subMenuForm.controls['href'].value ? this.subMenuForm.controls['href'].value : '').trim(),
+      href: (this.insertedAddress ? this.insertedAddress : '').trim(),
       is_header: this.subMenuForm.controls['is_header'].value,
     };
 
@@ -474,6 +480,8 @@ export class SubMenuComponent implements OnInit {
     this.subMenuForm.reset();
     this.selectedItem = null;
     this.subMenuForm.controls['area'].enable();
+    this.setClear = true;
+    this.insertedAddress = '';
   }
 
   fieldChanged() {

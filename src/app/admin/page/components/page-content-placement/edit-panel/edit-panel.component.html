@@ -11,16 +11,16 @@
       <div fxFlex="30" class="center-content">
         <div>
           <mat-select [(ngModel)]="rowTemplate" placeholder="قالب مورد نظر" class="persian-field right" (ngModelChange)="changeField()"
-            style="text-align: right;">
+                      style="text-align: right;">
             <mat-option *ngFor="let item of rowTemplateList" [value]="item.value" class="persian-field">{{item.name}}
             </mat-option>
           </mat-select>
         </div>
-        <div>
-          <mat-input-container class="persian-field full-width" dir="ltr">
-            <input matInput type="text" placeholder="آدرس" [(ngModel)]="urlAddress" (ngModelChange)="changeField()" style="text-align: left;"
-            />
-          </mat-input-container>
+        <div fxLayout="row" class="address-field">
+          <app-suggestion fxFlex="50"  [name]="'Page'"  [placeholder]="'آدرس'" [hasReturn]="true" [default]="setClear"
+                          (add)="urlAddress=$event.address" (field)="urlAddress=$event" >
+          </app-suggestion>
+          <div fxFlex="50" class="text-field" *ngIf="urlAddress">{{urlAddress}}</div>
         </div>
       </div>
       <div fxFlex="70">
@@ -174,3 +174,4 @@
     </div>
   </mat-dialog-content>
 </div>
+

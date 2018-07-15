@@ -16,6 +16,7 @@ import {RevertPlacementService} from '../../../../shared/services/revert-placeme
 })
 export class FooterPlacementComponent implements OnInit {
   @Input() pageId = null;
+  setClear: boolean = false;
   @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
@@ -487,7 +488,7 @@ export class FooterPlacementComponent implements OnInit {
 
   checkTextchanges() {
     this.textAnyChanges = false;
-
+    this.setClear = false;
     if (!this.selectedTextLink._id &&
       this.selectedTextLink.href &&
       this.selectedTextLink.href.trim()
@@ -523,6 +524,7 @@ export class FooterPlacementComponent implements OnInit {
   }
 
   clearTextLinkField() {
+    this.setClear = true;
     this.selectedTextLink = {
       _id: null,
       href: null,

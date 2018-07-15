@@ -82,3 +82,4 @@ export class FooterComponent implements OnInit {
     return Object.keys(list);
   }
 }
+

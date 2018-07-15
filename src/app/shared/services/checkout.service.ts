@@ -225,10 +225,12 @@ export class CheckoutService {
       paymentType: this.selectedPaymentType,
       loyalty: this.earnSpentPointObj,
     };
+
   }
 
   checkout() {
     const data = this.accumulateData();
+    console.log('88888' ,data);
     this.httpService.post('checkout', data)
       .subscribe(res => {
           this.cartService.emptyCart();
