@@ -50,6 +50,7 @@ export class BarcodeCheckerComponent implements OnInit {
       if (this.authService.userDetails.warehouse_id === this.authService.warehouses.find(el => el.is_hub)._id)
         this.dialog.open(DeliveryShelfCodeComponent, {
           width: '400px',
+          disableClose: !(res && res.exist),
           data: res
         });
       console.log('-> ', res);

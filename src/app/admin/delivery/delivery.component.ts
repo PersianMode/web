@@ -232,6 +232,6 @@ export class DeliveryComponent implements OnInit {
 
   isAfterMaxValidEndDate(id) {
     const delItem = this.deliveryItems.find(el => el._id === id);
-    return moment(delItem.end, 'YYYY-MM-DD').isAfter(moment(delItem.min_end, 'YYYY-MM-DD'));
+    return delItem.min_end ? moment(delItem.end, 'YYYY-MM-DD').isAfter(moment(delItem.min_end, 'YYYY-MM-DD')) : false;
   }
 }
