@@ -5,7 +5,10 @@ import {HttpService} from '../../../shared/services/http.service';
 import {CartService} from '../../../shared/services/cart.service';
 import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog} from '@angular/material';
+import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
+import {Router} from '@angular/router';
+
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
 
@@ -42,11 +45,14 @@ export class CheckoutPageComponent implements OnInit {
 
 
   constructor(private checkoutService: CheckoutService,
-              private httpService: HttpService, private authService: AuthService,
+              private httpService: HttpService,
+              private authService: AuthService,
+              private dialog: MatDialog,
               private cartService: CartService,
               private titleService: TitleService,
-              private productService: ProductService, private snackBar: MatSnackBar,
-              private progressService: ProgressService) {
+              private progressService: ProgressService,
+              private router: Router,
+              private productService: ProductService) {
   }
 
   ngOnInit() {
@@ -60,31 +66,8 @@ export class CheckoutPageComponent implements OnInit {
         }
       }
     );
-    this.checkoutService.finalCheck().subscribe(res => {
+    this.finalCheckItems();
 
-      this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
-      this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
-      this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
-
-      if ((this.soldOuts && this.soldOuts.length) ||
-        (this.discountChanges && this.discountChanges.length) ||
-        (this.priceChanges && this.priceChanges.length)) {
-
-        this.hasChangeError = !!this.soldOuts && !!this.soldOuts.length;
-        if (this.hasChangeError)
-          this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
-        if (this.discountChanges && this.discountChanges.length)
-          this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
-        if (this.priceChanges && this.priceChanges.length)
-          this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
-
-        this.productService.updateProducts(res);
-
-      }
-
-    }, err => {
-
-    });
     this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = res.balance;
@@ -190,7 +173,63 @@ export class CheckoutPageComponent implements OnInit {
     }
   }
 
+  finalCheckItems() {
+    return new Promise((resolve, reject) => {
+      this.checkoutService.finalCheck().subscribe(res => {
+          console.log(res);
+          this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
+          this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
+          this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
+          if ((this.soldOuts && this.soldOuts.length) ||
+            (this.discountChanges && this.discountChanges.length) ||
+            (this.priceChanges && this.priceChanges.length)) {
+            this.changeMessage = '';
+
+            if (!!this.soldOuts && !!this.soldOuts.length)
+              this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
+            else if (this.discountChanges && this.discountChanges.length)
+              this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
+            else if (this.priceChanges && this.priceChanges.length)
+              this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
+
+            this.productService.updateProducts(res);
+            if (this.changeMessage) {
+              this.dialog.open(CheckoutWarningConfirmComponent, {
+
+                position: {},
+                width: '400px',
+                data: {
+                  isError: (!!this.soldOuts && !!this.soldOuts.length),
+                  warning: this.changeMessage
+                }
+              }).afterClosed().subscribe(x => {
+                if (x)
+                  resolve();
+                else {
+                  if (!!this.soldOuts && !!this.soldOuts.length)
+                    this.router.navigate(['/', 'cart']);
+                  reject();
+                }
+              });
+            }
+            else {
+              resolve();
+            }
+          }
+        },
+        err => {
+          reject();
+        });
+    });
+  }
+
   checkout() {
-    this.checkoutService.checkout();
+    this.finalCheckItems()
+      .then(res => {
+        this.checkoutService.checkout();
+      })
+      .catch(err => {
+
+      });
   }
 }
