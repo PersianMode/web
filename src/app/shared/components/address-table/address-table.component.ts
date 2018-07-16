@@ -51,9 +51,9 @@ export class AddressTableComponent implements OnInit {
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
-              private dialog: MatDialog, private checkoutService: CheckoutService,
-              private responsiveService: ResponsiveService, private router: Router,
-              private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
+    private dialog: MatDialog, private checkoutService: CheckoutService,
+    private responsiveService: ResponsiveService, private router: Router,
+    private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -156,8 +156,7 @@ export class AddressTableComponent implements OnInit {
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
-    }
-    else {
+    } else {
       const rmDialog = this.dialog.open(GenDialogComponent, {
         width: '600px',
         data: {
@@ -169,7 +168,7 @@ export class AddressTableComponent implements OnInit {
           if (this.withDelivery) {
             this.checkoutService.getCustomerAddresses();
           }
-          // this.setState();
+          this.setState();
         },
         (err) => {
           console.error('Error in dialog: ', err);
