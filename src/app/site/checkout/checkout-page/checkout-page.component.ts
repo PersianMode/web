@@ -66,8 +66,31 @@ export class CheckoutPageComponent implements OnInit {
         }
       }
     );
-    this.finalCheckItems();
+    this.checkoutService.finalCheck().subscribe(res => {
 
+      this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
+      this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
+      this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
+
+      if ((this.soldOuts && this.soldOuts.length) ||
+        (this.discountChanges && this.discountChanges.length) ||
+        (this.priceChanges && this.priceChanges.length)) {
+
+        this.hasChangeError = !!this.soldOuts && !!this.soldOuts.length;
+        if (this.hasChangeError)
+          this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
+        if (this.discountChanges && this.discountChanges.length)
+          this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
+        if (this.priceChanges && this.priceChanges.length)
+          this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
+
+        this.productService.updateProducts(res);
+
+      }
+
+    }, err => {
+
+    });
     this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = res.balance;
@@ -78,17 +101,6 @@ export class CheckoutPageComponent implements OnInit {
       });
 
     this.checkoutService.isValid$.subscribe(r => this.disabled = (!r && !this.soldOuts));
-    if (!this.authService.userDetails.userId) {
-      this.showEarnPointLabel = false;
-      this.earnedLoyaltyPoint = 0;
-    } else {
-      this.showEarnPointLabel = true;
-      this.checkoutService.loyaltyGroups.subscribe(data => this.loyaltyGroups = data);
-      this.checkoutService.addPointArray.subscribe(data => this.addPointArray = data[0].add_point);
-    }
-
-    // this.checkoutService.setPaymentType(this.paymentType.cash);
-    this.checkoutService.setPaymentType(this.paymentType[this.selectedPaymentType]);
   }
 
   changePaymentType(data) {
