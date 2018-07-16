@@ -25,4 +25,8 @@ export class DeliveryShelfCodeComponent implements OnInit {
   printShelfCode() {
     this.printService.printShelfCode(this.shelfCode);
   }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
 }

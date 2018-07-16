@@ -1,5 +1,10 @@
 <div>
-  <div class="title">کد قفسه</div>
+  <div mat-dialog-title>
+    <button mat-icon-button (click)="closeDialog()" style="float: left">
+      <mat-icon aria-label="Close">close</mat-icon>
+    </button>
+    <h2 class="title">کد قفسه</h2>
+  </div>
   <div class="shelf-code">{{shelfCode}}</div>
   <div class="button-area">
     <button mat-icon-button (click)="printShelfCode()">
