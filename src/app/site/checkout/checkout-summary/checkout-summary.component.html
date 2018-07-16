@@ -1,38 +1,3 @@
-<<<<<<< HEAD
-<div style="width: 100%;">
-  <div>
-    <div>
-      <span class="co-right-text">جمع قیمت</span>
-      <span class="co-left-text">{{priceFormatter(total)}}  تومان</span>
-    </div>
-    <div>
-      <span class="co-right-text">تخفیف</span>
-      <span class="co-left-text">{{priceFormatter(discount)}}- تومان </span>
-    </div>
-    <div *ngIf="usedBalance">
-      <span class="co-right-text">موجودی</span>
-      <span class="co-left-text">{{priceFormatter(usedBalance)}}- تومان </span>
-    </div>
-    <div *ngIf="usedLoyaltyPoint">
-      <span class="co-right-text">امتیاز وفاداری</span>
-      <span class="co-left-text">{{priceFormatter(usedLoyaltyPoint)}}- تومان </span>
-    </div>
-    <br>
-    <div *ngIf="showCostLabel">
-      <span class="co-right-text">هزینه ارسال</span>
-      <span class="co-left-text" [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryCost)}} تومان </span>
-    </div>
-    <div *ngIf="showCostLabel" class="no-duration-selected">
-      <span class="co-right-text">تخفیف ارسال</span>
-      <span class="co-left-text" [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryDiscount)}} تومان </span>
-    </div>
-    <div class="final-price" >
-      <span class="co-right-text">قیمت نهایی</span>
-      <span class="co-left-text">{{priceFormatter(finalTotal)}} تومان </span>
-    </div>
-  </div>
-</div>
-=======
 <div style="width: 100%;">
   <div>
     <div>
@@ -71,4 +36,3 @@
     </div>
   </div>
 </div>
->>>>>>> cf0ee154f78db20bcd79033f3130bf95884a6e5e
