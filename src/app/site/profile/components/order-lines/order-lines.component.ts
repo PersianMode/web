@@ -1,19 +1,58 @@
-import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
-import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
-import {Location} from '@angular/common';
-import {Router} from '@angular/router';
-import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
-import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
-import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
-import {OrderStatus} from '../../../../shared/lib/order_status';
-import {DictionaryService} from '../../../../shared/services/dictionary.service';
-import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
-import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
-import { ResponsiveService } from '../../../../shared/services/responsive.service';
-import { RemovingConfirmComponent } from '../../../../shared/components/removing-confirm/removing-confirm.component';
-import { HttpService } from '../../../../shared/services/http.service';
-import { ProgressService } from '../../../../shared/services/progress.service';
-import {STATUS} from '../../../../shared/enum/status.enum';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
+import {
+  ProfileOrderService
+} from '../../../../shared/services/profile-order.service';
+import {
+  Location
+} from '@angular/common';
+import {
+  Router
+} from '@angular/router';
+import {
+  EditOrderComponent
+} from '../../../cart/components/edit-order/edit-order.component';
+import {
+  MatDialogRef,
+  MatDialog,
+  MatSnackBar
+} from '@angular/material';
+import {
+  imagePathFixer
+} from '../../../../shared/lib/imagePathFixer';
+import {
+  OrderStatus
+} from '../../../../shared/lib/order_status';
+import {
+  DictionaryService
+} from '../../../../shared/services/dictionary.service';
+import {
+  GenDialogComponent
+} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {
+  DialogEnum
+} from '../../../../shared/enum/dialog.components.enum';
+import {
+  ResponsiveService
+} from '../../../../shared/services/responsive.service';
+import {
+  RemovingConfirmComponent
+} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {
+  HttpService
+} from '../../../../shared/services/http.service';
+import {
+  ProgressService
+} from '../../../../shared/services/progress.service';
+import {
+  STATUS
+} from '../../../../shared/enum/status.enum';
 
 
 @Component({
@@ -22,6 +61,11 @@ import {STATUS} from '../../../../shared/enum/status.enum';
   styleUrls: ['./order-lines.component.css']
 })
 export class OrderLinesComponent implements OnInit {
+  quantitySelected;
+  isQuantityMoreThanOne;
+  quantities: any[] = [];
+
+
   stautsCancel: boolean;
   orderObject: any;
   isMobile = false;
@@ -29,16 +73,16 @@ export class OrderLinesComponent implements OnInit {
   orderLines = [];
   noDuplicateOrderLine = [];
   @Input() isNotMobile;
-  @Output() closeDialog = new EventEmitter<boolean>();
+  @Output() closeDialog = new EventEmitter < boolean > ();
 
   constructor(private profileOrderService: ProfileOrderService,
-              private dialog: MatDialog,
-              private httpService: HttpService,
-              private snackBar: MatSnackBar,
-              private progressService: ProgressService,
-              private location: Location, private router: Router,
-              private dict: DictionaryService,
-              private responsiveService: ResponsiveService) {
+    private dialog: MatDialog,
+    private httpService: HttpService,
+    private snackBar: MatSnackBar,
+    private progressService: ProgressService,
+    private location: Location, private router: Router,
+    private dict: DictionaryService,
+    private responsiveService: ResponsiveService) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -55,16 +99,20 @@ export class OrderLinesComponent implements OnInit {
   removeDuplicates(arr) {
     const instancArr = [];
     arr.forEach(el => {
+      this.orderInfo.dialog_order.order_lines
+        .forEach(elx => {
+          if (elx.order_line_id === el.order_line_id)
+            el['order_id'] = this.orderInfo.dialog_order._id;
+        });
       const gender = el.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-      // if (instancArr.indexOf(el.product_instance._id) === -1) {
+      if (instancArr.indexOf(el.product_instance._id) === -1) {
         instancArr.push(el.product_instance._id);
         el.quantity = 1;
         el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
         this.noDuplicateOrderLine.push(el);
-      // } 
-      // else {
-      //   this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
-      // }
+      } else {
+        this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
+      }
     });
   }
 
@@ -92,11 +140,13 @@ export class OrderLinesComponent implements OnInit {
   makePersianNumber(a: string, isPrice) {
     if (isNaN((+a)))
       return a;
-    return (+a).toLocaleString('fa', {useGrouping: isPrice});
+    return (+a).toLocaleString('fa', {
+      useGrouping: isPrice
+    });
   }
 
   orderStatus(ol) {
-    return  ol.tickets.length !== 0 ? OrderStatus.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
+    return ol.tickets.length !== 0 ? OrderStatus.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
   }
 
   getThumbnailURL(boughtColor, product) {
@@ -104,12 +154,12 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkReturnOrderLine(ol) {
-    const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14 ) ;
-    return ol.tickets.find(tk => tk.status === STATUS.Delivered
-      && (tk.status !== STATUS.Return || tk.status !== STATUS.Cancel)
-      && !ol['returnFlag']
-      && date > Date.now()
-      );
+    const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
+    return ol.tickets.find(tk => tk.status === STATUS.Delivered &&
+      (tk.status !== STATUS.Return || tk.status !== STATUS.Cancel) &&
+      !ol['returnFlag'] &&
+      date > Date.now()
+    );
   }
 
   returnOrderLine(ol) {
@@ -134,7 +184,35 @@ export class OrderLinesComponent implements OnInit {
   }
 
   cancelOrderLine(ol) {
+    this.quantities = [];
+    // check if quantity more than 1, we need show have many order_line need to cancel
+    if (ol.quantity > 1) {
+      for (let index = 1; index <= ol.quantity; index++) {
+        this.quantities.push({
+          value: index,
+          viewValue: index
+        });
+      }
+      this.isQuantityMoreThanOne = ol.order_line_id;
+    } else {
+      this.showDialogCancelOrderLine(ol, false);
+    }
+  }
 
+  showDialogCancelOrderLine(ol, multi: boolean) {
+    let options: any = {
+      orderId: this.orderInfo.orderId,
+      orderLineId: ol.order_line_id,
+      productIntanceId: ol.product_instance._id
+    }
+    if (multi) {
+      options = {
+        orderId: this.orderInfo.orderId,
+        orderLineId: ol.order_line_id,
+        quantity: this.quantitySelected,
+        productIntanceId: ol.product_instance._id
+      };
+    }
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
@@ -142,19 +220,20 @@ export class OrderLinesComponent implements OnInit {
       status => {
         if (status) {
           this.progressService.enable();
-          // TODO send delete request
-          this.httpService.post(`order/cancel`, {orderId: this.orderInfo.orderId, orderLineId: ol.order_line_id}).subscribe(
-            data => {
-              this.openSnackBar('کالا مورد نظر با موفقیت کنسل شد.');
-              this.changeOrderLine(ol);
-              this.closeDialog.emit(false);
-              this.progressService.disable();
-            },
-            err => {
-              this.openSnackBar('خطا در هنگام کنسل کردن');
-              this.progressService.disable();
-            }
-          );
+          // this request expect cancel order_lines
+          this.httpService.post(`order/cancel`, options)
+            .subscribe(
+              data => {
+                this.openSnackBar('کالا مورد نظر با موفقیت کنسل شد.');
+                this.changeOrderLine(ol);
+                this.closeDialog.emit(false);
+                this.progressService.disable();
+              },
+              err => {
+                this.openSnackBar('خطا در هنگام کنسل کردن');
+                this.progressService.disable();
+              }
+            );
         }
       }, err => {
         console.log('Error in dialog: ', err);
@@ -163,9 +242,9 @@ export class OrderLinesComponent implements OnInit {
 
   checkCancelOrderLine(ol) {
     return ol.tickets.every(tk =>
-      tk.status !== STATUS.OnDelivery && tk.status !== STATUS.Delivered
-       && tk.status !== STATUS.Cancel && tk.status !== STATUS.Return
-       && !ol['cancelFlag']
+      tk.status !== STATUS.OnDelivery && tk.status !== STATUS.Delivered &&
+      tk.status !== STATUS.Cancel && tk.status !== STATUS.Return &&
+      !ol['cancelFlag']
     );
   }
 
@@ -184,5 +263,10 @@ export class OrderLinesComponent implements OnInit {
       } else updateOrderLines.push(el);
     });
     this.orderInfo.dialog_order.order_lines = updateOrderLines;
+  }
+
+  cancelOrderLineByQuantity(ol) {
+    console.log('ol', ol);
+    this.showDialogCancelOrderLine(ol, true);
   }
 }
