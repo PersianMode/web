@@ -53,10 +53,8 @@ export class UpsertAddressComponent implements OnInit {
     this.addressData = this.addressInfo.dialog_address || {};
     this.dialogTitle = this.addressInfo.partEdit ? '' : this.addressInfo.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
     this.buttonTitle = 'ثبت اطلاعات';
-    console.log(this.checkoutService.C_and_C_ReceiverData.recipient_name);
-    if (this.checkoutService.C_and_C_ReceiverData.recipient_name) {
+    if (this.checkoutService.C_and_C_ReceiverData.recipient_name)
       this.addressData = this.checkoutService.C_and_C_ReceiverData;
-    }
     this.emailRequired = !this.authService.userIsLoggedIn();
     this.initForm();
   }
@@ -103,7 +101,7 @@ export class UpsertAddressComponent implements OnInit {
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
         Validators.minLength(8),
       ]],
-      recipient_title: [this.addressInfo.addressId ||this.addressData.recipient_title ? this.addressData.recipient_title : this.authService.userDetails.gender],
+      recipient_title: [this.addressInfo.addressId || this.addressData.recipient_title ? this.addressData.recipient_title : this.authService.userDetails.gender],
       latitude: [this.addressData.loc && this.addressInfo.addressId ? this.addressData.loc.lat : 35.696491],
       longitude: [this.addressData.loc && this.addressInfo.addressId ? this.addressData.loc.long : 51.379926],
       street: [this.addressInfo.addressId ? this.addressData.street : null, this.addressInfo.partEdit ? [] : [
