@@ -50,7 +50,7 @@
 
         <ng-container matColumnDef="min_slot">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">بازه دریافتی مطلوب</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content"> {{element.min_slot.lower_bound}} - {{element.min_slot.upper_bound}}</mat-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.min_slot?.lower_bound}} - {{element.min_slot?.upper_bound}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="delivery_agent">

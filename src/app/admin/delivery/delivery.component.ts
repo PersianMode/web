@@ -227,11 +227,11 @@ export class DeliveryComponent implements OnInit {
   }
 
   deliveryIsDone(item) {
-    return item.status_list && item.status_list.find(el => el.is_processed && el.status === STATUS.Delivered);
+    return item.status_list && item.status_list.find(el => el.is_processed && el.status === STATUS.OnDelivery);
   }
 
   isAfterMaxValidEndDate(id) {
     const delItem = this.deliveryItems.find(el => el._id === id);
-    return moment(delItem.end, 'YYYY-MM-DD').isAfter(moment(delItem.min_end, 'YYYY-MM-DD'));
+    return delItem.min_end ? moment(delItem.end, 'YYYY-MM-DD').isAfter(moment(delItem.min_end, 'YYYY-MM-DD')) : false;
   }
 }

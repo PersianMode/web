@@ -15,15 +15,16 @@ import {
 } from '@angular/material';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { InboxComponent } from './components/inbox/inbox.component';
-import { ProductViewerComponent } from './components/product-viewer/product-viewer.component';
+import {InboxComponent} from './components/inbox/inbox.component';
+import {ProductViewerComponent} from './components/product-viewer/product-viewer.component';
 import {DeliverComponent} from './components/deliver/deliver.component';
-import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-checker.component';
+import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import { TicketComponent } from './components/ticket/ticket.component';
+import {TicketComponent} from './components/ticket/ticket.component';
+import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/delivery-shelf-code.component';
 
 
-@NgModule({ 
+@NgModule({
   declarations: [
     OrderComponent,
     OrderAddressComponent,
@@ -31,7 +32,8 @@ import { TicketComponent } from './components/ticket/ticket.component';
     DeliverComponent,
     ProductViewerComponent,
     BarcodeCheckerComponent,
-    TicketComponent
+    TicketComponent,
+    DeliveryShelfCodeComponent
   ],
   imports: [
     OrderRouting,
@@ -56,9 +58,8 @@ import { TicketComponent } from './components/ticket/ticket.component';
     MatInputModule,
     MatTabsModule,
     MatCardModule,
-    
   ],
-  entryComponents: [OrderAddressComponent,  ProductViewerComponent, TicketComponent],
+  entryComponents: [OrderAddressComponent, ProductViewerComponent, TicketComponent, DeliveryShelfCodeComponent],
 })
 export class OrderModule {
 }

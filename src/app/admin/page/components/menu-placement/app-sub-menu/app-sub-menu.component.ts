@@ -56,8 +56,9 @@ export class AppSubMenuComponent implements OnInit {
   newPlacementId = null;
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-    private progressService: ProgressService, private sanitizer: DomSanitizer,
-    private dialog: MatDialog, private revertService: RevertPlacementService) {}
+              private progressService: ProgressService, private sanitizer: DomSanitizer,
+              private dialog: MatDialog, private revertService: RevertPlacementService) {
+  }
 
   ngOnInit() {
     if (!this.dragulaService.find(this.itemBagName))

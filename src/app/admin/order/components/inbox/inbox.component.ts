@@ -46,7 +46,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   ];
 
   dataSource = new MatTableDataSource();
-  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   expandedElement: any;
 
   pageSize = 10;
@@ -57,6 +56,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   socketObserver: any = null;
+
+  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,

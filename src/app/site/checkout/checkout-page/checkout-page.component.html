@@ -10,10 +10,13 @@
             <mat-expansion-panel-header>خلاصه</mat-expansion-panel-header>
 
 
-            <app-checkout-summary [total]="total" [discount]="discount" [usedBalance]="usedBalance"
-                                  [usedLoyaltyPoint]="usedLoyaltyPoint" [deliveryCost]="deliveryCost"
+            <app-checkout-summary [total]="total" [discount] = "discount" [usedBalance] = "usedBalance"
+                                  [usedLoyaltyPoint] = "usedLoyaltyPoint" [deliveryCost]="deliveryCost"
                                   [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
-                                  [showCostLabel]="showCostLabel" [noDuration]="noDuration"></app-checkout-summary>
+                                  [earnedLoyaltyPoint]="earnedLoyaltyPoint"
+                                  [showCostLabel]="showCostLabel"
+                                  [showEarnPointLabel]="showEarnPointLabel"
+                                  [noDuration]="noDuration"></app-checkout-summary>
 
           </mat-expansion-panel>
           <mat-expansion-panel>
@@ -33,7 +36,7 @@
             </mat-expansion-panel-header>
 
 
-            <app-address-table [isProfile] = false (deliveryType)="showDiscountLabel($event)"
+            <app-address-table [isProfile] = false (deliveryType)="setCostLabel($event)"
                                (noDuration)="noDuration = $event"
                                (durationType)="calculateDiscount($event)"></app-address-table>
           </mat-expansion-panel>

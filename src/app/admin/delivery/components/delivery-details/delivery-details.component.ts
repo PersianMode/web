@@ -113,7 +113,7 @@ export class DeliveryDetailsComponent implements OnInit {
       const currentHour = moment().format('HH');
       const currentMinute = moment().format('mm');
 
-      if (this.start_time.h < currentHour || this.start_time.m <= currentMinute) {
+      if (this.start_time.h < +currentHour || (this.start_time.h === +currentHour && this.start_time.m <= +currentMinute)) {
         this.snackBar.open('زمان شروع انتخاب شده معتبر نمی باشد', null, {
           duration: 3200,
         });
@@ -261,10 +261,13 @@ export class DeliveryDetailsComponent implements OnInit {
   }
 
   getMaxValidEndDate() {
-    return moment(this.data.min_end).format('YYYY-MM-DD');
+    return this.data.min_end ? moment(this.data.min_end).format('YYYY-MM-DD') : '-';
   }
 
   isAfterMaxValidDate(isTime = false) {
+    if (!this.data.min_end)
+      return false;
+
     const isAfterValidDate = moment(this.end_date, 'YYYY-MM-DD').isAfter(moment(this.data.min_end, 'YYYY-MM-DD'));
 
     if (isAfterValidDate)
@@ -272,6 +275,7 @@ export class DeliveryDetailsComponent implements OnInit {
 
     if (isTime &&
       moment(this.end_date, 'YYYY-MM-DD').isSame(moment(this.data.min_end, 'YYYY-MM-DD')) &&
+      this.data.min_slot &&
       this.end_time.h > this.data.min_slot.upper_bound)
       return true;
     else

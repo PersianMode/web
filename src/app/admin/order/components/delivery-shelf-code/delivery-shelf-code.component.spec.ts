@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OtherDetailsComponent } from './other-details.component';
+import { DeliveryShelfCodeComponent } from './delivery-shelf-code.component';
 
-describe('OtherDetailsComponent', () => {
-  let component: OtherDetailsComponent;
-  let fixture: ComponentFixture<OtherDetailsComponent>;
+describe('DeliveryShelfCodeComponent', () => {
+  let component: DeliveryShelfCodeComponent;
+  let fixture: ComponentFixture<DeliveryShelfCodeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OtherDetailsComponent ]
+      declarations: [ DeliveryShelfCodeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OtherDetailsComponent);
+    fixture = TestBed.createComponent(DeliveryShelfCodeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

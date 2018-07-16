@@ -7,6 +7,7 @@ import {ResponsiveService} from '../../services/responsive.service';
 import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
+import {time_slotEnum} from '../../enum/time_slot.enum';
 import {CheckoutService} from '../../services/checkout.service';
 import {ProgressService} from '../../services/progress.service';
 
@@ -18,6 +19,7 @@ import {ProgressService} from '../../services/progress.service';
 })
 export class AddressTableComponent implements OnInit {
   addressSelected;
+  time_slot = time_slotEnum;
   @Input() isProfile = true;
   @Input() isModify = true;
   @Output() selectedChange = new EventEmitter();
@@ -31,7 +33,8 @@ export class AddressTableComponent implements OnInit {
     'پالادیوم': [35.7975691, 51.4107673],
   };
   deliveryPeriodDay = [];
-  deliveryHour: { enum: ['10-18', '18-22'] };
+  delivery_time = null;
+  deliveryHour = [];
   loc = null;
   withDelivery = true;
   selectedCustomerAddress = -1;
@@ -48,18 +51,23 @@ export class AddressTableComponent implements OnInit {
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
-              private dialog: MatDialog, private checkoutService: CheckoutService,
-              private responsiveService: ResponsiveService, private router: Router,
-              private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
+    private dialog: MatDialog, private checkoutService: CheckoutService,
+    private responsiveService: ResponsiveService, private router: Router,
+    private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
   ngOnInit() {
+    this.delivery_time = null;
     this.noDuration.emit(null);
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.authService.isLoggedIn.subscribe(r => {
       this.isLoggedIn = this.authService.userIsLoggedIn();
     });
+
+    this.deliveryHour = [];
+    Object.keys(this.time_slot).forEach(el => this.deliveryHour.push(this.time_slot[el]));
+
     const state = this.checkoutService.addressState;
     if (state) {
       [this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress]
@@ -95,6 +103,9 @@ export class AddressTableComponent implements OnInit {
       this.withDelivery ?
         this.selectedCustomerAddress >= 0 ? this.showAddresses[this.selectedCustomerAddress] : null
         : this.selectedWarehouseAddress >= 0 ? this.showAddresses[this.selectedWarehouseAddress] : null,
+
+      this.withDelivery ? this.deliveryDays : null,
+      this.withDelivery ? this.delivery_time : null
     ];
   }
 
@@ -205,6 +216,12 @@ export class AddressTableComponent implements OnInit {
     );
   }
 
+  setDeliveryTime(deliveryTime) {
+    this.delivery_time = deliveryTime;
+    this.setState();
+
+  }
+
   changeWithDelivery() {
     this.deliveryType.emit(this.withDelivery);
     if (this.withDelivery) {
@@ -235,10 +252,16 @@ export class AddressTableComponent implements OnInit {
       this.showAddresses = this.addresses;
 
     this.selectedCustomerAddress = 0;
+
+    this.setState();
   }
 
   chooseAddress($event) {
     this.selectedChange.emit(this.addressSelected);
+  }
+
+  getDeliveryTimeDisplay(time_slot) {
+    return 'ساعت ' + (time_slot.lower_bound).toLocaleString('fa') + 'تا ' + (time_slot.upper_bound).toLocaleString('fa');
   }
 }
 

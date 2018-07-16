@@ -7,6 +7,7 @@ import {PaymentType} from '../enum/payment.type.enum';
 import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
+import {ReplaySubject} from 'rxjs/Rx';
 
 @Injectable()
 export class CheckoutService {
@@ -19,11 +20,16 @@ export class CheckoutService {
   private discount = 0;
   private loyaltyPointValue = 0;
   private balance = 0;
+  private earnSpentPointObj: any = {};
+  loyaltyGroups: ReplaySubject<any> = new ReplaySubject<any>();
+  addPointArray: ReplaySubject<any> = new ReplaySubject<any>();
+
   warehouseAddresses = [];
   private _ads: any = null;
   addressData: IAddressInfo;
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
 
   constructor(private cartService: CartService, private httpService: HttpService,
               private authService: AuthService, private snackBar: MatSnackBar,
@@ -31,8 +37,10 @@ export class CheckoutService {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
-    this.authService.isLoggedIn.subscribe(isLoggedIn => {
+    this.authService.isVerified.subscribe(isLoggedIn => {
       this.getCustomerAddresses(this.authService.userIsLoggedIn());
+      this.getLoyaltyGroup();
+      this.getAddLoyaltyPoints();
     });
 
     this.httpService.get('warehouse').subscribe(res => {
@@ -76,6 +84,16 @@ export class CheckoutService {
     this.selectedPaymentType = pt;
   }
 
+  setEarnSpentPoint(et) {
+    this.earnSpentPointObj = {
+      delivery_spent: 0,
+      shop_spent: 0,
+      delivery_value: 0,
+      shop_value: 0,
+      earn_point: et,
+    };
+  }
+
   finalCheck() {
     const cartItems = this.productData
       .map(r => Object.assign({}, {
@@ -95,7 +113,8 @@ export class CheckoutService {
       this.cartService.getLoyaltyBalance()
         .then((res: any) => {
           this.balance = res.balance;
-          this.loyaltyPointValue = res.loyalty_points * this.loyaltyValue;
+          // this.loyaltyPointValue = res.loyalty_points * this.loyaltyValue;
+          this.loyaltyPointValue = res.loyalty_points;
 
           resolve({
             balance: this.balance,
@@ -104,6 +123,33 @@ export class CheckoutService {
         })
         .catch(err => reject(err));
     });
+  }
+
+  getLoyaltyGroup() {
+    this.httpService.get('loyaltygroup')
+      .subscribe(res => {
+          this.loyaltyGroups.next(res);
+        },
+        err => {
+          console.error('Cannot get loyalty groups: ', err);
+          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+            duration: 3200,
+          });
+        });
+  }
+
+
+  getAddLoyaltyPoints() {
+    this.httpService.get('deliverycc')
+      .subscribe(res => {
+          this.addPointArray.next(res);
+        },
+        err => {
+          console.error('Cannot get loyalty groups: ', err);
+          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+            duration: 3200,
+          });
+        });
   }
 
   getTotalDiscount() {
@@ -154,6 +200,14 @@ export class CheckoutService {
     return !this._ads[0];
   }
 
+  private get delivery_days() {
+    return this._ads[5];
+  }
+
+  private get time_slot() {
+    return this._ads[6];
+  }
+
   private accumulateData() {
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
@@ -166,6 +220,10 @@ export class CheckoutService {
       total_amount: this.total,
       discount: this.discount,
       is_collect: this.is_collect,
+      duration_days: this.delivery_days,
+      time_slot: this.time_slot,
+      paymentType: this.selectedPaymentType,
+      loyalty: this.earnSpentPointObj,
     };
   }
 
