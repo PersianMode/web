@@ -66,30 +66,9 @@ export class CheckoutPageComponent implements OnInit {
         }
       }
     );
-    this.checkoutService.finalCheck().subscribe(res => {
-
-      this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
-      this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
-      this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
-
-      if ((this.soldOuts && this.soldOuts.length) ||
-        (this.discountChanges && this.discountChanges.length) ||
-        (this.priceChanges && this.priceChanges.length)) {
-
-        this.hasChangeError = !!this.soldOuts && !!this.soldOuts.length;
-        if (this.hasChangeError)
-          this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
-        if (this.discountChanges && this.discountChanges.length)
-          this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
-        if (this.priceChanges && this.priceChanges.length)
-          this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
-
-        this.productService.updateProducts(res);
-
-      }
-
-    }, err => {
-
+    this.finalCheckItems().then(() => {
+    }).catch((err) => {
+      console.error(err);
     });
     this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
