@@ -104,7 +104,7 @@ export class CheckoutPageComponent implements OnInit {
         console.error('Cannot get balance and loyalty points of customer: ', err);
       });
 
-    this.checkoutService.isValid$.subscribe(r => this.disabled = !!(!r || !(!this.soldOuts || this.soldOuts.length === 0)));
+    this.checkoutService.isValid$.subscribe(r => this.disabled = !!(!r));
     if (!this.authService.userDetails.userId) {
       this.showEarnPointLabel = false;
       this.earnedLoyaltyPoint = 0;
