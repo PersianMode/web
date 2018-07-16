@@ -139,7 +139,7 @@ export class UpsertAddressComponent implements OnInit {
           console.error('error occured in submitting address', err);
         });
     } else {
-      this.checkoutService.C_and_C_ReciverData = this.addressData;
+      this.checkoutService.C_and_C_ReceiverData = this.addressData;
       this.onClose();
     }
   }
