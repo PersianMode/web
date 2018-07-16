@@ -60,7 +60,7 @@ export class CheckoutService {
   private checkValidity() {
     const data = this.accumulateData();
     const il = this.authService.userIsLoggedIn();
-    this.isValid$.next(data.total_amount &&
+    this.isValid$.next(data.total_amount && data.address && (data.is_collect || (data.duration_days && data.time_slot)) &&
       (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
   }
 

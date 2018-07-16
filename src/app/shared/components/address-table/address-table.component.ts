@@ -51,9 +51,9 @@ export class AddressTableComponent implements OnInit {
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
-    private dialog: MatDialog, private checkoutService: CheckoutService,
-    private responsiveService: ResponsiveService, private router: Router,
-    private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
+              private dialog: MatDialog, private checkoutService: CheckoutService,
+              private responsiveService: ResponsiveService, private router: Router,
+              private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -85,7 +85,7 @@ export class AddressTableComponent implements OnInit {
         }
         this.addresses = res;
         this.showAddresses = this.addresses;
-        this.setState();
+        this.changeDurationType(this.durationId, this.deliveryDays);
       }
     });
 
@@ -156,7 +156,8 @@ export class AddressTableComponent implements OnInit {
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
-    } else {
+    }
+    else {
       const rmDialog = this.dialog.open(GenDialogComponent, {
         width: '600px',
         data: {
@@ -168,7 +169,7 @@ export class AddressTableComponent implements OnInit {
           if (this.withDelivery) {
             this.checkoutService.getCustomerAddresses();
           }
-          this.setState();
+          // this.setState();
         },
         (err) => {
           console.error('Error in dialog: ', err);
@@ -241,6 +242,9 @@ export class AddressTableComponent implements OnInit {
   }
 
   changeDurationType(durationId, deliveryDays) {
+    let selectedCustomerAddressID = -1;
+    if (this.selectedCustomerAddress > -1)
+      selectedCustomerAddressID = this.showAddresses[this.selectedCustomerAddress]._id;
     this.durationId = durationId;
     this.deliveryDays = deliveryDays;
     this.noDuration.emit(true);
@@ -250,8 +254,15 @@ export class AddressTableComponent implements OnInit {
       this.showAddresses = this.tehranAddresses;
     } else
       this.showAddresses = this.addresses;
-
     this.selectedCustomerAddress = 0;
+    if (selectedCustomerAddressID !== -1) {
+      for (let i = 0; i < this.showAddresses.length; i++) {
+        if (this.showAddresses[i]._id === selectedCustomerAddressID)
+          this.selectedCustomerAddress = i;
+      }
+    }
+    if (this.showAddresses.length < 1)
+      this.selectedCustomerAddress = -1;
 
     this.setState();
   }
