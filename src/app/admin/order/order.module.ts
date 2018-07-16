@@ -40,7 +40,8 @@ import { DeliveryShelfCodeComponent } from './components/delivery-shelf-code/del
     BarcodeCheckerComponent,
     TicketComponent,
     SmDeliverComponent,
-    DeliveryShowComponent
+    DeliveryShowComponent,
+    DeliveryShelfCodeComponent
   ],
   imports: [
     OrderRouting,
