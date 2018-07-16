@@ -1,58 +1,19 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnInit,
-  Output
-} from '@angular/core';
-import {
-  ProfileOrderService
-} from '../../../../shared/services/profile-order.service';
-import {
-  Location
-} from '@angular/common';
-import {
-  Router
-} from '@angular/router';
-import {
-  EditOrderComponent
-} from '../../../cart/components/edit-order/edit-order.component';
-import {
-  MatDialogRef,
-  MatDialog,
-  MatSnackBar
-} from '@angular/material';
-import {
-  imagePathFixer
-} from '../../../../shared/lib/imagePathFixer';
-import {
-  OrderStatus
-} from '../../../../shared/lib/order_status';
-import {
-  DictionaryService
-} from '../../../../shared/services/dictionary.service';
-import {
-  GenDialogComponent
-} from '../../../../shared/components/gen-dialog/gen-dialog.component';
-import {
-  DialogEnum
-} from '../../../../shared/enum/dialog.components.enum';
-import {
-  ResponsiveService
-} from '../../../../shared/services/responsive.service';
-import {
-  RemovingConfirmComponent
-} from '../../../../shared/components/removing-confirm/removing-confirm.component';
-import {
-  HttpService
-} from '../../../../shared/services/http.service';
-import {
-  ProgressService
-} from '../../../../shared/services/progress.service';
-import {
-  STATUS
-} from '../../../../shared/enum/status.enum';
+import {Component,EventEmitter,Inject,Input,OnInit,Output} from '@angular/core';
+import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
+import {Location} from '@angular/common';
+import {Router} from '@angular/router';
+import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
+import {MatDialogRef,MatDialog,MatSnackBar} from '@angular/material';
+import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+import {OrderStatus} from '../../../../shared/lib/order_status';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import {ResponsiveService} from '../../../../shared/services/responsive.service';
+import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {HttpService} from '../../../../shared/services/http.service';
+import {ProgressService} from '../../../../shared/services/progress.service';
+import {STATUS} from '../../../../shared/enum/status.enum';
 
 
 @Component({
@@ -105,14 +66,15 @@ export class OrderLinesComponent implements OnInit {
             el['order_id'] = this.orderInfo.dialog_order._id;
         });
       const gender = el.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-      if (instancArr.indexOf(el.product_instance._id) === -1) {
+      // if (instancArr.indexOf(el.product_instance._id) === -1) {
         instancArr.push(el.product_instance._id);
         el.quantity = 1;
         el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
         this.noDuplicateOrderLine.push(el);
-      } else {
-        this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
-      }
+      // } 
+      // else {
+      //   this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
+      // }
     });
   }
 
@@ -144,18 +106,21 @@ export class OrderLinesComponent implements OnInit {
       useGrouping: isPrice
     });
   }
-
-  orderStatus(arr) {
-    let tickets = [];
-    let statusText = '';
-    arr.forEach(el => {
-      tickets = el.tickets;
-      if (tickets.length)
-        statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
-      else statusText = '--';
-      el.statusText = statusText;
-    });
+  orderStatus(ol) {
+    return ol.tickets.length !== 0 ? OrderStatus.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
   }
+
+  // orderStatus(arr) {
+  //   let tickets = [];
+  //   let statusText = '';
+  //   arr.forEach(el => {
+  //     tickets = el.tickets;
+  //     if (tickets.length)
+  //       statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
+  //     else statusText = '--';
+  //     el.statusText = statusText;
+  //   });
+  // }
 
   getThumbnailURL(boughtColor, product) {
     return imagePathFixer(boughtColor.image.thumbnail, product._id, boughtColor._id);
