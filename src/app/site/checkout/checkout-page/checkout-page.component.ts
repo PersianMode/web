@@ -60,6 +60,16 @@ export class CheckoutPageComponent implements OnInit {
         }
       }
     );
+    if (this.authService.userIsLoggedIn()) {
+      this.checkoutService.C_and_C_ReceiverData = {
+        recipient_name: this.authService.userDetails.name,
+        recipient_surname: this.authService.userDetails.surname,
+        recipient_national_id: this.authService.userDetails.national_id,
+        recipient_mobile_no: this.authService.userDetails.mobile_no,
+        recipient_title: this.authService.userDetails.gender,
+      }
+
+    }
     this.checkoutService.finalCheck().subscribe(res => {
 
       this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));

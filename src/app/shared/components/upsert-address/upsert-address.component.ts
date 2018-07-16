@@ -130,7 +130,7 @@ export class UpsertAddressComponent implements OnInit {
           this.addressData[k] = this.addressForm.controls[k].value;
         }
       });
-    if (!this.addressInfo.is_click_and_collect) {
+    if (!this.addressInfo.is_click_and_collect || !this.authService.userIsLoggedIn()) {
       this.checkoutService.submitAddresses(this.addressData)
         .then(() => {
           this.onClose();

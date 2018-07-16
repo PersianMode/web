@@ -62,7 +62,7 @@ export class CheckoutService {
     const il = this.authService.userIsLoggedIn();
     console.log(data);
     this.isValid$.next(data.total_amount && data.address && (data.is_collect || (data.duration_days && data.time_slot)) &&
-      (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
+      ((il&&data.address.recipient_national_id) || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
