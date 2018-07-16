@@ -51,9 +51,9 @@ export class AddressTableComponent implements OnInit {
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
-    private dialog: MatDialog, private checkoutService: CheckoutService,
-    private responsiveService: ResponsiveService, private router: Router,
-    private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
+              private dialog: MatDialog, private checkoutService: CheckoutService,
+              private responsiveService: ResponsiveService, private router: Router,
+              private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -150,9 +150,10 @@ export class AddressTableComponent implements OnInit {
   openAddressDialog() {
     const customerAddresses = this.checkoutService.addresses$.getValue();
     this.checkoutService.addressData = {
-      addressId: this.withDelivery ? null : '1',
+      is_click_and_collect: this.isProfile ? false : this.withDelivery ? false : true,
+      addressId: null,
       partEdit: !this.withDelivery,
-      dialog_address: this.withDelivery ? {} : customerAddresses ? customerAddresses[0] : {},
+      dialog_address: this.withDelivery ? {} : customerAddresses && customerAddresses.length ? customerAddresses[0] : {},
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
@@ -181,6 +182,7 @@ export class AddressTableComponent implements OnInit {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.showAddresses[id] : null;
     this.checkoutService.addressData = {
+      is_click_and_collect:false,
       addressId: tempAddressId,
       partEdit: !this.isProfile || !this.authService.userIsLoggedIn(),
       dialog_address: tempAddress

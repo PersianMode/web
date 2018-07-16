@@ -29,7 +29,6 @@ export class UpsertAddressComponent implements OnInit {
     name: 'آقا',
     value: 'm'
   }];
-  title;
   addressData: any;
   addressInfo: IAddressInfo;
   emailRequired = false;
@@ -51,10 +50,13 @@ export class UpsertAddressComponent implements OnInit {
       }
     );
     this.addressInfo = this.checkoutService.addressData;
-    this.initializeData();
+    this.addressData = this.addressInfo.dialog_address || {};
     this.dialogTitle = this.addressInfo.partEdit ? '' : this.addressInfo.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
     this.buttonTitle = 'ثبت اطلاعات';
-    this.addressData = this.addressInfo.dialog_address;
+    console.log(this.checkoutService.C_and_C_ReceiverData.recipient_name);
+    if (this.checkoutService.C_and_C_ReceiverData.recipient_name) {
+      this.addressData = this.checkoutService.C_and_C_ReceiverData;
+    }
     this.emailRequired = !this.authService.userIsLoggedIn();
     this.initForm();
   }
@@ -68,22 +70,16 @@ export class UpsertAddressComponent implements OnInit {
     }
   }
 
-  initializeData() {
-    this.addressInfo = this.checkoutService.addressData;
-    this.title = this.addressInfo.addressId !== null ? 'ویرایش اطلاعات' : 'افزودن آدرس جدید';
-    this.addressData = this.addressInfo.dialog_address || {};
-  }
-
   initForm() {
     this.addressForm = new FormBuilder().group({
       recipient_email: [this.addressInfo.addressId ? this.addressData.recipient_email : '', this.emailRequired ? [Validators.required] : []],
-      recipient_name: [this.addressInfo.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
+      recipient_name: [this.addressInfo.addressId || this.addressData.recipient_name ? this.addressData.recipient_name : this.authService.userDetails.name, [
         Validators.required,
       ]],
-      recipient_surname: [this.addressInfo.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
+      recipient_surname: [this.addressInfo.addressId || this.addressData.recipient_surname ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
         Validators.required,
       ]],
-      recipient_national_id: [this.addressInfo.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
+      recipient_national_id: [this.addressInfo.addressId || this.addressData.recipient_national_id ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
         Validators.required,
         Validators.maxLength(10),
         Validators.minLength(10),
@@ -102,12 +98,12 @@ export class UpsertAddressComponent implements OnInit {
       district: [this.addressInfo.addressId ? this.addressData.district : null, this.addressInfo.partEdit ? [] : [
         Validators.maxLength(500),
       ]],
-      recipient_mobile_no: [this.addressInfo.addressId ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
+      recipient_mobile_no: [this.addressInfo.addressId || this.addressData.recipient_mobile_no ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
         Validators.required,
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
         Validators.minLength(8),
       ]],
-      recipient_title: [this.addressInfo.addressId ? this.addressData.recipient_title : this.authService.userDetails.gender],
+      recipient_title: [this.addressInfo.addressId ||this.addressData.recipient_title ? this.addressData.recipient_title : this.authService.userDetails.gender],
       latitude: [this.addressData.loc && this.addressInfo.addressId ? this.addressData.loc.lat : 35.696491],
       longitude: [this.addressData.loc && this.addressInfo.addressId ? this.addressData.loc.long : 51.379926],
       street: [this.addressInfo.addressId ? this.addressData.street : null, this.addressInfo.partEdit ? [] : [
@@ -123,11 +119,12 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   submitAddress() {
-    this.addressData.loc = {
-      long: this.addressForm.controls['longitude'].value,
-      lat: this.addressForm.controls['latitude'].value,
-    };
-
+    if (!this.addressInfo.is_click_and_collect) {
+      this.addressData.loc = {
+        long: this.addressForm.controls['longitude'].value,
+        lat: this.addressForm.controls['latitude'].value,
+      };
+    }
     Object.keys(this.addressForm.controls)
       .filter(r => !['latitude', 'longitude'].includes(r))
       .forEach(k => {
@@ -135,14 +132,18 @@ export class UpsertAddressComponent implements OnInit {
           this.addressData[k] = this.addressForm.controls[k].value;
         }
       });
-
-    this.checkoutService.submitAddresses(this.addressData)
-      .then(() => {
-        this.onClose();
-      })
-      .catch(err => {
-        console.error('error occured in submitting address', err);
-      });
+    if (!this.addressInfo.is_click_and_collect) {
+      this.checkoutService.submitAddresses(this.addressData)
+        .then(() => {
+          this.onClose();
+        })
+        .catch(err => {
+          console.error('error occured in submitting address', err);
+        });
+    } else {
+      this.checkoutService.C_and_C_ReciverData = this.addressData;
+      this.onClose();
+    }
   }
 
   setNewProvince(newProvince) {
@@ -173,11 +174,11 @@ export class UpsertAddressComponent implements OnInit {
   fieldChanged() {
     this.anyChanges =
       (this.addressData.loc && (this.addressData.loc.long !== this.addressForm.controls['longitude'].value
-    || this.addressData.loc.lat !== this.addressForm.controls['latitude'].value ) )
-    || Object.keys(this.addressForm.controls)
-      .filter(k => !['latitude', 'longitude'].includes(k) && (k.startsWith('recipient') || !this.addressInfo.partEdit))
-      .map(k => this.addressForm.controls[k].value !== null && this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
-      .reduce((a, b) => a || b, false);
+        || this.addressData.loc.lat !== this.addressForm.controls['latitude'].value))
+      || Object.keys(this.addressForm.controls)
+        .filter(k => !['latitude', 'longitude'].includes(k) && (k.startsWith('recipient') || !this.addressInfo.partEdit))
+        .map(k => this.addressForm.controls[k].value !== null && this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
+        .reduce((a, b) => a || b, false);
   }
 
 }

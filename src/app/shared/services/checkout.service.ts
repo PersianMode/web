@@ -23,7 +23,7 @@ export class CheckoutService {
   private earnSpentPointObj: any = {};
   loyaltyGroups: ReplaySubject<any> = new ReplaySubject<any>();
   addPointArray: ReplaySubject<any> = new ReplaySubject<any>();
-
+  C_and_C_ReceiverData: any = {};
   warehouseAddresses = [];
   private _ads: any = null;
   addressData: IAddressInfo;
@@ -60,6 +60,7 @@ export class CheckoutService {
   private checkValidity() {
     const data = this.accumulateData();
     const il = this.authService.userIsLoggedIn();
+    console.log(data);
     this.isValid$.next(data.total_amount && data.address && (data.is_collect || (data.duration_days && data.time_slot)) &&
       (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
   }
@@ -193,7 +194,10 @@ export class CheckoutService {
   }
 
   private get address() {
+    if (this.is_collect && this._ads[4])
+      Object.assign(this._ads[4], this.C_and_C_ReceiverData);
     return this._ads[4];
+
   }
 
   private get is_collect() {
