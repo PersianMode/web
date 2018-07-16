@@ -1,0 +1,20 @@
+<div class="main">
+  <div class="header">
+    <mat-icon aria-label="close" (click)="rejectOrCloseWarning()" style="cursor: pointer;">clear</mat-icon>
+  </div>
+  <div class="body" fxLayout="row" fxLayoutAlign="center top" fxLayout.sm="column">
+    <div class="item-data-and-name" fxFlex="68" fxFlex.xs="55" fxFlex.sm="55">
+      <h4>
+        <div>{{data.warning}}</div>
+      </h4>
+      <div class="bag-btn">
+        <button mat-button (click)="acceptWarning()" *ngIf="!haveError">تایید و ثبت سفارش</button>
+        <button mat-button (click)="rejectOrCloseWarning()" *ngIf="haveError">بازگشت به سبد خرید</button>
+
+      </div>
+      <div class="bag-btn">
+        <button mat-button *ngIf="!haveError" (click)="rejectOrCloseWarning()">بررسی دوباره ی سفارش</button>
+      </div>
+    </div>
+  </div>
+</div>

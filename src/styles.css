@@ -701,11 +701,13 @@ mat-panel-title {
 .footer-link:hover, .footer-link1:hover, .icons:hover {
   color: lightgray;
 }
+
 @media screen and (min-width: 960px) {
   .footer-wrapper {
     height: 227px;
   }
 }
+
 @media screen and (max-width: 500px) {
   .footer-link, .footer-link-bold, .footer-link1 {
     float: none;
@@ -976,10 +978,12 @@ p {
 .ql-toolbar.ql-snow {
   text-align: left;
 }
+
 .ui-colorpicker-panel {
   bottom: 26px !important;
   right: 0px !important;
 }
+
 /* PREVIEW END */
 
 .placement-tab .mat-tab-body {
@@ -990,7 +994,8 @@ p {
   text-align: left !important;
   direction: ltr !important;
 }
-.ui-dialog	{
+
+.ui-dialog {
   font-family: iranyekan, sans-serif !important;
 }
 
@@ -1020,6 +1025,7 @@ p {
 .selected-to-revert-img {
   border: #263f66 dashed thick !important;
 }
+
 .mat-list-text {
   padding-left: 20px !important;
   font-family: iranyekan, sans-serif;
@@ -1035,5 +1041,5 @@ p {
 
 .mat-option {
   text-align: right !important;
-  font-family: iranyekan, sans-serif;  
+  font-family: iranyekan, sans-serif;
 }

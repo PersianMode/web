@@ -1,0 +1,51 @@
+.main {
+  width: 100%;
+  font-family: iranyekan, sans-serif;
+  direction: rtl;
+}
+
+.main div {
+  display: inline-block;
+}
+
+.header {
+  display: inline-block;
+  text-align: right;
+  margin-bottom: 5px;
+  vertical-align: top;
+  width: 100%;
+}
+
+.header div {
+  width: calc(100% - 32px);
+  font-weight: 600;
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 22px;
+  vertical-align: top;
+}
+
+.body {
+  direction: rtl;
+}
+
+.item-data-and-name {
+  min-width: 200px;
+  padding-right: 15px;
+}
+
+.bag-btn {
+  text-align: center;
+  padding-top: 30px;
+  width: 100%;
+}
+
+.bag-btn button {
+  padding: 10px;
+  font-size: 15px;
+  background: black;
+  color: #fff;
+  outline: none;
+  border-radius: 5px;
+}
+
