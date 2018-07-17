@@ -167,7 +167,6 @@ export class CheckoutPageComponent implements OnInit {
   finalCheckItems() {
     return new Promise((resolve, reject) => {
       this.checkoutService.finalCheck().subscribe(res => {
-          console.log(res);
           this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
           this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
           this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
@@ -207,6 +206,7 @@ export class CheckoutPageComponent implements OnInit {
               resolve();
             }
           }
+        resolve();
         },
         err => {
           reject();
