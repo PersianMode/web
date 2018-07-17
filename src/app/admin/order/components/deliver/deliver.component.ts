@@ -271,7 +271,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
         return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
   }
-  
+
   firstApiCall() {
     const options = {
       agentName: this.agentName,
@@ -293,7 +293,7 @@ export class DeliverComponent implements OnInit, OnDestroy {
       const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
-        order['order_lines'] = this.removeDuplicates(order['order_lines'], '_id');
+        // order['order_lines'] = this.removeDuplicates(order['order_lines'], '_id');
         rows.push(order, {detailRow: true, order});
       });
       this.dataSourceOne.data = rows;
