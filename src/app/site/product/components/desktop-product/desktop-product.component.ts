@@ -12,6 +12,8 @@ import {CartService} from '../../../../shared/services/cart.service';
   styleUrls: ['./desktop-product.component.css']
 })
 export class DesktopProductComponent implements OnInit, AfterContentChecked {
+
+
   @Input() product;
   @Input() price;
   @Input() discountedPrice;
@@ -22,7 +24,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input() productType;
   @Input() color;
   @Input() barcode;
-  @Input() articleNo;
 
   @Input()
   set id(value) {
