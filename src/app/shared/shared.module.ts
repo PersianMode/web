@@ -60,7 +60,6 @@ import { ShelfCodePrinterComponent } from './components/shelf-code-printer/shelf
     MatAutocompleteModule,
     MatIconModule,
     MatButtonModule,
-    MatRadioModule,
     BidiModule,
     MatIconModule,
     MatSelectModule,
