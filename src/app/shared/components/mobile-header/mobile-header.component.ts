@@ -43,7 +43,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   curHeight;
 
   constructor(private authService: AuthService, private router: Router,
-    @Inject(WINDOW) private window, private cartService: CartService, private pageService: PageService,
+              @Inject(WINDOW) private window, private cartService: CartService, private pageService: PageService,
               private httpService: HttpService, private sanitizer: DomSanitizer,
               private dictionaryService: DictionaryService, private responsiveService: ResponsiveService) {
   }
@@ -82,24 +82,36 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
             this.menuItems[r.info.text] = {
               menu: {},
             };
-            this.menuItems[r.info.text].menu['همه ' + r.info.text] = {routerLink};
-            const section = r.info.section ? r.info.section : routerLink[2];
-            sectionMenu[section] = this.menuItems[r.info.text];
+            // this.menuItems[r.info.text].menu[r.info.text] = {routerLink};
+            // const section = r.info.section ? r.info.section : routerLink[2];
+            // sectionMenu[section] = this.menuItems[r.info.text];
           });
+          console.log('menu items :', this.menuItems);
           const subMenu = data.filter(r => r.variable_name === 'subMenu');
+          console.log(subMenu);
           let sub = '';
+          subMenu
+            .filter(r => r.info.section.split('/')[1] === 'header')
+            .map(r => Object.assign(r, {order: r.info.column * 100 + r.info.row}))
+            .sort((x, y) => x.order - y.order)
+            .forEach(r => {
+              const routerLink = ['/'].concat(r.info.href.split('/'));
+              
+            });
+
           subMenu.filter(r => r.info.section.split('/')[1] !== 'header')
             .map(r => Object.assign(r, {order: r.info.column * 100 + r.info.row + (r.info.section.split('/')[1] === 'left' ? 10000 : 0)}))
             .sort((x, y) => x.order - y.order)
             .forEach(r => {
+              console.log('not header : ', r);
               const routerLink = ['/'].concat(r.info.href.split('/'));
               const section = r.info.section.split('/')[0];
-              if (!sub || r.info.row === 1 || r.info.isHeader) {
+              if (!sub || r.info.row === 1 || r.info.is_header) {
                 sub = r.info.text;
                 sectionMenu[section].menu[sub] = {
                   menu: {},
                 };
-                sectionMenu[section].menu[sub].menu['همه ' + r.info.text] = {routerLink};
+                sectionMenu[section].menu[sub].menu[r.info.text] = {routerLink};
               } else {
                 sectionMenu[section].menu[sub].menu[r.info.text] = {routerLink};
               }
@@ -214,6 +226,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
     this.searchProductList = [];
     this.searchCollectionList = [];
   }
+
   searchProduct() {
     this.is_searching = true;
     this.searchProductList = [];
