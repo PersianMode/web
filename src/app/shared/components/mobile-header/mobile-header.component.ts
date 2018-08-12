@@ -96,7 +96,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
             .sort((x, y) => x.order - y.order)
             .forEach(r => {
               const routerLink = ['/'].concat(r.info.href.split('/'));
-              
+
             });
 
           subMenu.filter(r => r.info.section.split('/')[1] !== 'header')
