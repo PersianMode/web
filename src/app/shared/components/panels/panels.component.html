@@ -6,7 +6,7 @@
       {{placements[key].topTitle.title}}</h2>
     <div fxLayout="row"
          fxLayoutAlign="start start">
-      <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs" class="container">
+      <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs" class="container" style="cursor: pointer">
         <a (click)="directToUrl(im.href)">
           <img *ngIf="im.mediaType === 'image'"
                [src]="im.imgUrl" class="full-width"/>
@@ -24,7 +24,7 @@
             <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null"><b>{{ar.text}}</b></div>
             <div *ngIf="ar.buttonText" style="margin-top: 5%;">
               <button mat-raised-button class="shop-button" [style.color]="ar.buttonColor ? ar.buttonColor : 'black'"
-                      [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'">
+                      [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'" (click)="directToUrl(im.href)">
                 <b *ngIf="ar.buttonText">{{ar.buttonText}}</b>
                 <b *ngIf="ar.buttonText === undefined">خرید آنلاین</b>
               </button>

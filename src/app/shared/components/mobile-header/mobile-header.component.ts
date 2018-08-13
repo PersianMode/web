@@ -43,7 +43,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   curHeight;
 
   constructor(private authService: AuthService, private router: Router,
-    @Inject(WINDOW) private window, private cartService: CartService, private pageService: PageService,
+              @Inject(WINDOW) private window, private cartService: CartService, private pageService: PageService,
               private httpService: HttpService, private sanitizer: DomSanitizer,
               private dictionaryService: DictionaryService, private responsiveService: ResponsiveService) {
   }
@@ -77,40 +77,65 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
         const sectionMenu = {};
         if (data) {
           const topMenu = data.filter(r => r.variable_name === 'topMenu');
-          topMenu.forEach(r => {
-            const routerLink = ['/'].concat(r.info.href.split('/'));
-            this.menuItems[r.info.text] = {
-              menu: {},
-            };
-            this.menuItems[r.info.text].menu['همه ' + r.info.text] = {routerLink};
-            const section = r.info.section ? r.info.section : routerLink[2];
-            sectionMenu[section] = this.menuItems[r.info.text];
-          });
-          const subMenu = data.filter(r => r.variable_name === 'subMenu');
-          let sub = '';
-          subMenu.filter(r => r.info.section.split('/')[1] !== 'header')
-            .map(r => Object.assign(r, {order: r.info.column * 100 + r.info.row + (r.info.section.split('/')[1] === 'left' ? 10000 : 0)}))
-            .sort((x, y) => x.order - y.order)
+          topMenu
+            .sort((x, y) => x.info.column - y.info.column)
             .forEach(r => {
-              const routerLink = ['/'].concat(r.info.href.split('/'));
-              const section = r.info.section.split('/')[0];
-              if (!sub || r.info.row === 1 || r.info.isHeader) {
-                sub = r.info.text;
-                sectionMenu[section].menu[sub] = {
-                  menu: {},
-                };
-                sectionMenu[section].menu[sub].menu['همه ' + r.info.text] = {routerLink};
-              } else {
-                sectionMenu[section].menu[sub].menu[r.info.text] = {routerLink};
-              }
-            });
-          subMenu.filter(r => r.info.section.split('/')[1] === 'header')
-            .sort((x, y) => x.row - y.row)
-            .forEach(r => {
-              const routerLink = ['/'].concat(r.info.href.split('/'));
-              sectionMenu[r.info.section.split('/')[0]].menu[r.info.text] = {
-                routerLink
+              let routerLink = ['/'].concat(r.info.href.split('/'));
+              this.menuItems[r.info.text] = {
+                menu: {},
               };
+              let section = r.info.section ? r.info.section : routerLink[2];
+              sectionMenu[section] = this.menuItems[r.info.text];
+
+              const subMenu = data.filter(row => row.variable_name === 'subMenu' && row.info.section.split('/')[0] === r.info.section);
+
+              let sub = '';
+              subMenu.filter(row => row.info.section.split('/')[1] === 'header')
+                .sort((x, y) => x.info.row - y.info.row)
+                .forEach(row => {
+                  routerLink = ['/'].concat(row.info.href.split('/').filter(el => el !== '#'));
+                  this.menuItems[r.info.text].menu[row.info.text] = {
+                    routerLink
+                  };
+                });
+
+              subMenu.filter(row => row.info.section.split('/')[1] !== 'header')
+                .sort((x, y) => {
+                  const xPosition = x.info.section.split('/')[1];
+                  const yPosition = y.info.section.split('/')[1];
+
+                  if (xPosition === 'left' && yPosition === 'middle')
+                    return 1;
+                  else if (xPosition === 'middle' && yPosition === 'left')
+                    return -1;
+                  else {
+                    if (x.info.column > y.info.column)
+                      return 1;
+                    else if (x.info.column < y.info.column)
+                      return -1;
+                    else {
+                      if (x.info.row > y.info.row)
+                        return 1;
+                      else if (x.info.row < y.info.row)
+                        return -1;
+
+                      return 0;
+                    }
+                  }
+                })
+                .forEach(row => {
+                  routerLink = ['/'].concat(row.info.href.split('/').filter(el => el !== '#'));
+                  section = row.info.section.split('/')[0];
+
+                  if (row.info.row === 1 || row.info.is_header) {
+                    sub = row.info.text;
+                    this.menuItems[r.info.text].menu[sub] = {
+                      menu: {},
+                    };
+                  } else {
+                    this.menuItems[r.info.text].menu[sub].menu[row.info.text] = {routerLink};
+                  }
+                });
             });
           Object.assign(this.menuItems, {
             'خدمات': {
@@ -134,7 +159,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
   }
 
   select(targetLevel, object, title) {
-    if (!object || !object.hasOwnProperty('url')) {
+    if (!object || !object.hasOwnProperty('routerLink')) {
       if (targetLevel === 1) {
         this.isFirstLevel = true;
         this.isSecondLevel = false;
@@ -154,7 +179,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
       }
     } else {
       // Redirect to specific url
-      this.router.navigate([object.url]);
+      this.router.navigate(object.routerLink);
       this.sideNav.close();
     }
   }
@@ -214,6 +239,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
     this.searchProductList = [];
     this.searchCollectionList = [];
   }
+
   searchProduct() {
     this.is_searching = true;
     this.searchProductList = [];
@@ -352,4 +378,3 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
     this.sideNavIsOpen = false;
   }
 }
-
