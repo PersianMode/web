@@ -31,8 +31,8 @@ export class PageBasicInfoComponent implements OnInit {
   @ViewChild('content') contentEl: ElementRef;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-              private httpService: HttpService, private snackBar: MatSnackBar,
-              private dialog: MatDialog, private router: Router) {
+    private httpService: HttpService, private snackBar: MatSnackBar,
+    private dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit() {
@@ -200,7 +200,7 @@ export class PageBasicInfoComponent implements OnInit {
 
   fieldChanged() {
     if ((this.form.controls['is_app'].value || (this.form.controls['address'].value &&
-        (this.form.controls['address'].value === 'home' || this.form.controls['address'].value.includes('collection')))) ||
+      (this.form.controls['address'].value === 'home' || this.form.controls['address'].value.includes('collection')))) ||
       this.form.controls['title'].value)
       this.isTitleValid = true;
     else
@@ -217,7 +217,9 @@ export class PageBasicInfoComponent implements OnInit {
 
     Object.keys(this.form.controls).forEach(el => {
       let formValue = this.form.controls[el].value;
-      let originalValue = el.toLowerCase() === 'title' ? this.originalForm.page_info[el] : this.originalForm[el];
+      let originalValue = el.toLowerCase() === 'title' ?
+        (this.originalForm.page_info ? this.originalForm.page_info[el] : null) :
+        this.originalForm[el];
 
       if (typeof formValue === 'string') {
         if (formValue && formValue.trim().length <= 0)

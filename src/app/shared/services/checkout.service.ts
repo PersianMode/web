@@ -146,7 +146,7 @@ export class CheckoutService {
         },
         err => {
           console.error('Cannot get loyalty groups: ', err);
-          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+          this.snackBar.open('قادر به دریافت اطلاعات امتیازها نیستیم. دوباره تلاش کنید', null, {
             duration: 3200,
           });
         });
