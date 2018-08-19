@@ -153,7 +153,7 @@ export class CollectionHeaderComponent implements OnInit {
               type: this.dictionaryService.translateWord(el.product_type.name),
               imgUrl: this.getProductThumbnail(el),
               tags: this.dictionaryService.translateWord(el.tags.name),
-              instances: el.instances.article_no,
+              article_no: el.article_no,
             });
           });
         }
