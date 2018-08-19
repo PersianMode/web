@@ -8,9 +8,12 @@ export let OrderStatus: any[] = [
   {name: 'در انتظار صدور فاکتور', title: 'در حال پردازش', status: STATUS.WaitForInvoice},
   {name: 'تایید فاکتور', title: 'در حال پردازش', status: STATUS.InvoiceVerified},
   {name: 'آماده تحویل', title: 'آماده تحویل', status: STATUS.ReadyToDeliver},
-  {name: 'تعیین پیک', title: 'آماده تحویل', status: STATUS.DeliverySet},
+  {name: 'تعیین ارسال', title: 'آماده تحویل', status: STATUS.DeliverySet},
   {name: 'در حال ارسال', title: 'در حال ارسال', status: STATUS.OnDelivery},
   {name: 'تحویل شده', title: 'تحویل شده', status: STATUS.Delivered},
   {name: 'ناموجود', title: 'ناموجود', status: STATUS.NotExists},
   {name: 'بازگشت هزینه', title: 'بازگشت هزینه', status: STATUS.Refund},
+  {name: 'بازگشت کالا', title: 'بازگشت کالا', status: STATUS.Return},
+  {name: 'لغو سفارش', title: 'لغو سفارش', status: STATUS.Cancel},
 ];
+

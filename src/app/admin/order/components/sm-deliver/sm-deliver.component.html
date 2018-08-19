@@ -2,7 +2,42 @@
 
   <mat-card-content>
 
-    <app-barcode-checker></app-barcode-checker>
+    <!-- search inputs -->
+    <div class="search-area">
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxFlex="50" class="filtering-box">
+          <mat-input-container class="filtering-field">
+            <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری" [formControl]="receiverSearchCtrl">
+          </mat-input-container>
+        </div>
+        <div fxFlex="50" class="filtering-box">
+          <mat-input-container class="filtering-field">
+            <input class="filtering-field" matInput type="text" placeholder="کد سفارش" [formControl]="invoiceNoCtrl">
+          </mat-input-container>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxFlex="50" class="filtering-box">
+          <mat-form-field class="filtering-field">
+            <input matInput [matDatepicker]="picker" placeholder="تاریخ خرید" [(ngModel)]="addingTime" (ngModelChange)="load()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50" class="filtering-box">
+          <mat-form-field class="filtering-field">
+            <mat-select placeholder="وضعیت سفارش" [formControl]="statusSearchCtrl">
+              <mat-option *ngFor="let object of listStatus" [value]="object.status">
+                {{object.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <!-- table items -->
+
     <div class="example-container mat-elevation-z8">
 
       <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
@@ -13,22 +48,13 @@
         (matSortChange)="onSortChange($event)">
 
         <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell> 
+          <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
           <mat-cell *matCellDef="let order"> {{order.index}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="customer">
           <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="is_collect">
-          <mat-header-cell *matHeaderCellDef> C&C</mat-header-cell>
-          <mat-cell *matCellDef="let order">
-            <mat-icon *ngIf="!!order.is_collect">check</mat-icon>
-            <mat-icon *ngIf="!order.is_collect">clear</mat-icon>
-
-          </mat-cell>
+          <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="order_time">
@@ -36,26 +62,14 @@
           <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="total_order_lines">
-          <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
-        </ng-container>
+        <!--tarikhe bazagasht-->
 
-        <ng-container matColumnDef="address">
-          <mat-header-cell *matHeaderCellDef>آدرس</mat-header-cell>
-          <mat-cell *matCellDef="let order">
-            <button mat-button color="primary" (click)="showAddress(order)">نمایش</button>
-          </mat-cell>
-        </ng-container>
-
-        
-        <ng-container matColumnDef="process">
-          <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
-          <mat-cell *matCellDef="let order">
-            <button mat-button color="primary" *ngIf='isReadyForInvoice(order)' (click)='requestInvoice(order)'>صدور فاکتور</button>
-          </mat-cell>
-        </ng-container>
-
+        <!--<ng-container matColumnDef="address">-->
+        <!--<mat-header-cell *matHeaderCellDef>آدرس</mat-header-cell>-->
+        <!--<mat-cell *matCellDef="let order">-->
+        <!--<button mat-button color="primary" (click)="showAddress(order)">نمایش</button>-->
+        <!--</mat-cell>-->
+        <!--</ng-container>-->
 
         <!-- Expanded Content Column - The order lines rows is made up of this one column -->
         <ng-container matColumnDef="expandedDetail">
@@ -85,6 +99,14 @@
                   <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</span>
               </li>
               <li>
+                <span *ngIf="ol.isDelivered">
+                  <b>تاریخ بازگشت</b> {{getDate(ol.returnTime)}}
+                </span>
+              </li>
+              <li>
+                <button mat-button color="primary" (click)="showAddress(detail.order,ol.order_line_id)">نمایش آدرس</button>
+              </li>
+              <li>
                 <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
               </li>
             </ul>
@@ -97,7 +119,7 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
           (click)="expandedElement = row._id"></mat-row>
         <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
-          style="overflow: hidden">
+          style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
         </mat-row>
 
 

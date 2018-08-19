@@ -1,27 +1,24 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
-import {HttpService} from '../../../../shared/services/http.service';
-import {AuthService} from '../../../../shared/services/auth.service';
-import {SocketService} from '../../../../shared/services/socket.service';
-import {OrderStatus} from '../../../../shared/lib/order_status';
-import {OrderAddressComponent} from '../order-address/order-address.component';
-import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
-import {STATUS} from '../../../../shared/enum/status.enum';
-import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
-import {BarcodeCheckerComponent} from '../barcode-checker/barcode-checker.component';
-import {ProgressService} from '../../../../shared/services/progress.service';
-import {animate, state, style, transition, trigger} from '@angular/animations';
-import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
+import { TicketComponent } from '../ticket/ticket.component';
+import { STATUS } from '../../../../shared/enum/status.enum';
+import { OrderAddressComponent } from '../order-address/order-address.component';
+import { OrderStatus } from '../../../../shared/lib/order_status';
+import { ProductViewerComponent } from '../product-viewer/product-viewer.component';
+import { BarcodeCheckerComponent } from '../barcode-checker/barcode-checker.component';
+import { imagePathFixer } from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
-import {FormControl} from '@angular/forms';
-import {TicketComponent} from '../ticket/ticket.component';
-import {last} from 'rxjs/operators';
-
+import { HttpService } from '../../../../shared/services/http.service';
+import { MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { AuthService } from '../../../../shared/services/auth.service';
+import { SocketService } from '../../../../shared/services/socket.service';
+import { ProgressService } from '../../../../shared/services/progress.service';
+import { trigger, state, style, animate, transition } from '@angular/animations';
+import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-order-inbox',
-  templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.scss'],
+  selector: 'app-sm-deliver',
+  templateUrl: './sm-deliver.component.html',
+  styleUrls: ['./sm-deliver.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
@@ -30,19 +27,14 @@ import {last} from 'rxjs/operators';
     ]),
   ],
 })
-export class InboxComponent implements OnInit, OnDestroy {
-
+export class SmDeliverComponent implements OnInit {
 
   @Output() OnNewInboxCount = new EventEmitter();
 
   displayedColumns = [
     'position',
     'customer',
-    'is_collect',
     'order_time',
-    'total_order_lines',
-    'address',
-    'process'
   ];
 
   dataSource = new MatTableDataSource();
@@ -53,21 +45,60 @@ export class InboxComponent implements OnInit, OnDestroy {
 
   batchScanDialogRef;
 
+  statusSearchCtrl = new FormControl();
+  receiverSearchCtrl = new FormControl();
+  invoiceNoCtrl = new FormControl();
+
+  warehouseOrCutomerName = null;
+  invoiceNo = null;
+  isStatus = null;
+  addingTime = null;
+  listStatus: {name: string, status: number}[];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   socketObserver: any = null;
 
-  constructor(private httpService: HttpService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private authService: AuthService,
-    private socketService: SocketService,
-    private progressService: ProgressService) {
-  }
-
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
+  constructor(private httpService: HttpService,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private authService: AuthService,
+              private socketService: SocketService,
+              private progressService: ProgressService) {
+  }
+
   ngOnInit() {
+    // set status
+    this.listStatus = OrderStatus.map(el => ({name: el.name, status: el.status}));
+    this.listStatus.push({name: 'همه موارد', status: null});
+    this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.warehouseOrCutomerName = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+      }
+    );
+
+    this.invoiceNoCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.invoiceNo = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when agent name is changed: ', err);
+      }
+    );
+
+    this.statusSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.isStatus = data;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when agent name is changed: ', err);
+      }
+    );
 
     this.load();
 
@@ -85,16 +116,20 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.progressService.enable();
 
     const options = {
+      invoiceNo: this.invoiceNo,
+      transferee: this.warehouseOrCutomerName,
+      addingTime: this.addingTime,
+      status: this.isStatus,
+
       sort: this.sort.active,
       dir: this.sort.direction,
-      type: 'inbox'
+      type: 'outbox',
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
 
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
-
       const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
@@ -102,7 +137,21 @@ export class InboxComponent implements OnInit, OnDestroy {
       });
       this.dataSource.data = rows;
       this.resultsLength = res.total ? res.total : 0;
-      console.log('-> ', this.dataSource.data);
+      console.log('sm deliver--> ', this.dataSource.data);
+      this.dataSource.data.forEach((o: any) => {
+        if (o.order_lines) {
+
+          o.order_lines.forEach(ol => {
+            const lastTicket = ol.tickets[ol.tickets.length - 1];
+            if (lastTicket.status === 10) {
+              ol.isDelivered = true;
+              ol.returnTime = lastTicket.desc.day_slot;
+            }else {
+              ol.isDelivered = false;
+            }
+          });
+        }
+      });
       this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
@@ -112,13 +161,13 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
 
-  getIndex(order) {
-    
-    // let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
-    // if (index === 0)
-    //   index = 1;
-    // return index;
-  }
+  // getIndex(order) {
+
+  //   let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
+  //   if (index === 0)
+  //     index = 1;
+  //   return index;
+  // }
 
   getDate(orderTime) {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
@@ -167,8 +216,16 @@ export class InboxComponent implements OnInit, OnDestroy {
     }
   }
 
-  showAddress(order) {
-
+  showAddress(order, order_line = -1) {
+    let finalAddress = order.address;
+    if (order_line !== -1) {
+      const ticketsOfOrderLine = order.order_lines.find(x => x.order_line_id.toString() === order_line).tickets;
+      const lastTicketOfOrderLine = ticketsOfOrderLine[ticketsOfOrderLine.length - 1];
+      if (lastTicketOfOrderLine && lastTicketOfOrderLine.status === 10) {
+        const returnAddressId = lastTicketOfOrderLine.desc.reciver_id.toString();
+        finalAddress = order.customer.addresses.find(x => x._id.toString() === returnAddressId);
+      }
+    }
     if (!order.address) {
       this.openSnackBar('order line has no address!');
       return;
@@ -176,7 +233,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
     this.dialog.open(OrderAddressComponent, {
       width: '400px',
-      data: {address: order.address, is_collect: !!order.is_collect}
+      data: {address: finalAddress, is_collect: !!order.is_collect}
     });
 
   }
@@ -185,8 +242,9 @@ export class InboxComponent implements OnInit, OnDestroy {
   isReadyForInvoice(order) {
     return order.order_lines.every(x => {
       const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
-      return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice ||
-         lastTicket.status === STATUS.WaitForInvoice);
+      return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice
+        || lastTicket.status === STATUS.WaitForInvoice);
+
     });
   }
 
@@ -197,6 +255,7 @@ export class InboxComponent implements OnInit, OnDestroy {
       this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد');
     }, err => {
       this.openSnackBar('خطا به هنگام درخواست صدور فاکتور');
+
     });
   }
 
@@ -215,10 +274,10 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.load();
   }
 
-  ngOnDestroy(): void {
+  // ngOnDestroy(): void {
     // if (this.socketObserver)
     //   this.socketObserver.unsubscribe();
-  }
+  // }
 
   showTicket(order, orderLine) {
     const _orderId = order._id;

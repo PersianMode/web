@@ -24,6 +24,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
 import { WishListComponent } from './components/wish-list/wish-list.component';
 import { PreferenceComponent } from './components/preference/preference.component';
+import { OrderCancelComponent } from './components/order-cancel/order-cancel.component';
 
 @NgModule({
   imports: [
@@ -46,6 +47,6 @@ import { PreferenceComponent } from './components/preference/preference.componen
     MatSlideToggleModule,
 
   ],
-  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent, WishListComponent, PreferenceComponent],
+  declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent, WishListComponent, PreferenceComponent, OrderCancelComponent],
 })
 export class ProfileModule { }

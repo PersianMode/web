@@ -17,11 +17,10 @@ import {FormControl} from '@angular/forms';
 import {TicketComponent} from '../ticket/ticket.component';
 import {last} from 'rxjs/operators';
 
-
 @Component({
-  selector: 'app-order-inbox',
-  templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.scss'],
+  selector: 'app-sm-inbox',
+  templateUrl: './sm-inbox.component.html',
+  styleUrls: ['./sm-inbox.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
@@ -30,19 +29,14 @@ import {last} from 'rxjs/operators';
     ]),
   ],
 })
-export class InboxComponent implements OnInit, OnDestroy {
-
+export class SmInboxComponent implements OnInit {
 
   @Output() OnNewInboxCount = new EventEmitter();
 
   displayedColumns = [
     'position',
     'customer',
-    'is_collect',
     'order_time',
-    'total_order_lines',
-    'address',
-    'process'
   ];
 
   dataSource = new MatTableDataSource();
@@ -57,18 +51,17 @@ export class InboxComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   socketObserver: any = null;
 
-  constructor(private httpService: HttpService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private authService: AuthService,
-    private socketService: SocketService,
-    private progressService: ProgressService) {
-  }
-
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
-  ngOnInit() {
+  constructor(private httpService: HttpService,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private authService: AuthService,
+              private socketService: SocketService,
+              private progressService: ProgressService) {
+  }
 
+  ngOnInit() {
     this.load();
 
     this.socketObserver = this.socketService.getOrderLineMessage();
@@ -94,7 +87,6 @@ export class InboxComponent implements OnInit, OnDestroy {
 
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
-
       const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
@@ -103,6 +95,20 @@ export class InboxComponent implements OnInit, OnDestroy {
       this.dataSource.data = rows;
       this.resultsLength = res.total ? res.total : 0;
       console.log('-> ', this.dataSource.data);
+      this.dataSource.data.forEach((o: any) => {
+        if (o.order_lines) {
+
+          o.order_lines.forEach(ol => {
+            const lastTicket = ol.tickets[ol.tickets.length - 1];
+            if (lastTicket.status === 10) {
+              ol.isDelivered = true;
+              ol.returnTime = lastTicket.desc.day_slot;
+            } else {
+              ol.isDelivered = false;
+            }
+          });
+        }
+      });
       this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
@@ -112,13 +118,13 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
 
-  getIndex(order) {
-    
-    // let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
-    // if (index === 0)
-    //   index = 1;
-    // return index;
-  }
+  // getIndex(order) {
+
+  //   let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
+  //   if (index === 0)
+  //     index = 1;
+  //   return index;
+  // }
 
   getDate(orderTime) {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
@@ -167,8 +173,17 @@ export class InboxComponent implements OnInit, OnDestroy {
     }
   }
 
-  showAddress(order) {
-
+  showAddress(order, order_line = -1) {
+    console.log(order);
+    let finalAddress = order.address;
+    if (order_line !== -1) {
+      const ticketsOfOrderLine = order.order_lines.find(x => x.order_line_id.toString() === order_line).tickets;
+      const lastTicketOfOrderLine = ticketsOfOrderLine[ticketsOfOrderLine.length - 1];
+      if (lastTicketOfOrderLine && lastTicketOfOrderLine.status === 10) {
+        const returnAddressId = lastTicketOfOrderLine.desc.reciver_id.toString();
+        finalAddress = order.customer.addresses.find(x => x._id.toString() === returnAddressId);
+      }
+    }
     if (!order.address) {
       this.openSnackBar('order line has no address!');
       return;
@@ -176,7 +191,7 @@ export class InboxComponent implements OnInit, OnDestroy {
 
     this.dialog.open(OrderAddressComponent, {
       width: '400px',
-      data: {address: order.address, is_collect: !!order.is_collect}
+      data: {address: finalAddress, is_collect: !!order.is_collect}
     });
 
   }
@@ -197,6 +212,7 @@ export class InboxComponent implements OnInit, OnDestroy {
       this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد');
     }, err => {
       this.openSnackBar('خطا به هنگام درخواست صدور فاکتور');
+
     });
   }
 
@@ -215,10 +231,10 @@ export class InboxComponent implements OnInit, OnDestroy {
     this.load();
   }
 
-  ngOnDestroy(): void {
+  // ngOnDestroy(): void {
     // if (this.socketObserver)
     //   this.socketObserver.unsubscribe();
-  }
+  // }
 
   showTicket(order, orderLine) {
     const _orderId = order._id;
@@ -229,3 +245,4 @@ export class InboxComponent implements OnInit, OnDestroy {
     });
   }
 }
+
