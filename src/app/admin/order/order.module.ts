@@ -11,7 +11,10 @@ import {
   MatSnackBarModule,
   MatSortModule,
   MatTableModule, MatTabsModule,
-  MatToolbarModule
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatToolbarModule,
+  MatSelectModule
 } from '@angular/material';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -20,19 +23,24 @@ import {ProductViewerComponent} from './components/product-viewer/product-viewer
 import {DeliverComponent} from './components/deliver/deliver.component';
 import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {TicketComponent} from './components/ticket/ticket.component';
-import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/delivery-shelf-code.component';
-
+import { TicketComponent } from './components/ticket/ticket.component';
+import { SmInboxComponent } from './components/sm-inbox/sm-inbox.component';
+import { SmDeliverComponent } from './components/sm-deliver/sm-deliver.component';
+import { DeliveryShowComponent } from './components/delivery-show/delivery-show.component';
+import { DeliveryShelfCodeComponent } from './components/delivery-shelf-code/delivery-shelf-code.component';
 
 @NgModule({
   declarations: [
     OrderComponent,
     OrderAddressComponent,
     InboxComponent,
+    SmInboxComponent,
     DeliverComponent,
     ProductViewerComponent,
     BarcodeCheckerComponent,
     TicketComponent,
+    SmDeliverComponent,
+    DeliveryShowComponent,
     DeliveryShelfCodeComponent
   ],
   imports: [
@@ -58,8 +66,11 @@ import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/deliv
     MatInputModule,
     MatTabsModule,
     MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule
   ],
-  entryComponents: [OrderAddressComponent, ProductViewerComponent, TicketComponent, DeliveryShelfCodeComponent],
+  entryComponents: [OrderAddressComponent,  ProductViewerComponent, TicketComponent, DeliveryShowComponent, DeliveryShelfCodeComponent],
 })
 export class OrderModule {
 }

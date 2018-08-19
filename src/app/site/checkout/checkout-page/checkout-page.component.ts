@@ -211,11 +211,11 @@ export class CheckoutPageComponent implements OnInit {
                   reject();
                 }
               });
-            }
-            else {
+            } else {
               resolve();
             }
-          }
+          } else
+            resolve();
         },
         err => {
           reject();
@@ -229,7 +229,7 @@ export class CheckoutPageComponent implements OnInit {
         this.checkoutService.checkout();
       })
       .catch(err => {
-
+        console.error('Error in final check: ', err);
       });
   }
 }
