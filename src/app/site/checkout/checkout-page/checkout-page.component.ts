@@ -5,13 +5,13 @@ import {HttpService} from '../../../shared/services/http.service';
 import {CartService} from '../../../shared/services/cart.service';
 import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
-import {MatDialog} from '@angular/material';
+import {MatDialog} from '@angular/material'; 
 import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
 import {Router} from '@angular/router';
 
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
-
+ 
 @Component({
   selector: 'app-checkout-page',
   templateUrl: './checkout-page.component.html',
@@ -211,11 +211,11 @@ export class CheckoutPageComponent implements OnInit {
                   reject();
                 }
               });
-            }
-            else {
+            } else {
               resolve();
             }
-          }
+          } else
+            resolve();
         },
         err => {
           reject();
@@ -229,7 +229,7 @@ export class CheckoutPageComponent implements OnInit {
         this.checkoutService.checkout();
       })
       .catch(err => {
-
+        console.error('Error in final check: ', err);
       });
   }
 }

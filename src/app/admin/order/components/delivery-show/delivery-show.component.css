@@ -1,0 +1,8 @@
+.stlye-fixed {
+    margin: 0 auto;
+    text-align: center;
+}
+.stlye-fixed mat-form-field:not(:first-child) {
+    margin-right: 20px;
+ 
+}
