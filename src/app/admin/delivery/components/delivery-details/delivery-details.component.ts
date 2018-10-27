@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import {SaveChangeConfirmComponent} from '../../../../shared/components/save-change-confirm/save-change-confirm.component';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {ExpiredDateDialogComponent} from '../expired-date-dialog/expired-date-dialog.component';
+import * as jMoment from 'jalali-moment';
 
 @Component({
   selector: 'app-delivery-details',
@@ -110,8 +111,14 @@ export class DeliveryDetailsComponent implements OnInit {
       });
       return Promise.reject('invalid start date');
     } else if (moment(this.start_date, 'YYYY-MM-DD').isSame(moment(moment().format('YYYY-MM-DD')))) {
-      const currentHour = moment().format('HH');
+      const currentMonth = jMoment().format('jMM');
+
+      let currentHour = moment().format('HH');
       const currentMinute = moment().format('mm');
+
+      if (+currentMonth >= 1 && +currentMonth <= 6) {
+        currentHour = (+currentHour - 1).toString();
+      }
 
       if (this.start_time.h < +currentHour || (this.start_time.h === +currentHour && this.start_time.m <= +currentMinute)) {
         this.snackBar.open('زمان شروع انتخاب شده معتبر نمی باشد', null, {

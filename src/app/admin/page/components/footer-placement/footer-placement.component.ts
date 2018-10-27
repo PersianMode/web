@@ -572,7 +572,8 @@ export class FooterPlacementComponent implements OnInit {
   addColumnDisability() {
     if (!Object.keys(this.siteLinkItems).length)
       return true;
-    const lastColumn = Math.max(...Object.keys(this.siteLinkItems).map(el => parseInt(el, 10)));
+    console.log(' => ', Object.keys(this.siteLinkItems));
+    const lastColumn = Math.max(...Object.keys(this.siteLinkItems).map((el: any) => parseInt(el, 10)));
     return this.hasNewColumn || !this.siteLinkItems[lastColumn].length;
   }
 
