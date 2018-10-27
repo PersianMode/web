@@ -3,7 +3,8 @@
     <mat-form-field appearance="outline">
         <mat-label>مسئول</mat-label>
         <input matInput placeholder="Placeholder" disabled [value]="agentName ? agentName : 'نامشخص'">
-        <mat-icon matSuffix>{{agentName ? check : clear}}</mat-icon>
+        <mat-icon matSuffix *ngIf="agentName">check</mat-icon>
+        <mat-icon matSuffix *ngIf="!agentName">clear</mat-icon>
         <!-- <mat-hint>Hint</mat-hint> -->
     </mat-form-field>
 
@@ -24,28 +25,32 @@
     <mat-form-field appearance="outline">
         <mat-label>زمان شروع ارسال</mat-label>
         <input matInput placeholder="Placeholder" disabled [value]="start ? start : 'نامشخص'">
-        <mat-icon matSuffix>{{start ? check : clear}}</mat-icon>
-        <!-- <mat-hint>Hint</mat-hint> -->
+        <mat-icon matSuffix *ngIf="agentName">check</mat-icon>
+        <mat-icon matSuffix *ngIf="!agentName">clear</mat-icon>
+       <!-- <mat-hint>Hint</mat-hint> -->
     </mat-form-field>
 
     <mat-form-field appearance="outline">
         <mat-label>زمان پایان ارسال</mat-label>
         <input matInput placeholder="Placeholder" disabled [value]="end ? end : 'نامشخص'">
-        <mat-icon matSuffix>{{end ? check : clear}}</mat-icon>
-        <!-- <mat-hint>Hint</mat-hint> -->
+        <mat-icon matSuffix *ngIf="agentName">check</mat-icon>
+        <mat-icon matSuffix *ngIf="!agentName">clear</mat-icon>
+       <!-- <mat-hint>Hint</mat-hint> -->
     </mat-form-field>
 
     <mat-form-field appearance="outline">
         <mat-label>زمان ارسال</mat-label>
         <input matInput placeholder="Placeholder" disabled [value]="deliveryStart ? deliveryStart : 'نامشخص' ">
-        <mat-icon matSuffix>{{deliveryStart ? check : clear}}</mat-icon>
-        <!-- <mat-hint>Hint</mat-hint> -->
+        <mat-icon matSuffix *ngIf="agentName">check</mat-icon>
+        <mat-icon matSuffix *ngIf="!agentName">clear</mat-icon>
+         <!-- <mat-hint>Hint</mat-hint> -->
     </mat-form-field>
 
     <mat-form-field appearance="outline">
         <mat-label>زمان دریافت</mat-label>
         <input matInput placeholder="Placeholder" disabled [value]="deliveryEnd ? deliveryEnd : 'نامشخص' ">
-        <mat-icon matSuffix>{{deliveryEnd ? check : clear}}</mat-icon>
-        <!-- <mat-hint>Hint</mat-hint> -->
+        <mat-icon matSuffix *ngIf="agentName">check</mat-icon>
+        <mat-icon matSuffix *ngIf="!agentName">clear</mat-icon>
+         <!-- <mat-hint>Hint</mat-hint> -->
     </mat-form-field>
 </div>
