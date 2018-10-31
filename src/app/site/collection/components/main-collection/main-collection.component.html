@@ -12,7 +12,7 @@
   <app-panels></app-panels>
   <div class="gridwall-wrapper">
     <div *ngIf="!isMobile" class="gridwall-title">
-      <h1>{{collectionNameFa}}
+      <h1><span>{{collectionNameFa}}</span>
         <span>({{products.length.toLocaleString('fa')}})</span>
       </h1>
       <div class="sorter-row">
@@ -43,11 +43,5 @@
       </p-dataScroller>
     </div>
   </div>
-  <div class="center-content" *ngIf="showWaitingSpinner">
-    <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'" [strokeWidth]="'2'">
-    </mat-progress-spinner>
-    <div>
-      لطفا اندکی صبر نمایید ...
-    </div>
-  </div>
+
 </div>

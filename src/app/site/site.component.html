@@ -7,7 +7,15 @@
   <div [class.scrollable]="!isMobile">
     <app-sliding-header *ngIf="!isMobile"></app-sliding-header>
     <div [class.content]="!isMobile" [class.mobile-content]="isMobile">
+
       <router-outlet></router-outlet>
+      <div class="waiting-spinner center-content" *ngIf="spinnerEnabled">
+        <mat-progress-spinner color="primary" mode="indeterminate" >
+        </mat-progress-spinner>
+        <div>
+          لطفا اندکی صبر کنید...
+        </div>
+      </div>
       <app-footer></app-footer>
     </div>
   </div>

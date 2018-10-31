@@ -54,9 +54,9 @@ export class ProductService {
   collectionTagsAfterFilter: any = {};
   collectionIsEU = false;
   collectionIsEUObject: ReplaySubject<boolean> = new ReplaySubject<boolean>();
-
   private sortInput;
   private collectionId;
+
 
   constructor(private httpService: HttpService, private dict: DictionaryService) {
   }
@@ -326,9 +326,10 @@ export class ProductService {
               }
             });
           }
-          resolve(data)
-
+          resolve(data);
         });
+
+
     });
 
   }
@@ -341,7 +342,6 @@ export class ProductService {
           if (data.name_fa) {
             this.collectionName = data.name_fa;
             this.collectionNameFa$.next(data.name_fa);
-
           }
           if (data.products) {
             for (const product of data.products) {

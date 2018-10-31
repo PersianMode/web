@@ -6,6 +6,7 @@ import {PageService} from '../shared/services/page.service';
 import {ResponsiveService} from '../shared/services/responsive.service';
 import {CartService} from '../shared/services/cart.service';
 import {DictionaryService} from '../shared/services/dictionary.service';
+import {SpinnerService} from '../shared/services/spinner.service';
 
 
 @Component({
@@ -17,13 +18,19 @@ export class SiteComponent implements OnInit {
   isMobile = false;
   curWidth: number;
   curHeight: number;
+  spinnerEnabled = false;
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
-              private router: Router, private pageService: PageService) {
+              private router: Router, private pageService: PageService, private spinnerService: SpinnerService) {
   }
 
   ngOnInit() {
+    this.spinnerService.isSpinner$.subscribe(is_spinner => {
+      setTimeout(() => {
+        this.spinnerEnabled = is_spinner;
+      });
+    });
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
           return;

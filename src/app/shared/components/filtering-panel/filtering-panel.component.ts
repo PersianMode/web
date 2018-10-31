@@ -38,13 +38,13 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   selectedMaxDiscountFormatted = '';
 
   filter_options$: any;
-
+  showWaitingSpinner = false;
 
   constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
-
+    this.showHideSpinner(true);
     this.isEU = this.productService.collectionIsEU;
     this.isEUSubescriber = this.productService.collectionIsEUObject.subscribe(value => this.isEU = value);
 
@@ -102,6 +102,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     });
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    this.showHideSpinner(false);
   }
 
   formatPrices() {
@@ -199,4 +200,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.productService.applyFilters(this.current_filter_state, 'discount');
     this.expanded.discount = true;
   }
+
+  showHideSpinner(shouldShow = false) {
+    this.showWaitingSpinner = shouldShow;
+  }
 }
+

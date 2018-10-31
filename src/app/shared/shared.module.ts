@@ -5,7 +5,7 @@ import {
   MatInputModule,
   MatMenuModule,
   MatOptionModule, MatRadioModule, MatSelectModule, MatStepperModule,
-  MatToolbarModule, MatSnackBarModule, MatSlideToggleModule, MatButtonToggleModule,
+  MatToolbarModule, MatSnackBarModule, MatSlideToggleModule, MatButtonToggleModule, MatProgressSpinnerModule
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -68,6 +68,7 @@ import { ShelfCodePrinterComponent } from './components/shelf-code-printer/shelf
     MatStepperModule,
     MatSnackBarModule,
     MatButtonToggleModule,
+    MatProgressSpinnerModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),
@@ -87,7 +88,7 @@ import { ShelfCodePrinterComponent } from './components/shelf-code-printer/shelf
     AddressTableComponent,
     DobComponent, MatSlideToggleModule,
     LogoHeaderComponent,
-    SizePickerComponent
+    SizePickerComponent,
   ]
 })
 export class SharedModule {

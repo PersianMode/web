@@ -43,6 +43,8 @@ import {OrderLinesComponent} from './profile/components/order-lines/order-lines.
 import { ForgotPasswordComponent } from './login/components/forgot-password/forgot-password.component';
 import { OrderReturnComponent } from './profile/components/order-return/order-return.component';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
+import {SpinnerService} from '../shared/services/spinner.service';
+
 
 @NgModule({
   imports: [
@@ -93,10 +95,10 @@ import {OtherDetailsComponent} from './login/components/other-details/other-deta
     UpsertAddressComponent,
     GenDialogComponent,
     OrderLinesComponent,
-    OrderReturnComponent,
+    OrderReturnComponent
   ],
   entryComponents: [GenDialogComponent],
-  providers: [AuthGuard]
+  providers: [AuthGuard, SpinnerService]
 })
 export class SiteModule {
 }
