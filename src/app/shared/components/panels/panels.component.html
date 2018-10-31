@@ -19,28 +19,28 @@
             </video>
           </a>
         </div>
-          <div *ngFor="let ar of im.areas">
-            <div
-              [style.font-size]="(placements[key].type === 'full' && placements[key].imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
-              [ngClass]="ar.pos">
-              <h1 *ngIf="ar.title" [style.color]="ar.titleColor ? ar.titleColor : null">{{ar.title}}</h1>
-              <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null"><b>{{ar.text}}</b></div>
-              <div *ngIf="ar.buttonText" style="margin-top: 5%;">
-                <button mat-raised-button class="shop-button" [style.color]="ar.buttonColor ? ar.buttonColor : 'black'"
-                        [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'"
-                        (click)="directToUrl(im.href)">
-                  <b *ngIf="ar.buttonText">{{ar.buttonText}}</b>
-                  <b *ngIf="ar.buttonText === undefined">خرید آنلاین</b>
-                </button>
-              </div>
+        <div *ngFor="let ar of im.areas">
+          <div
+            [style.font-size]="(placements[key].type === 'full' && placements[key].imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
+            [ngClass]="ar.pos">
+            <h1 *ngIf="ar.title" [style.color]="ar.titleColor ? ar.titleColor : null">{{ar.title}}</h1>
+            <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null"><b>{{ar.text}}</b></div>
+            <div *ngIf="ar.buttonText" style="margin-top: 5%;">
+              <button mat-raised-button class="shop-button" [style.color]="ar.buttonColor ? ar.buttonColor : 'black'"
+                      [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'"
+                      (click)="directToUrl(im.href)">
+                <b *ngIf="ar.buttonText">{{ar.buttonText}}</b>
+                <b *ngIf="ar.buttonText === undefined">خرید آنلاین</b>
+              </button>
             </div>
           </div>
-          <div *ngIf="im.subTitle" [style.color]="im.subTitle.titleColor ? im.subTitle.titleColor : null"
-               class="sub-title">
-            <b>{{im.subTitle.title}}</b></div>
-          <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null"
-               class="sub-title">{{im.subTitle.text}}
-          </div>
+        </div>
+        <div *ngIf="im.subTitle" [style.color]="im.subTitle.titleColor ? im.subTitle.titleColor : null"
+             class="sub-title">
+          <b>{{im.subTitle.title}}</b></div>
+        <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null"
+             class="sub-title">{{im.subTitle.text}}
+        </div>
       </div>
     </div>
   </div>
