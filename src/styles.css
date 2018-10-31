@@ -493,6 +493,18 @@ input {
   text-decoration: none;
 }
 
+.msg-info {
+}
+
+.msg-error {
+  background-color: darkred !important;
+}
+
+.msg-warning {
+  background-color: #ed9357 !important;
+}
+
+
 dp-date-picker.dp-material .dp-picker-input {
   width: 98% !important;
   padding: 5px 5px 5px 5px !important;

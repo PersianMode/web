@@ -23,6 +23,7 @@ import {ProfileOrderService} from './shared/services/profile-order.service';
 import {TitleService} from './shared/services/title.service';
 import {RevertPlacementService} from './shared/services/revert-placement.service';
 import {PrintService} from './shared/services/print.service';
+import { MessageService } from './shared/services/message.service';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import {PrintService} from './shared/services/print.service';
     CheckoutService,
     ProfileOrderService,
     RevertPlacementService,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })
