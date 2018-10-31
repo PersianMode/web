@@ -261,7 +261,7 @@ export class AppSubMenuComponent implements OnInit {
         this.modifyPlacement.emit({
           type: this.selectedItem ? PlacementModifyEnum.Modify : PlacementModifyEnum.Add,
           placement_id: data.placement_id,
-          placements: [this.selectItem],
+          placements: [this.selectedItem],
           placement: data.new_placement,
         });
 
