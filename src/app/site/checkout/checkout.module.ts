@@ -21,6 +21,7 @@ import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.co
 import {SwiperModule} from 'ngx-swiper-wrapper';
 import {MarkdownModule} from 'angular2-markdown';
 import {SharedModule} from '../../shared/shared.module';
+import { CheckoutWarningConfirmComponent } from './checkout-warning-confirm/checkout-warning-confirm.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,9 @@ import {SharedModule} from '../../shared/shared.module';
     CheckoutPageComponent,
     PaymentTypeComponent,
     CheckoutSummaryComponent,
+    CheckoutWarningConfirmComponent,
   ],
+  entryComponents:[CheckoutWarningConfirmComponent],
 })
 export class CheckoutModule {
 }

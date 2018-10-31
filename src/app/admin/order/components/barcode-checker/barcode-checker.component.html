@@ -1,21 +1,12 @@
-<div mat-dialog-content class="main">
+<h1 style="text-align: center">بارکد ها را اسکن کنید</h1>
 
+<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start streach" fxLayoutAlign.xs="center center" dir="rtl">
 
-  <div>
-    <h1 style="text-align: center">بارکد را اسکن کنید</h1>
-    <img src="/assets/logos/barcode.png" class="center logo">
+  <div fxFlex="100" fxLayout="column" fxLayoutAlign="center center">
+    <img src="/assets/logos/barcode.png" class="logo">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="" [formControl]="barcodeCtrl">
+    </mat-form-field>
   </div>
-  <mat-divider></mat-divider>
-  <div>
-      <mat-form-field class="center" >
-    <input matInput placeholder="" [formControl]="barcodeCtrl" >
-  </mat-form-field>
-  </div>
-
-  <div>
-      <img src="/assets/logos/accept.png" class="center icon" *ngIf="isOK">
-      <img src="/assets/logos/fail.png" class="center icon" *ngIf="!isOK">
-  </div>
-
-   
+  
 </div>

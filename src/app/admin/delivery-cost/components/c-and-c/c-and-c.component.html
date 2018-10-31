@@ -1,0 +1,48 @@
+<div class="div-lable"> {{'تحویل در فروشگاه'}}</div>
+<br>
+<div>
+  <form [formGroup]="cAndCForm" (ngSubmit)="upsertLoyaltyPoint()">
+    <mat-input-container class="name-field">
+      <input matInput type="text" placeholder="نام گروه" formControlName="name" readonly/>
+    </mat-input-container>
+    <mat-input-container class="score-field">
+      <input matInput type="number" placeholder="میزان افزایش امتیاز وفاداری" formControlName="loyalty_point"/>
+    </mat-input-container>
+    <button mat-mini-fab class="button-area" type="submit" color="primary"
+            [disabled]="!cAndCForm.valid || !anyChanges">
+      <mat-icon aria-label="done">done</mat-icon>
+    </button>
+  </form>
+</div>
+<div class="center-content">
+  <table class="table little-right-margin">
+    <thead>
+    <td>شماره</td>
+    <td>نام گروه وفاداری</td>
+    <td>میزان افزایش امتیاز وفاداری</td>
+    <td>ویرایش</td>
+    </thead>
+    <tbody *ngIf="clickAndCollectInfo && clickAndCollectInfo.add_point && clickAndCollectInfo.add_point.length">
+    <tr *ngFor="let item of clickAndCollectInfo.add_point; let i = index">
+      <td>{{formatter(i+1)}}</td>
+      <td>{{item.name}}</td>
+      <td>{{formatter(item.added_point)}}
+      </td>
+      <td>
+        <button mat-icon-button (click)="editPoint(item)" color="primary">
+          <mat-icon aria-label="edit">edit</mat-icon>
+        </button>
+      </td>
+      <td class="button-td">
+        <div *ngIf="i === clickAndCollectInfo.add_point.length-1">
+          <div>
+            <button mat-button class="submit-all-discount"
+                    [disabled]="upsertBtnShouldDisabled" (click)="submitTotalInfo()">تایید امتیازهای وفاداری
+            </button>
+          </div>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

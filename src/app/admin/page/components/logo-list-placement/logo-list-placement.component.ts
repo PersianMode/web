@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -6,6 +6,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-logo-list-placement',
@@ -14,7 +15,7 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 })
 export class LogoListPlacementComponent implements OnInit {
   @Input() pageId = null;
-
+  @Input() canEdit = true;
   @Input()
   set placements(value) {
     if (value) {
@@ -48,15 +49,20 @@ export class LogoListPlacementComponent implements OnInit {
   bagName = 'logo-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private sanitizer: DomSanitizer,
-              private dialog: MatDialog,) {
+    private progressService: ProgressService, private sanitizer: DomSanitizer,
+    private dialog: MatDialog, private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
     this.clearFields();
 
     if (!this.dragulaService.find(this.bagName))
-      this.dragulaService.setOptions(this.bagName, {direction: 'horizontal'});
+      this.dragulaService.setOptions(this.bagName, {
+        direction: 'horizontal',
+        moves: () => {
+          return this.canEdit;
+        }
+      });
 
     this.dragulaService.dropModel.subscribe(value => {
       if (this.bagName === value[0])
@@ -152,21 +158,29 @@ export class LogoListPlacementComponent implements OnInit {
   }
 
   selectItem(value) {
-    const style = value.info.style;
-    this.upsertLogo = {
-      text: value.info.text,
-      href: value.info.href,
-      id: value._id,
-      column: value.info.column,
-      isEdit: true,
-      imgUrl: value.info.imgUrl,
-      style: {
-        width: style && typeof style.width !== 'undefined' && style.width !== null ? style.width : 60,
-        height: style && typeof style.height !== 'undefined' && style.height !== null ? style.height : 29,
-        top: style && typeof style.top !== 'undefined' && style.top !== null ? style.top : 0,
-        right: style && typeof style.right !== 'undefined' && style.right !== null ? style.right : 0,
-      }
-    };
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
+    } else if (this.canEdit) {
+      const style = value.info.style;
+      this.upsertLogo = {
+        text: value.info.text,
+        href: value.info.href,
+        id: value._id,
+        column: value.info.column,
+        isEdit: true,
+        imgUrl: value.info.imgUrl,
+        style: {
+          width: style && typeof style.width !== 'undefined' && style.width !== null ? style.width : 60,
+          height: style && typeof style.height !== 'undefined' && style.height !== null ? style.height : 29,
+          top: style && typeof style.top !== 'undefined' && style.top !== null ? style.top : 0,
+          right: style && typeof style.right !== 'undefined' && style.right !== null ? style.right : 0,
+        }
+      };
+    }
+  }
+
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   modifyItem(isEdit) {
@@ -269,5 +283,15 @@ export class LogoListPlacementComponent implements OnInit {
       component_name: 'logos',
       variable_name: 'logos'
     };
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.revertService.setRevertMode(true);
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.revertService.setRevertMode(false);
   }
 }

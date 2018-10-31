@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { DesktopProductComponent } from './components/desktop-product/desktop-product.component';
 import {ProductRouting} from './product.routing';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {SizePickerComponent} from '../../shared/components/size-picker/size-picker.component';
 import {
   MatDialogModule,
   MatExpansionModule,
@@ -21,6 +20,7 @@ import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import {AddToCardConfirmComponent} from './components/add-to-card-confirm/add-to-card-confirm.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {DialogModule} from 'primeng/dialog';
+import { SharedModule } from '../../shared/shared.module';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -43,11 +43,11 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     MatProgressSpinnerModule,
     DialogModule,
     MatTooltipModule,
+    SharedModule
   ],
   declarations: [
     DesktopProductComponent,
-    SizePickerComponent,
-    ProductComponent,
+     ProductComponent,
     MobileProductComponent,
     AddToCardConfirmComponent,
   ],

@@ -35,7 +35,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   productType = '';
   color = '';
   barcode = '';
-  articleNo = '';
+  // articleNo = '';
   private switch$: Subscription;
   private params$: Subscription;
   private product$: Subscription;
@@ -102,7 +102,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.formattedPrice = priceFormatter(price);
     this.discounted = this.formattedPrice !== this.discountedPrice;
     this.barcode = instance ? instance.barcode : '';
-    this.articleNo = instance ? instance.article_no : '';
   }
 
   saveToCart(size) {
@@ -143,7 +142,7 @@ export class ProductComponent implements OnInit, OnDestroy {
           setTimeout(function () {
             rmDialog.close();
             sub.unsubscribe();
-          }, 30000);
+          }, 3000);
         });
 
       setTimeout(() => {

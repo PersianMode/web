@@ -1,10 +1,10 @@
-import {Component, OnInit, HostListener} from '@angular/core';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {PageService} from '../../services/page.service';
-import {HttpService} from '../../services/http.service';
-import {DomSanitizer} from '@angular/platform-browser';
-import {DictionaryService} from '../../services/dictionary.service';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { PageService } from '../../services/page.service';
+import { HttpService } from '../../services/http.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { DictionaryService } from '../../services/dictionary.service';
 
 @Component({
   selector: 'app-collection-header',
@@ -25,8 +25,11 @@ export class CollectionHeaderComponent implements OnInit {
   placements: any = {};
   topMenu = [];
   searchPhrase = null;
-  searchResultList = [];
+  searchProductList = [];
+  searchCollectionList = [];
   searchWaiting = false;
+  rows: any = [];
+
 
   constructor(private router: Router, private pageService: PageService,
     private httpService: HttpService, private sanitizer: DomSanitizer,
@@ -85,17 +88,6 @@ export class CollectionHeaderComponent implements OnInit {
     }, 100);
   }
 
-  searchFocused() {
-    this.searchIsFocused = true;
-    if (this.searchPhrase)
-      this.searchProduct();
-  }
-
-  searchUnfocused() {
-    this.searchIsFocused = false;
-    this.searchResultList = [];
-  }
-
   persistList() {
     this.persistedList = true;
   }
@@ -118,9 +110,27 @@ export class CollectionHeaderComponent implements OnInit {
     return Object.keys(list);
   }
 
+  searchFocused() {
+    this.searchIsFocused = true;
+    if (this.searchPhrase)
+      this.searchProduct();
+    else {
+      this.searchProductList = [];
+      this.searchCollectionList = [];
+    }
+  }
+
+  searchUnfocused() {
+    this.searchIsFocused = false;
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+  }
+
   searchProduct() {
+    this.searchProductList = [];
     if (!this.searchPhrase) {
-      this.searchResultList = [];
+      this.searchProductList = [];
+      this.searchCollectionList = [];
       return;
     }
 
@@ -130,21 +140,60 @@ export class CollectionHeaderComponent implements OnInit {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 5,
+      limit: 6,
     }).subscribe(
       (data) => {
-        this.searchResultList = [];
+        this.searchProductList = [];
         if (data.data) {
           data.data.forEach(el => {
-            this.searchResultList.push({
+            this.searchProductList.push({
               id: el._id,
               name: el.name,
               brand: this.dictionaryService.translateWord(el.brand.name),
               type: this.dictionaryService.translateWord(el.product_type.name),
-              imgUrl: this.getProductThumbnail(el)
+              imgUrl: this.getProductThumbnail(el),
+              tags: this.dictionaryService.translateWord(el.tags.name),
+              article_no: el.article_no,
             });
           });
         }
+        this.alignRow();
+        this.searchCollection();
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  searchCollection() {
+    this.searchCollectionList = [];
+    if (!this.searchPhrase) {
+      this.searchCollectionList = [];
+      this.searchProductList = [];
+      return;
+    }
+    this.httpService.post('search/Collection', {
+      options: {
+        phrase: this.searchPhrase,
+      },
+      offset: 0,
+      limit: 6,
+    }).subscribe(
+      (data) => {
+        this.searchCollectionList = [];
+        if (data.data) {
+          data.data.forEach(el => {
+            this.searchCollectionList.push({
+              id: el._id,
+              name: el.name,
+              name_fa: el.name_fa,
+            });
+          });
+        }
+        this.searchCollectionList.forEach(el => {
+          this.getCollectionPages(el);
+        });
         this.searchWaiting = false;
       },
       (err) => {
@@ -153,10 +202,28 @@ export class CollectionHeaderComponent implements OnInit {
       });
   }
 
-  selectProduct(product) {
-    this.router.navigate([`/product/${product.id}`]);
+  getCollectionPages(el) {
+    this.httpService.post('collectionPages', {
+      collection_id: el.id,
+    }).subscribe(
+      (data) => {
+        el.pages = data;
+      },
+      (err) => {
+        console.error('Cannot get search data: ', err);
+        this.searchWaiting = false;
+      });
+  }
+
+  selectSearchResult(element, isProduct) {
+    if (isProduct)
+      this.router.navigate([`/product/${element.id}`]);
+    else
+      this.router.navigate([`${element.pages[0].address}`]);
+
     this.searchIsFocused = false;
-    this.searchResultList = [];
+    this.searchProductList = [];
+    this.searchCollectionList = [];
   }
 
   getProductThumbnail(product) {
@@ -172,6 +239,38 @@ export class CollectionHeaderComponent implements OnInit {
         img[0].image.thumbnail
       ].join('/')) :
       'assets/nike-brand.jpg';
+  }
+
+  alignRow() {
+    if (this.searchProductList.length <= 0) {
+      this.rows = [];
+      return;
+    }
+    this.rows = [];
+    let chunk = [], counter = 0;
+    for (const sp in this.searchProductList) {
+      if (this.searchProductList.hasOwnProperty(sp)) {
+        chunk.push(this.searchProductList[sp]);
+        counter++;
+
+        if (counter >= 2) {
+          counter = 0;
+          this.rows.push(chunk);
+          chunk = [];
+        }
+      }
+    }
+    if (counter > 0) {
+      this.rows.push(chunk);
+    }
+  }
+
+  onClose() {
+    this.searchPhrase = null;
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+    this.searchWaiting = false;
+    this.searchIsFocused = false;
   }
 
   @HostListener('document:click', ['$event'])

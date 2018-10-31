@@ -10,6 +10,7 @@ export class MenuPlacementComponent implements OnInit {
   @Input() isApp = false;
   @Input() address = '';
   @Input() pageId = null;
+  @Input() canEdit = true;
 
   @Input()
   set placements(value: IPlacement[]) {
@@ -30,6 +31,7 @@ export class MenuPlacementComponent implements OnInit {
   }
 
   @Output() modifyPlacement = new EventEmitter();
+  @Output() selectToRevert = new EventEmitter();
 
   topMenuItems: IPlacement[] = [];
   subMenuItems: IPlacement[] = [];
@@ -52,5 +54,9 @@ export class MenuPlacementComponent implements OnInit {
 
   validAddress() {
     return this.address.toLowerCase() === 'my_shop';
+  }
+
+  passToRevert(value) {
+    this.selectToRevert.emit(value);
   }
 }

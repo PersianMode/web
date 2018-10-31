@@ -44,7 +44,6 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
     this.progressService.enable();
     this.httpService.get(`/product/${this.productId}`).subscribe(
       (data) => {
-        console.log('-> ', data);
         this.product = data;
         this.progressService.disable();
       },
@@ -75,7 +74,7 @@ export class ProductFullInfoComponent implements OnInit, OnDestroy {
 
   getWarehouses(): any {
     this.httpService.get(`warehouse/all`).subscribe(res => {
-      this.warehouses = res;
+      this.warehouses = res.filter(el => !el.is_hub);
     }, err => {
       console.error();
     });

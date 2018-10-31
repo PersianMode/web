@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {WINDOW_PROVIDERS} from './shared/services/window.service';
+import {BrowserWindowRef, WINDOW_PROVIDERS} from './shared/services/window.service';
 import {HttpService} from './shared/services/http.service';
 import {SocketService} from './shared/services/socket.service';
 import {AuthService} from './shared/services/auth.service';
@@ -21,6 +21,8 @@ import {DictionaryService} from './shared/services/dictionary.service';
 import {CheckoutService} from './shared/services/checkout.service';
 import {ProfileOrderService} from './shared/services/profile-order.service';
 import {TitleService} from './shared/services/title.service';
+import {RevertPlacementService} from './shared/services/revert-placement.service';
+import {PrintService} from './shared/services/print.service';
 
 @NgModule({
   declarations: [
@@ -44,14 +46,17 @@ import {TitleService} from './shared/services/title.service';
     SocketService,
     AuthService,
     ProgressService,
+    BrowserWindowRef,
     PageService,
     ProductService,
     ResponsiveService,
+    PrintService,
     CartService,
     TitleService,
     DictionaryService,
     CheckoutService,
     ProfileOrderService,
+    RevertPlacementService,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 import {IPlacement} from '../../interfaces/IPlacement.interface';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DragulaService} from 'ng2-dragula';
@@ -7,6 +7,7 @@ import {Pos} from './slider-preview/slider-preview.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatDialog} from '@angular/material';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {RevertPlacementService} from '../../../../shared/services/revert-placement.service';
 
 @Component({
   selector: 'app-slider-placement',
@@ -15,7 +16,7 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 })
 export class SliderPlacementComponent implements OnInit {
   @Input() pageId = null;
-
+  @Input() canEdit = true;
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -50,15 +51,20 @@ export class SliderPlacementComponent implements OnInit {
   bagName = 'slider-bag';
 
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-              private progressService: ProgressService, private sanitizer: DomSanitizer,
-              private dialog: MatDialog) {
+    private progressService: ProgressService, private sanitizer: DomSanitizer,
+    private dialog: MatDialog, private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
     this.clearFields();
 
     if (!this.dragulaService.find(this.bagName))
-      this.dragulaService.setOptions(this.bagName, {direction: 'vertical',});
+      this.dragulaService.setOptions(this.bagName, {
+        direction: 'vertical',
+        moves: () => {
+          return this.canEdit;
+        }
+      });
 
     this.dragulaService.dropModel.subscribe(value => {
       if (this.bagName === value[0])
@@ -135,20 +141,28 @@ export class SliderPlacementComponent implements OnInit {
   }
 
   selectItem(value) {
-    this.upsertSlider = {
-      text: value.info.text,
-      href: value.info.href,
-      id: value._id,
-      column: value.info.column,
-      isEdit: true,
-      imgUrl: value.info.imgUrl,
-      style: value.info.style || {
-        imgWidth: 40,
-        imgMarginLeft: 0,
-        imgMarginTop: 0,
-      },
-    };
-    this.pos = Object.assign({}, this.upsertSlider.style);
+    if (this.revertService.getRevertMode() && !this.canEdit) {
+      this.revertService.select(value.component_name + (value.variable_name ? '-' + value.variable_name : ''), value);
+    } else {
+      this.upsertSlider = {
+        text: value.info.text,
+        href: value.info.href,
+        id: value._id,
+        column: value.info.column,
+        isEdit: true,
+        imgUrl: value.info.imgUrl,
+        style: value.info.style || {
+          imgWidth: 40,
+          imgMarginLeft: 0,
+          imgMarginTop: 0,
+        },
+      };
+      this.pos = Object.assign({}, this.upsertSlider.style);
+    }
+  }
+
+  isSelectedToRevert(item) {
+    return this.revertService.isSelected(item.component_name + (item.variable_name ? '-' + item.variable_name : ''), item._id);
   }
 
   removeItem() {
@@ -285,5 +299,15 @@ export class SliderPlacementComponent implements OnInit {
         path = '/' + path;
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
     }
+  }
+
+  @HostListener('document:keydown.control', ['$event'])
+  keydown(event: KeyboardEvent) {
+    this.revertService.setRevertMode(true);
+  }
+
+  @HostListener('document:keyup.control', ['$event'])
+  keyup(event: KeyboardEvent) {
+    this.revertService.setRevertMode(false);
   }
 }

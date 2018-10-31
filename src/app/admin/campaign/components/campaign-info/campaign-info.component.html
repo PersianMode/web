@@ -31,11 +31,11 @@
             </div>
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
                 <div fxFlex="25" class="field-container">
-                    <div class="dob" [class.input-error]="startDateError">
+                    <div class="dob" [class.input-error]="startDateError || !start_date">
                         <span>تاریخ شروع: </span>
                         <app-dob [date]="start_date" [isDOB]="false" (change)="setStartDate($event)"></app-dob>
                     </div>
-                    <label class="field-error dp-hint" *ngIf="startDateError">تاریخ شروع کمپین نادرست است</label>
+                    <label class="field-error dp-hint" *ngIf="startDateError || !start_date">تاریخ شروع کمپین نادرست است</label>
 
                 </div>
 

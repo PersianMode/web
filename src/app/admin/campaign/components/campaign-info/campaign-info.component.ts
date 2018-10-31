@@ -7,6 +7,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Router} from '@angular/router';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-campaign-info',
@@ -30,7 +31,7 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
   isCoupon: boolean = false;
   isActive: boolean = true;
 
-  startDateError: boolean = true;
+  startDateError: boolean = false;
   endDateError: boolean = false;
 
   discountRefError: boolean = true;
@@ -74,10 +75,7 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
         Validators.required,
       ]],
       coupon_code: [null]
-    },
-      {
-        validator: this.basicInfoValidation
-      });
+    });
   }
 
   getCampaign() {
@@ -201,16 +199,14 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
     );
   }
 
-
   addCollection(collection) {
-
     this.progressService.enable();
     this.httpService.post(`campaign/collection/add`, {
       campaignId: this.campaignId,
       collectionId: collection._id
     }).subscribe(
       (data) => {
-        this.collections.push(collection)
+        this.collections.push(collection);
         this.progressService.disable();
       },
       (error) => {
@@ -220,7 +216,6 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
         this.progressService.disable();
       }
     );
-
   }
 
   removeCollection(collection) {
@@ -278,17 +273,19 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
     start = new Date(this.start_date);
     now = new Date();
 
-    if (start < now) {
+    if (moment(moment(start).format('YYYY-MM-DD')).isBefore(moment(moment(now).format('YYYY-MM-DD')))) {
       this.startDateError = true;
       return;
     }
     if (this.start_date && this.end_date) {
       end = new Date(this.end_date);
-      this.endDateError = end < now || end < start || start.toString() === end.toString();
+      const endBeforeNow = moment(moment(end).format('YYYY-MM-DD')).isBefore(moment(moment(now).format('YYYY-MM-DD')));
+      const endBeforeStart = moment(moment(end).format('YYYY-MM-DD')).isBefore(moment(moment(start).format('YYYY-MM-DD')));
+
+      this.endDateError = endBeforeNow || endBeforeStart || start.toString() === end.toString();
       return;
     }
   }
-
 
   getDiscountInfo() {
 
@@ -309,24 +306,19 @@ export class CampaignInfoComponent implements OnInit, OnDestroy {
   }
 
   fieldChanged() {
-
     this.discountRefError = !this.campaingInfoForm.controls['discount_ref'].value || (this.campaingInfoForm.controls['discount_ref'].value <= 0)
     if (this.discountRefError) {
       this.discountByPercent = true;
       return;
     }
     if (this.isCoupon) {
-      this.discountByPercent = (this.campaingInfoForm.controls['discount_ref'].value >= 100)
+      this.discountByPercent = (this.campaingInfoForm.controls['discount_ref'].value >= 100);
     } else {
       if (this.campaingInfoForm.controls['discount_ref'].value >= 100)
-      this.discountRefError = true;
+        this.discountRefError = true;
       this.discountByPercent = true;
     }
   }
-
-  basicInfoValidation(Ac: AbstractControl) {
-  }
-
 
   ngOnDestroy() {
   }

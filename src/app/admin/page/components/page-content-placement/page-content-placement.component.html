@@ -1,5 +1,5 @@
 <div class="inner-placement-div">
-  <div>
+  <div *ngIf="canEdit">
     <label>افزودن یک مورد جدید</label>
     <button mat-icon-button (click)="openEditDialog()">
       <mat-icon aria-label="Add">add</mat-icon>
@@ -8,7 +8,7 @@
   <div class="demo-area center-content">
     <div fxLayout="row" fxLayoutAlign="start start"
          *ngFor="let key of getKeyList(modifiedPlacementList); first as vIsFirst; last as vIsLast">
-      <div fxFlex="10" class="move-button">
+      <div fxFlex="10" class="move-button" *ngIf="canEdit">
         <div>
           <button mat-icon-button (click)="move('up', key)" [disabled]="vIsFirst || moveButtonsShouldDisabled">
             <mat-icon aria-label="انتقال به بالا">expand_less</mat-icon>
@@ -33,8 +33,10 @@
         </div>
         <div fxLayout="row" fxLayoutAlign="start start">
           <div [fxFlex]="getRowParts(item)"
-               *ngFor="let item of modifiedPlacementList[key]; first as hIsFirst; last as hIsLast" class="container">
-            <div class="controller-area">
+               *ngFor="let item of modifiedPlacementList[key]; first as hIsFirst; last as hIsLast" class="container"
+               (click)="selectedPanel(item)"
+               [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(item)}">
+            <div class="controller-area" *ngIf="canEdit">
               <button mat-icon-button (click)="openEditDialog(item)" class="controller-button">
                 <mat-icon aria-label="Edit">create</mat-icon>
               </button>
@@ -45,11 +47,11 @@
             <a>
               <!--<img [src]="getUrl(item.info.imgUrl)" class="full-width"/>-->
               <img
-                *ngIf="getFileTypeFromExtension(item.info.fileType && item.info.fileType['ext'], item.info.imgUrl) === 'image'"
+                *ngIf="item.info.mediaType === 'image'"
                 [src]="getUrl(item.info.imgUrl)" class="full-width"/>
               <video #player
-                *ngIf="getFileTypeFromExtension(item.info.fileType && item.info.fileType['ext'], item.info.imgUrl) === 'video'"
-                class="full-width" autoplay loop>
+                     *ngIf="item.info.mediaType === 'video'"
+                     class="full-width" autoplay loop>
                 <source [src]="getUrl(item.info.imgUrl)" type="{{item.info.fileType && item.info.fileType['mime']}}">
                 مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
               </video>
@@ -81,7 +83,7 @@
                  [style.color]="item.info.subTitle.textColor ? item.info.subTitle.textColor : null" class="sub-title">
               {{item.info.subTitle.text}}
             </div>
-            <div class="move-button">
+            <div class="move-button" *ngIf="canEdit">
               <button mat-icon-button (click)="move('right', item)" [disabled]="hIsFirst || moveButtonsShouldDisabled">
                 <mat-icon aria-label="انتقال به راست">chevron_right</mat-icon>
               </button>

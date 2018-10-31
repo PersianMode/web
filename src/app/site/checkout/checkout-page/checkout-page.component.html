@@ -1,33 +1,53 @@
-<div fxLayout="row" style="direction: ltr">
-  <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
-  <div fxFlex="70" fxFlex.sm="80" fxFlex.xs="100">
+<div fxLayout="row" class="outer-div">
+  <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
+  <div fxFlex="80" fxFlex.sm="80" fxFlex.xs="100">
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"
          fxLayoutAlign="center center" fxLayoutAlign.sm="center center" fxLayoutAlign.xs="start center"
-         style="direction: rtl">
-      <div fxFlex="70" class="checkout-box" style="padding: 10px; width: 95%">
+         class="middle-div-wrapper">
+      <div fxFlex="70" class="middle-div">
         <mat-accordion multi>
           <mat-expansion-panel expanded>
             <mat-expansion-panel-header>خلاصه</mat-expansion-panel-header>
-              <app-checkout-summary [total]="total" [discount]="discount" [usedBalance]="usedBalance"
-                                    [usedLoyaltyPoint]="usedLoyaltyPoint"></app-checkout-summary>
+
+
+            <app-checkout-summary [total]="total" [discount] = "discount" [usedBalance] = "usedBalance"
+                                  [usedLoyaltyPoint] = "usedLoyaltyPoint" [deliveryCost]="deliveryCost"
+                                  [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
+                                  [earnedLoyaltyPoint]="earnedLoyaltyPoint"
+                                  [showCostLabel]="showCostLabel"
+                                  [showEarnPointLabel]="showEarnPointLabel"
+                                  [noDuration]="noDuration"></app-checkout-summary>
+
           </mat-expansion-panel>
-        <mat-expansion-panel>
+          <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>نوع پرداخت</mat-panel-title>
             </mat-expansion-panel-header>
+
+
             <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
                               (selectedType)="changePaymentType($event)"></app-payment-type>
+
+
           </mat-expansion-panel>
           <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header>
               <mat-panel-title>آدرس</mat-panel-title>
             </mat-expansion-panel-header>
-            <app-address-table [isProfile]="false"></app-address-table>
+
+
+            <app-address-table [isProfile] = false (deliveryType)="setCostLabel($event)"
+                               (noDuration)="noDuration = $event"
+                               (durationType)="calculateDiscount($event)"></app-address-table>
           </mat-expansion-panel>
         </mat-accordion>
-        <button mat-raised-button style="padding:10px;margin:15px;font-size:12pt;background: black;color:white;width:calc(100% - 30px)" (click)="checkout()" [disabled]="disabled" [style.background]="disabled ? 'gray' : 'black'">پرداخت</button>
+        <button mat-raised-button
+                class="payment-button"
+                (click)="checkout()" [disabled]="disabled"
+                [style.background]="disabled ? 'gray' : 'black'">پرداخت
+        </button>
       </div>
     </div>
   </div>
-  <div fxFlex="15" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
+  <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
 </div>

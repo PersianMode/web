@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.titleService.setTitleWithOutConstant('ورود ادمین') ;
+    this.titleService.setTitleWithOutConstant('ورود ادمین');
 
   }
 
@@ -51,8 +51,8 @@ export class LoginComponent implements OnInit {
 
       let warehouseId;
 
-      if (+this.loginForm.controls['loginAs'].value === AccessLevel.SalesManager ||
-        +this.loginForm.controls['loginAs'].value === AccessLevel.ShopClerk) {
+      if (+this.loginForm.controls['loginAs'].value === AccessLevel.ShopClerk ||
+        +this.loginForm.controls['loginAs'].value === AccessLevel.HubClerk) {
         warehouseId = this.loginForm.controls['warehouse_id'].value;
         if (!warehouseId) {
           this.openSnackBar('فروشگاه مورد نظر را انتخاب کنید');
@@ -66,18 +66,11 @@ export class LoginComponent implements OnInit {
         warehouseId)
         .then(data => {
           this.progressService.disable();
-          switch (parseInt(this.loginForm.controls['loginAs'].value, 10)) {
-            case 0:
-              this.router.navigate(['/agent/collections']);
-              break;
-            case 1:
-              this.router.navigate(['/agent/orders']);
-              break;
-            case 2:
-              this.router.navigate(['/agent/orders']);
-              break;
 
-          }
+          if (parseInt(this.loginForm.controls['loginAs'].value, 10) === 0)
+            this.router.navigate(['/agent/collections']);
+          else
+            this.router.navigate(['/agent/orders']);
         })
         .catch(err => {
           this.progressService.disable();
@@ -103,18 +96,28 @@ export class LoginComponent implements OnInit {
   }
 
   onChange(option) {
-    this.showClerkWarehouses = (option === AccessLevel.ShopClerk.toString());
-    if (this.showClerkWarehouses && this.authService.warehouses && this.authService.warehouses.length)
-      this.loginForm.controls['warehouse_id'].setValue(this.getClerkWarehouses()[0]._id);
-    else if (option === AccessLevel.SalesManager.toString())
-      this.loginForm.controls['warehouse_id'].setValue(this.authService.warehouses.find(x => x.is_center)._id);
-    else
-      this.loginForm.controls['warehouse_id'].setValue(null);
+
+    if (this.authService.warehouses && this.authService.warehouses.length) {
+      if (option === AccessLevel.ShopClerk.toString()) {
+        this.showClerkWarehouses = true;
+        this.loginForm.controls['warehouse_id'].setValue(this.getClerkWarehouses()[0]._id);
+      } else if (option === AccessLevel.HubClerk.toString()) {
+        this.showClerkWarehouses = false;
+        this.loginForm.controls['warehouse_id'].setValue(this.getClerkWarehouses(true)[0]._id);
+
+        console.log(this.loginForm.controls['warehouse_id'].value);
+
+      } else {
+        this.showClerkWarehouses = false;
+        this.loginForm.controls['warehouse_id'].setValue(null);
+      }
+    }
   }
 
-  getClerkWarehouses() {
-    return this.authService.warehouses.filter(x => !x.is_center)
-      .sort((a, b) => a.priority > b.priority ? -1 : a.priority < b.priority ? 1 : 0);
+  getClerkWarehouses(isHub = false) {
+    return this.authService.warehouses
+      .filter(x => x.is_hub === isHub)
+      .sort((a, b) => a.priority > b.priority ? 1 : a.priority < b.priority ? -1 : 0);
   }
 
   openSnackBar(message: string) {

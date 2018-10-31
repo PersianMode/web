@@ -1,6 +1,8 @@
 <div style="direction: rtl" class="dialog-style">
   <div class="center">
-    <span class="persian-mode-center-logo">پرشین مد<span>ُ</span></span>
+    <span class="persian-mode-center-logo">پرشین مد
+      <span>ُ</span>
+    </span>
   </div>
   <div fxLayout="column" fxLayoutAlign="center center">
     <div fxFlex="50">
@@ -32,52 +34,51 @@
       <form (ngSubmit)="register()" [formGroup]="registerForm">
         <div fxLayout="column" fxLayoutAlign="center center">
           <div fxFlex="13" class="input-container">
-            <input class="input-field left-direction" type="text"
-                   placeholder="تلفن همراه" formControlName="mobile_no"
+            <input class="input-field left-direction" type="text" placeholder="تلفن همراه" formControlName="mobile_no"
                    (focus)="setSeen('mobile_no')"
                    (blur)="curFocus = null"
-                   [ngClass]="(registerForm.controls['mobile_no'].hasError('required') || registerForm.controls['mobile_no'].hasError('pattern')) && seen['mobile_no'] && curFocus !== 'mobile_no' ? 'input-error' : null"/>
+                   [ngClass]="(registerForm.controls['mobile_no'].hasError('required') || registerForm.controls['mobile_no'].hasError('pattern')) && seen['mobile_no'] && curFocus !== 'mobile_no' ? 'input-error' : null"
+            />
             <label class="field-error"
                    *ngIf="(registerForm.controls['mobile_no'].hasError('required') || registerForm.controls['mobile_no'].hasError('pattern')) && seen['mobile_no'] && curFocus !== 'mobile_no'">لطفا
               شماره تلفن همراه معتبری وارد کنید</label>
           </div>
           <div fxFlex="13" class="input-container">
-            <input class="input-field left-direction" type="email"
-                   placeholder="ایمیل" formControlName="username"
+            <input class="input-field left-direction" type="email" placeholder="ایمیل" formControlName="username"
                    (focus)="setSeen('username')"
                    (blur)="curFocus = null"
-                   [ngClass]="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('email')) && seen['username'] && curFocus !== 'username' ? 'input-error' : null"/>
+                   [ngClass]="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('email')) && seen['username'] && curFocus !== 'username' ? 'input-error' : null"
+            />
             <label class="field-error"
                    *ngIf="(registerForm.controls['username'].hasError('required') || registerForm.controls['username'].hasError('email')) && seen['username'] && curFocus !== 'username'">لطفا
               ایمیل معتبری وارد کنید</label>
           </div>
           <div fxFlex="13" class="input-container">
-            <input class="input-field left-direction" type="password"
-                   placeholder="رمز عبور" formControlName="password"
+            <input class="input-field left-direction" type="password" placeholder="رمز عبور" formControlName="password"
                    (focus)="setSeen('password')"
                    (blur)="curFocus = null"
-                   [ngClass]="(registerForm.controls['password'].hasError('required') || registerForm.controls['password'].hasError('minlength')) && seen['password'] && curFocus !== 'password' ? 'input-error' : null"/>
+                   [ngClass]="(registerForm.controls['password'].hasError('required') || registerForm.controls['password'].hasError('minlength')) && seen['password'] && curFocus !== 'password' ? 'input-error' : null"
+            />
             <label class="field-error"
                    *ngIf="(registerForm.controls['password'].hasError('required') || registerForm.controls['password'].hasError('minlength')) && seen['password'] && curFocus !== 'password'">لطفا
               رمز عبور را وارد کنید (حداقل 8 کاراکتر)</label>
           </div>
           <div fxFlex="13" class="input-container">
 
-            <input class="input-field" type="text"
-                   placeholder="نام" formControlName="first_name"
-                   (focus)="setSeen('first_name')"
-                   (blur)="curFocus = null"
-                   [ngClass]="registerForm.controls['first_name'].hasError('required') && seen['first_name'] && curFocus !== 'first_name' ? 'input-error' : null"/>
+            <input class="input-field" type="text" placeholder="نام" formControlName="first_name"
+                   (focus)="setSeen('first_name')" (blur)="curFocus = null"
+                   [ngClass]="registerForm.controls['first_name'].hasError('required') && seen['first_name'] && curFocus !== 'first_name' ? 'input-error' : null"
+            />
             <label class="field-error"
                    *ngIf="registerForm.controls['first_name'].hasError('required') && seen['first_name'] && curFocus !== 'first_name'">لطفا
               نام را وارد کنید</label>
           </div>
           <div fxFlex="13" class="input-container">
-            <input class="input-field" type="text"
-                   placeholder="نام خانوادگی" formControlName="surname"
+            <input class="input-field" type="text" placeholder="نام خانوادگی" formControlName="surname"
                    (focus)="setSeen('surname')"
                    (blur)="curFocus = null"
-                   [ngClass]="registerForm.controls['surname'].hasError('required') && seen['surname'] && curFocus !== 'surname' ? 'input-error' : null"/>
+                   [ngClass]="registerForm.controls['surname'].hasError('required') && seen['surname'] && curFocus !== 'surname' ? 'input-error' : null"
+            />
             <label class="field-error"
                    *ngIf="registerForm.controls['surname'].hasError('required') && seen['surname'] && curFocus !== 'surname'">لطفا
               نام خانوادگی را وارد کنید</label>
@@ -85,17 +86,15 @@
           <div fxFlex="13" class="input-container">
             <div class="dob" [class.input-error]="seen.dob && !dob">
               <span>تاریخ تولد: </span>
-            <app-dob [date]="dob" (change)="changeDob($event)"></app-dob>
+              <app-dob [date]="dob" (change)="changeDob($event)"></app-dob>
             </div>
-            <label class="field-error dp-hint"
-                   *ngIf="!dob && seen['dob'] && curFocus !== 'dob'">لطفا
-              تاریخ تولد را وارد کنید</label>
+            <label class="field-error dp-hint" *ngIf="!dob && seen['dob'] && curFocus !== 'dob'">لطفا تاریخ تولد را وارد
+              کنید</label>
           </div>
           <div fxFlex="13" class="input-container">
             <div fxLayout="row" fxLayoutAlign="center center">
               <div fxFlex="50" style="margin-left: 10px;">
-                <div class="btn-field div-btn gender-choice"
-                     (click)="setGender('m')"
+                <div class="btn-field div-btn gender-choice" (click)="setGender('m')"
                      [class.selected-gender]="gender === 'm'">
                   <label>مرد</label>
                   <i *ngIf="gender === 'm'" class="fa fa-check" aria-hidden="true"></i>
@@ -111,8 +110,8 @@
             </div>
             <div>
               <label class="field-error" *ngIf="(gender !== 'f' && gender !== 'm') && seen['gender']">لطفا جنسیت را
-                تعیین
-                کنید</label>
+                تعیین کنید
+              </label>
             </div>
           </div>
         </div>
@@ -123,16 +122,21 @@
         </div>
       </form>
     </div>
+
+    <!-- verifyCode -->
     <div *ngIf="curStatus === regStatus.Verify">
       <div fxLayout="column" fxLayoutAlign="center center">
-        <div fxFlex="33">
+        <div fxFlex="33" style="margin-top: 10px;">
+          <div class="center">ایمیلی حاوی لینک فعال سازی برایتان ارسال شده است.</div>
+        </div>
+        <div fxFlex="33" style="margin-top: 10px;">
           <div class="center">لطفا کد ارسال شده به شماره همراه وارد شده را</div>
           <div class="center">در بخش زیر وارد کنید</div>
         </div>
         <div fxFlex="33" class="box-center input-container">
           <input class="input-field" type="number" [(ngModel)]="code" placeholder="کد"/>
         </div>
-        <div fxFlex="33" class="full-width">
+        <div fxFlex="33" class="full-width" style="margin-top: 10px;">
           <div fxLayout="row" fxLayoutAlign="center center">
             <div fxFlex="50" class="div-btn inform-btn clickable-link" (click)="resendCode()">
               <label>ارسال مجدد کد</label>
@@ -149,5 +153,28 @@
         </div>
       </div>
     </div>
+
+    <!-- after activating via mobile -> needs activation by email (left for final step) -->
+    <div *ngIf="curStatus === regStatus.MobileRegistered">
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <div fxFlex="33" style="margin-top: 10px;">
+          <div class="center">ایمیلی حاوی لینک فعال سازی برایتان ارسال شده است.</div>
+        </div>
+        <div fxFlex="33" style="margin-top: 10px;">
+          <div class="center">از طریق لینک ارسال شده اقدام به ورود نمایید.</div>
+        </div>
+        <div fxFlex="33" class="full-width" style="margin-top: 10px;">
+          <div fxLayout="row" fxLayoutAlign="center center">
+            <div fxFlex="50" class="div-btn inform-btn clickable-link" (click)="resendEmailActivationCode()">
+              <label>ارسال مجدد کد</label>
+            </div>
+            <!--<div fxFlex="50" class="div-btn inform-btn clickable-link" (click)="backToRegister()">-->
+              <!--<label>تغییر اطلاعات</label>-->
+            <!--</div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

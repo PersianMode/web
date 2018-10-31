@@ -46,7 +46,6 @@ export class WishListComponent implements OnInit {
               this.dict.setShoesSize(el.product[0].instances[0].size, gender, el.product[0].product_type.name) :
               null;
           });
-        console.log(this.profileWishList);
       }
     });
     this.profileOrderService.getWishList();

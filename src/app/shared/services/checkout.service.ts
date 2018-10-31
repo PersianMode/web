@@ -7,10 +7,12 @@ import {PaymentType} from '../enum/payment.type.enum';
 import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
+import {ReplaySubject} from 'rxjs/Rx';
 
 @Injectable()
 export class CheckoutService {
   dataIsReady: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private productData;
   private paymentType = PaymentType;
   private selectedPaymentType = this.paymentType.cash;
   private loyaltyValue = 0;
@@ -18,11 +20,16 @@ export class CheckoutService {
   private discount = 0;
   private loyaltyPointValue = 0;
   private balance = 0;
+  private earnSpentPointObj: any = {};
+  loyaltyGroups: ReplaySubject<any> = new ReplaySubject<any>();
+  addPointArray: ReplaySubject<any> = new ReplaySubject<any>();
+
   warehouseAddresses = [];
   private _ads: any = null;
   addressData: IAddressInfo;
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
 
   constructor(private cartService: CartService, private httpService: HttpService,
               private authService: AuthService, private snackBar: MatSnackBar,
@@ -30,8 +37,10 @@ export class CheckoutService {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
-    this.authService.isLoggedIn.subscribe(isLoggedIn => {
+    this.authService.isVerified.subscribe(isLoggedIn => {
       this.getCustomerAddresses(this.authService.userIsLoggedIn());
+      this.getLoyaltyGroup();
+      this.getAddLoyaltyPoints();
     });
 
     this.httpService.get('warehouse').subscribe(res => {
@@ -67,23 +76,36 @@ export class CheckoutService {
     }
   }
 
+  setProductData(data) {
+    this.productData = data;
+  }
+
   setPaymentType(pt) {
     this.selectedPaymentType = pt;
   }
 
+  setEarnSpentPoint(et) {
+    this.earnSpentPointObj = {
+      delivery_spent: 0,
+      shop_spent: 0,
+      delivery_value: 0,
+      shop_value: 0,
+      earn_point: et,
+    };
+  }
+
   finalCheck() {
-    const cartItems = this.cartService.cartItems.getValue()
+    const cartItems = this.productData
       .map(r => Object.assign({}, {
         product_id: r.product_id,
         product_instance_id: r.instance_id,
         price: r.price,
         count: r.count - (r.reserved ? r.reserved : 0),
         quantity: r.quantity,
+        discount: r.discount
       }));
-    this.httpService.post('finalCheck', cartItems)
-      .subscribe(res => {
-        console.log(res);
-      }, err => console.error(err));
+    return this.httpService.post('finalCheck', cartItems);
+
   }
 
   getLoyaltyBalance() {
@@ -91,7 +113,8 @@ export class CheckoutService {
       this.cartService.getLoyaltyBalance()
         .then((res: any) => {
           this.balance = res.balance;
-          this.loyaltyPointValue = res.loyalty_points * this.loyaltyValue;
+          // this.loyaltyPointValue = res.loyalty_points * this.loyaltyValue;
+          this.loyaltyPointValue = res.loyalty_points;
 
           resolve({
             balance: this.balance,
@@ -102,10 +125,36 @@ export class CheckoutService {
     });
   }
 
-  getTotalDiscount() {
-    this.total = this.cartService.calculateTotal();
-    this.discount = this.cartService.calculateDiscount(true);
+  getLoyaltyGroup() {
+    this.httpService.get('loyaltygroup')
+      .subscribe(res => {
+          this.loyaltyGroups.next(res);
+        },
+        err => {
+          console.error('Cannot get loyalty groups: ', err);
+          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+            duration: 3200,
+          });
+        });
+  }
 
+
+  getAddLoyaltyPoints() {
+    this.httpService.get('deliverycc')
+      .subscribe(res => {
+          this.addPointArray.next(res);
+        },
+        err => {
+          console.error('Cannot get loyalty groups: ', err);
+          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+            duration: 3200,
+          });
+        });
+  }
+
+  getTotalDiscount() {
+    this.total = this.cartService.calculateTotal(this.productData);
+    this.discount = this.cartService.calculateDiscount(this.productData, true);
     return {
       total: this.total,
       discount: this.discount,
@@ -138,9 +187,11 @@ export class CheckoutService {
       }
     }
   }
+
   private get customerData() {
     return this._ads[3];
   }
+
   private get address() {
     return this._ads[4];
   }
@@ -149,18 +200,30 @@ export class CheckoutService {
     return !this._ads[0];
   }
 
+  private get delivery_days() {
+    return this._ads[5];
+  }
+
+  private get time_slot() {
+    return this._ads[6];
+  }
+
   private accumulateData() {
     return {
-      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems() ,
+      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.address,
       customerData: this.customerData,
-      transaction_id: 'xyz' + Math.floor( Math.random() * 100000 ),
+      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
       used_point: 0,
       used_balance: 0,
       total_amount: this.total,
       discount: this.discount,
       is_collect: this.is_collect,
+      duration_days: this.delivery_days,
+      time_slot: this.time_slot,
+      paymentType: this.selectedPaymentType,
+      loyalty: this.earnSpentPointObj,
     };
   }
 
@@ -168,9 +231,26 @@ export class CheckoutService {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
       .subscribe(res => {
-        this.cartService.emptyCart();
-        this.router.navigate(['/', 'profile']);
-      },
+          this.cartService.emptyCart();
+          this.router.navigate(['/', 'profile']);
+        },
         err => console.error(err));
   }
+
+  calculateDeliveryDiscount(durationId) {
+    let data = {
+      customer_id: this.authService.userDetails.userId ? this.authService.userDetails.userId : null,
+      duration_id: durationId
+    };
+    return new Promise((resolve, reject) => {
+      this.httpService.post('/calculate/order/price', data)
+        .subscribe(res => {
+            resolve(res);
+          },
+          err => {
+            reject();
+          });
+    });
+  }
+
 }

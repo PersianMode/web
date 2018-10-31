@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
-  MatPaginatorModule, MatSelectModule,
+  MatPaginatorModule, MatSelectModule, 
   MatSnackBarModule, MatTabsModule, MatDividerModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';

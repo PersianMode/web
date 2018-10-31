@@ -17,7 +17,6 @@ export class MobileProductComponent implements OnInit {
   @Input() productType;
   @Input() color;
   @Input() barcode;
-  @Input() articleNo;
 
   @Input()
   set selectedProductColorID(id) {

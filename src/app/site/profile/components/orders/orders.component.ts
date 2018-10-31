@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {Router} from '@angular/router';
 import {dateFormatter} from '../../../../shared/lib/dateFormatter';
@@ -8,6 +8,10 @@ import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {MatDialog} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
+import * as moment from 'jalali-moment';
+import { OrderReturnComponent } from '../order-return/order-return.component';
+import { OrderCancelComponent } from '../order-cancel/order-cancel.component';
+
 
 
 @Component({
@@ -44,23 +48,27 @@ export class OrdersComponent implements OnInit, OnDestroy {
     return (+a).toLocaleString('fa', {useGrouping: isPrice});
   }
 
-  goToOrderLines(orderId) {
-    this.selectedOrder = {
-      orderId: orderId,
-      dialog_order: this.profileOrder.find(el => el._id === orderId),
-    };
-    this.profileOrderService.orderData = this.selectedOrder;
-    if (this.responsiveService.isMobile) {
-      this.router.navigate([`/profile/orderlines`]);
-    } else {
-      const rmDialog = this.dialog.open(GenDialogComponent, {
-        width: '700px',
-        data: {
-          componentName: DialogEnum.orderLinesComponent,
-        }
-      });
-    }
-  };
+   goToOrderLines(orderId) {
+     this.profileOrderService.getAllOrders();
+
+     this.selectedOrder = {
+       orderId: orderId,
+       dialog_order: this.profileOrder.find(el => el._id === orderId),
+     };
+     this.profileOrderService.orderData = this.selectedOrder;
+     if (this.responsiveService.isMobile) {
+       this.router.navigate([`/profile/orderlines`]);
+     } else {
+       const rmDialog = this.dialog.open(GenDialogComponent, {
+         width: '700px',
+         data: {
+           componentName: DialogEnum.orderLinesComponent,
+         }
+       }).afterClosed().subscribe(res => {
+        this.profileOrderService.getAllOrders();
+       });
+     }
+   };
 
   ngOnDestroy() {
   };

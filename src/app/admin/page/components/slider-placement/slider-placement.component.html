@@ -1,11 +1,11 @@
-<app-slider-preview *ngIf="upsertSlider.text"
+<app-slider-preview *ngIf="upsertSlider.text && canEdit"
                     [text]="upsertSlider.text"
                     [image]="upsertSlider.imgUrl"
                     [pos]="pos"
                     (imageSettingsChanged)="imageSettingsChanged($event)"></app-slider-preview>
 <div class="bottom-part">
   <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column"
-       fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center">
+       fxLayoutAlign.sm="center center" fxLayoutAlign.xs="center center" *ngIf="canEdit">
     <div fxFlex="50" style="width: 100%">
       <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column">
         <div fxFlex="65" style="width: 100%">
@@ -50,7 +50,7 @@
     </div>
   </div>
   <div class="demo-list" [dragula]="'slider-bag'" [dragulaModel]="sliders">
-    <div *ngFor="let item of sliders" class="top-menu-item" (click)="selectItem(item)">
+    <div *ngFor="let item of sliders" class="top-menu-item" (click)="selectItem(item)" [ngClass]="{'selected-to-revert-img': !canEdit && isSelectedToRevert(item)}">
       <img [style.width]="item.imgWidth? item.imgWidth + 'px': '40px'"
            [style.marginLeft]="item.imgMarginLeft ? item.imgMarginLeft + 'px' : 0"
            [style.marginTop]="item.imgMarginTop ? item.imgMarginTop + 'px' : 0"

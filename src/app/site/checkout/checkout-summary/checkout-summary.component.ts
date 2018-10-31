@@ -7,11 +7,53 @@ import {priceFormatter} from '../../../shared/lib/priceFormatter';
   styleUrls: ['./checkout-summary.component.css']
 })
 export class CheckoutSummaryComponent implements OnInit {
+
+  @Input() noDuration;
+  ignoreDeliveryItems = false;
+
+  @Input()
+  set showCostLabel(value) {
+    this._showCostLabel = value;
+    this.ignoreDeliveryItems = !!!value;
+
+    this.calculateFinalTotal();
+  }
+
+  get showCostLabel() {
+    return this._showCostLabel;
+  }
+
+  @Input()
+  set deliveryCost(value) {
+    this._deliveryCost = value;
+    if (value) {
+      // this.finalTotal = this.total + value;
+      this.calculateFinalTotal();
+    }
+  }
+
+  get deliveryCost() {
+    return this._deliveryCost;
+  }
+
+  @Input()
+  set deliveryDiscount(value) {
+    if (!value)
+      value = 0;
+
+    this._deliveryDiscount = value;
+    this.calculateFinalTotal();
+  }
+
+  get deliveryDiscount() {
+    return this._deliveryDiscount;
+  }
+
   @Input()
   set total(value) {
     this._total = value;
     if (value) {
-      this.finalTotal = value - this.discount;
+      this.finalTotal = value;
     }
   }
 
@@ -25,7 +67,7 @@ export class CheckoutSummaryComponent implements OnInit {
       value = 0;
 
     this._discount = value;
-    this.finalTotal = this.total ? this.total - value : 0;
+    this.calculateFinalTotal();
   }
 
   get discount() {
@@ -35,7 +77,7 @@ export class CheckoutSummaryComponent implements OnInit {
   @Input()
   set usedBalance(value) {
     this._usedBalance = value;
-    this.finalTotal = this.total - this.discount - this.usedLoyaltyPoint - this._usedBalance;
+    this.calculateFinalTotal();
   }
 
   get usedBalance() {
@@ -45,24 +87,38 @@ export class CheckoutSummaryComponent implements OnInit {
   @Input()
   set usedLoyaltyPoint(value) {
     this._usedLoyaltyPoint = value;
-    this.finalTotal = this.total - this.discount - this.usedLoyaltyPoint - this._usedBalance;
+    this.calculateFinalTotal();
   }
 
   get usedLoyaltyPoint() {
     return this._usedLoyaltyPoint;
   }
 
+  calculateFinalTotal() {
+    this.finalTotal = this.total
+      + (this.ignoreDeliveryItems ? 0 : this.deliveryCost - this.deliveryDiscount)
+      - this.usedBalance - this.usedLoyaltyPoint - this.discount;
+  }
 
   private _total = 0;
   private _discount = 0;
   private _usedBalance = 0;
   private _usedLoyaltyPoint = 0;
+  private _deliveryCost = 0;
+  private _deliveryDiscount = 0;
+  private _showCostLabel = true;
   finalTotal = 0;
+  @Input() earnedLoyaltyPoint;
+  @Input() showEarnPointLabel;
 
   constructor() {
   }
 
   ngOnInit() {
+    this.showCostLabel = true;
+    this.deliveryCost = 0;
+    this.deliveryDiscount = 0;
+    this.earnedLoyaltyPoint = 0;
   }
 
   priceFormatter(p) {

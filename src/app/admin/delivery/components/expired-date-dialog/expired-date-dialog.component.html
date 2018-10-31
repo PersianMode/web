@@ -1,0 +1,25 @@
+<mat-card class="center">
+    <mat-card-header class="content" style="float: right;">
+      تأیید تاریخ دریافت
+    </mat-card-header>
+    <mat-card-content class="page">
+      <div class="content" dir="rtl">
+        تاریخ/زمان دریافت انتخاب شده، پس از حداکثر تاریخ/زمان معتبر می باشد
+      </div>
+      <div class="sub-title content">آیا می خواهید همین تاریخ/زمان ذخیره شود؟</div>
+      <br/>
+      <div fxLayout="row" rxLayout.xs="column" fxLayoutAlign="center center">
+        <div fxFlex="50" role="yes-btn" style="display: inline-block">
+          <button mat-icon-button (click)="accept(true)">
+            <mat-icon aria-label="yes">done</mat-icon>
+          </button>
+        </div>
+        <div fxFlex="50" role="no-btn" style="display: inline-block">
+          <button mat-icon-button (click)="accept(false)">
+            <mat-icon aria-label="no">clear</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

@@ -1,0 +1,24 @@
+<mat-card class="center">
+  <mat-card-header class="content" style="float: right;">
+   ثبت تغییرات
+  </mat-card-header>
+  <mat-card-content class="page">
+    <div class="content" dir="rtl">
+در حال حاضر تغییراتی ثبت نشده وجود دارد
+    </div>
+    <div class="sub-title content">آیا تمایل به ثبت تغییرات دارید؟</div>
+    <br/>
+    <div fxLayout="row" rxLayout.xs="column" fxLayoutAlign="center center">
+      <div fxFlex="50" role="yes-btn" style="display: inline-block">
+        <button mat-icon-button (click)="remove(true)">
+          <mat-icon aria-label="yes">done</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="50" role="no-btn" style="display: inline-block">
+        <button mat-icon-button (click)="remove(false)">
+          <mat-icon aria-label="no">clear</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

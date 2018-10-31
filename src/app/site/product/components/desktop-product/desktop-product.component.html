@@ -27,10 +27,15 @@
   <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
   <mat-accordion>
     <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+       سایر مشخصات محصول
+        </mat-panel-title>
+      </mat-expansion-panel-header>
       <ul>
         <li *ngIf="color"><strong>رنگ:</strong> {{color}}</li>
         <li *ngIf="barcode"><strong>بارکد:</strong> {{barcode}}</li>
-        <li *ngIf="articleNo"><strong>Article No:</strong> {{articleNo}}</li>
+        <li *ngIf="product.article_no"><strong>Article No:</strong> {{product.article_no}}</li>
       </ul>
     </mat-expansion-panel>
     <mat-expansion-panel *ngIf="product.desc">
@@ -39,7 +44,7 @@
           بیشتر بدانید
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <div class="description-md" Markdown>
+      <div class="description-md">
         {{product.desc}}
       </div>
     </mat-expansion-panel>

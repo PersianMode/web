@@ -1,13 +1,17 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
-import {AuthService} from '../../../../shared/services/auth.service';
+import {AuthService, VerificationErrors} from '../../../../shared/services/auth.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
-enum RegStatus {
-  Register = 'Register',
-  Verify = 'Verify'
-};
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {WINDOW} from '../../../../shared/services/window.service';
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import {LoginStatus} from '../../../login/login-status.enum';
+import {Router} from '@angular/router';
+import {RegStatus} from '../../register-status.enum';
 
 @Component({
   selector: 'app-register',
@@ -25,8 +29,12 @@ export class RegisterComponent implements OnInit {
   regStatus = RegStatus;
   curStatus = RegStatus.Register;
   code = null;
+  dialogEnum = DialogEnum;
 
-  constructor(private httpService: HttpService, private authService: AuthService) {
+  constructor(private httpService: HttpService, private authService: AuthService,
+              private snackBar: MatSnackBar, private dict: DictionaryService,
+              @Inject(WINDOW) private window, public dialog: MatDialog,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -107,13 +115,27 @@ export class RegisterComponent implements OnInit {
   resendCode() {
     this.httpService.post('register/resend', {
       username: this.registerForm.controls['username'].value,
-      code: this.code
+      // code: this.code
     }).subscribe(
       (data) => {
-        console.log('New code is sent: ', data);
+        this.snackBar.open('کد فعال سازی به موبایلتان ارسال شد', null, {duration: 2300});
       },
       (err) => {
-        console.error('Cannot send new code: ', err);
+        console.error('Cannot send new verification code: ', err);
+      }
+    );
+  }
+
+  resendEmailActivationCode() {
+    this.httpService.post('user/auth/link', {
+      username: this.registerForm.controls['username'].value,
+      is_forgot_mail: false,
+    }).subscribe(
+      data => {
+        this.snackBar.open('کد فعال سازی با موفقیت ارسال شد', null, {duration: 2300});
+      }, err => {
+        this.snackBar.open('خطا در ارسال کد', null, {duration: 1000});
+        console.error('error in sending activation code: ', err);
       }
     );
   }
@@ -124,19 +146,56 @@ export class RegisterComponent implements OnInit {
 
   checkCode() {
     this.httpService.post('register/verify', {
-      code: this.code,
       username: this.registerForm.controls['username'].value,
+      code: this.code,
     }).subscribe(
       (data) => {
         this.authService.login(this.registerForm.controls['username'].value, this.registerForm.controls['password'].value)
-          .then(res => {
-            this.closeDialog.emit(true);
+        // comes here when customer activates via email BEFORE activating mobile, which rarely happens!
+        // this way, they get logged in and the next time they try logging in, they will be setting preferences
+          .then(userObj => {
+            if (userObj['is_preferences_set']) {
+              this.closeDialog.emit(true);
+              return;
+            }
+
+            if (this.window.innerWidth >= 960) {
+              const rmDialog = this.dialog.open(GenDialogComponent, {
+                width: '500px',
+                data: {
+                  componentName: this.dialogEnum.login,
+                  extraData: {
+                    loginStatus: LoginStatus.PreferenceTags
+                  }
+                }
+              });
+              rmDialog.afterOpen().subscribe(() => {
+                this.closeDialog.emit(false);
+              });
+              rmDialog.afterClosed().subscribe(resp => {
+                if (resp) {
+                  this.closeDialog.emit(true);
+                  this.router.navigate(['home']);
+                }
+              });
+            } else {
+              this.router.navigate(['../login/oauth/setPreferences']);
+            }
           })
+          // the usual way is verifying through mobile, but email is stayed put for later
+          // so depending on status code, we can understand that customer is verified by mobile or not
           .catch(err => {
-            console.error('Cannot login: ', err);
+            if (err.status === VerificationErrors.notEmailVerified.status) {
+              // mobile activated
+              this.curStatus = this.regStatus.MobileRegistered;
+            } else {
+              // wrong verification code
+              console.error('error in logging in:', err);
+            }
           });
       },
       (err) => {
+        // wrong verification code
         console.error('Cannot verify registration: ', err);
       }
     );

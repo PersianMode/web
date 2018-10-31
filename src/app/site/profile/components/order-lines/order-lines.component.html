@@ -1,65 +1,91 @@
 <div class="close-div">
-    <b>
-        <mat-icon aria-label="no" (click)="onClose()">clear</mat-icon>
-    </b>
+  <b>
+    <mat-icon aria-label="no" (click)="onClose()">clear</mat-icon>
+  </b>
 </div>
-<mat-card *ngFor="let ol of noDuplicateOrderLine">
+<div class="dialog-style2">
+  <mat-card style="margin-bottom: 5px" *ngFor="let ol of noDuplicateOrderLine">
     <mat-card-content>
-        <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column" dir="rtl">
-            <div fxFlex="25">
-                <a (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">
-                    <img src="{{getThumbnailURL(ol.boughtColor, ol.product)}}">
-                </a>
-            </div>
-            <div fxFlex="75" class="order-data-div">
-                <div fxLayout="row" fxLayoutAlign="center top" style="height : 100%">
-                    <div fxFlex="70">
-                        <div>
-                            <h3><a
-                                   (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">{{ol.product.name}}</a>
-                            </h3>
-                        </div>
-                        <div fxLayout="row" fxLayout.xs="column" dir="rtl">
-                            <div fxFlex="50">
-                                <span>اندازه : </span>
-                                <span>{{ol.product_instance.displaySize}}</span>
-                            </div>
-                            <div fxFlex="50">
-                                <span>تعداد : </span>
-                                <span>{{makePersianNumber(ol.quantity, false)}} عدد</span>
-                            </div>
-                        </div>
-                        <div fxLayout="row" fxLayout.xs="column" dir="rtl">
-                            <div fxFlex="50">
-                                <span>قیمت واحد : </span>
-                                <span>{{makePersianNumber(ol.product.instances.price ? ol.product.instances.price : ol.product.base_price, true)}}</span>
-                            </div>
-                            <div fxFlex="50">
-                                <span>تخفیف : </span>
-                                <span> - </span>
-                            </div>
-                        </div>
-                        <div>
-                            <span>وضعیت سفارش : </span>
-                            <span>{{ol.statusText}}</span>
-                        </div>
-                    </div>
-                    <div fxFlex="30" class="total_price">
-                        <div style="height: 80%">
-                            <span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : (ol.product.instances.price ? ol.product.instances.price : ol.product.base_price))* ol.quantity), true)}}</span>
-                            تومان
-                        </div>
-                        <!--<div class="submit-cancel-change-btn">-->
-                            <!--<button mat-button class="action-button"-->
-                                    <!--*ngIf="ol.tickets[ol.tickets.length - 1].status === 2 || ol.tickets[ol.tickets.length - 1].status === 3 || ol.tickets[ol.tickets.length - 1].status === 4">لغو سفارش-->
-                            <!--</button>-->
-                            <!--<button mat-button class="action-button"-->
-                                    <!--*ngIf="ol.tickets[ol.tickets.length - 1].status === 5 || ol.tickets[ol.tickets.length - 1].status === 1">بازگشت کالا-->
-                            <!--</button>-->
-                        <!--</div>-->
-                    </div>
-                </div>
-            </div>
+      <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column" dir="rtl">
+        <div fxFlex="25">
+          <a (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">
+            <img src="{{getThumbnailURL(ol.boughtColor, ol.product)}}">
+          </a>
         </div>
+        <div fxFlex="75" class="order-data-div">
+          <div fxLayout="row" fxLayoutAlign="center top" style="height : 100%">
+            <div fxFlex="70">
+              <div>
+                <h3>
+                  <a (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">{{ol.product.name}}</a>
+                </h3>
+              </div>
+
+              <div fxLayout="row" fxLayout.xs="column" dir="rtl">
+                <div fxFlex="50">
+                  <span>اندازه : </span>
+                  <span>{{ol.product_instance.displaySize}}</span>
+                </div>
+                <div fxFlex="50">
+                  <span>تعداد : </span>
+                  <span>{{makePersianNumber(ol.quantity, false)}} عدد</span>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.xs="column" dir="rtl">
+                <div fxFlex="50">
+                  <span>قیمت واحد : </span>
+                  <span>{{makePersianNumber(ol.product.instances.price ? ol.product.instances.price : ol.product.base_price, true)}}</span>
+                </div>
+                <div fxFlex="50">
+                  <span>تخفیف : </span>
+                  <span> - </span>
+                </div>
+              </div>
+              <div>
+                <span>وضعیت سفارش : </span>
+                <span>{{orderStatus(ol)}}</span>
+              </div>
+            </div>
+
+            <div fxFlex="30" class="total_price">
+              <div style="height: 80%">
+                <span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : (ol.product.instances.price ? ol.product.instances.price
+                  : ol.product.base_price))* ol.quantity), true)}}</span>
+                تومان
+              </div>
+              <div style="height: 20%">
+
+                <ng-container *ngIf="isQuantityMoreThanOne !== ol.order_line_id; else elseTemplate">
+                  <button *ngIf="checkCancelOrderLine(ol)" matTooltip="کنسل کردن خرید" class="clickable-link" (click)="cancelOrderLine(ol)">
+                    <i class="fa fa-times"></i>
+                  </button>
+                </ng-container>
+                <ng-template #elseTemplate>
+                  <select [(ngModel)]="quantitySelected">
+                    <option *ngFor="let quantity of quantities" [value]="quantity.value">{{quantity.viewValue}}</option>
+                  </select>
+                  <button matTooltip="تایید کردن" class="clickable-link" (click)="cancelOrderLineByQuantity(ol)">
+                    <i class="fa fa-check"></i>
+                  </button>
+                </ng-template>
+
+                <button *ngIf="checkReturnOrderLine(ol)" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrderLine(ol)">
+                  <i class="fa fa-undo"></i>
+                </button>
+              </div>
+              <!--<div class="submit-cancel-change-btn">-->
+              <!--<button mat-button class="action-button"-->
+              <!--*ngIf="ol.tickets[ol.tickets.length - 1].status === 2 || ol.tickets[ol.tickets.length - 1].status === 3 || ol.tickets[ol.tickets.length - 1].status === 4">لغو سفارش-->
+              <!--</button>-->
+              <!--<button mat-button class="action-button"-->
+              <!--*ngIf="ol.tickets[ol.tickets.length - 1].status === 5 || ol.tickets[ol.tickets.length - 1].status === 1">بازگشت کالا-->
+              <!--</button>-->
+              <!--</div>-->
+            </div>
+          </div>
+        </div>
+      </div>
     </mat-card-content>
-</mat-card>
+  </mat-card>
+
+</div>

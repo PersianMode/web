@@ -11,31 +11,43 @@ import {
   MatSnackBarModule,
   MatSortModule,
   MatTableModule, MatTabsModule,
-  MatToolbarModule
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatToolbarModule,
+  MatSelectModule
 } from '@angular/material';
-import {SMOrderProcessComponent} from './components/sm-order-process/sm-order-process.component';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { InboxComponent } from './components/inbox/inbox.component';
-import { ProductViewerComponent } from './components/product-viewer/product-viewer.component';
+import {InboxComponent} from './components/inbox/inbox.component';
+import {ProductViewerComponent} from './components/product-viewer/product-viewer.component';
 import {DeliverComponent} from './components/deliver/deliver.component';
-import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-checker.component';
-
+import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import { TicketComponent } from './components/ticket/ticket.component';
+import { SmInboxComponent } from './components/sm-inbox/sm-inbox.component';
+import { SmDeliverComponent } from './components/sm-deliver/sm-deliver.component';
+import { DeliveryShowComponent } from './components/delivery-show/delivery-show.component';
+import { DeliveryShelfCodeComponent } from './components/delivery-shelf-code/delivery-shelf-code.component';
 
 @NgModule({
   declarations: [
     OrderComponent,
-    SMOrderProcessComponent,
     OrderAddressComponent,
     InboxComponent,
+    SmInboxComponent,
     DeliverComponent,
     ProductViewerComponent,
     BarcodeCheckerComponent,
+    TicketComponent,
+    SmDeliverComponent,
+    DeliveryShowComponent,
+    DeliveryShelfCodeComponent
   ],
   imports: [
     OrderRouting,
     CommonModule,
     FormsModule,
+    FlexLayoutModule,
     ReactiveFormsModule,
     SharedModule,
     MatToolbarModule,
@@ -53,9 +65,12 @@ import { BarcodeCheckerComponent } from './components/barcode-checker/barcode-ch
     MatIconModule,
     MatInputModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule
   ],
-  entryComponents: [OrderAddressComponent, SMOrderProcessComponent,  ProductViewerComponent, BarcodeCheckerComponent],
+  entryComponents: [OrderAddressComponent,  ProductViewerComponent, TicketComponent, DeliveryShowComponent, DeliveryShelfCodeComponent],
 })
 export class OrderModule {
 }

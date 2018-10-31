@@ -26,16 +26,18 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
     this.pageService.placement$.filter(r => r[0] === 'slider').map(r => r[1]).subscribe(
       data => {
         this.slides = [];
-        for (let i = 0; i < data.length; i++) {
-          this.slides.push({});
-          // this.slides[i].text = data[i].variable_name;
-          this.slides[i].text = data[i].info.text;
-          this.slides[i].href = data[i].info.href;
-          this.slides[i].imgAddr = data[i].info.imgUrl;
-          this.slides[i].column = data[i].info.column;
-          for (const key in defaultStyle) {
-            if (defaultStyle.hasOwnProperty(key)) {
-              this.slides[i][key] = data[i].info.style && data[i].info.style[key] ? data[i].info.style[key] : defaultStyle[key];
+        if (data) {
+          for (let i = 0; i < data.length; i++) {
+            this.slides.push({});
+            // this.slides[i].text = data[i].variable_name;
+            this.slides[i].text = data[i].info.text;
+            this.slides[i].href = data[i].info.href;
+            this.slides[i].imgAddr = data[i].info.imgUrl;
+            this.slides[i].column = data[i].info.column;
+            for (const key in defaultStyle) {
+              if (defaultStyle.hasOwnProperty(key)) {
+                this.slides[i][key] = data[i].info.style && data[i].info.style[key] ? data[i].info.style[key] : defaultStyle[key];
+              }
             }
           }
         }

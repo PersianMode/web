@@ -6,11 +6,11 @@
       {{placements[key].topTitle.title}}</h2>
     <div fxLayout="row"
          fxLayoutAlign="start start">
-      <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs" class="container">
+      <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs" class="container" style="cursor: pointer">
         <a (click)="directToUrl(im.href)">
-          <img *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext'], getImageLink(im.imgUrl)) === 'image'"
+          <img *ngIf="im.mediaType === 'image'"
                [src]="im.imgUrl" class="full-width"/>
-          <video *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext'], getImageLink(im.imgUrl)) === 'video'"
+          <video *ngIf="im.mediaType === 'video'"
                  class="full-width" autoplay loop>
             <source [src]="im.imgUrl" type="{{im.fileType && im.fileType['mime']}}">
             مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
@@ -24,7 +24,7 @@
             <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null"><b>{{ar.text}}</b></div>
             <div *ngIf="ar.buttonText" style="margin-top: 5%;">
               <button mat-raised-button class="shop-button" [style.color]="ar.buttonColor ? ar.buttonColor : 'black'"
-                      [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'">
+                      [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'" (click)="directToUrl(im.href)">
                 <b *ngIf="ar.buttonText">{{ar.buttonText}}</b>
                 <b *ngIf="ar.buttonText === undefined">خرید آنلاین</b>
               </button>
@@ -49,9 +49,9 @@
          fxLayoutAlign="center center" fxLayout.sm="column" fxLayout.xs="column">
       <div [fxFlex]="100" *ngFor="let im of placements[key].imgs">
         <a (click)="directToUrl(im.href)">
-          <img *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext']) === 'image'" [src]="im.imgUrl"
+          <img *ngIf="im.mediaType === 'image'" [src]="im.imgUrl"
                class="full-width"/>
-          <video *ngIf="getFileTypeFromExtension(im.fileType && im.fileType['ext']) === 'video'" class="full-width"
+          <video *ngIf="im.mediaType === 'video'" class="full-width"
                  autoplay loop>
             <source [src]="im.imgUrl" type="{{im.fileType && im.fileType['mime']}}">
             مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
