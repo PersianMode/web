@@ -13,7 +13,7 @@ export class HttpService {
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {
     HttpService.Host = this.isInDevMode() ? 'http://localhost:3000' : 'http://bankofstyle.com';
-  }
+  }; 
 
   isInDevMode() {
     return isDevMode();

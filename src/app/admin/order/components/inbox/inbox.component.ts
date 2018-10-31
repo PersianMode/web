@@ -216,8 +216,8 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // if (this.socketObserver)
-    //   this.socketObserver.unsubscribe();
+    if (this.socketObserver)
+      this.socketObserver.unsubscribe();
   }
 
   showTicket(order, orderLine) {
