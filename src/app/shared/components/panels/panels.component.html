@@ -6,37 +6,41 @@
       {{placements[key].topTitle.title}}</h2>
     <div fxLayout="row"
          fxLayoutAlign="start start">
-      <div [fxFlex]="getRowParts(im)" *ngFor="let im of placements[key].imgs" class="container" style="cursor: pointer">
-        <a (click)="directToUrl(im.href)">
-          <img *ngIf="im.mediaType === 'image'"
-               [src]="im.imgUrl" class="full-width"/>
-          <video *ngIf="im.mediaType === 'video'"
-                 class="full-width" autoplay loop>
-            <source [src]="im.imgUrl" type="{{im.fileType && im.fileType['mime']}}">
-            مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
-          </video>
-        </a>
-        <div *ngFor="let ar of im.areas">
-          <div
-            [style.font-size]="(placements[key].type === 'full' && placements[key].imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
-            [ngClass]="ar.pos">
-            <h1 *ngIf="ar.title" [style.color]="ar.titleColor ? ar.titleColor : null">{{ar.title}}</h1>
-            <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null"><b>{{ar.text}}</b></div>
-            <div *ngIf="ar.buttonText" style="margin-top: 5%;">
-              <button mat-raised-button class="shop-button" [style.color]="ar.buttonColor ? ar.buttonColor : 'black'"
-                      [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'" (click)="directToUrl(im.href)">
-                <b *ngIf="ar.buttonText">{{ar.buttonText}}</b>
-                <b *ngIf="ar.buttonText === undefined">خرید آنلاین</b>
-              </button>
+      <div *ngFor="let im of placements[key].imgs" [fxFlex]="getRowParts(im)" class="container"
+           style="cursor: pointer;">
+        <div style="min-width: 250px; min-height: 250px">
+          <a (click)="directToUrl(im.href)">
+            <img *ngIf="im.mediaType === 'image'"
+                 [src]="im.imgUrl? im.imgUrl: placeHolder" class="full-width"/>
+            <video *ngIf="im.mediaType === 'video'"
+                   class="full-width" autoplay loop>
+              <source [src]="im.imgUrl" type="{{im.fileType && im.fileType['mime']}}">
+              مرورگر شما از پخش ویدیو پشتیبانی نمی کند!
+            </video>
+          </a>
+        </div>
+          <div *ngFor="let ar of im.areas">
+            <div
+              [style.font-size]="(placements[key].type === 'full' && placements[key].imgs[0].areas.length === 1)  ? '1.5em' : '0.9em'"
+              [ngClass]="ar.pos">
+              <h1 *ngIf="ar.title" [style.color]="ar.titleColor ? ar.titleColor : null">{{ar.title}}</h1>
+              <div *ngIf="ar.text" [style.color]="ar.textColor ? ar.textColor : null"><b>{{ar.text}}</b></div>
+              <div *ngIf="ar.buttonText" style="margin-top: 5%;">
+                <button mat-raised-button class="shop-button" [style.color]="ar.buttonColor ? ar.buttonColor : 'black'"
+                        [style.background-color]="ar.buttonBackgroundColor ? ar.buttonBackgroundColor : 'white'"
+                        (click)="directToUrl(im.href)">
+                  <b *ngIf="ar.buttonText">{{ar.buttonText}}</b>
+                  <b *ngIf="ar.buttonText === undefined">خرید آنلاین</b>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div *ngIf="im.subTitle" [style.color]="im.subTitle.titleColor ? im.subTitle.titleColor : null"
-             class="sub-title">
-          <b>{{im.subTitle.title}}</b></div>
-        <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null"
-             class="sub-title">{{im.subTitle.text}}
-        </div>
+          <div *ngIf="im.subTitle" [style.color]="im.subTitle.titleColor ? im.subTitle.titleColor : null"
+               class="sub-title">
+            <b>{{im.subTitle.title}}</b></div>
+          <div *ngIf="im.subTitle" [style.color]="im.subTitle.textColor ? im.subTitle.textColor : null"
+               class="sub-title">{{im.subTitle.text}}
+          </div>
       </div>
     </div>
   </div>
@@ -62,7 +66,8 @@
             {{ar.title}}</h2>
         </div>
         <div *ngIf="im.subTitle" class="title-mobile"><b>{{im.subTitle.title}}</b></div>
-        <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px; color: gray;">{{im.subTitle.text}}
+        <div *ngIf="im.subTitle" class="title-mobile" style="margin-bottom: 25px; color: gray;">
+          {{im.subTitle.text}}
         </div>
       </div>
     </div>

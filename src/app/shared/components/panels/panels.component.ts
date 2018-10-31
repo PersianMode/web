@@ -15,6 +15,7 @@ export class PanelsComponent implements OnInit {
   curWidth = 100;
   curHeight = 100;
   placements: any = [];
+  placeHolder: string = '../../../../assets/nike-brand.jpg'
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private pageService: PageService, private sanitizer: DomSanitizer,
@@ -134,4 +135,5 @@ export class PanelsComponent implements OnInit {
     // default fallback
     return 'image';
   }
+
 }

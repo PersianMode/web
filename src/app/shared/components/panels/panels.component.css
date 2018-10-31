@@ -7,6 +7,10 @@
   width: 100%;
 }
 
+.loading {
+  background: transparent url('http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif') center no-repeat;
+}
+
 /*Alignment based on horizontal-vertical align*/
 
 /* Bottom left text */
