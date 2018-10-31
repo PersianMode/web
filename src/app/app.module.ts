@@ -58,7 +58,7 @@ import {PrintService} from './shared/services/print.service';
     ProfileOrderService,
     RevertPlacementService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }

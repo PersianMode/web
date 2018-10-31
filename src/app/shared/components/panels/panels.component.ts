@@ -134,4 +134,5 @@ export class PanelsComponent implements OnInit {
     // default fallback
     return 'image';
   }
+
 }

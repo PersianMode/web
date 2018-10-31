@@ -100,6 +100,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
         }
       }
     });
+
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
   }
@@ -117,7 +118,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   }
 
   changeSizeType(fo) {
-    this.isChecked[fo]=[];
+    this.isChecked[fo] = [];
     this.productService.changeCollectionIsEU(this.current_filter_state);
   }
 
