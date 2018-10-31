@@ -9,6 +9,9 @@ import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {LoginStatus} from '../../login-status.enum';
+import {MessageService} from '../../../../shared/services/message.service';
+import {MessageType} from '../../../../shared/enum/messageType.enum';
+
 
 @Component({
   selector: 'app-login',
@@ -41,11 +44,13 @@ export class LoginComponent implements OnInit {
     preferred_tags: [],
     username: null
   };
+  showWaitingSpinner = false;
+
 
   constructor(private authService: AuthService, private router: Router,
               @Inject(WINDOW) private window, public dialog: MatDialog,
               private snackBar: MatSnackBar, private httpService: HttpService,
-              private dict: DictionaryService) {
+              private messageService: MessageService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
@@ -239,6 +244,7 @@ export class LoginComponent implements OnInit {
           this.tryLoggingIn()
             .catch(err => {
               // correct code but not verified via email
+              this.messageService.showMessage('لطفا برای فعال سازی حساب خود به ایمیل خود مراجعه فرمایید', MessageType.Information);
               this.loginStatus = this.Status.VerifiedMobile;
             });
         }
@@ -251,15 +257,21 @@ export class LoginComponent implements OnInit {
   }
 
   tryLoggingIn() {
+    this.showWaitingSpinner = true; // show spinner
     return new Promise((resolve, reject) => {
       this.authService.login(this.authService.tempUserData['username'] || this.loginForm.controls['username'].value,
         this.authService.tempUserData['password'] || this.loginForm.controls['password'].value)
         .then(userData => {
+          const fullName = userData.name + ' ' + userData.surname ;
+          this.messageService.showMessage(` ${fullName} عزیز خوش آمدید`, MessageType.Information);
+          this.showWaitingSpinner = false; // show spinner
           this.authService.tempUserData = {};
           this.outRouteOnPreferencesCondition(userData['is_preferences_set'], userData['gender'] || 'm');
           resolve();
         })
         .catch(err => {
+          this.messageService.showMessage('نام کاربری یا رمز عبور اشتباه است', MessageType.Error);
+          this.showWaitingSpinner = false; // show spinner
           reject(err);
         });
     });

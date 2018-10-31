@@ -13,7 +13,6 @@ import {LoginStatus} from '../../../login/login-status.enum';
 import {Router} from '@angular/router';
 import {RegStatus} from '../../register-status.enum';
 import { MessageService } from '../../../../shared/services/message.service';
-import { ProgressService } from '../../../../shared/services/progress.service';
 import { MessageType } from '../../../../shared/enum/messageType.enum';
 
 @Component({
@@ -33,11 +32,12 @@ export class RegisterComponent implements OnInit {
   curStatus = RegStatus.Register;
   code = null;
   dialogEnum = DialogEnum;
+  showWaitingSpinner = false;
 
   constructor(private httpService: HttpService, private authService: AuthService,
               private snackBar: MatSnackBar, private dict: DictionaryService,
               @Inject(WINDOW) private window, public dialog: MatDialog, private messageService: MessageService,
-              private progressService: ProgressService, private router: Router) {
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -82,7 +82,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this.progressService.enable();
+    this.showWaitingSpinner = true; // show spinner
     if (this.registerForm.valid && this.gender) {
       const data: any = {};
       Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
@@ -90,16 +90,17 @@ export class RegisterComponent implements OnInit {
       data.dob = this.dob;
       this.httpService.put('register', data).subscribe(
         (res) => {
+          this.showWaitingSpinner = false; // hide spinner
           this.curStatus = this.regStatus.Verify;
-          this.progressService.disable();
         },
         (err) => {
+          this.showWaitingSpinner = false; // hide spinner
           this.messageService.showMessage('کاربری با این مشخصات موجود است', MessageType.Error);
-          this.progressService.disable();
           console.error('Cannot register user: ', err);
         }
       );
     } else {
+      this.showWaitingSpinner = false; // hide spinner
       Object.keys(this.registerForm.controls).forEach(el => {
         if (!this.registerForm.controls[el].valid) {
           this.seen[el] = true;
@@ -153,7 +154,7 @@ export class RegisterComponent implements OnInit {
   }
 
   checkCode() {
-    this.progressService.enable();
+    this.showWaitingSpinner = true; // show spinner
     this.httpService.post('register/verify', {
       username: this.registerForm.controls['username'].value,
       code: this.code,
@@ -163,8 +164,8 @@ export class RegisterComponent implements OnInit {
         // comes here when customer activates via email BEFORE activating mobile, which rarely happens!
         // this way, they get logged in and the next time they try logging in, they will be setting preferences
           .then(userObj => {
+            this.showWaitingSpinner = false; // hide spinner
             if (userObj['is_preferences_set']) {
-              this.progressService.disable();
               this.closeDialog.emit(true);
               return;
             }
@@ -195,13 +196,13 @@ export class RegisterComponent implements OnInit {
           // the usual way is verifying through mobile, but email is stayed put for later
           // so depending on status code, we can understand that customer is verified by mobile or not
           .catch(err => {
-            this.progressService.disable();
+            this.showWaitingSpinner = false; // hide spinner
             if (err.status === VerificationErrors.notEmailVerified.status) {
               this.messageService.showMessage('لطفا برای فعال سازی حساب کابری به ایمیل خود مراجعه کنید ', MessageType.Information);
               // mobile activated
               this.curStatus = this.regStatus.MobileRegistered;
             } else {
-              this.messageService.showMessage('خطا در هنگام', MessageType.Error);
+              this.messageService.showMessage('خطا در هنگام ورود رخ داده است', MessageType.Error);
               // wrong verification code
               console.error('error in logging in:', err);
             }
@@ -209,6 +210,7 @@ export class RegisterComponent implements OnInit {
       },
       (err) => {
         // wrong verification code
+        this.showWaitingSpinner = false; // hide spinner
         this.messageService.showMessage('کد فعال سازی نادرست است', MessageType.Error);
         console.error('Cannot verify registration: ', err);
       }

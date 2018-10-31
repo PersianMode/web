@@ -1,4 +1,4 @@
-<div style="direction: rtl" class="dialog-style">
+<div style="direction: rtl" class="dialog-style" *ngIf="!showWaitingSpinner">
   <div class="center">
     <span class="persian-mode-center-logo">پرشین مد
       <span>ُ</span>
@@ -177,4 +177,11 @@
     </div>
 
   </div>
+</div>
+
+<div class="center-content" *ngIf="showWaitingSpinner">
+  <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
+    [strokeWidth]="'2'">
+  </mat-progress-spinner>
+  <span dir="rtl"> لطفا اندکی صبر نمایید ...</span>
 </div>
