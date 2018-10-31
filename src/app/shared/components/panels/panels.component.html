@@ -11,7 +11,7 @@
         <div style="min-width: 250px; min-height: 250px">
           <a (click)="directToUrl(im.href)">
             <img *ngIf="im.mediaType === 'image'"
-                 [src]="im.imgUrl? im.imgUrl: placeHolder" class="full-width"/>
+                 [src]="im.imgUrl" class="full-width"/>
             <video *ngIf="im.mediaType === 'video'"
                    class="full-width" autoplay loop>
               <source [src]="im.imgUrl" type="{{im.fileType && im.fileType['mime']}}">
