@@ -65,6 +65,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
   }
 
   ngOnInit() {
+    this.spinnerService.enable();
     this.route.paramMap.subscribe(params => {
       this.pageName = 'collection/' + params.get('typeName');
       this.pageService.getPage(this.pageName);
@@ -78,7 +79,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
             this.productService.emptyFilters();
             console.error('-> ', `${this.pageName} is getting empty data for page`);
           }
-          this.spinnerService.disable();
+          // this.spinnerService.disable();
         },
         err => {
           this.spinnerService.disable();
@@ -98,7 +99,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
       this.products = r;
       this.sortedBy = {value: null};
       setTimeout(() => this.calcAfterScroll(), 1000);
-      this.spinnerService.disable();
+      // this.spinnerService.disable();
 
     });
     this.calcWidth();

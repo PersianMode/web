@@ -9,8 +9,8 @@
     <div [class.content]="!isMobile" [class.mobile-content]="isMobile">
 
       <router-outlet></router-outlet>
-      <div class="waiting-spinner center-content" *ngIf="spinnerEnabled">
-        <mat-progress-spinner color="primary" mode="indeterminate" >
+      <div class="center-content" *ngIf="spinnerEnabled">
+        <mat-progress-spinner  class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'" [strokeWidth]="'2'">
         </mat-progress-spinner>
         <div>
           لطفا اندکی صبر کنید...

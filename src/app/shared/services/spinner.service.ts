@@ -6,12 +6,6 @@ import {ReplaySubject} from 'rxjs/ReplaySubject';
 export class SpinnerService {
 
   isSpinner$: BehaviorSubject<any> = new BehaviorSubject<any>(false);
-  // color$: BehaviorSubject<any> = new BehaviorSubject<any>('primary');
-  // mode$: BehaviorSubject<any> = new BehaviorSubject<any>('indeterminate');
-  // diameter$: BehaviorSubject<any> = new BehaviorSubject<any>(35);
-  // strokeWidth$: BehaviorSubject<any> = new BehaviorSubject<any>(2);
-
-
   constructor() {}
 
   enable() {
