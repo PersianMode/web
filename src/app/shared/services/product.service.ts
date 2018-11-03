@@ -159,6 +159,7 @@ export class ProductService {
   }
 
   applyFilters(filters, trigger) {
+    this.spinnerService.enable();
     this.filteredProducts = JSON.parse(JSON.stringify(this.products));
     filters.forEach(f => {
       if (f.values.length) {
@@ -213,8 +214,10 @@ export class ProductService {
 
       this.filteredProducts = this.cleanProductsList(this.filteredProducts);
     });
+    setTimeout(() => {
       this.sortProductsAndEmit();
       this.extractFilters(filters, trigger);
+    }, 500);
   }
 
   getProduct(productId) {
