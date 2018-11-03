@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, AfterViewInit} from '@angular/core';
 import {WINDOW} from '../../shared/services/window.service';
 import {CartService} from '../../shared/services/cart.service';
 import {AuthService} from '../../shared/services/auth.service';
@@ -18,7 +18,7 @@ import {CheckoutService} from '../../shared/services/checkout.service';
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
-export class CartComponent implements OnInit, OnDestroy {
+export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
   products = [];
   numberOfProducts: any;
   totalPrice: any;
@@ -31,10 +31,14 @@ export class CartComponent implements OnInit, OnDestroy {
   showWaitingSpinner = false;
 
   constructor(@Inject(WINDOW) private window, private cartService: CartService, private checkoutService: CheckoutService,
-              private authService: AuthService, private router: Router, public dialog: MatDialog, private titleService: TitleService, private productService: ProductService) {
+              private authService: AuthService, private router: Router, public dialog: MatDialog,
+               private titleService: TitleService, private productService: ProductService) {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
     this.titleService.setTitleWithConstant('سبد خرید');
     this.authService.isLoggedIn.subscribe(
       (data) => this.isLoggedIn = this.authService.userIsLoggedIn()
@@ -46,6 +50,7 @@ export class CartComponent implements OnInit, OnDestroy {
       carts.forEach(p => productIds.push(p.product_id));
       const prevProductCount = this.products.length;
       this.productService.loadProducts(productIds).then((data: any[]) => {
+        console.log('data', data);
         this.products = [];
         carts.forEach(p => {
           let item = {};

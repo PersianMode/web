@@ -91,7 +91,9 @@ export class CheckoutPageComponent implements OnInit {
     } else {
       this.showEarnPointLabel = true;
       this.checkoutService.loyaltyGroups.subscribe(data => this.loyaltyGroups = data);
-      this.checkoutService.addPointArray.subscribe(data => this.addPointArray = data[0].add_point);
+      this.checkoutService.addPointArray.subscribe(data => {
+        if (data && data.length) this.addPointArray = data[0].add_point;
+      });
     }
 
     // this.checkoutService.setPaymentType(this.paymentType.cash);
@@ -160,8 +162,7 @@ export class CheckoutPageComponent implements OnInit {
         customer_loyaltyGroup = valid_loyaltyGroups.filter(el => el.min_score === maxScore);
       }
 
-      console.log('customer_loyaltyGroup', customer_loyaltyGroup);
-      // this.earnedLoyaltyPoint = customer_loyaltyGroup &&  parseInt(this.addPointArray.filter(el => el.name === customer_loyaltyGroup[0].name)[0].added_point) + Math.floor(this.total / this.system_offline_offer);
+      this.earnedLoyaltyPoint = customer_loyaltyGroup &&  parseInt(this.addPointArray.filter(el => el.name === customer_loyaltyGroup[0].name)[0].added_point) + Math.floor(this.total / this.system_offline_offer);
     }
     this.checkoutService.setEarnSpentPoint(this.earnedLoyaltyPoint);
   }
