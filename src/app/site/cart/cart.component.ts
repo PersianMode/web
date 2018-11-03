@@ -50,7 +50,6 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
       carts.forEach(p => productIds.push(p.product_id));
       const prevProductCount = this.products.length;
       this.productService.loadProducts(productIds).then((data: any[]) => {
-        console.log('data', data);
         this.products = [];
         carts.forEach(p => {
           let item = {};

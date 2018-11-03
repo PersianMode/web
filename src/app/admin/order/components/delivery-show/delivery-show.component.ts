@@ -30,8 +30,6 @@ export class DeliveryShowComponent implements OnInit {
     this.httpService.post(`delivery/by_order`, {orderId: this.orderId, orderLineId: this.orderLineId})
       .map(res => res[0])
       .subscribe(data => {
-      console.log('data-->', data);
-      
       this.from = data.from['customer']['_id'] ? data.from['customer'] : data.from['warehouse'];
       this.to = data.to['customer']['_d'] ? data.to['customer'] : data.to['warehouse'];
       this.agentName = data['agent_name'] ? data['agent_name'] : null;
