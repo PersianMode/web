@@ -170,6 +170,7 @@ export class RegisterComponent implements OnInit {
               return;
             }
 
+
             if (this.window.innerWidth >= 960) {
               const rmDialog = this.dialog.open(GenDialogComponent, {
                 width: '500px',
@@ -180,13 +181,12 @@ export class RegisterComponent implements OnInit {
                   }
                 }
               });
-              rmDialog.afterOpen().subscribe(() => {
-                this.closeDialog.emit(false);
-              });
+              // rmDialog.afterOpen().subscribe(() => {
+              //   this.closeDialog.emit(false);
+              // });
               rmDialog.afterClosed().subscribe(resp => {
                 if (resp) {
                   this.closeDialog.emit(true);
-                  this.router.navigate(['home']);
                 }
               });
             } else {

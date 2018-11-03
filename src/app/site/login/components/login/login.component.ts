@@ -331,7 +331,7 @@ export class LoginComponent implements OnInit {
       preferred_size: this.preferences.preferred_size
     }).subscribe(response => {
       this.closeDialog.emit(true);
-      this.router.navigate(['home']);
+      // this.router.navigate(['home']);
     }, err => {
       console.error('error occurred in submitting preferences: ', err);
     });

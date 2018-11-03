@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
       .filter(x => x)
       .map(r => {
         if (!r.username) {
-          this.router.navigate(['/']);
+          this.router.navigate(['/', { returnUrl: state.url }]);
           // this.forbiddenStack.push({path: route.url.map(u => u.path), time: new Date()});
           return false;
         } else
