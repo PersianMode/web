@@ -19,9 +19,9 @@ import {last} from 'rxjs/operators';
 
 
 @Component({
-  selector: 'app-order-inbox',
-  templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.scss'],
+  selector: 'app-sc-inbox',
+  templateUrl: './sc-inbox.component.html',
+  styleUrls: ['./sc-inbox.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
@@ -30,12 +30,12 @@ import {last} from 'rxjs/operators';
     ]),
   ],
 })
-export class InboxComponent implements OnInit, OnDestroy {
+export class SCInboxComponent implements OnInit, OnDestroy {
 
 
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = [
+  displayedColumns = [ 
     'position',
     'customer',
     'is_collect',
