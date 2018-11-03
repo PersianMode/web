@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import {PaymentType} from '../../../shared/enum/payment.type.enum';
 import {CheckoutService} from '../../../shared/services/checkout.service';
 import {HttpService} from '../../../shared/services/http.service';
@@ -27,14 +27,14 @@ export class CheckoutPageComponent implements OnInit {
   balanceValue = 0;
   loyaltyPoint = 0;
   paymentType = PaymentType;
-  disabled: boolean = false;
-  changeMessage: string = '';
+  disabled = false;
+  changeMessage = '';
   soldOuts: any[];
   discountChanges: any[];
   priceChanges: any[];
   showCostLabel: true;
   noDuration = null;
-  hasChangeError: boolean = false;
+  hasChangeError = false;
   loyaltyGroups = [];
   addPointArray = [];
   selectedPaymentType = 0;
@@ -42,6 +42,7 @@ export class CheckoutPageComponent implements OnInit {
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
+  dataIsReady: boolean;
 
 
   constructor(private checkoutService: CheckoutService,
@@ -59,14 +60,20 @@ export class CheckoutPageComponent implements OnInit {
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {
+        this.dataIsReady = !!data;
         if (data) {
           const totalDiscount = this.checkoutService.getTotalDiscount();
           this.total = totalDiscount.total;
           this.discount = totalDiscount.discount;
+        } else {
+         this.router.navigate(['/cart']);
         }
       }
     );
-    this.finalCheckItems();
+    // check when reload page, redirect to basket page
+    if (!this.dataIsReady) return;
+
+      this.finalCheckItems();
 
     this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
@@ -139,8 +146,7 @@ export class CheckoutPageComponent implements OnInit {
     else if (this.showCostLabel) {
       // calculate earn point
       this.earnedLoyaltyPoint = Math.floor(this.total / this.system_offline_offer);
-    }
-    else {
+    } else {
       // calculate earn point in C&C mode
       valid_loyaltyGroups = this.loyaltyGroups.filter(el => el.min_score <= this.loyaltyPoint);
 
@@ -148,14 +154,14 @@ export class CheckoutPageComponent implements OnInit {
         scoreArray = this.loyaltyGroups.map(el => el.min_score);
         maxScore = Math.min(...scoreArray);
         customer_loyaltyGroup = this.loyaltyGroups.filter(el => el.min_score === maxScore);
-      }
-      else {
+      } else {
         scoreArray = valid_loyaltyGroups.map(el => el.min_score);
         maxScore = Math.max(...scoreArray);
         customer_loyaltyGroup = valid_loyaltyGroups.filter(el => el.min_score === maxScore);
       }
-      this.earnedLoyaltyPoint = parseInt(this.addPointArray.filter(el => el.name === customer_loyaltyGroup[0].name)[0].added_point)
-        + Math.floor(this.total / this.system_offline_offer);
+
+      console.log('customer_loyaltyGroup', customer_loyaltyGroup);
+      // this.earnedLoyaltyPoint = customer_loyaltyGroup &&  parseInt(this.addPointArray.filter(el => el.name === customer_loyaltyGroup[0].name)[0].added_point) + Math.floor(this.total / this.system_offline_offer);
     }
     this.checkoutService.setEarnSpentPoint(this.earnedLoyaltyPoint);
   }
@@ -176,7 +182,6 @@ export class CheckoutPageComponent implements OnInit {
   finalCheckItems() {
     return new Promise((resolve, reject) => {
       this.checkoutService.finalCheck().subscribe(res => {
-          console.log(res);
           this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
           this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
           this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));

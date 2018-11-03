@@ -180,19 +180,17 @@ export class CartService {
       .then(res => {
         try {
           this.setCartItem(overallDetails, res, false);
-        }
-        catch (err) {
+        } catch (err) {
           console.error('-> ', err);
         }
       })
       .catch(err => {
         try {
           this.setCartItem(null, [], false);
-        }
-        catch (err) {
+        } catch (err) {
           console.error('-> ', err);
         }
-      })
+      });
   }
 
   inventoryCount(instance) {

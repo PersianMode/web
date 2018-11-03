@@ -262,8 +262,6 @@ export class LoginComponent implements OnInit {
       this.authService.login(this.authService.tempUserData['username'] || this.loginForm.controls['username'].value,
         this.authService.tempUserData['password'] || this.loginForm.controls['password'].value)
         .then(userData => {
-          const fullName = userData.name + ' ' + userData.surname ;
-          this.messageService.showMessage(` ${fullName} عزیز خوش آمدید`, MessageType.Information);
           this.showWaitingSpinner = false; // show spinner
           this.authService.tempUserData = {};
           this.outRouteOnPreferencesCondition(userData['is_preferences_set'], userData['gender'] || 'm');
