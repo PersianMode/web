@@ -18,9 +18,11 @@ export class CartService {
   coupon_discount = 0;
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
-  constructor(private httpService: HttpService, private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
+  constructor(private httpService: HttpService, private authService: AuthService,
+     private productService: ProductService, private snackBar: MatSnackBar) {
     this.authService.isLoggedIn.subscribe(
       isLoggedIn => {
+        // if (!isLoggedIn) return;
         // Read data from localStorage and save in server if any data is exist in localStorage
         const items = this.getItemsFromStorage();
         if (this.authService.userIsLoggedIn()) {
@@ -49,9 +51,9 @@ export class CartService {
 
         } else if (items && items.length) {
           this.getItemsDetail(items);
-        }
-        else {
+        } else {
           this.setCartItem(null, [], false);
+          this.getUserCart();
         }
 
 
@@ -176,6 +178,7 @@ export class CartService {
   }
 
   getItemsDetail(overallDetails) {
+    // overallDetails includes of {instance_id, order_id, product_id}
     this.productService.loadProducts(overallDetails.map(x => x.product_id))
       .then(res => {
         try {

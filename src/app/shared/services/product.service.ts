@@ -6,8 +6,6 @@ import {DictionaryService} from './dictionary.service';
 import {imagePathFixer} from '../lib/imagePathFixer';
 import {discountCalc} from '../lib/discountCalc';
 import {productColorMap} from '../lib/colorNameMap';
-import {resolve} from 'path';
-import {reject} from 'q';
 
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
@@ -325,9 +323,8 @@ export class ProductService {
                 this.products[found] = product;
               }
             });
+            resolve(data);
           }
-          resolve(data)
-
         });
     });
 
