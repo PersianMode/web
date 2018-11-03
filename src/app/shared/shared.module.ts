@@ -26,6 +26,9 @@ import {LogoHeaderComponent} from './components/logo-header/logo-header.componen
 import {SizePickerComponent} from './components/size-picker/size-picker.component';
 import { SaveChangeConfirmComponent } from './components/save-change-confirm/save-change-confirm.component';
 import { ShelfCodePrinterComponent } from './components/shelf-code-printer/shelf-code-printer.component';
+import {ProductService} from './services/product.service';
+import {AuthGuard} from '../site/auth.guard';
+import {SpinnerService} from './services/spinner.service';
 
 @NgModule({
   declarations: [
@@ -89,7 +92,8 @@ import { ShelfCodePrinterComponent } from './components/shelf-code-printer/shelf
     DobComponent, MatSlideToggleModule,
     LogoHeaderComponent,
     SizePickerComponent,
-  ]
+  ],
+  providers: [SpinnerService]
 })
 export class SharedModule {
 

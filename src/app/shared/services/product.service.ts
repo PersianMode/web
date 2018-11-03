@@ -8,6 +8,7 @@ import {discountCalc} from '../lib/discountCalc';
 import {productColorMap} from '../lib/colorNameMap';
 import {resolve} from 'path';
 import {reject} from 'q';
+import {SpinnerService} from './spinner.service';
 
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
@@ -58,7 +59,7 @@ export class ProductService {
   private collectionId;
 
 
-  constructor(private httpService: HttpService, private dict: DictionaryService) {
+  constructor(private httpService: HttpService, private dict: DictionaryService, private spinnerService: SpinnerService) {
   }
 
   extractFilters(filters = [], trigger = '') {
@@ -212,8 +213,8 @@ export class ProductService {
 
       this.filteredProducts = this.cleanProductsList(this.filteredProducts);
     });
-    this.sortProductsAndEmit();
-    this.extractFilters(filters, trigger);
+      this.sortProductsAndEmit();
+      this.extractFilters(filters, trigger);
   }
 
   getProduct(productId) {
@@ -328,13 +329,11 @@ export class ProductService {
           }
           resolve(data);
         });
-
-
     });
-
   }
 
   loadCollectionProducts(collection_id) {
+    this.spinnerService.enable();
     this.sortInput = null;
     this.httpService.get('collection/product/' + collection_id)
       .subscribe(
@@ -354,8 +353,11 @@ export class ProductService {
             this.sortProductsAndEmit();
             this.extractFilters();
           }
+          this.spinnerService.disable();
+
         },
         (err) => {
+          this.spinnerService.disable();
           console.error('Cannot get products of collection: ', err);
         }
       );
@@ -369,6 +371,7 @@ export class ProductService {
   }
 
   private sortProductsAndEmit() {
+    this.spinnerService.enable();
     let sortedProducts = [];
     switch (this.sortInput) {
       case 'newest': {
@@ -396,6 +399,8 @@ export class ProductService {
       }
     }
     this.productList$.next(sortedProducts);
+    this.spinnerService.disable();
+
   }
 
   changeCollectionIsEU(filterState) {

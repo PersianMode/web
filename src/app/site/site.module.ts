@@ -44,6 +44,7 @@ import { ForgotPasswordComponent } from './login/components/forgot-password/forg
 import { OrderReturnComponent } from './profile/components/order-return/order-return.component';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
 import {SpinnerService} from '../shared/services/spinner.service';
+import {ProductService} from '../shared/services/product.service';
 
 
 @NgModule({
@@ -98,7 +99,7 @@ import {SpinnerService} from '../shared/services/spinner.service';
     OrderReturnComponent
   ],
   entryComponents: [GenDialogComponent],
-  providers: [AuthGuard, SpinnerService]
+  providers: [AuthGuard, ProductService]
 })
 export class SiteModule {
 }

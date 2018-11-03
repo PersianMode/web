@@ -7,7 +7,6 @@ import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {Subject, Subscription} from 'rxjs';
 import {TitleService} from '../../../../shared/services/title.service';
-import {SpinnerService} from '../../../../shared/services/spinner.service';
 
 const HEADER_HEIGHT = 209;
 
@@ -61,11 +60,10 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
               private responsiveService: ResponsiveService, private productService: ProductService,
-              private titleService: TitleService, private spinnerService: SpinnerService) {
+              private titleService: TitleService) {
   }
 
   ngOnInit() {
-    this.spinnerService.enable();
     this.route.paramMap.subscribe(params => {
       this.pageName = 'collection/' + params.get('typeName');
       this.pageService.getPage(this.pageName);
@@ -79,10 +77,8 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
             this.productService.emptyFilters();
             console.error('-> ', `${this.pageName} is getting empty data for page`);
           }
-          // this.spinnerService.disable();
         },
         err => {
-          this.spinnerService.disable();
           console.error('Error when subscribing on pageInfo: ', err);
         }
       );
@@ -94,12 +90,10 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
       else
         this.titleService.setTitleWithConstant(this.title);
     });
-    this.spinnerService.enable();
     this.productService.productList$.subscribe(r => {
       this.products = r;
       this.sortedBy = {value: null};
       setTimeout(() => this.calcAfterScroll(), 1000);
-      // this.spinnerService.disable();
 
     });
     this.calcWidth();
@@ -174,10 +168,6 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
     this.displayFilter = $event;
   }
 
-  showHideSpinner(shouldShow = false) {
-    // this.showWaitingSpinner = shouldShow;
-
-  }
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
