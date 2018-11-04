@@ -9,12 +9,10 @@ import {Router, RouteConfigLoadStart, RouteConfigLoadEnd} from '@angular/router'
 })
 export class AppComponent implements OnInit {
   loadingRouteConfig: boolean;
-  blockedDocument = false;
 
   constructor (private router: Router) {}
 
   ngOnInit () {
-    this.blockDocument();
     this.router.events.subscribe(event => {
       if (event instanceof RouteConfigLoadStart) {
         this.loadingRouteConfig = true;
@@ -23,10 +21,5 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  blockDocument() {
-    this.blockedDocument = true;
-    setTimeout(() => {
-      this.blockedDocument = false;
-    }, 2000);
-  }
+
 }
