@@ -57,7 +57,7 @@ export class BarcodeCheckerComponent implements OnInit {
     }, err => {
       this.progressService.disable();
       this.openSnackBar('خطا به هنگام اسکن محصول')
-    })
+    });
 
 
   }

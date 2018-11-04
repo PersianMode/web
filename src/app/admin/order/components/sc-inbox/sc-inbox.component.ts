@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -16,6 +16,7 @@ import * as moment from 'jalali-moment';
 import {FormControl} from '@angular/forms';
 import {TicketComponent} from '../ticket/ticket.component';
 import {last} from 'rxjs/operators';
+import {log} from 'util';
 
 
 @Component({
@@ -30,23 +31,30 @@ import {last} from 'rxjs/operators';
     ]),
   ],
 })
-export class SCInboxComponent implements OnInit, OnDestroy {
+export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
+
 
 
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = [ 
+  CCDisplayedColumns = [
     'position',
     'customer',
-    'is_collect',
     'order_time',
     'total_order_lines',
-    'address',
     'process'
   ];
 
-  dataSource = new MatTableDataSource();
+  normalDisplayedColumns = [
+    'position',
+    'details',
+    'name',
+  ];
+
+  CCDataSource = new MatTableDataSource();
   expandedElement: any;
+
+  normalDataSource = new MatTableDataSource();
 
   pageSize = 10;
   resultsLength: Number;
@@ -56,6 +64,8 @@ export class SCInboxComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   socketObserver: any = null;
+
+  hasCC = false;
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
@@ -69,25 +79,39 @@ export class SCInboxComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.load();
+    this.hasCC = !!this.authService.warehouses.find(x => x.has_customer_pickup &&
+      !x.is_hub &&
+      x._id === this.authService.userDetails.warehouse_id);
 
     this.socketObserver = this.socketService.getOrderLineMessage();
+
+  }
+
+  ngAfterViewInit(): void {
+    this.load();
     if (this.socketObserver) {
       this.socketObserver.subscribe(msg => {
         this.load();
       });
     }
-
   }
 
   load() {
+    if (this.hasCC)
+      this.loadCC();
 
+    this.loadNormal();
+  }
+
+
+  loadNormal() {
     this.progressService.enable();
 
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
-      type: 'inbox'
+      type: 'inbox',
+      isCollect: false
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
@@ -95,30 +119,53 @@ export class SCInboxComponent implements OnInit, OnDestroy {
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
 
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
+      });
+      this.normalDataSource.data = res.data;
+      this.resultsLength = res.total ? res.total : 0;
+      this.OnNewInboxCount.emit(res.total);
+    }, err => {
+      this.progressService.disable();
+      this.openSnackBar('خطا در دریافت لیست سفارش‌های عادی');
+    });
+  }
+
+  loadCC() {
+
+    if (!this.hasCC)
+      return;
+
+    this.progressService.enable();
+
+    const options = {
+      sort: this.sort.active,
+      dir: this.sort.direction,
+      type: 'inbox',
+      isCollect: true
+    };
+    const offset = this.paginator.pageIndex * +this.pageSize;
+    const limit = this.pageSize;
+
+    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+      this.progressService.disable();
+
+      console.log('-> ', res);   
       const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
-      this.dataSource.data = rows;
+      this.CCDataSource.data = rows;
       this.resultsLength = res.total ? res.total : 0;
-      console.log('-> ', this.dataSource.data);
       this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
       this.OnNewInboxCount.emit(0);
-      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
+      this.openSnackBar('خطا در دریافت لیست سفارش‌های آماده تحویل');
     });
   }
 
-
-  getIndex(order) {
-    
-    // let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
-    // if (index === 0)
-    //   index = 1;
-    // return index;
-  }
 
   getDate(orderTime) {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
@@ -186,7 +233,7 @@ export class SCInboxComponent implements OnInit, OnDestroy {
     return order.order_lines.every(x => {
       const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
       return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice ||
-         lastTicket.status === STATUS.WaitForInvoice);
+        lastTicket.status === STATUS.WaitForInvoice);
     });
   }
 
