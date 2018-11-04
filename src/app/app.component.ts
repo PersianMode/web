@@ -27,6 +27,6 @@ export class AppComponent {
     this.blockedDocument = true;
     setTimeout(() => {
       this.blockedDocument = false;
-    }, 3000);
+    }, 2000);
   }
 }
