@@ -1,11 +1,11 @@
-import {AfterContentInit, Component, HostListener, Inject, OnInit, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, HostListener, Inject, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {DOCUMENT} from '@angular/platform-browser';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
 import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
-import {Subject} from 'rxjs/Subject';
+import {Subject, Subscription} from 'rxjs';
 import {TitleService} from '../../../../shared/services/title.service';
 
 const HEADER_HEIGHT = 209;
@@ -15,7 +15,7 @@ const HEADER_HEIGHT = 209;
   templateUrl: './main-collection.component.html',
   styleUrls: ['./main-collection.component.css']
 })
-export class MainCollectionComponent implements OnInit, AfterContentInit {
+export class MainCollectionComponent implements OnInit, OnDestroy , AfterContentInit {
   products = [];
   @ViewChild('filterPane') filterPane;
   @ViewChild('gridwall') gridwall;
@@ -55,9 +55,8 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   sortedBy: any = {value: null};
   collectionName = '';
   collectionNameFa = '';
-  showWaitingSpinner = false;
   lazyRows = 10;
-
+  subscription: Subscription;
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
               private responsiveService: ResponsiveService, private productService: ProductService,
@@ -68,7 +67,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.route.paramMap.subscribe(params => {
       this.pageName = 'collection/' + params.get('typeName');
       this.pageService.getPage(this.pageName);
-      this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
+      this.subscription = this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
           this.title = res.title;
           if (res && res['collection_id']) {
             this.productService.loadCollectionProducts(res['collection_id']);
@@ -91,11 +90,11 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
       else
         this.titleService.setTitleWithConstant(this.title);
     });
-    this.showHideSpinner(true);
     this.productService.productList$.subscribe(r => {
       this.products = r;
       this.sortedBy = {value: null};
       setTimeout(() => this.calcAfterScroll(), 1000);
+
     });
     this.calcWidth();
     this.responsiveService.resize$.subscribe(r => {
@@ -105,6 +104,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
 
     this.scroll$.subscribe(() => this.calcAfterScroll());
+
   }
 
   ngAfterContentInit() {
@@ -128,7 +128,6 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
   }
 
   calcAfterScroll() {
-    this.showHideSpinner(true);
 
     if (!this.isMobile && this.filterPane && this.gridwall) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
@@ -144,7 +143,6 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
       this.topDist = height - filterHeight + HEADER_HEIGHT;
     }
 
-    this.showHideSpinner(false);
   }
 
   selectSortOption(sortPanel, index) {
@@ -170,7 +168,7 @@ export class MainCollectionComponent implements OnInit, AfterContentInit {
     this.displayFilter = $event;
   }
 
-  showHideSpinner(shouldShow = false) {
-    this.showWaitingSpinner = shouldShow;
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
