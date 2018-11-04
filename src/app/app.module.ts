@@ -61,7 +61,7 @@ import {BlockUIModule} from 'primeng/blockui';
     ProfileOrderService,
     RevertPlacementService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }
