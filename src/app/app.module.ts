@@ -24,6 +24,7 @@ import {TitleService} from './shared/services/title.service';
 import {RevertPlacementService} from './shared/services/revert-placement.service';
 import {PrintService} from './shared/services/print.service';
 import {BlockUIModule} from 'primeng/blockui';
+import {SpinnerService} from './shared/services/spinner.service';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import {BlockUIModule} from 'primeng/blockui';
     CheckoutService,
     ProfileOrderService,
     RevertPlacementService,
+    SpinnerService,
   ],
   bootstrap: [AppComponent],
 })

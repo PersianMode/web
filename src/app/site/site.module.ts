@@ -100,7 +100,7 @@ import {BlockUIModule} from 'primeng/blockui';
     OrderReturnComponent
   ],
   entryComponents: [GenDialogComponent],
-  providers: [AuthGuard, ProductService]
+  providers: [AuthGuard]
 })
 export class SiteModule {
 }

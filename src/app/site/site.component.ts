@@ -1,4 +1,4 @@
-import {Component, HostListener, Inject, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, Input, OnInit, OnDestroy} from '@angular/core';
 import {WINDOW} from '../shared/services/window.service';
 import {AuthService} from '../shared/services/auth.service';
 import {Router, NavigationEnd} from '@angular/router';
@@ -13,7 +13,7 @@ import {SpinnerService} from '../shared/services/spinner.service';
   templateUrl: './site.component.html',
   styleUrls: ['./site.component.css']
 })
-export class SiteComponent implements OnInit {
+export class SiteComponent implements OnInit, OnDestroy {
   isMobile = false;
   curWidth: number;
   curHeight: number;
@@ -32,7 +32,7 @@ export class SiteComponent implements OnInit {
     });
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
-          return;
+        return;
       }
       window.scrollTo(0, 0);
     });
@@ -41,7 +41,8 @@ export class SiteComponent implements OnInit {
     this.isMobile = this.isMobileCalc();
     this.updateResponsiveService();
     this.authService.checkValidation(this.router.url)
-      .then(() => {}).catch(err => console.error(err));
+      .then(() => {
+      }).catch(err => console.error(err));
     this.loadInitialPlacements();
     this.onResize(null, this.curWidth, this.curHeight);
   }
@@ -68,11 +69,15 @@ export class SiteComponent implements OnInit {
   }
 
   private loadInitialPlacements() {
-     setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
+    setTimeout(() => this.pageService.getPage(this.router.url.substring(1)), 100);
   }
 
   isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {
     return width < 960;
+  }
+
+  ngOnDestroy() {
+    this.spinnerService.isSpinner$.unsubscribe();
   }
 }
 

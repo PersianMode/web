@@ -93,7 +93,6 @@ import {SpinnerService} from './services/spinner.service';
     LogoHeaderComponent,
     SizePickerComponent,
   ],
-  providers: [SpinnerService]
 })
 export class SharedModule {
 
