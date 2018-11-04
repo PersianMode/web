@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as io from 'socket.io-client';
-import {Observable} from 'rxjs/Rx';
+import {Observable, BehaviorSubject, Subject} from 'rxjs/Rx';
 import {HttpService} from './http.service';
 
 @Injectable()
@@ -10,24 +10,23 @@ export class SocketService {
   // };
 
   private orderLineSocket;
-
-  private orderLineObservable = new Observable(observer => {
-    this.orderLineSocket.on('msg', (message) => {
-      console.log('-> socket message: ', message);
-      observer.next(message);
-    });
-  });
+  private orderLine$ = new Subject();
 
   constructor() {
   }
 
   public init() {
     this.orderLineSocket = io(HttpService.Host);
+    this.orderLineSocket.on('msg', (message) => {
+      console.log('-> socket message: ', message);
+      this.orderLine$.next(message);
+    });
+
   }
 
   getOrderLineMessage() {
     if (this.orderLineSocket)
-      return this.orderLineObservable;
+      return this.orderLine$;
   }
 
   disconnect() {
