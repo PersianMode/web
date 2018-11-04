@@ -1,1 +1,10 @@
 <router-outlet></router-outlet>
+<div *ngIf="loadingRouteConfig">
+  <p-blockUI [blocked]="blockedDocument">
+  <div style="width:50%;height:100vh;text-align: center; ">
+    <div style="position:absolute; left: calc(50% - 98px); top: calc(50% - 98px) ">
+      <img src="../assets/spinner.gif " alt="Loading... "/>
+    </div>
+  </div>
+  </p-blockUI>
+</div>

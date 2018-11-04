@@ -1,4 +1,4 @@
-import {Component, HostListener, Inject, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, Input, OnInit} from '@angular/core';
 import {WINDOW} from '../shared/services/window.service';
 import {AuthService} from '../shared/services/auth.service';
 import {Router, NavigationEnd} from '@angular/router';
@@ -7,7 +7,6 @@ import {ResponsiveService} from '../shared/services/responsive.service';
 import {CartService} from '../shared/services/cart.service';
 import {DictionaryService} from '../shared/services/dictionary.service';
 import {SpinnerService} from '../shared/services/spinner.service';
-
 
 @Component({
   selector: 'app-site',
@@ -19,6 +18,7 @@ export class SiteComponent implements OnInit {
   curWidth: number;
   curHeight: number;
   spinnerEnabled = false;
+  blockedDocument = false;
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
@@ -26,6 +26,11 @@ export class SiteComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.spinnerService.isblock$.subscribe(is_block => {
+      setTimeout(() => {
+        this.blockedDocument = is_block;
+      });
+    });
     this.spinnerService.isSpinner$.subscribe(is_spinner => {
       setTimeout(() => {
         this.spinnerEnabled = is_spinner;

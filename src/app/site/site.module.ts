@@ -43,8 +43,8 @@ import {OrderLinesComponent} from './profile/components/order-lines/order-lines.
 import { ForgotPasswordComponent } from './login/components/forgot-password/forgot-password.component';
 import { OrderReturnComponent } from './profile/components/order-return/order-return.component';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
-import {SpinnerService} from '../shared/services/spinner.service';
 import {ProductService} from '../shared/services/product.service';
+import {BlockUIModule} from 'primeng/blockui';
 
 
 @NgModule({
@@ -77,6 +77,7 @@ import {ProductService} from '../shared/services/product.service';
     MatSliderModule,
     SharedModule,
     MatTooltipModule,
+    BlockUIModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),

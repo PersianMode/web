@@ -23,6 +23,7 @@ import {ProfileOrderService} from './shared/services/profile-order.service';
 import {TitleService} from './shared/services/title.service';
 import {RevertPlacementService} from './shared/services/revert-placement.service';
 import {PrintService} from './shared/services/print.service';
+import {BlockUIModule} from 'primeng/blockui';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {PrintService} from './shared/services/print.service';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    BlockUIModule
   ],
   providers: [
     WINDOW_PROVIDERS,
