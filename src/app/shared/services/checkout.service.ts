@@ -32,8 +32,8 @@ export class CheckoutService {
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
-              private authService: AuthService, private snackBar: MatSnackBar,
-              private router: Router) {
+    private authService: AuthService, private snackBar: MatSnackBar,
+    private router: Router) {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
@@ -128,8 +128,8 @@ export class CheckoutService {
   getLoyaltyGroup() {
     this.httpService.get('loyaltygroup')
       .subscribe(res => {
-          this.loyaltyGroups.next(res);
-        },
+        this.loyaltyGroups.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -142,8 +142,8 @@ export class CheckoutService {
   getAddLoyaltyPoints() {
     this.httpService.get('deliverycc')
       .subscribe(res => {
-          this.addPointArray.next(res);
-        },
+        this.addPointArray.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -231,9 +231,9 @@ export class CheckoutService {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
       .subscribe(res => {
-          this.cartService.emptyCart();
-          this.router.navigate(['/', 'profile']);
-        },
+        this.cartService.emptyCart();
+        this.router.navigate(['/', 'profile']);
+      },
         err => console.error(err));
   }
 
@@ -245,12 +245,17 @@ export class CheckoutService {
     return new Promise((resolve, reject) => {
       this.httpService.post('/calculate/order/price', data)
         .subscribe(res => {
-            resolve(res);
-          },
+          resolve(res);
+        },
           err => {
             reject();
           });
     });
+  }
+
+
+  setCCOrderReceiver(info: any) {
+      
   }
 
 }
