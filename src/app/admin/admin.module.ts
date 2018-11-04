@@ -12,9 +12,6 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {FooterComponent} from './footer/footer.component';
 import {HeaderComponent} from './header/header.component';
 import {AdminAuthGuard} from './admin.auth.guard';
-import { DeliveryCostComponent } from './delivery-cost/delivery-cost.component';
-import { DurationComponent } from './delivery-cost/components/duration/duration.component';
-import { LoyaltyDiscountComponent } from './delivery-cost/components/loyalty-discount/loyalty-discount.component';
 
 
 @NgModule({
