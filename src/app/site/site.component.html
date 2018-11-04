@@ -7,7 +7,7 @@
   <div [class.scrollable]="!isMobile">
     <app-sliding-header *ngIf="!isMobile"></app-sliding-header>
     <div [class.content]="!isMobile" [class.mobile-content]="isMobile">
-      <p-blockUI [blocked]="blockedDocument" >
+      <p-blockUI [blocked]="spinnerEnabled" >
       <div  *ngIf="spinnerEnabled" style="position:absolute; left: calc(50% - 98px); top: calc(50% - 98px) ">
           <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
                                 [strokeWidth]="'4'">

@@ -18,7 +18,6 @@ export class SiteComponent implements OnInit {
   curWidth: number;
   curHeight: number;
   spinnerEnabled = false;
-  blockedDocument = false;
 
   constructor(@Inject(WINDOW) private window, private authService: AuthService,
               private responsiveService: ResponsiveService,
@@ -26,11 +25,6 @@ export class SiteComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spinnerService.isblock$.subscribe(is_block => {
-      setTimeout(() => {
-        this.blockedDocument = is_block;
-      });
-    });
     this.spinnerService.isSpinner$.subscribe(is_spinner => {
       setTimeout(() => {
         this.spinnerEnabled = is_spinner;
