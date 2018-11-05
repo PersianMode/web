@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
-import { TicketComponent } from '../ticket/ticket.component';
-import { STATUS } from '../../../../shared/enum/status.enum';
-import { OrderAddressComponent } from '../order-address/order-address.component';
-import { OrderStatus } from '../../../../shared/lib/order_status';
-import { ProductViewerComponent } from '../product-viewer/product-viewer.component';
-import { BarcodeCheckerComponent } from '../barcode-checker/barcode-checker.component';
-import { imagePathFixer } from '../../../../shared/lib/imagePathFixer';
+import {Component, OnInit, ViewChild, EventEmitter, Output, OnDestroy} from '@angular/core';
+import {TicketComponent} from '../ticket/ticket.component';
+import {STATUS} from '../../../../shared/enum/status.enum';
+import {OrderAddressComponent} from '../order-address/order-address.component';
+import {OrderStatus} from '../../../../shared/lib/order_status';
+import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
+import {BarcodeCheckerComponent} from '../barcode-checker/barcode-checker.component';
+import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
-import { HttpService } from '../../../../shared/services/http.service';
-import { MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { AuthService } from '../../../../shared/services/auth.service';
-import { SocketService } from '../../../../shared/services/socket.service';
-import { ProgressService } from '../../../../shared/services/progress.service';
-import { trigger, state, style, animate, transition } from '@angular/animations';
-import { FormControl } from '@angular/forms';
+import {HttpService} from '../../../../shared/services/http.service';
+import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {AuthService} from '../../../../shared/services/auth.service';
+import {SocketService} from '../../../../shared/services/socket.service';
+import {ProgressService} from '../../../../shared/services/progress.service';
+import {trigger, state, style, animate, transition} from '@angular/animations';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-sm-deliver',
@@ -27,7 +27,7 @@ import { FormControl } from '@angular/forms';
     ]),
   ],
 })
-export class SmDeliverComponent implements OnInit {
+export class SmDeliverComponent implements OnInit, OnDestroy {
 
   @Output() OnNewInboxCount = new EventEmitter();
 
@@ -62,11 +62,11 @@ export class SmDeliverComponent implements OnInit {
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private authService: AuthService,
-              private socketService: SocketService,
-              private progressService: ProgressService) {
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
+    private socketService: SocketService,
+    private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -146,7 +146,7 @@ export class SmDeliverComponent implements OnInit {
             if (lastTicket.status === 10) {
               ol.isDelivered = true;
               ol.returnTime = lastTicket.desc.day_slot;
-            }else {
+            } else {
               ol.isDelivered = false;
             }
           });
@@ -275,8 +275,8 @@ export class SmDeliverComponent implements OnInit {
   }
 
   // ngOnDestroy(): void {
-    // if (this.socketObserver)
-    //   this.socketObserver.unsubscribe();
+  // if (this.socketObserver)
+  //   this.socketObserver.unsubscribe();
   // }
 
   showTicket(order, orderLine) {
@@ -287,4 +287,10 @@ export class SmDeliverComponent implements OnInit {
       data: {_orderId, _orderLineId}
     });
   }
+
+  ngOnDestroy(): void {
+    if (this.socketObserver)
+      this.socketObserver.unsubscribe();
+  }
+
 }

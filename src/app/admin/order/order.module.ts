@@ -18,7 +18,6 @@ import {
 } from '@angular/material';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {InboxComponent} from './components/inbox/inbox.component';
 import {ProductViewerComponent} from './components/product-viewer/product-viewer.component';
 import {DeliverComponent} from './components/deliver/deliver.component';
 import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
@@ -28,12 +27,14 @@ import { SmInboxComponent } from './components/sm-inbox/sm-inbox.component';
 import { SmDeliverComponent } from './components/sm-deliver/sm-deliver.component';
 import { DeliveryShowComponent } from './components/delivery-show/delivery-show.component';
 import { DeliveryShelfCodeComponent } from './components/delivery-shelf-code/delivery-shelf-code.component';
+import {SCInboxComponent} from './components/sc-inbox/sc-inbox.component';
+import { HubInboxComponent } from './components/hub-inbox/hub-inbox.component';
 
 @NgModule({
   declarations: [
     OrderComponent,
     OrderAddressComponent,
-    InboxComponent,
+    SCInboxComponent,
     SmInboxComponent,
     DeliverComponent,
     ProductViewerComponent,
@@ -41,7 +42,8 @@ import { DeliveryShelfCodeComponent } from './components/delivery-shelf-code/del
     TicketComponent,
     SmDeliverComponent,
     DeliveryShowComponent,
-    DeliveryShelfCodeComponent
+    DeliveryShelfCodeComponent,
+    HubInboxComponent
   ],
   imports: [
     OrderRouting,

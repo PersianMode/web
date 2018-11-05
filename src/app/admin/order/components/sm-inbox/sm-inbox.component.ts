@@ -29,7 +29,8 @@ import {last} from 'rxjs/operators';
     ]),
   ],
 })
-export class SmInboxComponent implements OnInit {
+export class SmInboxComponent implements OnInit, OnDestroy {
+
 
   @Output() OnNewInboxCount = new EventEmitter();
 
@@ -54,11 +55,11 @@ export class SmInboxComponent implements OnInit {
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private authService: AuthService,
-              private socketService: SocketService,
-              private progressService: ProgressService) {
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
+    private socketService: SocketService,
+    private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -201,7 +202,7 @@ export class SmInboxComponent implements OnInit {
     return order.order_lines.every(x => {
       const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
       return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice ||
-         lastTicket.status === STATUS.WaitForInvoice);
+        lastTicket.status === STATUS.WaitForInvoice);
     });
   }
 
@@ -232,8 +233,8 @@ export class SmInboxComponent implements OnInit {
   }
 
   // ngOnDestroy(): void {
-    // if (this.socketObserver)
-    //   this.socketObserver.unsubscribe();
+  // if (this.socketObserver)
+  //   this.socketObserver.unsubscribe();
   // }
 
   showTicket(order, orderLine) {
@@ -243,6 +244,11 @@ export class SmInboxComponent implements OnInit {
       width: '1000px',
       data: {_orderId, _orderLineId}
     });
+  }
+  ngOnDestroy(): void {
+    if (this.socketObserver)
+      this.socketObserver.unsubscribe();
+
   }
 }
 

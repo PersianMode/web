@@ -13,7 +13,7 @@
 
       <app-sm-inbox *ngIf="isSalesManager"  (OnNewInboxCount)="newInboxCount = $event" ></app-sm-inbox>
 
-      <app-order-inbox  *ngIf="!isSalesManager" (OnNewInboxCount)="newInboxCount = $event" ></app-order-inbox>
+      <app-sc-inbox  *ngIf="!isSalesManager" (OnNewInboxCount)="newInboxCount = $event" ></app-sc-inbox>
       
 
     </mat-tab>
