@@ -49,7 +49,7 @@
       </span>
     </span>
     <span *ngIf="fo.name==='size' ">
-      <mat-button-toggle *ngFor="let v of filter_options[i].values; let j=i ndex " class="filter-size "
+      <mat-button-toggle *ngFor="let v of filter_options[i].values; let j=index " class="filter-size "
                          (click)="getValue(fo.name, v) "
                          [checked]="isChecked[fo.name][v] ">
         {{filter_options[i].values_fa[j]}}
