@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {PageService} from '../../../shared/services/page.service';
 import {TitleService} from '../../../shared/services/title.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import { AuthService } from 'app/shared/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,7 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private pageService: PageService, private titleService: TitleService,
+  constructor(private authService: AuthService, private pageService: PageService, private router: Router, private titleService: TitleService,
     private route: ActivatedRoute) {
   }
 

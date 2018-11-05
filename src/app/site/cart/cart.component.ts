@@ -44,7 +44,6 @@ export class CartComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.showHideSpinner(true);
     this.subs = this.cartService.cartItems.subscribe(carts => {
-      if (!carts || !carts.length) return;
       const productIds = [];
       carts.forEach(p => productIds.push(p.product_id));
       const prevProductCount = this.products.length;

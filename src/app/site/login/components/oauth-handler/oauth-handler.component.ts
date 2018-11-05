@@ -35,13 +35,10 @@ export class OauthHandlerComponent implements OnInit {
     this.route.params.subscribe(params => {
       return new Promise((resolve, reject) => {
         if (params['link']) {
-          console.log('setPreferencesPage 1');
           // if sent from google callback (to set mobile or preferences)
           if (params['link'].toLowerCase() === setMobilePage.toLowerCase()) {
-          console.log('setPreferencesPage 3');
             resolve({method: 'google'});
           } else if (params['link'].toLowerCase() === setPreferencesPage.toLowerCase()) {
-            console.log('setPreferencesPage 2');
             resolve({method: 'preferences'});
           } else {
             // if sent from activation link

@@ -134,7 +134,9 @@ export class LoginComponent implements OnInit {
 
     if (this.is_preferences_set) {
       this.closeDialog.emit(true);
-      this.router.navigate(['home']);
+      const url = this.authService.getPreviousUrl() || '/home';
+      console.log('url', url);
+      this.router.navigate([url]);
     } else {
       this.loginStatus = LoginStatus.PreferenceTags;
       this.is_preferences_set = true;
@@ -182,7 +184,9 @@ export class LoginComponent implements OnInit {
         }
       });
       regDialog.afterClosed().subscribe(data => {
-        this.router.navigate(['home']);
+        const url = this.authService.getPreviousUrl() || '/home';
+        console.log('url->>>>>>>>>>>>>>>', url);
+        this.router.navigate([url]);
       });
     } else {
       this.router.navigate(['register']);
@@ -237,7 +241,7 @@ export class LoginComponent implements OnInit {
                   // so it's the former
                   console.error('not validated!', err, error);
                   this.closeDialog.emit(true);
-                  this.router.navigate(['home']);
+                  // this.router.navigate(['home']);
                 });
             });
         } else {
