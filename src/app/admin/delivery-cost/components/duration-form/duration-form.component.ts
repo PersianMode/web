@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
+import {FormBuilder, FormGroup, Validators, CheckboxRequiredValidator} from '@angular/forms';
 import {HttpService} from '../../../../shared/services/http.service';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar, MatTableDataSource, MatDialog} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {Location} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-duration-form',
@@ -26,10 +27,18 @@ export class DurationFormComponent implements OnInit {
   upsertBtnShouldDisabled = false;
   loadedDurationInfo: any = null;
   anyFiledChanges = false;
+  freeDeliveryDisplayedColumns = ['position', 'province', 'min_price', 'edit', 'remove'];
+  freeDeliveryDataSource = new MatTableDataSource();
+  provinceList = [];
+  freeDeliveryItem = {
+    id: null,
+    province: null,
+    min_price: null
+  };
 
-  constructor(private route: ActivatedRoute, private http: HttpClient,
-              private httpService: HttpService, private snackBar: MatSnackBar,
-              private progressService: ProgressService, protected router: Router, private location: Location) {
+  constructor(private route: ActivatedRoute, private httpService: HttpService, private snackBar: MatSnackBar,
+    private progressService: ProgressService, protected router: Router, private location: Location,
+    private http: HttpClient, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -41,6 +50,8 @@ export class DurationFormComponent implements OnInit {
         this.initDurationFormInfo();
       }
     );
+
+    this.getProviceList();
   }
 
   getLoyaltyGroup() {
@@ -107,6 +118,22 @@ export class DurationFormComponent implements OnInit {
           this.costValue[el.name] = el.price;
           this.formLoyaltyInfo.filter(item => item._id === el._id)[0].discount = el.discount;
         });
+
+        // Fetch free delivery items
+        const tempFreeDelivery = [];
+        if (data.free_delivery_options) {
+          let counter = 0;
+          data.free_delivery_options.forEach(el => {
+            tempFreeDelivery.push({
+              id: el._id,
+              position: ++counter,
+              province: el.province,
+              min_price: el.min_price,
+            });
+          });
+        }
+        this.freeDeliveryDataSource.data = tempFreeDelivery;
+
         this.upsertBtnShouldDisabled = false;
         this.progressService.disable();
       },
@@ -118,6 +145,16 @@ export class DurationFormComponent implements OnInit {
 
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
+      }
+    );
+  }
+
+  getProviceList() {
+    this.http.get('assets/province.json').subscribe(
+      (info: any) => {
+        this.provinceList = info.map(el => el.name);
+      }, err => {
+        console.log('err: ', err);
       }
     );
   }
@@ -213,5 +250,94 @@ export class DurationFormComponent implements OnInit {
   backToComponent() {
     const tempId = this.addEditId ? this.addEditId : this.duration_id;
     this.router.navigate([`/agent/deliverycost/${tempId}`]);
+  }
+
+  editFreeDeliveryOption(id) {
+    const foundData = this.freeDeliveryDataSource.data.find((el: any) => el.id === id);
+    this.freeDeliveryItem = {
+      id: id,
+      province: foundData['province'],
+      min_price: foundData['min_price'],
+    };
+  }
+
+  removeFreeDeliveryOption(id) {
+    if (!id) {
+      return;
+    }
+
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+      data: {
+        name: 'ارسال رایگان ' + this.freeDeliveryDataSource.data.find((el: any) => el.id === id)['province']
+      }
+    });
+
+    rmDialog.afterClosed().subscribe(
+      status => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.post('delivery/cost/free/delete', {
+            id: id,
+            delivery_duration_id: this.duration_id,
+          }).subscribe(
+            data => {
+              const currentDataList = this.freeDeliveryDataSource.data.filter((el: any) => el.id !== id);
+              let counter = 0;
+              currentDataList.forEach(el => {
+                el['position'] = ++counter;
+              });
+              this.freeDeliveryDataSource.data = currentDataList;
+              this.progressService.disable();
+            },
+            err => {
+              this.progressService.disable();
+              console.error('Error when removing the freeDelivery item: ', err);
+              this.snackBar.open('خطایی در هنگام حذف مورد انتخابی رخ داده است. ' + err.message, 'بستن');
+            });
+        }
+      });
+  }
+
+  applyFreeDeliveryChanges() {
+    if (!this.freeDeliveryItem.province || !this.freeDeliveryItem.min_price) {
+      return;
+    }
+
+    this.progressService.enable();
+    this.httpService.post('delivery/cost/free', Object.assign({
+      delivery_duration_id: this.duration_id,
+    }, this.freeDeliveryItem)).subscribe(
+      data => {
+        if (this.freeDeliveryItem.id) {
+          const foundData = this.freeDeliveryDataSource.data.find((el: any) => el.id === this.freeDeliveryItem.id);
+          foundData['province'] = this.freeDeliveryItem.province;
+          foundData['min_price'] = this.freeDeliveryItem.min_price;
+        } else {
+          const currentData = this.freeDeliveryDataSource.data;
+          currentData.push({
+            position: currentData.length + 1,
+            id: data.id,
+            province: this.freeDeliveryItem.province,
+            min_price: this.freeDeliveryItem.min_price,
+          });
+          this.freeDeliveryDataSource.data = currentData;
+        }
+        this.snackBar.open('تغییرات با موفقیت ثبت شد', null);
+        this.progressService.disable();
+      },
+      err => {
+        this.progressService.disable();
+        console.error('Error when apply free delivery item changes: ', err);
+        this.snackBar.open('خطایی در هنگام اعمال تغییرات رخ داده است. ' + err.message, 'بستن');
+      });
+  }
+
+  clearFreeDeliveryFields() {
+    this.freeDeliveryItem = {
+      id: null,
+      province: null,
+      min_price: null
+    };
   }
 }
