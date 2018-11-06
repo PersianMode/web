@@ -177,6 +177,37 @@ export class AddressTableComponent implements OnInit {
   //   }
   // }
 
+  openAddressDialog() {
+    const customerAddresses = this.checkoutService.addresses$.getValue();
+    this.checkoutService.addressData = {
+      addressId: this.withDelivery ? null : '1',
+      partEdit: !this.withDelivery,
+      // dialog_address: this.withDelivery ? {} : customerAddresses ? customerAddresses[0] : {},
+      dialog_address: {},
+    };
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/checkout/address`]);
+    } else {
+      const rmDialog = this.dialog.open(GenDialogComponent, {
+        width: '600px',
+        data: {
+          componentName: DialogEnum.upsertAddress,
+        }
+      });
+      rmDialog.afterClosed().subscribe(
+        () => {
+          if (this.withDelivery) {
+            this.checkoutService.getCustomerAddresses();
+          }
+          this.setState();
+        },
+        (err) => {
+          console.error('Error in dialog: ', err);
+        }
+      );
+    }
+  }
+
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.showAddresses[id] : null;

@@ -8,6 +8,7 @@ import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs/Rx';
+import {isUndefined} from 'util';
 
 @Injectable()
 export class CheckoutService {
@@ -29,6 +30,7 @@ export class CheckoutService {
   addressData: IAddressInfo;
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  ccRecipientData: any = {};
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
@@ -162,9 +164,9 @@ export class CheckoutService {
   }
 
   submitAddresses(data): Promise<any> {
-    if (!data)
+    if (!data) {
       return Promise.reject('');
-
+    }
     if (this.authService.userIsLoggedIn()) {
       return new Promise((resolve, reject) => {
         this.httpService.post('user/address', data).subscribe(
@@ -209,6 +211,17 @@ export class CheckoutService {
   }
 
   private accumulateData() {
+    if (!this.is_collect) {
+      this.ccRecipientData = null;
+    } else if (this.ccRecipientData) {
+      this.address.recipient_name = this.ccRecipientData.recipient_name;
+      this.address.recipient_surname = this.ccRecipientData.recipient_surname;
+      this.address.recipient_national_id = this.ccRecipientData.recipient_national_id;
+      this.address.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
+      this.address.recipient_title = this.ccRecipientData.recipient_title;
+    } else if (this.is_collect && !this.ccRecipientData) {
+      return;
+    }
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
