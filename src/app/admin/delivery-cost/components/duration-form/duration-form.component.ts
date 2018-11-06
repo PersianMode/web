@@ -288,6 +288,9 @@ export class DurationFormComponent implements OnInit {
                 el['position'] = ++counter;
               });
               this.freeDeliveryDataSource.data = currentDataList;
+              this.snackBar.open('مورد انتخابی با موفقیت حذف شد', null, {
+                duration: 2000,
+              });
               this.progressService.disable();
             },
             err => {
@@ -323,7 +326,9 @@ export class DurationFormComponent implements OnInit {
           });
           this.freeDeliveryDataSource.data = currentData;
         }
-        this.snackBar.open('تغییرات با موفقیت ثبت شد', null);
+        this.snackBar.open('تغییرات با موفقیت ثبت شد', null, {
+          duration: 2000
+        });
         this.progressService.disable();
       },
       err => {
