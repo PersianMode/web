@@ -219,6 +219,7 @@ export class CheckoutService {
       this.address.recipient_national_id = this.ccRecipientData.recipient_national_id;
       this.address.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
       this.address.recipient_title = this.ccRecipientData.recipient_title;
+      this.address.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
     } else if (this.is_collect && !this.ccRecipientData) {
       return;
     }
