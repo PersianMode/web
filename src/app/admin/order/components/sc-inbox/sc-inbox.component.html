@@ -2,10 +2,10 @@
 
   <mat-card-content>
 
-    <app-barcode-checker></app-barcode-checker>
+    <app-barcode-checker [finished]='normalTotal === 0'></app-barcode-checker>
 
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
-      <div [fxFlex]="hasCC ? '50' : '100'" class="field-container">
+      <div [fxFlex]="hasCC ? '40' : '100'" class="field-container">
         <h2 style="text-align: center">نیاز به بررسی</h2>
 
         <div class="example-container mat-elevation-z8">
@@ -24,7 +24,7 @@
 
             <ng-container matColumnDef="details">
               <mat-header-cell *matHeaderCellDef>جزئیات</mat-header-cell>
-              <mat-cell *matCellDef="let orderLine"> 
+              <mat-cell *matCellDef="let orderLine">
                 <div class="imgWrapper">
                   <img [src]="getProductDetail(orderLine).thumbnailURL" (click)="showDetial(orderLine)">
                 </div>
@@ -33,7 +33,21 @@
 
             <ng-container matColumnDef="name">
               <mat-header-cell *matHeaderCellDef>نام</mat-header-cell>
-              <mat-cell *matCellDef="let orderLine"> {{orderLine.instance.product_name}}</mat-cell>
+              <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.product_name}}</span></mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="count">
+              <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
+            </ng-container>
+          
+            <ng-container matColumnDef="decline">
+              <mat-header-cell *matHeaderCellDef>عدم موجودی</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine">
+                  <button mat-icon-button color="warn">
+                      <mat-icon aria-label="icon-button with a reload icon">cancel_presentation</mat-icon>
+                  </button>
+              </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="normalDisplayedColumns"></mat-header-row>
@@ -45,7 +59,7 @@
         </div>
       </div>
 
-      <div *ngIf="hasCC" fxFlex="50" class="field-container">
+      <div *ngIf="hasCC" fxFlex="60" class="field-container">
         <h2 style="text-align: center">تحویل در فروشگاه</h2>
 
         <div class="example-container mat-elevation-z8">
@@ -64,10 +78,10 @@
 
             <ng-container matColumnDef="customer">
               <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
-              <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}} </mat-cell>
+              <mat-cell *matCellDef="let order">{{order.customer?.name + ' ' + order.customer?.surname}} </mat-cell>
             </ng-container>
 
-            
+
             <ng-container matColumnDef="order_time">
               <mat-header-cell *matHeaderCellDef>تاریخ خرید</mat-header-cell>
               <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
@@ -76,6 +90,18 @@
             <ng-container matColumnDef="total_order_lines">
               <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
               <mat-cell *matCellDef="let order"> {{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="recipient">
+              <mat-header-cell *matHeaderCellDef>تحویل گیرنده</mat-header-cell>
+              <mat-cell *matCellDef="let order"> {{order.address.recipient_name + ' ' +
+                order.address.recipient_surname}} </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="process">

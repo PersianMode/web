@@ -13,10 +13,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
-import {FormControl} from '@angular/forms';
 import {TicketComponent} from '../ticket/ticket.component';
-import {last} from 'rxjs/operators';
-import {log} from 'util';
 
 
 @Component({
@@ -42,13 +39,17 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     'customer',
     'order_time',
     'total_order_lines',
-    'process'
+    'recipient',
+    'status',
+    'process',
   ];
-
+  
   normalDisplayedColumns = [
     'position',
     'details',
     'name',
+    'count',
+    'decline'
   ];
 
   CCDataSource = new MatTableDataSource();
@@ -57,7 +58,8 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   normalDataSource = new MatTableDataSource();
 
   pageSize = 10;
-  resultsLength: Number;
+  normalTotal: Number;
+  ccTotal: Number;
 
   batchScanDialogRef;
 
@@ -123,7 +125,7 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
         order['index'] = index + 1;
       });
       this.normalDataSource.data = res.data;
-      this.resultsLength = res.total ? res.total : 0;
+      this.normalTotal = res.total ? res.total : 0;
       this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
@@ -150,14 +152,14 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
 
-      console.log('-> ', res);   
+      console.log('-> ', res);
       const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
       this.CCDataSource.data = rows;
-      this.resultsLength = res.total ? res.total : 0;
+      this.ccTotal = res.total ? res.total : 0;
       this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();

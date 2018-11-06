@@ -125,11 +125,6 @@ export class UpsertAddressComponent implements OnInit {
 
   submitAddress() {
 
-    if (this.addressInfo.partEdit) {
-      this.setRecieverInfo();
-      return;
-    }
-
     this.addressData.loc = {
       long: this.addressForm.controls['longitude'].value,
       lat: this.addressForm.controls['latitude'].value,
@@ -151,10 +146,6 @@ export class UpsertAddressComponent implements OnInit {
       .catch(err => {
         console.error('error occured in submitting address', err);
       });
-  }
-  setRecieverInfo(): any {
-
-    this.checkoutService.setCCOrderReceiver(this.addressData);
   }
 
   setNewProvince(newProvince) {

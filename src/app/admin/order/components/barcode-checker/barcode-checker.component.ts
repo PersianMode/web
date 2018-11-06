@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatSnackBar, MatDialog} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -12,35 +12,38 @@ import {AuthService} from '../../../../shared/services/auth.service';
   styleUrls: ['./barcode-checker.component.css']
 })
 export class BarcodeCheckerComponent implements OnInit {
-
+  
   barcodeCtrl: FormControl;
+  isStarted = false;
+  
+  currentWarehouse: String;
 
 
-
+  @Input() isHub = true;
+  @Input() finished = true;
+  
   constructor(private httpService: HttpService,
     private snackBar: MatSnackBar,
     private progressService: ProgressService,
     private dialog: MatDialog,
     private authService: AuthService) {}
-
-
-  ngOnInit() {
-
-
-    this.barcodeCtrl = new FormControl();
-
-    this.barcodeCtrl.valueChanges.debounceTime(150).subscribe(
-      (res) => {
-        if (res) {
-          this.checkBarcode(res.trim());
-          this.barcodeCtrl.setValue('');
+    
+    
+    ngOnInit() {
+      
+      this.barcodeCtrl = new FormControl();
+      this.barcodeCtrl.valueChanges.debounceTime(150).subscribe(
+        (res) => {
+          if (res) {
+            this.checkBarcode(res.trim());
+            this.barcodeCtrl.setValue('');
         }
       },
       (err) => {
       }
-    );
-  }
-  checkBarcode(barcode) {
+      );
+    }
+    checkBarcode(barcode) {
     this.progressService.enable();
     this.httpService.post('order/ticket/scan', {
       barcode
@@ -66,6 +69,17 @@ export class BarcodeCheckerComponent implements OnInit {
     this.snackBar.open(message, null, {
       duration: 2000,
     });
+  }
+
+
+  onWarehouseChange(warehouseId) {
+    this.currentWarehouse = warehouseId;
+  }
+
+  getClerkWarehouses(isHub = false) {
+    return this.authService.warehouses
+      .filter(x => x.is_hub === isHub)
+      .sort((a, b) => a.priority > b.priority ? 1 : a.priority < b.priority ? -1 : 0);
   }
 
 }

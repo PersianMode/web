@@ -298,7 +298,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
       });
       this.dataSourceOne.data = rows;
       this.resultsLength = res.total ? res.total : 0;
-      console.log('dataSourceOne-> ', this.dataSourceOne.data);
       this.OnNewOutboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
@@ -332,7 +331,6 @@ export class DeliverComponent implements OnInit, OnDestroy {
       });
       this.dataSourceTwo.data = rows;
       this.resultsLength = res.total ? res.total : 0;
-      console.log('dataSourceTwo-> ', this.dataSourceTwo.data);
       // this.OnNewOutboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
