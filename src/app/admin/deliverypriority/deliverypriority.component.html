@@ -1,0 +1,5 @@
+
+
+<div class="container" [dragula]="'field-bag'" [dragulaModel]="warehouse" (dragulaModelChange)="console.log(1)"> 
+<div *ngFor='let item of warehouse'>{{item.name}} </div>
+    </div>
