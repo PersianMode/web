@@ -59,6 +59,17 @@ export class DeliverypriorityComponent implements OnInit {
       }
     );
   }
+  updatepriority() {
+    this.httpService.put('warehouse/updatepriority', { warehouses: this.warehouse }).subscribe(
+      (res) => {
+        console.log("i love qazal")
+      },
+      (err) => {
+        console.error('Cannot edit user info: ', err);
+      }
+    );
+
+  }
 }
 
 
