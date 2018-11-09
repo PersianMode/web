@@ -21,6 +21,7 @@ import {AddToCardConfirmComponent} from './components/add-to-card-confirm/add-to
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {DialogModule} from 'primeng/dialog';
 import { SharedModule } from '../../shared/shared.module';
+import {JwSocialButtonsModule} from 'jw-angular-social-buttons';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -43,7 +44,8 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     MatProgressSpinnerModule,
     DialogModule,
     MatTooltipModule,
-    SharedModule
+    SharedModule,
+    JwSocialButtonsModule,
   ],
   declarations: [
     DesktopProductComponent,
