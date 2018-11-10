@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {HttpService} from './http.service';
-import {Router, NavigationEnd} from '@angular/router';
+import {Router} from '@angular/router';
 import {SocketService} from './socket.service';
 
 export const VerificationErrors = {
@@ -28,17 +28,7 @@ export class AuthService {
   tempUserData: any = {};
   warehouses: any[] = [];
 
-  private previousUrl: string;
-  private currentUrl: string;
-
   constructor(private httpService: HttpService, private router: Router, private socketService: SocketService) {
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.previousUrl = this.currentUrl;
-        this.currentUrl = event.url;
-      };
-    });
-
     this.populateUserDetails();
     this.getWarehouses();
 
@@ -198,9 +188,5 @@ export class AuthService {
   public userIsLoggedIn(): boolean {
     const currentState = this.isLoggedIn.getValue();
     return currentState ? currentState && currentState.username : false;
-  }
-
-  public getPreviousUrl() {
-    return this.previousUrl;
   }
 }

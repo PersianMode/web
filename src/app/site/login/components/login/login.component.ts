@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService, VerificationErrors} from '../../../../shared/services/auth.service';
-import {Router} from '@angular/router';
+import {Router, NavigationEnd} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
@@ -11,6 +11,7 @@ import {DictionaryService} from '../../../../shared/services/dictionary.service'
 import {LoginStatus} from '../../login-status.enum';
 import {MessageService} from '../../../../shared/services/message.service';
 import {MessageType} from '../../../../shared/enum/messageType.enum';
+import { SpinnerService } from 'app/shared/services/spinner.service';
 
 
 @Component({
@@ -44,13 +45,20 @@ export class LoginComponent implements OnInit {
     preferred_tags: [],
     username: null
   };
-  showWaitingSpinner = false;
 
+  previousUrl: string;
+  currentUrl: string;
 
   constructor(private authService: AuthService, private router: Router,
               @Inject(WINDOW) private window, public dialog: MatDialog,
               private snackBar: MatSnackBar, private httpService: HttpService,
-              private messageService: MessageService, private dict: DictionaryService) {
+              private messageService: MessageService, private dict: DictionaryService, private spinnerService: SpinnerService) {
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.previousUrl = this.currentUrl;
+        this.currentUrl = event.url;
+      };
+    });
   }
 
   ngOnInit() {
@@ -134,8 +142,7 @@ export class LoginComponent implements OnInit {
 
     if (this.is_preferences_set) {
       this.closeDialog.emit(true);
-      const url = this.authService.getPreviousUrl() || '/home';
-      console.log('url', url);
+      const url = this.previousUrl || '/home';
       this.router.navigate([url]);
     } else {
       this.loginStatus = LoginStatus.PreferenceTags;
@@ -184,8 +191,7 @@ export class LoginComponent implements OnInit {
         }
       });
       regDialog.afterClosed().subscribe(data => {
-        const url = this.authService.getPreviousUrl() || '/home';
-        console.log('url->>>>>>>>>>>>>>>', url);
+        const url = this.previousUrl || '/home';
         this.router.navigate([url]);
       });
     } else {
@@ -261,19 +267,19 @@ export class LoginComponent implements OnInit {
   }
 
   tryLoggingIn() {
-    this.showWaitingSpinner = true; // show spinner
+    this.spinnerService.enable(); // show spinner
     return new Promise((resolve, reject) => {
       this.authService.login(this.authService.tempUserData['username'] || this.loginForm.controls['username'].value,
         this.authService.tempUserData['password'] || this.loginForm.controls['password'].value)
         .then(userData => {
-          this.showWaitingSpinner = false; // show spinner
+          this.spinnerService.disable(); // hide spinner
           this.authService.tempUserData = {};
           this.outRouteOnPreferencesCondition(userData['is_preferences_set'], userData['gender'] || 'm');
           resolve();
         })
         .catch(err => {
           this.messageService.showMessage('نام کاربری یا رمز عبور اشتباه است', MessageType.Error);
-          this.showWaitingSpinner = false; // show spinner
+          this.spinnerService.disable(); // hide spinner
           reject(err);
         });
     });
