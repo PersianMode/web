@@ -51,9 +51,9 @@ export class AddressTableComponent implements OnInit {
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
-    private dialog: MatDialog, private checkoutService: CheckoutService,
-    private responsiveService: ResponsiveService, private router: Router,
-    private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
+              private dialog: MatDialog, private checkoutService: CheckoutService,
+              private responsiveService: ResponsiveService, private router: Router,
+              private authService: AuthService, private progressService: ProgressService, private snackBar: MatSnackBar) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -107,8 +107,6 @@ export class AddressTableComponent implements OnInit {
       this.withDelivery ? this.deliveryDays : null,
       this.withDelivery ? this.delivery_time : null
     ];
-
-    console.log('*****', this.checkoutService.addressState);
   }
 
   private setBtnLabel() {
@@ -148,6 +146,7 @@ export class AddressTableComponent implements OnInit {
       return a;
     return (+a).toLocaleString('fa', {useGrouping: false});
   }
+
   openAddressDialog() {
     const customerAddresses = this.checkoutService.addresses$.getValue();
     this.checkoutService.addressData = {
@@ -165,9 +164,22 @@ export class AddressTableComponent implements OnInit {
         }
       });
       rmDialog.afterClosed().subscribe(
-        () => {
+        (data) => {
           if (this.withDelivery) {
-            this.checkoutService.getCustomerAddresses();
+            if (this.deliveryDays === 3) { // should change days if added address is not tehran
+              if (data !== 'تهران') {
+                const duration_5 = this.durations.filter(el => el.delivery_days === 5)[0];
+                this.changeDurationType(duration_5._id, duration_5.delivery_days);
+              } else {
+                this.addresses = this.checkoutService.addresses$.getValue();
+                this.showAddresses = this.addresses;
+                if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 2 || this.deliveryDays === 3)) {
+                  this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
+                  this.showAddresses = this.tehranAddresses;
+                } else
+                  this.showAddresses = this.addresses;
+              }
+            }
           }
           this.setState();
         },

@@ -69,7 +69,10 @@ export class CheckoutService {
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
     if (isLoggedIn) {
       this.httpService.get(`customer/address`)
-        .subscribe(res => this.addresses$.next(res.addresses), err => console.error(err));
+        .subscribe(res => {
+          this.addresses$.next(res.addresses);
+        }, err => console.error(err)
+        );
     } else {
       const address = JSON.parse(localStorage.getItem('address'));
       if (address) {
@@ -171,6 +174,7 @@ export class CheckoutService {
       return new Promise((resolve, reject) => {
         this.httpService.post('user/address', data).subscribe(
           () => {
+            this.getCustomerAddresses();
             resolve();
           }, err => {
             reject(err);

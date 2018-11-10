@@ -61,10 +61,10 @@ export class UpsertAddressComponent implements OnInit {
     this.initForm();
   }
 
-  onClose() {
+  onClose(data = false) {
     // TODO: guard is needed if any fields have been changed!
     if (this.isNotMobile) {
-      this.closeDialog.emit(false);
+      this.closeDialog.emit(data);
     } else {
       this.location.back();
     }
@@ -141,7 +141,7 @@ export class UpsertAddressComponent implements OnInit {
     if (this.withDelivery) {
       this.checkoutService.submitAddresses(this.addressData)
         .then(() => {
-          this.onClose();
+          this.onClose(this.addressData.province);
         })
         .catch(err => {
           console.error('error occured in submitting address', err);
