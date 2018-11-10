@@ -26,7 +26,8 @@ button:focus{
   background: rgba(17,17,17,.75) !important;
 }
 .cart {
-  width: calc(100% - 80px);
+  width: 100%;
+  /* width: calc(100% - 80px); */
   cursor: pointer;
 }
 
@@ -74,4 +75,29 @@ button:focus{
 .selectedImg {
   opacity: 1 !important;
   border: 1px solid #ccc;
+}
+
+.share-button {
+  border: 1px solid black !important;
+  border-radius: 4px !important;
+  padding-right: 4px !important;
+  padding-left: 4px !important;
+  padding-bottom: 0px !important;
+  padding-top: 0px !important;
+  margin: unset !important;
+  line-height: 18px !important;
+}
+
+.share-icon {
+  font-size: 14px !important;
+}
+
+.inner-copy-link {
+  display: inline-block;
+  font-size: 10px;
+}
+
+.share-parts {
+  text-align: center;
+  margin: 3px;
 }
