@@ -26,7 +26,7 @@ export class SoldOutComponent implements OnInit {
   dataSource = new MatTableDataSource();
   resultsLength = 0;
   pageSize = 3;
-  phrase: string = '';
+  phrase = '';
   offset = 0;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -99,14 +99,12 @@ export class SoldOutComponent implements OnInit {
     }).subscribe(res => {
       this.progressService.disable();
 
-      this.openSnackBar(soldOutStatus ? 'محصول نمایش نداده خواهد شد' : 'محصول نمایش داده خواهد شد')
+      this.openSnackBar(soldOutStatus ? 'محصول نمایش نداده خواهد شد' : 'محصول نمایش داده خواهد شد');
       this.load();
-      
-    },err =>{
+    }, err => {
       this.progressService.disable();
-      this.openSnackBar('خطا در بروز رسانی وضعیت محصول')
-      
-    })
+      this.openSnackBar('خطا در بروز رسانی وضعیت محصول');
+    });
 
 
   }

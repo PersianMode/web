@@ -1,9 +1,9 @@
-import {Component,EventEmitter,Inject,Input,OnInit,Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Input , OnInit, Output} from '@angular/core';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
-import {MatDialogRef,MatDialog,MatSnackBar} from '@angular/material';
+import {MatDialogRef, MatDialog, MatSnackBar} from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {OrderStatus} from '../../../../shared/lib/order_status';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
@@ -71,7 +71,7 @@ export class OrderLinesComponent implements OnInit {
         el.quantity = 1;
         el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
         this.noDuplicateOrderLine.push(el);
-      // } 
+      // }
       // else {
       //   this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
       // }
@@ -177,7 +177,7 @@ export class OrderLinesComponent implements OnInit {
       orderId: this.orderInfo.orderId,
       orderLineId: ol.order_line_id,
       productIntanceId: ol.product_instance._id
-    }
+    };
     if (multi) {
       options = {
         orderId: this.orderInfo.orderId,
