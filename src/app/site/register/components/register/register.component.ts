@@ -181,9 +181,6 @@ export class RegisterComponent implements OnInit {
                   }
                 }
               });
-              // rmDialog.afterOpen().subscribe(() => {
-              //   this.closeDialog.emit(false);
-              // });
               rmDialog.afterClosed().subscribe(resp => {
                 if (resp) {
                   this.closeDialog.emit(true);

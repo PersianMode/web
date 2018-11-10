@@ -192,6 +192,7 @@ export class LoginComponent implements OnInit {
       });
       regDialog.afterClosed().subscribe(data => {
         const url = this.previousUrl || '/home';
+        console.log('url 1->', url);
         this.router.navigate([url]);
       });
     } else {

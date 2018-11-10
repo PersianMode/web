@@ -1,11 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RoutesRecognized } from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {MatDialog} from '@angular/material';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {LoginStatus} from '../../login-status.enum';
+import { filter, pairwise } from 'rxjs/operators';
 
 const expiredLinkStatusCode = 437;
 const setMobilePage = 'setMobile';
@@ -26,9 +27,18 @@ export class OauthHandlerComponent implements OnInit {
   shouldGoToSetMobile = false;
   shouldGoToPreferences = false;
 
+  previousUrl: string;
+  currentUrl: string;
+
   constructor(private authService: AuthService, private router: Router,
-              @Inject(WINDOW) private window, public dialog: MatDialog,
-              private route: ActivatedRoute) {
+    @Inject(WINDOW) private window, public dialog: MatDialog,
+    private route: ActivatedRoute) {
+    this.router.events
+      .pipe(filter((e: any) => e instanceof RoutesRecognized),
+        pairwise()
+      ).subscribe((e: any) => {
+        this.previousUrl = e[0].urlAfterRedirects;
+      });
   }
 
   ngOnInit() {
@@ -115,6 +125,7 @@ export class OauthHandlerComponent implements OnInit {
   }
 
   returnBack() {
-    this.router.navigate(['home']);
+    const url = this.previousUrl || '/home';
+    this.router.navigate([url]);
   }
 }
