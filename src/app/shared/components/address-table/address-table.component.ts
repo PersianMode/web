@@ -135,9 +135,7 @@ export class AddressTableComponent implements OnInit {
         this.selectedWarehouseAddress = -1;
       } else {
         this.selectedWarehouseAddress = i;
-        console.log('888');
         this.loc = this.locs[this.showAddresses[this.selectedWarehouseAddress].name];
-        console.log('999');
       }
     }
     this.setState();
