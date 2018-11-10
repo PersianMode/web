@@ -135,7 +135,9 @@ export class AddressTableComponent implements OnInit {
         this.selectedWarehouseAddress = -1;
       } else {
         this.selectedWarehouseAddress = i;
+        console.log('888');
         this.loc = this.locs[this.showAddresses[this.selectedWarehouseAddress].name];
+        console.log('999');
       }
     }
     this.setState();
@@ -146,7 +148,6 @@ export class AddressTableComponent implements OnInit {
       return a;
     return (+a).toLocaleString('fa', {useGrouping: false});
   }
-
   // openAddressDialog() {
   //   const customerAddresses = this.checkoutService.addresses$.getValue();
   //   this.checkoutService.addressData = {
@@ -176,7 +177,6 @@ export class AddressTableComponent implements OnInit {
   //     );
   //   }
   // }
-
   openAddressDialog() {
     const customerAddresses = this.checkoutService.addresses$.getValue();
     this.checkoutService.addressData = {
@@ -255,7 +255,9 @@ export class AddressTableComponent implements OnInit {
 
   changeWithDelivery() {
     this.deliveryType.emit(this.withDelivery);
+    this.setBtnLabel();
     if (this.withDelivery) {
+      console.log('**');
       this.addresses = this.checkoutService.addresses$.getValue();
       this.showAddresses = this.addresses;
       if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 2 || this.deliveryDays === 3)) {
@@ -268,7 +270,6 @@ export class AddressTableComponent implements OnInit {
       this.showAddresses = this.addresses;
     }
     this.setState();
-    this.setBtnLabel();
   }
 
   changeDurationType(durationId, deliveryDays) {
