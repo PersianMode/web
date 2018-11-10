@@ -2,6 +2,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HomeComponent} from './home/home.component';
 import {AdminAuthGuard} from './admin.auth.guard';
+import { InternalDeliveryComponent } from './internal-delivery/internal-delivery.component';
 
 const Admin_ROUTES: Routes = [
   {
@@ -25,6 +26,11 @@ const Admin_ROUTES: Routes = [
       {
         path: 'delivery',
         loadChildren: 'app/admin/delivery/delivery.module#DeliveryModule',
+        canActivate: [AdminAuthGuard]
+      },
+      {
+        path: 'internal_delivery',
+        loadChildren: () => InternalDeliveryComponent,
         canActivate: [AdminAuthGuard]
       }
     ]
