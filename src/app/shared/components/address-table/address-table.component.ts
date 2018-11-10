@@ -151,7 +151,6 @@ export class AddressTableComponent implements OnInit {
     this.checkoutService.addressData = {
       addressId: this.withDelivery ? null : '1',
       partEdit: !this.withDelivery,
-      // dialog_address: this.withDelivery ? {} : customerAddresses ? customerAddresses[0] : {},
       dialog_address: {},
     };
     if (this.responsiveService.isMobile) {
