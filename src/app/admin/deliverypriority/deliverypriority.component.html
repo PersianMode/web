@@ -1,4 +1,6 @@
 <div class="container" [dragula]="'field-bag'" [dragulaModel]="warehouse" (dragulaModelChange)="console.log(1)">
-  <div *ngFor='let item of warehouse'>{{item.name}} </div>
+  <div *ngFor='let item of warehouse'>
+      <input type="checkbox" checked data-toggle="toggle" [(ngModel)]="item.is_active"> 
+    {{item.name}} </div>
 </div>
-<button (click)="updatepriority()">update all</button>
+<button (click)="update()">update all</button>
