@@ -255,7 +255,6 @@ export class AddressTableComponent implements OnInit {
     this.deliveryType.emit(this.withDelivery);
     this.setBtnLabel();
     if (this.withDelivery) {
-      console.log('**');
       this.addresses = this.checkoutService.addresses$.getValue();
       this.showAddresses = this.addresses;
       if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 2 || this.deliveryDays === 3)) {
