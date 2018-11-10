@@ -107,6 +107,8 @@ export class AddressTableComponent implements OnInit {
       this.withDelivery ? this.deliveryDays : null,
       this.withDelivery ? this.delivery_time : null
     ];
+
+    console.log('*****', this.checkoutService.addressState);
   }
 
   private setBtnLabel() {

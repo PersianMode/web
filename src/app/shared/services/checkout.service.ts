@@ -63,7 +63,7 @@ export class CheckoutService {
     const data = this.accumulateData();
     const il = this.authService.userIsLoggedIn();
     this.isValid$.next(data.total_amount &&
-      ((il && (data.customerData && data.cartItems && data.cartItems.length)) || (!il && data.order_id)));
+      (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
@@ -266,5 +266,4 @@ export class CheckoutService {
           });
     });
   }
-
 }
