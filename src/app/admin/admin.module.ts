@@ -12,7 +12,6 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {FooterComponent} from './footer/footer.component';
 import {HeaderComponent} from './header/header.component';
 import {AdminAuthGuard} from './admin.auth.guard';
-import { InternalDeliveryComponent } from './internal-delivery/internal-delivery.component';
 
 
 @NgModule({
@@ -20,7 +19,6 @@ import { InternalDeliveryComponent } from './internal-delivery/internal-delivery
     HomeComponent,
     FooterComponent,
     HeaderComponent,
-    InternalDeliveryComponent,
   ],
   imports: [
     AdminRouting,
