@@ -12,45 +12,45 @@ import {AuthService} from '../../../../shared/services/auth.service';
   styleUrls: ['./barcode-checker.component.css']
 })
 export class BarcodeCheckerComponent implements OnInit {
-  
+
   barcodeCtrl: FormControl;
   isStarted = false;
-  
+
   currentWarehouse: String;
 
 
-  @Input() isHub = true;
+  @Input() isHub = false;
   @Input() finished = true;
-  
+
   constructor(private httpService: HttpService,
     private snackBar: MatSnackBar,
     private progressService: ProgressService,
     private dialog: MatDialog,
     private authService: AuthService) {}
-    
-    
-    ngOnInit() {
-      
-      this.barcodeCtrl = new FormControl();
-      this.barcodeCtrl.valueChanges.debounceTime(150).subscribe(
-        (res) => {
-          if (res) {
-            this.checkBarcode(res.trim());
-            this.barcodeCtrl.setValue('');
+
+
+  ngOnInit() {
+
+    this.barcodeCtrl = new FormControl();
+    this.barcodeCtrl.valueChanges.debounceTime(150).subscribe(
+      (res) => {
+        if (res) {
+          this.checkBarcode(res.trim());
+          this.barcodeCtrl.setValue('');
         }
       },
       (err) => {
       }
-      );
-    }
-    checkBarcode(barcode) {
+    );
+  }
+  checkBarcode(barcode) {
     this.progressService.enable();
     this.httpService.post('order/ticket/scan', {
       barcode
     }).subscribe(res => {
       this.progressService.disable();
 
-      if (this.authService.userDetails.warehouse_id === this.authService.warehouses.find(el => el.is_hub)._id)
+      if (this.isHub)
         this.dialog.open(DeliveryShelfCodeComponent, {
           width: '400px',
           disableClose: !(res && res.exist),

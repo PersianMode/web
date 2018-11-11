@@ -2,19 +2,19 @@
 
   <mat-card-content>
 
-    <app-barcode-checker [finished]='normalTotal === 0'></app-barcode-checker>
+    <app-barcode-checker [finished]='scanTotal === 0'></app-barcode-checker>
 
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
-      <div [fxFlex]="hasCC ? '40' : '100'" class="field-container">
-        <h2 style="text-align: center">نیاز به بررسی</h2>
+      <div [fxFlex]="hasManual ? '40' : '100'" class="field-container">
+        <h2 style="text-align: center">نیاز به اسکن</h2>
 
         <div class="example-container mat-elevation-z8">
 
-          <button mat-icon-button color="primary" (click)="loadNormal()" style="margin-top: 10px;">
+          <button mat-icon-button color="primary" (click)="loadScan()" style="margin-top: 10px;">
             <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
           </button>
 
-          <mat-table #table [dataSource]="normalDataSource" class="example-table" matSort matSortActive="created"
+          <mat-table #table [dataSource]="scanDataSource" class="example-table" matSort matSortActive="created"
             matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
 
             <ng-container matColumnDef="position">
@@ -36,23 +36,25 @@
               <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.product_name}}</span></mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="barcode">
+              <mat-header-cell *matHeaderCellDef>بارکد</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.barcode}}</span></mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px">{{getOrderLineStatus(orderLine)}}</span> 
+              </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="count">
               <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
               <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
             </ng-container>
-          
-            <ng-container matColumnDef="decline">
-              <mat-header-cell *matHeaderCellDef>عدم موجودی</mat-header-cell>
-              <mat-cell *matCellDef="let orderLine">
-                  <button mat-icon-button color="warn">
-                      <mat-icon aria-label="icon-button with a reload icon">cancel_presentation</mat-icon>
-                  </button>
-              </mat-cell>
-            </ng-container>
 
-            <mat-header-row *matHeaderRowDef="normalDisplayedColumns"></mat-header-row>
+            <mat-header-row *matHeaderRowDef="scanDisplayedColumns"></mat-header-row>
 
-            <mat-row *matRowDef="let row; columns: normalDisplayedColumns;" matRipple class="element-row"></mat-row>
+            <mat-row *matRowDef="let row; columns: scanDisplayedColumns;" matRipple class="element-row"></mat-row>
 
           </mat-table>
           <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
@@ -60,15 +62,15 @@
       </div>
 
       <div *ngIf="hasCC" fxFlex="60" class="field-container">
-        <h2 style="text-align: center">تحویل در فروشگاه</h2>
+        <h2 style="text-align: center">بررسی دستی</h2>
 
         <div class="example-container mat-elevation-z8">
 
-          <button mat-icon-button color="primary" (click)="loadCC()" style="margin-top: 10px;">
+          <button mat-icon-button color="primary" (click)="loadManual()" style="margin-top: 10px;">
             <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
           </button>
 
-          <mat-table #table [dataSource]="CCDataSource" class="example-table" matSort matSortActive="created"
+          <mat-table #table [dataSource]="manualDataSource" class="example-table" matSort matSortActive="created"
             matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
 
             <ng-container matColumnDef="position">
@@ -148,9 +150,9 @@
               </mat-cell>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="CCDisplayedColumns"></mat-header-row>
+            <mat-header-row *matHeaderRowDef="manualDisplayedColumns"></mat-header-row>
 
-            <mat-row *matRowDef="let row; columns: CCDisplayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
+            <mat-row *matRowDef="let row; columns: manualDisplayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
               (click)="expandedElement = row._id"></mat-row>
             <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
               style="overflow: hidden">

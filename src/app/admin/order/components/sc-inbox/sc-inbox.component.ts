@@ -34,7 +34,7 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() OnNewInboxCount = new EventEmitter();
 
-  CCDisplayedColumns = [
+  manualDisplayedColumns = [
     'position',
     'customer',
     'order_time',
@@ -44,22 +44,23 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     'process',
   ];
   
-  normalDisplayedColumns = [
+  scanDisplayedColumns = [
     'position',
     'details',
     'name',
+    'barcode',
     'count',
-    'decline'
+    'status'
   ];
 
-  CCDataSource = new MatTableDataSource();
+  manualDataSource = new MatTableDataSource();
   expandedElement: any;
-
-  normalDataSource = new MatTableDataSource();
+ 
+  scanDataSource = new MatTableDataSource();
 
   pageSize = 10;
-  normalTotal: Number;
-  ccTotal: Number;
+  scanTotal: Number;
+  manualTotal: Number;
 
   batchScanDialogRef;
 
@@ -67,7 +68,7 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   socketObserver: any = null;
 
-  hasCC = false;
+  hasManual = false;
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
@@ -81,7 +82,7 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
 
-    this.hasCC = !!this.authService.warehouses.find(x => x.has_customer_pickup &&
+    this.hasManual = !!this.authService.warehouses.find(x => x.has_customer_pickup &&
       !x.is_hub &&
       x._id === this.authService.userDetails.warehouse_id);
 
@@ -99,21 +100,21 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   load() {
-    if (this.hasCC)
-      this.loadCC();
+    if (this.hasManual)
+      this.loadManual();
 
-    this.loadNormal();
+    this.loadScan();
   }
 
 
-  loadNormal() {
+  loadScan() {
     this.progressService.enable();
 
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
       type: 'inbox',
-      isCollect: false
+      manual: false
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
@@ -124,8 +125,8 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
       });
-      this.normalDataSource.data = res.data;
-      this.normalTotal = res.total ? res.total : 0;
+      this.scanDataSource.data = res.data;
+      this.scanTotal = res.total ? res.total : 0;
       this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
@@ -133,9 +134,9 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  loadCC() {
+  loadManual() {
 
-    if (!this.hasCC)
+    if (!this.hasManual)
       return;
 
     this.progressService.enable();
@@ -144,22 +145,20 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       sort: this.sort.active,
       dir: this.sort.direction,
       type: 'inbox',
-      isCollect: true
+      manual: true
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
 
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
-
-      console.log('-> ', res);
       const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
-      this.CCDataSource.data = rows;
-      this.ccTotal = res.total ? res.total : 0;
+      this.manualDataSource.data = rows;
+      this.manualTotal = res.total ? res.total : 0;
       this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
