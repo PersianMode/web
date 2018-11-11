@@ -41,7 +41,11 @@ export class InternalDeliveryComponent implements OnInit {
     try {
       this.spinnerService.enable();
       const agent = await this.httpService.get('internal_delivery/get_agent').toPromise();
-      this.agentCtrl.setValue(`${agent.surname} ${agent.first_name}`); // data set into input
+      if (agent && agent.surname) {
+        this.agentCtrl.setValue(`${agent.first_name} ${agent.surname}`); // data set into input
+      } else {
+        this.agentCtrl.setValue(''); // first time agent not set (to be null)
+      }
       this.spinnerService.disable();
     } catch (err) {
       throw err;
