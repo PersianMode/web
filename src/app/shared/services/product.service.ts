@@ -203,7 +203,7 @@ export class ProductService {
                this.filteredProducts.push(product);
              }
            });
-           this.filteredProducts = this.filteredProducts.filter(p => p.discountedPrice >= f.values[0] && p.discountedPrice <= f.values[1]);
+           this.filteredProducts = this.filteredProducts.filter(p => p.price >= f.values[0] && p.price <= f.values[1]);
          } else if (f.name === 'discount') {
            this.filteredProducts = this.filteredProducts.filter(p => p.discount >= f.values[0] && p.discount <= f.values[1]);
          } else {
@@ -217,7 +217,7 @@ export class ProductService {
      setTimeout(() => {
        this.sortProductsAndEmit();
        this.extractFilters(filters, trigger);
-     }, 500);
+     }, 0);
    }, 0);
   }
 
