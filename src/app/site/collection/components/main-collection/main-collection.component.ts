@@ -15,7 +15,7 @@ const HEADER_HEIGHT = 209;
   templateUrl: './main-collection.component.html',
   styleUrls: ['./main-collection.component.css']
 })
-export class MainCollectionComponent implements OnInit, OnDestroy , AfterContentInit {
+export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentInit {
   products = [];
   @ViewChild('filterPane') filterPane;
   @ViewChild('gridwall') gridwall;
@@ -57,6 +57,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
   collectionNameFa = '';
   lazyRows = 10;
   subscription: Subscription;
+
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
               private responsiveService: ResponsiveService, private productService: ProductService,
@@ -114,11 +115,11 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
   private calcWidth() {
     this.curWidth = this.responsiveService.curWidth;
     this.curHeight = this.responsiveService.curHeight;
-    this.gridWidth = (this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10;
+    this.gridWidth = Math.max((this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10, 1708);
     this.gridHeight = this.gridWidth + 90;
     this.lazyRows = this.isMobile ? 10 :
-      Math.floor(this.gridwall.nativeElement.offsetWidth / 242)
-      * Math.floor((this.window.innerHeight - 105) / 348) * 2;
+      Math.round(Math.floor(this.gridWidth / 242) *
+        Math.ceil((this.window.innerHeight - 105) / 348) * 1.5);
     setTimeout(() => this.calcAfterScroll(), 1000);
   }
 
