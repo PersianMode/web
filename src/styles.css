@@ -1008,7 +1008,7 @@ p {
 }
 
 .wishlist {
-  width: 70px;
+  /* width: 70px; */
   font-size: 14px;
   cursor: pointer;
 }

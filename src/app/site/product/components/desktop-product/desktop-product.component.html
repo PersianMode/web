@@ -1,35 +1,61 @@
 <div class="photos" #photosDiv>
-<span *ngIf="selectedProductColor">
-<div *ngFor="let item of selectedProductColor?.image?.angles">
-  <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1"><source
-    src="{{item.url}}" type="video/webm"></video>
-  <img *ngIf="item.type !== 'video'" src="{{item.url}}">
-</div>
-</span>
+  <span *ngIf="selectedProductColor">
+    <div *ngFor="let item of selectedProductColor?.image?.angles">
+      <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
+        <source src="{{item.url}}" type="video/webm"></video>
+      <img *ngIf="item.type !== 'video'" src="{{item.url}}">
+    </div>
+  </span>
 </div>
 <div class="description" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
-     [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll"
-     [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
-     'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}" #descPane>
+  [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
+     'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}"
+  #descPane>
   <h1 *ngIf="product">{{product.name}}</h1>
-  <h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}} تومان</span></h4>
+  <h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}}
+      تومان</span></h4>
   <div *ngIf="product?.colors" class="colors">
     <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
       <span style="margin:0;" matTooltip="{{item?.translatedName}}">
         <p *ngIf="item.soldOut && !focused[item._id]" class="soldOut">تمام شد</p>
-      <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id"
-           src="{{item.image.thumbnail}}" (mouseenter)="focused[item._id]=true" (mouseout)="focused[item._id]=false">
+        <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id" src="{{item.image.thumbnail}}"
+          (mouseenter)="focused[item._id]=true" (mouseout)="focused[item._id]=false">
       </span>
     </a>
   </div>
   <app-size-picker [sizes]="productSize" [productType]="productType" [gender]="gender" (value)="newSize($event)"></app-size-picker>
-  <button mat-button class="cart" (click)="saveToCart()">در سبد بگذار</button>
-  <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+    <div fxFlex="80" class="full-width">
+      <button mat-button class="cart" (click)="saveToCart()">در سبد بگذار</button>
+    </div>
+    <div fxFlex="20">
+      <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+    <div fxFlex="30" class="share-parts">
+      <fb-like url="{{getProductShareLink()}}"></fb-like>
+    </div>
+    <div fxFlex="15" class="share-parts">
+      <google-plus url="{{getProductShareLink()}}"></google-plus>
+    </div>
+    <div fxFlex="15" class="share-parts">
+      <tweet url="{{getProductShareLink()}}"></tweet>
+    </div>
+    <div fxFlex="20" class="share-parts">
+      <linkedin-share url="{{getProductShareLink()}}"></linkedin-share>
+    </div>
+    <div fxFlex="20" class="share-parts">
+      <button mat-raised-button class="share-button clickable-link" (click)="copyLinkToClipboard()">
+        <div class="inner-copy-link">کپی لینک</div>
+      </button>
+    </div>
+  </div>
   <mat-accordion>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
-       سایر مشخصات محصول
+          سایر مشخصات محصول
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ul>
