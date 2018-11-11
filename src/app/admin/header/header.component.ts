@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
     {label: 'تنظیمات هزینه ارسال', path: '/agent/deliverycost', active: false},
     {label: 'گروه وفاداری', path: '/agent/loyaltygroup', active: false},
     {label: 'ارسال', path: '/agent/delivery', active: false},
+    {label: 'شرایط تحویل رایگان', path: '/agent/deliverycost/free/option', active: false},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;
