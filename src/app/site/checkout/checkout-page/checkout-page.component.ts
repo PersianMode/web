@@ -34,7 +34,6 @@ export class CheckoutPageComponent implements OnInit {
   priceChanges: any[];
   showCostLabel: true;
   noDuration = null;
-  hasChangeError: boolean = false;
   loyaltyGroups = [];
   addPointArray = [];
   selectedPaymentType = 0;
@@ -149,8 +148,7 @@ export class CheckoutPageComponent implements OnInit {
         scoreArray = this.loyaltyGroups.map(el => el.min_score);
         maxScore = Math.min(...scoreArray);
         customer_loyaltyGroup = this.loyaltyGroups.filter(el => el.min_score === maxScore);
-      }
-      else {
+      } else {
         scoreArray = valid_loyaltyGroups.map(el => el.min_score);
         maxScore = Math.max(...scoreArray);
         customer_loyaltyGroup = valid_loyaltyGroups.filter(el => el.min_score === maxScore);

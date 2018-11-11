@@ -48,6 +48,7 @@ export class AddressTableComponent implements OnInit {
   durations = [];
   durationId;
   deliveryDays;
+  province;
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
@@ -77,16 +78,31 @@ export class AddressTableComponent implements OnInit {
       this.changeWithDelivery();
     }
     this.checkoutService.addresses$.subscribe(res => {
-      if (res && res.length && this.withDelivery) {
-        if (this.showAddresses.length === res.length - 1) {
-          this.selectedCustomerAddress = res.length - 1;
-        } else if (res.length === 1) {
-          this.selectedCustomerAddress = 0;
+      this.addresses = res;
+      if (this.withDelivery) {
+        if (this.deliveryDays === 3) { // should change days if added address is not tehran
+          if (this.province !== 'تهران') {
+            const duration_5 = this.durations.filter(el => el.delivery_days === 5)[0];
+            this.changeDurationType(duration_5._id, duration_5.delivery_days);
+            this.selectedCustomerAddress = this.addresses.length - 1;
+          } else {
+            this.showAddresses = this.addresses;
+            if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
+              this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
+              this.showAddresses = this.tehranAddresses;
+            }
+            this.selectedCustomerAddress = this.tehranAddresses.length - 1;
+          }
+        } else if (res && res.length) {
+          if (this.showAddresses.length === res.length - 1) {
+            this.selectedCustomerAddress = res.length - 1;
+          } else if (res.length === 1) {
+            this.selectedCustomerAddress = 0;
+          }
+          this.showAddresses = this.addresses;
         }
-        this.addresses = res;
-        this.showAddresses = this.addresses;
-        this.setState();
       }
+      this.setState();
     });
 
     this.setState();
@@ -148,7 +164,6 @@ export class AddressTableComponent implements OnInit {
   }
 
   openAddressDialog() {
-    const customerAddresses = this.checkoutService.addresses$.getValue();
     this.checkoutService.addressData = {
       addressId: this.withDelivery ? null : '1',
       partEdit: !this.withDelivery,
@@ -165,23 +180,13 @@ export class AddressTableComponent implements OnInit {
       });
       rmDialog.afterClosed().subscribe(
         (data) => {
-          if (this.withDelivery) {
-            if (this.deliveryDays === 3) { // should change days if added address is not tehran
-              if (data !== 'تهران') {
-                const duration_5 = this.durations.filter(el => el.delivery_days === 5)[0];
-                this.changeDurationType(duration_5._id, duration_5.delivery_days);
-              } else {
-                this.addresses = this.checkoutService.addresses$.getValue();
-                this.showAddresses = this.addresses;
-                if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 2 || this.deliveryDays === 3)) {
-                  this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-                  this.showAddresses = this.tehranAddresses;
-                } else
-                  this.showAddresses = this.addresses;
-              }
+          if (!data) return;
+          else {
+            this.province = data;
+            if (this.withDelivery) {
+              this.checkoutService.getCustomerAddresses();
             }
           }
-          this.setState();
         },
         (err) => {
           console.error('Error in dialog: ', err);
@@ -241,7 +246,7 @@ export class AddressTableComponent implements OnInit {
     if (this.withDelivery) {
       this.addresses = this.checkoutService.addresses$.getValue();
       this.showAddresses = this.addresses;
-      if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 2 || this.deliveryDays === 3)) {
+      if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
         this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
         this.showAddresses = this.tehranAddresses;
       } else
