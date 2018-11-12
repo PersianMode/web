@@ -48,6 +48,8 @@ export class ProductService {
   private products = [];
   private filteredProducts = [];
   collectionNameFa$: ReplaySubject<any> = new ReplaySubject<any>(1);
+  typeId$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  tagId$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
   product$: ReplaySubject<any> = new ReplaySubject<any>();
@@ -342,9 +344,12 @@ export class ProductService {
     this.httpService.get('collection/product/' + collection_id)
       .subscribe(
         (data) => {
+          console.log('data: ', data);
           if (data.name_fa) {
             this.collectionName = data.name_fa;
             this.collectionNameFa$.next(data.name_fa);
+            this.typeId$ = data.typeId;
+            this.tagId$ = data.tagId;
           }
           if (data.products) {
             for (const product of data.products) {
