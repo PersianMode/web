@@ -23,6 +23,7 @@ export interface Agent {
 export class InternalDeliveryComponent implements OnInit {
 
   isAgentUpdate = false;
+  agenFullname: string;
   agentCtrl: FormControl;
   filteredAgents: Observable<any[]>;
 
@@ -99,6 +100,9 @@ export class InternalDeliveryComponent implements OnInit {
   }
 
   agentSelect(agent: Agent) {
+    this.agentCtrl.setValue(`${agent.firstname} ${agent.surname}`)
+    this.agenFullname = agent.firstname + ' ' + agent.surname;
+    console.log('agenFullname', this.agenFullname);
     this.isAgentUpdate = true;
     this.agentSelected = agent;
   }
