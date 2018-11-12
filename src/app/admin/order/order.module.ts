@@ -30,6 +30,7 @@ import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/deliv
 import {InboxComponent} from './components/inbox/inbox.component';
 import {DeliverBoxComponent} from './components/deliver-box/deliver-box.component';
 import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-confirm.component';
+import { HubShelfOrderComponent } from './components/hub-shelf-order/hub-shelf-order.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-c
     DeliveryShowComponent,
     DeliveryShelfCodeComponent,
     DeliverBoxComponent,
-    MismatchConfirmComponent
+    MismatchConfirmComponent,
+    HubShelfOrderComponent
   ],
   imports: [
     OrderRouting,

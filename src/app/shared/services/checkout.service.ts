@@ -8,7 +8,6 @@ import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs/Rx';
-import {isUndefined} from 'util';
 
 @Injectable()
 export class CheckoutService {
@@ -34,7 +33,7 @@ export class CheckoutService {
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
-    private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
+    private authService: AuthService, private snackBar: MatSnackBar,
     private router: Router) {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
