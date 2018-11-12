@@ -1,30 +1,23 @@
 import {Component, OnInit, ViewChild, EventEmitter, Output, OnDestroy} from '@angular/core';
-import {TicketComponent} from '../ticket/ticket.component';
-import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
-import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+import {TicketComponent} from '../../../ticket/ticket.component';
+import {ProductViewerComponent} from '../../../product-viewer/product-viewer.component';
+import {imagePathFixer} from '../../../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
-import {HttpService} from '../../../../shared/services/http.service';
+import {HttpService} from '../../../../../../shared/services/http.service';
 import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {AuthService} from '../../../../shared/services/auth.service';
-import {SocketService} from '../../../../shared/services/socket.service';
-import {ProgressService} from '../../../../shared/services/progress.service';
+import {AuthService} from '../../../../../../shared/services/auth.service';
+import {SocketService} from '../../../../../../shared/services/socket.service';
+import {ProgressService} from '../../../../../../shared/services/progress.service';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import {FormControl} from '@angular/forms';
 
 @Component({
-  selector: 'app-sent-customer',
-  templateUrl: './sent-customer.component.html',
-  styleUrls: ['./sent-customer.component.css'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
-      state('expanded', style({height: '*', visibility: 'visible'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+  selector: 'app-posted',
+  templateUrl: './posted.component.html',
+  styleUrls: ['./posted.component.css']
 })
+export class PostedComponent implements OnInit {
 
-export class SentCustomerComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['position', 'customer', 'is_collect', 'order_time', 'total_order_lines', 'process' ];
   expandedElement: any;

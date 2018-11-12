@@ -41,6 +41,16 @@
     </mat-tab>
 
 
+    <!-- internal sent hub (صندوق ارسال) -->
+    <mat-tab label="shelf-order" *ngIf="isHubClerk">
+      <ng-template mat-tab-label>
+        <span>صندوق ارسال</span>
+      </ng-template>
+      <app-sent-internal-hub></app-sent-internal-hub>
+    </mat-tab>
+
+
+
 
     <!-- shelf order (فهرست قفسه ها) -->
     <mat-tab label="shelf-order" *ngIf="isHubClerk">

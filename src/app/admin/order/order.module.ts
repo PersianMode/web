@@ -32,6 +32,9 @@ import {DeliverBoxComponent} from './components/deliver-box/deliver-box.componen
 import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-confirm.component';
 import { HubShelfOrderComponent } from './components/hub-shelf-order/hub-shelf-order.component';
 import { SentCustomerComponent } from './components/sent-customer/sent-customer.component';
+import { SentInternalHubComponent } from './components/sent-internal-hub/sent-internal-hub.component';
+import { ReadyToSendComponent } from './components/sent-internal-hub/components/ready-to-send/ready-to-send.component';
+import { PostedComponent } from './components/sent-internal-hub/components/posted/posted.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +52,10 @@ import { SentCustomerComponent } from './components/sent-customer/sent-customer.
     DeliverBoxComponent,
     MismatchConfirmComponent,
     HubShelfOrderComponent,
-    SentCustomerComponent
+    SentCustomerComponent,
+    SentInternalHubComponent,
+    ReadyToSendComponent,
+    PostedComponent
   ],
   imports: [
     OrderRouting,
