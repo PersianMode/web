@@ -48,6 +48,7 @@ export class InternalDeliveryComponent implements OnInit {
       }
       this.spinnerService.disable();
     } catch (err) {
+      // show error message
       throw err;
     }
   }
@@ -60,7 +61,9 @@ export class InternalDeliveryComponent implements OnInit {
       this.agents = agents; // data set into input
       this.filterData(); // data filtered
       this.spinnerService.disable();
+      // show success message
     } catch (err) {
+      // show error message
       throw err;
     }
   }
@@ -105,14 +108,11 @@ export class InternalDeliveryComponent implements OnInit {
       this.spinnerService.enable();
       const agent_id = this.agentSelected._id;
       this.isAgentUpdate = false;
-      const set_agent = await this.httpService.post('/internal_delivery/set_agent', {agent_id}).toPromise();
-
-      if (set_agent) {
-        this.spinnerService.disable();
-      } else {
-        this.spinnerService.disable();
-      }
+      await this.httpService.post('/internal_delivery/set_agent', {agent_id}).toPromise();
+      this.spinnerService.disable();
+      // show success message
     } catch (err) {
+      // show error message
       throw err;
     }
   }
