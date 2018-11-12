@@ -18,18 +18,23 @@ export class OrderComponent implements OnInit {
   newDeliverCount: number;
   isSalesManager = false;
   isHubClerk = false;
-  outboxName = 'صندوق خروجی';
+  isShopClerk = false;
+  isCentralStore = false;
+
   constructor( private dialog: MatDialog, private titleService: TitleService, private authService: AuthService) {
   }
 
   ngOnInit() {
     if (this.authService.userDetails.access_level === 1 ) {
       this.isSalesManager = true;
-      this.outboxName = 'پیگیری سفارشات';
+    }
+    if (this.authService.userDetails.access_level === 3 ) {
+      this.isShopClerk = true;
     }
     if (this.authService.userDetails.access_level === 3 ) {
       this.isHubClerk = true;
     }
+    // you must to check central store
 
     this.titleService.setTitleWithOutConstant('ادمین: سفارش‌ها');
   }

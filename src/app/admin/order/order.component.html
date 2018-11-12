@@ -1,4 +1,3 @@
-
 <div class="main">
   <mat-tab-group dir="rtl">
 
@@ -12,25 +11,35 @@
         </mat-chip-list>
       </ng-template>
 
-      <app-sm-inbox *ngIf="isSalesManager"  (OnNewInboxCount)="newInboxCount = $event" ></app-sm-inbox>
+      <app-sm-inbox *ngIf="isSalesManager" (OnNewInboxCount)="newInboxCount = $event"></app-sm-inbox>
 
-      <app-inbox  *ngIf="!isSalesManager" (OnNewInboxCount)="newInboxCount = $event" ></app-inbox>
-      
-
+      <app-inbox *ngIf="!isSalesManager" (OnNewInboxCount)="newInboxCount = $event"></app-inbox>
     </mat-tab>
 
-    
-    <mat-tab label="outbox">
+
+    <!-- tracking orders (پیگیری سفارشات)-->
+    <mat-tab label="outbox" *ngIf="isSalesManager">
       <ng-template mat-tab-label>
-        <span>{{outboxName}}</span>
+        <span>پیگیری سفارشات</span>
         <mat-chip-list *ngIf="newOutboxCount">
           <mat-chip color="accent" selected="true">{{newOutboxCount}}</mat-chip>
         </mat-chip-list>
       </ng-template>
-      <app-sm-send  *ngIf="isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sm-send>
+      <app-sm-send (OnNewOutboxCount)="newOutboxCount = $event"> </app-sm-send>
       <!-- comment this line beacuse error component  -->
-      <!-- <app-sc-send  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sc-send> --> 
+      <!-- <app-sc-send  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sc-send> -->
     </mat-tab>
+
+
+
+    <!-- customer sent (صندوق تحویل) -->
+    <mat-tab label="shelf-order" *ngIf="isHubClerk || (isShopClerk && !isCentralStore)">
+      <ng-template mat-tab-label>
+        <span>صندوق تحویل</span>
+      </ng-template>
+      <app-sent-customer></app-sent-customer>
+    </mat-tab>
+
 
 
     <!-- shelf order (فهرست قفسه ها) -->

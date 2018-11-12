@@ -13,9 +13,9 @@ import {trigger, state, style, animate, transition} from '@angular/animations';
 import {FormControl} from '@angular/forms';
 
 @Component({
-  selector: 'app-hub-shelf-order',
-  templateUrl: './hub-shelf-order.component.html',
-  styleUrls: ['./hub-shelf-order.component.css'],
+  selector: 'app-sent-customer',
+  templateUrl: './sent-customer.component.html',
+  styleUrls: ['./sent-customer.component.css'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
@@ -25,8 +25,7 @@ import {FormControl} from '@angular/forms';
   ],
 })
 
-export class HubShelfOrderComponent implements OnInit {
-
+export class SentCustomerComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   displayedColumns = ['position', 'customer', 'is_collect', 'order_time', 'total_order_lines', 'address', 'used_balance' ];
   expandedElement: any;
