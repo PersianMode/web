@@ -19,7 +19,7 @@ export class GenDialogComponent implements OnInit {
     this.extraData = this.data.extraData ? this.data.extraData : {};
   }
 
-  close() {
-    this.dialogRef.close();
+  close(data) {
+    this.dialogRef.close(data);
   }
 }

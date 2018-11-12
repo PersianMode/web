@@ -20,6 +20,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {DurationFormComponent} from './components/duration-form/duration-form.component';
 import {LoyaltyDiscountComponent} from './components/loyalty-discount/loyalty-discount.component';
 import { CAndCComponent } from './components/c-and-c/c-and-c.component';
+import { FreeDeliveryComponent } from './components/free-delivery/free-delivery.component';
 
 
 
@@ -30,6 +31,7 @@ import { CAndCComponent } from './components/c-and-c/c-and-c.component';
     LoyaltyDiscountComponent,
     DurationFormComponent,
     CAndCComponent,
+    FreeDeliveryComponent,
   ],
   imports: [
     DeliveryCostRouting,
