@@ -12,6 +12,6 @@ export let links: any[] = [
   {address: '/agent/soldouts', access: [AccessLevel.ContentManager]},
   {address: '/agent/loyaltygroup', access: [AccessLevel.SalesManager]},
   {address: '/agent/delivery', access: [AccessLevel.SalesManager, AccessLevel.ShopClerk, AccessLevel.HubClerk]},
-  {address: '/agent/deliverypriority', access: [AccessLevel.SalesManager]}
+  {address: '/agent/deliverypriority', access: [AccessLevel.SalesManager]},
   {address: '/agent/deliverycost/free/option', access: [AccessLevel.SalesManager]}
 ];
