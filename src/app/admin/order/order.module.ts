@@ -35,6 +35,9 @@ import { SentCustomerComponent } from './components/sent-customer/sent-customer.
 import { SentInternalHubComponent } from './components/sent-internal-hub/sent-internal-hub.component';
 import { ReadyToSendComponent } from './components/sent-internal-hub/components/ready-to-send/ready-to-send.component';
 import { PostedComponent } from './components/sent-internal-hub/components/posted/posted.component';
+import { SentInternalShopComponent } from './components/sent-internal-shop/sent-internal-shop.component';
+import { ShopReadyToSendComponent } from './components/sent-internal-shop/components/shop-ready-to-send/shop-ready-to-send.component';
+import { ShopPostedComponent } from './components/sent-internal-shop/components/shop-posted/shop-posted.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +58,10 @@ import { PostedComponent } from './components/sent-internal-hub/components/poste
     SentCustomerComponent,
     SentInternalHubComponent,
     ReadyToSendComponent,
-    PostedComponent
+    PostedComponent,
+    SentInternalShopComponent,
+    ShopReadyToSendComponent,
+    ShopPostedComponent
   ],
   imports: [
     OrderRouting,
