@@ -42,11 +42,11 @@
 
 
     <!-- internal sent shop (صندوق ارسال) -->
-    <mat-tab label="shelf-order" *ngIf="isShopClerk && !isCentralStore">
+    <mat-tab label="shelf-order" *ngIf="!isHubClerk && isShopClerk && !isCentralStore">
       <ng-template mat-tab-label>
         <span>صندوق ارسال</span>
       </ng-template>
-      <app-sent-internal-hub></app-sent-internal-hub>
+      <app-sent-internal-shop></app-sent-internal-shop>
     </mat-tab>
 
 

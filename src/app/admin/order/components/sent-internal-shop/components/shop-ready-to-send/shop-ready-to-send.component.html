@@ -52,7 +52,7 @@
         <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="count">
+      <ng-container matColumnDef="process">
         <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
         <mat-cell *matCellDef="let orderLine">
             <button mat-button color="primary" (click)="isInvoicing = true">صدور فاکتور</button>

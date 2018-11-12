@@ -28,7 +28,7 @@ export class OrderComponent implements OnInit {
     if (this.authService.userDetails.access_level === 1 ) {
       this.isSalesManager = true;
     }
-    if (this.authService.userDetails.access_level === 3 ) {
+    if (this.authService.userDetails.access_level === 2 ) {
       this.isShopClerk = true;
     }
     if (this.authService.userDetails.access_level === 3 ) {
