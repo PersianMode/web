@@ -1,0 +1,22 @@
+<mat-card class="center">
+  <mat-card-header class="content" style="float: right;">
+    تایید اختلاف
+  </mat-card-header>
+  <mat-card-content class="page">
+    <div class="content" dir="rtl">
+    آیا از اعلام اختلاف موجودی اطمینان دارید؟
+    </div>
+    <div fxLayout="row" rxLayout.xs="column" fxLayoutAlign="center center">
+      <div fxFlex="50" role="yes-btn" style="display: inline-block">
+        <button mat-icon-button (click)="close(true)">
+          <mat-icon aria-label="yes">done</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="50" role="no-btn" style="display: inline-block">
+        <button mat-icon-button (click)="close(false)">
+          <mat-icon aria-label="no">clear</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
