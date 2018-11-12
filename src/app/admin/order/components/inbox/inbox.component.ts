@@ -87,7 +87,6 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
         order['index'] = index + 1;
       });
       this.scanDataSource = new MatTableDataSource<any>(res.data);
-      console.log('scanDataSource', res.data);
       this.scanTotal = res.total || 0;
       this.OnNewInboxCount.emit(res.total);
     }, err => {

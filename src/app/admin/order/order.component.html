@@ -2,6 +2,7 @@
 <div class="main">
   <mat-tab-group dir="rtl">
 
+    <!-- inbox (صندوق ورودی) -->
     <mat-tab label="inbox">
       <ng-template mat-tab-label>
         <span>صندوق ورودی</span>
@@ -29,6 +30,15 @@
       <app-sm-send  *ngIf="isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sm-send>
       <!-- comment this line beacuse error component  -->
       <!-- <app-sc-send  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sc-send> --> 
+    </mat-tab>
+
+
+    <!-- shelf order (فهرست قفسه ها) -->
+    <mat-tab label="shelf-order" *ngIf="isHubClerk">
+      <ng-template mat-tab-label>
+        <span>فهرست قفسه ها</span>
+      </ng-template>
+      <app-hub-shelf-order></app-hub-shelf-order>
     </mat-tab>
 
 

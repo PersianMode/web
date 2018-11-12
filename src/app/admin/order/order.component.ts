@@ -17,14 +17,18 @@ export class OrderComponent implements OnInit {
   readyToScanCount: number;
   newDeliverCount: number;
   isSalesManager = false;
+  isHubClerk = false;
   outboxName = 'صندوق خروجی';
   constructor( private dialog: MatDialog, private titleService: TitleService, private authService: AuthService) {
   }
 
   ngOnInit() {
-    if(this.authService.userDetails.access_level === 1 ) {
+    if (this.authService.userDetails.access_level === 1 ) {
       this.isSalesManager = true;
       this.outboxName = 'پیگیری سفارشات';
+    }
+    if (this.authService.userDetails.access_level === 3 ) {
+      this.isHubClerk = true;
     }
 
     this.titleService.setTitleWithOutConstant('ادمین: سفارش‌ها');
