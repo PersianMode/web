@@ -42,7 +42,6 @@ export class AddressTableComponent implements OnInit {
   addrBtnLabel = 'افزودن آدرس جدید';
   addresses = [];
   tehranAddresses = [];
-  showAddresses = [];
   isMobile = false;
   isLoggedIn = false;
   durations = [];
@@ -86,20 +85,18 @@ export class AddressTableComponent implements OnInit {
             this.changeDurationType(duration_5._id, duration_5.delivery_days);
             this.selectedCustomerAddress = this.addresses.length - 1;
           } else {
-            this.showAddresses = this.addresses;
             if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
               this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-              this.showAddresses = this.tehranAddresses;
+              this.addresses = this.tehranAddresses;
             }
-            this.selectedCustomerAddress = this.tehranAddresses.length - 1;
+            this.selectedCustomerAddress = this.addresses.length - 1;
           }
         } else if (res && res.length) {
-          if (this.showAddresses.length === res.length - 1) {
+          if (this.addresses.length === res.length - 1) {
             this.selectedCustomerAddress = res.length - 1;
           } else if (res.length === 1) {
             this.selectedCustomerAddress = 0;
           }
-          this.showAddresses = this.addresses;
         }
       }
       this.setState();
@@ -117,8 +114,8 @@ export class AddressTableComponent implements OnInit {
       this.selectedWarehouseAddress,
       JSON.parse(localStorage.getItem('address')),
       this.withDelivery ?
-        this.selectedCustomerAddress >= 0 ? this.showAddresses[this.selectedCustomerAddress] : null
-        : this.selectedWarehouseAddress >= 0 ? this.showAddresses[this.selectedWarehouseAddress] : null,
+        this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
+        : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null,
 
       this.withDelivery ? this.deliveryDays : null,
       this.withDelivery ? this.delivery_time : null
@@ -130,12 +127,12 @@ export class AddressTableComponent implements OnInit {
   }
 
   getLatitude() {
-    return this.showAddresses[this.selectedWarehouseAddress].loc ? this.showAddresses[this.selectedWarehouseAddress].loc.lat :
+    return this.addresses[this.selectedWarehouseAddress].loc ? this.addresses[this.selectedWarehouseAddress].loc.lat :
       this.loc ? this.loc[0] : 35.7322793;
   }
 
   getLongitude() {
-    return this.showAddresses[this.selectedWarehouseAddress].loc ? this.showAddresses[this.selectedWarehouseAddress].loc.long :
+    return this.addresses[this.selectedWarehouseAddress].loc ? this.addresses[this.selectedWarehouseAddress].loc.long :
       this.loc ? this.loc[1] : 51.2140536;
   }
 
@@ -151,7 +148,7 @@ export class AddressTableComponent implements OnInit {
         this.selectedWarehouseAddress = -1;
       } else {
         this.selectedWarehouseAddress = i;
-        this.loc = this.locs[this.showAddresses[this.selectedWarehouseAddress].name];
+        this.loc = this.locs[this.addresses[this.selectedWarehouseAddress].name];
       }
     }
     this.setState();
@@ -197,7 +194,7 @@ export class AddressTableComponent implements OnInit {
 
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
-    const tempAddress = (id || id === 0) ? this.showAddresses[id] : null;
+    const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     this.checkoutService.addressData = {
       addressId: tempAddressId,
       partEdit: !this.isProfile || !this.authService.userIsLoggedIn(),
@@ -245,32 +242,27 @@ export class AddressTableComponent implements OnInit {
     this.setBtnLabel();
     if (this.withDelivery) {
       this.addresses = this.checkoutService.addresses$.getValue();
-      this.showAddresses = this.addresses;
       if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
         this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-        this.showAddresses = this.tehranAddresses;
-      } else
-        this.showAddresses = this.addresses;
+        this.addresses = this.tehranAddresses;
+      }
     } else {
       this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-      this.showAddresses = this.addresses;
     }
     this.setState();
   }
 
   changeDurationType(durationId, deliveryDays) {
+    this.addresses = this.checkoutService.addresses$.getValue();
     this.durationId = durationId;
     this.deliveryDays = deliveryDays;
     this.noDuration.emit(true);
     this.durationType.emit(durationId);
-    if (this.addresses && this.addresses.length && (deliveryDays === 2 || deliveryDays === 3)) {
+    if (this.addresses && this.addresses.length && deliveryDays === 3) {
       this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-      this.showAddresses = this.tehranAddresses;
-    } else
-      this.showAddresses = this.addresses;
-
+      this.addresses = this.tehranAddresses;
+    }
     this.selectedCustomerAddress = 0;
-
     this.setState();
   }
 

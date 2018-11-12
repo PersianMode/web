@@ -77,6 +77,7 @@ export class CheckoutService {
         );
     } else {
       const address = JSON.parse(localStorage.getItem('address'));
+
       if (address) {
         this.addresses$.next([address]);
       }
@@ -250,6 +251,9 @@ export class CheckoutService {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
       .subscribe(res => {
+          if (!this.authService.userDetails.userId) {
+            localStorage.removeItem('address');
+          }
           this.cartService.emptyCart();
           this.router.navigate(['/', 'profile']);
         },

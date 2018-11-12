@@ -29,7 +29,7 @@
   <button mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
 </div>
 <span
-  *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!showAddresses || !showAddresses.length)) || (!withDelivery && !isLoggedIn)"
+  *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
   class="newAddress-checkout" [class.newAddress-profile]="isProfile">
   <div class="recipient" *ngIf="!withDelivery && customerData && customerData.recipient_name">
     <b>نام تحویل گیرنده:</b>
@@ -38,7 +38,7 @@
     {{customerData.recipient_name + ' ' + customerData.recipient_surname}}
   </div>
 </span>
-<div *ngIf="showAddresses && showAddresses.length" [class.show-button]="showAddresses && showAddresses.length">
+<div *ngIf="addresses && addresses.length" [class.show-button]="addresses && addresses.length">
   <div *ngIf="!isMobile" class="rs-table field">
     <mat-card>
       <table class="field table">
@@ -57,7 +57,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let address of showAddresses; let i = index">
+        <tr *ngFor="let address of addresses; let i = index">
           <td *ngIf="isModify;else anothercontent2">{{makePersianNumber(i+1)}}</td>
           <ng-template #anothercontent2>
             <td><input type="radio" [value]="address" name="address" [(ngModel)]="addressSelected"
@@ -106,7 +106,7 @@
     </mat-card>
   </div>
   <div *ngIf="isMobile">
-    <div *ngFor="let address of showAddresses; let i = index">
+    <div *ngFor="let address of addresses; let i = index">
       <mat-card>
         <mat-card-content>
           <div>
