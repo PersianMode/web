@@ -5,7 +5,6 @@ import {AuthService} from '../../../../shared/services/auth.service';
 import {SocketService} from '../../../../shared/services/socket.service';
 import {OrderStatus} from '../../../../shared/lib/order_status';
 import {OrderAddressComponent} from '../order-address/order-address.component';
-import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {STATUS} from '../../../../shared/enum/status.enum';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {BarcodeCheckerComponent} from '../barcode-checker/barcode-checker.component';
@@ -17,9 +16,9 @@ import {TicketComponent} from '../ticket/ticket.component';
 
 
 @Component({
-  selector: 'app-sc-inbox',
-  templateUrl: './sc-inbox.component.html',
-  styleUrls: ['./sc-inbox.component.scss'],
+  selector: 'app-inbox',
+  templateUrl: './inbox.component.html',
+  styleUrls: ['./inbox.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
@@ -28,7 +27,7 @@ import {TicketComponent} from '../ticket/ticket.component';
     ]),
   ],
 })
-export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
+export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
@@ -43,7 +42,7 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     'status',
     'process',
   ];
-  
+
   scanDisplayedColumns = [
     'position',
     'details',
@@ -55,7 +54,7 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   manualDataSource = new MatTableDataSource();
   expandedElement: any;
- 
+
   scanDataSource = new MatTableDataSource();
 
   pageSize = 10;
@@ -275,5 +274,10 @@ export class SCInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       width: '1000px',
       data: {_orderId, _orderLineId}
     });
+  }
+
+  onMismatchDetected() {
+    this.progressService.enable();
+    
   }
 }

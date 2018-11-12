@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmDeliverComponent } from './sm-deliver.component';
+import { SendBoxComponent } from './send-box.component';
 
-describe('SmDeliverComponent', () => {
-  let component: SmDeliverComponent;
-  let fixture: ComponentFixture<SmDeliverComponent>;
+describe('OutBoxComponent', () => {
+  let component: SendBoxComponent;
+  let fixture: ComponentFixture<SendBoxComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SmDeliverComponent ]
+      declarations: [ SendBoxComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SmDeliverComponent);
+    fixture = TestBed.createComponent(SendBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -2,7 +2,7 @@
 
   <mat-card-content>
 
-    <app-barcode-checker [finished]='scanTotal === 0'></app-barcode-checker>
+    <app-barcode-checker [finished]='scanTotal === 0' (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
 
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
       <div [fxFlex]="hasManual ? '40' : '100'" class="field-container">

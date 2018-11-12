@@ -12,13 +12,9 @@
         </select>
       </div>
     </div>
-    <button mat-raised-button *ngIf="!isStarted" color="primary" style="margin-left: 10px" (click)="isStarted = !isStarted">شروع
-      اسکن</button>
-    <button mat-raised-button *ngIf="isStarted" color="warn" style="margin-left: 10px" (click)="isStarted = !isStarted">پایان
-      اسکن</button>
-    <button mat-raised-button *ngIf="!isStarted" color="warn" style="margin-left: 10px">گزارش عدم تطابق</button>
+    <button mat-raised-button *ngIf="!isStarted" color="warn" style="margin-left: 10px" (click)="onMismatchDetected()">گزارش عدم تطابق</button>
 
-    <div fxLayout="column" fxLayoutAlign="center center" *ngIf="isStarted">
+    <div fxLayout="column" fxLayoutAlign="center center">
       <img src="/assets/logos/barcode.png" class="logo">
       <mat-form-field class="example-full-width">
         <input matInput placeholder="" [formControl]="barcodeCtrl">
