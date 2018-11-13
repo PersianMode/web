@@ -31,12 +31,12 @@ export class CheckoutService {
   addressData: IAddressInfo;
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  ccRecipientData: any = {};
+  ccRecipientData: any = null;
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
-    private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
-    private router: Router) {
+              private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
+              private router: Router) {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
@@ -78,9 +78,7 @@ export class CheckoutService {
         );
     } else {
       const address = JSON.parse(localStorage.getItem('address'));
-      if (address) {
-        this.addresses$.next([address]);
-      }
+      this.addresses$.next(address && Object.keys(address).length ? [address] : []);
     }
   }
 
@@ -136,8 +134,8 @@ export class CheckoutService {
   getLoyaltyGroup() {
     this.httpService.get('loyaltygroup')
       .subscribe(res => {
-        this.loyaltyGroups.next(res);
-      },
+          this.loyaltyGroups.next(res);
+        },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -150,8 +148,8 @@ export class CheckoutService {
   getAddLoyaltyPoints() {
     this.httpService.get('deliverycc')
       .subscribe(res => {
-        this.addPointArray.next(res);
-      },
+          this.addPointArray.next(res);
+        },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -201,7 +199,7 @@ export class CheckoutService {
   }
 
   private get address() {
-    return this._ads[4];
+    return this._ads[4] ? this._ads[4] : {};
   }
 
   private get is_collect() {
@@ -217,9 +215,7 @@ export class CheckoutService {
   }
 
   private accumulateData() {
-    if (!this.is_collect) {
-      this.ccRecipientData = null;
-    } else if (this.ccRecipientData) {
+    if (this.is_collect && this.ccRecipientData) {
       this.address.recipient_name = this.ccRecipientData.recipient_name;
       this.address.recipient_surname = this.ccRecipientData.recipient_surname;
       this.address.recipient_national_id = this.ccRecipientData.recipient_national_id;
@@ -252,7 +248,12 @@ export class CheckoutService {
     this.httpService.post('checkout', data)
       .subscribe(res => {
           if (!this.authService.userDetails.userId) {
+            let addresses = [];
             localStorage.removeItem('address');
+            if (this.is_collect) {
+              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+            }
+            this.addresses$.next(addresses);
           }
           this.cartService.emptyCart();
           this.router.navigate(['/', 'profile']);
@@ -268,8 +269,8 @@ export class CheckoutService {
     return new Promise((resolve, reject) => {
       this.httpService.post('/calculate/order/price', data)
         .subscribe(res => {
-          resolve(res);
-        },
+            resolve(res);
+          },
           err => {
             reject();
           });
