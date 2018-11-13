@@ -55,21 +55,37 @@ export class DeliveryComponent implements OnInit {
     'view_details',
   ];
   deliveryAgentList = [];
-  // farhad
   receiverSearchCtrl = new FormControl();
   agentSearchCtrl = new FormControl();
   isDelivered = null;
+  isInternal = null;
+  isReturn = null;
+  startDateSearch = null;
   endDateSearch = null;
   transferee = null;
   agentName = null;
+  isSalesManager = false;
+  isHubClerk = false;
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
     private snackBar: MatSnackBar, private dialog: MatDialog,
     private authService: AuthService) {}
 
   ngOnInit() {
-    if (!this.isHubClerk())
-      this.displayedColumns = this.displayedColumns.filter(el => el.toLowerCase() !== 'shelf_code');
+    this.isHubClerk = this.authService.userDetails.isAgent && +this.authService.userDetails.accessLevel === AccessLevel.HubClerk;
+    this.isSalesManager = this.authService.userDetails.isAgent && +this.authService.userDetails.accessLevel === AccessLevel.SalesManager;
+
+    if (!this.isSalesManager) {
+      this.displayedColumns = this.displayedColumns.filter(el => el !== 'view_details');
+    }
+
+    if (!this.isHubClerk) {
+      this.displayedColumns = this.displayedColumns.filter(el => el !== 'shelf_code');
+    }
+
+    if (!this.isSalesManager && !this.isHubClerk) {
+      this.displayedColumns = this.displayedColumns.filter(el => !['view_details', 'shelf_code', 'end', 'min_slot'].includes(el));
+    }
 
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
@@ -101,9 +117,8 @@ export class DeliveryComponent implements OnInit {
     );
 
     this.getDeliveryItems();
-    this.getDeliveryAgents();
   }
-  // farhad
+
   getDeliveryItems() {
     this.progressService.enable();
     this.httpService.post('delivery/items/' + (this.offset ? this.offset : 0) + '/' + (this.limit ? this.limit : 10), {
@@ -111,15 +126,16 @@ export class DeliveryComponent implements OnInit {
       agentName: this.agentName,
       transferee: this.transferee,
       direction: this.direction,
-      endDate: this.endDateSearch,
+      delivery_end: this.endDateSearch,
+      delivery_start: this.startDateSearch,
+      isInternal: this.isInternal,
       isDelivered: this.isDelivered,
+      isReturn: this.isReturn,
     }).subscribe(
       data => {
         this.deliveryItems = [];
 
-        if (data && data.length) {
-          data = data[0];
-
+        if (data) {
           this.deliveryItems = data.result;
           this.selection.clear();
           this.setDataSource(this.deliveryItems);
@@ -157,23 +173,13 @@ export class DeliveryComponent implements OnInit {
         delivery_start: moment(el.delivery_start).format('YYYY-MM-DD'),
         delivery_end: moment(el.delivery_end).format('YYYY-MM-DD'),
         receiver_sender_name: el.is_return
-          ? (el.from.customer ? (el.from.customer.first_name + el.from.customer.surname) : null)
-          : (Object.keys(el.to.customer).length ? (el.to.customer.first_name + el.to.customer.surname) : el.to.warehouse.name),
+          ? (el.from.customer ? (el.from.customer.first_name + ' ' + el.from.customer.surname) : null)
+          : (Object.keys(el.to.customer || {}).length ? (el.to.customer.first_name + ' ' + el.to.customer.surname) : el.to.warehouse.name),
         is_delivered: this.deliveryIsDone(el),
       });
     });
 
     this.dataSource.data = tempData;
-  }
-
-  getDeliveryAgents() {
-    this.httpService.get('delivery/agent').subscribe(
-      data => {
-        this.deliveryAgentList = data;
-      },
-      err => {
-        console.error('Cannot get delivery agent list: ', err);
-      });
   }
 
   changePageSetting(data) {
@@ -188,17 +194,13 @@ export class DeliveryComponent implements OnInit {
   }
 
   showDetails(id) {
-    const detailsDialog = this.dialog.open(DeliveryDetailsComponent, {
+    this.dialog.open(DeliveryDetailsComponent, {
       width: '600px',
-      disableClose: true,
       data: {
         deliveryItem: this.deliveryItems.find(el => el._id === id),
-        agentList: this.deliveryAgentList,
-        isHubClerk: this.isHubClerk(),
+        isHubClerk: this.isHubClerk,
       },
     });
-
-    detailsDialog.afterClosed().subscribe(() => this.setDataSource(this.deliveryItems));
   }
 
   showTracking(id) {
@@ -206,10 +208,6 @@ export class DeliveryComponent implements OnInit {
       width: '600px',
       data: {deliveryItem: this.deliveryItems.find(el => el._id === id)},
     });
-  }
-
-  isHubClerk() {
-    return this.authService.userDetails.isAgent && +this.authService.userDetails.accessLevel === AccessLevel.HubClerk;
   }
 
   getCustomerInventoryName(element) {
@@ -223,6 +221,30 @@ export class DeliveryComponent implements OnInit {
       this.isDelivered = false;
     else if (this.isDelivered === false)
       this.isDelivered = null;
+
+    this.getDeliveryItems();
+  }
+
+  changeInternalStatus() {
+    if (this.isInternal === null) {
+      this.isInternal = true;
+    } else if (this.isInternal === true) {
+      this.isInternal = false;
+    } else if (this.isInternal === false) {
+      this.isInternal = null;
+    }
+
+    this.getDeliveryItems();
+  }
+
+  changeReturnStatus() {
+    if (this.isReturn === null) {
+      this.isReturn = true;
+    } else if (this.isReturn === true) {
+      this.isReturn = false;
+    } else if (this.isReturn === false) {
+      this.isReturn = null;
+    }
 
     this.getDeliveryItems();
   }

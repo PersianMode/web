@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <hr/>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
         <label>ارسال به</label>
@@ -69,21 +69,16 @@
         </div>
       </div>
     </div>
-    <hr/>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
         <label>ارسال کننده</label>
       </div>
       <div fxFlex="70">
-        <mat-select [disabled]="data.delivery_end || data.delivery_start" class="select-label" placeholder="انتخاب ارسال کننده" [ngModel]="data.delivery_agent._id"
-          (change)="deliveryAgentChange($event)">
-          <mat-option *ngFor="let dg of deliveryAgentList" [value]="dg._id">
-            {{dg.first_name}} - {{dg.surname}}
-          </mat-option>
-        </mat-select>
+        <div>{{data?.delivery_agent.first_name}} - {{data?.delivery_agent.surname}}</div>
       </div>
     </div>
-    <hr/>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
         <label *ngIf="!data.is_return">دریافت کننده</label>
@@ -93,9 +88,9 @@
         <label>{{getDestinationName()}}</label>
         <label class="phone_number">{{getDestinationPhone()}}</label>
       </div>
-      <hr/>
+      <hr />
     </div>
-    <hr/>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
         <label>نوع</label>
@@ -105,7 +100,7 @@
         <label *ngIf="!data.is_return">ارسالی</label>
       </div>
     </div>
-    <hr/>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
         <label>بازه</label>
@@ -123,66 +118,39 @@
         <label>{{data.shelf_code}}</label>
       </div>
     </div>
-    <hr/>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
         <label>زمان ارسال</label>
       </div>
       <div fxFlex="70">
-        <div fxLayout="row" fxLayoutAlign="center center" style="direction: ltr;">
-          <div fxFlex="50" class="date-time">
-            <mat-form-field class="inner-date-time">
-              <input [disabled]="data.delivery_end || data.delivery_start" matInput [matDatepicker]="start_picker" placeholder="انتخاب تاریخ ارسال"
-                [(ngModel)]="start_date">
-              <mat-datepicker-toggle matSuffix [for]="start_picker"></mat-datepicker-toggle>
-              <mat-datepicker #start_picker></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div fxFlex="25" class="date-time">
-            <mat-input-container class="inner-date-time">
-              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="start_time.h"
-                (ngModelChange)="changeTime('start', 'h')" />
-            </mat-input-container>
-          </div>
-          <div fxFlex="25" class="date-time">
-            <mat-input-container class="inner-date-time">
-              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="59" placeholder="دقیقه"
-                [(ngModel)]="start_time.m" (ngModelChange)="changeTime('start', 'm')" />
-            </mat-input-container>
-          </div>
+        <div>
+          <div class="address-part address-title">تاریخ</div>
+          <div class="address-part">{{getFormattedDate(start_date)}}</div>
+        </div>
+        <div>
+          <div class="address-part address-title">ساعت</div>
+          <div class="address-part">{{start_time.h || '-'}} : {{start_time.m || '-'}}</div>
         </div>
       </div>
     </div>
-    <hr/>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
         <label>زمان دریافت</label>
       </div>
       <div fxFlex="70">
-        <div fxLayout="row" fxLayoutAlign="center center" style="direction: ltr;">
-          <div fxFlex="50" class="date-time">
-            <mat-form-field class="inner-date-time">
-              <input [disabled]="data.delivery_end || data.delivery_start" matInput [matDatepicker]="end_picker" placeholder="انتخاب حداکثر تاریخ دریافت"
-                [(ngModel)]="end_date" [style.color]="isAfterMaxValidDate() ? 'red' : 'black'">
-              <mat-datepicker-toggle matSuffix [for]="end_picker"></mat-datepicker-toggle>
-              <mat-datepicker #end_picker></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div fxFlex="25" class="date-time">
-            <mat-input-container class="inner-date-time">
-              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="23" placeholder="ساعت" [(ngModel)]="end_time.h"
-                (ngModelChange)="changeTime('end', 'h')" [style.color]="isAfterMaxValidDate(true) ? 'red' : 'black'"/>
-            </mat-input-container>
-          </div>
-          <div fxFlex="25" class="date-time">
-            <mat-input-container class="inner-date-time">
-              <input [disabled]="data.delivery_end || data.delivery_start" matInput type="number" min="0" max="59" placeholder="دقیقه"
-                [(ngModel)]="end_time.m" (ngModelChange)="changeTime('end', 'm')" [style.color]="isAfterMaxValidDate(true) ? 'red' : 'black'"/>
-            </mat-input-container>
-          </div>
+        <div>
+          <div class="address-part address-title">تاریخ</div>
+          <div class="address-part">{{getFormattedDate(end_date)}}</div>
+        </div>
+        <div>
+          <div class="address-part address-title">ساعت</div>
+          <div class="address-part">{{end_time.h || '-'}} : {{end_time.m || '-'}}</div>
         </div>
       </div>
     </div>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" classs="header-label">
         <label>(حداکثر زمان دریافت)</label>
@@ -191,7 +159,7 @@
         <label style="direction: ltr">{{getMaxValidEndDate()}}</label>
       </div>
     </div>
-    <hr/>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
         <label>زمان شروع به ارسال</label>
@@ -207,7 +175,7 @@
         </div>
       </div>
     </div>
-    <hr/>
+    <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
         <label>زمان تحویل کالا به مقصد</label>
@@ -221,13 +189,6 @@
           <label class="inner-label">ساعت</label>
           <label>{{getFormattedClock(data.delivery_end)}}</label>
         </div>
-      </div>
-    </div>
-    <div class="button-area" style="direction: ltr">
-      <div>
-        <button mat-icon-button (click)="saveChanges()" [disabled]="noChanges()">
-          <mat-icon aria-label="save changes">done</mat-icon>
-        </button>
       </div>
     </div>
   </mat-dialog-content>

@@ -22,16 +22,39 @@
       <div fxLayout="row" fxLayoutAlign="center start">
         <div fxFlex="50" class="filtering-box">
           <mat-form-field class="filtering-field">
-            <input matInput [matDatepicker]="picker" placeholder="انتخاب حداکثر تاریخ دریافت" [(ngModel)]="endDateSearch" (ngModelChange)="getDeliveryItems()">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <input matInput [matDatepicker]="epicker" placeholder="انتقالات از تاریخ ..." [(ngModel)]="endDateSearch" (ngModelChange)="getDeliveryItems()">
+            <mat-datepicker-toggle matSuffix [for]="epicker"></mat-datepicker-toggle>
+            <mat-datepicker #epicker></mat-datepicker>
           </mat-form-field>
         </div>
-        <div fxFlex="50" class="filtering-box" style="margin-top: 20px">
+        <div fxFlex="50" class="filtering-box">
+          <mat-form-field class="filtering-field">
+            <input matInput [matDatepicker]="spicker" placeholder="انتقالات تا تاریخ ..." [(ngModel)]="startDateSearch" (ngModelChange)="getDeliveryItems()"/>
+            <mat-datepicker-toggle matSuffix [for]="spicker"></mat-datepicker-toggle>
+            <mat-datepicker #spicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <div fxFlex="33" class="filtering-box" style="margin-top: 20px">
           <mat-checkbox class="filtering-field" [ngModel]="isDelivered" (change)="changeDeliverStatus()" [indeterminate]="isDelivered === null">
             <span *ngIf="isDelivered" class="checkbox-label">تحویل داده شده</span>
             <span *ngIf="isDelivered === false" class="checkbox-label">تحویل داده نشده</span>
             <span *ngIf="isDelivered === null" class="checkbox-label">همه موارد</span>
+          </mat-checkbox>
+        </div>
+        <div fxFlex="33" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
+          <mat-checkbox class="filtering-field" [ngModel]="isInternal" (change)="changeInternalStatus()" [indeterminate]="isInternal === null">
+            <span *ngIf="isInternal" class="checkbox-label">انتقالات داخلی</span>
+            <span *ngIf="isInternal === false" class="checkbox-label">انتقالات خارجی</span>
+            <span *ngIf="isInternal === null" class="checkbox-label">همه انتقالات</span>
+          </mat-checkbox>
+        </div>
+        <div fxFlex="33" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
+          <mat-checkbox class="filtering-field" [ngModel]="isReturn" (change)="changeReturnStatus()" [indeterminate]="isReturn === null">
+            <span *ngIf="isReturn" class="checkbox=label">برگشت داده شده ها</span>
+            <span *ngIf="isReturn === false" class="checkbox=label">برگشت داده نشده ها</span>
+            <span *ngIf="isReturn === null" class="checkbox=label">همه نوع مرسوله ای</span>
           </mat-checkbox>
         </div>
       </div>
@@ -66,7 +89,7 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="shelf_code" *ngIf="isHubClerk()">
+        <ng-container matColumnDef="shelf_code" *ngIf="isHubClerk">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">کد قفسه</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content"> {{element.shelf_code}} </mat-cell>
         </ng-container>
@@ -92,7 +115,7 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="view_details">
+        <ng-container matColumnDef="view_details" *ngIf="isSalesManager">
           <mat-header-cell *matHeaderCellDef class="header">نمایش جزئیات</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content details-button">
             <div (click)="showDetails(element._id)">
