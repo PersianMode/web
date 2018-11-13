@@ -1,10 +1,12 @@
 import {
   Component, HostListener, Inject, Input, OnInit, Output, ViewChild, EventEmitter, AfterContentChecked
 } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
 import {CartService} from '../../../../shared/services/cart.service';
+import {HttpService} from 'app/shared/services/http.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-desktop-product',
@@ -12,8 +14,6 @@ import {CartService} from '../../../../shared/services/cart.service';
   styleUrls: ['./desktop-product.component.css']
 })
 export class DesktopProductComponent implements OnInit, AfterContentChecked {
-
-
   @Input() product;
   @Input() price;
   @Input() discountedPrice;
@@ -62,7 +62,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Output() addFavorite = new EventEmitter<any>();
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-              private cartService: CartService) {
+    private cartService: CartService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -107,7 +107,28 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   addToCartDisability() {
-    console.log(this.addCardBtnDisabled || !this.size);
     return this.addCardBtnDisabled || !this.size;
+  }
+
+  getProductShareLink() {
+    return HttpService.Host + this.router.url;
+  }
+
+  copyLinkToClipboard() {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = this.getProductShareLink();
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+
+    this.snackBar.open('لینک محصول در پس زمینه کپی شد', null, {
+      duration: 2000,
+    });
   }
 }
