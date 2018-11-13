@@ -15,7 +15,6 @@
       <h1><span>{{collectionNameFa}}</span>
         <span>({{products.length.toLocaleString('fa')}})</span>
       </h1>
-
       <div class="sorter-row">
         <div class="sorter" (click)="sortPanel.toggle($event)">ترتیب نمایش
           <span *ngIf="sortedBy.value"> با {{sortedBy.fa}}</span>
@@ -27,6 +26,7 @@
           </div>
         </p-overlayPanel>
       </div>
+      <app-breadcrumb></app-breadcrumb>
     </div>
     <div *ngIf="isMobile" class="mobileGridwallTitle">
       <h1>{{collectionNameFa}}</h1>
@@ -44,5 +44,4 @@
       </p-dataScroller>
     </div>
   </div>
-  <app-breadcrumb></app-breadcrumb>
 </div>

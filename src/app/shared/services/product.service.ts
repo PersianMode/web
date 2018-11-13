@@ -48,8 +48,8 @@ export class ProductService {
   private products = [];
   private filteredProducts = [];
   collectionNameFa$: ReplaySubject<any> = new ReplaySubject<any>(1);
-  typeId$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  tagId$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  type$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  tag$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
   product$: ReplaySubject<any> = new ReplaySubject<any>();
@@ -242,7 +242,7 @@ export class ProductService {
     return data.filter(p => p.instances.length && p.colors.length);
   }
 
-  private enrichProductData(data) {
+   private enrichProductData(data) {
     data.id = data._id;
     data.type = data.product_type;
     data.price = data.base_price;
@@ -348,12 +348,14 @@ export class ProductService {
           if (data.name_fa) {
             this.collectionName = data.name_fa;
             this.collectionNameFa$.next(data.name_fa);
-            this.typeId$ = data.typeId;
-            this.tagId$ = data.tagId;
           }
           if (data.products) {
             for (const product of data.products) {
               this.enrichProductData(product);
+              this.type$.next(product.product_type);
+              // this.tag$.next(product.tags.find(r => r.tg_name === 'Gender'));
+              this.tag$.next(product.tags);
+
             }
             this.collectionId = collection_id;
             this.products = data.products;

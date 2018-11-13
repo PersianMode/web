@@ -15,7 +15,7 @@ const HEADER_HEIGHT = 209;
   templateUrl: './main-collection.component.html',
   styleUrls: ['./main-collection.component.css']
 })
-export class MainCollectionComponent implements OnInit, OnDestroy , AfterContentInit {
+export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentInit {
   products = [];
   @ViewChild('filterPane') filterPane;
   @ViewChild('gridwall') gridwall;
@@ -55,8 +55,11 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
   sortedBy: any = {value: null};
   collectionName = '';
   collectionNameFa = '';
+  tagId = [];
+  typeId = [];
   lazyRows = 10;
   subscription: Subscription;
+
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
               private responsiveService: ResponsiveService, private productService: ProductService,
@@ -74,6 +77,8 @@ export class MainCollectionComponent implements OnInit, OnDestroy , AfterContent
           } else {
             this.products = [];
             this.collectionNameFa = '';
+            this.tagId = [];
+            this.typeId = [];
             this.productService.emptyFilters();
             console.error('-> ', `${this.pageName} is getting empty data for page`);
           }
