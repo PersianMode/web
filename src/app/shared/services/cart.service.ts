@@ -18,7 +18,10 @@ export class CartService {
   coupon_discount = 0;
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
-  constructor(private httpService: HttpService, private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
+  constructor(private httpService: HttpService,
+              private authService: AuthService,
+              private productService: ProductService,
+              private snackBar: MatSnackBar) {
     this.authService.isLoggedIn.subscribe(
       isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
@@ -49,8 +52,7 @@ export class CartService {
 
         } else if (items && items.length) {
           this.getItemsDetail(items);
-        }
-        else {
+        } else {
           this.setCartItem(null, [], false);
         }
 
@@ -153,7 +155,7 @@ export class CartService {
         quantity: instanceChange && cur_ls_item ? cur_ls_item.quantity + value.number : value.number,
       });
       if (instanceChange && cur_ls_item)
-        ls_items = ls_items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id)
+        ls_items = ls_items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify(ls_items));
         update();
@@ -180,19 +182,17 @@ export class CartService {
       .then(res => {
         try {
           this.setCartItem(overallDetails, res, false);
-        }
-        catch (err) {
+        } catch (err) {
           console.error('-> ', err);
         }
       })
       .catch(err => {
         try {
           this.setCartItem(null, [], false);
-        }
-        catch (err) {
+        } catch (err) {
           console.error('-> ', err);
         }
-      })
+      });
   }
 
   inventoryCount(instance) {
