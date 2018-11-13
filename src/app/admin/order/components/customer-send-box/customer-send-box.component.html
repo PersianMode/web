@@ -1,6 +1,5 @@
 <!-- barcode checker -->
-<!-- [finished]="" -->
-<app-barcode-checker *ngIf="showBarcodeScanner" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+<app-barcode-checker *ngIf="showBarcodeScanner" [finished]="false"  (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
 
 <mat-card>
   <mat-card-content>
@@ -51,7 +50,7 @@
         <ng-container matColumnDef="process_order">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let order">
-            <button mat-icon-button (click)="onScanOrder()"><mat-icon>scanner</mat-icon></button>
+            <button mat-button color="primary" (click)="onScanOrder()">پردازش</button>
           </mat-cell>
         </ng-container>
 
@@ -87,12 +86,14 @@
 
         <!-- row-header and mat-row and mat-row-collapse-detail -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
         <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
           (click)="expandedElement = row._id">
         </mat-row>
-        <mat-row class="collapse-fixed-style" *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
-          [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'">
+        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
+          style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
         </mat-row>
+
 
       </mat-table>
     </div>
