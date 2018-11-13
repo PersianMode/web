@@ -35,6 +35,8 @@ import {InternalSendBoxComponent} from './components/internal-send-box/internal-
 import {CustomerSendBoxComponent} from './components/customer-send-box/customer-send-box.component';
 import {CustomerDeliveryComponent} from './components/customer-delivery/customer-delivery.component';
 import {ShelvsViewComponent} from './components/shelvs-view/shelvs-view.component';
+import { ReadyToSendComponent } from './components/internal-send-box/components/ready-to-send/ready-to-send.component';
+import { PostedComponent } from './components/internal-send-box/components/posted/posted.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import {ShelvsViewComponent} from './components/shelvs-view/shelvs-view.componen
     InternalSendBoxComponent,
     CustomerSendBoxComponent,
     CustomerDeliveryComponent,
-    ShelvsViewComponent
+    ShelvsViewComponent,
+    ReadyToSendComponent,
+    PostedComponent,
   ],
   imports: [
     OrderRouting,
