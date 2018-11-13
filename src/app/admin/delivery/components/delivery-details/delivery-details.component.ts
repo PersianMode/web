@@ -82,4 +82,9 @@ export class DeliveryDetailsComponent implements OnInit {
   closeDialog() {
     this.dialogRef.close();
   }
+
+  getProductColorName(data) {
+    const foundColor = data.colors.find(el => el._id.toString() === data.product_color_id.toString());
+    return foundColor ? foundColor.name : '';
+  }
 }

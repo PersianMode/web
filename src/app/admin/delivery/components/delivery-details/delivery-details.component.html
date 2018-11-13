@@ -191,5 +191,26 @@
         </div>
       </div>
     </div>
+    <div *ngIf="data.product_instances?.length">
+      <hr />
+      <hr />
+      <div class="center">
+        <label>کالاهای موجود</label>
+      </div>
+      <table style="width: 100%" cellspacing="0">
+        <tr>
+          <td class="product-table-header">نام</td>
+          <td class="product-table-header">سایز</td>
+          <td class="product-table-header">رنگ</td>
+          <td class="product-table-header">بارکد</td>
+        </tr>
+          <tr *ngFor="let pi of data.product_instances; let i = index" [class.odd-row]="i % 2 === 0">
+            <td class="product-table-content">{{pi.product_name}}</td>
+            <td class="product-table-content">{{pi.size}}</td>
+            <td class="product-table-content">{{getProductColorName(pi)}}</td>
+            <td class="product-table-content">{{pi.barcode}}</td>
+          </tr>
+      </table>
+    </div>
   </mat-dialog-content>
 </div>
