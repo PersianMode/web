@@ -35,6 +35,10 @@ export class OrderComponent implements OnInit {
       this.isHubClerk = true;
     }
     // you must to check central store
+    const is_central_warehouse = this.authService.warehouses.filter(w => !w.has_customer_pickup && !w.is_hub)[0]._id;
+    if (is_central_warehouse === this.authService.userDetails.warehouse_id) {
+      this.isCentralStore = true;
+    }
 
     this.titleService.setTitleWithOutConstant('ادمین: سفارش‌ها');
   }
