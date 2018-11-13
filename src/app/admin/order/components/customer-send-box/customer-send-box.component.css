@@ -1,0 +1,12 @@
+mat-header-cell,
+mat-cell {
+  text-align: center;
+  font-family: iranyekan, sans-serif !important;
+}
+
+.collapse-fixed-style {
+  overflow: hidden;
+  height: 0px;
+  min-height: 0px;
+  visibility: hidden;
+}
