@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ReadyToSendComponent } from './ready-to-send.component';
+import { ShelvsViewComponent } from './shelvs-view.component';
 
-describe('ReadyToSendComponent', () => {
-  let component: ReadyToSendComponent;
-  let fixture: ComponentFixture<ReadyToSendComponent>;
+describe('ShelvsViewComponent', () => {
+  let component: ShelvsViewComponent;
+  let fixture: ComponentFixture<ShelvsViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReadyToSendComponent ]
+      declarations: [ ShelvsViewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReadyToSendComponent);
+    fixture = TestBed.createComponent(ShelvsViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
