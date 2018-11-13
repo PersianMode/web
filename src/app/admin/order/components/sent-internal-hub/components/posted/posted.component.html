@@ -38,9 +38,9 @@
         </ng-container>
   
         <ng-container matColumnDef="process">
-          <mat-header-cell *matHeaderCellDef>تیکت</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
           <mat-cell *matCellDef="let order">
-            <button mat-button color="primary" (click)="showTicket()">نمایش</button>
+            <button mat-button color="primary" (click)="showProcess()">نمایش</button>
           </mat-cell>
         </ng-container>
   
@@ -68,13 +68,6 @@
                 <td>
                   <p>
                     <b>سایز:</b> {{ol.instance.size}}</p>
-                </td>
-                <td>
-                  <p>
-                    <!-- <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p> -->
-                </td>
-                <td>
-                  <button mat-button color="primary" (click)='showHistory(detail.order, ol)'>وضعیت ارسال</button>
                 </td>
               </tr>
             </table>

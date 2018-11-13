@@ -4,7 +4,7 @@
 <mat-card>
 
   <mat-card-header>
-    <mat-card-title>آماده ارسال</mat-card-title>
+    <mat-card-title>ارسال شده</mat-card-title>
     <mat-card-subtitle>
       <button mat-icon-button color="primary" (click)="loadData()" style="margin-top: 10px;">
         <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
@@ -41,21 +41,15 @@
         <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.barcode}}</span></mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
-        <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px">{{getOrderLineStatus(orderLine)}}</span>
-        </mat-cell>
-      </ng-container>
-
       <ng-container matColumnDef="count">
         <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
         <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="ticket">
-        <mat-header-cell *matHeaderCellDef>تیکت</mat-header-cell>
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
         <mat-cell *matCellDef="let orderLine">
-            <button mat-button color="primary" (click)="showTicket()">نمایش</button>
+            <button mat-button color="primary" (click)="showStatus()">نمایش</button>
         </mat-cell>
       </ng-container>
 

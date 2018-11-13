@@ -1,16 +1,21 @@
 import {Component, OnInit, ViewChild, EventEmitter, Output, OnDestroy} from '@angular/core';
+import {trigger, state, style, animate, transition} from '@angular/animations';
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
+import {startWith} from 'rxjs/operators/startWith';
+import {map} from 'rxjs/operators/map';
+import * as moment from 'jalali-moment';
+import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+
+
 import {TicketComponent} from '../ticket/ticket.component';
 import {OrderAddressComponent} from '../order-address/order-address.component';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
-import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
-import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {SocketService} from '../../../../shared/services/socket.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {trigger, state, style, animate, transition} from '@angular/animations';
-import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-hub-shelf-order',
@@ -27,8 +32,11 @@ import {FormControl} from '@angular/forms';
 
 export class HubShelfOrderComponent implements OnInit {
 
+  filteredShelfCodes: Observable<any[]>;
+  shelfCodes = SHELF_CODES; // mock data
+
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['position', 'customer', 'is_collect', 'order_time', 'total_order_lines', 'address', 'used_balance' ];
+  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'used_balance' ];
   expandedElement: any;
 
   trackingCodeCtrl = new FormControl();
@@ -58,12 +66,23 @@ export class HubShelfOrderComponent implements OnInit {
               private authService: AuthService,
               private socketService: SocketService,
               private progressService: ProgressService) {
+      this.shelfCodeCtrl = new FormControl();
+      this.filteredShelfCodes = this.shelfCodeCtrl.valueChanges
+        .pipe(
+          startWith(''),
+          map(shelf => shelf ? this.filterShelfCodes(shelf) : this.shelfCodes.slice())
+        );
   }
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   ngOnInit() {
     this.loadData();
+  }
+
+  filterShelfCodes(code: string) {
+    return this.shelfCodes.filter(shelf =>
+      shelf.code.toLowerCase().indexOf(code.toLowerCase()) === 0);
   }
 
   loadData() {
@@ -137,9 +156,9 @@ export class HubShelfOrderComponent implements OnInit {
 
   showTicket(order, orderLine) {
   }
+
   showHistory(order, orderLine) {
   }
-
 
 }
 const MOCK_DATA = [{
@@ -390,3 +409,18 @@ const MOCK_DATA = [{
     'index': 1
   }
 }];
+
+const SHELF_CODES = [
+  {
+    code: 'as23sd3',
+  },
+  {
+    code: '99sd23',
+  },
+  {
+    code: '023d34',
+  },
+  {
+    code: '3sd342s',
+  }
+];

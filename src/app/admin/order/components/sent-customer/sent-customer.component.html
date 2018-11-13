@@ -17,15 +17,6 @@
           <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}} </mat-cell>
         </ng-container>
   
-        <ng-container matColumnDef="is_collect">
-          <mat-header-cell *matHeaderCellDef> C&C</mat-header-cell>
-          <mat-cell *matCellDef="let order">
-            <mat-icon *ngIf="!!order.is_collect">check</mat-icon>
-            <mat-icon *ngIf="!order.is_collect">clear</mat-icon>
-  
-          </mat-cell>
-        </ng-container>
-  
         <ng-container matColumnDef="order_time">
           <mat-header-cell *matHeaderCellDef>تاریخ خرید</mat-header-cell>
           <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
@@ -67,13 +58,6 @@
                 <td>
                   <p>
                     <b>سایز:</b> {{ol.instance.size}}</p>
-                </td>
-                <td>
-                  <p>
-                    <!-- <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p> -->
-                </td>
-                <td>
-                  <button mat-button color="primary" (click)='showHistory(detail.order, ol)'>وضعیت ارسال</button>
                 </td>
               </tr>
             </table>

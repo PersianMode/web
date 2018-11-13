@@ -31,34 +31,32 @@
     </mat-tab>
 
 
-
-    <!-- customer sent (صندوق تحویل) -->
-    <mat-tab label="shelf-order" *ngIf="isHubClerk || (isShopClerk && !isCentralStore)">
+    <!-- internal sent shop (صندوق ارسال داخلی) -->
+    <mat-tab label="internal-sent-shop" *ngIf="!isSalesManager">
       <ng-template mat-tab-label>
-        <span>صندوق تحویل</span>
-      </ng-template>
-      <app-sent-customer></app-sent-customer>
-    </mat-tab>
-
-
-    <!-- internal sent shop (صندوق ارسال) -->
-    <mat-tab label="shelf-order" *ngIf="!isHubClerk && isShopClerk && !isCentralStore">
-      <ng-template mat-tab-label>
-        <span>صندوق ارسال</span>
+        <span>صندوق ارسال داخلی</span>
       </ng-template>
       <app-sent-internal-shop></app-sent-internal-shop>
     </mat-tab>
 
 
-
-    <!-- internal sent hub (صندوق ارسال) -->
-    <mat-tab label="shelf-order" *ngIf="isHubClerk">
+    <!-- customer sent (صندوق تحویل به مشتری) -->
+    <mat-tab label="sent-customer-shop" *ngIf="isShopClerk && !isCentralStore">
       <ng-template mat-tab-label>
-        <span>صندوق ارسال</span>
+        <span>صندوق تحویل به مشتری</span>
+      </ng-template>
+      <app-sent-customer></app-sent-customer>
+    </mat-tab>
+
+
+
+    <!-- internal sent hub (صندوق ارسال به مشتری) -->
+    <mat-tab label="sent-customer-hub" *ngIf="isHubClerk">
+      <ng-template mat-tab-label>
+        <span>صندوق ارسال به مشتری</span>
       </ng-template>
       <app-sent-internal-hub></app-sent-internal-hub>
     </mat-tab>
-
 
 
     <!-- shelf order (فهرست قفسه ها) -->

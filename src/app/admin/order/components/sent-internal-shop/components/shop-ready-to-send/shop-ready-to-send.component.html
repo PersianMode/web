@@ -52,14 +52,6 @@
         <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="process">
-        <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
-        <mat-cell *matCellDef="let orderLine">
-            <button mat-button color="primary" (click)="isInvoicing = true">صدور فاکتور</button>
-        </mat-cell>
-      </ng-container>
-
-
       <mat-header-row *matHeaderRowDef="scanDisplayedColumns"></mat-header-row>
 
       <mat-row *matRowDef="let row; columns: scanDisplayedColumns;" matRipple class="element-row"></mat-row>

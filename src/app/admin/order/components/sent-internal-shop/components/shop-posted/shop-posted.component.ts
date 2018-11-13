@@ -19,7 +19,7 @@ export class ShopPostedComponent implements OnInit {
 
   @Output() OnNewInboxCount = new EventEmitter();
 
-  scanDisplayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status', 'ticket'];
+  scanDisplayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status'];
 
   expandedElement: any;
   dataSource: MatTableDataSource<any>;
@@ -84,7 +84,7 @@ export class ShopPostedComponent implements OnInit {
     });
   }
 
-  showTicket() {
+  showStatus() {
     
   }
 

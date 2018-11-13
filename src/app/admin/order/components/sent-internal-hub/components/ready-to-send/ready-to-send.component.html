@@ -1,5 +1,5 @@
 <!-- barcode checker -->
-<app-barcode-checker *ngIf="isInvoicing" [finished]="!!scanTotal" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+<app-barcode-checker *ngIf="isBarcodeChecker" [finished]="!!scanTotal" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
 
 <mat-card>
   <mat-card-header>
@@ -21,15 +21,6 @@
         <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="is_collect">
-        <mat-header-cell *matHeaderCellDef> C&C</mat-header-cell>
-        <mat-cell *matCellDef="let order">
-          <mat-icon *ngIf="!!order.is_collect">check</mat-icon>
-          <mat-icon *ngIf="!order.is_collect">clear</mat-icon>
-
-        </mat-cell>
-      </ng-container>
-
       <ng-container matColumnDef="order_time">
         <mat-header-cell *matHeaderCellDef>تاریخ خرید</mat-header-cell>
         <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
@@ -40,10 +31,10 @@
         <mat-cell *matCellDef="let order"> {{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="process">
+      <ng-container matColumnDef="process" #row>
         <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
-        <mat-cell *matCellDef="let order">
-          <button mat-button color="primary" (click)="isInvoicing = true">صدور فاکتور</button>
+        <mat-cell  *matCellDef="let order">
+          <button mat-button color="primary" (click)="invoicing(order)">صدور فاکتور</button>
         </mat-cell>
       </ng-container>
 
@@ -72,13 +63,6 @@
                 <p>
                   <b>سایز:</b> {{ol.instance.size}}</p>
               </td>
-              <td>
-                <p>
-                  <!-- <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p> -->
-              </td>
-              <td>
-                <button mat-button color="primary" (click)='showHistory(detail.order, ol)'>وضعیت ارسال</button>
-              </td>
             </tr>
           </table>
 
@@ -88,8 +72,8 @@
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-      <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
-        (click)="expandedElement = row._id">
+      <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [ngClass]="{'expanded highlight-row': expandedElement == row._id}"
+        (click)="expandedElement == row._id">
       </mat-row>
       <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
         style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">

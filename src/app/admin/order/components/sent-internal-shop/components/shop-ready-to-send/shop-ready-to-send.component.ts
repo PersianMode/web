@@ -18,7 +18,7 @@ import {imagePathFixer} from '../../../../../../shared/lib/imagePathFixer';
 export class ShopReadyToSendComponent implements OnInit {
   @Output() OnNewInboxCount = new EventEmitter();
 
-  scanDisplayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status', 'process'];
+  scanDisplayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status'];
 
   expandedElement: any;
   dataSource: MatTableDataSource<any>;

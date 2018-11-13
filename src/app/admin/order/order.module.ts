@@ -14,7 +14,8 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MatToolbarModule,
-  MatSelectModule
+  MatSelectModule,
+  MatAutocompleteModule
 } from '@angular/material';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -88,7 +89,8 @@ import { ShopPostedComponent } from './components/sent-internal-shop/components/
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    MatAutocompleteModule
   ],
   entryComponents: [
     OrderAddressComponent,

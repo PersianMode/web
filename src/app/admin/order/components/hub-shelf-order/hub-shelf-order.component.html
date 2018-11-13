@@ -1,22 +1,25 @@
 <mat-card>
 
   <div class="search-area">
-    <div fxLayout="row" fxLayoutAlign="center start">
-      <div fxFlex="50" class="filtering-box">
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+      <div fxFlex="30" class="filtering-box">
         <mat-input-container class="filtering-field">
           <input class="filtering-field" matInput type="text" placeholder="شماره پیگیری" [formControl]="trackingCodeCtrl">
         </mat-input-container>
       </div>
-      <div fxFlex="50" class="filtering-box">
+      <div fxFlex="30" class="filtering-box">
         <mat-input-container class="filtering-field">
           <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری" [formControl]="transfereeCtrl">
         </mat-input-container>
       </div>
-    </div>
-    <div fxLayout="row" fxLayoutAlign="center start">
-      <div fxFlex="50" class="filtering-box">
+      <div fxFlex="30" class="filtering-box">
         <mat-input-container class="filtering-field">
-          <input class="filtering-field" matInput type="text" placeholder="کد قفسه" [formControl]="shelfCodeCtrl">
+          <input matInput placeholder="کد قفسه" aria-label="shelft-code" [matAutocomplete]="auto" [formControl]="shelfCodeCtrl">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let shelf of filteredShelfCodes | async" [value]="shelf.code">
+              <span>{{ shelf.code }}</span>
+            </mat-option>
+          </mat-autocomplete>
         </mat-input-container>
       </div>
     </div>
@@ -36,15 +39,6 @@
         <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}} </mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="is_collect">
-        <mat-header-cell *matHeaderCellDef> C&C</mat-header-cell>
-        <mat-cell *matCellDef="let order">
-          <mat-icon *ngIf="!!order.is_collect">check</mat-icon>
-          <mat-icon *ngIf="!order.is_collect">clear</mat-icon>
-
-        </mat-cell>
-      </ng-container>
-
       <ng-container matColumnDef="order_time">
         <mat-header-cell *matHeaderCellDef>تاریخ خرید</mat-header-cell>
         <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
@@ -56,7 +50,7 @@
       </ng-container>
 
       <ng-container matColumnDef="address">
-        <mat-header-cell *matHeaderCellDef>آدرس</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef>جزئیات قفسه</mat-header-cell>
         <mat-cell *matCellDef="let order">
           <button mat-button color="primary" (click)="showAddress(order)">نمایش</button>
         </mat-cell>
@@ -99,13 +93,6 @@
               <td>
                 <p>
                   <b>سایز:</b> {{ol.instance.size}}</p>
-              </td>
-              <td>
-                <p>
-                  <!-- <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</p> -->
-              </td>
-              <td>
-                <button mat-button color="primary" (click)='showHistory(detail.order, ol)'>وضعیت ارسال</button>
               </td>
             </tr>
           </table>

@@ -3,3 +3,8 @@ mat-header-cell, mat-cell{
   text-align: center;
   font-family: iranyekan, sans-serif !important;
 }
+
+
+.highlight-row {
+  background-color: rgb(220, 255, 197);
+}
