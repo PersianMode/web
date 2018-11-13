@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-sent-internal-shop',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sent-internal-shop.component.css']
 })
 export class SentInternalShopComponent implements OnInit {
+
+
+  @Input() isCentralStore;
 
   constructor() { }
 

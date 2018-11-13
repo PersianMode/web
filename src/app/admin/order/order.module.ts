@@ -20,7 +20,6 @@ import {
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ProductViewerComponent} from './components/product-viewer/product-viewer.component';
-import {SendBoxComponent} from './components/send-box/send-box.component';
 import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {TicketComponent} from './components/ticket/ticket.component';
@@ -46,7 +45,6 @@ import { ShopPostedComponent } from './components/sent-internal-shop/components/
     OrderAddressComponent,
     InboxComponent,
     SmInboxComponent,
-    SendBoxComponent,
     ProductViewerComponent,
     BarcodeCheckerComponent,
     TicketComponent,
