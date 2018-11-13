@@ -60,6 +60,7 @@ export class DeliveryComponent implements OnInit {
   isDelivered = null;
   isInternal = null;
   isReturn = null;
+  missDeliveryAgent = null;
   startDateSearch = null;
   endDateSearch = null;
   transferee = null;
@@ -117,6 +118,17 @@ export class DeliveryComponent implements OnInit {
     );
 
     this.getDeliveryItems();
+    this.getDeliveryAgents();
+  }
+
+  getDeliveryAgents() {
+    this.httpService.get('delivery/agent').subscribe(
+      data => {
+        this.deliveryAgentList = data;
+      },
+      err => {
+        console.error('Cannot get delivery agent list: ', err);
+      });
   }
 
   getDeliveryItems() {
@@ -131,6 +143,7 @@ export class DeliveryComponent implements OnInit {
       isInternal: this.isInternal,
       isDelivered: this.isDelivered,
       isReturn: this.isReturn,
+      missDeliveryAgent: this.missDeliveryAgent,
     }).subscribe(
       data => {
         this.deliveryItems = [];
@@ -168,10 +181,11 @@ export class DeliveryComponent implements OnInit {
         delivery_agent: el.delivery_agent,
         shelf_code: el.shelf_code,
         order_line_count: el.order_line_count,
+        is_internal: el.is_internal,
         start: el.start ? moment(el.start).format('YYYY-MM-DD') : null,
         end: el.end ? moment(el.end).format('YYYY-MM-DD') : null,
-        delivery_start: moment(el.delivery_start).format('YYYY-MM-DD'),
-        delivery_end: moment(el.delivery_end).format('YYYY-MM-DD'),
+        delivery_start: el.delivery_start ? moment(el.delivery_start).format('YYYY-MM-DD') : null,
+        delivery_end: el.delivery_end ? moment(el.delivery_end).format('YYYY-MM-DD') : null,
         receiver_sender_name: el.is_return
           ? (el.from.customer ? (el.from.customer.first_name + ' ' + el.from.customer.surname) : null)
           : (Object.keys(el.to.customer || {}).length ? (el.to.customer.first_name + ' ' + el.to.customer.surname) : el.to.warehouse.name),
@@ -249,6 +263,18 @@ export class DeliveryComponent implements OnInit {
     this.getDeliveryItems();
   }
 
+  changeDeliveryAgentStatus() {
+    if (this.missDeliveryAgent === null) {
+      this.missDeliveryAgent = true;
+    } else if (this.missDeliveryAgent === true) {
+      this.missDeliveryAgent = false;
+    } else if (this.missDeliveryAgent === false) {
+      this.missDeliveryAgent = null;
+    }
+
+    this.getDeliveryItems();
+  }
+
   deliveryIsDone(item) {
     return item.status_list && item.status_list.find(el => el.is_processed && el.status === STATUS.Delivered);
   }
@@ -256,5 +282,46 @@ export class DeliveryComponent implements OnInit {
   isAfterMaxValidEndDate(id) {
     const delItem = this.deliveryItems.find(el => el._id === id);
     return delItem.min_end ? moment(delItem.end, 'YYYY-MM-DD').isAfter(moment(delItem.min_end, 'YYYY-MM-DD')) : false;
+  }
+
+  deliveryAgentChange(deliveryId, data) {
+    const foundDeliveryItem = this.deliveryItems.find((el: any) => el._id.toString() === deliveryId.toString());
+
+    if (!data.value ||
+      foundDeliveryItem.delivery_end || foundDeliveryItem.delivery_start ||
+      (foundDeliveryItem.delivery_agent && foundDeliveryItem.delivery_agent._id &&
+        data.value.toString() === foundDeliveryItem.delivery_agent._id.toString())) {
+      return;
+    }
+
+    this.progressService.enable();
+    this.httpService.post('delivery', {
+      delivery_agent_id: data.value,
+      _id: deliveryId,
+    }).subscribe(
+      res => {
+        const foundDeliveryAgent = this.deliveryAgentList.find(el => el._id.toString() === data.value.toString());
+        if (!foundDeliveryItem.delivery_agent || !foundDeliveryItem.delivery_agent._id) {
+          foundDeliveryItem.delivery_agent = {};
+        }
+        foundDeliveryItem.delivery_agent['_id'] = data.value;
+        foundDeliveryItem.delivery_agent['first_name'] = foundDeliveryAgent.first_name;
+        foundDeliveryItem.delivery_agent['surname'] = foundDeliveryAgent.surname;
+        foundDeliveryItem.delivery_agent['username'] = foundDeliveryAgent.username;
+
+        this.setDataSource(this.deliveryItems);
+
+        this.progressService.disable();
+        this.snackBar.open('مسئول ارسال با موفقیت ثبت شد', null, {
+          duration: 2000,
+        });
+      },
+      err => {
+        console.error('Error when store/update internal delivery agent: ', err);
+        this.progressService.disable();
+        this.snackBar.open('ثبت مسئول ارسال با خطا مواجه شد', 'بستن', {
+          duration: 2000,
+        });
+      });
   }
 }

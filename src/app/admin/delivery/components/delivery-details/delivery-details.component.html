@@ -204,12 +204,12 @@
           <td class="product-table-header">رنگ</td>
           <td class="product-table-header">بارکد</td>
         </tr>
-          <tr *ngFor="let pi of data.product_instances; let i = index" [class.odd-row]="i % 2 === 0">
-            <td class="product-table-content">{{pi.product_name}}</td>
-            <td class="product-table-content">{{pi.size}}</td>
-            <td class="product-table-content">{{getProductColorName(pi)}}</td>
-            <td class="product-table-content">{{pi.barcode}}</td>
-          </tr>
+        <tr *ngFor="let pi of data.product_instances; let i = index" [class.odd-row]="i % 2 === 0">
+          <td class="product-table-content">{{pi.product_name}}</td>
+          <td class="product-table-content">{{pi.size}}</td>
+          <td class="product-table-content">{{getProductColorName(pi)}}</td>
+          <td class="product-table-content">{{pi.barcode}}</td>
+        </tr>
       </table>
     </div>
   </mat-dialog-content>
