@@ -32,5 +32,8 @@ export enum STATUS {
   NotExists = 11,
   Refund = 12,
   Return = 13,
-  Cancel = 14
+  CustomerCancel = 14,
+  StoreCancel = 15,
+  Renew = 16
+
 }

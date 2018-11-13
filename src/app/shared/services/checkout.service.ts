@@ -34,8 +34,8 @@ export class CheckoutService {
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
-              private authService: AuthService, private snackBar: MatSnackBar,
-              private router: Router) {
+    private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
+    private router: Router) {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
@@ -77,7 +77,6 @@ export class CheckoutService {
         );
     } else {
       const address = JSON.parse(localStorage.getItem('address'));
-
       if (address) {
         this.addresses$.next([address]);
       }
@@ -136,8 +135,8 @@ export class CheckoutService {
   getLoyaltyGroup() {
     this.httpService.get('loyaltygroup')
       .subscribe(res => {
-          this.loyaltyGroups.next(res);
-        },
+        this.loyaltyGroups.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -150,8 +149,8 @@ export class CheckoutService {
   getAddLoyaltyPoints() {
     this.httpService.get('deliverycc')
       .subscribe(res => {
-          this.addPointArray.next(res);
-        },
+        this.addPointArray.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -268,8 +267,8 @@ export class CheckoutService {
     return new Promise((resolve, reject) => {
       this.httpService.post('/calculate/order/price', data)
         .subscribe(res => {
-            resolve(res);
-          },
+          resolve(res);
+        },
           err => {
             reject();
           });
