@@ -22,3 +22,7 @@ mat-cell {
   direction:ltr;
   transition: all .5s ease-out;
 }
+
+.highlight-row {
+  background-color: rgb(220, 255, 197);
+}

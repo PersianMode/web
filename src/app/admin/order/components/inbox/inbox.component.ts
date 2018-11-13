@@ -24,7 +24,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   scanDataSource: MatTableDataSource<any>;
 
   pageSize = 10;
-  scanTotal: boolean;
+  scanTotal;
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
