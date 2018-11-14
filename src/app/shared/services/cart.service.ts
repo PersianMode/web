@@ -19,7 +19,7 @@ export class CartService {
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
   constructor(private httpService: HttpService,
-     private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
+              private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
     this.authService.isLoggedIn.subscribe(
       isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
@@ -50,8 +50,7 @@ export class CartService {
 
         } else if (items && items.length) {
           this.getItemsDetail(items);
-        }
-        else {
+        } else {
           this.setCartItem(null, [], false);
         }
 

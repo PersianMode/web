@@ -41,7 +41,6 @@ export class AddressTableComponent implements OnInit {
   selectedWarehouseAddress = -1;
   addrBtnLabel = 'افزودن آدرس جدید';
   addresses = [];
-  tehranAddresses = [];
   isMobile = false;
   isLoggedIn = false;
   durations = [];
@@ -88,8 +87,7 @@ export class AddressTableComponent implements OnInit {
             this.province = '';
           } else {
             if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
-              this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-              this.addresses = this.tehranAddresses;
+              this.filterTehranAddresses();
             }
             this.selectedCustomerAddress = this.addresses.length - 1;
             this.province = '';
@@ -127,8 +125,6 @@ export class AddressTableComponent implements OnInit {
         this.withDelivery ? this.deliveryDays : null,
         this.withDelivery ? this.delivery_time : null
       ];
-
-      console.log('--->>>', this.checkoutService.addressState);
     }
   }
 
@@ -257,8 +253,7 @@ export class AddressTableComponent implements OnInit {
       }
 
       if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
-        this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-        this.addresses = this.tehranAddresses;
+        this.filterTehranAddresses();
       }
     } else {
       this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
@@ -273,11 +268,14 @@ export class AddressTableComponent implements OnInit {
     this.noDuration.emit(true);
     this.durationType.emit(durationId);
     if (this.addresses && this.addresses.length && deliveryDays === 3) {
-      this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-      this.addresses = this.tehranAddresses;
+      this.filterTehranAddresses();
     }
     this.selectedCustomerAddress = this.addresses && this.addresses.length ? 0 : -1;
     this.setState();
+  }
+
+  filterTehranAddresses() {
+    this.addresses = this.addresses.filter(el => el.province === 'تهران');
   }
 
   chooseAddress($event) {
