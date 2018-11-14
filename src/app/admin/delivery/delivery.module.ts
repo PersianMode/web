@@ -26,7 +26,12 @@ import { DeliveryTrackingComponent } from './components/delivery-tracking/delive
 import { ExpiredDateDialogComponent } from './components/expired-date-dialog/expired-date-dialog.component';
 
 @NgModule({
-  declarations: [DeliveryComponent, DeliveryDetailsComponent, DeliveryTrackingComponent, ExpiredDateDialogComponent],
+  declarations: [
+    DeliveryComponent,
+    DeliveryDetailsComponent,
+    DeliveryTrackingComponent,
+    ExpiredDateDialogComponent,
+  ],
   imports: [
     DeliveryRouting,
     CommonModule,
