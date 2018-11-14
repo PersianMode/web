@@ -25,6 +25,7 @@ import {RevertPlacementService} from './shared/services/revert-placement.service
 import {PrintService} from './shared/services/print.service';
 import {BlockUIModule} from 'primeng/blockui';
 import {SpinnerService} from './shared/services/spinner.service';
+import { MessageService } from './shared/services/message.service';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import {SpinnerService} from './shared/services/spinner.service';
     ProfileOrderService,
     RevertPlacementService,
     SpinnerService,
+    MessageService
   ],
   bootstrap: [AppComponent],
 })

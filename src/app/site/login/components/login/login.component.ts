@@ -249,6 +249,7 @@ export class LoginComponent implements OnInit {
       (err) => {
         // wrong verification code
         console.error('Cannot verify registration: ', err);
+        this.messageService.showMessage('نام کاربری یا رمز عبور اشتباه است', MessageType.Error);
       }
     );
   }
