@@ -9,6 +9,7 @@ import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs/Rx';
 import {isUndefined} from 'util';
+import {SpinnerService} from './spinner.service';
 
 @Injectable()
 export class CheckoutService {
