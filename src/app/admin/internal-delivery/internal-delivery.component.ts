@@ -5,7 +5,8 @@ import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
 import { HttpService } from 'app/shared/services/http.service';
 import { SpinnerService } from 'app/shared/services/spinner.service';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageType } from 'app/shared/enum/messageType.enum';
+import { MessageService } from 'app/shared/services/message.service';
 
 export interface Agent {
   _id: string;
@@ -30,7 +31,7 @@ export class InternalDeliveryComponent implements OnInit {
   agents: Agent[];
   agentSelected: Agent;
 
-  constructor(private httpService: HttpService, private spinnerService: SpinnerService) {
+  constructor(private httpService: HttpService, private spinnerService: SpinnerService, private messageService: MessageService) {
     this.agentCtrl = new FormControl();
    }
 
@@ -42,14 +43,14 @@ export class InternalDeliveryComponent implements OnInit {
     try {
       this.spinnerService.enable();
       const agent = await this.httpService.get('internal_delivery/get_agent').toPromise();
-      if (agent && agent.surname) {
+      if (agent && agent._id) {
         this.agentCtrl.setValue(`${agent.first_name} ${agent.surname}`); // data set into input
       } else {
         this.agentCtrl.setValue(''); // first time agent not set (to be null)
       }
       this.spinnerService.disable();
     } catch (err) {
-      // show error message
+      this.messageService.showMessage('خطایی در کرفتن مامور انتخاب شده رخ داده است', MessageType.Error);
       throw err;
     }
   }
@@ -62,9 +63,8 @@ export class InternalDeliveryComponent implements OnInit {
       this.agents = agents; // data set into input
       this.filterData(); // data filtered
       this.spinnerService.disable();
-      // show success message
     } catch (err) {
-      // show error message
+      this.messageService.showMessage('خطایی در کرفتن لیست ماموران برای ارسال داخلی رخ داده است', MessageType.Error);
       throw err;
     }
   }
@@ -102,7 +102,6 @@ export class InternalDeliveryComponent implements OnInit {
   agentSelect(agent: Agent) {
     this.agentCtrl.setValue(`${agent.firstname} ${agent.surname}`)
     this.agenFullname = agent.firstname + ' ' + agent.surname;
-    console.log('agenFullname', this.agenFullname);
     this.isAgentUpdate = true;
     this.agentSelected = agent;
   }
@@ -114,9 +113,9 @@ export class InternalDeliveryComponent implements OnInit {
       this.isAgentUpdate = false;
       await this.httpService.post('/internal_delivery/set_agent', {agent_id}).toPromise();
       this.spinnerService.disable();
-      // show success message
+      this.messageService.showMessage('عملیات تغییر مامور با موفقیت انجام گرفت', MessageType.Information);
     } catch (err) {
-      // show error message
+      this.messageService.showMessage('خطایی در تغییر مامور رخ داده است', MessageType.Error);
       throw err;
     }
   }
