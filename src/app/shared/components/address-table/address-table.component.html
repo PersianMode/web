@@ -21,7 +21,8 @@
 
   <label class="label-field">ساعت تحویل</label>
   <mat-radio-group [(ngModel)]="delivery_time" class="radio-field">
-    <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">{{getDeliveryTimeDisplay(dh)}}
+    <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">
+      {{getDeliveryTimeDisplay(dh)}}
     </mat-radio-button>
   </mat-radio-group>
 </div>
@@ -38,6 +39,43 @@
     {{customerData.recipient_name + ' ' + customerData.recipient_surname}}
   </div>
 </span>
+
+<mat-card *ngIf="!withDelivery && showRecipientInfo"
+     style="background-color: #dedfde;border-radius: 3px; padding: 5px; margin-top: 10px;">
+  <div style="padding-right: 5px; margin-bottom: 10px; font-weight: bold"> مشخصات تحویل گیرنده :</div>
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" style="padding-right: 5px">
+    <div fxFlex="20">
+    <span *ngIf="showRecipientInfo.recipient_title" style="font-weight: bold;">
+      <span *ngIf="showRecipientInfo.recipient_title === 'f'">خانم</span>
+      <span *ngIf="showRecipientInfo.recipient_title === 'm'">آقای</span>
+    </span>
+
+      {{showRecipientInfo.recipient_name}}
+      {{showRecipientInfo.recipient_surname}}
+    </div>
+    <div fxFlex="25" style="font-weight: bold;">
+      <span>کد ملی :</span>
+      {{showRecipientInfo.recipient_national_id}}
+    </div>
+    <div fxFlex="30" style="font-weight: bold;">
+      <span>آدرس ایمیل : </span>
+      {{showRecipientInfo.recipient_email}}
+    </div>
+    <div fxFlex="25">
+    <span style="font-weight: bold;">شماره تماس :</span>
+    {{showRecipientInfo.recipient_mobile_no}}
+    </div>
+  </div>
+  <div style="text-align: left; margin-top: 5px;">
+    <button mat-button (click)="openAddressDialog()">
+      <mat-icon aria-label="edit" style=" font-size: 20px">edit</mat-icon>
+    </button>
+    <button mat-button (click)="removeRecipient()">
+      <mat-icon aria-label="delete" style=" font-size: 20px">delete</mat-icon>
+    </button>
+  </div>
+</mat-card>
+
 <div *ngIf="addresses && addresses.length" [class.show-button]="addresses && addresses.length">
   <div *ngIf="!isMobile" class="rs-table field">
     <mat-card>

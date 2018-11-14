@@ -47,6 +47,7 @@ export class AddressTableComponent implements OnInit {
   durationId;
   deliveryDays;
   province;
+  showRecipientInfo = false;
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
@@ -184,6 +185,7 @@ export class AddressTableComponent implements OnInit {
       rmDialog.afterClosed().subscribe(
         (data) => {
           if (!data) {
+            this.showRecipientInfo = this.checkoutService.ccRecipientData;
             this.setState();
             return;
           } else {
@@ -198,6 +200,10 @@ export class AddressTableComponent implements OnInit {
     }
   }
 
+  removeRecipient() {
+    this.checkoutService.ccRecipientData = null;
+    this.showRecipientInfo = null;
+  }
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
