@@ -37,8 +37,8 @@ export class UpsertAddressComponent implements OnInit {
   withDelivery = null;
 
   constructor(private authService: AuthService, private http: HttpClient,
-    private checkoutService: CheckoutService, private router: Router,
-    private location: Location) {
+              private checkoutService: CheckoutService, private router: Router,
+              private location: Location) {
   }
 
 
@@ -176,18 +176,33 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   setButtonVisibility() {
-    return !this.addressInfo.partEdit && (!this.addressForm.valid || !this.anyChanges);
+    if (this.addressInfo.partEdit) {
+      // return (!(this.addressForm.controls['recipient_name'].value && this.addressForm.controls['recipient_surname'].value
+      //   && this.addressForm.controls['recipient_mobile_no'].value && this.addressForm.controls['recipient_national_id'].value) || (!this.addressForm.valid || !this.anyChanges))
+      return !this.addressForm.valid || !this.anyChanges
+
+    } else
+      return !this.addressInfo.partEdit && (!this.addressForm.valid || !this.anyChanges);
   }
 
   fieldChanged() {
-    this.anyChanges =
-      (this.addressData.loc && (this.addressData.loc.long !== this.addressForm.controls['longitude'].value
-        || this.addressData.loc.lat !== this.addressForm.controls['latitude'].value ) )
-      || Object.keys(this.addressForm.controls)
-        .filter(k => !['latitude', 'longitude'].includes(k) && (k.startsWith('recipient') || !this.addressInfo.partEdit))
-        .map(k => this.addressForm.controls[k].value !== null &&
-           this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
-        .reduce((a, b) => a || b, false);
+    if (!this.addressInfo.partEdit) {
+      this.anyChanges =
+        (this.addressData.loc && (this.addressData.loc.long !== this.addressForm.controls['longitude'].value
+          || this.addressData.loc.lat !== this.addressForm.controls['latitude'].value))
+        || Object.keys(this.addressForm.controls)
+          .filter(k => !['latitude', 'longitude'].includes(k) && (k.startsWith('recipient') || !this.addressInfo.partEdit))
+          .map(k => this.addressForm.controls[k].value !== null &&
+            this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
+          .reduce((a, b) => a || b, false);
+    } else {
+      this.anyChanges =
+        Object.keys(this.addressForm.controls)
+          .filter(k => (k.startsWith('recipient')))
+          .map(k => this.addressForm.controls[k].value !== null &&
+            this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
+          .reduce((a, b) => a || b, false);
+    }
   }
 
 }
