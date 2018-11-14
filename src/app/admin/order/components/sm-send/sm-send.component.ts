@@ -16,9 +16,9 @@ import {trigger, state, style, animate, transition} from '@angular/animations';
 import {FormControl} from '@angular/forms';
 
 @Component({
-  selector: 'app-sm-deliver',
-  templateUrl: './sm-deliver.component.html',
-  styleUrls: ['./sm-deliver.component.scss'],
+  selector: 'app-sm-send',
+  templateUrl: './sm-send.component.html',
+  styleUrls: ['./sm-send.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
@@ -27,7 +27,7 @@ import {FormControl} from '@angular/forms';
     ]),
   ],
 })
-export class SmDeliverComponent implements OnInit, OnDestroy {
+export class SmSendComponent implements OnInit, OnDestroy {
 
   @Output() OnNewInboxCount = new EventEmitter();
 

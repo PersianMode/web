@@ -7,6 +7,7 @@ import {IAddressInfo} from '../../interfaces/iaddressInfo.interface';
 import {AuthService} from '../../services/auth.service';
 import {HttpClient} from '@angular/common/http';
 import {isUndefined} from 'util';
+import {CartService} from 'app/shared/services/cart.service';
 
 @Component({
   selector: 'app-upsert-address',
@@ -36,8 +37,8 @@ export class UpsertAddressComponent implements OnInit {
   withDelivery = null;
 
   constructor(private authService: AuthService, private http: HttpClient,
-              private checkoutService: CheckoutService, private router: Router,
-              private location: Location) {
+    private checkoutService: CheckoutService, private router: Router,
+    private location: Location) {
   }
 
 
@@ -125,6 +126,7 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   submitAddress() {
+
     this.addressData.loc = {
       long: this.addressForm.controls['longitude'].value,
       lat: this.addressForm.controls['latitude'].value,
@@ -183,7 +185,8 @@ export class UpsertAddressComponent implements OnInit {
         || this.addressData.loc.lat !== this.addressForm.controls['latitude'].value ) )
       || Object.keys(this.addressForm.controls)
         .filter(k => !['latitude', 'longitude'].includes(k) && (k.startsWith('recipient') || !this.addressInfo.partEdit))
-        .map(k => this.addressForm.controls[k].value !== null && this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
+        .map(k => this.addressForm.controls[k].value !== null &&
+           this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
         .reduce((a, b) => a || b, false);
   }
 
