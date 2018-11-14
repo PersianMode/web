@@ -18,7 +18,8 @@ export class CartService {
   coupon_discount = 0;
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
-  constructor(private httpService: HttpService, private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
+  constructor(private httpService: HttpService,
+     private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
     this.authService.isLoggedIn.subscribe(
       isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage

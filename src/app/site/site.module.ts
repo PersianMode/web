@@ -43,6 +43,9 @@ import {OrderLinesComponent} from './profile/components/order-lines/order-lines.
 import { ForgotPasswordComponent } from './login/components/forgot-password/forgot-password.component';
 import { OrderReturnComponent } from './profile/components/order-return/order-return.component';
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
+import {ProductService} from '../shared/services/product.service';
+import {BlockUIModule} from 'primeng/blockui';
+
 
 @NgModule({
   imports: [
@@ -74,6 +77,7 @@ import {OtherDetailsComponent} from './login/components/other-details/other-deta
     MatSliderModule,
     SharedModule,
     MatTooltipModule,
+    BlockUIModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDtglbLDTFZFa1rE-glHm7bFxnp9iANHro'
     }),
@@ -93,7 +97,7 @@ import {OtherDetailsComponent} from './login/components/other-details/other-deta
     UpsertAddressComponent,
     GenDialogComponent,
     OrderLinesComponent,
-    OrderReturnComponent,
+    OrderReturnComponent
   ],
   entryComponents: [GenDialogComponent],
   providers: [AuthGuard]

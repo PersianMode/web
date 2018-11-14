@@ -1,5 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CartService} from '../../../../shared/services/cart.service';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material';
+import {HttpService} from 'app/shared/services/http.service';
 
 @Component({
   selector: 'app-mobile-product',
@@ -34,7 +37,8 @@ export class MobileProductComponent implements OnInit {
   @Output() changeSize = new EventEmitter<any>();
   size = '';
 
-  constructor(private cartService: CartService) {
+  constructor(private cartService: CartService, private router: Router,
+    private snackBar: MatSnackBar) {
   }
 
   newSize(event) {
@@ -53,5 +57,27 @@ export class MobileProductComponent implements OnInit {
 
   saveToFavorites() {
     this.addFavorite.emit(this.size);
+  }
+
+  getProductShareLink() {
+    return HttpService.Host + this.router.url;
+  }
+
+  copyLinkToClipboard() {
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = this.getProductShareLink();
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+
+    this.snackBar.open('لینک محصول در پس زمینه کپی شد', null, {
+      duration: 2000,
+    });
   }
 }

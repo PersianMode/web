@@ -6,6 +6,8 @@ mat-header-cell, mat-cell{
 
 
 .imgWrapper{
+  min-width: 72px;
+  min-height: 72px;
   width: 72px;
   height: 72px;
   margin: 10px;
@@ -61,4 +63,8 @@ ul{
 ul li{
   display: inline;
   margin-left: 20px;
+}
+
+ul li span, ul li button{
+  font-size: 10px
 }

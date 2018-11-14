@@ -104,5 +104,3 @@ export class DurationComponent implements OnInit {
       });
   }
 }
-
-

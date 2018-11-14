@@ -18,16 +18,18 @@ import {
 } from '@angular/material';
 import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {InboxComponent} from './components/inbox/inbox.component';
 import {ProductViewerComponent} from './components/product-viewer/product-viewer.component';
-import {DeliverComponent} from './components/deliver/deliver.component';
+import {SendBoxComponent} from './components/send-box/send-box.component';
 import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import { TicketComponent } from './components/ticket/ticket.component';
-import { SmInboxComponent } from './components/sm-inbox/sm-inbox.component';
-import { SmDeliverComponent } from './components/sm-deliver/sm-deliver.component';
-import { DeliveryShowComponent } from './components/delivery-show/delivery-show.component';
-import { DeliveryShelfCodeComponent } from './components/delivery-shelf-code/delivery-shelf-code.component';
+import {TicketComponent} from './components/ticket/ticket.component';
+import {SmInboxComponent} from './components/sm-inbox/sm-inbox.component';
+import {SmSendComponent} from './components/sm-send/sm-send.component';
+import {DeliveryShowComponent} from './components/delivery-show/delivery-show.component';
+import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/delivery-shelf-code.component';
+import {InboxComponent} from './components/inbox/inbox.component';
+import {DeliverBoxComponent} from './components/deliver-box/deliver-box.component';
+import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-confirm.component';
 
 @NgModule({
   declarations: [
@@ -35,13 +37,15 @@ import { DeliveryShelfCodeComponent } from './components/delivery-shelf-code/del
     OrderAddressComponent,
     InboxComponent,
     SmInboxComponent,
-    DeliverComponent,
+    SendBoxComponent,
     ProductViewerComponent,
     BarcodeCheckerComponent,
     TicketComponent,
-    SmDeliverComponent,
+    SmSendComponent,
     DeliveryShowComponent,
-    DeliveryShelfCodeComponent
+    DeliveryShelfCodeComponent,
+    DeliverBoxComponent,
+    MismatchConfirmComponent
   ],
   imports: [
     OrderRouting,
@@ -70,7 +74,13 @@ import { DeliveryShelfCodeComponent } from './components/delivery-shelf-code/del
     MatNativeDateModule,
     MatSelectModule
   ],
-  entryComponents: [OrderAddressComponent,  ProductViewerComponent, TicketComponent, DeliveryShowComponent, DeliveryShelfCodeComponent],
+  entryComponents: [
+    OrderAddressComponent,
+    ProductViewerComponent,
+    TicketComponent,
+    DeliveryShowComponent,
+    DeliveryShelfCodeComponent,
+    MismatchConfirmComponent],
 })
 export class OrderModule {
 }

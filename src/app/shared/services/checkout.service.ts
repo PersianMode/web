@@ -8,6 +8,7 @@ import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs/Rx';
+import {isUndefined} from 'util';
 
 @Injectable()
 export class CheckoutService {
@@ -29,11 +30,12 @@ export class CheckoutService {
   addressData: IAddressInfo;
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  ccRecipientData: any = {};
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
-              private authService: AuthService, private snackBar: MatSnackBar,
-              private router: Router) {
+    private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
+    private router: Router) {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
@@ -67,7 +69,10 @@ export class CheckoutService {
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
     if (isLoggedIn) {
       this.httpService.get(`customer/address`)
-        .subscribe(res => this.addresses$.next(res.addresses), err => console.error(err));
+        .subscribe(res => {
+          this.addresses$.next(res.addresses);
+        }, err => console.error(err)
+        );
     } else {
       const address = JSON.parse(localStorage.getItem('address'));
       if (address) {
@@ -128,8 +133,8 @@ export class CheckoutService {
   getLoyaltyGroup() {
     this.httpService.get('loyaltygroup')
       .subscribe(res => {
-          this.loyaltyGroups.next(res);
-        },
+        this.loyaltyGroups.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -142,8 +147,8 @@ export class CheckoutService {
   getAddLoyaltyPoints() {
     this.httpService.get('deliverycc')
       .subscribe(res => {
-          this.addPointArray.next(res);
-        },
+        this.addPointArray.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -162,13 +167,14 @@ export class CheckoutService {
   }
 
   submitAddresses(data): Promise<any> {
-    if (!data)
+    if (!data) {
       return Promise.reject('');
-
+    }
     if (this.authService.userIsLoggedIn()) {
       return new Promise((resolve, reject) => {
         this.httpService.post('user/address', data).subscribe(
           () => {
+            this.getCustomerAddresses();
             resolve();
           }, err => {
             reject(err);
@@ -209,6 +215,18 @@ export class CheckoutService {
   }
 
   private accumulateData() {
+    if (!this.is_collect) {
+      this.ccRecipientData = null;
+    } else if (this.ccRecipientData) {
+      this.address.recipient_name = this.ccRecipientData.recipient_name;
+      this.address.recipient_surname = this.ccRecipientData.recipient_surname;
+      this.address.recipient_national_id = this.ccRecipientData.recipient_national_id;
+      this.address.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
+      this.address.recipient_title = this.ccRecipientData.recipient_title;
+      this.address.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
+    } else if (this.is_collect && !this.ccRecipientData) {
+      return;
+    }
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
@@ -231,9 +249,9 @@ export class CheckoutService {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
       .subscribe(res => {
-          this.cartService.emptyCart();
-          this.router.navigate(['/', 'profile']);
-        },
+        this.cartService.emptyCart();
+        this.router.navigate(['/', 'profile']);
+      },
         err => console.error(err));
   }
 
@@ -245,12 +263,11 @@ export class CheckoutService {
     return new Promise((resolve, reject) => {
       this.httpService.post('/calculate/order/price', data)
         .subscribe(res => {
-            resolve(res);
-          },
+          resolve(res);
+        },
           err => {
             reject();
           });
     });
   }
-
 }

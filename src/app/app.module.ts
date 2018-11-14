@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
-import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
+import {MatButtonModule, MatCardModule, MatIconModule, MatProgressSpinnerModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserWindowRef, WINDOW_PROVIDERS} from './shared/services/window.service';
@@ -23,6 +23,8 @@ import {ProfileOrderService} from './shared/services/profile-order.service';
 import {TitleService} from './shared/services/title.service';
 import {RevertPlacementService} from './shared/services/revert-placement.service';
 import {PrintService} from './shared/services/print.service';
+import {BlockUIModule} from 'primeng/blockui';
+import {SpinnerService} from './shared/services/spinner.service';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import {PrintService} from './shared/services/print.service';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatProgressSpinnerModule,
+    BlockUIModule
   ],
   providers: [
     WINDOW_PROVIDERS,
@@ -57,8 +61,9 @@ import {PrintService} from './shared/services/print.service';
     CheckoutService,
     ProfileOrderService,
     RevertPlacementService,
+    SpinnerService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }

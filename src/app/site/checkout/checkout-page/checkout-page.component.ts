@@ -5,13 +5,13 @@ import {HttpService} from '../../../shared/services/http.service';
 import {CartService} from '../../../shared/services/cart.service';
 import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
-import {MatDialog} from '@angular/material'; 
+import {MatDialog} from '@angular/material';
 import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
 import {Router} from '@angular/router';
 
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
- 
+
 @Component({
   selector: 'app-checkout-page',
   templateUrl: './checkout-page.component.html',
@@ -77,7 +77,9 @@ export class CheckoutPageComponent implements OnInit {
         console.error('Cannot get balance and loyalty points of customer: ', err);
       });
 
-    this.checkoutService.isValid$.subscribe(r => this.disabled = (!r && !this.soldOuts));
+    this.checkoutService.isValid$.subscribe(r => {
+      this.disabled = (!r && !this.soldOuts);
+    });
     if (!this.authService.userDetails.userId) {
       this.showEarnPointLabel = false;
       this.earnedLoyaltyPoint = 0;
@@ -139,8 +141,7 @@ export class CheckoutPageComponent implements OnInit {
     else if (this.showCostLabel) {
       // calculate earn point
       this.earnedLoyaltyPoint = Math.floor(this.total / this.system_offline_offer);
-    }
-    else {
+    } else {
       // calculate earn point in C&C mode
       valid_loyaltyGroups = this.loyaltyGroups.filter(el => el.min_score <= this.loyaltyPoint);
 
@@ -176,7 +177,6 @@ export class CheckoutPageComponent implements OnInit {
   finalCheckItems() {
     return new Promise((resolve, reject) => {
       this.checkoutService.finalCheck().subscribe(res => {
-          console.log(res);
           this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
           this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
           this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
