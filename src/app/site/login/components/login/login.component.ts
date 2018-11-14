@@ -9,6 +9,8 @@ import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {LoginStatus} from '../../login-status.enum';
+import {MessageService} from '../../../../shared/services/message.service';
+import {MessageType} from '../../../../shared/enum/messageType.enum';
 
 @Component({
   selector: 'app-login',
@@ -45,7 +47,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router,
               @Inject(WINDOW) private window, public dialog: MatDialog,
               private snackBar: MatSnackBar, private httpService: HttpService,
-              private dict: DictionaryService) {
+              private dict: DictionaryService, private messageService: MessageService) {
   }
 
   ngOnInit() {
@@ -239,6 +241,7 @@ export class LoginComponent implements OnInit {
           this.tryLoggingIn()
             .catch(err => {
               // correct code but not verified via email
+              this.messageService.showMessage('لطفا برای فعال سازی حساب خود به ایمیل خود مراجعه فرمایید', MessageType.Information);
               this.loginStatus = this.Status.VerifiedMobile;
             });
         }
@@ -260,6 +263,7 @@ export class LoginComponent implements OnInit {
           resolve();
         })
         .catch(err => {
+          this.messageService.showMessage('نام کاربری یا رمز عبور اشتباه است', MessageType.Error);
           reject(err);
         });
     });
