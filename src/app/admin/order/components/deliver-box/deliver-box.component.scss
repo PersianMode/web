@@ -18,18 +18,14 @@ mat-header-cell, mat-cell{
   transition: all .5s ease-out;
 }
 
-.imgWrapper {
-  display: inline;
-}
-
 .imgWrapper img{
   height: 72px;
   position: relative;
 }
 
-// mat-cell{
-//   overflow: visible !important;
-// }
+mat-cell{
+  overflow: visible !important;
+}
 
 .element-row {
   position: relative;
@@ -55,10 +51,29 @@ mat-header-cell, mat-cell{
   max-height: 500px;
 }
 
-ul{
-  text-align: right
+.orderLineDetail {
+  width: 100%;
 }
-ul li{
-  display: inline;
-  margin-left: 20px;
+
+
+.search-area {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.filtering-field {
+  width: 100%;
+  line-height: 23px;
+  text-align: right;
+}
+
+.filtering-box {
+  margin: 5px;
+}
+
+.checkbox-label {
+  margin-right: 5px;
+}
+.mat-select {
+  font-family: iranyekan, sans-serif !important;
 }

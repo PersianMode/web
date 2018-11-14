@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SCInboxComponent } from './sc-inbox.component';
+import { SmSendComponent } from './sm-send.component';
 
-describe('SCInboxComponent', () => {
-  let component: SCInboxComponent;
-  let fixture: ComponentFixture<SCInboxComponent>;
+describe('SmSendComponent', () => {
+  let component: SmSendComponent;
+  let fixture: ComponentFixture<SmSendComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SCInboxComponent ]
+      declarations: [ SmSendComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SCInboxComponent);
+    fixture = TestBed.createComponent(SmSendComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
