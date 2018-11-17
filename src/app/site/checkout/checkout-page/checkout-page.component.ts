@@ -7,7 +7,7 @@ import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
 import {MatDialog} from '@angular/material';
 import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
@@ -41,7 +41,7 @@ export class CheckoutPageComponent implements OnInit {
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
-
+  province = null;
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -51,10 +51,15 @@ export class CheckoutPageComponent implements OnInit {
               private titleService: TitleService,
               private progressService: ProgressService,
               private router: Router,
-              private productService: ProductService) {
+              private productService: ProductService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
+
+    this.route.queryParams.subscribe(params => {
+      this.province = params['province'] || null;
+    });
+
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {

@@ -24,6 +24,7 @@ export class AddressTableComponent implements OnInit {
   time_slot = time_slotEnum;
   @Input() isProfile = true;
   @Input() isModify = true;
+  @Input()  receivedProvince = null;
   @Output() selectedChange = new EventEmitter();
   @Output() deliveryType = new EventEmitter();
   @Output() durationType = new EventEmitter();
@@ -61,6 +62,15 @@ export class AddressTableComponent implements OnInit {
 
   ngOnInit() {
     this.showRecipientInfo = this.checkoutService.ccRecipientData ? this.checkoutService.ccRecipientData : null;
+    this.province = this.receivedProvince;
+    console.log('*****', this.province);
+    if (!this.province) {
+      this.showRecipientInfo = this.checkoutService.ccRecipientData;
+      this.setState();
+    } else {
+      this.checkoutService.getCustomerAddresses();
+    }
+
     this.delivery_time = null;
     this.noDuration.emit(null);
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
@@ -173,7 +183,6 @@ export class AddressTableComponent implements OnInit {
     this.checkoutService.addressData = {
       addressId: this.withDelivery ? null : '1',
       partEdit: !this.withDelivery,
-      // dialog_address: this.withDelivery ? {} : customerAddresses ? customerAddresses[0] : {},
       dialog_address: this.withDelivery ? {} : this.showRecipientInfo ? this.showRecipientInfo : {},
     };
     if (this.responsiveService.isMobile) {

@@ -62,13 +62,15 @@ export class UpsertAddressComponent implements OnInit {
     this.initForm();
   }
 
-  onClose(data = false) {
+  onClose(data = null) {
+    console.log(data);
     // TODO: guard is needed if any fields have been changed!
     if (this.isNotMobile) {
       this.closeDialog.emit(data);
     } else {
-      this.location.back();
+      this.router.navigate(['/checkout'], {queryParams: {province: data, withDelivery : this.withDelivery}});
     }
+
   }
 
   initializeData() {
@@ -126,12 +128,10 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   submitAddress() {
-
     this.addressData.loc = {
       long: this.addressForm.controls['longitude'].value,
       lat: this.addressForm.controls['latitude'].value,
     };
-
     Object.keys(this.addressForm.controls)
       .filter(r => !['latitude', 'longitude'].includes(r))
       .forEach(k => {
@@ -150,7 +150,7 @@ export class UpsertAddressComponent implements OnInit {
         });
     } else {
       this.checkoutService.ccRecipientData = this.addressData;
-      this.onClose();
+      this.onClose(null);
     }
   }
 

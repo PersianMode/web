@@ -41,10 +41,11 @@
 </span>
 
 <mat-card *ngIf="!withDelivery && showRecipientInfo"
-     style="background-color: #dedfde;border-radius: 3px; padding: 5px; margin-top: 10px;">
+          style="background-color: #dedfde;border-radius: 3px; padding: 5px; margin-top: 10px;">
   <div style="padding-right: 5px; margin-bottom: 10px; font-weight: bold"> مشخصات تحویل گیرنده :</div>
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" style="padding-right: 5px">
-    <div fxFlex="20">
+  <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+       fxLayoutAlign.xs="center center" style="padding-right: 5px">
+    <div fxFlex="50">
     <span *ngIf="showRecipientInfo.recipient_title" style="font-weight: bold;">
       <span *ngIf="showRecipientInfo.recipient_title === 'f'">خانم</span>
       <span *ngIf="showRecipientInfo.recipient_title === 'm'">آقای</span>
@@ -53,17 +54,20 @@
       {{showRecipientInfo.recipient_name}}
       {{showRecipientInfo.recipient_surname}}
     </div>
-    <div fxFlex="25" style="font-weight: bold;">
-      <span>کد ملی :</span>
+    <div fxFlex="50">
+      <span style="font-weight: bold;">کد ملی :</span>
       {{showRecipientInfo.recipient_national_id}}
     </div>
-    <div fxFlex="30" style="font-weight: bold;">
-      <span>آدرس ایمیل : </span>
+  </div>
+  <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+       fxLayoutAlign.xs="center center" style="padding-right: 5px">
+    <div fxFlex="50">
+      <span style="font-weight: bold;">آدرس ایمیل : </span>
       {{showRecipientInfo.recipient_email ? showRecipientInfo.recipient_email : '---'}}
     </div>
-    <div fxFlex="25">
-    <span style="font-weight: bold;">شماره تماس :</span>
-    {{showRecipientInfo.recipient_mobile_no}}
+    <div fxFlex="50">
+      <span style="font-weight: bold;">شماره تماس :</span>
+      {{showRecipientInfo.recipient_mobile_no}}
     </div>
   </div>
   <div style="text-align: left; margin-top: 5px;">
