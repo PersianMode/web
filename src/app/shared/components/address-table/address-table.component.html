@@ -59,7 +59,7 @@
     </div>
     <div fxFlex="30" style="font-weight: bold;">
       <span>آدرس ایمیل : </span>
-      {{showRecipientInfo.recipient_email}}
+      {{showRecipientInfo.recipient_email ? showRecipientInfo.recipient_email : '---'}}
     </div>
     <div fxFlex="25">
     <span style="font-weight: bold;">شماره تماس :</span>

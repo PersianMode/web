@@ -10,6 +10,8 @@ import {DialogEnum} from '../../enum/dialog.components.enum';
 import {time_slotEnum} from '../../enum/time_slot.enum';
 import {CheckoutService} from '../../services/checkout.service';
 import {ProgressService} from '../../services/progress.service';
+import {RemovingConfirmComponent} from '../removing-confirm/removing-confirm.component';
+import {PlacementModifyEnum} from '../../../admin/page/enum/placement.modify.type.enum';
 
 
 @Component({
@@ -70,7 +72,6 @@ export class AddressTableComponent implements OnInit {
     Object.keys(this.time_slot).forEach(el => this.deliveryHour.push(this.time_slot[el]));
 
     const state = this.checkoutService.addressState;
-    console.log(state);
     if (state) {
       [this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress]
         = this.checkoutService.addressState;
@@ -203,8 +204,22 @@ export class AddressTableComponent implements OnInit {
   }
 
   removeRecipient() {
-    this.checkoutService.ccRecipientData = null;
-    this.showRecipientInfo = null;
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+
+
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+
+          this.checkoutService.ccRecipientData = null;
+          this.showRecipientInfo = null;
+        }
+      }, err => {
+        console.log('Error in dialog: ', err);
+      });
   }
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
@@ -257,7 +272,7 @@ export class AddressTableComponent implements OnInit {
       if (this.isLoggedIn)
         this.addresses = this.checkoutService.addresses$.getValue();
       else {
-        this.addresses = JSON.parse(localStorage.getItem('address')); ///////// some bug here
+        this.addresses = JSON.parse(localStorage.getItem('address')); ///////// some bug here ///fixed
         this.checkoutService.addresses$.next(this.addresses && Object.keys(this.addresses).length ? [this.addresses] : []);
       }
 
