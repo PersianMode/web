@@ -58,6 +58,7 @@ export class AddressTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showRecipientInfo = this.checkoutService.ccRecipientData ? this.checkoutService.ccRecipientData : null;
     this.delivery_time = null;
     this.noDuration.emit(null);
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
@@ -171,7 +172,8 @@ export class AddressTableComponent implements OnInit {
     this.checkoutService.addressData = {
       addressId: this.withDelivery ? null : '1',
       partEdit: !this.withDelivery,
-      dialog_address: {},
+      // dialog_address: this.withDelivery ? {} : customerAddresses ? customerAddresses[0] : {},
+      dialog_address: this.withDelivery ? {} : this.showRecipientInfo ? this.showRecipientInfo : {},
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
@@ -256,6 +258,7 @@ export class AddressTableComponent implements OnInit {
         this.addresses = this.checkoutService.addresses$.getValue();
       else {
         this.addresses = JSON.parse(localStorage.getItem('address')); ///////// some bug here
+        this.checkoutService.addresses$.next(this.addresses && Object.keys(this.addresses).length ? [this.addresses] : []);
       }
 
       if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
