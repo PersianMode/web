@@ -9,6 +9,9 @@ import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {HttpService} from '../../../../shared/services/http.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {LoginStatus} from '../../login-status.enum';
+import {MessageService} from '../../../../shared/services/message.service';
+import {SpinnerService} from '../../../../shared/services/spinner.service';
+import {MessageType} from '../../../../shared/enum/messageType.enum';
 
 @Component({
   selector: 'app-login',
@@ -43,9 +46,8 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(private authService: AuthService, private router: Router,
-              @Inject(WINDOW) private window, public dialog: MatDialog,
-              private snackBar: MatSnackBar, private httpService: HttpService,
-              private dict: DictionaryService) {
+              @Inject(WINDOW) private window, public dialog: MatDialog, private httpService: HttpService,
+              private dict: DictionaryService, private messageService: MessageService, private spinnerService: SpinnerService) {
   }
 
   ngOnInit() {
@@ -54,10 +56,15 @@ export class LoginComponent implements OnInit {
   }
 
   getTagTypes() {
+    this.spinnerService.enable();
     this.httpService.get('tags/Category').subscribe(tags => {
+    this.spinnerService.disable();
       tags.forEach(el => {
         this.tagsType.push({name: this.dict.translateWord(el.name.trim()), '_id': el._id});
       });
+    }, err => {
+      this.spinnerService.disable();
+      console.log('error of get tags');
     });
   }
 
@@ -141,27 +148,33 @@ export class LoginComponent implements OnInit {
   }
 
   resendEmailActivationCode() {
+    this.spinnerService.enable();
     this.httpService.post('user/auth/link', {
       username: this.authService.tempUserData['username'],
       is_forgot_mail: false,
     }).subscribe(
       data => {
-        this.snackBar.open('کد فعال سازی با موفقیت ارسال شد', null, {duration: 2300});
+        this.spinnerService.disable();
+        this.messageService.showMessage('کد فعال سازی به موبایلتان ارسال شد', MessageType.Information);
       }, err => {
-        this.snackBar.open('خطا در ارسال کد', null, {duration: 1000});
+        this.spinnerService.disable();
+        this.messageService.showMessage('خطا در ارسال کد', MessageType.Information);
         console.error('error in sending activation code: ', err);
       }
     );
   }
 
   resendCode() {
+    this.spinnerService.enable();
     this.httpService.post('register/resend', {
       username: this.authService.tempUserData['username'],
     }).subscribe(
       (data) => {
-        this.snackBar.open('کد فعال سازی به موبایلتان ارسال شد', null, {duration: 2300});
+        this.spinnerService.disable();
+        this.messageService.showMessage('کد فعال سازی به موبایلتان ارسال شد', MessageType.Information);
       },
       (err) => {
+        this.spinnerService.disable();
         console.error('Cannot send new verification code: ', err);
       }
     );
@@ -211,6 +224,7 @@ export class LoginComponent implements OnInit {
   }
 
   checkCode() {
+    this.spinnerService.enable();
     this.httpService.post('register/verify', {
       username: this.authService.tempUserData['username'],
       code: this.code,
@@ -220,17 +234,18 @@ export class LoginComponent implements OnInit {
           this.authService.checkValidation(this.router.url)
             .then(userData => {
               this.outRouteOnPreferencesCondition(userData['is_preferences_set'], userData['gender'] || 'm');
+              this.spinnerService.disable();
             })
             .catch(err => {
               // might be real error
               // or
               // might close register page, activates via email, then enters the code in the login page
-
               // try the latter
               this.tryLoggingIn()
                 .catch(error => {
                   // so it's the former
                   console.error('not validated!', err, error);
+                  this.spinnerService.disable();
                   this.closeDialog.emit(true);
                   this.router.navigate(['home']);
                 });
@@ -239,6 +254,8 @@ export class LoginComponent implements OnInit {
           this.tryLoggingIn()
             .catch(err => {
               // correct code but not verified via email
+              this.spinnerService.disable();
+              this.messageService.showMessage('لطفا برای فعال سازی حساب خود به ایمیل خود مراجعه فرمایید', MessageType.Information);
               this.loginStatus = this.Status.VerifiedMobile;
             });
         }
@@ -246,20 +263,26 @@ export class LoginComponent implements OnInit {
       (err) => {
         // wrong verification code
         console.error('Cannot verify registration: ', err);
+        this.spinnerService.disable();
+        this.messageService.showMessage('نام کاربری یا رمز عبور اشتباه است', MessageType.Error);
       }
     );
   }
 
   tryLoggingIn() {
+    this.spinnerService.enable();
     return new Promise((resolve, reject) => {
       this.authService.login(this.authService.tempUserData['username'] || this.loginForm.controls['username'].value,
         this.authService.tempUserData['password'] || this.loginForm.controls['password'].value)
         .then(userData => {
+          this.spinnerService.disable();
           this.authService.tempUserData = {};
           this.outRouteOnPreferencesCondition(userData['is_preferences_set'], userData['gender'] || 'm');
           resolve();
         })
         .catch(err => {
+          this.spinnerService.disable();
+          this.messageService.showMessage('نام کاربری یا رمز عبور اشتباه است', MessageType.Error);
           reject(err);
         });
     });

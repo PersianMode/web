@@ -31,6 +31,11 @@ const Admin_ROUTES: Routes = [
         path: 'delivery',
         loadChildren: 'app/admin/delivery/delivery.module#DeliveryModule',
         canActivate: [AdminAuthGuard]
+      },
+      {
+        path: 'internal_delivery',
+        loadChildren: 'app/admin/internal-delivery/internal-delivery.module#InternalDeliveryModule',
+        canActivate: [AdminAuthGuard]
       }
     ]
   },

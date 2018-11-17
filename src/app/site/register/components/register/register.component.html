@@ -146,8 +146,8 @@
             </div>
           </div>
           <div>
-            <div class="div-btn inform-btn clickable-link" (click)="checkCode()">
-              <label>ارسال کد</label>
+            <div class="div-btn inform-btn clickable-link" (click)="checkCode()" *ngIf="code">
+              <label>تایید کد</label>
             </div>
           </div>
         </div>
