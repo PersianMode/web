@@ -1,5 +1,16 @@
 
-<div>
-  {{tags[0].name}} > {{types}} > {{tags[1].name}}
-  {{page_info}}
+
+<div style="cursor: pointer;" *ngIf="getTagGroupName() && !type_fa">
+  <a (click)="collectionFirstTag()">{{getTagGroupName()}} </a>
+</div>
+
+<div style="cursor: pointer;" *ngIf="getTagGroupName() && type_fa && !getTagName()">
+  <a (click)="collectionSecondTag()">{{getTagGroupName()}} </a>
+  <a (click)="collectionSecondTypeName()" class="left-chevron additional-chevron"><i class="fa fa-chevron-left"></i>{{type_fa}}</a>
+</div>
+
+<div style="cursor: pointer;" *ngIf="getTagGroupName() && type_fa && getTagName()">
+  <a (click)="collectionTThirdTagGroup()">{{getTagGroupName()}} </a>
+  <a (click)="collectionThirdTypeName()" class="left-chevron additional-chevron"><i class="fa fa-chevron-left"></i>{{type_fa}}</a>
+<a (click)="collectionThirdTag()" class=" left-chevron additional-chevron"><i class="fa fa-chevron-left"></i>{{getTagName()}}</a>
 </div>

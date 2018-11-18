@@ -344,18 +344,16 @@ export class ProductService {
     this.httpService.get('collection/product/' + collection_id)
       .subscribe(
         (data) => {
-          console.log('data: ', data);
           if (data.name_fa) {
             this.collectionName = data.name_fa;
             this.collectionNameFa$.next(data.name_fa);
+            this.tag$.next(data.tags);
+            this.type$.next(data.types);
+
           }
           if (data.products) {
             for (const product of data.products) {
               this.enrichProductData(product);
-              this.type$.next(product.product_type);
-              // this.tag$.next(product.tags.find(r => r.tg_name === 'Gender'));
-              this.tag$.next(product.tags);
-
             }
             this.collectionId = collection_id;
             this.products = data.products;
