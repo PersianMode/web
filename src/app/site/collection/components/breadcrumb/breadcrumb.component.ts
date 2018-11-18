@@ -48,7 +48,7 @@ export class BreadcrumbComponent implements OnInit {
 
   getTagName() {
     this.tag = this.tags.find((t) => !this.gender.includes(t));
-    const tag =  this.tag ? this.dict.translateWord(this.tag.toString()) : '';
+    const tag = this.tag ? this.dict.translateWord(this.tag.toString()) : '';
     return tag;
   }
 
