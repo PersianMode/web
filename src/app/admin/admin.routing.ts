@@ -13,7 +13,11 @@ const Admin_ROUTES: Routes = [
       {path: 'campaigns', loadChildren: 'app/admin/campaign/campaign.module#CampaignModule', canActivate: [AdminAuthGuard]},
       {path: 'pages', loadChildren: 'app/admin/page/page.module#PageModule', canActivate: [AdminAuthGuard]},
       {path: 'orders', loadChildren: 'app/admin/order/order.module#OrderModule', canActivate: [AdminAuthGuard]},
-      {path: 'deliverycost', loadChildren: 'app/admin/delivery-cost/delivery-cost.module#DeliveryCostModule', canActivate: [AdminAuthGuard]},
+      {
+        path: 'deliverycost',
+        loadChildren: 'app/admin/delivery-cost/delivery-cost.module#DeliveryCostModule',
+        canActivate: [AdminAuthGuard]
+      },
       {path: 'dictionary', loadChildren: 'app/admin/dictionary/dictionary.module#DictionaryModule', canActivate: [AdminAuthGuard]},
       {path: 'soldouts', loadChildren: 'app/admin/soldout/soldout.module#SoldOutModule', canActivate: [AdminAuthGuard]},
       {path: 'uploads', loadChildren: 'app/admin/upload/upload.module#UploadModule', canActivate: [AdminAuthGuard]},
@@ -25,6 +29,11 @@ const Admin_ROUTES: Routes = [
       {
         path: 'delivery',
         loadChildren: 'app/admin/delivery/delivery.module#DeliveryModule',
+        canActivate: [AdminAuthGuard]
+      },
+      {
+        path: 'internal_delivery',
+        loadChildren: 'app/admin/internal-delivery/internal-delivery.module#InternalDeliveryModule',
         canActivate: [AdminAuthGuard]
       }
     ]

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HubInboxComponent } from './hub-inbox.component';
+import { SendBoxComponent } from './send-box.component';
 
-describe('HubInboxComponent', () => {
-  let component: HubInboxComponent;
-  let fixture: ComponentFixture<HubInboxComponent>;
+describe('OutBoxComponent', () => {
+  let component: SendBoxComponent;
+  let fixture: ComponentFixture<SendBoxComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HubInboxComponent ]
+      declarations: [ SendBoxComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HubInboxComponent);
+    fixture = TestBed.createComponent(SendBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

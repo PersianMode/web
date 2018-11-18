@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmDeliverComponent } from './sm-deliver.component';
+import { InternalDeliveryComponent } from './internal-delivery.component';
 
-describe('SmDeliverComponent', () => {
-  let component: SmDeliverComponent;
-  let fixture: ComponentFixture<SmDeliverComponent>;
+describe('InternalDeliveryComponent', () => {
+  let component: InternalDeliveryComponent;
+  let fixture: ComponentFixture<InternalDeliveryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SmDeliverComponent ]
+      declarations: [ InternalDeliveryComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SmDeliverComponent);
+    fixture = TestBed.createComponent(InternalDeliveryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
