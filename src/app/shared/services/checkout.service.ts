@@ -169,7 +169,6 @@ export class CheckoutService {
   }
 
   submitAddresses(data): Promise<any> {
-    console.log('---->>', data);
     if (!data) {
       return Promise.reject('');
     }
