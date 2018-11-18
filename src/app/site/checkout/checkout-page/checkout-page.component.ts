@@ -41,7 +41,6 @@ export class CheckoutPageComponent implements OnInit {
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
-  province = null;
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -55,11 +54,6 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.route.queryParams.subscribe(params => {
-      this.province = params['province'] || null;
-    });
-
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {

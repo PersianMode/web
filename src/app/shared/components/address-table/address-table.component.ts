@@ -62,15 +62,6 @@ export class AddressTableComponent implements OnInit {
 
   ngOnInit() {
     this.showRecipientInfo = this.checkoutService.ccRecipientData ? this.checkoutService.ccRecipientData : null;
-    this.province = this.receivedProvince;
-    console.log('*****', this.province);
-    if (!this.province) {
-      this.showRecipientInfo = this.checkoutService.ccRecipientData;
-      this.setState();
-    } else {
-      this.checkoutService.getCustomerAddresses();
-    }
-
     this.delivery_time = null;
     this.noDuration.emit(null);
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
@@ -89,7 +80,14 @@ export class AddressTableComponent implements OnInit {
         this.withDelivery = true;
       this.changeWithDelivery();
     }
+
+    this.province = this.checkoutService.addedProvince ? this.checkoutService.addedProvince : null;
+    if (this.province) {
+      this.checkoutService.getCustomerAddresses();
+    }
+
     this.checkoutService.addresses$.subscribe(res => {
+      this.province = this.checkoutService.addedProvince ? this.checkoutService.addedProvince : null;
       this.addresses = res;
       if (this.withDelivery) {
         if (this.deliveryDays === 3 && this.province) { // should change days if added address is not tehran
@@ -195,13 +193,12 @@ export class AddressTableComponent implements OnInit {
         }
       });
       rmDialog.afterClosed().subscribe(
-        (data) => {
-          if (!data) {
+        () => {
+          if (!this.withDelivery) {
             this.showRecipientInfo = this.checkoutService.ccRecipientData;
             this.setState();
             return;
           } else {
-            this.province = data;
             this.checkoutService.getCustomerAddresses();
           }
         },
@@ -216,8 +213,6 @@ export class AddressTableComponent implements OnInit {
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
-
-
     rmDialog.afterClosed().subscribe(
       (status) => {
         if (status) {
@@ -281,7 +276,7 @@ export class AddressTableComponent implements OnInit {
       if (this.isLoggedIn)
         this.addresses = this.checkoutService.addresses$.getValue();
       else {
-        this.addresses = JSON.parse(localStorage.getItem('address')); ///////// some bug here ///fixed
+        this.addresses = JSON.parse(localStorage.getItem('address'));
         this.checkoutService.addresses$.next(this.addresses && Object.keys(this.addresses).length ? [this.addresses] : []);
       }
 

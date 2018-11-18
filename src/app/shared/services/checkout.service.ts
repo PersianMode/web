@@ -32,6 +32,7 @@ export class CheckoutService {
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   ccRecipientData: any = null;
+  addedProvince: any = null;
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
@@ -168,6 +169,7 @@ export class CheckoutService {
   }
 
   submitAddresses(data): Promise<any> {
+    console.log('---->>', data);
     if (!data) {
       return Promise.reject('');
     }
