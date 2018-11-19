@@ -24,7 +24,7 @@ export class AddressTableComponent implements OnInit {
   time_slot = time_slotEnum;
   @Input() isProfile = true;
   @Input() isModify = true;
-  @Input()  receivedProvince = null;
+  @Input() receivedProvince = null;
   @Output() selectedChange = new EventEmitter();
   @Output() deliveryType = new EventEmitter();
   @Output() durationType = new EventEmitter();
@@ -122,21 +122,18 @@ export class AddressTableComponent implements OnInit {
   }
 
   private setState() {
-    if ((this.withDelivery && this.delivery_time && this.deliveryDays && this.selectedCustomerAddress >= 0) ||
-      (!this.withDelivery && this.selectedWarehouseAddress >= 0 && this.checkoutService.ccRecipientData)) {
-      this.checkoutService.addressState = [
-        this.withDelivery,
-        this.selectedCustomerAddress,
-        this.selectedWarehouseAddress,
-        this.withDelivery ? JSON.parse(localStorage.getItem('address')) : null,
-        this.withDelivery ?
-          this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
-          : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null,
+    this.checkoutService.addressState = [
+      this.withDelivery,
+      this.selectedCustomerAddress,
+      this.selectedWarehouseAddress,
+      this.withDelivery ? JSON.parse(localStorage.getItem('address')) : null,
+      this.withDelivery ?
+        this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
+        : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null,
 
-        this.withDelivery ? this.deliveryDays : null,
-        this.withDelivery ? this.delivery_time : null
-      ];
-    }
+      this.withDelivery ? this.deliveryDays : null,
+      this.withDelivery ? this.delivery_time : null
+    ];
   }
 
   private setBtnLabel() {
@@ -225,6 +222,7 @@ export class AddressTableComponent implements OnInit {
         console.log('Error in dialog: ', err);
       });
   }
+
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
