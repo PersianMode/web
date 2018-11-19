@@ -177,10 +177,7 @@ export class UpsertAddressComponent implements OnInit {
 
   setButtonVisibility() {
     if (this.addressInfo.partEdit) {
-      // return (!(this.addressForm.controls['recipient_name'].value && this.addressForm.controls['recipient_surname'].value
-      //   && this.addressForm.controls['recipient_mobile_no'].value && this.addressForm.controls['recipient_national_id'].value) || (!this.addressForm.valid || !this.anyChanges))
       return !this.addressForm.valid || !this.anyChanges;
-
     } else
       return !this.addressInfo.partEdit && (!this.addressForm.valid || !this.anyChanges);
   }
