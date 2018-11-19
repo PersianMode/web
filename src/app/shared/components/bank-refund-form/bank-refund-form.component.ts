@@ -10,7 +10,6 @@ export class BankRefundFormComponent implements OnInit {
 
   informationBankForm: FormGroup;
 
-  // cardTypes = [{id: 1, value: 'شماره کارت'}, {id: 2, value: 'شماره شبا'}];
   cardSelected = null;
   formGroup;
 

@@ -82,6 +82,7 @@ import { BankRefundFormComponent } from './components/bank-refund-form/bank-refu
   entryComponents: [
     RemovingConfirmComponent,
     SaveChangeConfirmComponent,
+    BankRefundFormComponent
   ],
   exports: [SuggestionComponent,
     SearchFieldsComponent,
