@@ -24,7 +24,6 @@ export class AddressTableComponent implements OnInit {
   time_slot = time_slotEnum;
   @Input() isProfile = true;
   @Input() isModify = true;
-  @Input() receivedProvince = null;
   @Output() selectedChange = new EventEmitter();
   @Output() deliveryType = new EventEmitter();
   @Output() durationType = new EventEmitter();
