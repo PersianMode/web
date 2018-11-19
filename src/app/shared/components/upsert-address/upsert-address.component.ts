@@ -138,7 +138,6 @@ export class UpsertAddressComponent implements OnInit {
         }
       });
 
-    console.log(this.addressData);
     if (this.withDelivery) {
       this.checkoutService.submitAddresses(this.addressData)
         .then(() => {

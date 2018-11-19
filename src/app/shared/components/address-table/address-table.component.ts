@@ -34,22 +34,23 @@ export class AddressTableComponent implements OnInit {
     'سانا': [35.8024766, 51.4552242],
     'پالادیوم': [35.7975691, 51.4107673],
   };
-  deliveryPeriodDay = [];
-  delivery_time = null;
+
   deliveryHour = [];
   loc = null;
-  withDelivery = true;
-  selectedCustomerAddress = -1;
-  selectedWarehouseAddress = -1;
-  addrBtnLabel = 'افزودن آدرس جدید';
+
   addresses = [];
   isMobile = false;
   isLoggedIn = false;
   durations = [];
   durationId;
-  deliveryDays;
   province;
   showRecipientInfo = false;
+
+  withDelivery;
+  selectedCustomerAddress = -1;
+  selectedWarehouseAddress = -1;
+  deliveryDays;
+  deliveryTime;
 
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
@@ -60,8 +61,14 @@ export class AddressTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.withDelivery = this.checkoutService.withDelivery;
+    this.selectedCustomerAddress = this.checkoutService.selectedCustomerAddress;
+    this.selectedWarehouseAddress = this.checkoutService.selectedWarehouseAddress;
+    this.setAddressDataForService();
+    this.deliveryDays = this.checkoutService.deliveryDays;
+    this.deliveryTime = this.checkoutService.deliveryTime;
+
     this.showRecipientInfo = this.checkoutService.ccRecipientData ? this.checkoutService.ccRecipientData : null;
-    this.delivery_time = null;
     this.noDuration.emit(null);
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.authService.isLoggedIn.subscribe(r => {
@@ -71,14 +78,9 @@ export class AddressTableComponent implements OnInit {
     this.deliveryHour = [];
     Object.keys(this.time_slot).forEach(el => this.deliveryHour.push(this.time_slot[el]));
 
-    const state = this.checkoutService.addressState;
-    if (state) {
-      [this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress]
-        = this.checkoutService.addressState;
-      if (this.isProfile)
-        this.withDelivery = true;
-      this.changeWithDelivery();
-    }
+    if (this.isProfile)
+      this.withDelivery = true;
+    this.changeWithDelivery();
 
     this.province = this.checkoutService.addedProvince ? this.checkoutService.addedProvince : null;
     if (this.province) {
@@ -109,34 +111,44 @@ export class AddressTableComponent implements OnInit {
             this.selectedCustomerAddress = 0;
           }
         }
+        this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
       } else {
         this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
       }
-      this.setState();
+
+      this.setAddressDataForService();
     });
-
-    this.setState();
-
     this.getDurations();
   }
 
-  private setState() {
-    this.checkoutService.addressState = [
-      this.withDelivery,
-      this.selectedCustomerAddress,
-      this.selectedWarehouseAddress,
-      this.withDelivery ? JSON.parse(localStorage.getItem('address')) : null,
-      this.withDelivery ?
-        this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
-        : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null,
+  changeWithDelivery() {
+    this.checkoutService.withDelivery = this.withDelivery;
+    this.deliveryType.emit(this.withDelivery);
+    if (this.withDelivery) {
+      if (this.isLoggedIn)
+        this.addresses = this.checkoutService.addresses$.getValue();
+      else {
+        // this.addresses = JSON.parse(localStorage.getItem('address')); ///////////////////
+        // this.checkoutService.addresses$.next(this.addresses && Object.keys(this.addresses).length ? [this.addresses] : []);
+        this.addresses = this.checkoutService.addresses$.getValue();
+      }
 
-      this.withDelivery ? this.deliveryDays : null,
-      this.withDelivery ? this.delivery_time : null
-    ];
+      if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
+        this.filterTehranAddresses();
+      }
+    } else {
+      this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+    }
+    this.setAddressDataForService();
   }
 
-  private setBtnLabel() {
-    this.addrBtnLabel = this.withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده';
+  setAddressDataForService() {
+    this.checkoutService.addressObj =
+      this.withDelivery ?
+        this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
+        : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null;
+
+    console.log('====>>>', this.checkoutService.addressObj);
   }
 
   getLatitude() {
@@ -156,6 +168,7 @@ export class AddressTableComponent implements OnInit {
       } else {
         this.selectedCustomerAddress = i;
       }
+      this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
     } else {
       if (i === this.selectedWarehouseAddress) {
         this.selectedWarehouseAddress = -1;
@@ -163,8 +176,9 @@ export class AddressTableComponent implements OnInit {
         this.selectedWarehouseAddress = i;
         this.loc = this.locs[this.addresses[this.selectedWarehouseAddress].name];
       }
+      this.checkoutService.selectedWarehouseAddress = this.selectedWarehouseAddress;
     }
-    this.setState();
+    this.setAddressDataForService();
   }
 
   makePersianNumber(a: string) {
@@ -192,7 +206,6 @@ export class AddressTableComponent implements OnInit {
         () => {
           if (!this.withDelivery) {
             this.showRecipientInfo = this.checkoutService.ccRecipientData;
-            this.setState();
             return;
           } else {
             this.checkoutService.getCustomerAddresses();
@@ -241,7 +254,8 @@ export class AddressTableComponent implements OnInit {
       });
 
       rmDialog.afterClosed().subscribe(
-        () => this.setState(),
+        () => {
+        },
         (err) => {
           console.error('Error in dialog: ', err);
         }
@@ -253,7 +267,6 @@ export class AddressTableComponent implements OnInit {
     this.httpService.get('deliveryduration').subscribe(
       (data) => {
         this.durations = data;
-        this.deliveryPeriodDay = data.map(el => el.delivery_days);
       },
       (error) => {
         console.log(error);
@@ -262,29 +275,10 @@ export class AddressTableComponent implements OnInit {
   }
 
   setDeliveryTime(deliveryTime) {
-    this.delivery_time = deliveryTime;
-    this.setState();
+    this.deliveryTime = deliveryTime;
+    this.checkoutService.deliveryTime = this.deliveryTime;
   }
 
-  changeWithDelivery() {
-    this.deliveryType.emit(this.withDelivery);
-    this.setBtnLabel();
-    if (this.withDelivery) {
-      if (this.isLoggedIn)
-        this.addresses = this.checkoutService.addresses$.getValue();
-      else {
-        this.addresses = JSON.parse(localStorage.getItem('address'));
-        this.checkoutService.addresses$.next(this.addresses && Object.keys(this.addresses).length ? [this.addresses] : []);
-      }
-
-      if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
-        this.filterTehranAddresses();
-      }
-    } else {
-      this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-    }
-    this.setState();
-  }
 
   changeDurationType(durationId, deliveryDays) {
     this.addresses = this.checkoutService.addresses$.getValue();
@@ -296,11 +290,17 @@ export class AddressTableComponent implements OnInit {
       this.filterTehranAddresses();
     }
     this.selectedCustomerAddress = this.addresses && this.addresses.length ? 0 : -1;
-    this.setState();
+    this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
+    this.setAddressDataForService();
+    this.checkoutService.deliveryDays = this.deliveryDays;
   }
 
   filterTehranAddresses() {
     this.addresses = this.addresses.filter(el => el.province === 'تهران');
+    if (!this.addresses || this.addresses.length === 0)
+      this.selectedCustomerAddress = -1;
+
+    this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
   }
 
   chooseAddress($event) {

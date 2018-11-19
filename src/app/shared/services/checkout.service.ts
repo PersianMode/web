@@ -25,14 +25,20 @@ export class CheckoutService {
   private earnSpentPointObj: any = {};
   loyaltyGroups: ReplaySubject<any> = new ReplaySubject<any>();
   addPointArray: ReplaySubject<any> = new ReplaySubject<any>();
-
   warehouseAddresses = [];
-  private _ads: any = null;
   addressData: IAddressInfo;
+
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   ccRecipientData: any = null;
   addedProvince: any = null;
+
+  withDelivery: any = true;
+  selectedCustomerAddress = -1;
+  selectedWarehouseAddress = -1;
+  deliveryDays: any = null;
+  deliveryTime: any = null;
+  addressObj: any = {};
 
 
 
@@ -54,20 +60,11 @@ export class CheckoutService {
     });
   }
 
-  set addressState(ads) {
-    this._ads = ads;
-    this.checkValidity();
-  }
-
-  get addressState() {
-    return this._ads;
-  }
-
   private checkValidity() {
-    const data = this.accumulateData();
-    const il = this.authService.userIsLoggedIn();
-    this.isValid$.next(data.total_amount &&
-      (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
+    // const data = this.accumulateData();
+    // const il = this.authService.userIsLoggedIn();
+    // this.isValid$.next(data.total_amount &&
+    //   (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
@@ -147,7 +144,6 @@ export class CheckoutService {
         });
   }
 
-
   getAddLoyaltyPoints() {
     this.httpService.get('deliverycc')
       .subscribe(res => {
@@ -197,55 +193,6 @@ export class CheckoutService {
     }
   }
 
-  private get customerData() {
-    return this._ads[3];
-  }
-
-  private get address() {
-    return this._ads[4] ? this._ads[4] : {};
-  }
-
-  private get is_collect() {
-    return !this._ads[0];
-  }
-
-  private get delivery_days() {
-    return this._ads[5];
-  }
-
-  private get time_slot() {
-    return this._ads[6];
-  }
-
-  private accumulateData() {
-    if (this.is_collect && this.ccRecipientData) {
-      this.address.recipient_name = this.ccRecipientData.recipient_name;
-      this.address.recipient_surname = this.ccRecipientData.recipient_surname;
-      this.address.recipient_national_id = this.ccRecipientData.recipient_national_id;
-      this.address.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
-      this.address.recipient_title = this.ccRecipientData.recipient_title;
-      this.address.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
-    } else if (this.is_collect && !this.ccRecipientData) {
-      return;
-    }
-    return {
-      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
-      order_id: this.cartService.getOrderId(),
-      address: this.address,
-      customerData: this.customerData,
-      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
-      used_point: 0,
-      used_balance: 0,
-      total_amount: this.total,
-      discount: this.discount,
-      is_collect: this.is_collect,
-      duration_days: this.delivery_days,
-      time_slot: this.time_slot,
-      paymentType: this.selectedPaymentType,
-      loyalty: this.earnSpentPointObj,
-    };
-  }
-
   checkout() {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
@@ -254,7 +201,7 @@ export class CheckoutService {
             this.ccRecipientData = null;
             let addresses = [];
             localStorage.removeItem('address');
-            if (this.is_collect) {
+            if (this.withDelivery) {
               addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
             }
             this.addresses$.next(addresses);
@@ -280,4 +227,34 @@ export class CheckoutService {
           });
     });
   }
+
+  private accumulateData() {
+    if (this.withDelivery && this.ccRecipientData) {
+      this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
+      this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
+      this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
+      this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
+      this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
+      this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
+    } else if (this.withDelivery && !this.ccRecipientData) {
+      return;
+    }
+    return {
+      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
+      order_id: this.cartService.getOrderId(),
+      address: this.addressObj,
+      customerData: this.addressObj,
+      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
+      used_point: 0,
+      used_balance: 0,
+      total_amount: this.total,
+      discount: this.discount,
+      withDelivery: this.withDelivery,
+      duration_days: this.deliveryDays,
+      deliveryTime: this.deliveryTime,
+      paymentType: this.selectedPaymentType,
+      loyalty: this.earnSpentPointObj,
+    };
+  }
+
 }

@@ -11,23 +11,23 @@
 </span>
 <div *ngIf="withDelivery && !isProfile">
   <label class="label-field">زمان تحویل</label>
-  <mat-radio-group class="radio-field">
+  <mat-radio-group class="radio-field" [(ngModel)]="deliveryDays">
     <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days"
                       (change)="changeDurationType(d._id, d.delivery_days)"
                       [checked]="d._id === (durationId ? durationId : null)" [class.radio-option]="i > 0">
-      <label>{{d.name}}{{(d.delivery_days === 2 || d.delivery_days === 3) ? ' (مخصوص استان تهران)' : ''}}</label>
+      <label>{{d.name}}{{d.delivery_days === 3 ? ' (مخصوص استان تهران)' : ''}}</label>
     </mat-radio-button>
   </mat-radio-group>
 
   <label class="label-field">ساعت تحویل</label>
-  <mat-radio-group [(ngModel)]="delivery_time" class="radio-field">
+  <mat-radio-group [(ngModel)]="deliveryTime" class="radio-field">
     <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">
       {{getDeliveryTimeDisplay(dh)}}
     </mat-radio-button>
   </mat-radio-group>
 </div>
 <div style="direction: ltr;">
-  <button mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
+  <button mat-button (click)="openAddressDialog()">{{withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده'}}</button>
 </div>
 <span
   *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
