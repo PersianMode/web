@@ -52,6 +52,9 @@ export class AddressTableComponent implements OnInit {
   deliveryDays;
   deliveryTime;
 
+  //
+  // if (!this.isProfile && this.deliveryDays === 3)
+  // this.filterTehranAddresses();
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
               private dialog: MatDialog, private checkoutService: CheckoutService,
@@ -91,19 +94,22 @@ export class AddressTableComponent implements OnInit {
       this.province = this.checkoutService.addedProvince ? this.checkoutService.addedProvince : null;
       this.addresses = res;
       if (this.withDelivery) {
-        if (this.deliveryDays === 3 && this.province) { // should change days if added address is not tehran
-          if (this.province !== 'تهران') {
-            const duration_5 = this.durations.filter(el => el.delivery_days === 5)[0];
-            this.changeDurationType(duration_5._id, duration_5.delivery_days);
-            this.selectedCustomerAddress = this.addresses.length - 1;
-            this.province = '';
-          } else {
-            if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
-              this.filterTehranAddresses();
+        if (this.deliveryDays === 3) {// should change days if added address is not tehran
+          if (this.province) {
+            if (this.province !== 'تهران') {
+              const duration_5 = this.durations.filter(el => el.delivery_days === 5)[0];
+              this.changeDurationType(duration_5._id, duration_5.delivery_days);
+              this.selectedCustomerAddress = this.addresses.length - 1;
+              this.province = '';
+            } else {
+              if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
+                this.filterTehranAddresses();
+              }
+              this.selectedCustomerAddress = this.addresses.length - 1;
+              this.province = '';
             }
-            this.selectedCustomerAddress = this.addresses.length - 1;
-            this.province = '';
-          }
+          } else if (!this.province)
+            this.filterTehranAddresses();
         } else if (res && res.length) {
           if (this.addresses.length === res.length - 1) {
             this.selectedCustomerAddress = res.length - 1;
@@ -112,7 +118,10 @@ export class AddressTableComponent implements OnInit {
           }
         }
         this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
-      } else {
+      }
+
+
+      else {
         this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
       }
 
@@ -147,8 +156,7 @@ export class AddressTableComponent implements OnInit {
       this.withDelivery ?
         this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
         : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null;
-
-    console.log('====>>>', this.checkoutService.addressObj);
+    this.checkoutService.checkValidity();
   }
 
   getLatitude() {
@@ -191,7 +199,9 @@ export class AddressTableComponent implements OnInit {
     this.checkoutService.addressData = {
       addressId: this.withDelivery ? null : '1',
       partEdit: !this.withDelivery,
-      dialog_address: this.withDelivery ? {} : this.showRecipientInfo ? this.showRecipientInfo : {},
+      withDelivery: this.withDelivery,
+      // dialog_address: this.withDelivery ? {} : this.showRecipientInfo ? this.showRecipientInfo : {},
+      dialog_address: {},
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
@@ -203,13 +213,15 @@ export class AddressTableComponent implements OnInit {
         }
       });
       rmDialog.afterClosed().subscribe(
-        () => {
+        (data) => {
+          this.province = this.checkoutService.addedProvince;
           if (!this.withDelivery) {
             this.showRecipientInfo = this.checkoutService.ccRecipientData;
-            return;
-          } else {
+          } else if (this.province) {
             this.checkoutService.getCustomerAddresses();
           }
+
+          this.checkoutService.checkValidity();
         },
         (err) => {
           console.error('Error in dialog: ', err);
@@ -229,6 +241,7 @@ export class AddressTableComponent implements OnInit {
 
           this.checkoutService.ccRecipientData = null;
           this.showRecipientInfo = null;
+          this.checkoutService.checkValidity();
         }
       }, err => {
         console.log('Error in dialog: ', err);
@@ -240,8 +253,9 @@ export class AddressTableComponent implements OnInit {
     const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     this.checkoutService.addressData = {
       addressId: tempAddressId,
-      partEdit: !this.isProfile || !this.authService.userIsLoggedIn(),
-      dialog_address: tempAddress
+      partEdit: !this.authService.userIsLoggedIn() ? !this.withDelivery : !this.isProfile,
+      withDelivery: this.isProfile ? null : this.withDelivery,
+      dialog_address: this.withDelivery ? tempAddress : this.showRecipientInfo,
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
@@ -255,6 +269,13 @@ export class AddressTableComponent implements OnInit {
 
       rmDialog.afterClosed().subscribe(
         () => {
+          if (!this.withDelivery) {
+            this.showRecipientInfo = this.checkoutService.ccRecipientData;
+            // return;
+          } else {
+            this.checkoutService.getCustomerAddresses();
+          }
+          this.checkoutService.checkValidity();
         },
         (err) => {
           console.error('Error in dialog: ', err);
@@ -277,8 +298,8 @@ export class AddressTableComponent implements OnInit {
   setDeliveryTime(deliveryTime) {
     this.deliveryTime = deliveryTime;
     this.checkoutService.deliveryTime = this.deliveryTime;
+    this.checkoutService.checkValidity();
   }
-
 
   changeDurationType(durationId, deliveryDays) {
     this.addresses = this.checkoutService.addresses$.getValue();
@@ -291,8 +312,8 @@ export class AddressTableComponent implements OnInit {
     }
     this.selectedCustomerAddress = this.addresses && this.addresses.length ? 0 : -1;
     this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
-    this.setAddressDataForService();
     this.checkoutService.deliveryDays = this.deliveryDays;
+    this.setAddressDataForService();
   }
 
   filterTehranAddresses() {
@@ -301,6 +322,7 @@ export class AddressTableComponent implements OnInit {
       this.selectedCustomerAddress = -1;
 
     this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
+    this.checkoutService.checkValidity();
   }
 
   chooseAddress($event) {

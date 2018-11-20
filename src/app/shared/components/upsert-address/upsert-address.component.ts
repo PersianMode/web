@@ -58,7 +58,7 @@ export class UpsertAddressComponent implements OnInit {
     this.buttonTitle = 'ثبت اطلاعات';
     this.addressData = this.addressInfo.dialog_address;
     this.emailRequired = !this.authService.userIsLoggedIn();
-    this.withDelivery = !this.addressInfo.partEdit;
+    this.withDelivery = this.addressInfo.withDelivery;
     this.initForm();
   }
 
@@ -138,7 +138,7 @@ export class UpsertAddressComponent implements OnInit {
         }
       });
 
-    if (this.withDelivery) {
+    if (this.withDelivery === null || this.withDelivery) {
       this.checkoutService.submitAddresses(this.addressData)
         .then(() => {
           this.checkoutService.addedProvince = this.addressData.province;
@@ -200,5 +200,4 @@ export class UpsertAddressComponent implements OnInit {
           .reduce((a, b) => a || b, false);
     }
   }
-
 }
