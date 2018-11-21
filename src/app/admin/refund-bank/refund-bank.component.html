@@ -1,0 +1,53 @@
+<mat-card dir="rtl">
+  <mat-card-header>
+    <mat-card-title>در این بخش قابلیت مشاهده درخواست های بازگشت مبلغ خرید را داده اند دارید</mat-card-title>
+  </mat-card-header>
+
+
+  <mat-card-content>
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort>
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef> شماره </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="date">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> تاریخ </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{getShamsiDate(element.date)}} </mat-cell>
+        </ng-container>
+
+        <!-- Credit Column -->
+        <ng-container matColumnDef="credit">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> بستانکاری </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.credit}} </mat-cell>
+        </ng-container>
+
+        <!-- Detail Column -->
+        <ng-container matColumnDef="detail">
+          <mat-header-cell *matHeaderCellDef> نمایش جزئیات </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="showDetail()"><mat-icon>contacts</mat-icon></button>
+             </mat-cell>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> وضعیت  </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{getStatus(element.status)}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+    </mat-paginator>
+  </mat-card-actions>
+</mat-card>

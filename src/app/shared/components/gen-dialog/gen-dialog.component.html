@@ -5,4 +5,5 @@
         <app-order-lines *ngIf="componentName === dialogEnum.orderLinesComponent" (closeDialog)="close($event)" [isNotMobile]="true"></app-order-lines>
         <app-forgot-password *ngIf="componentName === dialogEnum.forgotPassword" (closeDialog)="close($event)"></app-forgot-password>
         <app-order-return *ngIf="componentName === dialogEnum.orderReturnComponent" (closeDialog)="close($event)" [isNotMobile]="true"></app-order-return>
+        <app-bank-refund-form *ngIf="componentName === dialogEnum.refundBank" (closeDialog)="close($event)" [isNotMobile]="true"></app-bank-refund-form>
 </div>
