@@ -18,7 +18,6 @@ export class UpsertAddressComponent implements OnInit {
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
   dialogTitle;
-  buttonTitle;
   addressForm: FormGroup;
   cityArray = [];
   provinceArray: any;
@@ -55,7 +54,6 @@ export class UpsertAddressComponent implements OnInit {
     this.addressInfo = this.checkoutService.addressData;
     this.initializeData();
     this.dialogTitle = this.addressInfo.partEdit ? '' : this.addressInfo.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
-    this.buttonTitle = 'ثبت اطلاعات';
     this.addressData = this.addressInfo.dialog_address;
     this.emailRequired = !this.authService.userIsLoggedIn();
     this.withDelivery = this.addressInfo.withDelivery;
@@ -88,8 +86,8 @@ export class UpsertAddressComponent implements OnInit {
       ]],
       recipient_national_id: [this.addressInfo.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
         Validators.required,
-        Validators.maxLength(10),
-        Validators.minLength(10),
+        Validators.maxLength(2),
+        Validators.minLength(2),
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/)
       ]],
       province: [this.addressInfo.addressId ? this.addressData.province : 'تهران'],
@@ -108,7 +106,7 @@ export class UpsertAddressComponent implements OnInit {
       recipient_mobile_no: [this.addressInfo.addressId ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
         Validators.required,
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
-        Validators.minLength(8),
+        Validators.minLength(3),
       ]],
       recipient_title: [this.addressInfo.addressId ? this.addressData.recipient_title : this.authService.userDetails.gender],
       latitude: [this.addressData.loc && this.addressInfo.addressId ? this.addressData.loc.lat : 35.696491],

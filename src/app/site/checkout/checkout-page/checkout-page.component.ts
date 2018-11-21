@@ -30,7 +30,7 @@ export class CheckoutPageComponent implements OnInit {
   paymentType = PaymentType;
   disabled: boolean = false;
   changeMessage: string = '';
-  soldOuts: any[];
+  soldOuts: any[] = [];
   discountChanges: any[];
   priceChanges: any[];
   showCostLabel: true;
@@ -77,7 +77,7 @@ export class CheckoutPageComponent implements OnInit {
       });
 
     this.checkoutService.isValid$.subscribe(r => {
-      this.disabled = !(r && ((isUndefined(this.soldOuts) || this.soldOuts.length === 0)));
+      this.disabled = !(r && (this.soldOuts || !this.soldOuts.length));
     });
     if (!this.authService.userDetails.userId) {
       this.showEarnPointLabel = false;
@@ -160,6 +160,8 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   calculateDiscount(durationId) {
+    console.log('Emmited value : ', durationId);
+
     if (durationId) {
       this.checkoutService.calculateDeliveryDiscount(durationId)
         .then((res: any) => {

@@ -100,7 +100,7 @@ export class CheckoutService {
   }
 
   finalCheck() {
-    let cartItems = {};
+    let cartItems: any = {};
     if (this.productData) {
       cartItems = this.productData.map(r => Object.assign({}, {
         product_id: r.product_id,
@@ -221,7 +221,7 @@ export class CheckoutService {
   }
 
   calculateDeliveryDiscount(durationId) {
-    let data = {
+    const data = {
       customer_id: this.authService.userDetails.userId ? this.authService.userDetails.userId : null,
       duration_id: durationId
     };

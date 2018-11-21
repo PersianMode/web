@@ -60,6 +60,7 @@ export class AddressTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getDurations();
     this.withDelivery = this.checkoutService.withDelivery;
     this.selectedCustomerAddress = this.checkoutService.selectedCustomerAddress;
     this.selectedWarehouseAddress = this.checkoutService.selectedWarehouseAddress;
@@ -120,7 +121,7 @@ export class AddressTableComponent implements OnInit {
 
       this.setAddressDataForService();
     });
-    this.getDurations();
+
   }
 
   changeWithDelivery() {
