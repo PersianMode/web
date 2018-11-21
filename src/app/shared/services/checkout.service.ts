@@ -111,7 +111,6 @@ export class CheckoutService {
         discount: r.discount
       }));
     return this.httpService.post('finalCheck', cartItems);
-
   }
 
   getLoyaltyBalance() {
