@@ -27,7 +27,7 @@
         </mat-chip-list>
       </ng-template>
       <app-sm-send  *ngIf="isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sm-send>
-      <app-sc-send  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sc-send>
+      <!-- <app-sc-send  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sc-send> -->
 
     </mat-tab>
 
