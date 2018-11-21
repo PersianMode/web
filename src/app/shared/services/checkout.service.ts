@@ -237,6 +237,12 @@ export class CheckoutService {
   }
 
   private accumulateData() {
+
+    if (!this.withDelivery) {
+      this.addressObj.wharehouse_name = this.addressObj.name;
+      delete this.addressObj.name;
+    }
+
     if (!this.withDelivery && this.ccRecipientData) {
       this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
       this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
@@ -246,7 +252,8 @@ export class CheckoutService {
       this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
     } else if (!this.withDelivery && !this.ccRecipientData) {
       return;
-    }
+    };
+
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
