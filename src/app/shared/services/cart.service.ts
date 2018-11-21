@@ -166,14 +166,14 @@ export class CartService {
     }
   }
 
-  saveItem(item) {
+  addItem(item) {
     this.itemAdded$.next(false);
     if (this.authService.userIsLoggedIn()) {
       // Update order in server
-      this.saveItemToServer(item);
+      this.addCartItemToServer(item);
     } else {
       // Save data on storage
-      this.saveItemToStorage(item);
+      this.addCartItemToStorage(item);
     }
   }
 
@@ -193,11 +193,6 @@ export class CartService {
           console.error('-> ', err);
         }
       });
-  }
-
-  inventoryCount(instance) {
-    const inventory = instance.inventory;
-    return inventory && inventory.length ? inventory.map(i => i.count - (i.reserved ? i.reserved : 0)).reduce((a, b) => a + b) : 0;
   }
 
   private setCartItem(overallDetails, products, isUpdate = true) {
@@ -232,7 +227,7 @@ export class CartService {
     return JSON.parse(localStorage.getItem(this.localStorageKey)) === null ? [] : JSON.parse(localStorage.getItem(this.localStorageKey));
   }
 
-  private saveItemToServer(item) {
+  private addCartItemToServer(item) {
 
     this.httpService.post('order', {
       product_id: item.product_id,
@@ -248,7 +243,7 @@ export class CartService {
       });
   }
 
-  private saveItemToStorage(item) {
+  private addCartItemToStorage(item) {
     const data = this.getItemsFromStorage();
     const found = data.find(r => r.product_id === item.product_id && r.instance_id === item.product_instance_id);
     if (found)
@@ -310,18 +305,6 @@ export class CartService {
       }))
       .map(r => r.q * (r.p - r.d))
       .reduce((x, y) => x + y, 0);
-  }
-
-  calculateTotal(cartData) {
-    if (cartData && cartData.length > 0) {
-      return cartData
-        .filter(el => el.count && el.quantity <= el.count)
-        .map(el => el.price * el.quantity)
-        .reduce((a, b) => (+a) + (+b), 0);
-
-    }
-
-    return 0;
   }
 
   addCoupon(coupon_code = '') {

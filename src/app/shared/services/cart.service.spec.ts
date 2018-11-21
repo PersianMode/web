@@ -18,8 +18,30 @@ describe('HttpClient testing', () => {
     httpTestingController = TestBed.get(HttpTestingController);
   });
   /// Tests begin ///
+  it('can test HttpClient.get', () => {
+    const testData: any = {name: 'Test Data'};
 
-  it('should be ok', () => {
-    expect(true).toBeTruthy();
+    // Make an HTTP GET request
+    httpClient.get<any>('/data')
+      .subscribe(data =>
+        // When observable resolves, result should match test data
+        expect(data).toEqual(testData)
+      );
+
+    // The following `expectOne()` will match the request's URL.
+    // If no requests or multiple requests matched that URL
+    // `expectOne()` would throw.
+    const req = httpTestingController.expectOne('/data');
+
+    // Assert that the request is a GET.
+    expect(req.request.method).toEqual('GET');
+
+    // Respond with mock data, causing Observable to resolve.
+    // Subscribe callback asserts that correct data was returned.
+    req.flush(testData);
+
+    // Finally, assert that there are no outstanding requests.
+    httpTestingController.verify();
   });
+
 });
