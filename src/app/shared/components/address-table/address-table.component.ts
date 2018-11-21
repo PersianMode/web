@@ -52,10 +52,6 @@ export class AddressTableComponent implements OnInit {
   deliveryDays;
   deliveryTime;
 
-  //
-  // if (!this.isProfile && this.deliveryDays === 3)
-  // this.filterTehranAddresses();
-
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
               private dialog: MatDialog, private checkoutService: CheckoutService,
               private responsiveService: ResponsiveService, private router: Router,
@@ -81,9 +77,9 @@ export class AddressTableComponent implements OnInit {
     this.deliveryHour = [];
     Object.keys(this.time_slot).forEach(el => this.deliveryHour.push(this.time_slot[el]));
 
-    if (this.isProfile)
-      this.withDelivery = true;
-    this.changeWithDelivery();
+    // if (this.isProfile)
+    //   this.withDelivery = true;
+    // this.changeWithDelivery();
 
     this.province = this.checkoutService.addedProvince ? this.checkoutService.addedProvince : null;
     if (this.province) {
@@ -137,8 +133,6 @@ export class AddressTableComponent implements OnInit {
       if (this.isLoggedIn)
         this.addresses = this.checkoutService.addresses$.getValue();
       else {
-        // this.addresses = JSON.parse(localStorage.getItem('address')); ///////////////////
-        // this.checkoutService.addresses$.next(this.addresses && Object.keys(this.addresses).length ? [this.addresses] : []);
         this.addresses = this.checkoutService.addresses$.getValue();
       }
 

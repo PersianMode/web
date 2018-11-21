@@ -8,7 +8,6 @@ import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs/Rx';
-import {isUndefined} from 'util';
 import {SpinnerService} from './spinner.service';
 
 @Injectable()
@@ -17,7 +16,6 @@ export class CheckoutService {
   private productData;
   private paymentType = PaymentType;
   private selectedPaymentType = this.paymentType.cash;
-  private loyaltyValue = 0;
   private total = 0;
   private discount = 0;
   private loyaltyPointValue = 0;

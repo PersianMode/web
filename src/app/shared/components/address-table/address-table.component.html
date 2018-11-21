@@ -27,7 +27,7 @@
   </mat-radio-group>
 </div>
 <div style="direction: ltr;">
-  <button mat-button (click)="openAddressDialog()">{{withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده'}}</button>
+  <button mat-raised-button class="accent" (click)="openAddressDialog()">{{withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده'}}</button>
 </div>
 <span
   *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
