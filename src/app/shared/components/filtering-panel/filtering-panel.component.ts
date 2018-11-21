@@ -149,7 +149,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       }
     });
     this.clear_box = null;
-
     this.productService.applyFilters(this.current_filter_state, name);
   }
 
