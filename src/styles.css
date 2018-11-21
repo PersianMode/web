@@ -6,7 +6,8 @@
   src: url('assets/fonts/OneNikeGlyphs.woff');
 }
 
-body, label {
+body,
+label {
   margin: 0;
   padding: 0;
   font-family: iranyekan, sans-serif;
@@ -15,12 +16,22 @@ body, label {
   direction: rtl;
 }
 
+span,
+div {
+  font-family: iranyekan, sans-serif;
+}
+
 a {
   text-decoration: none;
   outline: none;
 }
 
-h1, h2 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: irankharazmi, sans-serif;
 }
 
@@ -170,7 +181,7 @@ nav {
   background: #fff;
 }
 
-.second-bar > ul {
+.second-bar>ul {
   background-color: white;
   text-align: center;
   font-size: 0;
@@ -220,7 +231,8 @@ nav {
   white-space: nowrap;
 }
 
-.search-bar input, i {
+.search-bar input,
+i {
   padding: 3px;
 }
 
@@ -247,7 +259,8 @@ nav {
   line-height: 16px;
 }
 
-input, button {
+input,
+button {
   font-family: iranyekan, sans-serif;
 }
 
@@ -698,7 +711,9 @@ mat-panel-title {
   padding: 2px 0px 13px 13px;
 }
 
-.footer-link:hover, .footer-link1:hover, .icons:hover {
+.footer-link:hover,
+.footer-link1:hover,
+.icons:hover {
   color: lightgray;
 }
 
@@ -709,7 +724,10 @@ mat-panel-title {
 }
 
 @media screen and (max-width: 500px) {
-  .footer-link, .footer-link-bold, .footer-link1 {
+
+  .footer-link,
+  .footer-link-bold,
+  .footer-link1 {
     float: none;
     display: block;
   }
@@ -781,7 +799,8 @@ mat-panel-title {
   width: 100%;
 }
 
-.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+.mat-checkbox-checked.mat-accent .mat-checkbox-background,
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
   background: #999999 !important;
 }
 
@@ -861,7 +880,8 @@ mat-panel-title {
   padding: 5px;
 }
 
-.mat-radio-label-content, .mat-radio-label {
+.mat-radio-label-content,
+.mat-radio-label {
   width: 100% !important;
 }
 
@@ -885,7 +905,8 @@ mat-panel-title {
   height: 20px !important;
 }
 
-.demo-list, .center-content {
+.demo-list,
+.center-content {
   text-align: center;
   width: 100%;
   margin: 0 auto;
@@ -941,13 +962,15 @@ p {
   direction: ltr;
 }
 
-.mat-content-preview-for-page ul, .mat-content-preview-for-page ol {
+.mat-content-preview-for-page ul,
+.mat-content-preview-for-page ol {
   padding-right: 30px;
   padding-left: 30px;
 }
 
 .mat-content-preview-for-page ol {
-  list-style: -moz-arabic-indic; /* fallback */
+  list-style: -moz-arabic-indic;
+  /* fallback */
   list-style: arabic-indic;
 }
 
@@ -1042,4 +1065,12 @@ p {
 .mat-option {
   text-align: right !important;
   font-family: iranyekan, sans-serif;
+}
+
+.msg-error {
+  background-color: darkred !important;
+}
+
+.msg-warning {
+  background-color: #ed9357 !important;
 }

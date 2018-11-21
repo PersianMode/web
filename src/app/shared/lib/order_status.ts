@@ -14,6 +14,8 @@ export let OrderStatus: any[] = [
   {name: 'ناموجود', title: 'ناموجود', status: STATUS.NotExists},
   {name: 'بازگشت هزینه', title: 'بازگشت هزینه', status: STATUS.Refund},
   {name: 'بازگشت کالا', title: 'بازگشت کالا', status: STATUS.Return},
-  {name: 'لغو سفارش', title: 'لغو سفارش', status: STATUS.Cancel},
+  {name: 'لغو سفارش', title: 'لغو سفارش', status: STATUS.CustomerCancel},
+  {name: 'ّعدم موجودی انبار', title: 'بررسی توسط مسئول فروش', status: STATUS.StoreCancel},
+  {name: 'ّاز سر گیری فرایند', title: 'در حال پردازش', status: STATUS.Renew},
 ];
 

@@ -1,0 +1,88 @@
+<mat-card class="card-view farsi">
+  <mat-card-header>
+    <mat-card-title>
+      <h2>تعیین موارد تحویل رایگان</h2>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="farsi">
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <div fxFlex="40" dir="rtl">
+          <mat-select placeholder="استان" class="full-width" [(ngModel)]="freeDeliveryItem.province">
+            <mat-option *ngFor="let province of provinceList" [value]="province">{{province}}</mat-option>
+          </mat-select>
+        </div>
+        <div fxFlex="40" dir="rtl">
+          <mat-input-container class="full-width">
+            <input matInput type="number" placeholder="حداقل هزینه ی خرید (تومان)" [(ngModel)]="freeDeliveryItem.min_price" />
+          </mat-input-container>
+        </div>
+        <div fxFlex="10">
+          <button mat-icon-button (click)="applyFreeDeliveryChanges()">
+            <mat-icon aria-label="Apply">done</mat-icon>
+          </button>
+        </div>
+        <div fxFlex="10">
+          <button mat-icon-button (click)="clearFreeDeliveryFields()">
+            <mat-icon aria-label="Clear Fields">close</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div>
+        <mat-table #table [dataSource]="freeDeliveryDataSource">
+          <ng-container matColumnDef="position">
+            <mat-header-cell *matHeaderCellDef>
+              <span>ردیف</span>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <span>{{(element.position).toLocaleString('fa')}}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="province">
+            <mat-header-cell *matHeaderCellDef>
+              <span>استان</span>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <span>{{element.province}}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="min_price">
+            <mat-header-cell *matHeaderCellDef>
+              <span>حداقل هزینه خرید</span>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <span>{{element.min_price}}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <mat-header-cell *matHeaderCellDef>
+              <span>ویرایش</span>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <button mat-icon-button (click)="editFreeDeliveryOption(element.id)">
+                <mat-icon aria-label="edit">edit</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="remove">
+            <mat-header-cell *matHeaderCellDef>
+              <span>حذف</span>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <button mat-icon-button (click)="removeFreeDeliveryOption(element.id)">
+                <mat-icon aria-label="Remove">delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="freeDeliveryDisplayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: freeDeliveryDisplayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

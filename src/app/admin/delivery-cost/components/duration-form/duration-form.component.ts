@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
+import {FormBuilder, FormGroup, Validators, CheckboxRequiredValidator} from '@angular/forms';
 import {HttpService} from '../../../../shared/services/http.service';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar, MatTableDataSource, MatDialog} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {Location} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-duration-form',
@@ -27,9 +28,9 @@ export class DurationFormComponent implements OnInit {
   loadedDurationInfo: any = null;
   anyFiledChanges = false;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient,
-              private httpService: HttpService, private snackBar: MatSnackBar,
-              private progressService: ProgressService, protected router: Router, private location: Location) {
+  constructor(private route: ActivatedRoute, private httpService: HttpService, private snackBar: MatSnackBar,
+    private progressService: ProgressService, protected router: Router, private location: Location,
+    private http: HttpClient, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -107,6 +108,7 @@ export class DurationFormComponent implements OnInit {
           this.costValue[el.name] = el.price;
           this.formLoyaltyInfo.filter(item => item._id === el._id)[0].discount = el.discount;
         });
+
         this.upsertBtnShouldDisabled = false;
         this.progressService.disable();
       },

@@ -13,7 +13,7 @@
 
       <app-sm-inbox *ngIf="isSalesManager"  (OnNewInboxCount)="newInboxCount = $event" ></app-sm-inbox>
 
-      <app-sc-inbox  *ngIf="!isSalesManager" (OnNewInboxCount)="newInboxCount = $event" ></app-sc-inbox>
+      <app-inbox  *ngIf="!isSalesManager" (OnNewInboxCount)="newInboxCount = $event" ></app-inbox>
       
 
     </mat-tab>
@@ -26,8 +26,8 @@
           <mat-chip color="accent" selected="true">{{newOutboxCount}}</mat-chip>
         </mat-chip-list>
       </ng-template>
-      <app-sm-deliver  *ngIf="isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sm-deliver>
-      <app-deliver  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-deliver>
+      <app-sm-send  *ngIf="isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sm-send>
+      <!-- <app-sc-send  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sc-send> -->
 
     </mat-tab>
 

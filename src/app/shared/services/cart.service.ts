@@ -155,7 +155,7 @@ export class CartService {
         quantity: instanceChange && cur_ls_item ? cur_ls_item.quantity + value.number : value.number,
       });
       if (instanceChange && cur_ls_item)
-        ls_items = ls_items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id);
+        ls_items = ls_items.filter(el => el.product_id !== value.product_id || el.instance_id !== value.pre_instance_id)
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify(ls_items));
         update();

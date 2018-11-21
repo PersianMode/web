@@ -1,0 +1,169 @@
+<mat-card>
+
+  <mat-card-content>
+
+    <app-barcode-checker [finished]='scanTotal === 0' (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl">
+      <div [fxFlex]="hasManual ? '40' : '100'" class="field-container">
+        <h2 style="text-align: center">نیاز به اسکن</h2>
+
+        <div class="example-container mat-elevation-z8">
+
+          <button mat-icon-button color="primary" (click)="loadScan()" style="margin-top: 10px;">
+            <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+          </button>
+
+          <mat-table #table [dataSource]="scanDataSource" class="example-table" matSort matSortActive="created"
+            matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
+
+            <ng-container matColumnDef="position">
+              <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> {{orderLine.index}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="details">
+              <mat-header-cell *matHeaderCellDef>جزئیات</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine">
+                <div class="imgWrapper">
+                  <img [src]="getProductDetail(orderLine).thumbnailURL" (click)="showDetial(orderLine)">
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef>نام</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.product_name}}</span></mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="barcode">
+              <mat-header-cell *matHeaderCellDef>بارکد</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.barcode}}</span></mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px">{{getOrderLineStatus(orderLine)}}</span> 
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="count">
+              <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="scanDisplayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let row; columns: scanDisplayedColumns;" matRipple class="element-row"></mat-row>
+
+          </mat-table>
+          <!-- <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator> -->
+        </div>
+      </div>
+
+      <div  fxFlex="60" class="field-container">
+        <h2 style="text-align: center">بررسی دستی</h2>
+
+        <div class="example-container mat-elevation-z8">
+
+          <button mat-icon-button color="primary" (click)="loadManual()" style="margin-top: 10px;">
+            <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+          </button>
+
+          <mat-table #table [dataSource]="manualDataSource" class="example-table" matSort matSortActive="created"
+            matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
+
+            <ng-container matColumnDef="position">
+              <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
+              <mat-cell *matCellDef="let order"> {{order.index}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="customer">
+              <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
+              <mat-cell *matCellDef="let order">{{order.customer?.name + ' ' + order.customer?.surname}} </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="order_time">
+              <mat-header-cell *matHeaderCellDef>تاریخ خرید</mat-header-cell>
+              <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="total_order_lines">
+              <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
+              <mat-cell *matCellDef="let order"> {{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="recipient">
+              <mat-header-cell *matHeaderCellDef>تحویل گیرنده</mat-header-cell>
+              <mat-cell *matCellDef="let order"> {{order.address.recipient_name + ' ' +
+                order.address.recipient_surname}} </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
+              <mat-cell *matCellDef="let orderLine"> </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="process">
+              <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
+              <mat-cell *matCellDef="let order">
+                <button mat-button color="primary" *ngIf='isReadyForInvoice(order)' (click)='requestInvoice(order)'>صدور
+                  فاکتور</button>
+              </mat-cell>
+            </ng-container>
+
+
+            <!-- Expanded Content Column - The order lines rows is made up of this one column -->
+            <ng-container matColumnDef="expandedDetail">
+              <mat-cell *matCellDef="let detail">
+
+
+                <ul *ngFor='let ol of detail.order.order_lines'>
+                  <li>
+                    <div class="imgWrapper">
+                      <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetial(ol)">
+                    </div>
+                  </li>
+                  <li>
+                    <span>
+                      <b>بارکد:</b> {{ol.instance.barcode}}</span>
+                  </li>
+                  <li>
+                    <span>
+                      <b>نام:</b> {{ol.instance.product_name}}</span>
+                  </li>
+                  <li>
+                    <span>
+                      <b>سایز:</b> {{ol.instance.size}}</span>
+                  </li>
+                  <li>
+                    <span>
+                      <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</span>
+                  </li>
+                  <li>
+                    <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
+                  </li>
+                </ul>
+
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="manualDisplayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let row; columns: manualDisplayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
+              (click)="expandedElement = row._id"></mat-row>
+            <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
+              style="overflow: hidden">
+            </mat-row>
+
+          </mat-table>
+          <!-- <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator> -->
+        </div>
+
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>
