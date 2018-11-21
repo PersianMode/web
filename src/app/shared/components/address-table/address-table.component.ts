@@ -219,6 +219,7 @@ export class AddressTableComponent implements OnInit {
         },
         (err) => {
           console.error('Error in dialog: ', err);
+          this.checkoutService.checkValidity();
         }
       );
     }
@@ -239,6 +240,7 @@ export class AddressTableComponent implements OnInit {
         }
       }, err => {
         console.log('Error in dialog: ', err);
+        this.checkoutService.checkValidity();
       });
   }
 
@@ -265,7 +267,6 @@ export class AddressTableComponent implements OnInit {
         () => {
           if (!this.withDelivery) {
             this.showRecipientInfo = this.checkoutService.ccRecipientData;
-            // return;
           } else {
             this.checkoutService.getCustomerAddresses();
           }
@@ -273,8 +274,8 @@ export class AddressTableComponent implements OnInit {
         },
         (err) => {
           console.error('Error in dialog: ', err);
-        }
-      );
+          this.checkoutService.checkValidity();
+        });
     }
   }
 

@@ -61,7 +61,7 @@ export class CheckoutService {
     // const il = this.authService.userIsLoggedIn();
     // this.isValid$.next(data.total_amount &&
     //   (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
-    
+
     const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData);
     this.isValid$.next(this.total && isValid);
   }
