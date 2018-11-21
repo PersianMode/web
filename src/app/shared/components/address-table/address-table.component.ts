@@ -114,10 +114,7 @@ export class AddressTableComponent implements OnInit {
           }
         }
         this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
-      }
-
-
-      else {
+      } else {
         this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
       }
 

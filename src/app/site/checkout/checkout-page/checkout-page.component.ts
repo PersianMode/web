@@ -11,6 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-checkout-page',
@@ -76,7 +77,7 @@ export class CheckoutPageComponent implements OnInit {
       });
 
     this.checkoutService.isValid$.subscribe(r => {
-      this.disabled = (!r || this.soldOuts.length !== 0);
+      this.disabled = !(r && ((isUndefined(this.soldOuts) || this.soldOuts.length === 0)));
     });
     if (!this.authService.userDetails.userId) {
       this.showEarnPointLabel = false;
