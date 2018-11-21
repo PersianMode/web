@@ -76,7 +76,7 @@ export class CheckoutPageComponent implements OnInit {
       });
 
     this.checkoutService.isValid$.subscribe(r => {
-      this.disabled = (!r || !(this.soldOuts.length === 0));
+      this.disabled = (!r || this.soldOuts.length !== 0);
     });
     if (!this.authService.userDetails.userId) {
       this.showEarnPointLabel = false;
