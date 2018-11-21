@@ -9,25 +9,31 @@
       <div class="example-container">
         <!-- bank card -> customer firstname -->
         <mat-form-field>
-          <input matInput placeholder="نام" formControlName="firstname">
+          <input matInput placeholder="نام" formControlName="owner_card_name">
+          <mat-error *ngIf="informationBankForm.controls['owner_card_name'].hasError('required')">
+            وارد کردن نام صاحب کارت الزامی است
+          </mat-error>
         </mat-form-field>
 
         <!-- bank card -> customer surname -->
         <mat-form-field>
-          <input matInput placeholder="نام خانوادگی" formControlName="surname">
+          <input matInput placeholder="نام خانوادگی" formControlName="owner_card_surname">
+          <mat-error *ngIf="informationBankForm.controls['owner_card_surname'].hasError('required')">
+            وارد کردن نام خانوادگی صاحب کارت الزامی است
+          </mat-error>
         </mat-form-field>
 
 
         <!-- bank card -> customer mobile-->
         <mat-form-field *ngIf="accessLevel === 'salesManager'">
-          <input matInput placeholder="شماره تماس" formControlName="mobileNumber">
+          <input matInput placeholder="شماره تماس" formControlName="mobile_number">
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput placeholder="نام بانک" formControlName="bankName">
+          <input matInput placeholder="نام بانک" formControlName="bank_name">
         </mat-form-field>
 
-        <!-- selector ->  bank-card or sheba-card -->
+         <!--selector ->  bank-card or sheba-card -->
         <mat-form-field>
           <mat-select placeholder="انتخاب نوع دریافتی" [(value)]="cardSelected">
             <mat-option value="1">شماره کارت</mat-option>
@@ -35,32 +41,32 @@
           </mat-select>
         </mat-form-field>
 
-        <!-- bank card -->
-        <div formGroupName="cardBank" *ngIf="cardSelected && cardSelected == 1" style="text-align: center; direction: ltr">
-          <mat-form-field style="width: 15%;">
-            <input pattern="[0-9]" matInput maxlength="4" style="text-align: center" formControlName="first">
-          </mat-form-field>
-          <span>&nbsp;:</span>
+         <!--bank card -->
+        <!--<div formGroupName="card_no" *ngIf="cardSelected && cardSelected == 1" style="text-align: center; direction: ltr">-->
+          <!--<mat-form-field style="width: 15%;">-->
+            <!--<input pattern="[0-9]"  matInput maxlength="4" style="text-align: center" formControlName="first">-->
+          <!--</mat-form-field>-->
+          <!--<span>&nbsp;:</span>-->
 
-          <mat-form-field style="width: 15%;">
-            <input pattern="[0-9]" matInput maxlength="4" style="text-align: center" formControlName="second">
-          </mat-form-field>
-          <span>&nbsp;:</span>
+          <!--<mat-form-field style="width: 15%;">-->
+            <!--<input pattern="[0-9]"  matInput maxlength="4" style="text-align: center" formControlName="second">-->
+          <!--</mat-form-field>-->
+          <!--<span>&nbsp;:</span>-->
 
-          <mat-form-field style="width: 15%;">
-            <input pattern="[0-9]" matInput maxlength="4" style="text-align: center" formControlName="third">
-          </mat-form-field>
-          <span>&nbsp;:</span>
+          <!--<mat-form-field style="width: 15%;">-->
+            <!--<input pattern="[0-9]"  matInput maxlength="4" style="text-align: center" formControlName="third">-->
+          <!--</mat-form-field>-->
+          <!--<span>&nbsp;:</span>-->
 
-          <mat-form-field style="width: 15%;">
-            <input pattern="[0-9]" matInput maxlength="4" style="text-align: center" formControlName="fourth">
-          </mat-form-field>
-        </div>
+          <!--<mat-form-field style="width: 15%;">-->
+            <!--<input pattern="[0-9]"  matInput maxlength="4" style="text-align: center" formControlName="fourth">-->
+          <!--</mat-form-field>-->
+        <!--</div>-->
 
         <!-- sheba card -->
         <mat-form-field *ngIf="cardSelected && cardSelected == 2" dir="ltr" class="example-full-width">
           <span matPrefix>IR &nbsp;</span>
-          <input type="tel" matInput placeholder="شماره شبا" dir="ltr" formControlName="cardShaba">
+          <input pattern="[0-9]"  maxlength="24"  matInput placeholder="شماره شبا" dir="ltr" formControlName="sheba_no">
         </mat-form-field>
 
 
@@ -73,7 +79,7 @@
     </mat-card-content>
     <mat-card-actions dir="ltr">
       <div class="button-row">
-        <button mat-raised-button color="primary" type="submit" >تایید</button>
+        <button mat-raised-button color="primary" (click)="submitForm()">تایید</button>
         <button mat-raised-button color="warn" (click)="cancelForm()">لغو</button>
       </div>
     </mat-card-actions>

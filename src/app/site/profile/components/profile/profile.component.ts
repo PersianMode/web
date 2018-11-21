@@ -6,6 +6,7 @@ import {TitleService} from '../../../../shared/services/title.service';
 import { GenDialogComponent } from 'app/shared/components/gen-dialog/gen-dialog.component';
 import { DialogEnum } from 'app/shared/enum/dialog.components.enum';
 import { MatDialog } from '@angular/material';
+import {HttpService} from '../../../../shared/services/http.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +20,7 @@ export class ProfileComponent implements OnInit {
   dialogEnum = DialogEnum;
 
   constructor(private authService: AuthService, private dialog: MatDialog,
-    private router: Router, private profileOrderService: ProfileOrderService, private titleService: TitleService  ) {
+    private router: Router, private profileOrderService: ProfileOrderService, private titleService: TitleService) {
   }
 
   ngOnInit() {

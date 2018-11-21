@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RefundBankComponent } from './refund-bank.component';
 import { RefundBankRouting } from './refun-bank.routing';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
@@ -12,12 +11,14 @@ import {
   MatDialogModule,
   MatTabsModule,
   MatCheckboxModule,
-  MatTableModule
+  MatTableModule, MatSelectModule, MAT_DIALOG_DATA, MatDialogRef
 } from '@angular/material';
-import { SharedModule } from 'primeng/primeng';
+import {SmRefundFormBankComponent} from './sm-refund-form-bank/sm-refund-form-bank.component';
+import {RefundBankComponent} from './refund-bank.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
-  declarations: [RefundBankComponent],
+  declarations: [RefundBankComponent, SmRefundFormBankComponent],
   imports: [
     CommonModule,
     RefundBankRouting,
@@ -26,12 +27,19 @@ import { SharedModule } from 'primeng/primeng';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatDialogModule,
     MatPaginatorModule,
     MatTabsModule,
     MatCheckboxModule,
     MatTableModule,
-    SharedModule
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule
   ],
+  entryComponents: [SmRefundFormBankComponent],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
+  ]
 })
 export class RefundBankModule { }

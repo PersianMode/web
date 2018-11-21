@@ -9,28 +9,28 @@
       <mat-table #table [dataSource]="dataSource" matSort>
 
         <!-- Position Column -->
-        <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef> شماره </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
-        </ng-container>
+        <!--<ng-container matColumnDef="position">-->
+          <!--<mat-header-cell *matHeaderCellDef> شماره </mat-header-cell>-->
+          <!--<mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>-->
+        <!--</ng-container>-->
 
-        <!-- Date Column -->
-        <ng-container matColumnDef="date">
+        <!-- requested_time Column -->
+        <ng-container matColumnDef="requested_time">
           <mat-header-cell *matHeaderCellDef mat-sort-header> تاریخ </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{getShamsiDate(element.date)}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{getShamsiDate(element.requested_time)}} </mat-cell>
         </ng-container>
 
-        <!-- Credit Column -->
-        <ng-container matColumnDef="credit">
+        <!-- balance Column -->
+        <ng-container matColumnDef="balance">
           <mat-header-cell *matHeaderCellDef mat-sort-header> بستانکاری </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.credit}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{element.balance}} </mat-cell>
         </ng-container>
 
         <!-- Detail Column -->
         <ng-container matColumnDef="detail">
           <mat-header-cell *matHeaderCellDef> نمایش جزئیات </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <button mat-icon-button (click)="showDetail()"><mat-icon>contacts</mat-icon></button>
+            <button mat-icon-button (click)="showDetail(element._id)"><mat-icon>contacts</mat-icon></button>
              </mat-cell>
         </ng-container>
 
