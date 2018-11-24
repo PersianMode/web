@@ -1,0 +1,86 @@
+<form [formGroup]="informationBankForm" (ngSubmit)="onSubmit()">
+  <!--TODO: guard is needed if any fields have been changed!-->
+  <div class="clear-div">
+    <mat-icon aria-label="no" (click)="onClose()" class="clear-icon">clear</mat-icon>
+  </div>
+  <mat-card dir="rtl">
+    <mat-card-header>
+      <mat-card-subtitle>مشخصات مشتری</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="example-container">
+
+        <mat-form-field>
+          <input matInput placeholder="نام صاحب کارت" formControlName="owner_card_name">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="نام خانوادگی صاحب کارت " formControlName="owner_card_surname">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="نام مشتری" formControlName="customer_first_name">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="نام خانوادگی مشتری" formControlName="customer_surname">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="موجودی" formControlName="customer_balance">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="شماره تماس" formControlName="mobile_number">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="نام بانک" formControlName="bank_name">
+        </mat-form-field>
+
+
+        <!--bank card -->
+        <!--<div formGroupName="card_no" *ngIf="cardSelected && cardSelected == 1" style="text-align: center; direction: ltr">-->
+        <!--<mat-form-field style="width: 15%;">-->
+        <!--<input pattern="[0-9]"  matInput maxlength="4" style="text-align: center" formControlName="first">-->
+        <!--</mat-form-field>-->
+        <!--<span>&nbsp;:</span>-->
+
+        <!--<mat-form-field style="width: 15%;">-->
+        <!--<input pattern="[0-9]"  matInput maxlength="4" style="text-align: center" formControlName="second">-->
+        <!--</mat-form-field>-->
+        <!--<span>&nbsp;:</span>-->
+
+        <!--<mat-form-field style="width: 15%;">-->
+        <!--<input pattern="[0-9]"  matInput maxlength="4" style="text-align: center" formControlName="third">-->
+        <!--</mat-form-field>-->
+        <!--<span>&nbsp;:</span>-->
+
+        <!--<mat-form-field style="width: 15%;">-->
+        <!--<input pattern="[0-9]"  matInput maxlength="4" style="text-align: center" formControlName="fourth">-->
+        <!--</mat-form-field>-->
+        <!--</div>-->
+
+        <!-- sheba card -->
+        <mat-form-field  dir="ltr" class="example-full-width">
+          <span matPrefix>IR &nbsp;</span>
+          <input pattern="[0-9]"  maxlength="24"  matInput placeholder="شماره شبا" dir="ltr" formControlName="sheba_no">
+        </mat-form-field>
+
+
+        <!-- comment -->
+        <mat-form-field class="example-full-width">
+          <textarea matInput placeholder="توضیحات" formControlName="comment"></textarea>
+        </mat-form-field>
+
+      </div>
+    </mat-card-content>
+    <mat-card-actions dir="ltr">
+      <div class="button-row">
+        <button mat-raised-button color="primary" (click)="submitForm()">پرداخت</button>
+        <button mat-raised-button color="warn" (click)="cancelForm()">لغو پرداخت</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</form>
