@@ -43,10 +43,8 @@ export class BankRefundFormComponent implements OnInit {
     });
   }
 
-  //
-  // onSubmit() {
-  //   console.log('informationBankForm', this.informationBankForm.value);
-  // }
+  onSubmit() {
+  }
 
   submitForm() {
     const sendingData = {
