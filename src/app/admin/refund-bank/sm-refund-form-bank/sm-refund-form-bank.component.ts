@@ -14,7 +14,7 @@ export class SmRefundFormBankComponent implements OnInit {
 
   cardSelected = null;
   formGroup;
-
+  disabled
   @Input() accessLevel;
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
@@ -109,7 +109,7 @@ export class SmRefundFormBankComponent implements OnInit {
         });
       },
       (err) => {
-        console.error();
+        console.error(err);
         this.snackBar.open(`لغو درخواست بازشگت وجه با مشکل مواجه شد، لطفا دوباره تلاش کنید`, null, {
           duration: 3200,
         });
