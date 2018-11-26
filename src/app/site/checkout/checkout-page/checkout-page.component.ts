@@ -7,10 +7,11 @@ import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
 import {MatDialog} from '@angular/material';
 import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
+import {isUndefined} from 'util';
 
 @Component({
   selector: 'app-checkout-page',
@@ -29,12 +30,11 @@ export class CheckoutPageComponent implements OnInit {
   paymentType = PaymentType;
   disabled: boolean = false;
   changeMessage: string = '';
-  soldOuts: any[];
+  soldOuts: any[] = [];
   discountChanges: any[];
   priceChanges: any[];
   showCostLabel: true;
   noDuration = null;
-  hasChangeError: boolean = false;
   loyaltyGroups = [];
   addPointArray = [];
   selectedPaymentType = 0;
@@ -42,7 +42,6 @@ export class CheckoutPageComponent implements OnInit {
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
-
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -52,7 +51,7 @@ export class CheckoutPageComponent implements OnInit {
               private titleService: TitleService,
               private progressService: ProgressService,
               private router: Router,
-              private productService: ProductService) {
+              private productService: ProductService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -78,7 +77,7 @@ export class CheckoutPageComponent implements OnInit {
       });
 
     this.checkoutService.isValid$.subscribe(r => {
-      this.disabled = (!r && !this.soldOuts);
+      this.disabled = !(r && (this.soldOuts || !this.soldOuts.length));
     });
     if (!this.authService.userDetails.userId) {
       this.showEarnPointLabel = false;
@@ -149,8 +148,7 @@ export class CheckoutPageComponent implements OnInit {
         scoreArray = this.loyaltyGroups.map(el => el.min_score);
         maxScore = Math.min(...scoreArray);
         customer_loyaltyGroup = this.loyaltyGroups.filter(el => el.min_score === maxScore);
-      }
-      else {
+      } else {
         scoreArray = valid_loyaltyGroups.map(el => el.min_score);
         maxScore = Math.max(...scoreArray);
         customer_loyaltyGroup = valid_loyaltyGroups.filter(el => el.min_score === maxScore);
@@ -162,6 +160,8 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   calculateDiscount(durationId) {
+    console.log('Emmited value : ', durationId);
+
     if (durationId) {
       this.checkoutService.calculateDeliveryDiscount(durationId)
         .then((res: any) => {

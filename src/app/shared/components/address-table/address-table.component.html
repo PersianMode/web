@@ -11,25 +11,26 @@
 </span>
 <div *ngIf="withDelivery && !isProfile">
   <label class="label-field">زمان تحویل</label>
-  <mat-radio-group class="radio-field">
+  <mat-radio-group class="radio-field" [(ngModel)]="deliveryDays">
     <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days"
                       (change)="changeDurationType(d._id, d.delivery_days)"
                       [checked]="d._id === (durationId ? durationId : null)" [class.radio-option]="i > 0">
-      <label>{{d.name}}{{(d.delivery_days === 2 || d.delivery_days === 3) ? ' (مخصوص استان تهران)' : ''}}</label>
+      <label>{{d.name}}{{d.delivery_days === 3 ? ' (مخصوص استان تهران)' : ''}}</label>
     </mat-radio-button>
   </mat-radio-group>
 
   <label class="label-field">ساعت تحویل</label>
-  <mat-radio-group [(ngModel)]="delivery_time" class="radio-field">
-    <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">{{getDeliveryTimeDisplay(dh)}}
+  <mat-radio-group [(ngModel)]="deliveryTime" class="radio-field">
+    <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">
+      {{getDeliveryTimeDisplay(dh)}}
     </mat-radio-button>
   </mat-radio-group>
 </div>
 <div style="direction: ltr;">
-  <button mat-button (click)="openAddressDialog()">{{addrBtnLabel}}</button>
+  <button mat-raised-button class="accent" (click)="openAddressDialog()">{{withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده'}}</button>
 </div>
 <span
-  *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!showAddresses || !showAddresses.length)) || (!withDelivery && !isLoggedIn)"
+  *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
   class="newAddress-checkout" [class.newAddress-profile]="isProfile">
   <div class="recipient" *ngIf="!withDelivery && customerData && customerData.recipient_name">
     <b>نام تحویل گیرنده:</b>
@@ -38,7 +39,49 @@
     {{customerData.recipient_name + ' ' + customerData.recipient_surname}}
   </div>
 </span>
-<div *ngIf="showAddresses && showAddresses.length" [class.show-button]="showAddresses && showAddresses.length">
+
+<mat-card *ngIf="!withDelivery && showRecipientInfo"
+          style="background-color: #dedfde;border-radius: 3px; padding: 5px; margin-top: 10px;">
+  <div style="padding-right: 5px; margin-bottom: 10px; font-weight: bold"> مشخصات تحویل گیرنده :</div>
+  <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+       fxLayoutAlign.xs="center center" style="padding-right: 5px">
+    <div fxFlex="50">
+    <span *ngIf="showRecipientInfo.recipient_title" style="font-weight: bold;">
+      <span *ngIf="showRecipientInfo.recipient_title === 'f'">خانم</span>
+      <span *ngIf="showRecipientInfo.recipient_title === 'm'">آقای</span>
+    </span>
+
+      {{showRecipientInfo.recipient_name}}
+      {{showRecipientInfo.recipient_surname}}
+    </div>
+    <div fxFlex="50">
+      <span style="font-weight: bold;">کد ملی :</span>
+      {{showRecipientInfo.recipient_national_id}}
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+       fxLayoutAlign.xs="center center" style="padding-right: 5px">
+    <div fxFlex="50">
+      <span style="font-weight: bold;">آدرس ایمیل : </span>
+      {{showRecipientInfo.recipient_email ? showRecipientInfo.recipient_email : '---'}}
+    </div>
+    <div fxFlex="50">
+      <span style="font-weight: bold;">شماره تماس :</span>
+      {{showRecipientInfo.recipient_mobile_no}}
+    </div>
+  </div>
+  <!--////////////////////////////////-->
+  <div style="text-align: left; margin-top: 5px;">
+    <button mat-button (click)="editAddress(0)">
+      <mat-icon aria-label="edit" style=" font-size: 20px">edit</mat-icon>
+    </button>
+    <button mat-button (click)="removeRecipient()">
+      <mat-icon aria-label="delete" style=" font-size: 20px">delete</mat-icon>
+    </button>
+  </div>
+</mat-card>
+
+<div *ngIf="addresses && addresses.length" [class.show-button]="addresses && addresses.length">
   <div *ngIf="!isMobile" class="rs-table field">
     <mat-card>
       <table class="field table">
@@ -57,7 +100,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let address of showAddresses; let i = index">
+        <tr *ngFor="let address of addresses; let i = index">
           <td *ngIf="isModify;else anothercontent2">{{makePersianNumber(i+1)}}</td>
           <ng-template #anothercontent2>
             <td><input type="radio" [value]="address" name="address" [(ngModel)]="addressSelected"
@@ -106,7 +149,7 @@
     </mat-card>
   </div>
   <div *ngIf="isMobile">
-    <div *ngFor="let address of showAddresses; let i = index">
+    <div *ngFor="let address of addresses; let i = index">
       <mat-card>
         <mat-card-content>
           <div>

@@ -8,7 +8,6 @@ import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs/Rx';
-import {isUndefined} from 'util';
 import {SpinnerService} from './spinner.service';
 
 @Injectable()
@@ -17,7 +16,6 @@ export class CheckoutService {
   private productData;
   private paymentType = PaymentType;
   private selectedPaymentType = this.paymentType.cash;
-  private loyaltyValue = 0;
   private total = 0;
   private discount = 0;
   private loyaltyPointValue = 0;
@@ -25,18 +23,25 @@ export class CheckoutService {
   private earnSpentPointObj: any = {};
   loyaltyGroups: ReplaySubject<any> = new ReplaySubject<any>();
   addPointArray: ReplaySubject<any> = new ReplaySubject<any>();
-
   warehouseAddresses = [];
-  private _ads: any = null;
   addressData: IAddressInfo;
+
   addresses$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   isValid$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  ccRecipientData: any = {};
+  ccRecipientData: any = null;
+  addedProvince: any = null;
+
+  withDelivery: any = true;
+  selectedCustomerAddress = -1;
+  selectedWarehouseAddress = -1;
+  deliveryDays: any = null;
+  deliveryTime: any = null;
+  addressObj: any = {};
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
-    private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
-    private router: Router) {
+              private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
+              private router: Router) {
     this.cartService.cartItems.subscribe(
       data => this.dataIsReady.next(data && data.length)
     );
@@ -51,34 +56,28 @@ export class CheckoutService {
     });
   }
 
-  set addressState(ads) {
-    this._ads = ads;
-    this.checkValidity();
-  }
+  checkValidity() {
+    // const data = this.accumulateData();
+    // const il = this.authService.userIsLoggedIn();
+    // this.isValid$.next(data.total_amount &&
+    //   (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
 
-  get addressState() {
-    return this._ads;
-  }
-
-  private checkValidity() {
-    const data = this.accumulateData();
-    const il = this.authService.userIsLoggedIn();
-    this.isValid$.next(data.total_amount &&
-      (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
+    const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData);
+    this.isValid$.next(this.total && isValid);
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
     if (isLoggedIn) {
       this.httpService.get(`customer/address`)
         .subscribe(res => {
-          this.addresses$.next(res.addresses);
-        }, err => console.error(err)
+            this.addresses$.next(res.addresses);
+          }, err => {
+            console.error(err);
+          }
         );
     } else {
       const address = JSON.parse(localStorage.getItem('address'));
-      if (address) {
-        this.addresses$.next([address]);
-      }
+      this.addresses$.next(address && Object.keys(address).length ? [address] : []);
     }
   }
 
@@ -101,8 +100,9 @@ export class CheckoutService {
   }
 
   finalCheck() {
-    const cartItems = this.productData
-      .map(r => Object.assign({}, {
+    let cartItems: any = {};
+    if (this.productData) {
+      cartItems = this.productData.map(r => Object.assign({}, {
         product_id: r.product_id,
         product_instance_id: r.instance_id,
         price: r.price,
@@ -110,8 +110,8 @@ export class CheckoutService {
         quantity: r.quantity,
         discount: r.discount
       }));
+    }
     return this.httpService.post('finalCheck', cartItems);
-
   }
 
   getLoyaltyBalance() {
@@ -134,8 +134,8 @@ export class CheckoutService {
   getLoyaltyGroup() {
     this.httpService.get('loyaltygroup')
       .subscribe(res => {
-        this.loyaltyGroups.next(res);
-      },
+          this.loyaltyGroups.next(res);
+        },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -144,12 +144,11 @@ export class CheckoutService {
         });
   }
 
-
   getAddLoyaltyPoints() {
     this.httpService.get('deliverycc')
       .subscribe(res => {
-        this.addPointArray.next(res);
-      },
+          this.addPointArray.next(res);
+        },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -175,7 +174,6 @@ export class CheckoutService {
       return new Promise((resolve, reject) => {
         this.httpService.post('user/address', data).subscribe(
           () => {
-            this.getCustomerAddresses();
             resolve();
           }, err => {
             reject(err);
@@ -195,80 +193,84 @@ export class CheckoutService {
     }
   }
 
-  private get customerData() {
-    return this._ads[3];
-  }
-
-  private get address() {
-    return this._ads[4];
-  }
-
-  private get is_collect() {
-    return !this._ads[0];
-  }
-
-  private get delivery_days() {
-    return this._ads[5];
-  }
-
-  private get time_slot() {
-    return this._ads[6];
-  }
-
-  private accumulateData() {
-    if (!this.is_collect) {
-      this.ccRecipientData = null;
-    } else if (this.ccRecipientData) {
-      this.address.recipient_name = this.ccRecipientData.recipient_name;
-      this.address.recipient_surname = this.ccRecipientData.recipient_surname;
-      this.address.recipient_national_id = this.ccRecipientData.recipient_national_id;
-      this.address.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
-      this.address.recipient_title = this.ccRecipientData.recipient_title;
-      this.address.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
-    } else if (this.is_collect && !this.ccRecipientData) {
-      return;
-    }
-    return {
-      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
-      order_id: this.cartService.getOrderId(),
-      address: this.address,
-      customerData: this.customerData,
-      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
-      used_point: 0,
-      used_balance: 0,
-      total_amount: this.total,
-      discount: this.discount,
-      is_collect: this.is_collect,
-      duration_days: this.delivery_days,
-      time_slot: this.time_slot,
-      paymentType: this.selectedPaymentType,
-      loyalty: this.earnSpentPointObj,
-    };
-  }
-
   checkout() {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
       .subscribe(res => {
-        this.cartService.emptyCart();
-        this.router.navigate(['/', 'profile']);
-      },
+          if (!this.authService.userDetails.userId) {
+            this.ccRecipientData = null;
+            let addresses = [];
+            localStorage.removeItem('address');
+            if (!this.withDelivery) {
+              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+            }
+            this.addresses$.next(addresses);
+          }
+          this.cartService.emptyCart();
+          this.selectedCustomerAddress = -1;
+          this.selectedWarehouseAddress = -1;
+          this.withDelivery = true;
+          this.deliveryDays = null;
+          this.deliveryTime = null;
+          this.addressObj = {};
+          this.ccRecipientData = null;
+          this.addedProvince = '';
+          this.router.navigate(['/', 'profile']);
+        },
         err => console.error(err));
   }
 
   calculateDeliveryDiscount(durationId) {
-    let data = {
+    const data = {
       customer_id: this.authService.userDetails.userId ? this.authService.userDetails.userId : null,
       duration_id: durationId
     };
     return new Promise((resolve, reject) => {
       this.httpService.post('/calculate/order/price', data)
         .subscribe(res => {
-          resolve(res);
-        },
+            resolve(res);
+          },
           err => {
             reject();
           });
     });
   }
+
+  private accumulateData() {
+
+    if (!this.withDelivery) {
+      this.addressObj.wharehouse_name = this.addressObj.name;
+      delete this.addressObj.name;
+    }
+
+    if (!this.withDelivery && this.ccRecipientData) {
+      this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
+      this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
+      this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
+      this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
+      this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
+      this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
+    } else if (!this.withDelivery && !this.ccRecipientData) {
+      return;
+    }
+    ;
+
+    return {
+      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
+      order_id: this.cartService.getOrderId(),
+      address: this.addressObj,
+      customerData: this.addressObj,
+      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
+      used_point: 0,
+      used_balance: 0,
+      total_amount: this.total,
+      discount: this.discount,
+      is_collect: !this.withDelivery,
+      duration_days: this.deliveryDays,
+      time_slot: this.deliveryTime,
+      paymentType: this.selectedPaymentType,
+      loyalty: this.earnSpentPointObj,
+    };
+  }
+
 }
