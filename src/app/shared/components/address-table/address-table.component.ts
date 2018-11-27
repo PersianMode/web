@@ -78,10 +78,6 @@ export class AddressTableComponent implements OnInit {
     this.deliveryHour = [];
     Object.keys(this.time_slot).forEach(el => this.deliveryHour.push(this.time_slot[el]));
 
-    // if (this.isProfile)
-    //   this.withDelivery = true;
-    // this.changeWithDelivery();
-
     this.province = this.checkoutService.addedProvince ? this.checkoutService.addedProvince : null;
     if (this.province) {
       this.checkoutService.getCustomerAddresses();
@@ -90,33 +86,35 @@ export class AddressTableComponent implements OnInit {
     this.checkoutService.addresses$.subscribe(res => {
       this.province = this.checkoutService.addedProvince ? this.checkoutService.addedProvince : null;
       this.addresses = res;
-      if (this.withDelivery) {
-        if (this.deliveryDays === 3) {// should change days if added address is not tehran
-          if (this.province) {
-            if (this.province !== 'تهران') {
-              const duration_5 = this.durations.filter(el => el.delivery_days === 5)[0];
-              this.changeDurationType(duration_5._id, duration_5.delivery_days);
-              this.selectedCustomerAddress = this.addresses.length - 1;
-              this.province = '';
-            } else {
-              if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
-                this.filterTehranAddresses();
+      if (!this.isProfile) {
+        if (this.withDelivery) {
+          if (this.deliveryDays === 3) {// should change days if added address is not tehran
+            if (this.province) {
+              if (this.province !== 'تهران') {
+                const duration_5 = this.durations.filter(el => el.delivery_days === 5)[0];
+                this.changeDurationType(duration_5._id, duration_5.delivery_days);
+                this.selectedCustomerAddress = this.addresses.length - 1;
+                this.province = '';
+              } else {
+                if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
+                  this.filterTehranAddresses();
+                }
+                this.selectedCustomerAddress = this.addresses.length - 1;
+                this.province = '';
               }
-              this.selectedCustomerAddress = this.addresses.length - 1;
-              this.province = '';
+            } else if (!this.province)
+              this.filterTehranAddresses();
+          } else if (res && res.length) {
+            if (this.addresses.length === res.length - 1) {
+              this.selectedCustomerAddress = res.length - 1;
+            } else if (res.length === 1) {
+              this.selectedCustomerAddress = 0;
             }
-          } else if (!this.province)
-            this.filterTehranAddresses();
-        } else if (res && res.length) {
-          if (this.addresses.length === res.length - 1) {
-            this.selectedCustomerAddress = res.length - 1;
-          } else if (res.length === 1) {
-            this.selectedCustomerAddress = 0;
           }
+          this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
+        } else {
+          this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
         }
-        this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
-      } else {
-        this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
       }
 
       this.setAddressDataForService();
@@ -128,11 +126,7 @@ export class AddressTableComponent implements OnInit {
     this.checkoutService.withDelivery = this.withDelivery;
     this.deliveryType.emit(this.withDelivery);
     if (this.withDelivery) {
-      if (this.isLoggedIn)
-        this.addresses = this.checkoutService.addresses$.getValue();
-      else {
-        this.addresses = this.checkoutService.addresses$.getValue();
-      }
+      this.addresses = this.checkoutService.addresses$.getValue();
 
       if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
         this.filterTehranAddresses();

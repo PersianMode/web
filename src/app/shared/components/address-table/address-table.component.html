@@ -26,11 +26,13 @@
     </mat-radio-button>
   </mat-radio-group>
 </div>
+
+
 <div style="direction: ltr;">
-  <button mat-raised-button class="accent" (click)="openAddressDialog()">{{withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده'}}</button>
+  <button mat-raised-button class="accent" (click)="openAddressDialog()">{{isProfile ? 'افزودن آدرس جدید' : (!withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده')}}</button>
 </div>
 <span
-  *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
+  *ngIf="!isProfile && (isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn))"
   class="newAddress-checkout" [class.newAddress-profile]="isProfile">
   <div class="recipient" *ngIf="!withDelivery && customerData && customerData.recipient_name">
     <b>نام تحویل گیرنده:</b>
@@ -40,7 +42,7 @@
   </div>
 </span>
 
-<mat-card *ngIf="!withDelivery && showRecipientInfo"
+<mat-card *ngIf="!isProfile && !withDelivery && showRecipientInfo"
           style="background-color: #dedfde;border-radius: 3px; padding: 5px; margin-top: 10px;">
   <div style="padding-right: 5px; margin-bottom: 10px; font-weight: bold"> مشخصات تحویل گیرنده :</div>
   <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
@@ -188,7 +190,7 @@
       <br>
     </div>
   </div>
-  <div *ngIf="!withDelivery && selectedWarehouseAddress!==-1" class="map-div">
+  <div *ngIf="!isProfile && !withDelivery && selectedWarehouseAddress!==-1" class="map-div">
     <agm-map class="ev-loc" [latitude]="getLatitude()" [longitude]="getLongitude()">
       <agm-marker
         [latitude]="getLatitude()"
