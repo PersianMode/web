@@ -77,7 +77,8 @@ export class UpsertAddressComponent implements OnInit {
 
   initForm() {
     this.addressForm = new FormBuilder().group({
-      recipient_email: [this.addressInfo.addressId ? this.addressData.recipient_email : '', this.emailRequired ? [Validators.required] : []],
+      recipient_email: [this.addressInfo.addressId ? this.addressData.recipient_email : '',
+        this.emailRequired ? [Validators.required] : []],
       recipient_name: [this.addressInfo.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
         Validators.required,
       ]],

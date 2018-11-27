@@ -184,7 +184,7 @@ export class AddressTableComponent implements OnInit {
   openAddressDialog() {
     this.checkoutService.addressData = {
       addressId: this.withDelivery ? null : '1',
-      partEdit: !this.withDelivery,
+      partEdit: !this.isProfile && !this.withDelivery,
       withDelivery: this.withDelivery,
       // dialog_address: this.withDelivery ? {} : this.showRecipientInfo ? this.showRecipientInfo : {},
       dialog_address: {},
@@ -243,7 +243,7 @@ export class AddressTableComponent implements OnInit {
       addressId: tempAddressId,
       partEdit: !this.authService.userIsLoggedIn() ? !this.withDelivery : !this.isProfile,
       withDelivery: this.isProfile ? null : this.withDelivery,
-      dialog_address: this.withDelivery ? tempAddress : this.showRecipientInfo,
+      dialog_address: this.withDelivery || this.isProfile ? tempAddress : this.showRecipientInfo,
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
