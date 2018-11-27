@@ -86,8 +86,8 @@ export class UpsertAddressComponent implements OnInit {
       ]],
       recipient_national_id: [this.addressInfo.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
         Validators.required,
-        Validators.maxLength(2),
-        Validators.minLength(2),
+        Validators.maxLength(10),
+        Validators.minLength(10),
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/)
       ]],
       province: [this.addressInfo.addressId ? this.addressData.province : 'تهران'],
@@ -106,7 +106,7 @@ export class UpsertAddressComponent implements OnInit {
       recipient_mobile_no: [this.addressInfo.addressId ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
         Validators.required,
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
-        Validators.minLength(3),
+        Validators.minLength(8),
       ]],
       recipient_title: [this.addressInfo.addressId ? this.addressData.recipient_title : this.authService.userDetails.gender],
       latitude: [this.addressData.loc && this.addressInfo.addressId ? this.addressData.loc.lat : 35.696491],
