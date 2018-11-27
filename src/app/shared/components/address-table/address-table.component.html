@@ -32,7 +32,7 @@
   <button mat-raised-button class="accent" (click)="openAddressDialog()">{{isProfile ? 'افزودن آدرس جدید' : (!withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده')}}</button>
 </div>
 <span
-  *ngIf="!isProfile && (isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn))"
+  *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
   class="newAddress-checkout" [class.newAddress-profile]="isProfile">
   <div class="recipient" *ngIf="!withDelivery && customerData && customerData.recipient_name">
     <b>نام تحویل گیرنده:</b>
@@ -72,7 +72,6 @@
       {{showRecipientInfo.recipient_mobile_no}}
     </div>
   </div>
-  <!--////////////////////////////////-->
   <div style="text-align: left; margin-top: 5px;">
     <button mat-button (click)="editAddress(0)">
       <mat-icon aria-label="edit" style=" font-size: 20px">edit</mat-icon>
