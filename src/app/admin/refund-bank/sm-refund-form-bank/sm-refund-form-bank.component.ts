@@ -14,7 +14,6 @@ export class SmRefundFormBankComponent implements OnInit {
 
   cardSelected = null;
   formGroup;
-  disabled
   @Input() accessLevel;
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
@@ -28,7 +27,7 @@ export class SmRefundFormBankComponent implements OnInit {
       this.data.customer_first_name,
       this.data.customer_surname,
       this.data.bank_name,
-      this.data.customer_balance,
+      this.data.amount,
       this.data.mobile_number,
       this.data.sheba_no,
       // this.data.card_no,
@@ -41,14 +40,14 @@ export class SmRefundFormBankComponent implements OnInit {
   }
 
   createFormGroup(owner_card_name = null, owner_card_surname = null, customer_first_name = null, customer_surname = null,
-                  bank_name = null, customer_balance = null, mobile_number = null, sheba_no = null, comment = null) {
+                  bank_name = null, amount = null, mobile_number = null, sheba_no = null, comment = null) {
     this.formGroup = new FormGroup({
       owner_card_name: new FormControl(owner_card_name, Validators.required),
       owner_card_surname: new FormControl(owner_card_surname, Validators.required),
       customer_first_name: new FormControl(customer_first_name, Validators.required),
       customer_surname: new FormControl(customer_surname, Validators.required),
       bank_name: new FormControl(bank_name, Validators.required),
-      customer_balance: new FormControl(customer_balance, Validators.required),
+      amount: new FormControl(amount, Validators.required),
       // card_no: new FormGroup({
       //   first: new FormControl(null, Validators.required),
       //   second: new FormControl(null, Validators.required),
@@ -65,6 +64,7 @@ export class SmRefundFormBankComponent implements OnInit {
   }
 
   submitForm() {
+    this.dialogRef.close(true);
     const sendingData = {
       _id: this.data._id,
       owner_card_name: this.informationBankForm.controls['owner_card_name'].value,
@@ -74,12 +74,12 @@ export class SmRefundFormBankComponent implements OnInit {
       sheba_no: this.informationBankForm.controls['sheba_no'].value,
       status: 2,
       comment: this.informationBankForm.controls['comment'].value,
-      executed_time: new Date()
+      executed_time: new Date(),
+      amount: this.data.amount
     };
 
     this.httpService.post('refund/set_detail_form', sendingData).subscribe(
       (data) => {
-        this.closeDialog.emit(false);
         this.snackBar.open(`اطلاعات با موفقیت ثبت گردید`, null, {
           duration: 2300,
         });
@@ -94,6 +94,7 @@ export class SmRefundFormBankComponent implements OnInit {
   }
 
   cancelForm() {
+    this.dialogRef.close(true);
     const sendingData = {
       _id: this.data._id,
       status: 3,
@@ -103,7 +104,6 @@ export class SmRefundFormBankComponent implements OnInit {
 
     this.httpService.post('refund/reject_detail_form', sendingData).subscribe(
       (data) => {
-        this.closeDialog.emit(false);
         this.snackBar.open(`درخواست بازشگت وجه لغو شد`, null, {
           duration: 2300,
         });
@@ -118,6 +118,6 @@ export class SmRefundFormBankComponent implements OnInit {
   }
 
   onClose() {
-    this.closeDialog.emit(false);
+    this.dialogRef.close();
   }
 }

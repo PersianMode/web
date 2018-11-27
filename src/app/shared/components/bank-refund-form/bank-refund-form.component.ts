@@ -14,11 +14,12 @@ export class BankRefundFormComponent implements OnInit {
 
   cardSelected = null;
   formGroup;
+  isProcessing = false;
 
 
   @Input() accessLevel;
   @Input() isNotMobile;
-  @Output() closeDialog = new EventEmitter<boolean>();
+  @Output() closeDialog = new EventEmitter<any>();
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar) {
     this.createFormGroup();
@@ -58,7 +59,7 @@ export class BankRefundFormComponent implements OnInit {
 
     this.httpService.put('refund', sendingData).subscribe(
       (data) => {
-        this.closeDialog.emit(false);
+        this.closeDialog.emit({'isProcessing': true});
         this.snackBar.open(`اطلاعات با موفقیت ثبت گردید`, null, {
           duration: 2300,
         });
