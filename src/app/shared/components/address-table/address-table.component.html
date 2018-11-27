@@ -29,7 +29,7 @@
 
 
 <div style="direction: ltr;">
-  <button mat-raised-button class="accent" (click)="openAddressDialog()">{{isProfile ? 'افزودن آدرس جدید' : (!withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده')}}</button>
+  <button mat-raised-button class="accent" (click)="openAddressDialog()">{{isProfile||withDelivery ? 'معرفی تحویل گیرنده' : 'افزودن آدرس جدید'}}</button>
 </div>
 <span
   *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
