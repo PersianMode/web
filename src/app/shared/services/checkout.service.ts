@@ -21,6 +21,7 @@ export class CheckoutService {
   private loyaltyPointValue = 0;
   private balance = 0;
   private earnSpentPointObj: any = {};
+  private durations: any;
   loyaltyGroups: ReplaySubject<any> = new ReplaySubject<any>();
   addPointArray: ReplaySubject<any> = new ReplaySubject<any>();
   warehouseAddresses = [];
@@ -80,6 +81,24 @@ export class CheckoutService {
       this.addresses$.next(address && Object.keys(address).length ? [address] : []);
     }
   }
+
+  getDurations() {
+    if (this.durations)
+      return new Promise(r => setTimeout(() => r(this.durations), 7100));
+
+    return new Promise((resolve, reject) => {
+      this.httpService.get('deliveryduration').subscribe(
+        (data) => {
+          this.durations = data;
+          resolve(data);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+
 
   setProductData(data) {
     this.productData = data;

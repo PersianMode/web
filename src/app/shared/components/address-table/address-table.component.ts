@@ -41,7 +41,7 @@ export class AddressTableComponent implements OnInit {
   addresses = [];
   isMobile = false;
   isLoggedIn = false;
-  durations = [];
+  durations: any = [];
   durationId;
   province;
   showRecipientInfo = false;
@@ -59,8 +59,8 @@ export class AddressTableComponent implements OnInit {
     this.isMobile = this.responsiveService.isMobile;
   }
 
-  ngOnInit() {
-    this.getDurations();
+  async ngOnInit() {
+    this.durations = await this.checkoutService.getDurations();
     this.withDelivery = this.checkoutService.withDelivery;
     this.selectedCustomerAddress = this.checkoutService.selectedCustomerAddress;
     this.selectedWarehouseAddress = this.checkoutService.selectedWarehouseAddress;
@@ -269,17 +269,6 @@ export class AddressTableComponent implements OnInit {
           this.checkoutService.checkValidity();
         });
     }
-  }
-
-  getDurations() {
-    this.httpService.get('deliveryduration').subscribe(
-      (data) => {
-        this.durations = data;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
   }
 
   setDeliveryTime(deliveryTime) {
