@@ -84,7 +84,8 @@ export class CheckoutService {
 
   getDurations() {
     if (this.durations)
-      return new Promise(r => setTimeout(() => r(this.durations), 7100));
+      return this.durations;
+      // return new Promise(r => setTimeout(() => r(this.durations), 7100));
 
     return new Promise((resolve, reject) => {
       this.httpService.get('deliveryduration').subscribe(
