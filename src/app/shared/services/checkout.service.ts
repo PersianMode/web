@@ -301,30 +301,4 @@ export class CheckoutService {
       loyalty: this.earnSpentPointObj,
     };
   }
-  
-  checkout() {
-    const data = this.accumulateData();
-    this.httpService.post('checkout', data)
-      .subscribe(res => {
-        this.cartService.emptyCart();
-        this.router.navigate(['/', 'profile']);
-      },
-        err => console.error(err));
-  }
-
-  calculateDeliveryDiscount(durationId) {
-    const data = {
-      customer_id: this.authService.userDetails.userId ? this.authService.userDetails.userId : null,
-      duration_id: durationId
-    };
-    return new Promise((resolve, reject) => {
-      this.httpService.post('/calculate/order/price', data)
-        .subscribe(res => {
-          resolve(res);
-        },
-          err => {
-            reject();
-          });
-    });
-  }
 }
