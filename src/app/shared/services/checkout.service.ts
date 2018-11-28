@@ -37,6 +37,7 @@ export class CheckoutService {
   deliveryDays: any = null;
   deliveryTime: any = null;
   addressObj: any = {};
+   cartItems: any = {};
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
@@ -57,13 +58,16 @@ export class CheckoutService {
   }
 
   checkValidity() {
-    // const data = this.accumulateData();
-    // const il = this.authService.userIsLoggedIn();
+    if (this.authService.userIsLoggedIn()){
+      const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime && this.cartItems) : (this.addressObj && this.ccRecipientData && this.cartItems);
+      this.isValid$.next(this.total && isValid);
+        }else{
+          const cart = JSON.parse(localStorage.getItem('cart'));
+          const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime && this.cartItems && cart.length) : (this.addressObj && this.ccRecipientData && this.cartItems && cart.length);
+          this.isValid$.next(this.total && isValid);
+    }
     // this.isValid$.next(data.total_amount &&
     //   (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
-
-    const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData);
-    this.isValid$.next(this.total && isValid);
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
