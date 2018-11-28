@@ -177,7 +177,7 @@ export class CheckoutService {
   }
 
   getTotalDiscount() {
-    this.total = this.cartService.calculateTotal(this.productData);
+    this.total = this.calculateTotal();
     this.discount = this.cartService.calculateDiscount(this.productData, true);
     return {
       total: this.total,
@@ -185,6 +185,17 @@ export class CheckoutService {
     };
   }
 
+  calculateTotal(products = this.productData) {
+    if (products && products.length > 0) {
+      return products
+        .filter(el => el.count && el.quantity <= el.count)
+        .map(el => el.price * el.quantity)
+        .reduce((a, b) => (+a) + (+b), 0);
+
+    }
+
+    return 0;
+  }
   submitAddresses(data): Promise<any> {
     if (!data) {
       return Promise.reject('');
@@ -290,5 +301,30 @@ export class CheckoutService {
       loyalty: this.earnSpentPointObj,
     };
   }
+  
+  checkout() {
+    const data = this.accumulateData();
+    this.httpService.post('checkout', data)
+      .subscribe(res => {
+        this.cartService.emptyCart();
+        this.router.navigate(['/', 'profile']);
+      },
+        err => console.error(err));
+  }
 
+  calculateDeliveryDiscount(durationId) {
+    const data = {
+      customer_id: this.authService.userDetails.userId ? this.authService.userDetails.userId : null,
+      duration_id: durationId
+    };
+    return new Promise((resolve, reject) => {
+      this.httpService.post('/calculate/order/price', data)
+        .subscribe(res => {
+          resolve(res);
+        },
+          err => {
+            reject();
+          });
+    });
+  }
 }

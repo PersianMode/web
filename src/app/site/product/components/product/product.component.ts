@@ -125,7 +125,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         discountedPrice: instance.discountedPrice,
       });
 
-      this.cartService.saveItem(object);
+      this.cartService.addItem(object);
       this.waiting = true;
       const sub = this.cartService.itemAdded$.filter(r => r === true)
         .subscribe(() => {
