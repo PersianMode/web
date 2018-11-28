@@ -3,6 +3,7 @@ import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {TitleService} from '../../../../shared/services/title.service';
+import {CheckoutService} from '../../../../shared/services/checkout.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,8 @@ export class ProfileComponent implements OnInit {
   isEdit = false;
   headerTitle;
 
-  constructor(private authService: AuthService, private router: Router, private profileOrderService: ProfileOrderService, private titleService: TitleService  ) {
+  constructor(private authService: AuthService, private checkoutService: CheckoutService,
+              private router: Router, private profileOrderService: ProfileOrderService, private titleService: TitleService  ) {
   }
 
   ngOnInit() {
@@ -24,6 +26,7 @@ export class ProfileComponent implements OnInit {
       else
         this.titleService.setTitleWithConstant('پروفایل');
     });
+    this.checkoutService.getCustomerAddresses();
   }
 
   setHeaderTitle(title) {

@@ -33,7 +33,7 @@ export class WishListComponent implements OnInit {
 
   ngOnInit() {
     this.profileOrderService.wishListArray.subscribe(result => {
-      if (!result.length) {
+      if (!result || !result.length) {
         this.profileWishList = [];
         return;
       } else {

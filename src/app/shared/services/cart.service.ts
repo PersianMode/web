@@ -19,7 +19,7 @@ export class CartService {
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
   constructor(private httpService: HttpService,
-     private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
+              private authService: AuthService, private productService: ProductService, private snackBar: MatSnackBar) {
     this.authService.isLoggedIn.subscribe(
       isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
@@ -50,8 +50,7 @@ export class CartService {
 
         } else if (items && items.length) {
           this.getItemsDetail(items);
-        }
-        else {
+        } else {
           this.setCartItem(null, [], false);
         }
 
@@ -181,19 +180,17 @@ export class CartService {
       .then(res => {
         try {
           this.setCartItem(overallDetails, res, false);
-        }
-        catch (err) {
+        } catch (err) {
           console.error('-> ', err);
         }
       })
       .catch(err => {
         try {
           this.setCartItem(null, [], false);
-        }
-        catch (err) {
+        } catch (err) {
           console.error('-> ', err);
         }
-      })
+      });
   }
 
   inventoryCount(instance) {
@@ -234,7 +231,6 @@ export class CartService {
   }
 
   private saveItemToServer(item) {
-
     this.httpService.post('order', {
       product_id: item.product_id,
       product_instance_id: item.product_instance_id,
@@ -286,7 +282,6 @@ export class CartService {
       currentValue.push(object);
     }
     this.cartItems.next(currentValue);
-
   }
 
   getLoyaltyBalance() {
