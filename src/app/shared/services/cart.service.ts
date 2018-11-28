@@ -228,7 +228,6 @@ export class CartService {
   }
 
   private addCartItemToServer(item) {
-
     this.httpService.post('order', {
       product_id: item.product_id,
       product_instance_id: item.product_instance_id,
@@ -280,7 +279,6 @@ export class CartService {
       currentValue.push(object);
     }
     this.cartItems.next(currentValue);
-
   }
 
   getLoyaltyBalance() {

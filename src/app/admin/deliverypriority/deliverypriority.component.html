@@ -1,0 +1,6 @@
+<div class="container" [dragula]="'field-bag'" [dragulaModel]="warehouse" (dragulaModelChange)="console.log(1)">
+  <div class="container1" *ngFor='let item of warehouse'>
+      <input  type="checkbox" checked data-toggle="toggle" [(ngModel)]="item.is_active"> 
+    {{item.name}} </div>
+</div>
+<button class="button"  mat-icon-button type (click)="update()">تایید تغییرات</button>
