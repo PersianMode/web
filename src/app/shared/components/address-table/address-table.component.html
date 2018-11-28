@@ -35,11 +35,11 @@
 <span
   *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
   class="newAddress-checkout" [class.newAddress-profile]="isProfile">
-  <div class="recipient" *ngIf="!withDelivery && addressObj && addressObj.recipient_name">
+  <div class="recipient" *ngIf="!withDelivery && customerData && customerData.recipient_name">
     <b>نام تحویل گیرنده:</b>
-    <span *ngIf="addressObj.recipient_title === 'f'"> خانم </span>
-    <span *ngIf="addressObj.recipient_title === 'm'"> آقای </span>
-    {{addressObj.recipient_name + ' ' + addressObj.recipient_surname}}
+    <span *ngIf="customerData.recipient_title === 'f'"> خانم </span>
+    <span *ngIf="customerData.recipient_title === 'm'"> آقای </span>
+    {{customerData.recipient_name + ' ' + customerData.recipient_surname}}
   </div>
 </span>
 

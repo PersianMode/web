@@ -259,7 +259,6 @@ export class CheckoutService {
 
     if (!this.withDelivery) {
       this.addressObj.wharehouse_name = this.addressObj.name;
-      delete this.addressObj.name;
     }
 
     if (!this.withDelivery)
@@ -277,6 +276,7 @@ export class CheckoutService {
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
+      customerData: this.addressObj,
       address: this.addressObj,
       transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
       used_point: 0,
