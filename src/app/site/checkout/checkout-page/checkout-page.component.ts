@@ -160,8 +160,6 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   calculateDiscount(durationId) {
-    console.log('Emmited value : ', durationId);
-
     if (durationId) {
       this.checkoutService.calculateDeliveryDiscount(durationId)
         .then((res: any) => {

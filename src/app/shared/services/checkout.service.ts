@@ -39,12 +39,13 @@ export class CheckoutService {
   deliveryTime: any = null;
   addressObj: any = {};
 
-
   constructor(private cartService: CartService, private httpService: HttpService,
               private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
               private router: Router) {
     this.cartService.cartItems.subscribe(
-      data => this.dataIsReady.next(data && data.length)
+      data => {
+        this.dataIsReady.next(data && data.length);
+      }
     );
     this.authService.isVerified.subscribe(isLoggedIn => {
       this.getCustomerAddresses(this.authService.userIsLoggedIn());
@@ -58,11 +59,14 @@ export class CheckoutService {
   }
 
   checkValidity() {
+    this.cartService.cartItems.subscribe(
+      data => {
+      }
+    );
     // const data = this.accumulateData();
     // const il = this.authService.userIsLoggedIn();
     // this.isValid$.next(data.total_amount &&
     //   (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
-
     const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData);
     this.isValid$.next(this.total && isValid);
   }
@@ -85,7 +89,6 @@ export class CheckoutService {
   getDurations() {
     if (this.durations)
       return this.durations;
-      // return new Promise(r => setTimeout(() => r(this.durations), 7100));
 
     return new Promise((resolve, reject) => {
       this.httpService.get('deliveryduration').subscribe(
@@ -263,23 +266,22 @@ export class CheckoutService {
       delete this.addressObj.name;
     }
 
-    if (!this.withDelivery && this.ccRecipientData) {
-      this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
-      this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
-      this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
-      this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
-      this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
-      this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
-    } else if (!this.withDelivery && !this.ccRecipientData) {
-      return;
-    }
-    ;
+    if (!this.withDelivery)
+      if (this.ccRecipientData) {
+        this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
+        this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
+        this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
+        this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
+        this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
+        this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
+      } else {
+        return;
+      }
 
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.addressObj,
-      customerData: this.addressObj,
       transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
       used_point: 0,
       used_balance: 0,

@@ -180,19 +180,17 @@ export class CartService {
       .then(res => {
         try {
           this.setCartItem(overallDetails, res, false);
-        }
-        catch (err) {
+        } catch (err) {
           console.error('-> ', err);
         }
       })
       .catch(err => {
         try {
           this.setCartItem(null, [], false);
-        }
-        catch (err) {
+        } catch (err) {
           console.error('-> ', err);
         }
-      })
+      });
   }
 
   inventoryCount(instance) {
@@ -233,7 +231,6 @@ export class CartService {
   }
 
   private saveItemToServer(item) {
-
     this.httpService.post('order', {
       product_id: item.product_id,
       product_instance_id: item.product_instance_id,
@@ -285,7 +282,6 @@ export class CartService {
       currentValue.push(object);
     }
     this.cartItems.next(currentValue);
-
   }
 
   getLoyaltyBalance() {
