@@ -66,7 +66,7 @@ export class ProductComponent implements OnInit, OnDestroy {
           this.product = data;
           this.product.colors = data.colors.map(c => Object.assign(c, {translatedName: this.dict.translateColor(c)}));
           this.titleService.setTitleWithConstant(this.product.name);
-          this.joinedTags = Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
+          this.joinedTags = ''; // Array.from(new Set([... this.product.tags.map(t => this.dict.translateWord(t.name.trim()))])).join(' ');
           this.selectedProductColorID = colorIdParam ? colorIdParam : this.product.colors[0]._id;
           this.updatePrice();
           if (this.product.id) {
