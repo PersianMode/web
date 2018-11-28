@@ -181,7 +181,7 @@ nav {
   background: #fff;
 }
 
-.second-bar>ul {
+.second-bar > ul {
   background-color: white;
   text-align: center;
   font-size: 0;
@@ -766,8 +766,19 @@ mat-panel-title {
 
 .div-top {
   width: 100%;
-  padding-bottom: 25px;
-  padding-top: 25px
+  padding-bottom: 0px;
+  padding-top: 10px
+}
+
+.e-nemad {
+  width: 125px;
+  height: 136px;
+  background: antiquewhite;
+  border-radius: 5px;
+}
+
+.e-nemad-wrapper {
+  text-align: center;
 }
 
 .mat-drawer-content {

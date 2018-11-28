@@ -18,7 +18,6 @@ export class UpsertAddressComponent implements OnInit {
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
   dialogTitle;
-  buttonTitle;
   addressForm: FormGroup;
   cityArray = [];
   provinceArray: any;
@@ -37,8 +36,8 @@ export class UpsertAddressComponent implements OnInit {
   withDelivery = null;
 
   constructor(private authService: AuthService, private http: HttpClient,
-    private checkoutService: CheckoutService, private router: Router,
-    private location: Location) {
+              private checkoutService: CheckoutService, private router: Router,
+              private location: Location) {
   }
 
 
@@ -55,17 +54,16 @@ export class UpsertAddressComponent implements OnInit {
     this.addressInfo = this.checkoutService.addressData;
     this.initializeData();
     this.dialogTitle = this.addressInfo.partEdit ? '' : this.addressInfo.addressId !== null ? 'ویرایش آدرس' : 'افزودن آدرس جدید';
-    this.buttonTitle = 'ثبت اطلاعات';
     this.addressData = this.addressInfo.dialog_address;
     this.emailRequired = !this.authService.userIsLoggedIn();
-    this.withDelivery = !this.addressInfo.partEdit;
+    this.withDelivery = this.addressInfo.withDelivery;
     this.initForm();
   }
 
-  onClose(data = false) {
+  onClose() {
     // TODO: guard is needed if any fields have been changed!
     if (this.isNotMobile) {
-      this.closeDialog.emit(data);
+      this.closeDialog.emit(false);
     } else {
       this.location.back();
     }
@@ -79,7 +77,8 @@ export class UpsertAddressComponent implements OnInit {
 
   initForm() {
     this.addressForm = new FormBuilder().group({
-      recipient_email: [this.addressInfo.addressId ? this.addressData.recipient_email : '', this.emailRequired ? [Validators.required] : []],
+      recipient_email: [this.addressInfo.addressId ? this.addressData.recipient_email : '',
+        this.emailRequired ? [Validators.required] : []],
       recipient_name: [this.addressInfo.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
         Validators.required,
       ]],
@@ -126,12 +125,10 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   submitAddress() {
-
     this.addressData.loc = {
       long: this.addressForm.controls['longitude'].value,
       lat: this.addressForm.controls['latitude'].value,
     };
-
     Object.keys(this.addressForm.controls)
       .filter(r => !['latitude', 'longitude'].includes(r))
       .forEach(k => {
@@ -140,10 +137,11 @@ export class UpsertAddressComponent implements OnInit {
         }
       });
 
-    if (this.withDelivery) {
+    if (this.withDelivery === null || this.withDelivery) {
       this.checkoutService.submitAddresses(this.addressData)
         .then(() => {
-          this.onClose(this.addressData.province);
+          this.checkoutService.addedProvince = this.addressData.province;
+          this.onClose();
         })
         .catch(err => {
           console.error('error occured in submitting address', err);
@@ -176,18 +174,29 @@ export class UpsertAddressComponent implements OnInit {
   }
 
   setButtonVisibility() {
-    return !this.addressInfo.partEdit && (!this.addressForm.valid || !this.anyChanges);
+    if (this.addressInfo.partEdit) {
+      return !this.addressForm.valid || !this.anyChanges;
+    } else
+      return !this.addressInfo.partEdit && (!this.addressForm.valid || !this.anyChanges);
   }
 
   fieldChanged() {
-    this.anyChanges =
-      (this.addressData.loc && (this.addressData.loc.long !== this.addressForm.controls['longitude'].value
-        || this.addressData.loc.lat !== this.addressForm.controls['latitude'].value ) )
-      || Object.keys(this.addressForm.controls)
-        .filter(k => !['latitude', 'longitude'].includes(k) && (k.startsWith('recipient') || !this.addressInfo.partEdit))
-        .map(k => this.addressForm.controls[k].value !== null &&
-           this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
-        .reduce((a, b) => a || b, false);
+    if (!this.addressInfo.partEdit) {
+      this.anyChanges =
+        (this.addressData.loc && (this.addressData.loc.long !== this.addressForm.controls['longitude'].value
+          || this.addressData.loc.lat !== this.addressForm.controls['latitude'].value))
+        || Object.keys(this.addressForm.controls)
+          .filter(k => !['latitude', 'longitude'].includes(k) && (k.startsWith('recipient') || !this.addressInfo.partEdit))
+          .map(k => this.addressForm.controls[k].value !== null &&
+            this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
+          .reduce((a, b) => a || b, false);
+    } else {
+      this.anyChanges =
+        Object.keys(this.addressForm.controls)
+          .filter(k => (k.startsWith('recipient')))
+          .map(k => this.addressForm.controls[k].value !== null &&
+            this.addressForm.controls[k].value !== undefined && this.addressData[k] !== this.addressForm.controls[k].value.trim())
+          .reduce((a, b) => a || b, false);
+    }
   }
-
 }

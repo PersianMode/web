@@ -1,11 +1,11 @@
 <div class="photos" #photosDiv>
-  <span *ngIf="selectedProductColor">
+  <section *ngIf="selectedProductColor">
     <div *ngFor="let item of selectedProductColor?.image?.angles">
       <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
         <source src="{{item.url}}" type="video/webm"></video>
       <img *ngIf="item.type !== 'video'" src="{{item.url}}">
     </div>
-  </span>
+  </section>
 </div>
 <div class="description" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
   [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
@@ -26,7 +26,7 @@
   <app-size-picker [sizes]="productSize" [productType]="productType" [gender]="gender" (value)="newSize($event)"></app-size-picker>
   <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
     <div fxFlex="80" class="full-width">
-      <button mat-button class="cart" (click)="saveToCart()">در سبد بگذار</button>
+      <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">در سبد بگذار</button>
     </div>
     <div fxFlex="20">
       <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
@@ -52,7 +52,7 @@
     </div>
   </div>
   <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel [expanded]="false">
       <mat-expansion-panel-header>
         <mat-panel-title>
           سایر مشخصات محصول

@@ -6,7 +6,7 @@ import {ResponsiveService} from '../../services/responsive.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
 import {DictionaryService} from '../../services/dictionary.service';
-
+const tagNames = ['Sub Division', 'Category', 'Gender'];
 @Component({
   selector: 'app-product-grid-item',
   templateUrl: './product-grid-item.component.html',
@@ -40,7 +40,11 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.desc = Array.from(new Set([... this.data.tags.map(x => this.dict.translateWord(x.name.trim()))])).join(' ');
+    this.desc =  this.data.tags
+      .filter(r => tagNames.includes(r.tg_name))
+      .sort((x, y) => tagNames.findIndex(r => x.tg_name === r) - tagNames.findIndex(r => y.tg_name === r))
+      .map(x => this.dict.translateWord(x.name.trim()))
+      .join(' ');
     this.setPrice();
 
     const arrImages = this.data.colors.map(r => r.image.thumbnail);

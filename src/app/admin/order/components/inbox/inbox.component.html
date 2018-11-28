@@ -57,11 +57,11 @@
             <mat-row *matRowDef="let row; columns: scanDisplayedColumns;" matRipple class="element-row"></mat-row>
 
           </mat-table>
-          <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+          <!-- <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator> -->
         </div>
       </div>
 
-      <div *ngIf="hasCC" fxFlex="60" class="field-container">
+      <div  fxFlex="60" class="field-container">
         <h2 style="text-align: center">بررسی دستی</h2>
 
         <div class="example-container mat-elevation-z8">
@@ -159,7 +159,7 @@
             </mat-row>
 
           </mat-table>
-          <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+          <!-- <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator> -->
         </div>
 
       </div>
