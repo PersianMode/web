@@ -59,10 +59,6 @@ export class CheckoutService {
   }
 
   checkValidity() {
-    this.cartService.cartItems.subscribe(
-      data => {
-      }
-    );
     // const data = this.accumulateData();
     // const il = this.authService.userIsLoggedIn();
     // this.isValid$.next(data.total_amount &&
