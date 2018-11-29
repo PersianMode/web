@@ -1,4 +1,4 @@
-<div class="container" [dragula]="'field-bag'" [dragulaModel]="warehouse" (dragulaModelChange)="">
+<div class="container" [dragula]="'field-bag'" [dragulaModel]="warehouse">
   <div class="container1" *ngFor='let item of warehouse'>
       <input  type="checkbox" checked data-toggle="toggle" [(ngModel)]="item.is_active"> 
     {{item.name}} </div>
