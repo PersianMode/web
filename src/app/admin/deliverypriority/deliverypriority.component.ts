@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { DragulaService } from 'ng2-dragula';
-import { Subscription } from 'rxjs/Subscription';
-import { HttpService } from '../../shared/services/http.service';
-import { ProgressService } from '../../shared/services/progress.service';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import {Component, OnInit} from '@angular/core';
+import {DragulaService} from 'ng2-dragula';
+import {Subscription} from 'rxjs/Subscription';
+import {HttpService} from '../../shared/services/http.service';
+import {ProgressService} from '../../shared/services/progress.service';
+import {MatSnackBar, MatDialog} from '@angular/material';
 
 
 @Component({
@@ -32,7 +32,6 @@ export class DeliverypriorityComponent implements OnInit {
       this.dragulaService.dropModel.subscribe(value => {
         console.log(this.warehouse);
 
-
         this.warehouse.forEach(el => {
           el.priority = this.warehouse.indexOf(el);
         });
@@ -50,8 +49,8 @@ export class DeliverypriorityComponent implements OnInit {
 
         this.warehouse = data;
 
-        this.warehouse.sort((a,b)=>{
-         return a.priority-b.priority
+        this.warehouse.sort((a, b) => {
+          return a.priority - b.priority
         })
 
         console.log(this.warehouse);
@@ -68,8 +67,8 @@ export class DeliverypriorityComponent implements OnInit {
   }
   update() {
     this.progressService.enable();
-console.log(this.warehouse)
-    this.httpService.put('warehouse/update', { warehouses: this.warehouse }).subscribe(
+    console.log(this.warehouse)
+    this.httpService.put('warehouse/update', {warehouses: this.warehouse}).subscribe(
       (res) => {
         this.progressService.disable();
 
