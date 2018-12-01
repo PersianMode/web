@@ -22,7 +22,8 @@
 
   <ng-container matColumnDef="total_amount">
     <mat-header-cell *matHeaderCellDef mat-sort-header>هزینه کل (تومان)</mat-header-cell>
-    <mat-cell *matCellDef="let order"><span *ngIf="order.discount" class="overridden">{{makePersianNumber(order.total_amount, true)}}<br/></span>{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}</mat-cell>
+    <mat-cell *matCellDef="let order"><span *ngIf="order.discount" class="overridden">{{makePersianNumber(order.total_amount,
+      true)}}<br/></span>{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="discount">
     <mat-header-cell *matHeaderCellDef mat-sort-header>تخفیف (تومان)</mat-header-cell>
