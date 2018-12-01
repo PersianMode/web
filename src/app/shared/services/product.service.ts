@@ -22,7 +22,12 @@ const newestSort = function (a, b) {
   }
 };
 
-const reviewSort = function (a, b) {
+const extractPrices = function(products) {
+  const pricesHelper = products.map(product => product.instances.map(instance => instance.discountedPrice));
+  return [].concat(...pricesHelper);
+};
+
+const reviewSort = function () {
   return 0;
 };
 
@@ -40,6 +45,10 @@ const nameSort = function (a, b) {
     return -1;
   else
     return 0;
+};
+
+const cleanProductsList = function (data: any[]) {
+  return data.filter(p => p.instances.length && p.colors.length);
 };
 
 @Injectable()
@@ -93,9 +102,9 @@ export class ProductService {
       .reduce((x, y) => x.concat(y), [])
     ]));
 
-    let mappedColor = [];
-    for (let col in color) {
-      let conv = safeColorConverter(color[col]);
+    const mappedColor = [];
+    for (const col in color) if (color.hasOwnProperty(col)) {
+      const conv = safeColorConverter(color[col]);
       mappedColor[col] = conv ? conv : this.dict.translateColor(col);
     }
     color = Array.from(new Set(mappedColor));
@@ -105,13 +114,14 @@ export class ProductService {
     if (trigger === 'price') {
       price = [];
     } else {
-
-      const pricesHelper = products.map(product => product.instances.map(instance => instance.discountedPrice));
-      const prices = [].concat(...pricesHelper);
+      const prices = extractPrices(products);
+      const allPrices = extractPrices(this.products);
+      const start = allPrices && allPrices.length ? Math.min(...allPrices) : 0;
       const minPrice = prices && prices.length ? Math.min(...prices) : 0;
       const maxPrice = prices && prices.length ? Math.max(...prices) : 0;
+      const end = allPrices && allPrices.length ? Math.max(...allPrices) : 0;
 
-      price = [minPrice, maxPrice];
+      price = [start, minPrice, maxPrice, end];
     }
 
     let discount;
@@ -185,15 +195,14 @@ export class ProductService {
           } else if (f.name === 'color') {
 
             this.filteredProducts.forEach((p, pi) => {
-              const newColors = p.colors.filter(c => {
-                let result = f.values.filter(v => {
+              this.filteredProducts[pi].colors = p.colors.filter(c => {
+                const result = f.values.filter(v => {
                   return c.name ? c.name.split('/').find(a => {
-                    return safeColorConverter(a) === v
-                  }) : false
+                    return safeColorConverter(a) === v;
+                  }) : false;
                 });
                 return result.length;
               });
-              this.filteredProducts[pi].colors = newColors;
             });
 
             this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
@@ -224,7 +233,7 @@ export class ProductService {
           } else if (f.name === 'price') {
             const filteredProductBefore = this.filteredProducts;
             this.filteredProducts = [];
-            filteredProductBefore.forEach((product, key) => {
+            filteredProductBefore.forEach(product => {
               if ((product.instances.filter(instance => instance.discountedPrice >= f.values[0] &&
                 instance.discountedPrice <= f.values[1])).length > 0) {
                 this.filteredProducts.push(product);
@@ -239,7 +248,7 @@ export class ProductService {
           }
         }
 
-        this.filteredProducts = this.cleanProductsList(this.filteredProducts);
+        this.filteredProducts = cleanProductsList(this.filteredProducts);
       });
       setTimeout(() => {
         this.sortProductsAndEmit();
@@ -261,10 +270,6 @@ export class ProductService {
         this.product$.next(data);
       });
     }
-  }
-
-  private cleanProductsList(data: any[]) {
-    return data.filter(p => p.instances.length && p.colors.length);
   }
 
    private enrichProductData(data) {
@@ -346,7 +351,7 @@ export class ProductService {
   }
 
   loadProducts(productIds) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.httpService.post('product/getMultiple', { productIds })
         .subscribe(data => {
           if (data) {
