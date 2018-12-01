@@ -134,8 +134,6 @@ export class ProductService {
       discount = [minDiscount, maxDiscount];
     }
 
-    console.log(mappedColor);
-    console.log(color);
     tags = { brand, type, price, size, shoesSize, color };
 
     if (discount && discount.length && discount[0] !== discount[1])
