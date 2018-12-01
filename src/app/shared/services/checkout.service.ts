@@ -38,14 +38,14 @@ export class CheckoutService {
   deliveryTime: any = null;
   addressObj: any = {};
   cartItems: any = {};
-checkcart:any ={};
+
 
   constructor(private cartService: CartService, private httpService: HttpService,
     private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
     private router: Router) {
     this.cartService.cartItems.subscribe(
       data => {
-        this.checkcart = data;
+    
          this.dataIsReady.next(data && data.length)
       }
 
@@ -63,9 +63,9 @@ checkcart:any ={};
 
   checkValidity() {
    
-      const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime && this.cartItems && this.checkcart && this.checkcart.length) : (this.addressObj && this.ccRecipientData && this.cartItems && this.checkcart && this.checkcart.length);
+      const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime && this.cartItems && this.productData && this.productData.length) : (this.addressObj && this.ccRecipientData && this.cartItems && this.productData && this.productData.length);
       this.isValid$.next(this.total && isValid);
-      console.log(this.checkcart);
+     
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
