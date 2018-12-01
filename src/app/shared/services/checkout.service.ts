@@ -45,7 +45,6 @@ export class CheckoutService {
     private router: Router) {
     this.cartService.cartItems.subscribe(
       data => {
-    
          this.dataIsReady.next(data && data.length)
       }
 
