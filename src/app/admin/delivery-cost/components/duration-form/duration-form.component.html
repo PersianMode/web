@@ -64,7 +64,7 @@
           </button>
           <button mat-button class="submit-button" (click)="saveDurationInfo()" [disabled]="!durationForm.valid ||
                   (duration_id && !anyChanges && !anyFiledChanges) ||
-                  filedValidation">
+                  !filedValidation">
             تایید
           </button>
         </div>

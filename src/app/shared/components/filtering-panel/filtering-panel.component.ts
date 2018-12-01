@@ -4,6 +4,7 @@ import {priceFormatter} from '../../lib/priceFormatter';
 import {ProductService} from '../../services/product.service';
 import {colorConverter} from '../../services/colorConverter';
 import {DictionaryService} from '../../services/dictionary.service';
+import * as ntc from 'ntcjs';
 
 @Component({
   selector: 'app-filtering-panel',
@@ -87,7 +88,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       for (const col in this.isChecked.color) {
         let color;
         color = this.dict.convertColor(col);
-        this.translatedColor[col] = this.dict.translateWord(col);
+        this.translatedColor[col] = ntc.name(this.dict.translateWord(col))[1];
         if (color) {
           this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
           const red = color.substring(1, 3);
@@ -99,6 +100,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
           this.oppositeColor[col] = 'white';
         }
       }
+      
     });
 
     this.isMobile = this.responsiveService.isMobile;
@@ -149,7 +151,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       }
     });
     this.clear_box = null;
-
     this.productService.applyFilters(this.current_filter_state, name);
   }
 

@@ -21,6 +21,7 @@ export class CheckoutService {
   private loyaltyPointValue = 0;
   private balance = 0;
   private earnSpentPointObj: any = {};
+  private durations: any;
   loyaltyGroups: ReplaySubject<any> = new ReplaySubject<any>();
   addPointArray: ReplaySubject<any> = new ReplaySubject<any>();
   warehouseAddresses = [];
@@ -39,15 +40,13 @@ export class CheckoutService {
   addressObj: any = {};
   cartItems: any = {};
 
-
   constructor(private cartService: CartService, private httpService: HttpService,
     private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
     private router: Router) {
     this.cartService.cartItems.subscribe(
       data => {
-         this.dataIsReady.next(data && data.length)
+        this.dataIsReady.next(data && data.length);
       }
-
     );
     this.authService.isVerified.subscribe(isLoggedIn => {
       this.getCustomerAddresses(this.authService.userIsLoggedIn());
@@ -81,6 +80,24 @@ export class CheckoutService {
       this.addresses$.next(address && Object.keys(address).length ? [address] : []);
     }
   }
+
+  getDurations() {
+    if (this.durations)
+      return this.durations;
+
+    return new Promise((resolve, reject) => {
+      this.httpService.get('deliveryduration').subscribe(
+        (data) => {
+          this.durations = data;
+          resolve(data);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+
 
   setProductData(data) {
     this.productData = data;
@@ -159,7 +176,7 @@ export class CheckoutService {
   }
 
   getTotalDiscount() {
-    this.total = this.cartService.calculateTotal(this.productData);
+    this.total = this.calculateTotal();
     this.discount = this.cartService.calculateDiscount(this.productData, true);
     return {
       total: this.total,
@@ -167,6 +184,17 @@ export class CheckoutService {
     };
   }
 
+  calculateTotal(products = this.productData) {
+    if (products && products.length > 0) {
+      return products
+        .filter(el => el.count && el.quantity <= el.count)
+        .map(el => el.price * el.quantity)
+        .reduce((a, b) => (+a) + (+b), 0);
+
+    }
+
+    return 0;
+  }
   submitAddresses(data): Promise<any> {
     if (!data) {
       return Promise.reject('');
@@ -241,27 +269,24 @@ export class CheckoutService {
 
     if (!this.withDelivery) {
       this.addressObj.wharehouse_name = this.addressObj.name;
-      delete this.addressObj.name;
     }
 
     if (!this.withDelivery)
-    if (this.ccRecipientData) {
-      this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
-      this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
-      this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
-      this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
-      this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
-      this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
-    } else {
-      return;
-    }
-
-    ;
+      if (this.ccRecipientData) {
+        this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
+        this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
+        this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
+        this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
+        this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
+        this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
+      } else {
+        return;
+      }
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
-      address: this.addressObj,
       customerData: this.addressObj,
+      address: this.addressObj,
       transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
       used_point: 0,
       used_balance: 0,
@@ -274,5 +299,4 @@ export class CheckoutService {
       loyalty: this.earnSpentPointObj,
     };
   }
-
 }

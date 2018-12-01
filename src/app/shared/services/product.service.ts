@@ -1,13 +1,14 @@
-import {Injectable} from '@angular/core';
-import {HttpService} from './http.service';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
-import {IFilter} from '../interfaces/ifilter.interface';
-import {DictionaryService} from './dictionary.service';
-import {imagePathFixer} from '../lib/imagePathFixer';
-import {discountCalc} from '../lib/discountCalc';
-import {productColorMap} from '../lib/colorNameMap';
-import {SpinnerService} from './spinner.service';
+import { Injectable } from '@angular/core';
+import { HttpService } from './http.service';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { IFilter } from '../interfaces/ifilter.interface';
+import { DictionaryService } from './dictionary.service';
+import { imagePathFixer } from '../lib/imagePathFixer';
+import { discountCalc } from '../lib/discountCalc';
+import { productColorMap } from '../lib/colorNameMap';
+import { SpinnerService } from './spinner.service';
 import { AuthService } from './auth.service';
+import { safeColorConverter } from './colorConverter';
 
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
@@ -47,6 +48,8 @@ export class ProductService {
   private products = [];
   private filteredProducts = [];
   collectionNameFa$: ReplaySubject<any> = new ReplaySubject<any>(1);
+  type$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  tag$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
   product$: ReplaySubject<any> = new ReplaySubject<any>();
@@ -58,7 +61,7 @@ export class ProductService {
   private collectionId;
 
   constructor(private httpService: HttpService, private dict: DictionaryService,
-    private spinnerService: SpinnerService, private authService: AuthService) {}
+    private spinnerService: SpinnerService, private authService: AuthService) { }
 
   extractFilters(filters = [], trigger = '') {
     const products = trigger ? this.filteredProducts : this.products;
@@ -74,7 +77,7 @@ export class ProductService {
       .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'MENS')
       .map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
-      const shoesSizeWomen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
+    const shoesSizeWomen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
       .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'WOMENS')
       .map(r => Object.keys(r.sizesInventory))
       .reduce((x, y) => x.concat(y), []).sort()]));
@@ -84,8 +87,19 @@ export class ProductService {
     }
     const shoesSize = new Set([].concat(shoesSizeWomen, shoesSizeMen));
 
-    const color = Array.from(new Set([...products.map(productColorMap)
-      .reduce((x, y) => x.concat(y), []).reduce((x, y) => x.concat(y), [])]));
+    let color = Array.from(new Set([...products
+      .map(productColorMap)
+      .reduce((x, y) => x.concat(y), [])
+      .reduce((x, y) => x.concat(y), [])
+    ]));
+
+    let mappedColor = [];
+    for (let col in color) {
+      let conv = safeColorConverter(color[col]);
+      mappedColor[col] = conv ? conv : this.dict.translateColor(col);
+    }
+    color = Array.from(new Set(mappedColor));
+
 
     let price = [];
     if (trigger === 'price') {
@@ -110,7 +124,9 @@ export class ProductService {
       discount = [minDiscount, maxDiscount];
     }
 
-    tags = {brand, type, price, size, shoesSize, color};
+    console.log(mappedColor);
+    console.log(color);
+    tags = { brand, type, price, size, shoesSize, color };
 
     if (discount && discount.length && discount[0] !== discount[1])
       tags.discount = discount;
@@ -155,68 +171,81 @@ export class ProductService {
   }
 
   applyFilters(filters, trigger) {
-   setTimeout(() => {
-     this.spinnerService.enable();
-     this.filteredProducts = JSON.parse(JSON.stringify(this.products));
-     filters.forEach(f => {
-       if (f.values.length) {
-         if (['brand', 'type'].includes(f.name)) {
-           this.filteredProducts = this.filteredProducts.filter(r => Array.from(f.values).includes(r[f.name]));
-         } else if (f.name === 'color') {
-           this.filteredProducts
-             .forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
-               .filter(c => Array.from(f.values).filter(v => c.name ? c.name.split('/').find(a => a.includes(v)) : false).length));
 
-           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
-         } else if (f.name === 'size') {
-           this.filteredProducts.forEach((p, pi) => {
-             if (p.product_type === 'FOOTWEAR')
-               return this.filteredProducts[pi].instances = p.instances;
-             return this.filteredProducts[pi].instances = p.instances
-               .filter(i => Array.from(f.values).includes(i.size));
-           });
-           this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
-             .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
-           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
-         } else if (f.name === 'shoesSize') {
-           this.filteredProducts.forEach((p, pi) => {
-             if (p.product_type !== 'FOOTWEAR')
-               return this.filteredProducts[pi].instances = p.instances;
-             if (!this.collectionIsEU)
-               return this.filteredProducts[pi].instances = p.instances
-                 .filter(i => Array.from(f.values).includes(i.size));
-             const gender = p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase();
-             return this.filteredProducts[pi].instances = p.instances
-               .filter(i => Array.from(f.values).includes(this.dict.USToEU(i.size, gender)));
-           });
-           this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
-             .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
-           this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
-         } else if (f.name === 'price') {
-           const filteredProductBefore = this.filteredProducts;
-           this.filteredProducts = [];
-           filteredProductBefore.forEach((product, key) => {
-             if ((product.instances.filter(instance => instance.discountedPrice >= f.values[0] &&
-                 instance.discountedPrice <= f.values[1])).length > 0) {
-               this.filteredProducts.push(product);
-             }
-           });
-           this.filteredProducts = this.filteredProducts.filter(p => p.price >= f.values[0] && p.price <= f.values[1]);
-         } else if (f.name === 'discount') {
-           this.filteredProducts = this.filteredProducts.filter(p => p.discount >= f.values[0] && p.discount <= f.values[1]);
-         } else {
-           this.filteredProducts = this.filteredProducts
-             .filter(p => p.tags.filter(t => Array.from(f.values).includes(t.name)).length);
-         }
-       }
+    setTimeout(() => {
+      this.spinnerService.enable();
+      this.filteredProducts = JSON.parse(JSON.stringify(this.products));
 
-       this.filteredProducts = this.cleanProductsList(this.filteredProducts);
-     });
-     setTimeout(() => {
-       this.sortProductsAndEmit();
-       this.extractFilters(filters, trigger);
-     }, 0);
-   }, 0);
+
+
+      filters.forEach(f => {
+        if (f.values.length) {
+          if (['brand', 'type'].includes(f.name)) {
+            this.filteredProducts = this.filteredProducts.filter(r => Array.from(f.values).includes(r[f.name]));
+          } else if (f.name === 'color') {
+
+            this.filteredProducts.forEach((p, pi) => {
+              const newColors = p.colors.filter(c => {
+                let result = f.values.filter(v => {
+                  return c.name ? c.name.split('/').find(a => {
+                    return safeColorConverter(a) === v
+                  }) : false
+                });
+                return result.length;
+              });
+              this.filteredProducts[pi].colors = newColors;
+            });
+
+            this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
+          } else if (f.name === 'size') {
+            this.filteredProducts.forEach((p, pi) => {
+              if (p.product_type === 'FOOTWEAR')
+                return this.filteredProducts[pi].instances = p.instances;
+              return this.filteredProducts[pi].instances = p.instances
+                .filter(i => Array.from(f.values).includes(i.size));
+            });
+            this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
+              .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
+            this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
+          } else if (f.name === 'shoesSize') {
+            this.filteredProducts.forEach((p, pi) => {
+              if (p.product_type !== 'FOOTWEAR')
+                return this.filteredProducts[pi].instances = p.instances;
+              if (!this.collectionIsEU)
+                return this.filteredProducts[pi].instances = p.instances
+                  .filter(i => Array.from(f.values).includes(i.size));
+              const gender = p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase();
+              return this.filteredProducts[pi].instances = p.instances
+                .filter(i => Array.from(f.values).includes(this.dict.USToEU(i.size, gender)));
+            });
+            this.filteredProducts.forEach((p, pi) => this.filteredProducts[pi].colors = p.colors
+              .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
+            this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
+          } else if (f.name === 'price') {
+            const filteredProductBefore = this.filteredProducts;
+            this.filteredProducts = [];
+            filteredProductBefore.forEach((product, key) => {
+              if ((product.instances.filter(instance => instance.discountedPrice >= f.values[0] &&
+                instance.discountedPrice <= f.values[1])).length > 0) {
+                this.filteredProducts.push(product);
+              }
+            });
+            this.filteredProducts = this.filteredProducts.filter(p => p.price >= f.values[0] && p.price <= f.values[1]);
+          } else if (f.name === 'discount') {
+            this.filteredProducts = this.filteredProducts.filter(p => p.discount >= f.values[0] && p.discount <= f.values[1]);
+          } else {
+            this.filteredProducts = this.filteredProducts
+              .filter(p => p.tags.filter(t => Array.from(f.values).includes(t.name)).length);
+          }
+        }
+
+        this.filteredProducts = this.cleanProductsList(this.filteredProducts);
+      });
+      setTimeout(() => {
+        this.sortProductsAndEmit();
+        this.extractFilters(filters, trigger);
+      }, 0);
+    }, 0);
   }
 
   getProduct(productId) {
@@ -238,7 +267,7 @@ export class ProductService {
     return data.filter(p => p.instances.length && p.colors.length);
   }
 
-  private enrichProductData(data) {
+   private enrichProductData(data) {
     data.id = data._id;
     data.type = data.product_type;
     data.price = data.base_price;
@@ -318,7 +347,7 @@ export class ProductService {
 
   loadProducts(productIds) {
     return new Promise((resolve, reject) => {
-      this.httpService.post('product/getMultiple', {productIds})
+      this.httpService.post('product/getMultiple', { productIds })
         .subscribe(data => {
           if (data) {
             data.forEach(product => {
@@ -343,6 +372,9 @@ export class ProductService {
           if (data.name_fa) {
             this.collectionName = data.name_fa;
             this.collectionNameFa$.next(data.name_fa);
+            this.tag$.next(data.tags);
+            this.type$.next(data.types);
+
           }
           if (data.products) {
             for (const product of data.products) {

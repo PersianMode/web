@@ -9,16 +9,17 @@
       </mat-radio-button>
     </mat-radio-group>
 </span>
-<div *ngIf="withDelivery && !isProfile">
+<div *ngIf="withDelivery && !isProfile" [class.check-box-div]="isMobile">
   <label class="label-field">زمان تحویل</label>
-  <mat-radio-group class="radio-field" [(ngModel)]="deliveryDays">
+  <mat-radio-group [(ngModel)]="deliveryDays">
     <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days"
                       (change)="changeDurationType(d._id, d.delivery_days)"
-                      [checked]="d._id === (durationId ? durationId : null)" [class.radio-option]="i > 0">
+                      [checked]="d._id === (durationId ? durationId : null)" [class.radio-option]="!isMobile && i > 0">
       <label>{{d.name}}{{d.delivery_days === 3 ? ' (مخصوص استان تهران)' : ''}}</label>
     </mat-radio-button>
   </mat-radio-group>
-
+</div>
+<div *ngIf="withDelivery && !isProfile">
   <label class="label-field">ساعت تحویل</label>
   <mat-radio-group [(ngModel)]="deliveryTime" class="radio-field">
     <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)">
@@ -26,8 +27,10 @@
     </mat-radio-button>
   </mat-radio-group>
 </div>
-<div style="direction: ltr;">
-  <button mat-raised-button class="accent" (click)="openAddressDialog()">{{withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده'}}</button>
+<div style="direction: ltr;margin-top: 10px; margin-left: 10px">
+  <button mat-raised-button class="accent" (click)="openAddressDialog()">{{isProfile||withDelivery ? 'افزودن آدرس جدید'
+    : 'معرفی تحویل گیرنده'}}
+  </button>
 </div>
 <span
   *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
@@ -40,7 +43,7 @@
   </div>
 </span>
 
-<mat-card *ngIf="!withDelivery && showRecipientInfo"
+<mat-card *ngIf="!isProfile && !withDelivery && showRecipientInfo"
           style="background-color: #dedfde;border-radius: 3px; padding: 5px; margin-top: 10px;">
   <div style="padding-right: 5px; margin-bottom: 10px; font-weight: bold"> مشخصات تحویل گیرنده :</div>
   <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
@@ -70,7 +73,6 @@
       {{showRecipientInfo.recipient_mobile_no}}
     </div>
   </div>
-  <!--////////////////////////////////-->
   <div style="text-align: left; margin-top: 5px;">
     <button mat-button (click)="editAddress(0)">
       <mat-icon aria-label="edit" style=" font-size: 20px">edit</mat-icon>
@@ -91,9 +93,9 @@
           <ng-template #anothercontent1>
             <th style="width: 5%"><b>انتخاب</b></th>
           </ng-template>
-          <th *ngIf="withDelivery"><b>مشخصات تحویل گیرنده</b></th>
+          <th *ngIf="isProfile || withDelivery"><b>مشخصات تحویل گیرنده</b></th>
           <th *ngIf="withDelivery && !isProfile"></th>
-          <th *ngIf="!withDelivery">نام فروشگاه</th>
+          <th *ngIf="!withDelivery && !isProfile">نام فروشگاه</th>
           <th style="min-width: 40%"><b>آدرس</b></th>
           <th *ngIf="!isProfile" style=" width: 5%"></th>
           <th *ngIf="isProfile"></th>
@@ -106,7 +108,8 @@
             <td><input type="radio" [value]="address" name="address" [(ngModel)]="addressSelected"
                        (change)="chooseAddress($event)"></td>
           </ng-template>
-          <td *ngIf="withDelivery"><span *ngIf="address.recipient_name">
+          <td *ngIf="isProfile || withDelivery">
+            <span *ngIf="address.recipient_name">
             نام تحویل گیرنده: <b><span *ngIf="address.recipient_title === 'f'"> خانم </span>
                                  <span *ngIf="address.recipient_title === 'm'"> آقای </span>
                                   {{address.recipient_name + ' ' + address.recipient_surname}}
@@ -124,7 +127,7 @@
           <td *ngIf="withDelivery && !isProfile">
             <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
           </td>
-          <td *ngIf="!withDelivery">
+          <td *ngIf="!withDelivery && !isProfile">
             <b>{{address.name}}</b>
           </td>
           <td>
@@ -136,7 +139,7 @@
           <td *ngIf="withDelivery && !isProfile">
             <mat-checkbox (change)="setAddress(i)" [checked]="selectedCustomerAddress === i"></mat-checkbox>
           </td>
-          <td *ngIf="!withDelivery">
+          <td *ngIf="!withDelivery && !isProfile">
             <mat-checkbox class="check-box" [checked]="selectedWarehouseAddress===i"
                           (change)="setAddress(i)"></mat-checkbox>
           </td>
@@ -153,14 +156,14 @@
       <mat-card>
         <mat-card-content>
           <div>
-          <span *ngIf="withDelivery">
+          <span *ngIf="isProfile || withDelivery">
           نام تحویل گیرنده: <b>{{address.recipient_name + ' ' + address.recipient_surname}}</b>
           <br>
           کدملی تحویل گیرنده: <b>{{makePersianNumber( address.recipient_national_id)}}</b>
           <br>
           شماره تلفن تحویل گیرنده: <b>{{makePersianNumber(address.recipient_mobile_no)}}</b>
           </span>
-            <span *ngIf="!withDelivery">
+            <span *ngIf="!isProfile && !withDelivery">
               فروشگاه<b> {{address.name}}</b>
           </span>
           </div>
@@ -172,15 +175,17 @@
             {{address.unit ?  'واحد' + makePersianNumber(address.unit) : ''}}
             </span>
           </div>
-          <div *ngIf="withDelivery" class="edit-button">
-            <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
-          </div>
-          <div *ngIf="!isProfile" style="margin-top: 20px;">
-            انتخاب آدرس
-            <mat-checkbox *ngIf="withDelivery" [checked]="selectedCustomerAddress===i"
-                          (change)="setAddress(i)"></mat-checkbox>
-            <mat-checkbox *ngIf="!withDelivery" [checked]="selectedWarehouseAddress===i"
-                          (change)="setAddress(i)"></mat-checkbox>
+          <div style="margin-top: 15px;" fxLayout="row" fxLayout.sm="column" fxLayoutAlign="start start">
+            <div *ngIf="!isProfile" fxFlex="50">
+              انتخاب آدرس
+              <mat-checkbox *ngIf="withDelivery" [checked]="selectedCustomerAddress===i"
+                            (change)="setAddress(i)"></mat-checkbox>
+              <mat-checkbox *ngIf="!withDelivery" [checked]="selectedWarehouseAddress===i"
+                            (change)="setAddress(i)"></mat-checkbox>
+            </div>
+            <div *ngIf="isProfile || withDelivery" fxFlex="50" style="text-align: left; margin-left: 10px">
+              <mat-icon aria-label="edit" (click)="editAddress(i)">edit</mat-icon>
+            </div>
           </div>
           <br>
         </mat-card-content>
@@ -188,7 +193,7 @@
       <br>
     </div>
   </div>
-  <div *ngIf="!withDelivery && selectedWarehouseAddress!==-1" class="map-div">
+  <div *ngIf="!isProfile && !withDelivery && selectedWarehouseAddress!==-1" class="map-div">
     <agm-map class="ev-loc" [latitude]="getLatitude()" [longitude]="getLongitude()">
       <agm-marker
         [latitude]="getLatitude()"
