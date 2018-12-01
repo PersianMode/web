@@ -285,7 +285,6 @@ export class CheckoutService {
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
-      customerData: this.addressObj,
       address: this.addressObj,
       transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
       used_point: 0,
