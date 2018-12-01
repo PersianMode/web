@@ -61,8 +61,8 @@ export class CheckoutService {
 
   checkValidity() {
    
-      const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime && this.productData && this.productData.length) : (this.addressObj && this.ccRecipientData  && this.productData && this.productData.length);
-      this.isValid$.next(this.total && isValid);
+      const validAddressObject = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData );
+      this.isValid$.next(this.total && validAddressObject  && this.productData && this.productData.length);
      
   }
 
