@@ -244,16 +244,18 @@ export class CheckoutService {
       delete this.addressObj.name;
     }
 
-    if (!this.withDelivery && this.ccRecipientData) {
+    if (!this.withDelivery)
+    if (this.ccRecipientData) {
       this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
       this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
       this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
       this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
       this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
       this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
-    } else if (!this.withDelivery && !this.ccRecipientData) {
+    } else {
       return;
     }
+
     ;
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
