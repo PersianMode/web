@@ -38,7 +38,7 @@ export class CheckoutService {
   deliveryDays: any = null;
   deliveryTime: any = null;
   addressObj: any = {};
-  cartItems: any = {};
+
 
   constructor(private cartService: CartService, private httpService: HttpService,
     private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
@@ -61,7 +61,7 @@ export class CheckoutService {
 
   checkValidity() {
    
-      const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime && this.cartItems && this.productData && this.productData.length) : (this.addressObj && this.ccRecipientData && this.cartItems && this.productData && this.productData.length);
+      const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime && this.productData && this.productData.length) : (this.addressObj && this.ccRecipientData  && this.productData && this.productData.length);
       this.isValid$.next(this.total && isValid);
      
   }
