@@ -1,6 +1,5 @@
 <div *ngIf="!profileOrder.length">هیچ سفارش ثبت شده ای موجود نمی باشد.</div>
-<mat-table *ngIf="!isMobile && profileOrder.length" [dataSource]="profileOrder"
-           class="example-container mat-elevation-z8">
+<mat-table *ngIf="!isMobile && profileOrder.length" [dataSource]="profileOrder" class="example-container mat-elevation-z8">
   <ng-container matColumnDef="col_no">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
     <mat-cell *matCellDef="let order">{{(profileOrder.indexOf(order)+1).toLocaleString('fa')}}</mat-cell>
@@ -23,7 +22,7 @@
   <ng-container matColumnDef="total_amount">
     <mat-header-cell *matHeaderCellDef mat-sort-header>هزینه کل (تومان)</mat-header-cell>
     <mat-cell *matCellDef="let order"><span *ngIf="order.discount" class="overridden">{{makePersianNumber(order.total_amount,
-      true)}}<br/></span>{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}</mat-cell>
+        true)}}<br/></span>{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}</mat-cell>
   </ng-container>
   <ng-container matColumnDef="discount">
     <mat-header-cell *matHeaderCellDef mat-sort-header>تخفیف (تومان)</mat-header-cell>
@@ -37,22 +36,26 @@
 
   <ng-container matColumnDef="address">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ارسال شده به</mat-header-cell>
-    <mat-cell *matCellDef="let order" style="font-size: 13px; text-align: right">استان {{order.address.province}} شهر
-      {{order.address.city}}
-      <br>
-      {{order.address.district}} {{order.address.street}} {{order.address.no ? 'پلاک ' + makePersianNumber(order.address.no, false) : ''}}
-      {{order.address.unit ?  'واحد' + makePersianNumber(order.address.unit, false) : ''}}
+    <mat-cell *matCellDef="let order" style="font-size: 13px; text-align: right"> {{ order.is_collect ? ' دریافت شده از
+      ' + order.address.wharehouse_name + ' توسط ' + order.address.recipient_name + ' ' +
+      order.address.recipient_surname :
+      ' استان ' + order.address.province +
+      ' شهر ' + order.address.city +' '+
+      order.address.district +' '+
+      order.address.street +' '+
+      ' پلاک ' + makePersianNumber(order.address.no, false) +
+      ' واحد ' + makePersianNumber(order.address.unit, false) }}
+
+
     </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="view_details">
     <mat-header-cell *matHeaderCellDef mat-sort-header>مشاهده جزییات</mat-header-cell>
-    <mat-cell *matCellDef="let order" style=" font-size: 20px"><a class="clickable-link"
-                                                                  (click)="goToOrderLines(order._id)"
-    ><i
-      class="fa fa-eye"></i></a></mat-cell>
+    <mat-cell *matCellDef="let order" style=" font-size: 20px"><a class="clickable-link" (click)="goToOrderLines(order._id)"><i
+          class="fa fa-eye"></i></a></mat-cell>
   </ng-container>
-  
+
   <!-- return order -->
   <!-- <ng-container matColumnDef="return_order">
     <mat-header-cell *matHeaderCellDef mat-sort-header> مرجوع سفارش</mat-header-cell>
@@ -94,11 +97,11 @@
           <span>ارسال شده به:</span>
           <span>استان {{order.address.province}} شهر {{order.address.city}}
             <br>
-            {{order.address.district}} {{order.address.street}} {{order.address.no ? 'پلاک ' + makePersianNumber(order.address.no, false) : ''}}
-           {{order.address.unit ?  'واحد' + makePersianNumber(order.address.unit, false) : ''}}</span>
+            {{order.address.district}} {{order.address.street}} {{order.address.no ? 'پلاک ' +
+            makePersianNumber(order.address.no, false) : ''}}
+            {{order.address.unit ? 'واحد' + makePersianNumber(order.address.unit, false) : ''}}</span>
         </div>
-        <div class="eye-style"><a (click)="goToOrderLines(order._id)" class="clickable-link"><i
-          class="fa fa-eye"></i></a></div>
+        <div class="eye-style"><a (click)="goToOrderLines(order._id)" class="clickable-link"><i class="fa fa-eye"></i></a></div>
       </mat-card-content>
     </mat-card>
   </div>

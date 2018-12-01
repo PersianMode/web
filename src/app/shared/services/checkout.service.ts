@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {IAddressInfo} from '../interfaces/iaddressInfo.interface';
-import {HttpService} from './http.service';
-import {CartService} from './cart.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {PaymentType} from '../enum/payment.type.enum';
-import {AuthService} from './auth.service';
-import {MatSnackBar} from '@angular/material';
-import {Router} from '@angular/router';
-import {ReplaySubject} from 'rxjs/Rx';
-import {SpinnerService} from './spinner.service';
+import { Injectable } from '@angular/core';
+import { IAddressInfo } from '../interfaces/iaddressInfo.interface';
+import { HttpService } from './http.service';
+import { CartService } from './cart.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { PaymentType } from '../enum/payment.type.enum';
+import { AuthService } from './auth.service';
+import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
+import { ReplaySubject } from 'rxjs/Rx';
+import { SpinnerService } from './spinner.service';
 
 @Injectable()
 export class CheckoutService {
@@ -39,9 +39,10 @@ export class CheckoutService {
   deliveryTime: any = null;
   addressObj: any = {};
 
+
   constructor(private cartService: CartService, private httpService: HttpService,
-              private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
-              private router: Router) {
+    private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
+    private router: Router) {
     this.cartService.cartItems.subscribe(
       data => {
         this.dataIsReady.next(data && data.length);
@@ -59,22 +60,20 @@ export class CheckoutService {
   }
 
   checkValidity() {
-    // const data = this.accumulateData();
-    // const il = this.authService.userIsLoggedIn();
-    // this.isValid$.next(data.total_amount &&
-    //   (il || (data.customerData && data.cartItems && data.cartItems.length)) && (!il || data.order_id));
-    const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData);
-    this.isValid$.next(this.total && isValid);
+   
+      const isValid = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime && this.productData && this.productData.length) : (this.addressObj && this.ccRecipientData  && this.productData && this.productData.length);
+      this.isValid$.next(this.total && isValid);
+     
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
     if (isLoggedIn) {
       this.httpService.get(`customer/address`)
         .subscribe(res => {
-            this.addresses$.next(res.addresses);
-          }, err => {
-            console.error(err);
-          }
+          this.addresses$.next(res.addresses);
+        }, err => {
+          console.error(err);
+        }
         );
     } else {
       const address = JSON.parse(localStorage.getItem('address'));
@@ -153,8 +152,8 @@ export class CheckoutService {
   getLoyaltyGroup() {
     this.httpService.get('loyaltygroup')
       .subscribe(res => {
-          this.loyaltyGroups.next(res);
-        },
+        this.loyaltyGroups.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -166,8 +165,8 @@ export class CheckoutService {
   getAddLoyaltyPoints() {
     this.httpService.get('deliverycc')
       .subscribe(res => {
-          this.addPointArray.next(res);
-        },
+        this.addPointArray.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -227,26 +226,26 @@ export class CheckoutService {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
       .subscribe(res => {
-          if (!this.authService.userDetails.userId) {
-            this.ccRecipientData = null;
-            let addresses = [];
-            localStorage.removeItem('address');
-            if (!this.withDelivery) {
-              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-            }
-            this.addresses$.next(addresses);
-          }
-          this.cartService.emptyCart();
-          this.selectedCustomerAddress = -1;
-          this.selectedWarehouseAddress = -1;
-          this.withDelivery = true;
-          this.deliveryDays = null;
-          this.deliveryTime = null;
-          this.addressObj = {};
+        if (!this.authService.userDetails.userId) {
           this.ccRecipientData = null;
-          this.addedProvince = '';
-          this.router.navigate(['/', 'profile']);
-        },
+          let addresses = [];
+          localStorage.removeItem('address');
+          if (!this.withDelivery) {
+            addresses = this.warehouseAddresses.map(r => Object.assign({ name: r.name }, r.address));
+          }
+          this.addresses$.next(addresses);
+        }
+        this.cartService.emptyCart();
+        this.selectedCustomerAddress = -1;
+        this.selectedWarehouseAddress = -1;
+        this.withDelivery = true;
+        this.deliveryDays = null;
+        this.deliveryTime = null;
+        this.addressObj = {};
+        this.ccRecipientData = null;
+        this.addedProvince = '';
+        this.router.navigate(['/', 'profile']);
+      },
         err => console.error(err));
   }
 
@@ -258,8 +257,8 @@ export class CheckoutService {
     return new Promise((resolve, reject) => {
       this.httpService.post('/calculate/order/price', data)
         .subscribe(res => {
-            resolve(res);
-          },
+          resolve(res);
+        },
           err => {
             reject();
           });
@@ -283,7 +282,6 @@ export class CheckoutService {
       } else {
         return;
       }
-
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
