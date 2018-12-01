@@ -32,16 +32,6 @@
     : 'معرفی تحویل گیرنده'}}
   </button>
 </div>
-<span
-  *ngIf="isModify && (withDelivery && isLoggedIn) || (withDelivery && !isLoggedIn && (!addresses || !addresses.length)) || (!withDelivery && !isLoggedIn)"
-  class="newAddress-checkout" [class.newAddress-profile]="isProfile">
-  <div class="recipient" *ngIf="!withDelivery && addressObj && addressObj.recipient_name">
-    <b>نام تحویل گیرنده:</b>
-    <span *ngIf="addressObj.recipient_title === 'f'"> خانم </span>
-    <span *ngIf="addressObj.recipient_title === 'm'"> آقای </span>
-    {{addressObj.recipient_name + ' ' + addressObj.recipient_surname}}
-  </div>
-</span>
 
 <mat-card *ngIf="!isProfile && !withDelivery && showRecipientInfo"
           style="background-color: #dedfde;border-radius: 3px; padding: 5px; margin-top: 10px;">
