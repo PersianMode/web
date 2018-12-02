@@ -17,6 +17,7 @@ export class ProfileComponent implements OnInit {
 
   headerTitle;
   balance;
+  active;
   disabled = false;
   isProcessing = false;
   hasBalance = true;
@@ -44,12 +45,10 @@ export class ProfileComponent implements OnInit {
   }
 
   checkBalance() {
-    this.httpService.get(`customer/balance`).subscribe(res => {
-      console.log('00000000000');
-      console.log(res.balance);
-      if (res.balance === 0) {
-        this.hasBalance = false;
-      }
+    this.httpService.get(`refund/get_balance`).subscribe(res => {
+      console.log(res);
+      this.balance = res[0].balance;
+      this.active = res[1].active;
     });
   }
 

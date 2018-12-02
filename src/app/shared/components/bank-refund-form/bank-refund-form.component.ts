@@ -34,13 +34,14 @@ export class BankRefundFormComponent implements OnInit {
       owner_card_name: new FormControl(null, Validators.required),
       owner_card_surname: new FormControl(null, Validators.required),
       bank_name: new FormControl(null),
-      // card_no: new FormGroup({
-      //   first: new FormControl(null, Validators.required),
-      //   second: new FormControl(null, Validators.required),
-      //   third: new FormControl(null, Validators.required),
-      //   fourth: new FormControl(null, Validators.required)
-      // }),
-      sheba_no: new FormControl(null),
+      card_no: new FormControl(null, [ Validators.required,
+        Validators.maxLength(16),
+        Validators.minLength(16),
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/)]),
+      sheba_no: new FormControl(null, [Validators.required,
+        Validators.maxLength(24),
+        Validators.minLength(24),
+        Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/)]),
     });
   }
 
@@ -52,7 +53,7 @@ export class BankRefundFormComponent implements OnInit {
       owner_card_name: this.informationBankForm.controls['owner_card_name'].value,
       owner_card_surname: this.informationBankForm.controls['owner_card_surname'].value,
       bank_name: this.informationBankForm.controls['bank_name'].value,
-      // card_no: this.informationBankForm.controls['card_no'].value,
+      card_no: this.informationBankForm.controls['card_no'].value,
       sheba_no: this.informationBankForm.controls['sheba_no'].value,
 
     };

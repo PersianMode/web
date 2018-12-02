@@ -24,13 +24,13 @@
       </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>درخواست بازگشت وجه</mat-expansion-panel-header>
-        <div *ngIf=" hasBalance && !isProcessing">
+        <div *ngIf="balance > 0">
         <button mat-raised-button (click)="goToRefundBank()">بازگشت مبلغ</button>
         </div>
-        <div *ngIf="isProcessing">
-          <span >در حال بررسی درخواست بازگشت وجه</span>
+        <div *ngIf="balance === 0 && active">
+          <span >درخواست شما در حال بررسی می باشد</span>
         </div>
-        <div *ngIf="!hasBalance ">
+        <div *ngIf="balance === 0 && !active ">
           <span >موحودی حساب شما صفر است</span>
         </div>
       </mat-expansion-panel>

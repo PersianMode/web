@@ -12,3 +12,9 @@ mat-header-cell, mat-cell{
   text-align: center;
   font-family: iranyekan, sans-serif !important;
 }
+
+.card-container {
+  direction: rtl;
+  margin: 10px;
+  padding: 10px;
+}

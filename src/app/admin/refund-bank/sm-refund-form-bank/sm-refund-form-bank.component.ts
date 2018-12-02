@@ -11,7 +11,7 @@ import {HttpService} from '../../../shared/services/http.service';
 export class SmRefundFormBankComponent implements OnInit {
 
   informationBankForm: FormGroup;
-
+  disabled = false;
   cardSelected = null;
   formGroup;
   @Input() accessLevel;
@@ -20,7 +20,7 @@ export class SmRefundFormBankComponent implements OnInit {
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar,
               private dialogRef: MatDialogRef<SmRefundFormBankComponent>, @Inject(MAT_DIALOG_DATA) private data: any) {
-    console.log(this.data);
+
     this.createFormGroup(
       this.data.owner_card_name,
       this.data.owner_card_surname,
@@ -30,7 +30,7 @@ export class SmRefundFormBankComponent implements OnInit {
       this.data.amount,
       this.data.mobile_number,
       this.data.sheba_no,
-      // this.data.card_no,
+      this.data.card_no,
       this.data.comment
     );
   }
@@ -40,7 +40,7 @@ export class SmRefundFormBankComponent implements OnInit {
   }
 
   createFormGroup(owner_card_name = null, owner_card_surname = null, customer_first_name = null, customer_surname = null,
-                  bank_name = null, amount = null, mobile_number = null, sheba_no = null, comment = null) {
+                  bank_name = null, amount = null,  mobile_number = null, card_no = null, sheba_no = null, comment = null) {
     this.formGroup = new FormGroup({
       owner_card_name: new FormControl(owner_card_name, Validators.required),
       owner_card_surname: new FormControl(owner_card_surname, Validators.required),
@@ -48,13 +48,8 @@ export class SmRefundFormBankComponent implements OnInit {
       customer_surname: new FormControl(customer_surname, Validators.required),
       bank_name: new FormControl(bank_name, Validators.required),
       amount: new FormControl(amount, Validators.required),
-      // card_no: new FormGroup({
-      //   first: new FormControl(null, Validators.required),
-      //   second: new FormControl(null, Validators.required),
-      //   third: new FormControl(null, Validators.required),
-      //   fourth: new FormControl(null, Validators.required)
-      // }),
       mobile_number: new FormControl(mobile_number, Validators.required),
+      card_no: new FormControl(card_no),
       sheba_no: new FormControl(sheba_no),
       comment: new FormControl(comment),
     });
@@ -70,7 +65,7 @@ export class SmRefundFormBankComponent implements OnInit {
       owner_card_name: this.informationBankForm.controls['owner_card_name'].value,
       owner_card_surname: this.informationBankForm.controls['owner_card_surname'].value,
       bank_name: this.informationBankForm.controls['bank_name'].value,
-      // card_no: this.informationBankForm.controls['card_no'].value,
+      card_no: this.informationBankForm.controls['card_no'].value,
       sheba_no: this.informationBankForm.controls['sheba_no'].value,
       status: 2,
       comment: this.informationBankForm.controls['comment'].value,
@@ -99,18 +94,20 @@ export class SmRefundFormBankComponent implements OnInit {
       _id: this.data._id,
       status: 3,
       comment: this.informationBankForm.controls['comment'].value,
-      executed_time: new Date()
+      executed_time: new Date(),
+      customer_id: this.data.customer_id,
+      amount: this.informationBankForm.controls['amount'].value
     };
 
     this.httpService.post('refund/reject_detail_form', sendingData).subscribe(
       (data) => {
-        this.snackBar.open(`درخواست بازشگت وجه لغو شد`, null, {
+        this.snackBar.open(`درخواست بازگشت وجه لغو شد`, null, {
           duration: 2300,
         });
       },
       (err) => {
         console.error(err);
-        this.snackBar.open(`لغو درخواست بازشگت وجه با مشکل مواجه شد، لطفا دوباره تلاش کنید`, null, {
+        this.snackBar.open(`لغو درخواست بازگشت وجه با مشکل مواجه شد، لطفا دوباره تلاش کنید`, null, {
           duration: 3200,
         });
       }

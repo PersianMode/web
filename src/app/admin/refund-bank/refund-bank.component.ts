@@ -15,35 +15,33 @@ import {SmRefundFormBankComponent} from './sm-refund-form-bank/sm-refund-form-ba
   templateUrl: './refund-bank.component.html',
   styleUrls: ['./refund-bank.component.css']
 })
-export class RefundBankComponent implements OnInit, AfterViewInit {
+export class RefundBankComponent implements OnInit {
+  limit: any = 10;
+  offset: any = 0;
   dataTemp;
+  totalRecords = 0;
   dialogEnum = DialogEnum;
   displayedColumns = ['requested_time', 'balance', 'detail', 'status'];
   dataSource: MatTableDataSource<any>;
   statusList = [{status: 1, message: 'در حال بررسی'}, {status: 2, message: 'پرداخت شده'}, {status: 3, message: 'لغو شده'}];
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
-
   constructor(private dialog: MatDialog, private httpService: HttpService,
-              private messageService: MessageService, private authService: AuthService) {
+              private messageService: MessageService) {
   }
 
   ngOnInit() {
     this.getData();
   }
 
-  ngAfterViewInit() {
-    // this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.paginator;
+  load() {
+
   }
 
   getData() {
-    this.httpService.get('refund/get_forms').subscribe(data => {
-      this.dataTemp = data;
-      console.log('data::', data);
-      this.dataSource = new MatTableDataSource(this.mapData(data));
+    this.httpService.get('refund/get_forms/' + (this.offset ? this.offset : 0) + '/' + (this.limit ? this.limit : 10)).subscribe(data => {
+      this.dataTemp = data.result;
+      this.dataSource = new MatTableDataSource(this.mapData(data.result));
+      this.totalRecords = data && data.total ? data.total : 0;
       this.messageService.showMessage('عملیات با موفقیت انجام شد', MessageType.Information);
     }, err => {
       console.log('Cannot get data', err);
@@ -60,6 +58,7 @@ export class RefundBankComponent implements OnInit, AfterViewInit {
           _id: refund._id,
           balance: refund.amount,
           status: refund.status,
+          customer_id: refund.customer_id
         };
         _data.push(_obj);
       });
@@ -68,9 +67,6 @@ export class RefundBankComponent implements OnInit, AfterViewInit {
   }
 
   showDetail(_id) {
-    console.log(_id);
-    console.log(this.dataTemp);
-    console.log(this.dataTemp.find(x => x._id === _id));
     const refundForm = this.dialog.open(SmRefundFormBankComponent, {
       width: '500px',
       data: this.dataTemp.find(x => x._id === _id),
@@ -90,6 +86,13 @@ export class RefundBankComponent implements OnInit, AfterViewInit {
 
   getStatus(status) {
     return this.statusList.filter(s => s.status === status)[0].message;
+  }
+
+  changePageSetting(data) {
+    this.limit = data.pageSize ? data.pageSize : 10;
+    this.offset = data.pageIndex * this.limit;
+
+    this.getData();
   }
 
 }

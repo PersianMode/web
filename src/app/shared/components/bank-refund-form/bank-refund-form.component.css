@@ -16,13 +16,24 @@
   width: 15%;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 
 .example-four-width {
   width: 20%;
+}
+
+
+.mat {
+  width: 100%;
+  text-align: left;
+}
+
+.comment {
+  width: 100%;
+  text-align: right;
 }

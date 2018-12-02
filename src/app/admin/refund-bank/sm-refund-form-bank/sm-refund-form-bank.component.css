@@ -36,3 +36,13 @@ input[type=number]::-webkit-outer-spin-button {
 .clear-icon {
   cursor: pointer;
 }
+
+.mat-input {
+  width: 100%;
+  text-align: left;
+}
+
+.comment {
+  width: 100%;
+  text-align: right;
+}
