@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs/Rx';
 import { SpinnerService } from './spinner.service';
+import { time_slotEnum } from '../enum/time_slot.enum';
 
 @Injectable()
 export class CheckoutService {
@@ -231,6 +232,7 @@ export class CheckoutService {
           let addresses = [];
           localStorage.removeItem('address');
           if (!this.withDelivery) {
+           
             addresses = this.warehouseAddresses.map(r => Object.assign({ name: r.name }, r.address));
           }
           this.addresses$.next(addresses);
@@ -269,6 +271,8 @@ export class CheckoutService {
 
     if (!this.withDelivery) {
       this.addressObj.wharehouse_name = this.addressObj.name;
+      
+      
     }
 
     if (!this.withDelivery)
@@ -279,6 +283,7 @@ export class CheckoutService {
         this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
         this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
         this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
+       
       } else {
         return;
       }
@@ -292,8 +297,8 @@ export class CheckoutService {
       total_amount: this.total,
       discount: this.discount,
       is_collect: !this.withDelivery,
-      duration_days: this.deliveryDays,
-      time_slot: this.deliveryTime,
+      duration_days: this.withDelivery ? this.deliveryDays: null,
+      time_slot: this.withDelivery? this.deliveryTime : null,
       paymentType: this.selectedPaymentType,
       loyalty: this.earnSpentPointObj,
     };
