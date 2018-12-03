@@ -9,7 +9,6 @@ import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs/Rx';
 import { SpinnerService } from './spinner.service';
-import { time_slotEnum } from '../enum/time_slot.enum';
 
 @Injectable()
 export class CheckoutService {
