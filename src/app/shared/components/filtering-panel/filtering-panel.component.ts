@@ -63,16 +63,15 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
           }
         }
       });
-      const prices = r.find(fo => fo.name === 'price');
+      let prices: any = r.find(fo => fo.name === 'price');
       if (prices && prices.values.length) {
-        if (!this.minPrice)
-          this.minPrice = prices.values[0];
-        if (!this.maxPrice)
-          this.maxPrice = prices.values[1];
+        prices = prices.values;
+          this.minPrice = prices[0];
+          this.maxPrice = prices[3];
 
-        this.rangeValues = [prices.values[0], prices.values[1]];
+        this.rangeValues = [prices[1], prices[2]];
         this.formatPrices();
-      }
+    }
 
       const discount = r.find(fo => fo.name === 'discount');
       if (discount && discount.values.length) {
@@ -85,7 +84,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
         this.formatDiscount();
       }
 
-      for (const col in this.isChecked.color) {
+      for (const col in this.isChecked.color) if (this.isChecked.color.hasOwnProperty(col)) {
         let color;
         color = this.dict.convertColor(col);
         this.translatedColor[col] = ntc.name(this.dict.translateWord(col))[1];
@@ -100,7 +99,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
           this.oppositeColor[col] = 'white';
         }
       }
-      
     });
 
     this.isMobile = this.responsiveService.isMobile;
@@ -160,9 +158,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     });
     this.clear_box = false;
 
-    for (const name in this.isChecked) {
+    for (const name in this.isChecked) if (this.isChecked.hasOwnProperty(name)) {
       this.expanded[name] = false;
-      for (const value in this.isChecked[name]) {
+      for (const value in this.isChecked[name]) if (this.isChecked[name].hasOwnProperty(value)) {
         this.isChecked[name][value] = false;
       }
     }
