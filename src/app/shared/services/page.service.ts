@@ -6,6 +6,7 @@ import {Subject} from 'rxjs/Subject';
 import {AuthService} from './auth.service';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 const defaultComponents = ['menu', 'slider', 'logos', 'footer'];
 
