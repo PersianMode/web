@@ -1,11 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, Input} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {CartService} from '../../../../shared/services/cart.service';
 import {Router} from '@angular/router';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
-import {discountCalc} from '../../../../shared/lib/discountCalc';
 
 @Component({
   selector: 'app-add-to-card-confirm',
@@ -21,6 +20,7 @@ export class AddToCardConfirmComponent implements OnInit {
   discountedPrice = null;
   thumbnail;
   countFa;
+  
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<AddToCardConfirmComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private cartService: CartService,
@@ -28,6 +28,7 @@ export class AddToCardConfirmComponent implements OnInit {
   }
 
   ngOnInit() {
+    
     this.cartNumbers = 0;
     this.name = (this.data && this.data.name) ? this.data.name : null;
     this.product = this.data.product;
@@ -48,6 +49,7 @@ export class AddToCardConfirmComponent implements OnInit {
     })
   }
 
+  
   closeDialog() {
     this.dialogRef.close();
   }
@@ -56,4 +58,9 @@ export class AddToCardConfirmComponent implements OnInit {
     this.router.navigate(['/', 'cart']);
     this.dialogRef.close();
   }
+
+  navigateToCheckout(){
+    this.router.navigate(['/checkout']);
+    this.dialogRef.close();
+}
 }
