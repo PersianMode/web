@@ -1,10 +1,10 @@
-import {Component, Inject, OnInit, Input} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
-import {priceFormatter} from '../../../../shared/lib/priceFormatter';
-import {CartService} from '../../../../shared/services/cart.service';
-import {Router} from '@angular/router';
-import {AuthService} from '../../../../shared/services/auth.service';
-import {DictionaryService} from '../../../../shared/services/dictionary.service';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
+import { priceFormatter } from '../../../../shared/lib/priceFormatter';
+import { CartService } from '../../../../shared/services/cart.service';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../../shared/services/auth.service';
+import { DictionaryService } from '../../../../shared/services/dictionary.service';
 
 @Component({
   selector: 'app-add-to-card-confirm',
@@ -20,15 +20,15 @@ export class AddToCardConfirmComponent implements OnInit {
   discountedPrice = null;
   thumbnail;
   countFa;
-  
+
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<AddToCardConfirmComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, private cartService: CartService,
-              private router: Router, private auth: AuthService, private dict: DictionaryService) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private cartService: CartService,
+    private router: Router, private auth: AuthService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
-    
+
     this.cartNumbers = 0;
     this.name = (this.data && this.data.name) ? this.data.name : null;
     this.product = this.data.product;
@@ -37,19 +37,19 @@ export class AddToCardConfirmComponent implements OnInit {
       this.selectedSize = this.dict.setShoesSize(this.data.selectedSize, gender,
         this.data.product.product_type.name || this.data.product.type);
     });
-    const price =  this.data.instance.price ? this.data.instance.price : this.product.base_price;
+    const price = this.data.instance.price ? this.data.instance.price : this.product.base_price;
     this.farsiPrice = '@ ' + priceFormatter(price) + ' تومان';
     this.discountedPrice = '@ ' + priceFormatter(this.data.instance.discountedPrice) + ' تومان';
     this.thumbnail = this.product.colors.find(r => this.data.instance.product_color_id === r._id).image.thumbnail;
     this.cartService.cartItems.subscribe(items => {
       const found = items.find(r => r.instance_id === this.data.instance._id && r.product_id === this.data.product.id);
       if (found) {
-        this.countFa = found.quantity.toLocaleString('fa', {useGrouping: false}) + ' عدد ';
+        this.countFa = found.quantity.toLocaleString('fa', { useGrouping: false }) + ' عدد ';
       }
     })
   }
 
-  
+
   closeDialog() {
     this.dialogRef.close();
   }
@@ -59,8 +59,8 @@ export class AddToCardConfirmComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  navigateToCheckout(){
+  navigateToCheckout() {
     this.router.navigate(['/checkout']);
     this.dialogRef.close();
-}
+  }
 }
