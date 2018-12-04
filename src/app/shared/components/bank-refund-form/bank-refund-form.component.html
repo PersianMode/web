@@ -1,5 +1,7 @@
-<form [formGroup]="informationBankForm" (ngSubmit)="onSubmit()">
-
+<form [formGroup]="informationBankForm" (ngSubmit)="submitForm()">
+  <div class="clear-div">
+    <mat-icon aria-label="no" (click)="cancelForm()" class="clear-icon">clear</mat-icon>
+  </div>
   <mat-card dir="rtl">
     <mat-card-header>
       <mat-card-subtitle>مشخصات دارنده کارت</mat-card-subtitle>
@@ -36,14 +38,14 @@
         <!--selector ->  bank-card or sheba-card -->
         <mat-form-field>
           <mat-select placeholder="انتخاب نوع دریافتی" [(value)]="cardSelected">
-            <mat-option value="1">شماره کارت</mat-option>
-            <mat-option value="2">شماره شبا</mat-option>
+            <mat-option [value]="cardTypes.card_no">شماره کارت</mat-option>
+            <mat-option [value]="cardTypes.sheba_no">شماره شبا</mat-option>
           </mat-select>
         </mat-form-field>
 
         <!--bank card -->
-        <mat-form-field dir="ltr" *ngIf="cardSelected && cardSelected == 1">
-          <input matInput class="mat" type="number" placeholder="شماره کارت" formControlName="card_no">
+        <mat-form-field dir="ltr" *ngIf="cardSelected && cardSelected === cardTypes.card_no">
+          <input matInput class="mat" maxlength="16" placeholder="شماره کارت" formControlName="card_no">
           <mat-hint>لطفا شماره 16 رقمی کارت بانکی را وارد نمایید</mat-hint>
           <mat-error *ngIf="informationBankForm.controls['card_no'].hasError('required')">وارد کردن
             شماره کارت الزامی است
@@ -55,9 +57,9 @@
         </mat-form-field>
 
         <!-- sheba card -->
-        <mat-form-field dir="ltr" *ngIf="cardSelected && cardSelected == 2">
+        <mat-form-field dir="ltr" *ngIf="cardSelected && cardSelected === cardTypes.sheba_no">
           <span matPrefix>IR &nbsp;</span>
-          <input matInput class="mat" type="number" placeholder="شماره شبا" formControlName="sheba_no">
+          <input matInput class="mat" maxlength="24" placeholder="شماره شبا" formControlName="sheba_no">
           <mat-hint>برای مبالغ بیشتر از 3 میلیون تومان لطفا شماره شبا خود را وارد نمایید</mat-hint>
           <mat-error *ngIf="informationBankForm.controls['sheba_no'].hasError('required')">وارد کردن
             شماره شبا الزامی است
@@ -72,8 +74,7 @@
     </mat-card-content>
     <mat-card-actions dir="ltr">
       <div class="button-row">
-        <button mat-raised-button (click)="submitForm()">تایید</button>
-        <button mat-raised-button (click)="cancelForm()">لغو</button>
+        <button mat-raised-button [disabled]="checkValidation()"> تایید </button>
       </div>
     </mat-card-actions>
   </mat-card>

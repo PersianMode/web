@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
@@ -19,8 +19,6 @@ export class ProfileComponent implements OnInit {
   balance;
   active;
   disabled = false;
-  isProcessing = false;
-  hasBalance = true;
   dialogEnum = DialogEnum;
 
   constructor(private authService: AuthService, private dialog: MatDialog,
@@ -59,12 +57,11 @@ export class ProfileComponent implements OnInit {
         componentName: this.dialogEnum.refundBank,
       }
     });
-
-    refundForm.afterClosed().subscribe(data => {
-      if (data.isProcessing) {
-        this.isProcessing = true;
-      }
-    });
+    // console.log('refundform111111', refundForm);
+    // if (refundForm) {
+    //   this.active = true;
+    //   this.balance = 0;
+    // }
   }
 }
 

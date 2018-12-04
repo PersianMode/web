@@ -4,12 +4,29 @@
   </mat-card-header>
   <mat-card-content>
     <div class="example-container mat-elevation-z8">
-      <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
+      <button mat-icon-button color="primary" (click)="getData()" style="margin-top: 10px;">
         <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
       </button>
+
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <div fxFlex="25" class="filtering-box" style="margin-top: 20px">
+          <mat-checkbox class="filtering-field" [ngModel]="_status" (change)="changeStatus()"
+                        [indeterminate]="_status === null">
+            <span *ngIf="_status" class="checkbox-label"> در حال بررسی </span>
+            <span *ngIf="_status === false" class="checkbox-label"> پرداخت یا لغو شده </span>
+            <span *ngIf="_status === null" class="checkbox-label"> همه موارد </span>
+          </mat-checkbox>
+        </div>
+      </div>
+
       <mat-table #table [dataSource]="dataSource" matSort>
 
-        <!-- requested_time Column -->
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{formatter(element.position)}} </mat-cell>
+        </ng-container>
+
+          <!-- requested_time Column -->
         <ng-container matColumnDef="requested_time">
           <mat-header-cell *matHeaderCellDef mat-sort-header> تاریخ </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{getShamsiDate(element.requested_time)}} </mat-cell>

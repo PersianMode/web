@@ -1,5 +1,4 @@
 <form [formGroup]="informationBankForm" (ngSubmit)="onSubmit()">
-  <!--TODO: guard is needed if any fields have been changed!-->
   <div class="clear-div">
     <mat-icon aria-label="no" (click)="onClose()" class="clear-icon">clear</mat-icon>
   </div>
@@ -28,7 +27,7 @@
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput placeholder="موجودی" formControlName="amount" >
+          <input matInput placeholder="موجودی" formControlName="amount">
         </mat-form-field>
 
         <mat-form-field>
@@ -48,7 +47,7 @@
         <!-- sheba card -->
         <mat-form-field dir="ltr" class="mat-input">
           <span matPrefix>IR &nbsp;</span>
-          <input pattern="[0-9]" maxlength="24" matInput placeholder="شماره شبا" dir="ltr" formControlName="sheba_no">
+          <input pattern="[0-9]"  maxlength="24" matInput placeholder="شماره شبا" dir="ltr" formControlName="sheba_no">
         </mat-form-field>
 
 
@@ -60,7 +59,7 @@
       </div>
     </mat-card-content>
     <mat-card-actions dir="ltr">
-      <div class="button-row" >
+      <div class="button-row">
         <button mat-raised-button (click)="submitForm()">پرداخت</button>
         <button mat-raised-button (click)="cancelForm()">لغو پرداخت</button>
       </div>

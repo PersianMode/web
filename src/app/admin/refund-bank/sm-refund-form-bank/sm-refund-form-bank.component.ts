@@ -49,8 +49,8 @@ export class SmRefundFormBankComponent implements OnInit {
       bank_name: new FormControl(bank_name, Validators.required),
       amount: new FormControl(amount, Validators.required),
       mobile_number: new FormControl(mobile_number, Validators.required),
-      card_no: new FormControl(card_no),
-      sheba_no: new FormControl(sheba_no),
+      card_no: new FormControl(card_no, Validators.required),
+      sheba_no: new FormControl(sheba_no, Validators.required),
       comment: new FormControl(comment),
     });
   }
