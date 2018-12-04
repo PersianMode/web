@@ -16,8 +16,6 @@ export class BankRefundFormComponent implements OnInit {
 
   cardSelected = null;
   formGroup;
-
-  @Input() accessLevel;
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<any>();
 
@@ -64,6 +62,7 @@ export class BankRefundFormComponent implements OnInit {
         this.snackBar.open(`اطلاعات با موفقیت ثبت گردید`, null, {
           duration: 2300,
         });
+        // this.isSubmited = true;
       },
       (err) => {
         console.error();

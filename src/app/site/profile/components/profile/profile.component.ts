@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
@@ -46,22 +46,22 @@ export class ProfileComponent implements OnInit {
     this.httpService.get(`refund/get_balance`).subscribe(res => {
       console.log(res);
       this.balance = res[0].balance;
-      this.active = res[1].active;
+      this.active = res[1] && res[1].active;
     });
   }
 
-  goToRefundBank() {
+   goToRefundBank() {
     const refundForm = this.dialog.open(GenDialogComponent, {
       width: '500px',
       data: {
         componentName: this.dialogEnum.refundBank,
       }
     });
-    // console.log('refundform111111', refundForm);
-    // if (refundForm) {
-    //   this.active = true;
-    //   this.balance = 0;
-    // }
+     refundForm.afterClosed().subscribe(data => {
+       this.balance = 0;
+       this.active = true;
+     });
+
   }
 }
 

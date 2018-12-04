@@ -12,7 +12,6 @@ export class SmRefundFormBankComponent implements OnInit {
 
   informationBankForm: FormGroup;
   disabled = false;
-  cardSelected = null;
   formGroup;
   @Input() accessLevel;
   @Input() isNotMobile;
@@ -116,5 +115,9 @@ export class SmRefundFormBankComponent implements OnInit {
 
   onClose() {
     this.dialogRef.close();
+  }
+
+  checkValidation() {
+    return !(this.data.status === 2 || this.data.status === 3);
   }
 }

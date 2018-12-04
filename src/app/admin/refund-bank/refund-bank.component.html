@@ -12,9 +12,9 @@
         <div fxFlex="25" class="filtering-box" style="margin-top: 20px">
           <mat-checkbox class="filtering-field" [ngModel]="_status" (change)="changeStatus()"
                         [indeterminate]="_status === null">
-            <span *ngIf="_status" class="checkbox-label"> در حال بررسی </span>
-            <span *ngIf="_status === false" class="checkbox-label"> پرداخت یا لغو شده </span>
-            <span *ngIf="_status === null" class="checkbox-label"> همه موارد </span>
+            <span *ngIf="_status == true" class="checkbox-label"> در حال بررسی </span>
+            <span *ngIf="_status == false" class="checkbox-label"> پرداخت یا لغو شده </span>
+            <span *ngIf="_status == null" class="checkbox-label"> همه موارد </span>
           </mat-checkbox>
         </div>
       </div>

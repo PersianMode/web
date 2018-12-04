@@ -22,7 +22,10 @@ export class RefundBankComponent implements OnInit {
   offset: any = 0;
   dataTemp;
   totalRecords = 0;
-  filterStatus = [];
+  filterstatus1 = [];
+  filterstatus11 = [];
+  filterStatus2 = [];
+  filterStatus22 = [];
   position;
   _status = null;
   dialogEnum = DialogEnum;
@@ -42,9 +45,16 @@ export class RefundBankComponent implements OnInit {
     this.progressService.enable();
     this.httpService.get('refund/get_forms/' + (this.offset ? this.offset : 0) + '/' + (this.limit ? this.limit : 10)).subscribe(data => {
       this.dataTemp = data.result;
-      this.filterStatus = this.dataTemp(s => s.status === 2 || 3);
-      console.log('filterStatusz',this.filterStatus);
       this.dataSource = new MatTableDataSource(this.mapData(data.result));
+
+      if (this._status === true) {
+        console.log('status === 1');
+        this.dataSource = new MatTableDataSource(this.mapData(data.result.filter(el => el.status === 1)));
+      }
+
+      if (this._status === false) {
+        this.dataSource = new MatTableDataSource(this.mapData(data.result.filter(el => el.status === 3 || el.status === 2)));
+      }
       this.totalRecords = data && data.total ? data.total : 0;
       this.progressService.disable();
 
@@ -71,7 +81,6 @@ export class RefundBankComponent implements OnInit {
         _data.push(_obj);
       });
     }
-    console.log('data:::',_data);
     return _data;
   }
 
@@ -102,14 +111,25 @@ export class RefundBankComponent implements OnInit {
   }
 
   changeStatus() {
-    console.log('filterStatus', this.filterStatus);
     if (this._status === null) {
-      this._status = true;
       this.getData();
-    }
-    if (this._status === true) {
+      this._status = true;
+    } else if (this._status === true) {
+      this.getData();
+      console.log('22');
       this._status = false;
+    } else if (this._status === false) {
+      this.getData();
+      this._status = null;
     }
+    // if (this._status === true) {
+    //   this._status = false;
+    //   this.getData();
+    // }
+    // if (this._status === false) {
+    //   this._status = null;
+
+    // }
 
   }
 

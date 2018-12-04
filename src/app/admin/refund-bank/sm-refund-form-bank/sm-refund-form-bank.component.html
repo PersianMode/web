@@ -59,9 +59,9 @@
       </div>
     </mat-card-content>
     <mat-card-actions dir="ltr">
-      <div class="button-row">
+      <div class="button-row" *ngIf="checkValidation()">
         <button mat-raised-button (click)="submitForm()">پرداخت</button>
-        <button mat-raised-button (click)="cancelForm()">لغو پرداخت</button>
+        <button mat-raised-button  (click)="cancelForm()">لغو پرداخت</button>
       </div>
     </mat-card-actions>
   </mat-card>
