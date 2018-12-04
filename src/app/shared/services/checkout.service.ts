@@ -285,7 +285,6 @@ export class CheckoutService {
     return {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
-      customerData: this.addressObj,
       address: this.addressObj,
       transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
       used_point: 0,
@@ -293,8 +292,8 @@ export class CheckoutService {
       total_amount: this.total,
       discount: this.discount,
       is_collect: !this.withDelivery,
-      duration_days: this.withDelivery ? this.deliveryDays : null,
-      time_slot: this.withDelivery ? this.deliveryTime : null,
+      duration_days: this.withDelivery ? this.deliveryDays: null,
+      time_slot: this.withDelivery? this.deliveryTime : null,
       paymentType: this.selectedPaymentType,
       loyalty: this.earnSpentPointObj,
     };
