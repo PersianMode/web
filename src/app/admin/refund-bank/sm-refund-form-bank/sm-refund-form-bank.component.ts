@@ -11,7 +11,7 @@ import {HttpService} from '../../../shared/services/http.service';
 export class SmRefundFormBankComponent implements OnInit {
 
   informationBankForm: FormGroup;
-  disabled = false;
+  // disabled = false;
   formGroup;
   @Input() accessLevel;
   @Input() isNotMobile;
@@ -41,15 +41,15 @@ export class SmRefundFormBankComponent implements OnInit {
   createFormGroup(owner_card_name = null, owner_card_surname = null, customer_first_name = null, customer_surname = null,
                   bank_name = null, amount = null,  mobile_number = null, card_no = null, sheba_no = null, comment = null) {
     this.formGroup = new FormGroup({
-      owner_card_name: new FormControl(owner_card_name, Validators.required),
-      owner_card_surname: new FormControl(owner_card_surname, Validators.required),
-      customer_first_name: new FormControl(customer_first_name, Validators.required),
-      customer_surname: new FormControl(customer_surname, Validators.required),
-      bank_name: new FormControl(bank_name, Validators.required),
-      amount: new FormControl(amount, Validators.required),
-      mobile_number: new FormControl(mobile_number, Validators.required),
-      card_no: new FormControl(card_no, Validators.required),
-      sheba_no: new FormControl(sheba_no, Validators.required),
+      owner_card_name: new FormControl({value: owner_card_name, disabled: true}, Validators.required),
+      owner_card_surname: new FormControl({value: owner_card_surname, disabled: true}, Validators.required),
+      customer_first_name: new FormControl({value: customer_first_name, disabled: true}, Validators.required),
+      customer_surname: new FormControl({value: customer_surname, disabled: true}, Validators.required),
+      bank_name: new FormControl({value: bank_name, disabled: true}, Validators.required),
+      amount: new FormControl({value: amount, disabled: true}, Validators.required),
+      mobile_number: new FormControl({value: mobile_number, disabled: true}, Validators.required),
+      card_no: new FormControl({value: card_no, disabled: true}, Validators.required),
+      sheba_no: new FormControl({value: sheba_no, disabled: true}, Validators.required),
       comment: new FormControl(comment),
     });
   }

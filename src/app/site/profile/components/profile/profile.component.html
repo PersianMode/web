@@ -4,7 +4,10 @@
     <mat-accordion multi>
       <mat-expansion-panel expanded>
         <mat-expansion-panel-header>{{headerTitle}}</mat-expansion-panel-header>
-        <app-basic-info [isEdit]=false (formTitle)="setHeaderTitle($event)"></app-basic-info>
+        <app-basic-info [isEdit]=false (formTitle)="setHeaderTitle($event)">
+
+
+        </app-basic-info>
       </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>آدرس</mat-expansion-panel-header>

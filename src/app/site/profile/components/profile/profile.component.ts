@@ -58,8 +58,10 @@ export class ProfileComponent implements OnInit {
       }
     });
     refundForm.afterClosed().subscribe(data => {
-      this.balance = 0;
-      this.active = true;
+      if (data === true) {
+        this.balance = 0;
+        this.active = true;
+      }
     });
 
   }
