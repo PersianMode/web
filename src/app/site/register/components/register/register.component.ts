@@ -46,24 +46,24 @@ export class RegisterComponent implements OnInit {
 
   initForm() {
     this.registerForm = new FormBuilder().group({
-      username: ['sareh@salehi.com', [
+      username: [null, [
         Validators.required,
         Validators.email,
       ]],
-      password: ['123456789', [
+      password: [null, [
         Validators.required,
         Validators.minLength(8),
       ]],
-      first_name: ['ساره', [
+      first_name: [null, [
         Validators.required,
       ]],
-      surname: ['صالححی', [
+      surname: [null, [
         Validators.required,
       ]],
       dob: [null, [
         Validators.required,
       ]],
-      mobile_no: ['09198283303', [
+      mobile_no: [null, [
         Validators.required,
         Validators.pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/),
       ]],
