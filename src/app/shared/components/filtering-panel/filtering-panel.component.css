@@ -65,5 +65,7 @@
     text-align: right;
   }
 }
-
+.initial-filter{
+  border-style: solid
+}
 

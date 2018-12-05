@@ -37,22 +37,25 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   maxDiscount;
   selectedMinDiscountFormatted = '';
   selectedMaxDiscountFormatted = '';
-
   filter_options$: any;
 
-
+ 
   constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
 
+    
     this.isEU = this.productService.collectionIsEU;
     this.isEUSubescriber = this.productService.collectionIsEUObject.subscribe(value => this.isEU = value);
 
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
       this.filter_options = r;
+      let nfo = this.filter_options.name
+      console.log(nfo);
+      
       this.filter_options.forEach(el => {
-        const found = this.current_filter_state.find(cfs => cfs.name === el.name);
+      const found = this.current_filter_state.find(cfs => cfs.name === el.name);
         if (!found) {
           this.current_filter_state.push({name: el.name, values: []});
         }
@@ -87,7 +90,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       for (const col in this.isChecked.color) if (this.isChecked.color.hasOwnProperty(col)) {
         let color;
         color = this.dict.convertColor(col);
-        this.translatedColor[col] = ntc.name(this.dict.translateWord(col))[1];
+        if(this.dict.translateWord(col) !== 'نامعین'){
+          this.translatedColor[col] = ntc.name(this.dict.translateWord(col))[1];
+        }
         if (color) {
           this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
           const red = color.substring(1, 3);

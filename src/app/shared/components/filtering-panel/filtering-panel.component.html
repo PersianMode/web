@@ -1,4 +1,7 @@
 <div [ngClass]="isMobile ? 'set-size-mobile' : null">
+  <div class="initial-filter">
+
+  </div>
   <h1 *ngIf="filter_options?.length">فیلترها</h1>
 </div>
 <mat-accordion multi="true">
@@ -12,46 +15,42 @@
     </div>
   </mat-expansion-panel>
   <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null"
-                       [expanded]="expanded[fo.name]"
-                       (opened)="expanded[fo.name]=true" (closed)="expanded[fo.name]=false">
+    [expanded]="expanded[fo.name]" (opened)="expanded[fo.name]=true" (closed)="expanded[fo.name]=false">
     <mat-expansion-panel-header>
       <div class="checkbox-title">{{fo.name_fa}}</div>
     </mat-expansion-panel-header>
-    <div *ngFor="let v of filter_options[i].values;let j=index"
-         [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
-      <mat-checkbox
-        *ngIf="fo.name !== 'color' && fo.name !== 'size' && fo.name!=='shoesSize' && fo.name !=='price' && fo.name !== 'discount'"
+    <div *ngFor="let v of filter_options[i].values;let j=index" [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
+      <mat-checkbox *ngIf="fo.name !== 'color' && fo.name !== 'size' && fo.name!=='shoesSize' && fo.name !=='price' && fo.name !== 'discount'"
         (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
         <span class="check-box-text">{{filter_options[i].values_fa[j]}}</span>
       </mat-checkbox>
     </div>
     <div *ngIf="fo.name==='price' ">
-      <p-slider [(ngModel)]="rangeValues " [range]="true " [min]="minPrice " [max]="maxPrice "
-                (onChange)="formatPrices() " (onSlideEnd)="priceRangeChange() "></p-slider>
+      <p-slider [(ngModel)]="rangeValues " [range]="true " [min]="minPrice " [max]="maxPrice " (onChange)="formatPrices() "
+        (onSlideEnd)="priceRangeChange() "></p-slider>
       <span style="float:left ">{{selectedMinPriceFormatted}} تومان</span>
       <span>{{selectedMaxPriceFormatted}} تومان</span>
     </div>
     <div *ngIf="fo.name==='discount' ">
       <p-slider [(ngModel)]="discountRangeValues " [range]="true " [min]="minDiscount " [max]="maxDiscount
-        " (onChange)="formatDiscount() " (onSlideEnd)="discountRangeChange() "></p-slider>
+        "
+        (onChange)="formatDiscount() " (onSlideEnd)="discountRangeChange() "></p-slider>
       <span style="float: left ">{{selectedMinDiscountFormatted}} درصد</span>
       <span>{{selectedMaxDiscountFormatted}} درصد</span>
     </div>
-    <span *ngIf="fo.name==='color' ">
-      <span *ngFor="let v of filter_options[i].values; let j=index " class="color-span "
-            (click)="getValue(fo.name, v) " style="cursor: pointer; "
-            matTooltip="{{translatedColor[v]}} " matTooltipShowDelay="500 ">
+    <span *ngIf="fo.name==='color'">
+      <span *ngFor="let v of filter_options[i].values ; let j=index " class="color-span " (click)="getValue(fo.name, v) "
+        style="cursor: pointer; " matTooltip="{{translatedColor[v]}} " matTooltipShowDelay="500 ">
         <svg height="26 " width="26 ">
           <circle cx="13 " cy="13 " r="12 " [attr.stroke]="needsBorder[v] ? '#ccc' : 'transparent' " stroke-width="1 "
-                  attr.fill="{{filter_options[i]?.values_fa[j]}} "></circle>
+            attr.fill="{{filter_options[i]?.values_fa[j]}} "></circle>
         </svg>
         <i *ngIf="isChecked[fo.name][v] " class="fa fa-check circle " [style.color]="oppositeColor[v] "></i>
       </span>
     </span>
     <span *ngIf="fo.name==='size' ">
-      <mat-button-toggle *ngFor="let v of filter_options[i].values; let j=index " class="filter-size "
-                         (click)="getValue(fo.name, v) "
-                         [checked]="isChecked[fo.name][v] ">
+      <mat-button-toggle *ngFor="let v of filter_options[i].values; let j=index " class="filter-size " (click)="getValue(fo.name, v) "
+        [checked]="isChecked[fo.name][v] ">
         {{filter_options[i].values_fa[j]}}
       </mat-button-toggle>
     </span>
@@ -62,9 +61,8 @@
         </mat-slide-toggle>
         <span>EU</span>
       </div>
-      <mat-button-toggle *ngFor="let v of filter_options[i].values; let j=index " class="filter-size "
-                         (click)="getValue(fo.name, v) "
-                         [checked]="isChecked[fo.name][v]">
+      <mat-button-toggle *ngFor="let v of filter_options[i].values; let j=index " class="filter-size " (click)="getValue(fo.name, v) "
+        [checked]="isChecked[fo.name][v]">
         {{filter_options[i].values_fa[j]}}
       </mat-button-toggle>
     </span>
