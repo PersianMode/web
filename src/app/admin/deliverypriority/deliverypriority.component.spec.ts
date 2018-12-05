@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SmInboxComponent } from './sm-inbox.component';
+import { DeliverypriorityComponent } from './deliverypriority.component';
 
-describe('SmInboxComponent', () => {
-  let component: SmInboxComponent;
-  let fixture: ComponentFixture<SmInboxComponent>;
+describe('DeliverypriorityComponent', () => {
+  let component: DeliverypriorityComponent;
+  let fixture: ComponentFixture<DeliverypriorityComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SmInboxComponent ]
+      declarations: [ DeliverypriorityComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SmInboxComponent);
+    fixture = TestBed.createComponent(DeliverypriorityComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

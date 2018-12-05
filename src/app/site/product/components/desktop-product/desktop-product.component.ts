@@ -106,10 +106,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     this.topDist = height - filterHeight + 209;
   }
 
-  addToCartDisability() {
-    return this.addCardBtnDisabled || !this.size;
-  }
-
   getProductShareLink() {
     return HttpService.Host + this.router.url;
   }

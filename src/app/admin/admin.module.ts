@@ -4,7 +4,7 @@ import {AdminRouting} from './admin.routing';
 import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule,
-  MatProgressBarModule, MatRadioModule, MatSelectModule, MatSidenavModule,
+  MatProgressBarModule, MatRadioModule, MatSidenavModule,
   MatTabsModule, MatToolbarModule
 } from '@angular/material';
 import {SharedModule} from '../shared/shared.module';
