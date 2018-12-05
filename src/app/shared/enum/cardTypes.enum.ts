@@ -1,4 +1,5 @@
 export enum CardTypes {
   card_no = 1,
-  sheba_no = 2
+  Sheba_no = 2
+
 }
