@@ -13,7 +13,6 @@ export class BankRefundFormComponent implements OnInit {
 
   informationBankForm: FormGroup;
   cardTypes = CardTypes;
-
   cardSelected = null;
   formGroup;
   @Input() isNotMobile;
@@ -43,9 +42,6 @@ export class BankRefundFormComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-  }
-
   submitForm() {
     const sendingData = {
       owner_card_name: this.informationBankForm.controls['owner_card_name'].value,
@@ -62,7 +58,6 @@ export class BankRefundFormComponent implements OnInit {
         this.snackBar.open(`اطلاعات با موفقیت ثبت گردید`, null, {
           duration: 2300,
         });
-        // this.isSubmited = true;
       },
       (err) => {
         console.error();
