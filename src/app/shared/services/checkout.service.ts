@@ -231,7 +231,6 @@ export class CheckoutService {
           let addresses = [];
           localStorage.removeItem('address');
           if (!this.withDelivery) {
-           
             addresses = this.warehouseAddresses.map(r => Object.assign({ name: r.name }, r.address));
           }
           this.addresses$.next(addresses);
@@ -270,8 +269,6 @@ export class CheckoutService {
 
     if (!this.withDelivery) {
       this.addressObj.wharehouse_name = this.addressObj.name;
-      
-      
     }
 
     if (!this.withDelivery)
@@ -282,7 +279,6 @@ export class CheckoutService {
         this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
         this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
         this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
-       
       } else {
         return;
       }
