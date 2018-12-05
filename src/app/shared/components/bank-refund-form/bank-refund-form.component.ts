@@ -1,7 +1,7 @@
 import {Component, OnInit, EventEmitter, Input, Output, Inject} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatSnackBar} from '@angular/material';
 import {CardTypes} from '../../enum/cardTypes.enum';
 
 @Component({
@@ -74,7 +74,7 @@ export class BankRefundFormComponent implements OnInit {
   }
 
   checkValidation() {
-    return !(this.informationBankForm.valid &&  this.cardSelected &&
+    return !(this.informationBankForm.valid && this.cardSelected &&
       (this.informationBankForm.controls['sheba_no'].value || this.informationBankForm.controls['card_no'].value)
     );
   }
