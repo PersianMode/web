@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
   dialogEnum = DialogEnum;
 
   constructor(private httpService: HttpService, private authService: AuthService,
-             private dict: DictionaryService, @Inject(WINDOW) private window, public dialog: MatDialog,
+              private dict: DictionaryService, @Inject(WINDOW) private window, public dialog: MatDialog,
               private router: Router, private messageService: MessageService, private spinnerService: SpinnerService) {
   }
 
@@ -95,7 +95,10 @@ export class RegisterComponent implements OnInit {
         (err) => {
           console.error('Cannot register user: ', err);
           this.spinnerService.disable();
-          this.messageService.showMessage('کاربری با این مشخصات موجود است', MessageType.Error);
+          if (err.error === 'customer already exist')
+            this.messageService.showMessage('کاربری با این مشخصات موجود است', MessageType.Error);
+          else
+            this.messageService.showMessage('در حال حاضر ثبت نام در سایت امکان پذیر نیست، لطفا دوباره تلاش کنید', MessageType.Error);
         }
       );
     } else {
@@ -131,6 +134,7 @@ export class RegisterComponent implements OnInit {
       (err) => {
         this.spinnerService.disable();
         console.error('Cannot send new verification code: ', err);
+        this.messageService.showMessage('خطایی در ارسال مجدد کد رخ داده است، دوباره تلاش کنید', MessageType.Information);
       }
     );
   }
