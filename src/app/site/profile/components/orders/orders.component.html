@@ -37,7 +37,7 @@
   <ng-container matColumnDef="address">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ارسال شده به</mat-header-cell>
     <mat-cell *matCellDef="let order" style="font-size: 13px; text-align: right"> {{ order.is_collect ? ' دریافت شده از
-      ' + order.address.wharehouse_name + ' توسط ' + order.address.recipient_name + ' ' +
+      ' + order.address.warehouse_name + ' توسط ' + order.address.recipient_name + ' ' +
       order.address.recipient_surname :
       ' استان ' + order.address.province +
       ' شهر ' + order.address.city +' '+

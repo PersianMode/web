@@ -1,9 +1,9 @@
-import {Component,EventEmitter,Inject,Input,OnInit,Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
-import {MatDialogRef,MatDialog,MatSnackBar} from '@angular/material';
+import {MatDialogRef, MatDialog, MatSnackBar} from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {OrderStatus} from '../../../../shared/lib/order_status';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
@@ -34,16 +34,16 @@ export class OrderLinesComponent implements OnInit {
   orderLines = [];
   noDuplicateOrderLine = [];
   @Input() isNotMobile;
-  @Output() closeDialog = new EventEmitter < boolean > ();
+  @Output() closeDialog = new EventEmitter<boolean>();
 
   constructor(private profileOrderService: ProfileOrderService,
-    private dialog: MatDialog,
-    private httpService: HttpService,
-    private snackBar: MatSnackBar,
-    private progressService: ProgressService,
-    private location: Location, private router: Router,
-    private dict: DictionaryService,
-    private responsiveService: ResponsiveService) {
+              private dialog: MatDialog,
+              private httpService: HttpService,
+              private snackBar: MatSnackBar,
+              private progressService: ProgressService,
+              private location: Location, private router: Router,
+              private dict: DictionaryService,
+              private responsiveService: ResponsiveService) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -67,11 +67,11 @@ export class OrderLinesComponent implements OnInit {
         });
       const gender = el.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
       // if (instancArr.indexOf(el.product_instance._id) === -1) {
-        instancArr.push(el.product_instance._id);
-        el.quantity = 1;
-        el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
-        this.noDuplicateOrderLine.push(el);
-      // } 
+      instancArr.push(el.product_instance._id);
+      el.quantity = 1;
+      el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
+      this.noDuplicateOrderLine.push(el);
+      // }
       // else {
       //   this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
       // }
@@ -106,6 +106,7 @@ export class OrderLinesComponent implements OnInit {
       useGrouping: isPrice
     });
   }
+
   orderStatus(ol) {
     return ol.tickets.length !== 0 ? OrderStatus.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
   }
@@ -197,13 +198,14 @@ export class OrderLinesComponent implements OnInit {
           this.httpService.post(`order/cancel`, options)
             .subscribe(
               data => {
-                this.openSnackBar('کالا مورد نظر با موفقیت کنسل شد.');
+                this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
                 this.changeOrderLine(ol);
                 this.closeDialog.emit(false);
                 this.progressService.disable();
               },
               err => {
                 this.openSnackBar('خطا در هنگام کنسل کردن');
+                console.error('error in canceling order:', err);
                 this.progressService.disable();
               }
             );
