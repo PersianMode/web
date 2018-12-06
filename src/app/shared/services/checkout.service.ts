@@ -225,29 +225,28 @@ export class CheckoutService {
 
   checkout() {
     const data = this.accumulateData();
-    this.httpService.post('checkout', data)
-      .subscribe(res => {
-          if (!this.authService.userDetails.userId) {
-            this.ccRecipientData = null;
-            let addresses = [];
-            localStorage.removeItem('address');
-            if (!this.withDelivery) {
-              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-            }
-            this.addresses$.next(addresses);
-          }
-          this.cartService.emptyCart();
-          this.selectedCustomerAddress = -1;
-          this.selectedWarehouseAddress = -1;
-          this.withDelivery = true;
-          this.deliveryDays = null;
-          this.deliveryTime = null;
-          this.addressObj = {};
+    this.httpService.post('checkout', data).subscribe(res => {
+        if (!this.authService.userDetails.userId) {
           this.ccRecipientData = null;
-          this.addedProvince = '';
-          this.router.navigate(['/', 'profile']);
-        },
-        err => console.error(err));
+          let addresses = [];
+          localStorage.removeItem('address');
+          if (!this.withDelivery) {
+            addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+          }
+          this.addresses$.next(addresses);
+        }
+        this.cartService.emptyCart();
+        this.selectedCustomerAddress = -1;
+        this.selectedWarehouseAddress = -1;
+        this.withDelivery = true;
+        this.deliveryDays = null;
+        this.deliveryTime = null;
+        this.addressObj = {};
+        this.ccRecipientData = null;
+        this.addedProvince = '';
+        this.router.navigate(['/', 'profile']);
+      },
+      err => console.error(err));
   }
 
   calculateDeliveryDiscount(durationId) {
@@ -270,8 +269,6 @@ export class CheckoutService {
 
     if (!this.withDelivery) {
       this.addressObj.wharehouse_name = this.addressObj.name;
-
-
     }
 
     if (!this.withDelivery)
@@ -282,7 +279,6 @@ export class CheckoutService {
         this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
         this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
         this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
-
       } else {
         return;
       }
