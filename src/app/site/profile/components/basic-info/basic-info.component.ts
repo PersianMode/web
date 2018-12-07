@@ -4,9 +4,12 @@ import * as moment from 'jalali-moment';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {isUndefined} from 'util';
 import {HttpService} from '../../../../shared/services/http.service';
+
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {MatDialog} from '@angular/material';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import {MatSnackBar} from '@angular/material';
+import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-basic-info',
@@ -52,7 +55,9 @@ export class BasicInfoComponent implements OnInit {
   loyaltyPointsValueFa = '';
   dialogEnum = DialogEnum;
 
-  constructor(private authService: AuthService, private httpService: HttpService, private dialog: MatDialog) {
+
+  constructor(private authService: AuthService, private httpService: HttpService,
+              private snackBar: MatSnackBar, protected progressService: ProgressService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -143,9 +148,15 @@ export class BasicInfoComponent implements OnInit {
       (res) => {
         this.ngOnInit();
         this.isEdit = false;
+        this.snackBar.open('اطلاعات شما با موفقیت ویرایش شد', null, {
+          duration: 3200
+        });
       },
       (err) => {
         console.error('Cannot edit user info: ', err);
+        this.snackBar.open('سیستم قادر به ویرایش اطلاعات شما نیست، لطفا دوباره تلاش کنید', null, {
+          duration: 3200
+        });
       }
     );
   }
@@ -191,8 +202,6 @@ export class BasicInfoComponent implements OnInit {
 
   initChangePassForm() {
     // TODO set form fiels with change_pass_obj if they have value(insted of set null every time)
-    // this.title = 'تغییر کلمه عبور < اطلاعات مشتری';
-    // this.formTitle.emit(this.title);
     this.changePassForm = new FormBuilder().group({
       oldPass: [null, [
         Validators.required,
@@ -253,11 +262,16 @@ export class BasicInfoComponent implements OnInit {
       this.initChangePassForm();
       console.error('Cannot change user pass, new entered pass are not compatible: ');
     } else {
+      this.progressService.enable();
       this.httpService.post('changePassword', this.changed_pass_obj).subscribe(
         (res) => {
           this.ngOnInit();
           this.isEdit = false;
           this.isChangePass = false;
+          this.snackBar.open('رمز عبور شما با موفقیت تغییر کرد', null, {
+            duration: 3200
+          });
+          this.progressService.disable();
         },
         (err) => {
           this.errorMsgOld = 'اطلاعات جهت تغییر کلمه عبور درست وارد نشده است';
@@ -269,6 +283,7 @@ export class BasicInfoComponent implements OnInit {
             this.curFocus = null;
           });
           this.initChangePassForm();
+          this.progressService.disable();
         }
       );
     }
