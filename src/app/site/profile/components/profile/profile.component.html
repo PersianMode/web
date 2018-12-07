@@ -4,10 +4,7 @@
     <mat-accordion multi>
       <mat-expansion-panel expanded>
         <mat-expansion-panel-header>{{headerTitle}}</mat-expansion-panel-header>
-        <app-basic-info [isEdit]=false (formTitle)="setHeaderTitle($event)">
-
-
-        </app-basic-info>
+        <app-basic-info [isEdit]=false (formTitle)="setHeaderTitle($event)"></app-basic-info>
       </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>آدرس</mat-expansion-panel-header>
@@ -24,18 +21,6 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>علاقه مندی</mat-expansion-panel-header>
         <app-preference></app-preference>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>درخواست بازگشت وجه</mat-expansion-panel-header>
-        <div *ngIf="balance > 0">
-        <button mat-raised-button (click)="goToRefundBank()">بازگشت مبلغ</button>
-        </div>
-        <div *ngIf="balance === 0 && active">
-          <span >درخواست شما در حال بررسی می باشد</span>
-        </div>
-        <div *ngIf="balance === 0 && !active ">
-          <span >موجودی حساب شما صفر است</span>
-        </div>
       </mat-expansion-panel>
     </mat-accordion>
   </div>

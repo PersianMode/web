@@ -4,8 +4,6 @@ import {Router} from '@angular/router';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {TitleService} from '../../../../shared/services/title.service';
 import {CheckoutService} from '../../../../shared/services/checkout.service';
-import {GenDialogComponent} from 'app/shared/components/gen-dialog/gen-dialog.component';
-import {DialogEnum} from 'app/shared/enum/dialog.components.enum';
 import {MatDialog} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 
@@ -16,20 +14,17 @@ import {HttpService} from '../../../../shared/services/http.service';
 })
 export class ProfileComponent implements OnInit {
 
-  isEdit = false;
   headerTitle;
   balance;
   active;
   disabled = false;
-  dialogEnum = DialogEnum;
 
-  constructor(private authService: AuthService, private dialog: MatDialog, private checkoutService: CheckoutService,
+  constructor(private authService: AuthService, private checkoutService: CheckoutService,
               private router: Router, private profileOrderService: ProfileOrderService, private titleService: TitleService,
               private httpService: HttpService) {
   }
 
   ngOnInit() {
-    this.checkBalance();
     this.authService.isLoggedIn.filter(r => r).subscribe(() => { // on logout
       if (!this.authService.userIsLoggedIn())
         this.router.navigate(['/']);
@@ -41,29 +36,6 @@ export class ProfileComponent implements OnInit {
 
   setHeaderTitle(title) {
     this.headerTitle = title;
-  }
-
-  checkBalance() {
-    this.httpService.get(`refund/get_balance`).subscribe(res => {
-      this.balance = res[0].balance;
-      this.active = res[1] && res[1].active;
-    });
-  }
-
-  goToRefundBank() {
-    const refundForm = this.dialog.open(GenDialogComponent, {
-      width: '500px',
-      data: {
-        componentName: this.dialogEnum.refundBank,
-      }
-    });
-    refundForm.afterClosed().subscribe(data => {
-      if (data === true) {
-        this.balance = 0;
-        this.active = true;
-      }
-    });
-
   }
 }
 

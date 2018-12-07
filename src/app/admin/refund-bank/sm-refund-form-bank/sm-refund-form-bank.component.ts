@@ -11,7 +11,6 @@ import {HttpService} from '../../../shared/services/http.service';
 export class SmRefundFormBankComponent implements OnInit {
 
   informationBankForm: FormGroup;
-  // disabled = false;
   formGroup;
   @Input() accessLevel;
   @Input() isNotMobile;
@@ -19,7 +18,6 @@ export class SmRefundFormBankComponent implements OnInit {
 
   constructor(private httpService: HttpService, private snackBar: MatSnackBar,
               private dialogRef: MatDialogRef<SmRefundFormBankComponent>, @Inject(MAT_DIALOG_DATA) private data: any) {
-
     this.createFormGroup(
       this.data.owner_card_name,
       this.data.owner_card_surname,
@@ -28,8 +26,8 @@ export class SmRefundFormBankComponent implements OnInit {
       this.data.bank_name,
       this.data.amount,
       this.data.mobile_number,
-      this.data.sheba_no,
       this.data.card_no,
+      this.data.sheba_no,
       this.data.comment
     );
   }

@@ -29,16 +29,8 @@
           <input matInput placeholder="نام بانک" formControlName="bank_name">
         </mat-form-field>
 
-        <!--selector ->  bank-card or sheba-card -->
-        <mat-form-field>
-          <mat-select placeholder="انتخاب نوع دریافتی" [(value)]="cardSelected">
-            <mat-option [value]="cardTypes.card_no">شماره کارت</mat-option>
-            <mat-option [value]="cardTypes.sheba_no">شماره شبا</mat-option>
-          </mat-select>
-        </mat-form-field>
-
         <!--bank card -->
-        <mat-form-field dir="ltr" *ngIf="cardSelected && cardSelected === cardTypes.card_no">
+        <mat-form-field dir="ltr" *ngIf="balance <= 3000000">
           <input matInput class="mat" maxlength="16" placeholder="شماره کارت" formControlName="card_no">
           <mat-hint>لطفا شماره 16 رقمی کارت بانکی را وارد نمایید</mat-hint>
           <mat-error *ngIf="informationBankForm.controls['card_no'].hasError('required')">وارد کردن
@@ -51,7 +43,7 @@
         </mat-form-field>
 
         <!-- sheba card -->
-        <mat-form-field dir="ltr" *ngIf="cardSelected && cardSelected === cardTypes.sheba_no">
+        <mat-form-field dir="ltr" *ngIf="balance > 3000000">
           <span matPrefix>IR &nbsp;</span>
           <input matInput class="mat" maxlength="24" placeholder="شماره شبا" formControlName="sheba_no">
           <mat-hint>برای مبالغ بیشتر از 3 میلیون تومان لطفا شماره شبا خود را وارد نمایید</mat-hint>

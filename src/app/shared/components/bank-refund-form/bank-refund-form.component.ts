@@ -15,6 +15,9 @@ export class BankRefundFormComponent implements OnInit {
   cardTypes = CardTypes;
   cardSelected = null;
   formGroup;
+  balance;
+  card_no;
+  sheba_no;
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<any>();
 
@@ -23,6 +26,7 @@ export class BankRefundFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkBalance();
     this.informationBankForm = this.formGroup;
   }
 
@@ -43,13 +47,13 @@ export class BankRefundFormComponent implements OnInit {
   }
 
   submitForm() {
+
     const sendingData = {
       owner_card_name: this.informationBankForm.controls['owner_card_name'].value,
       owner_card_surname: this.informationBankForm.controls['owner_card_surname'].value,
       bank_name: this.informationBankForm.controls['bank_name'].value,
-      card_no: this.informationBankForm.controls['card_no'].value,
-      sheba_no: this.informationBankForm.controls['sheba_no'].value,
-
+      card_no: this.informationBankForm.controls['card_no'].value ? this.informationBankForm.controls['card_no'].value : '-',
+      sheba_no: this.informationBankForm.controls['sheba_no'].value ? this.informationBankForm.controls['sheba_no'].value : '-'
     };
 
     this.httpService.put('refund', sendingData).subscribe(
@@ -69,9 +73,15 @@ export class BankRefundFormComponent implements OnInit {
   }
 
   checkValidation() {
-    return !(this.informationBankForm.valid && this.cardSelected &&
+    return !(this.informationBankForm.valid &&
       (this.informationBankForm.controls['sheba_no'].value || this.informationBankForm.controls['card_no'].value)
     );
+  }
+
+  checkBalance() {
+    this.httpService.get(`refund/get_balance`).subscribe(res => {
+      this.balance = res[0].balance;
+    });
   }
 
   cancelForm() {
