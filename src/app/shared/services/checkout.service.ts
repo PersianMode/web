@@ -8,7 +8,6 @@ import { AuthService } from './auth.service';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs/Rx';
-import { SpinnerService } from './spinner.service';
 
 @Injectable()
 export class CheckoutService {
@@ -60,10 +59,9 @@ export class CheckoutService {
   }
 
   checkValidity() {
-   
-      const validAddressObject = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData );
-      this.isValid$.next(this.total && validAddressObject  && this.productData && this.productData.length);
-     
+    const validAddressObject =
+      this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData);
+    this.isValid$.next(this.total && validAddressObject && this.productData && this.productData.length);
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
