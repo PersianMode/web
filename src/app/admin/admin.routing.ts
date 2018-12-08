@@ -9,6 +9,7 @@ const Admin_ROUTES: Routes = [
       {path: '', redirectTo: 'collections', pathMatch: 'full'},
       {path: 'collections', loadChildren: 'app/admin/collections/collections.module#CollectionsModule', canActivate: [AdminAuthGuard]},
       {path: 'login', loadChildren: 'app/admin/login/login.module#LoginModule'},
+      {path:'deliverypriority',loadChildren:'app/admin/deliverypriority/deliverypriority.module#DeliverypriorityModule', canActivate: [AdminAuthGuard]},
       {path: 'products', loadChildren: 'app/admin/product/product.module#ProductModule', canActivate: [AdminAuthGuard]},
       {path: 'campaigns', loadChildren: 'app/admin/campaign/campaign.module#CampaignModule', canActivate: [AdminAuthGuard]},
       {path: 'pages', loadChildren: 'app/admin/page/page.module#PageModule', canActivate: [AdminAuthGuard]},
@@ -29,6 +30,11 @@ const Admin_ROUTES: Routes = [
       {
         path: 'delivery',
         loadChildren: 'app/admin/delivery/delivery.module#DeliveryModule',
+        canActivate: [AdminAuthGuard]
+      },
+      {
+        path: 'internal_delivery',
+        loadChildren: 'app/admin/internal-delivery/internal-delivery.module#InternalDeliveryModule',
         canActivate: [AdminAuthGuard]
       }
     ]

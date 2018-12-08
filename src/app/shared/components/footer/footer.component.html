@@ -3,13 +3,16 @@
     <div fxFlex="15" fxFlex.sm="2" fxFlex.xs="2">&nbsp;</div>
     <div fxFlex="70" fxFlex.sm="98" fxFlex.xs="98">
       <div class="div-top" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="center center">
-        <div fxFlex="70">
+        <div fxFlex="30">
           <div *ngFor="let column of getKeyList(footerSiteLinksItems); first as isFirst" class="footer-column">
             <div *ngFor="let item of footerSiteLinksItems[column]; first as rowHeader" class="row-item">
               <a [ngClass]="{'footer-link-bold': rowHeader || item.is_header || isFirst, 'footer-link': !rowHeader && !item.is_header}"
                 href="{{item.href}}">{{item.text}}</a>
             </div>
           </div>
+        </div>
+        <div fxFlex="40" class="e-nemad-wrapper">
+          <img src="https://trustseal.enamad.ir/logo.aspx?id=100023&p=5JCVzc2aDSrCH87p" alt="" onclick="window.open('https://trustseal.enamad.ir/Verify.aspx?id=100023&p=5JCVzc2aDSrCH87p','Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')" style="cursor:pointer" id="5JCVzc2aDSrCH87p" class="e-nemad">
         </div>
         <div fxFlex="30" class="icons-outer-div">
           <div class="icons-inner-div">
@@ -29,7 +32,7 @@
           </div>
           <div class="div-right-reserved"> &nbsp; تمامی حقوق این سایت متعلق به پرشین مد می باشد.</div>
         </div>
-        <div fxFlex="50" style="text-align: left">
+        <div fxFlex="30" style="text-align: left">
           <div class="div-guide">
             <a href="#" class="footer-link1">راهنمای سایت</a>
           </div>

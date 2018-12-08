@@ -10,6 +10,8 @@ import {DialogEnum} from '../../enum/dialog.components.enum';
 import {time_slotEnum} from '../../enum/time_slot.enum';
 import {CheckoutService} from '../../services/checkout.service';
 import {ProgressService} from '../../services/progress.service';
+import {RemovingConfirmComponent} from '../removing-confirm/removing-confirm.component';
+import {PlacementModifyEnum} from '../../../admin/page/enum/placement.modify.type.enum';
 
 
 @Component({
@@ -32,23 +34,23 @@ export class AddressTableComponent implements OnInit {
     'سانا': [35.8024766, 51.4552242],
     'پالادیوم': [35.7975691, 51.4107673],
   };
-  deliveryPeriodDay = [];
-  delivery_time = null;
+
   deliveryHour = [];
   loc = null;
-  withDelivery = true;
-  selectedCustomerAddress = -1;
-  selectedWarehouseAddress = -1;
-  addrBtnLabel = 'افزودن آدرس جدید';
+
   addresses = [];
-  tehranAddresses = [];
-  showAddresses = [];
   isMobile = false;
   isLoggedIn = false;
-  durations = [];
+  durations: any = [];
   durationId;
-  deliveryDays;
+  province;
+  showRecipientInfo = false;
 
+  withDelivery;
+  selectedCustomerAddress = -1;
+  selectedWarehouseAddress = -1;
+  deliveryDays;
+  deliveryTime;
 
   constructor(@Inject(WINDOW) private window, private httpService: HttpService,
               private dialog: MatDialog, private checkoutService: CheckoutService,
@@ -57,8 +59,16 @@ export class AddressTableComponent implements OnInit {
     this.isMobile = this.responsiveService.isMobile;
   }
 
-  ngOnInit() {
-    this.delivery_time = null;
+  async ngOnInit() {
+    this.durations = await this.checkoutService.getDurations();
+    this.withDelivery = this.checkoutService.withDelivery;
+    this.selectedCustomerAddress = this.checkoutService.selectedCustomerAddress;
+    this.selectedWarehouseAddress = this.checkoutService.selectedWarehouseAddress;
+    this.setAddressDataForService();
+    this.deliveryDays = this.checkoutService.deliveryDays;
+    this.deliveryTime = this.checkoutService.deliveryTime;
+
+    this.showRecipientInfo = this.checkoutService.ccRecipientData ? this.checkoutService.ccRecipientData : null;
     this.noDuration.emit(null);
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
     this.authService.isLoggedIn.subscribe(r => {
@@ -68,58 +78,80 @@ export class AddressTableComponent implements OnInit {
     this.deliveryHour = [];
     Object.keys(this.time_slot).forEach(el => this.deliveryHour.push(this.time_slot[el]));
 
-    const state = this.checkoutService.addressState;
-    if (state) {
-      [this.withDelivery, this.selectedCustomerAddress, this.selectedWarehouseAddress]
-        = this.checkoutService.addressState;
-      if (this.isProfile)
-        this.withDelivery = true;
-      this.changeWithDelivery();
+    this.province = this.checkoutService.addedProvince ? this.checkoutService.addedProvince : null;
+    if (this.province) {
+      this.checkoutService.getCustomerAddresses();
     }
+
     this.checkoutService.addresses$.subscribe(res => {
-      if (res && res.length && this.withDelivery) {
-        if (this.showAddresses.length === res.length - 1) {
-          this.selectedCustomerAddress = res.length - 1;
-        } else if (res.length === 1) {
-          this.selectedCustomerAddress = 0;
+      this.province = this.checkoutService.addedProvince ? this.checkoutService.addedProvince : null;
+      this.addresses = res;
+      if (!this.isProfile) {
+        if (this.withDelivery) {
+          if (this.deliveryDays === 3) {// should change days if added address is not tehran
+            if (this.province) {
+              if (this.province !== 'تهران') {
+                const duration_5 = this.durations.filter(el => el.delivery_days === 5)[0];
+                this.changeDurationType(duration_5._id, duration_5.delivery_days);
+                this.selectedCustomerAddress = this.addresses.length - 1;
+                this.province = '';
+              } else {
+                if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
+                  this.filterTehranAddresses();
+                }
+                this.selectedCustomerAddress = this.addresses.length - 1;
+                this.province = '';
+              }
+            } else if (!this.province)
+              this.filterTehranAddresses();
+          } else if (res && res.length) {
+            if (this.addresses.length === res.length - 1) {
+              this.selectedCustomerAddress = res.length - 1;
+            } else if (res.length === 1) {
+              this.selectedCustomerAddress = 0;
+            }
+          }
+          this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
+        } else {
+          this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
         }
-        this.addresses = res;
-        this.showAddresses = this.addresses;
-        this.setState();
       }
+
+      this.setAddressDataForService();
     });
 
-    this.setState();
-
-    this.getDurations();
   }
 
-  private setState() {
-    this.checkoutService.addressState = [
-      this.withDelivery,
-      this.selectedCustomerAddress,
-      this.selectedWarehouseAddress,
-      JSON.parse(localStorage.getItem('address')),
+  changeWithDelivery() {
+    this.checkoutService.withDelivery = this.withDelivery;
+    this.deliveryType.emit(this.withDelivery);
+    if (this.withDelivery) {
+      this.addresses = this.checkoutService.addresses$.getValue();
+
+      if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 3)) {
+        this.filterTehranAddresses();
+      }
+    } else {
+      this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+    }
+    this.setAddressDataForService();
+  }
+
+  setAddressDataForService() {
+    this.checkoutService.addressObj =
       this.withDelivery ?
-        this.selectedCustomerAddress >= 0 ? this.showAddresses[this.selectedCustomerAddress] : null
-        : this.selectedWarehouseAddress >= 0 ? this.showAddresses[this.selectedWarehouseAddress] : null,
-
-      this.withDelivery ? this.deliveryDays : null,
-      this.withDelivery ? this.delivery_time : null
-    ];
-  }
-
-  private setBtnLabel() {
-    this.addrBtnLabel = this.withDelivery ? 'افزودن آدرس جدید' : 'معرفی تحویل‌گیرنده';
+        this.selectedCustomerAddress >= 0 ? this.addresses[this.selectedCustomerAddress] : null
+        : this.selectedWarehouseAddress >= 0 ? this.addresses[this.selectedWarehouseAddress] : null;
+    this.checkoutService.checkValidity();
   }
 
   getLatitude() {
-    return this.showAddresses[this.selectedWarehouseAddress].loc ? this.showAddresses[this.selectedWarehouseAddress].loc.lat :
+    return this.addresses[this.selectedWarehouseAddress].loc ? this.addresses[this.selectedWarehouseAddress].loc.lat :
       this.loc ? this.loc[0] : 35.7322793;
   }
 
   getLongitude() {
-    return this.showAddresses[this.selectedWarehouseAddress].loc ? this.showAddresses[this.selectedWarehouseAddress].loc.long :
+    return this.addresses[this.selectedWarehouseAddress].loc ? this.addresses[this.selectedWarehouseAddress].loc.long :
       this.loc ? this.loc[1] : 51.2140536;
   }
 
@@ -130,15 +162,17 @@ export class AddressTableComponent implements OnInit {
       } else {
         this.selectedCustomerAddress = i;
       }
+      this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
     } else {
       if (i === this.selectedWarehouseAddress) {
         this.selectedWarehouseAddress = -1;
       } else {
         this.selectedWarehouseAddress = i;
-        this.loc = this.locs[this.showAddresses[this.selectedWarehouseAddress].name];
+        this.loc = this.locs[this.addresses[this.selectedWarehouseAddress].name];
       }
+      this.checkoutService.selectedWarehouseAddress = this.selectedWarehouseAddress;
     }
-    this.setState();
+    this.setAddressDataForService();
   }
 
   makePersianNumber(a: string) {
@@ -148,10 +182,11 @@ export class AddressTableComponent implements OnInit {
   }
 
   openAddressDialog() {
-    const customerAddresses = this.checkoutService.addresses$.getValue();
     this.checkoutService.addressData = {
       addressId: this.withDelivery ? null : '1',
-      partEdit: !this.withDelivery,
+      partEdit: !this.isProfile && !this.withDelivery,
+      withDelivery: this.withDelivery,
+      // dialog_address: this.withDelivery ? {} : this.showRecipientInfo ? this.showRecipientInfo : {},
       dialog_address: {},
     };
     if (this.responsiveService.isMobile) {
@@ -165,38 +200,50 @@ export class AddressTableComponent implements OnInit {
       });
       rmDialog.afterClosed().subscribe(
         (data) => {
-          if (this.withDelivery) {
-            if (this.deliveryDays === 3) { // should change days if added address is not tehran
-              if (data !== 'تهران') {
-                const duration_5 = this.durations.filter(el => el.delivery_days === 5)[0];
-                this.changeDurationType(duration_5._id, duration_5.delivery_days);
-              } else {
-                this.addresses = this.checkoutService.addresses$.getValue();
-                this.showAddresses = this.addresses;
-                if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 2 || this.deliveryDays === 3)) {
-                  this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-                  this.showAddresses = this.tehranAddresses;
-                } else
-                  this.showAddresses = this.addresses;
-              }
-            }
+          this.province = this.checkoutService.addedProvince;
+          if (!this.withDelivery) {
+            this.showRecipientInfo = this.checkoutService.ccRecipientData;
+          } else if (this.province) {
+            this.checkoutService.getCustomerAddresses();
           }
-          this.setState();
+
+          this.checkoutService.checkValidity();
         },
         (err) => {
           console.error('Error in dialog: ', err);
+          this.checkoutService.checkValidity();
         }
       );
     }
   }
 
+  removeRecipient() {
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+
+          this.checkoutService.ccRecipientData = null;
+          this.showRecipientInfo = null;
+          this.checkoutService.checkValidity();
+        }
+      }, err => {
+        console.log('Error in dialog: ', err);
+        this.checkoutService.checkValidity();
+      });
+  }
+
   editAddress(id) {
     const tempAddressId: string = (id || id === 0) ? id + 1 : null;
-    const tempAddress = (id || id === 0) ? this.showAddresses[id] : null;
+    const tempAddress = (id || id === 0) ? this.addresses[id] : null;
     this.checkoutService.addressData = {
       addressId: tempAddressId,
-      partEdit: !this.isProfile || !this.authService.userIsLoggedIn(),
-      dialog_address: tempAddress
+      partEdit: !this.authService.userIsLoggedIn() ? !this.withDelivery : !this.isProfile,
+      withDelivery: this.isProfile ? null : this.withDelivery,
+      dialog_address: this.withDelivery || this.isProfile ? tempAddress : this.showRecipientInfo,
     };
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/checkout/address`]);
@@ -209,64 +256,49 @@ export class AddressTableComponent implements OnInit {
       });
 
       rmDialog.afterClosed().subscribe(
-        () => this.setState(),
+        () => {
+          if (!this.withDelivery) {
+            this.showRecipientInfo = this.checkoutService.ccRecipientData;
+          } else {
+            this.checkoutService.getCustomerAddresses();
+          }
+          this.checkoutService.checkValidity();
+        },
         (err) => {
           console.error('Error in dialog: ', err);
-        }
-      );
+          this.checkoutService.checkValidity();
+        });
     }
-  }
-
-  getDurations() {
-    this.httpService.get('deliveryduration').subscribe(
-      (data) => {
-        this.durations = data;
-        this.deliveryPeriodDay = data.map(el => el.delivery_days);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
   }
 
   setDeliveryTime(deliveryTime) {
-    this.delivery_time = deliveryTime;
-    this.setState();
-
-  }
-
-  changeWithDelivery() {
-    this.deliveryType.emit(this.withDelivery);
-    this.setBtnLabel();
-    if (this.withDelivery) {
-      this.addresses = this.checkoutService.addresses$.getValue();
-      this.showAddresses = this.addresses;
-      if (this.addresses && this.addresses.length && this.deliveryDays && (this.deliveryDays === 2 || this.deliveryDays === 3)) {
-        this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-        this.showAddresses = this.tehranAddresses;
-      } else
-        this.showAddresses = this.addresses;
-    } else {
-      this.addresses = this.checkoutService.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-      this.showAddresses = this.addresses;
-    }
-    this.setState();
+    this.deliveryTime = deliveryTime;
+    this.checkoutService.deliveryTime = this.deliveryTime;
+    this.checkoutService.checkValidity();
   }
 
   changeDurationType(durationId, deliveryDays) {
+    this.addresses = this.checkoutService.addresses$.getValue();
     this.durationId = durationId;
     this.deliveryDays = deliveryDays;
     this.noDuration.emit(true);
     this.durationType.emit(durationId);
-    if (this.addresses && this.addresses.length && (deliveryDays === 2 || deliveryDays === 3)) {
-      this.tehranAddresses = this.addresses.filter(el => el.province === 'تهران');
-      this.showAddresses = this.tehranAddresses;
-    } else
-      this.showAddresses = this.addresses;
+    if (this.addresses && this.addresses.length && deliveryDays === 3) {
+      this.filterTehranAddresses();
+    }
+    this.selectedCustomerAddress = this.addresses && this.addresses.length ? 0 : -1;
+    this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
+    this.checkoutService.deliveryDays = this.deliveryDays;
+    this.setAddressDataForService();
+  }
 
-    this.selectedCustomerAddress = 0;
+  filterTehranAddresses() {
+    this.addresses = this.addresses.filter(el => el.province === 'تهران');
+    if (!this.addresses || this.addresses.length === 0)
+      this.selectedCustomerAddress = -1;
 
-    this.setState();
+    this.checkoutService.selectedCustomerAddress = this.selectedCustomerAddress;
+    this.checkoutService.checkValidity();
   }
 
   chooseAddress($event) {

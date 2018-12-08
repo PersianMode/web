@@ -3,6 +3,7 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {CartService} from '../../../../shared/services/cart.service';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
+import {CheckoutService} from '../../../../shared/services/checkout.service';
 
 
 @Component({
@@ -53,7 +54,7 @@ export class SummaryComponent implements OnInit, OnChanges {
   isLoggedIn = false;
 
   constructor(private cartService: CartService, private authService: AuthService,
-              private router: Router) {
+              private router: Router, private checkoutService: CheckoutService) {
   }
 
   ngOnInit() {
@@ -75,7 +76,7 @@ export class SummaryComponent implements OnInit, OnChanges {
 
     this.cartService.cartItems.subscribe(() => {
       if (this.productsData) {
-        this.total = this.cartService.calculateTotal(this.productsData);
+        this.total = this.checkoutService.calculateTotal(this.productsData);
         this.discount = this.cartService.calculateDiscount(this.productsData, !!this.coupon_code);
       }
     });

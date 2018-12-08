@@ -57,6 +57,8 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   sortedBy: any = {value: null};
   collectionName = '';
   collectionNameFa = '';
+  tagId = [];
+  typeId = [];
   lazyRows = 10;
   subscription: Subscription;
 
@@ -69,7 +71,15 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.pageName = 'collection/' + params.get('typeName');
+      if (params.get('typeName')) {
+        this.pageName = 'collection/' + params.get('typeName');
+      }
+      if ((params.get('l1'))) {
+        this.pageName += '/' + params.get('l1');
+      }
+      if ((params.get('l2'))) {
+        this.pageName += '/'  + params.get('l2');
+      }
       this.pageService.getPage(this.pageName);
       this.subscription = this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
           this.title = res.title;
@@ -81,6 +91,8 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
           } else {
             this.products = [];
             this.collectionNameFa = '';
+            this.tagId = [];
+            this.typeId = [];
             this.productService.emptyFilters();
             console.error('-> ', `${this.pageName} is getting empty data for page`);
           }
