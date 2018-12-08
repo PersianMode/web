@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {TitleService} from '../../../../shared/services/title.service';
 import {CheckoutService} from '../../../../shared/services/checkout.service';
+import {MatDialog} from '@angular/material';
+import {HttpService} from '../../../../shared/services/http.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,11 +14,14 @@ import {CheckoutService} from '../../../../shared/services/checkout.service';
 })
 export class ProfileComponent implements OnInit {
 
-  isEdit = false;
   headerTitle;
+  balance;
+  active;
+  disabled = false;
 
   constructor(private authService: AuthService, private checkoutService: CheckoutService,
-              private router: Router, private profileOrderService: ProfileOrderService, private titleService: TitleService  ) {
+              private router: Router, private profileOrderService: ProfileOrderService, private titleService: TitleService,
+              private httpService: HttpService) {
   }
 
   ngOnInit() {

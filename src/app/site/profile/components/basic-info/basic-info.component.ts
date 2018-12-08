@@ -4,6 +4,10 @@ import * as moment from 'jalali-moment';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {isUndefined} from 'util';
 import {HttpService} from '../../../../shared/services/http.service';
+
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {MatDialog} from '@angular/material';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
 
@@ -42,18 +46,22 @@ export class BasicInfoComponent implements OnInit {
   changedDob;
   changeDobFlag = false;
   balance = 0;
+  active = false;
   loyaltyPoints = 0;
   loyaltyPointsValue = 0;
   loyaltyValue = 400;
   balanceFa = '';
   loyaltyPointsFa = '';
   loyaltyPointsValueFa = '';
+  dialogEnum = DialogEnum;
+
 
   constructor(private authService: AuthService, private httpService: HttpService,
-              private snackBar: MatSnackBar, protected progressService: ProgressService) {
+              private snackBar: MatSnackBar, protected progressService: ProgressService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
+    this.checkBalance();
     this.anyChanges = false;
     this.changeDobFlag = false;
     this.customerBasicInfo = this.authService.userDetails;
@@ -313,5 +321,29 @@ export class BasicInfoComponent implements OnInit {
     } else {
       this.retypePass.nativeElement.type = 'password';
     }
+  }
+
+  checkBalance() {
+    this.httpService.get(`refund/get_balance`).subscribe(res => {
+      this.balance = res[0].balance;
+      this.active = res[1] && res[1].active;
+    });
+  }
+
+  goToRefundBank() {
+    const refundForm = this.dialog.open(GenDialogComponent, {
+      width: '500px',
+      data: {
+        componentName: this.dialogEnum.refundBank,
+      }
+    });
+    refundForm.afterClosed().subscribe(data => {
+      if (data === true) {
+        this.balance = 0;
+        this.active = true;
+        this.balanceFa = this.balance.toLocaleString('fa');
+      }
+    });
+
   }
 }

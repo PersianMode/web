@@ -1,0 +1,68 @@
+<form [formGroup]="informationBankForm" (ngSubmit)="onSubmit()">
+  <div class="clear-div">
+    <mat-icon aria-label="no" (click)="onClose()" class="clear-icon">clear</mat-icon>
+  </div>
+  <mat-card dir="rtl">
+    <mat-card-header>
+      <mat-card-subtitle>مشخصات مشتری</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="example-container">
+
+        <mat-form-field>
+          <input matInput placeholder="نام صاحب کارت" formControlName="owner_card_name">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="نام خانوادگی صاحب کارت " formControlName="owner_card_surname">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="نام مشتری" formControlName="customer_first_name">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="نام خانوادگی مشتری" formControlName="customer_surname">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="موجودی" formControlName="amount">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="شماره تماس" formControlName="mobile_number">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="نام بانک" formControlName="bank_name">
+        </mat-form-field>
+
+
+        <!--bank card -->
+        <mat-form-field dir="ltr" class="mat-input">
+          <input pattern="[0-9]" maxlength="16" matInput placeholder="شماره کارت" dir="ltr" formControlName="card_no">
+        </mat-form-field>
+
+        <!-- sheba card -->
+        <mat-form-field dir="ltr" class="mat-input">
+          <span matPrefix>IR &nbsp;</span>
+          <input pattern="[0-9]"  maxlength="24" matInput placeholder="شماره شبا" dir="ltr" formControlName="sheba_no">
+        </mat-form-field>
+
+
+        <!-- comment -->
+        <mat-form-field class="comment">
+          <textarea matInput placeholder="توضیحات" formControlName="comment"></textarea>
+        </mat-form-field>
+
+      </div>
+    </mat-card-content>
+    <mat-card-actions dir="ltr">
+      <div class="button-row" *ngIf="checkValidation()">
+        <button mat-raised-button (click)="submitForm()">پرداخت</button>
+        <button mat-raised-button  (click)="cancelForm()">لغو پرداخت</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</form>

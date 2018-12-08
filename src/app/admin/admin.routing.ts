@@ -33,8 +33,15 @@ const Admin_ROUTES: Routes = [
         canActivate: [AdminAuthGuard]
       },
       {
+
         path: 'internal_delivery',
         loadChildren: 'app/admin/internal-delivery/internal-delivery.module#InternalDeliveryModule',
+        canActivate: [AdminAuthGuard]
+      },
+      {
+
+        path: 'refund_bank',
+        loadChildren: 'app/admin/refund-bank/refund-bank.module#RefundBankModule',
         canActivate: [AdminAuthGuard]
       }
     ]
