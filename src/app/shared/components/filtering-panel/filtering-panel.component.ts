@@ -86,9 +86,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       }
 
       for (const col in this.isChecked.color) {
-        let color;
-        color = this.dict.convertColor(col);
-        this.translatedColor[col] = ntc.name(this.dict.translateWord(col))[1];
+
+          this.translatedColor[col] = ntc.name(this.dict.translateWord(col))[1];
+        let color = this.translatedColor[col]
         if (color) {
           this.oppositeColor[col] = parseInt(color.substring(1), 16) < parseInt('888888', 16) ? 'white' : 'black';
           const red = color.substring(1, 3);

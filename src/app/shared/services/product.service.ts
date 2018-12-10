@@ -94,9 +94,12 @@ export class ProductService {
     let mappedColor = [];
     for (let col in color) {
       let conv = safeColorConverter(color[col]);
-      mappedColor[col] = conv ? conv : this.dict.translateColor(col);
+      if (conv !== null){
+        mappedColor[col] = conv 
+      }
     }
     color = Array.from(new Set(mappedColor));
+    
 
 
     let price = [];
