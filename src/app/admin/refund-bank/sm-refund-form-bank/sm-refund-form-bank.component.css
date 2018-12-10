@@ -1,0 +1,48 @@
+.example-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-container > * {
+  width: 100%;
+}
+.example-button-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.card-bank {
+  width: 15%;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+.example-four-width {
+  width: 20%;
+}
+
+.clear-div {
+  text-align: right;
+  display: inline-block;
+  width: 7%;
+}
+
+.clear-icon {
+  cursor: pointer;
+}
+
+.mat-input {
+  width: 100%;
+  text-align: left;
+}
+
+.comment {
+  width: 100%;
+  text-align: right;
+}

@@ -8,7 +8,6 @@ import { AuthService } from './auth.service';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs/Rx';
-import { SpinnerService } from './spinner.service';
 
 @Injectable()
 export class CheckoutService {
@@ -41,7 +40,7 @@ export class CheckoutService {
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
-    private authService: AuthService, private snackBar: MatSnackBar, private spinnerService: SpinnerService,
+    private authService: AuthService, private snackBar: MatSnackBar,
     private router: Router) {
     this.cartService.cartItems.subscribe(
       data => {
@@ -60,10 +59,9 @@ export class CheckoutService {
   }
 
   checkValidity() {
-   
-      const validAddressObject = this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData );
-      this.isValid$.next(this.total && validAddressObject  && this.productData && this.productData.length);
-     
+    const validAddressObject =
+      this.withDelivery ? (this.addressObj && this.deliveryDays && this.deliveryTime) : (this.addressObj && this.ccRecipientData);
+    this.isValid$.next(this.total && validAddressObject && this.productData && this.productData.length);
   }
 
   getCustomerAddresses(isLoggedIn = this.authService.userIsLoggedIn()) {
@@ -231,7 +229,6 @@ export class CheckoutService {
           let addresses = [];
           localStorage.removeItem('address');
           if (!this.withDelivery) {
-           
             addresses = this.warehouseAddresses.map(r => Object.assign({ name: r.name }, r.address));
           }
           this.addresses$.next(addresses);
@@ -270,8 +267,6 @@ export class CheckoutService {
 
     if (!this.withDelivery) {
       this.addressObj.wharehouse_name = this.addressObj.name;
-      
-      
     }
 
     if (!this.withDelivery)
@@ -282,7 +277,6 @@ export class CheckoutService {
         this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
         this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
         this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
-       
       } else {
         return;
       }

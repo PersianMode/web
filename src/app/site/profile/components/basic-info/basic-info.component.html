@@ -8,10 +8,26 @@
       <div fxFlex="50" class="info-cell">امتیاز وفاداری: <b>{{loyaltyPointsFa}}</b></div>
       <div fxFlex="50" class="info-cell">ارزش امتیاز به تومان: <b>{{loyaltyPointsValueFa}}</b></div>
     </div>
-    <div *ngIf="balance" style="background: #ccc" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+    <div *ngIf="balance > 0" style="background: #ccc" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"
+         dir="rtl">
       <div fxFlex="50" class="info-cell">موجودی اکانت: <b>{{balanceFa}}</b></div>
-      <div fxFlex="50" class="info-cell"><button mat-raised-button style="line-height: 24px">واریز موجودی به حساب بانکی</button></div>
+      <div fxFlex="50" class="info-cell">
+        <button mat-raised-button style="line-height: 24px" (click)="goToRefundBank()">واریز موجودی به حساب بانکی
+        </button>
+      </div>
     </div>
+    <div *ngIf="balance === 0 && active" style="background: #ccc" fxLayout="row" fxLayout.sm="column"
+         fxLayout.xs="column" dir="rtl">
+      <div fxFlex="50" class="info-cell">موجودی اکانت: <b>{{balanceFa}}</b></div>
+      <div fxFlex="50" class="info-cell">درخواست شما در حال بررسی می باشد</div>
+    </div>
+    <div *ngIf="balance === 0 && !active" style="background: #ccc" fxLayout="row" fxLayout.sm="column"
+         fxLayout.xs="column" dir="rtl">
+      <div fxFlex="50" class="info-cell"> موجودی اکانت: <b>{{balanceFa}}</b></div>
+      <div fxFlex="50" class="info-cell">موجودی حساب شما صفر است</div>
+    </div>
+
+
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
       <div fxFlex="50" class="info-cell">تاریخ تولد: <b>{{birthDate}}</b></div>
       <div fxFlex="50" class="info-cell">شماره ملی: <b>{{userNationalId}}</b></div>

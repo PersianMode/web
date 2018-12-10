@@ -29,6 +29,7 @@ import { ShelfCodePrinterComponent } from './components/shelf-code-printer/shelf
 import {ProductService} from './services/product.service';
 import {AuthGuard} from '../site/auth.guard';
 import {SpinnerService} from './services/spinner.service';
+import { BankRefundFormComponent } from './components/bank-refund-form/bank-refund-form.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import {SpinnerService} from './services/spinner.service';
     SizePickerComponent,
     SaveChangeConfirmComponent,
     ShelfCodePrinterComponent,
+    BankRefundFormComponent,
   ],
   imports: [
     MatSlideToggleModule,
@@ -80,6 +82,7 @@ import {SpinnerService} from './services/spinner.service';
   entryComponents: [
     RemovingConfirmComponent,
     SaveChangeConfirmComponent,
+    BankRefundFormComponent
   ],
   exports: [SuggestionComponent,
     SearchFieldsComponent,
@@ -92,6 +95,7 @@ import {SpinnerService} from './services/spinner.service';
     DobComponent, MatSlideToggleModule,
     LogoHeaderComponent,
     SizePickerComponent,
+    BankRefundFormComponent
   ],
 })
 export class SharedModule {

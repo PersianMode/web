@@ -108,6 +108,7 @@ export class ProductService {
       mappedColor[col] = conv ? conv : this.dict.translateColor(col);
     }
     color = Array.from(new Set(mappedColor));
+    
 
 
     let price = [];
@@ -134,8 +135,6 @@ export class ProductService {
       discount = [minDiscount, maxDiscount];
     }
 
-    console.log(mappedColor);
-    console.log(color);
     tags = { brand, type, price, size, shoesSize, color };
 
     if (discount && discount.length && discount[0] !== discount[1])

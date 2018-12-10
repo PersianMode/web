@@ -5,6 +5,12 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {isUndefined} from 'util';
 import {HttpService} from '../../../../shared/services/http.service';
 
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {MatDialog} from '@angular/material';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import {MatSnackBar} from '@angular/material';
+import {ProgressService} from '../../../../shared/services/progress.service';
+
 @Component({
   selector: 'app-basic-info',
   templateUrl: './basic-info.component.html',
@@ -40,17 +46,22 @@ export class BasicInfoComponent implements OnInit {
   changedDob;
   changeDobFlag = false;
   balance = 0;
+  active = false;
   loyaltyPoints = 0;
   loyaltyPointsValue = 0;
   loyaltyValue = 400;
   balanceFa = '';
   loyaltyPointsFa = '';
   loyaltyPointsValueFa = '';
+  dialogEnum = DialogEnum;
 
-  constructor(private authService: AuthService, private httpService: HttpService) {
+
+  constructor(private authService: AuthService, private httpService: HttpService,
+              private snackBar: MatSnackBar, protected progressService: ProgressService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
+    this.checkBalance();
     this.anyChanges = false;
     this.changeDobFlag = false;
     this.customerBasicInfo = this.authService.userDetails;
@@ -137,9 +148,15 @@ export class BasicInfoComponent implements OnInit {
       (res) => {
         this.ngOnInit();
         this.isEdit = false;
+        this.snackBar.open('اطلاعات شما با موفقیت ویرایش شد', null, {
+          duration: 3200
+        });
       },
       (err) => {
         console.error('Cannot edit user info: ', err);
+        this.snackBar.open('سیستم قادر به ویرایش اطلاعات شما نیست، لطفا دوباره تلاش کنید', null, {
+          duration: 3200
+        });
       }
     );
   }
@@ -185,8 +202,6 @@ export class BasicInfoComponent implements OnInit {
 
   initChangePassForm() {
     // TODO set form fiels with change_pass_obj if they have value(insted of set null every time)
-    // this.title = 'تغییر کلمه عبور < اطلاعات مشتری';
-    // this.formTitle.emit(this.title);
     this.changePassForm = new FormBuilder().group({
       oldPass: [null, [
         Validators.required,
@@ -247,11 +262,16 @@ export class BasicInfoComponent implements OnInit {
       this.initChangePassForm();
       console.error('Cannot change user pass, new entered pass are not compatible: ');
     } else {
+      this.progressService.enable();
       this.httpService.post('changePassword', this.changed_pass_obj).subscribe(
         (res) => {
           this.ngOnInit();
           this.isEdit = false;
           this.isChangePass = false;
+          this.snackBar.open('رمز عبور شما با موفقیت تغییر کرد', null, {
+            duration: 3200
+          });
+          this.progressService.disable();
         },
         (err) => {
           this.errorMsgOld = 'اطلاعات جهت تغییر کلمه عبور درست وارد نشده است';
@@ -263,6 +283,7 @@ export class BasicInfoComponent implements OnInit {
             this.curFocus = null;
           });
           this.initChangePassForm();
+          this.progressService.disable();
         }
       );
     }
@@ -300,5 +321,29 @@ export class BasicInfoComponent implements OnInit {
     } else {
       this.retypePass.nativeElement.type = 'password';
     }
+  }
+
+  checkBalance() {
+    this.httpService.get(`refund/get_balance`).subscribe(res => {
+      this.balance = res[0].balance;
+      this.active = res[1] && res[1].active;
+    });
+  }
+
+  goToRefundBank() {
+    const refundForm = this.dialog.open(GenDialogComponent, {
+      width: '500px',
+      data: {
+        componentName: this.dialogEnum.refundBank,
+      }
+    });
+    refundForm.afterClosed().subscribe(data => {
+      if (data === true) {
+        this.balance = 0;
+        this.active = true;
+        this.balanceFa = this.balance.toLocaleString('fa');
+      }
+    });
+
   }
 }

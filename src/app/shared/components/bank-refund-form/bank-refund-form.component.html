@@ -1,0 +1,67 @@
+<form [formGroup]="informationBankForm" (ngSubmit)="submitForm()">
+  <div class="clear-div">
+    <mat-icon aria-label="no" (click)="cancelForm()" class="clear-icon">clear</mat-icon>
+  </div>
+  <mat-card dir="rtl">
+    <mat-card-header>
+      <mat-card-subtitle>مشخصات دارنده کارت</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="example-container">
+        <!-- bank card -> customer firstname -->
+        <mat-form-field>
+          <input matInput placeholder="نام" formControlName="owner_card_name">
+          <mat-error *ngIf="informationBankForm.controls['owner_card_name'].hasError('required')">
+            وارد کردن نام صاحب کارت الزامی است
+          </mat-error>
+        </mat-form-field>
+
+        <!-- bank card -> customer surname -->
+        <mat-form-field>
+          <input matInput placeholder="نام خانوادگی" formControlName="owner_card_surname">
+          <mat-error *ngIf="informationBankForm.controls['owner_card_surname'].hasError('required')">
+            وارد کردن نام خانوادگی صاحب کارت الزامی است
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="نام بانک" formControlName="bank_name">
+        </mat-form-field>
+
+        <!--bank card -->
+        <mat-form-field dir="ltr" *ngIf="balance <= 3000000">
+          <input matInput class="mat" maxlength="16" placeholder="شماره کارت" formControlName="card_no">
+          <mat-hint>لطفا شماره 16 رقمی کارت بانکی را وارد نمایید</mat-hint>
+          <mat-error *ngIf="informationBankForm.controls['card_no'].hasError('required')">وارد کردن
+            شماره کارت الزامی است
+          </mat-error>
+          <mat-error
+            *ngIf="(informationBankForm.controls['card_no'].hasError('maxLength') || informationBankForm.controls['card_no'].hasError('minLength') || informationBankForm.controls['card_no'].hasError('pattern'))">
+            شماره کارت نامعتبر است
+          </mat-error>
+        </mat-form-field>
+
+        <!-- sheba card -->
+        <mat-form-field dir="ltr" *ngIf="balance > 3000000">
+          <span matPrefix>IR &nbsp;</span>
+          <input matInput class="mat" maxlength="24" placeholder="شماره شبا" formControlName="sheba_no">
+          <mat-hint>برای مبالغ بیشتر از 3 میلیون تومان لطفا شماره شبا خود را وارد نمایید</mat-hint>
+          <mat-error *ngIf="informationBankForm.controls['sheba_no'].hasError('required')">وارد کردن
+            شماره شبا الزامی است
+          </mat-error>
+          <mat-error
+            *ngIf="(informationBankForm.controls['sheba_no'].hasError('maxLength') || informationBankForm.controls['sheba_no'].hasError('minLength') || informationBankForm.controls['sheba_no'].hasError('pattern'))">
+            شماره شبا نامعتبر است
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+    </mat-card-content>
+    <mat-card-actions dir="ltr">
+      <div class="button-row">
+        <button mat-raised-button [disabled]="checkValidation()"> تایید</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</form>

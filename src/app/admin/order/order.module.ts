@@ -14,14 +14,15 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MatToolbarModule,
-  MatSelectModule
+  MatSelectModule,
+  MatAutocompleteModule
 } from '@angular/material';
-import {OrderAddressComponent} from './components/order-address/order-address.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ProductViewerComponent} from './components/product-viewer/product-viewer.component';
-import {SendBoxComponent} from './components/send-box/send-box.component';
-import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
+
+import {OrderAddressComponent} from './components/order-address/order-address.component';
+import {ProductViewerComponent} from './components/product-viewer/product-viewer.component';
+import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
 import {TicketComponent} from './components/ticket/ticket.component';
 import {SmInboxComponent} from './components/sm-inbox/sm-inbox.component';
 import {SmSendComponent} from './components/sm-send/sm-send.component';
@@ -30,6 +31,13 @@ import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/deliv
 import {InboxComponent} from './components/inbox/inbox.component';
 import {DeliverBoxComponent} from './components/deliver-box/deliver-box.component';
 import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-confirm.component';
+import {InternalSendBoxComponent} from './components/internal-send-box/internal-send-box.component';
+import {CustomerSendBoxComponent} from './components/customer-send-box/customer-send-box.component';
+import {CustomerDeliveryComponent} from './components/customer-delivery/customer-delivery.component';
+import {ShelvsViewComponent} from './components/shelvs-view/shelvs-view.component';
+import { ReadyToSendComponent } from './components/internal-send-box/components/ready-to-send/ready-to-send.component';
+import { PostedComponent } from './components/internal-send-box/components/posted/posted.component';
+import { ReturnToWarehouseBoxComponent } from './components/return-to-warehouse-box/return-to-warehouse-box.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +45,6 @@ import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-c
     OrderAddressComponent,
     InboxComponent,
     SmInboxComponent,
-    SendBoxComponent,
     ProductViewerComponent,
     BarcodeCheckerComponent,
     TicketComponent,
@@ -45,7 +52,14 @@ import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-c
     DeliveryShowComponent,
     DeliveryShelfCodeComponent,
     DeliverBoxComponent,
-    MismatchConfirmComponent
+    MismatchConfirmComponent,
+    InternalSendBoxComponent,
+    CustomerSendBoxComponent,
+    CustomerDeliveryComponent,
+    ShelvsViewComponent,
+    ReadyToSendComponent,
+    PostedComponent,
+    ReturnToWarehouseBoxComponent,
   ],
   imports: [
     OrderRouting,
@@ -72,7 +86,8 @@ import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-c
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    MatAutocompleteModule
   ],
   entryComponents: [
     OrderAddressComponent,

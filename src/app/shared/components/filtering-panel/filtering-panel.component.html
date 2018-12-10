@@ -1,3 +1,14 @@
+<div *ngFor="let fo of filter_options; let i = index">
+  <div *ngFor="let v of filter_options[i].values; let j = index">
+    <mat-checkbox *ngIf="fo.name !== 'color' && fo.name !== 'size' && fo.name!=='shoesSize' && fo.name !=='price' && fo.name !== 'discount'"
+      (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
+      <span class="check-box-text">{{ v.length }} {{filter_options[i].values_fa[j]}}</span>
+    </mat-checkbox>
+  </div>
+</div>
+
+
+
 <div [ngClass]="isMobile ? 'set-size-mobile' : null">
   <div class="initial-filter">
 
@@ -39,7 +50,7 @@
       <span>{{selectedMaxDiscountFormatted}} درصد</span>
     </div>
     <span *ngIf="fo.name==='color'">
-      <span *ngFor="let v of filter_options[i].values ; let j=index " class="color-span " (click)="getValue(fo.name, v) "
+      <span *ngFor="let v of filter_options[i].values; let j=index " class="color-span " (click)="getValue(fo.name, v) "
         style="cursor: pointer; " matTooltip="{{translatedColor[v]}} " matTooltipShowDelay="500 ">
         <svg height="26 " width="26 ">
           <circle cx="13 " cy="13 " r="12 " [attr.stroke]="needsBorder[v] ? '#ccc' : 'transparent' " stroke-width="1 "
