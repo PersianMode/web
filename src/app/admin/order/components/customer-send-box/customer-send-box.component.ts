@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/material';
+import {MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
 
@@ -7,6 +7,9 @@ import {OrderAddressComponent} from 'app/admin/order/components/order-address/or
 import {ProductViewerComponent} from 'app/admin/order/components/product-viewer/product-viewer.component';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ORDERS} from 'app/admin/order/components/order-mock';
+import {ProgressService} from '../../../../shared/services/progress.service';
+import {HttpService} from '../../../../shared/services/http.service';
+
 @Component({
   selector: 'app-customer-send-box',
   templateUrl: './customer-send-box.component.html',
@@ -32,7 +35,9 @@ export class CustomerSendBoxComponent implements OnInit {
   showBarcodeScanner = false;
 
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private progressService: ProgressService, private httpService: HttpService, private snackBar: MatSnackBar) {
+  }
+
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   ngOnInit() {
@@ -40,13 +45,21 @@ export class CustomerSendBoxComponent implements OnInit {
   }
 
   loadData() {
+
     this.dataSource = new MatTableDataSource<any>(ORDERS);
     this.resultsLength = this.dataSource.data.length;
+
   }
 
   onSortChange($event: any) {
     this.paginator.pageIndex = 0;
     this.loadData();
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 2000,
+    });
   }
 
   onPageChange($event: any) {
@@ -91,7 +104,7 @@ export class CustomerSendBoxComponent implements OnInit {
   }
 
   onMismatchDetected() {
-    //
+      this.progressService.enable();
   }
 
   onScanOrder() {

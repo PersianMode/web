@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/material';
+import {MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
 import { FormControl } from '@angular/forms';
@@ -12,6 +12,8 @@ import {OrderAddressComponent} from 'app/admin/order/components/order-address/or
 import {ProductViewerComponent} from 'app/admin/order/components/product-viewer/product-viewer.component';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ORDERS} from 'app/admin/order/components/order-mock';
+import {ProgressService} from '../../../../shared/services/progress.service';
+import {HttpService} from '../../../../shared/services/http.service';
 
 
 @Component({
@@ -31,10 +33,11 @@ export class ShelvsViewComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dataSource: MatTableDataSource<any>;
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'used_balance'];
+  // dataSource: MatTableDataSource<any>;
+  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address'];
+  //must added above: , 'shelf_code'
   expandedElement: any;
-
+  total;
   pageSize = 10;
   resultsLength: Number;
   showBarcodeScanner = false;
@@ -45,9 +48,9 @@ export class ShelvsViewComponent implements OnInit {
 
   filteredShelfCodes: Observable<any[]>;
   shelfCodes = SHELF_CODES; // mock
+  dataSource = new MatTableDataSource();
 
-
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private progressService: ProgressService, private httpService: HttpService, private snackBar: MatSnackBar) {
     this.shelfCodeCtrl = new FormControl();
     this.filteredShelfCodes = this.shelfCodeCtrl.valueChanges
       .pipe(
@@ -62,9 +65,34 @@ export class ShelvsViewComponent implements OnInit {
   }
 
   loadData() {
-    this.dataSource = new MatTableDataSource<any>(ORDERS);
-    this.resultsLength = this.dataSource.data.length;
+    this.progressService.enable();
+    const options = {
+      sort: this.sort.active,
+      dir: this.sort.direction,
+      type: 'shelvesList',
+      manual: false
+    };
+    const offset = this.paginator.pageIndex * +this.pageSize;
+    const limit = this.pageSize;
+    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+      this.progressService.disable();
+
+      console.log('res: ', res);
+      const rows = [];
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
+        rows.push(order, {detailRow: true, order});
+      });
+      this.dataSource.data = rows;
+      // this.OnNewInboxCount.emit(res.total);
+    }, err => {
+      this.progressService.disable();
+      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
+    });
+    // this.dataSource = new MatTableDataSource<any>(ORDERS);
+    // this.resultsLength = this.dataSource.data.length;
   }
+
 
   filterShelfCodes(code: string) {
     return this.shelfCodes.filter(shelf =>
@@ -78,6 +106,12 @@ export class ShelvsViewComponent implements OnInit {
 
   onPageChange($event: any) {
     this.loadData();
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 2000,
+    });
   }
 
   getDate(orderTime) {
@@ -96,21 +130,21 @@ export class ShelvsViewComponent implements OnInit {
   }
 
   getProductDetail(orderLine) {
-    const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
+    const product_color = orderLine.product_colors.find(x => x._id === orderLine.product_color_id);
     const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id) :
+      imagePathFixer(product_color.image.thumbnail, orderLine.instances.product_id, product_color._id) :
       null;
     return {
-      name: orderLine.instance.product_name,
+      name: orderLine.instances.product_name,
       thumbnailURL,
       color: product_color ? product_color.name : null,
       color_code: product_color ? product_color.code : null,
-      size: orderLine.instance.size,
-      product_id: orderLine.instance.product_id
+      size: orderLine.instances.size,
+      product_id: orderLine.instances.product_id
     };
   }
 
-  showDetial(orderLine) {
+  showDetail(orderLine) {
     this.dialog.open(ProductViewerComponent, {
       width: '400px',
       data: this.getProductDetail(orderLine)
@@ -118,7 +152,7 @@ export class ShelvsViewComponent implements OnInit {
   }
 
   onMismatchDetected() {
-    //
+    this.progressService.enable();
   }
 
   onScanOrder() {

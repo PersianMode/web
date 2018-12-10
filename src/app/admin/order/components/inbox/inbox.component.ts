@@ -66,7 +66,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
-      type: 'inbox',
+      type: 'scanInbox',
       manual: false
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
@@ -74,6 +74,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
+      console.log('res scan inbox', res);
 
       res.data.forEach((order, index) => {
         order['index'] = index + 1;

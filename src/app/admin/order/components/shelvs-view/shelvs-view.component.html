@@ -15,7 +15,7 @@
       </div>
       <div fxFlex="30" class="filtering-box">
         <mat-input-container class="filtering-field">
-          <input matInput placeholder="کد قفسه" aria-label="shelft-code" [matAutocomplete]="auto" [formControl]="shelfCodeCtrl">
+          <input matInput placeholder="کد قفسه" aria-label="shelf-code" [matAutocomplete]="auto" [formControl]="shelfCodeCtrl">
           <mat-autocomplete #auto="matAutocomplete">
             <mat-option *ngFor="let shelf of filteredShelfCodes | async" [value]="shelf.code">
               <span>{{ shelf.code }}</span>
@@ -42,7 +42,7 @@
         <!-- customer column -->
         <ng-container matColumnDef="customer">
           <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}} </mat-cell>
+          <mat-cell *matCellDef="let order">{{order.customer.first_name + ' ' + order.customer.surname}} </mat-cell>
         </ng-container>
 
         <!-- order_time column -->
@@ -51,10 +51,10 @@
           <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
         </ng-container>
 
-        <!-- total_order_lines column -->
+         <!--total_order_lines column-->
         <ng-container matColumnDef="total_order_lines">
           <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
+          <mat-cell *matCellDef="let order">{{order.total_order_lines}} / {{order.instances.length}}</mat-cell>
         </ng-container>
 
         <!-- address column -->
@@ -65,52 +65,49 @@
           </mat-cell>
         </ng-container>
 
-        <!-- used_balance column -->
-        <ng-container matColumnDef="used_balance">
-          <mat-header-cell *matHeaderCellDef> بالانس </mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.used_balance}}</mat-cell>
-        </ng-container>
+         <!--used_balance column-->
+        <!--<ng-container matColumnDef="shelf_code">-->
+          <!--<mat-header-cell *matHeaderCellDef> کد قفسه </mat-header-cell>-->
+          <!--<mat-cell > {{shelfCodes[0].code}}</mat-cell>-->
+        <!--</ng-container>-->
 
-
-        <!-- Expanded Content Column - The order lines rows is made up of this one column -->
+         <!--Expanded Content Column - The order lines rows is made up of this one column-->
         <ng-container matColumnDef="expandedDetail">
           <mat-cell *matCellDef="let detail">
 
-
             <table class='orderLineDetail'>
-              <tr *ngFor='let ol of detail.order.order_lines'>
+              <tr *ngFor='let ol of detail.order'>
                 <td>
                   <div class="imgWrapper">
-                    <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetial(ol)">
+                    <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetail(ol)">
                   </div>
                 </td>
                 <td>
                   <p>
-                    <b>بارکد:</b> {{ol.instance.barcode}}</p>
+                    <b>بارکد:</b> {{ol.barcode}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>نام:</b> {{ol.instance.product_name}}</p>
+                    <b>نام:</b> {{ol.product_name}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>سایز:</b> {{ol.instance.size}}</p>
+                    <b>سایز:</b> {{ol.size}}</p>
                 </td>
               </tr>
             </table>
-
-
           </mat-cell>
         </ng-container>
 
 
         <!-- mat-row and mat-row-collapsed -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
-          (click)="expandedElement = row._id">
+
+        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [ngClass]="{'expanded highlight-row': expandedElement == row._id}"
+                 (click)="expandedElement = row._id">
         </mat-row>
         <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
-          style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
+                 style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
         </mat-row>
 
 

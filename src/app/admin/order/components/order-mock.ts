@@ -74,7 +74,7 @@ export const ORDERS = [{
   'transaction_id': 'xyz22823',
   'used_point': 0,
   'total_amount': 18,
-  'total_order_lines': 1,
+  'total_order_lines': 2,
   'is_collect': false,
   'discount': 18,
   'used_balance': 0,
@@ -130,9 +130,61 @@ export const ORDERS = [{
       'size': '10',
       'product_color_id': '5b6feffa01f471001c361bfa'
     }
+    },
+    {
+    'order_line_id': '5b7a926d47b021001c078205',
+    'tickets': {
+      'is_processed': true,
+      '_id': '5b7a967c47b021001c07821d',
+      'status': 10,
+      'desc': null,
+      'receiver_id': '5b6e6c4a486ddf00066decaa',
+      'timestamp': '2018-08-20T10:22:52.050Z',
+      'agent_id': '5b6e6cf8486ddf00066decbb'
+    },
+    'product_colors': [{
+      'image': {
+        'angles': ['897646-006-PHCFH001-2000.jpg',
+          '897646-006-PHCTH001-2000.jpg',
+          '897646-006-PHSLH000-2000.jpg',
+          '897646-006-PHSRH000-2000.jpg',
+          '897646-006-PHSRH001-2000.jpg',
+          '897646-006-PHSUH000-2000.jpg'
+        ],
+        'thumbnail': '897646-006-PHCBH000-2000.jpg'
+      },
+      '_id': '5b6feffa01f471001c361bfa',
+      'color_id': '5b6a957c7b0420001ce50d0b',
+      'name': 'BLACK/TEAM ORANGE-WHITE-ATMOSPHERE GREY',
+      'code': '006'
+    }, {
+      'image': {
+        'angles': ['897646-101-PHCFH001-2000.jpg',
+          '897646-101-PHCTH001-2000.jpg',
+          '897646-101-PHSLH000-2000.jpg',
+          '897646-101-PHSRH000-2000.jpg',
+          '897646-101-PHSRH001-2000.jpg',
+          '897646-101-PHSUH000-2000.jpg'
+        ],
+        'thumbnail': '897646-101-PHCBH000-2000.jpg'
+      },
+      '_id': '5b6feffa01f471001c361c9c',
+      'color_id': '5b6a957c7b0420001ce50d14',
+      'name': 'WHITE/RACER BLUE-INFRARED-PURE PLATINUM',
+      'code': '101'
+    }],
+    'instance': {
+      '_id': '5b6feffa01f471001c361bfd',
+      'product_id': '5b6feffad81843b40eb9954a',
+      'product_name': 'LEBRON SOLDIER XI SFG',
+      'barcode': '676556989184',
+      'size': '10',
+      'product_color_id': '5b6feffa01f471001c361bfa'
+    }
   }],
   'index': 1
-}, {
+},
+  {
   'detailRow': true,
   'order': {
     '_id': '5b7a926dea19cc9eaf57773e',
@@ -229,8 +281,7 @@ export const ORDERS = [{
       },
       'product_colors': [{
         'image': {
-          'angles': [
-            '897646-006-PHCFH001-2000.jpg',
+          'angles': ['897646-006-PHCFH001-2000.jpg',
             '897646-006-PHCTH001-2000.jpg',
             '897646-006-PHSLH000-2000.jpg',
             '897646-006-PHSRH000-2000.jpg',
@@ -245,8 +296,7 @@ export const ORDERS = [{
         'code': '006'
       }, {
         'image': {
-          'angles': [
-            '897646-101-PHCFH001-2000.jpg',
+          'angles': ['897646-101-PHCFH001-2000.jpg',
             '897646-101-PHCTH001-2000.jpg',
             '897646-101-PHSLH000-2000.jpg',
             '897646-101-PHSRH000-2000.jpg',
@@ -268,7 +318,58 @@ export const ORDERS = [{
         'size': '10',
         'product_color_id': '5b6feffa01f471001c361bfa'
       }
-    }],
+    },
+      {
+        'order_line_id': '5b7a926d47b021001c078205',
+        'tickets': {
+          'is_processed': true,
+          '_id': '5b7a967c47b021001c07821d',
+          'status': 10,
+          'desc': null,
+          'receiver_id': '5b6e6c4a486ddf00066decaa',
+          'timestamp': '2018-08-20T10:22:52.050Z',
+          'agent_id': '5b6e6cf8486ddf00066decbb'
+        },
+        'product_colors': [{
+          'image': {
+            'angles': ['897646-006-PHCFH001-2000.jpg',
+              '897646-006-PHCTH001-2000.jpg',
+              '897646-006-PHSLH000-2000.jpg',
+              '897646-006-PHSRH000-2000.jpg',
+              '897646-006-PHSRH001-2000.jpg',
+              '897646-006-PHSUH000-2000.jpg'
+            ],
+            'thumbnail': '897646-006-PHCBH000-2000.jpg'
+          },
+          '_id': '5b6feffa01f471001c361bfa',
+          'color_id': '5b6a957c7b0420001ce50d0b',
+          'name': 'BLACK/TEAM ORANGE-WHITE-ATMOSPHERE GREY',
+          'code': '006'
+        }, {
+          'image': {
+            'angles': ['897646-101-PHCFH001-2000.jpg',
+              '897646-101-PHCTH001-2000.jpg',
+              '897646-101-PHSLH000-2000.jpg',
+              '897646-101-PHSRH000-2000.jpg',
+              '897646-101-PHSRH001-2000.jpg',
+              '897646-101-PHSUH000-2000.jpg'
+            ],
+            'thumbnail': '897646-101-PHCBH000-2000.jpg'
+          },
+          '_id': '5b6feffa01f471001c361c9c',
+          'color_id': '5b6a957c7b0420001ce50d14',
+          'name': 'WHITE/RACER BLUE-INFRARED-PURE PLATINUM',
+          'code': '101'
+        }],
+        'instance': {
+          '_id': '5b6feffa01f471001c361bfd',
+          'product_id': '5b6feffad81843b40eb9954a',
+          'product_name': 'LEBRON SOLDIER XI SFG',
+          'barcode': '676556989184',
+          'size': '10',
+          'product_color_id': '5b6feffa01f471001c361bfa'
+        }
+      }],
     'index': 1
   }
 }];
