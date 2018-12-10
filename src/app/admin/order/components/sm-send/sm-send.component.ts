@@ -137,7 +137,6 @@ export class SmSendComponent implements OnInit, OnDestroy {
       });
       this.dataSource.data = rows;
       this.resultsLength = res.total ? res.total : 0;
-      console.log('sm deliver--> ', this.dataSource.data);
       this.dataSource.data.forEach((o: any) => {
         if (o.order_lines) {
 

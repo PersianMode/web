@@ -22,7 +22,12 @@ const newestSort = function (a, b) {
   }
 };
 
-const reviewSort = function (a, b) {
+const extractPrices = function(products) {
+  const pricesHelper = products.map(product => product.instances.map(instance => instance.discountedPrice));
+  return [].concat(...pricesHelper);
+};
+
+const reviewSort = function () {
   return 0;
 };
 
@@ -42,12 +47,18 @@ const nameSort = function (a, b) {
     return 0;
 };
 
+const cleanProductsList = function (data: any[]) {
+  return data.filter(p => p.instances.length && p.colors.length);
+};
+
 @Injectable()
 export class ProductService {
   private collectionName: string;
   private products = [];
   private filteredProducts = [];
   collectionNameFa$: ReplaySubject<any> = new ReplaySubject<any>(1);
+  type$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  tag$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
   product$: ReplaySubject<any> = new ReplaySubject<any>();
@@ -91,12 +102,10 @@ export class ProductService {
       .reduce((x, y) => x.concat(y), [])
     ]));
 
-    let mappedColor = [];
-    for (let col in color) {
-      let conv = safeColorConverter(color[col]);
-      if (conv !== null){
-        mappedColor[col] = conv 
-      }
+    const mappedColor = [];
+    for (const col in color) if (color.hasOwnProperty(col)) {
+      const conv = safeColorConverter(color[col]);
+      mappedColor[col] = conv ? conv : this.dict.translateColor(col);
     }
     color = Array.from(new Set(mappedColor));
     
@@ -106,13 +115,14 @@ export class ProductService {
     if (trigger === 'price') {
       price = [];
     } else {
-
-      const pricesHelper = products.map(product => product.instances.map(instance => instance.discountedPrice));
-      const prices = [].concat(...pricesHelper);
+      const prices = extractPrices(products);
+      const allPrices = extractPrices(this.products);
+      const start = allPrices && allPrices.length ? Math.min(...allPrices) : 0;
       const minPrice = prices && prices.length ? Math.min(...prices) : 0;
       const maxPrice = prices && prices.length ? Math.max(...prices) : 0;
+      const end = allPrices && allPrices.length ? Math.max(...allPrices) : 0;
 
-      price = [minPrice, maxPrice];
+      price = [start, minPrice, maxPrice, end];
     }
 
     let discount;
@@ -125,8 +135,6 @@ export class ProductService {
       discount = [minDiscount, maxDiscount];
     }
 
-    console.log(mappedColor);
-    console.log(color);
     tags = { brand, type, price, size, shoesSize, color };
 
     if (discount && discount.length && discount[0] !== discount[1])
@@ -186,15 +194,14 @@ export class ProductService {
           } else if (f.name === 'color') {
 
             this.filteredProducts.forEach((p, pi) => {
-              const newColors = p.colors.filter(c => {
-                let result = f.values.filter(v => {
+              this.filteredProducts[pi].colors = p.colors.filter(c => {
+                const result = f.values.filter(v => {
                   return c.name ? c.name.split('/').find(a => {
-                    return safeColorConverter(a) === v
-                  }) : false
+                    return safeColorConverter(a) === v;
+                  }) : false;
                 });
                 return result.length;
               });
-              this.filteredProducts[pi].colors = newColors;
             });
 
             this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
@@ -225,7 +232,7 @@ export class ProductService {
           } else if (f.name === 'price') {
             const filteredProductBefore = this.filteredProducts;
             this.filteredProducts = [];
-            filteredProductBefore.forEach((product, key) => {
+            filteredProductBefore.forEach(product => {
               if ((product.instances.filter(instance => instance.discountedPrice >= f.values[0] &&
                 instance.discountedPrice <= f.values[1])).length > 0) {
                 this.filteredProducts.push(product);
@@ -240,7 +247,7 @@ export class ProductService {
           }
         }
 
-        this.filteredProducts = this.cleanProductsList(this.filteredProducts);
+        this.filteredProducts = cleanProductsList(this.filteredProducts);
       });
       setTimeout(() => {
         this.sortProductsAndEmit();
@@ -264,11 +271,7 @@ export class ProductService {
     }
   }
 
-  private cleanProductsList(data: any[]) {
-    return data.filter(p => p.instances.length && p.colors.length);
-  }
-
-  private enrichProductData(data) {
+   private enrichProductData(data) {
     data.id = data._id;
     data.type = data.product_type;
     data.price = data.base_price;
@@ -347,7 +350,7 @@ export class ProductService {
   }
 
   loadProducts(productIds) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.httpService.post('product/getMultiple', { productIds })
         .subscribe(data => {
           if (data) {
@@ -373,6 +376,9 @@ export class ProductService {
           if (data.name_fa) {
             this.collectionName = data.name_fa;
             this.collectionNameFa$.next(data.name_fa);
+            this.tag$.next(data.tags);
+            this.type$.next(data.types);
+
           }
           if (data.products) {
             for (const product of data.products) {

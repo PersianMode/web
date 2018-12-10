@@ -17,6 +17,7 @@ import {
 import {FormsModule} from '@angular/forms';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {SliderModule} from 'primeng/slider';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {SliderModule} from 'primeng/slider';
     ParentCollectionComponent,
     FilteringPanelComponent,
     ProductGridItemComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     CollectionRouting,

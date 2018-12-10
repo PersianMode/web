@@ -31,7 +31,8 @@ export class CartComponent implements OnInit, OnDestroy {
   showWaitingSpinner = false;
 
   constructor(@Inject(WINDOW) private window, private cartService: CartService, private checkoutService: CheckoutService,
-              private authService: AuthService, private router: Router, public dialog: MatDialog, private titleService: TitleService, private productService: ProductService) {
+              private authService: AuthService, private router: Router, public dialog: MatDialog,
+              private titleService: TitleService, private productService: ProductService) {
   }
 
   ngOnInit() {
@@ -92,7 +93,7 @@ export class CartComponent implements OnInit, OnDestroy {
           this.checkoutService.setProductData(this.products);
         if (this.products.length > 0) {
           this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
-          this.totalPrice = this.cartService.calculateTotal(this.products);
+          this.totalPrice = this.checkoutService.calculateTotal();
           this.calculateDiscount();
         } else if (prevProductCount) {
           this.router.navigate(['/']);

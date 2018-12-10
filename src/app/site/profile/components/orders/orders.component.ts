@@ -21,6 +21,7 @@ import { OrderCancelComponent } from '../order-cancel/order-cancel.component';
 })
 export class OrdersComponent implements OnInit, OnDestroy {
   profileOrder = [];
+
   displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'discount', 'used_point', 'address', 'view_details'];
   isMobile = false;
   selectedOrder;
@@ -35,7 +36,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
       if (!result.length)
         return;
       this.profileOrder = result;
-      this.profileOrder.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.order_time));
+            this.profileOrder.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.order_time));
     });
     this.isMobile = this.responsiveService.isMobile;
     this.profileOrderService.getAllOrders();
@@ -47,7 +48,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
       return a;
     return (+a).toLocaleString('fa', {useGrouping: isPrice});
   }
-
    goToOrderLines(orderId) {
      this.profileOrderService.getAllOrders();
 

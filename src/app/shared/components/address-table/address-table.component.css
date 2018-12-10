@@ -96,5 +96,11 @@ mat-icon {
 }
 
 .show-button {
-  margin-top: 55px;
+  margin-top: 15px;
+}
+
+.accent {
+  background: #f2f2f2;
+  color: darkred;
+  font-size: 110%;
 }
