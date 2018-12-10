@@ -8,9 +8,9 @@ import {ProductViewerComponent} from 'app/admin/order/components/product-viewer/
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ORDERS} from 'app/admin/order/components/order-mock';
 @Component({
-  selector: 'app-customer-send-box',
-  templateUrl: './customer-send-box.component.html',
-  styleUrls: ['./customer-send-box.component.css'],
+  selector: 'app-cc-delivery-box',
+  templateUrl: './cc-delivery-box.component.html',
+  styleUrls: ['./cc-delivery-box.component.css'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
@@ -19,7 +19,7 @@ import {ORDERS} from 'app/admin/order/components/order-mock';
     ]),
   ],
 })
-export class CustomerSendBoxComponent implements OnInit {
+export class CCDeliveryComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

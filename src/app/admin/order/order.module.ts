@@ -29,14 +29,11 @@ import {SmSendComponent} from './components/sm-send/sm-send.component';
 import {DeliveryShowComponent} from './components/delivery-show/delivery-show.component';
 import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/delivery-shelf-code.component';
 import {InboxComponent} from './components/inbox/inbox.component';
-import {DeliverBoxComponent} from './components/deliver-box/deliver-box.component';
 import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-confirm.component';
-import {InternalSendBoxComponent} from './components/internal-send-box/internal-send-box.component';
-import {CustomerSendBoxComponent} from './components/customer-send-box/customer-send-box.component';
-import {CustomerDeliveryComponent} from './components/customer-delivery/customer-delivery.component';
+import {InternalDeliveryBoxComponent} from './components/internal-delivery-box/internal-delivery-box.component';
+import {ExternalDeliveryBoxComponent} from './components/external-delivery-box/external-delivery-box.component';
+import {CCDeliveryComponent} from './components/cc-delivery-box/cc-delivery-box.component';
 import {ShelvsViewComponent} from './components/shelvs-view/shelvs-view.component';
-import { ReadyToSendComponent } from './components/internal-send-box/components/ready-to-send/ready-to-send.component';
-import { PostedComponent } from './components/internal-send-box/components/posted/posted.component';
 import { ReturnToWarehouseBoxComponent } from './components/return-to-warehouse-box/return-to-warehouse-box.component';
 
 @NgModule({
@@ -51,14 +48,11 @@ import { ReturnToWarehouseBoxComponent } from './components/return-to-warehouse-
     SmSendComponent,
     DeliveryShowComponent,
     DeliveryShelfCodeComponent,
-    DeliverBoxComponent,
     MismatchConfirmComponent,
-    InternalSendBoxComponent,
-    CustomerSendBoxComponent,
-    CustomerDeliveryComponent,
+    InternalDeliveryBoxComponent,
+    ExternalDeliveryBoxComponent,
+    CCDeliveryComponent,
     ShelvsViewComponent,
-    ReadyToSendComponent,
-    PostedComponent,
     ReturnToWarehouseBoxComponent,
   ],
   imports: [

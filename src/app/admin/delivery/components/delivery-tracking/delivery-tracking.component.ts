@@ -1,8 +1,6 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {OrderStatus} from '../../../../shared/lib/order_status';
-import {STATUS} from '../../../../shared/enum/status.enum';
 import * as moment from 'moment';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -26,7 +24,7 @@ export class DeliveryTrackingComponent implements OnInit {
   }
 
   getStatus(value) {
-    return OrderStatus.find(s => s.status === value.status).name;
+    // return OrderLineStatus.find(s => s.status === value.status).name;
   }
 
   getDate(value) {
@@ -39,9 +37,9 @@ export class DeliveryTrackingComponent implements OnInit {
 
   isOnDelivery() {
     const statusObj = this.data.status_list.find(el => !el.is_processed);
-    return statusObj && statusObj.status === STATUS.OnDelivery;
+    // return statusObj && statusObj.status === STATUS.OnDelivery;
   }
-
+ 
   getImageUrl(url) {
     if (url) {
       url = url[0] === '/' ? url : '/' + url;

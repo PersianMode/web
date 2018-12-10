@@ -9,7 +9,7 @@ import {AccessLevel} from '../../shared/enum/accessLevel.enum';
 import * as moment from 'moment';
 import {AuthService} from '../../shared/services/auth.service';
 import {DeliveryTrackingComponent} from './components/delivery-tracking/delivery-tracking.component';
-import {STATUS} from '../../shared/enum/status.enum';
+import {Delivery_STATUS} from '../../shared/enum/status.enum';
 
 export interface DeliveryItem {
   _id: String;
@@ -276,7 +276,7 @@ export class DeliveryComponent implements OnInit {
   }
 
   deliveryIsDone(item) {
-    return item.status_list && item.status_list.find(el => el.is_processed && el.status === STATUS.Delivered);
+    // return item.status_list && item.status_list.find(el => el.is_processed && el.status === Delivery_STATUS.Delivered);
   }
 
   isAfterMaxValidEndDate(id) {

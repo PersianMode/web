@@ -3,10 +3,10 @@ import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from 
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {SocketService} from '../../../../shared/services/socket.service';
-import {OrderStatus} from '../../../../shared/lib/order_status';
+import {OrderLineStatuses} from '../../../../shared/lib/status';
 import {OrderAddressComponent} from '../order-address/order-address.component';
 import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
-import {STATUS} from '../../../../shared/enum/status.enum';
+import {ORDER_LINE_STATUS} from '../../../../shared/enum/status.enum';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {BarcodeCheckerComponent} from '../barcode-checker/barcode-checker.component';
 import {ProgressService} from '../../../../shared/services/progress.service';
@@ -170,7 +170,7 @@ export class SmInboxComponent implements OnInit, OnDestroy {
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets) {
       const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return OrderStatus.find(x => x.status === lastTicket.status).name;
+      return OrderLineStatuses.find(x => x.status === lastTicket.status).name;
     }
   }
 
@@ -199,11 +199,11 @@ export class SmInboxComponent implements OnInit, OnDestroy {
 
 
   isReadyForInvoice(order) {
-    return order.order_lines.every(x => {
-      const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
-      return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice ||
-        lastTicket.status === STATUS.WaitForInvoice);
-    });
+    // return order.order_lines.every(x => {
+    //   const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
+    //   return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice ||
+    //     lastTicket.status === STATUS.WaitForInvoice);
+    // });
   }
 
   requestInvoice(order) {

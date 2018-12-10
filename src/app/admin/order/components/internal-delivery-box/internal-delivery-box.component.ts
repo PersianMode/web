@@ -1,41 +1,40 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
-import {HttpService} from '../../../../shared/services/http.service';
-import {SocketService} from '../../../../shared/services/socket.service';
-import {OrderLineStatuses} from '../../../../shared/lib/status';
+import {Component, OnInit, Output, EventEmitter, AfterViewInit, OnDestroy, ViewChild} from '@angular/core';
+import {MatTableDataSource, MatSort, MatPaginator, MatDialog, MatSnackBar} from '@angular/material';
+import {HttpService} from 'app/shared/services/http.service';
+import {SocketService} from 'app/shared/services/socket.service';
+import {ProgressService} from 'app/shared/services/progress.service';
+import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
-import {ProgressService} from '../../../../shared/services/progress.service';
-import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
-import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
-
+import {OrderLineStatuses} from 'app/shared/lib/status';
 
 @Component({
-  selector: 'app-inbox',
-  templateUrl: './inbox.component.html',
-  styleUrls: ['./inbox.component.scss']
+  selector: 'app-internal-delivery-box',
+  templateUrl: './internal-delivery-box.component.html',
+  styleUrls: ['./internal-delivery-box.component.css']
 })
-export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
+export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Output() OnNewInboxCount = new EventEmitter();
+
+  @Output() OnInternalDeliveryBoxCount = new EventEmitter();
 
   displayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status'];
   dataSource: MatTableDataSource<any>;
 
+
   pageSize = 10;
   total;
 
-  trigger = ScanTrigger.Inbox;
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
   socketObserver: any = null;
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private socketService: SocketService,
-    private progressService: ProgressService) {
-  }
+    private progressService: ProgressService) {}
+
 
   ngOnInit() {
     this.socketObserver = this.socketService.getOrderLineMessage();
@@ -56,7 +55,8 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
-      type: 'Inbox',
+      type: 'ScanInternalDelivery',
+      manual: false
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
@@ -69,18 +69,19 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
       });
       this.dataSource = new MatTableDataSource<any>(res.data);
       this.total = res.total || 0;
-      this.OnNewInboxCount.emit(this.total);
+      this.OnInternalDeliveryBoxCount.emit(this.total);
     }, err => {
       this.progressService.disable();
-      this.openSnackBar('خطا به هنگام دریافت لیست سفارشات');
+      this.openSnackBar('خطا در دریافت لیست سفارش‌های عادی');
     });
   }
+
 
   getProductDetail(orderLine) {
     const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
     const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id)
-      : null;
+      imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id) :
+      null;
     return {
       name: orderLine.instance.product_name,
       thumbnailURL,
@@ -97,8 +98,6 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
       data: this.getProductDetail(orderLine)
     });
   }
-
-
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets) {
       const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
@@ -130,5 +129,6 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.socketObserver)
       this.socketObserver.unsubscribe();
   }
+
 
 }

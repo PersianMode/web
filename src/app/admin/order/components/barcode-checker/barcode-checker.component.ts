@@ -21,7 +21,8 @@ export class BarcodeCheckerComponent implements OnInit {
 
 
   @Input() isHub = false;
-  @Input() finished = true;
+  @Input() showScanner = false;
+  @Input() trigger: String;
 
   @Output() onMismatchListener = new EventEmitter();
 
@@ -47,9 +48,14 @@ export class BarcodeCheckerComponent implements OnInit {
     );
   }
   checkBarcode(barcode) {
+    if (!this.trigger) {
+      this.openSnackBar('نوع اسکن مشخص نیست');
+      return;
+    }
     this.progressService.enable();
     this.httpService.post('order/ticket/scan', {
-      barcode
+      barcode,
+      trigger: this.trigger
     }).subscribe(res => {
       this.progressService.disable();
 

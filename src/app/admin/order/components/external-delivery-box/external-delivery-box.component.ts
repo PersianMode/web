@@ -8,9 +8,9 @@ import {ProductViewerComponent} from 'app/admin/order/components/product-viewer/
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ORDERS} from 'app/admin/order/components/order-mock';
 @Component({
-  selector: 'app-customer-delivery',
-  templateUrl: './customer-delivery.component.html',
-  styleUrls: ['./customer-delivery.component.css'],
+  selector: 'app-external-delivery-box',
+  templateUrl: './external-delivery-box.component.html',
+  styleUrls: ['./external-delivery-box.component.css'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
@@ -19,7 +19,7 @@ import {ORDERS} from 'app/admin/order/components/order-mock';
     ]),
   ],
 })
-export class CustomerDeliveryComponent implements OnInit {
+export class ExternalDeliveryBoxComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

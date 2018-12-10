@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild, EventEmitter, Output, OnDestroy} from '@angular/core';
 import {TicketComponent} from '../ticket/ticket.component';
-import {STATUS} from '../../../../shared/enum/status.enum';
+import {ORDER_LINE_STATUS} from '../../../../shared/enum/status.enum';
 import {OrderAddressComponent} from '../order-address/order-address.component';
-import {OrderStatus} from '../../../../shared/lib/order_status';
+import {OrderLineStatuses} from '../../../../shared/lib/status';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {BarcodeCheckerComponent} from '../barcode-checker/barcode-checker.component';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
@@ -71,7 +71,7 @@ export class SmSendComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // set status
-    this.listStatus = OrderStatus.map(el => ({name: el.name, status: el.status}));
+    this.listStatus = OrderLineStatuses.map(el => ({name: el.name, status: el.status}));
     this.listStatus.push({name: 'همه موارد', status: null});
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
@@ -211,7 +211,7 @@ export class SmSendComponent implements OnInit, OnDestroy {
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets) {
       const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return OrderStatus.find(x => x.status === lastTicket.status).name;
+      return OrderLineStatuses.find(x => x.status === lastTicket.status).name;
     }
   }
 
@@ -239,12 +239,12 @@ export class SmSendComponent implements OnInit, OnDestroy {
 
 
   isReadyForInvoice(order) {
-    return order.order_lines.every(x => {
-      const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
-      return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice
-        || lastTicket.status === STATUS.WaitForInvoice);
+    // return order.order_lines.every(x => {
+    //   const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
+    //   return lastTicket && !lastTicket.is_processed && (lastTicket.status === ORDER_LINE_STATUS.ReadyForInvoice
+    //     || lastTicket.status === ORDER_LINE_STATUS.WaitForInvoice);
 
-    });
+    // });
   }
 
   requestInvoice(order) {

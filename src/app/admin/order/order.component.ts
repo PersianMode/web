@@ -12,10 +12,9 @@ import { AuthService } from '../../shared/services/auth.service';
 export class OrderComponent implements OnInit {
 
 
-  newInboxCount: number;
-  newOutboxCount: number;
-  readyToScanCount: number;
-  newDeliverCount: number;
+  InboxCount: number;
+  InternalDeliveryBoxCount: number;
+
   isSalesManager = false;
   isHubClerk = false;
   isShopClerk = false;

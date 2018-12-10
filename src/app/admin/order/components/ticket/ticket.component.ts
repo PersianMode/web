@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import {MatPaginator, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import * as moment from 'jalali-moment';
 import { HttpService } from '../../../../shared/services/http.service';
-import { OrderStatus } from '../../../../shared/lib/order_status';
+import { OrderLineStatuses } from '../../../../shared/lib/status';
 
 @Component({
   selector: 'app-ticket',
@@ -50,8 +50,8 @@ export class TicketComponent implements OnInit {
   }
 
   getStatus(element) {
-    const orderStatus = OrderStatus.find(x => x.status === element);
-    return orderStatus ? orderStatus.name : 'نامشخص';
+    const _OrderLineStatus = OrderLineStatuses.find(x => x.status === element);
+    return _OrderLineStatus ? _OrderLineStatus.name : 'نامشخص';
 
   }
 

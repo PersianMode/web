@@ -1,22 +1,20 @@
 <!-- barcode checker -->
-<app-barcode-checker [finished]="!scanTotal" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+<app-barcode-checker [showScanner]="total" [trigger]="trigger" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
 
 <mat-card>
-
 
   <mat-card-header>
     <mat-card-title>نیاز به اسکن</mat-card-title>
     <mat-card-subtitle>
-      <button mat-icon-button color="primary" (click)="loadScan()" style="margin-top: 10px;">
+      <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
         <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
       </button>
     </mat-card-subtitle>
   </mat-card-header>
-
   <mat-card-content>
 
     <div class="example-container mat-elevation-z8">
-      <mat-table #table [dataSource]="scanDataSource" class="example-table" matSort matSortActive="created"
+      <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created"
         matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
 
         <ng-container matColumnDef="position">
@@ -54,9 +52,9 @@
           <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="scanDisplayedColumns"></mat-header-row>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-        <mat-row *matRowDef="let row; columns: scanDisplayedColumns;" matRipple class="element-row"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row"></mat-row>
 
       </mat-table>
     </div>
@@ -65,6 +63,6 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <mat-paginator [length]="scanTotal" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+    <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
   </mat-card-actions>
 </mat-card>
