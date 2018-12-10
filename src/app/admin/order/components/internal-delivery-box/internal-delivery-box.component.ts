@@ -27,7 +27,7 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  socketObserver: any = null;
+  socketSubscription: any = null;
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
@@ -37,16 +37,13 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
 
   ngOnInit() {
-    this.socketObserver = this.socketService.getOrderLineMessage();
   }
 
   ngAfterViewInit(): void {
     this.load();
-    if (this.socketObserver) {
-      this.socketObserver.subscribe(msg => {
-        this.load();
-      });
-    }
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
   }
 
   load() {
@@ -126,8 +123,7 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngOnDestroy(): void {
-    if (this.socketObserver)
-      this.socketObserver.unsubscribe();
+      this.socketSubscription.unsubscribe();
   }
 
 

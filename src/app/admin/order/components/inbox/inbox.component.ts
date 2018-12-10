@@ -28,8 +28,8 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  socketObserver: any = null;
 
+  socketSubscription: any;
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
@@ -38,16 +38,13 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.socketObserver = this.socketService.getOrderLineMessage();
   }
 
   ngAfterViewInit(): void {
     this.load();
-    if (this.socketObserver) {
-      this.socketObserver.subscribe(msg => {
-        this.load();
-      });
-    }
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
   }
 
   load() {
@@ -127,8 +124,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.socketObserver)
-      this.socketObserver.unsubscribe();
+    this.socketSubscription.unsubscribe();
   }
 
 }
