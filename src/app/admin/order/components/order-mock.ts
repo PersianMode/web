@@ -294,7 +294,8 @@ export const ORDERS = [{
         'color_id': '5b6a957c7b0420001ce50d0b',
         'name': 'BLACK/TEAM ORANGE-WHITE-ATMOSPHERE GREY',
         'code': '006'
-      }, {
+      },
+        {
         'image': {
           'angles': ['897646-101-PHCFH001-2000.jpg',
             '897646-101-PHCTH001-2000.jpg',

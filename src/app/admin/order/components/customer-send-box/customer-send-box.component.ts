@@ -47,6 +47,7 @@ export class CustomerSendBoxComponent implements OnInit {
   loadData() {
 
     this.dataSource = new MatTableDataSource<any>(ORDERS);
+    console.log('datasource', this.dataSource);
     this.resultsLength = this.dataSource.data.length;
 
   }

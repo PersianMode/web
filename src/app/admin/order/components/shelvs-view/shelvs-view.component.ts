@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
@@ -33,7 +33,8 @@ export class ShelvsViewComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  // dataSource: MatTableDataSource<any>;
+  @Output() OnNewInboxCount = new EventEmitter();
+
   displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address'];
   //must added above: , 'shelf_code'
   expandedElement: any;
@@ -61,10 +62,10 @@ export class ShelvsViewComponent implements OnInit {
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   ngOnInit() {
-    this.loadData();
+    this.load();
   }
 
-  loadData() {
+  load() {
     this.progressService.enable();
     const options = {
       sort: this.sort.active,
@@ -78,15 +79,19 @@ export class ShelvsViewComponent implements OnInit {
       this.progressService.disable();
 
       console.log('res: ', res);
+
       const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
       this.dataSource.data = rows;
-      // this.OnNewInboxCount.emit(res.total);
+      console.log('rows: ', rows);
+      this.resultsLength = res.total ? res.total : 0;
+      this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
+      this.OnNewInboxCount.emit(0);
       this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
     });
     // this.dataSource = new MatTableDataSource<any>(ORDERS);
@@ -101,11 +106,11 @@ export class ShelvsViewComponent implements OnInit {
 
   onSortChange($event: any) {
     this.paginator.pageIndex = 0;
-    this.loadData();
+    this.load();
   }
 
   onPageChange($event: any) {
-    this.loadData();
+    this.load();
   }
 
   openSnackBar(message: string) {
@@ -132,15 +137,15 @@ export class ShelvsViewComponent implements OnInit {
   getProductDetail(orderLine) {
     const product_color = orderLine.product_colors.find(x => x._id === orderLine.product_color_id);
     const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      imagePathFixer(product_color.image.thumbnail, orderLine.instances.product_id, product_color._id) :
+      imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id) :
       null;
     return {
-      name: orderLine.instances.product_name,
+      name: orderLine.instance.product_name,
       thumbnailURL,
       color: product_color ? product_color.name : null,
       color_code: product_color ? product_color.code : null,
-      size: orderLine.instances.size,
-      product_id: orderLine.instances.product_id
+      size: orderLine.instance.size,
+      product_id: orderLine.instance.product_id
     };
   }
 

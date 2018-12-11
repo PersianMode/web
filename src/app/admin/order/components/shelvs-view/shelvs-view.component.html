@@ -29,6 +29,11 @@
   <!-- content -->
   <mat-card-content>
 
+
+    <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
+      <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+    </button>
+
     <div class="example-container mat-elevation-z8">
       <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created"
         matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
@@ -54,7 +59,7 @@
          <!--total_order_lines column-->
         <ng-container matColumnDef="total_order_lines">
           <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.total_order_lines}} / {{order.instances.length}}</mat-cell>
+          <mat-cell *matCellDef="let order">{{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
         </ng-container>
 
         <!-- address column -->
@@ -76,7 +81,7 @@
           <mat-cell *matCellDef="let detail">
 
             <table class='orderLineDetail'>
-              <tr *ngFor='let ol of detail.order'>
+              <tr *ngFor='let ol of detail.order.order_lines'>
                 <td>
                   <div class="imgWrapper">
                     <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetail(ol)">
@@ -84,30 +89,31 @@
                 </td>
                 <td>
                   <p>
-                    <b>بارکد:</b> {{ol.barcode}}</p>
+                    <b>بارکد:</b> {{ol.instance.barcode}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>نام:</b> {{ol.product_name}}</p>
+                    <b>نام:</b> {{ol.instance.product_name}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>سایز:</b> {{ol.size}}</p>
+                    <b>سایز:</b> {{ol.instance.size}}</p>
                 </td>
               </tr>
             </table>
+
+
           </mat-cell>
         </ng-container>
 
 
         <!-- mat-row and mat-row-collapsed -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-
-        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [ngClass]="{'expanded highlight-row': expandedElement == row._id}"
-                 (click)="expandedElement = row._id">
+        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
+          (click)="expandedElement = row._id">
         </mat-row>
         <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
-                 style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
+          style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
         </mat-row>
 
 
