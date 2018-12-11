@@ -77,15 +77,29 @@ export class UpsertAddressComponent implements OnInit {
 
   initForm() {
     this.addressForm = new FormBuilder().group({
-      recipient_email: [this.addressInfo.addressId ? this.addressData.recipient_email : '',
+      // recipient_email: [this.addressInfo.addressId ? this.addressData.recipient_email : '',
+      //   this.emailRequired ? [Validators.required] : []],
+      // recipient_name: [this.addressInfo.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
+      //   Validators.required,
+      // ]],
+      // recipient_surname: [this.addressInfo.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
+      //   Validators.required,
+      // ]],
+      // recipient_national_id: [this.addressInfo.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
+      //   Validators.required,
+      //   Validators.maxLength(10),
+      //   Validators.minLength(10),
+      //   Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/)
+      // ]],
+      recipient_email: ['s@s.com',
         this.emailRequired ? [Validators.required] : []],
-      recipient_name: [this.addressInfo.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
+      recipient_name: ['ساره', [
         Validators.required,
       ]],
-      recipient_surname: [this.addressInfo.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
+      recipient_surname: ['صالحیی', [
         Validators.required,
       ]],
-      recipient_national_id: [this.addressInfo.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
+      recipient_national_id: ['0385051182', [
         Validators.required,
         Validators.maxLength(10),
         Validators.minLength(10),
@@ -107,7 +121,7 @@ export class UpsertAddressComponent implements OnInit {
       recipient_mobile_no: [this.addressInfo.addressId ? this.addressData.recipient_mobile_no : this.authService.userDetails.mobile_no, [
         Validators.required,
         Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/),
-        Validators.minLength(8),
+        Validators.minLength(2),
       ]],
       recipient_title: [this.addressInfo.addressId ? this.addressData.recipient_title : this.authService.userDetails.gender],
       latitude: [this.addressData.loc && this.addressInfo.addressId ? this.addressData.loc.lat : 35.696491],

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import { IAddressInfo } from '../interfaces/iaddressInfo.interface';
 import { HttpService } from './http.service';
 import { CartService } from './cart.service';
@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs/Rx';
+import {DOCUMENT} from '@angular/common';
 
 @Injectable()
 export class CheckoutService {
@@ -41,7 +42,7 @@ export class CheckoutService {
 
   constructor(private cartService: CartService, private httpService: HttpService,
     private authService: AuthService, private snackBar: MatSnackBar,
-    private router: Router) {
+    private router: Router, @Inject(DOCUMENT) private document: any) {
     this.cartService.cartItems.subscribe(
       data => {
         this.dataIsReady.next(data && data.length);
@@ -220,6 +221,34 @@ export class CheckoutService {
     }
   }
 
+  sendDataToBank() {
+    if (!this.withDelivery)
+      if (this.ccRecipientData) {
+        this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
+        this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
+        this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
+        this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
+        this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
+        this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
+      } else {
+        return;
+      }
+    const data = {
+      total_amount : this.total,
+      address: this.addressObj
+    };
+    return new Promise((resolve, reject) => {
+      this.httpService.post('ipgpayment', data)
+        .subscribe(res => {
+            this.document.location.href = 'https://pep.shaparak.ir/gateway.aspx';
+            resolve(res);
+          },
+          err => {
+            reject();
+          });
+    });
+  }
+
   checkout() {
     const data = this.accumulateData();
     this.httpService.post('checkout', data)
@@ -264,7 +293,6 @@ export class CheckoutService {
   }
 
   private accumulateData() {
-
     if (!this.withDelivery) {
       this.addressObj.wharehouse_name = this.addressObj.name;
     }

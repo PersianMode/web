@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {PaymentType} from '../../../shared/enum/payment.type.enum';
 import {CheckoutService} from '../../../shared/services/checkout.service';
 import {HttpService} from '../../../shared/services/http.service';
@@ -11,7 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
-import {isUndefined} from 'util';
+import {DOCUMENT, Location} from '@angular/common';
 
 @Component({
   selector: 'app-checkout-page',
@@ -50,7 +50,7 @@ export class CheckoutPageComponent implements OnInit {
               private cartService: CartService,
               private titleService: TitleService,
               private progressService: ProgressService,
-              private router: Router,
+              private router: Router,  @Inject(DOCUMENT) private document: any, private location: Location,
               private productService: ProductService, private route: ActivatedRoute) {
   }
 
@@ -223,6 +223,9 @@ export class CheckoutPageComponent implements OnInit {
 
   checkout() {
     this.finalCheckItems()
+      .then(res => {   // redirect to bank payment page
+        return this.checkoutService.sendDataToBank();
+      })
       .then(res => {
         this.checkoutService.checkout();
       })
