@@ -62,6 +62,12 @@
           <mat-cell *matCellDef="let order">{{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
         </ng-container>
 
+    <!--trackingCode column-->
+        <ng-container matColumnDef="trackingCode">
+          <mat-header-cell *matHeaderCellDef>شماره پیگیری</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{order.transaction_id}}</mat-cell>
+        </ng-container>
+
         <!-- address column -->
         <ng-container matColumnDef="address">
           <mat-header-cell *matHeaderCellDef>آدرس</mat-header-cell>

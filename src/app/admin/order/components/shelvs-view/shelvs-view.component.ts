@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core'
 import {MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
-import { FormControl } from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
@@ -35,7 +35,7 @@ export class ShelvsViewComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address'];
+  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'trackingCode', 'address'];
   //must added above: , 'shelf_code'
   expandedElement: any;
   total;
@@ -49,6 +49,8 @@ export class ShelvsViewComponent implements OnInit {
 
   filteredShelfCodes: Observable<any[]>;
   shelfCodes = SHELF_CODES; // mock
+  transferee = null;
+  trackingCode = null;
   dataSource = new MatTableDataSource();
 
   constructor(private dialog: MatDialog, private progressService: ProgressService, private httpService: HttpService, private snackBar: MatSnackBar) {
@@ -58,11 +60,31 @@ export class ShelvsViewComponent implements OnInit {
         startWith(''),
         map(shelf => shelf ? this.filterShelfCodes(shelf) : this.shelfCodes.slice())
       );
-   }
+  }
+
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   ngOnInit() {
     this.load();
+
+    this.trackingCodeCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.trackingCode = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when tracking code is changed: ', err);
+      }
+    );
+
+    this.transfereeCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.transferee = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+      }
+    );
+
   }
 
   load() {
@@ -70,6 +92,10 @@ export class ShelvsViewComponent implements OnInit {
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
+
+      transferee: this.transferee,
+      trackingCode: this.trackingCode,
+
       type: 'shelvesList',
       manual: false
     };
@@ -78,26 +104,23 @@ export class ShelvsViewComponent implements OnInit {
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
 
-      console.log('res: ', res);
-
       const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
+
       this.dataSource.data = rows;
-      console.log('rows: ', rows);
       this.resultsLength = res.total ? res.total : 0;
       this.OnNewInboxCount.emit(res.total);
+
     }, err => {
       this.progressService.disable();
       this.OnNewInboxCount.emit(0);
       this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
     });
-    // this.dataSource = new MatTableDataSource<any>(ORDERS);
-    // this.resultsLength = this.dataSource.data.length;
-  }
 
+  }
 
   filterShelfCodes(code: string) {
     return this.shelfCodes.filter(shelf =>
