@@ -36,6 +36,7 @@ import {CCDeliveryComponent} from './components/cc-delivery-box/cc-delivery-box.
 import {ShelvsViewComponent} from './components/shelvs-view/shelvs-view.component';
 import { ReturnToWarehouseBoxComponent } from './components/return-to-warehouse-box/return-to-warehouse-box.component';
 import {DeliveryComponent} from './components/delivery/delivery.component';
+import {DeliveryTrackingComponent} from './components/delivery/components/delivery-tracking/delivery-tracking.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import {DeliveryComponent} from './components/delivery/delivery.component';
     CCDeliveryComponent,
     ShelvsViewComponent,
     ReturnToWarehouseBoxComponent,
+    DeliveryTrackingComponent
   ],
   imports: [
     LogisticRouting,
@@ -91,7 +93,8 @@ import {DeliveryComponent} from './components/delivery/delivery.component';
     TicketComponent,
     DeliveryShowComponent,
     DeliveryShelfCodeComponent,
-    MismatchConfirmComponent],
+    MismatchConfirmComponent,
+    DeliveryTrackingComponent],
 })
 export class LogisticModule {
 }

@@ -1,0 +1,166 @@
+<mat-card class="card-container">
+  <div>
+    <h2>
+      <button mat-icon-button (click)="getDeliveryItems()">
+        <mat-icon color="primary" aria-label="refresh">refresh</mat-icon>
+      </button>
+      <label>لیست سفارشات</label>
+    </h2>
+    <div class="search-area">
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxFlex="50" class="filtering-box">
+          <mat-input-container class="filtering-field">
+            <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری" [formControl]="receiverSearchCtrl">
+          </mat-input-container>
+        </div>
+        <div fxFlex="50" class="filtering-box">
+          <mat-input-container class="filtering-field">
+            <input class="filtering-field" matInput type="text" placeholder="مسئول ارسال" [formControl]="agentSearchCtrl">
+          </mat-input-container>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxFlex="50" class="filtering-box">
+          <mat-form-field class="filtering-field">
+            <input matInput [matDatepicker]="epicker" placeholder="انتقالات از تاریخ ..." [(ngModel)]="endDateSearch"
+              (ngModelChange)="getDeliveryItems()">
+            <mat-datepicker-toggle matSuffix [for]="epicker"></mat-datepicker-toggle>
+            <mat-datepicker #epicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50" class="filtering-box">
+          <mat-form-field class="filtering-field">
+            <input matInput [matDatepicker]="spicker" placeholder="انتقالات تا تاریخ ..." [(ngModel)]="startDateSearch"
+              (ngModelChange)="getDeliveryItems()" />
+            <mat-datepicker-toggle matSuffix [for]="spicker"></mat-datepicker-toggle>
+            <mat-datepicker #spicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="start start">
+        <div fxFlex="25" class="filtering-box" style="margin-top: 20px">
+          <mat-checkbox class="filtering-field" [ngModel]="isDelivered" (change)="changeDeliverStatus()"
+            [indeterminate]="isDelivered === null">
+            <span *ngIf="isDelivered" class="checkbox-label">تحویل داده شده</span>
+            <span *ngIf="isDelivered === false" class="checkbox-label">تحویل داده نشده</span>
+            <span *ngIf="isDelivered === null" class="checkbox-label">همه موارد</span>
+          </mat-checkbox>
+        </div>
+        <div fxFlex="25" class="filtering-box" style="margin-top: 20px">
+          <mat-checkbox class="filtering-field" [ngModel]="missDeliveryAgent" (change)="changeDeliveryAgentStatus()"
+            [indeterminate]="missDeliveryAgent === null">
+            <span *ngIf="missDeliveryAgent" class="checkbox=label">بدون مسئول ارسال</span>
+            <span *ngIf="missDeliveryAgent === false" class="checkbox=label">مسئول ارسال تعیین شده</span>
+            <span *ngIf="missDeliveryAgent === null" class="checkbox=label">همه ی انواع</span>
+          </mat-checkbox>
+        </div>
+        <div fxFlex="25" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
+          <mat-checkbox class="filtering-field" [ngModel]="isInternal" (change)="changeInternalStatus()"
+            [indeterminate]="isInternal === null">
+            <span *ngIf="isInternal" class="checkbox-label">انتقالات داخلی</span>
+            <span *ngIf="isInternal === false" class="checkbox-label">انتقالات خارجی</span>
+            <span *ngIf="isInternal === null" class="checkbox-label">همه انتقالات</span>
+          </mat-checkbox>
+        </div>
+        <div fxFlex="25" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
+          <mat-checkbox class="filtering-field" [ngModel]="isReturn" (change)="changeReturnStatus()" [indeterminate]="isReturn === null">
+            <span *ngIf="isReturn" class="checkbox=label">برگشت داده شده ها</span>
+            <span *ngIf="isReturn === false" class="checkbox=label">برگشت داده نشده ها</span>
+            <span *ngIf="isReturn === null" class="checkbox=label">همه نوع مرسوله ای</span>
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
+    <div>
+      <mat-table #table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef class="header">ردیف</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{formatter(element.position)}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="end">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تاریخ دریافت</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content" [style.color]="isAfterMaxValidEndDate(element._id) ? 'red' : 'black'">
+            {{element.end}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="min_slot">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">بازه دریافتی مطلوب</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.min_slot?.lower_bound}} -
+            {{element.min_slot?.upper_bound}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delivery_agent">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مسئول ارسال</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            <div *ngIf="!element.is_internal">
+              {{element.delivery_agent.first_name}} {{element.delivery_agent.surname}}
+            </div>
+            <div *ngIf="element.is_internal">
+              <mat-select class="select-label" placeholder="انتخاب ارسال کننده" [ngModel]="element.delivery_agent._id"
+                (change)="deliveryAgentChange(element._id, $event)" [disabled]="isSalesManager && !element.is_return">
+                <mat-option *ngFor="let dg of deliveryAgentList" [value]="dg._id">
+                  {{dg.first_name}} - {{dg.surname}}
+                </mat-option>
+              </mat-select>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="receiver_sender_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">نام مشتری / فروشگاه</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            <span *ngIf="element.receiver_sender_name">{{element.receiver_sender_name}}</span>
+            <span *ngIf="!element.receiver_sender_name">-</span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="shelf_code" *ngIf="isHubClerk">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">کد قفسه</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.shelf_code}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="is_delivered">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تحویل گرفته شده</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            <div *ngIf="element.is_delivered">
+              <mat-icon style="color: green" aria-label="delivered">check</mat-icon>
+            </div>
+            <div *ngIf="!element.is_delivered">
+              <mat-icon style="color: red" aria-label="not delivered">close</mat-icon>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tracking">
+          <mat-header-cell *matHeaderCellDef class="header">رهگیری</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content details-button">
+            <div (click)="showTracking(element._id)">
+              <mat-icon color="primary">zoom_in</mat-icon>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="view_details" *ngIf="isSalesManager">
+          <mat-header-cell *matHeaderCellDef class="header">نمایش جزئیات</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content details-button">
+            <div (click)="showDetails(element._id)">
+              <mat-icon color="primary">details</mat-icon>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+    <div dir="ltr">
+      <mat-paginator [length]="totalRecords" [pageIndex]="offset / limit" [pageSize]="limit" [pageSizeOptions]="[5, 10, 20, 50]"
+        (page)="changePageSetting($event)">
+      </mat-paginator>
+    </div>
+  </div>
+  <div *ngIf="selectedDelivery">
+    <h3></h3>
+  </div>
+</mat-card>
