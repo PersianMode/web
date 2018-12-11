@@ -240,7 +240,6 @@ export class CheckoutService {
     return new Promise((resolve, reject) => {
       this.httpService.post('ipgpayment', data)
         .subscribe(res => {
-            this.document.location.href = 'https://pep.shaparak.ir/gateway.aspx';
             resolve(res);
           },
           err => {
@@ -319,7 +318,7 @@ export class CheckoutService {
       discount: this.discount,
       is_collect: !this.withDelivery,
       duration_days: this.withDelivery ? this.deliveryDays: null,
-      time_slot: this.withDelivery? this.deliveryTime : null,
+      time_slot: this.withDelivery ? this.deliveryTime : null,
       paymentType: this.selectedPaymentType,
       loyalty: this.earnSpentPointObj,
     };

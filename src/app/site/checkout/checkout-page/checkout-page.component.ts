@@ -12,6 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
 import {DOCUMENT, Location} from '@angular/common';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
 @Component({
   selector: 'app-checkout-page',
@@ -50,8 +51,8 @@ export class CheckoutPageComponent implements OnInit {
               private cartService: CartService,
               private titleService: TitleService,
               private progressService: ProgressService,
-              private router: Router,  @Inject(DOCUMENT) private document: any, private location: Location,
-              private productService: ProductService, private route: ActivatedRoute) {
+              private router: Router, @Inject(DOCUMENT) private document: any, private location: Location,
+              private productService: ProductService, private route: ActivatedRoute, private http: HttpClient) {
   }
 
   ngOnInit() {
@@ -226,11 +227,41 @@ export class CheckoutPageComponent implements OnInit {
       .then(res => {   // redirect to bank payment page
         return this.checkoutService.sendDataToBank();
       })
+      .then((res) => {
+        const sentRes: any = res;
+        console.log(sentRes);
+        const body = new HttpParams()
+          .set('merchantCode', sentRes.merchantCode)
+          .set('terminalCode', sentRes.terminalCode)
+          .set('action', sentRes.action)
+          .set('amount', sentRes.amount)
+          .set('invoiceDate', sentRes.invoiceDate)
+          .set('invoiceNumber', '' +
+            '\'' + sentRes.invoiceNumber + '\'')
+          .set('timeStamp', sentRes.timeStamp)
+          .set('redirectAddress', sentRes.redirectAddress)
+          .set('sign', sentRes.sign);
+
+        console.log(body.toString());
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://pep.shaparak.ir/gateway.aspx', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.send(body.toString());
+
+
+        // return this.http.post('https://pep.shaparak.ir/gateway.aspx', body.toString(), {
+        //   headers: new HttpHeaders()
+        //     .set('Content-Type', 'application/x-www-form-urlencoded')
+        // });
+      })
       .then(res => {
-        this.checkoutService.checkout();
+        console.log('****', res);
+        // this.checkoutService.checkout();
       })
       .catch(err => {
         console.error('Error in final check: ', err);
       });
   }
 }
+
