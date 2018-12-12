@@ -2,6 +2,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HomeComponent} from './home/home.component';
 import {AdminAuthGuard} from './admin.auth.guard';
+import {DailySalesReportModule} from './daily-sales-report/daily-sales-report.module';
 
 const Admin_ROUTES: Routes = [
   {
@@ -42,6 +43,12 @@ const Admin_ROUTES: Routes = [
 
         path: 'refund_bank',
         loadChildren: 'app/admin/refund-bank/refund-bank.module#RefundBankModule',
+        canActivate: [AdminAuthGuard]
+      },
+      {
+
+        path: 'daily_report',
+        loadChildren: 'app/admin/daily-sales-report/daily-sales-report.module#DailySalesReportModule',
         canActivate: [AdminAuthGuard]
       }
     ]
