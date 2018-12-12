@@ -41,13 +41,26 @@
                                (durationType)="calculateDiscount($event)"></app-address-table>
           </mat-expansion-panel>
         </mat-accordion>
-
+        <div *ngIf="bankData">
+          <form id="Form2" method="post" Action="https://pep.shaparak.ir/gateway.aspx">
+            <input type="hidden" name="invoiceNumber" [value]="bankData.invoiceNumber"/>
+            <input type="hidden" name="invoiceDate" [value]="bankData.invoiceDate"/>
+            <input type="hidden" name="amount" [value]="bankData.amount"/>
+            <input type="hidden" name="terminalCode" [value]="bankData.terminalCode"/>
+            <input type="hidden" name="merchantCode" [value]="bankData.merchantCode"/>
+            <input type="hidden" name="redirectAddress" [value]="bankData.redirectAddress"/>
+            <input type="hidden" name="timeStamp" [value]="bankData.timeStamp"/>
+            <input type="hidden" name="action" [value]="bankData.action"/>
+            <input type="hidden" name="sign" [value]="bankData.sign"/>
+            <!--<input type="submit" name="submit" [value]="'ارسال'"/>-->
+            <button type="submit">Send my greetings</button>
+          </form>
+        </div>
         <button mat-raised-button
                 class="payment-button"
                 (click)="checkout()" [disabled]="disabled"
                 [style.background]="disabled ? 'gray' : 'black'">پرداخت
         </button>
-
       </div>
     </div>
   </div>

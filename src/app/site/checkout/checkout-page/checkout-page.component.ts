@@ -13,6 +13,7 @@ import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
 import {DOCUMENT, Location} from '@angular/common';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {RequestOptions} from '@angular/http';
 
 @Component({
   selector: 'app-checkout-page',
@@ -43,6 +44,7 @@ export class CheckoutPageComponent implements OnInit {
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
+  bankData: any = null;
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -228,35 +230,45 @@ export class CheckoutPageComponent implements OnInit {
         return this.checkoutService.sendDataToBank();
       })
       .then((res) => {
-        const sentRes: any = res;
-        console.log(sentRes);
-        const body = new HttpParams()
-          .set('merchantCode', sentRes.merchantCode)
-          .set('terminalCode', sentRes.terminalCode)
-          .set('action', sentRes.action)
-          .set('amount', sentRes.amount)
-          .set('invoiceDate', sentRes.invoiceDate)
-          .set('invoiceNumber', '' +
-            '\'' + sentRes.invoiceNumber + '\'')
-          .set('timeStamp', sentRes.timeStamp)
-          .set('redirectAddress', sentRes.redirectAddress)
-          .set('sign', sentRes.sign);
+        this.bankData = res;
+        // const body = new HttpParams()
+        //   .set('merchantCode', this.bankData.merchantCode)
+        //   .set('terminalCode', this.bankData.terminalCode)
+        //   .set('action', this.bankData.action)
+        //   .set('amount', this.bankData.amount)
+        //   .set('invoiceDate', this.bankData.invoiceDate)
+        //   .set('invoiceNumber', this.bankData.invoiceNumber)
+        //   .set('timeStamp', this.bankData.timeStamp)
+        //   .set('redirectAddress', this.bankData.redirectAddress)
+        //   .set('sign', this.bankData.sign);
 
-        console.log(body.toString());
+        const body = new FormData();
+          body.append('merchantCode', this.bankData.merchantCode)
+          body.append('terminalCode', this.bankData.terminalCode)
+          body.append('action', this.bankData.action)
+          body.append('amount', this.bankData.amount)
+          body.append('invoiceDate', this.bankData.invoiceDate)
+          body.append('invoiceNumber', this.bankData.invoiceNumber)
+          body.append('timeStamp', this.bankData.timeStamp)
+          body.append('redirectAddress', this.bankData.redirectAddress)
+          body.append('sign', this.bankData.sign);
 
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://pep.shaparak.ir/gateway.aspx', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        xhr.send(body.toString());
 
-
-        // return this.http.post('https://pep.shaparak.ir/gateway.aspx', body.toString(), {
-        //   headers: new HttpHeaders()
-        //     .set('Content-Type', 'application/x-www-form-urlencoded')
-        // });
+        console.log('---->>',  body, body.toString());
+        return this.http.post('https://pep.shaparak.ir/gateway.aspx', body, {
+          headers: {'Content-Type': 'application/form-data; charset=UTF-8',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Request-Method': 'POST, OPTIONS',
+          'Access-Control-Allow-Credentials': 'true'}
+        }).subscribe(
+          (info: any) => {
+            console.log(info);
+          }, err => {
+            console.log('err: ', err);
+          }
+        );
       })
       .then(res => {
-        console.log('****', res);
         // this.checkoutService.checkout();
       })
       .catch(err => {
@@ -265,3 +277,8 @@ export class CheckoutPageComponent implements OnInit {
   }
 }
 
+// const xhr = new XMLHttpRequest();
+// xhr.open('POST', 'https://pep.shaparak.ir/gateway.aspx', true);
+// xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+// xhr.send(body.toString());
+//
