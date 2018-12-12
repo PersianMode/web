@@ -1,18 +1,15 @@
-<div *ngFor="let fo of filter_options; let i = index">
+<div *ngFor="let fo of filter_options; let i = index" >
   <div *ngFor="let v of filter_options[i].values; let j = index">
-    <mat-checkbox *ngIf="fo.name !== 'color' && fo.name !== 'size' && fo.name!=='shoesSize' && fo.name !=='price' && fo.name !== 'discount'"
-      (click)="getValue(fo.name, v)" [checked]="isChecked[fo.name][v]">
-      <span class="check-box-text">{{ v.length }} {{filter_options[i].values_fa[j]}}</span>
-    </mat-checkbox>
+    <div *ngIf="fo.name!== 'Silhouette' && fo.name !== 'Season' && fo.name !== 'Gender' && fo.name !== 'brand' && fo.name !== 'Sub Silhouette' && fo.name !=='Season Year' && fo.name !== 'color' && fo.name !== 'size' && fo.name!=='shoesSize' && fo.name !=='price' && fo.name !== 'discount'"
+      (click)="getValue(fo.name, v)" >
+      <span class="check-box-text">  {{filter_options[i].values_fa[j]}}  </span>
+  </div>
   </div>
 </div>
 
 
 
 <div [ngClass]="isMobile ? 'set-size-mobile' : null">
-  <div class="initial-filter">
-
-  </div>
   <h1 *ngIf="filter_options?.length">فیلترها</h1>
 </div>
 <mat-accordion multi="true">

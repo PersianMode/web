@@ -6,6 +6,8 @@ import {colorConverter} from '../../services/colorConverter';
 import {DictionaryService} from '../../services/dictionary.service';
 import * as ntc from 'ntcjs';
 
+
+
 @Component({
   selector: 'app-filtering-panel',
   templateUrl: './filtering-panel.component.html',
@@ -51,8 +53,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
       this.filter_options = r;
-      let nfo = this.filter_options.name
-      console.log(nfo);
+    
       
       this.filter_options.forEach(el => {
       const found = this.current_filter_state.find(cfs => cfs.name === el.name);
