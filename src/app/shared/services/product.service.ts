@@ -110,7 +110,7 @@ export class ProductService {
     color = Array.from(new Set(mappedColor)).filter((element) =>{
       return element !== 'نامعین'
     });
-    console.log(color);
+    
     
 
 
