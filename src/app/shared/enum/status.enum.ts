@@ -1,39 +1,50 @@
-// export enum STATUS {
-//   default = 1,
-//   WaitForOnlineWarehouse = 2,
-//   WaitForAggregation = 3,
-//   ReadyForInternalDelivery = 4,
-//   OnInternalDelivery = 5,
-//   ReadyForInvoice = 6,
-//   WaitForInvoice = 7,
-//   InvoiceVerified = 8,
-//   ReadyToDeliver = 9,
-//   DeliverySet = 10,
-//   OnDelivery = 11,
-//   Delivered = 12,
-//   NotExists = 13,
-//   Refund = 13,
-//   Return = 14,
-//   Cancel = 15
-// }
 
-
-export enum STATUS {
+enum ORDER_LINE_STATUS {
   default = 1,
   WaitForOnlineWarehouse = 2,
-  WaitForAggregation = 3,
-  ReadyForInvoice = 4,
-  WaitForInvoice = 5,
-  InvoiceVerified = 6,
-  ReadyToDeliver = 7,
-  DeliverySet = 8,
-  OnDelivery = 9,
-  Delivered = 10,
+  OnlineWarehouseVerified = 3,
+  ReadyToDeliver = 4,
+  DeliverySet = 5,
+  OnDelivery = 6,
+  Delivered = 7,
+  Recieved = 8,
+  FinalCheck = 9,
+  Checked = 10,
   NotExists = 11,
-  Refund = 12,
-  Return = 13,
-  CustomerCancel = 14,
-  StoreCancel = 15,
-  Renew = 16
-
+  Return = 12,
+  CustomerCancel = 13,
+  StoreCancel = 14,
+  Renew = 15
 }
+
+
+enum ORDER_STATUS {
+  WaitForAggregation = 1,
+  ReadyForInvoice = 2,
+  WaitForInvoice = 3,
+  InvoiceVerified = 4,
+  ReadyToDeliver = 5,
+  DeliverySet = 6,
+  DeliveryReserved = 7,
+  OnDelivery = 8,
+  Delivered = 9,
+  Return = 10,
+  CustomerCancel = 11,
+}
+
+enum Delivery_STATUS {
+
+  default = 1,
+  agentSet = 2,
+  requestPackage = 3,
+  started = 4,
+  ended = 5,
+}
+
+
+
+export {
+  ORDER_LINE_STATUS,
+  ORDER_STATUS,
+  Delivery_STATUS
+};

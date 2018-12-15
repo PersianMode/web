@@ -1,11 +1,10 @@
-import {Component,EventEmitter,Inject,Input,OnInit,Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
 import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
-import {MatDialogRef,MatDialog,MatSnackBar} from '@angular/material';
+import {MatDialogRef, MatDialog, MatSnackBar} from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
-import {OrderStatus} from '../../../../shared/lib/order_status';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
@@ -13,8 +12,8 @@ import {ResponsiveService} from '../../../../shared/services/responsive.service'
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {STATUS} from '../../../../shared/enum/status.enum';
-
+import {OrderLineStatuses} from '../../../../shared/lib/status';
+import {ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
 
 @Component({
   selector: 'app-order-lines',
@@ -34,7 +33,7 @@ export class OrderLinesComponent implements OnInit {
   orderLines = [];
   noDuplicateOrderLine = [];
   @Input() isNotMobile;
-  @Output() closeDialog = new EventEmitter < boolean > ();
+  @Output() closeDialog = new EventEmitter<boolean>();
 
   constructor(private profileOrderService: ProfileOrderService,
     private dialog: MatDialog,
@@ -51,7 +50,7 @@ export class OrderLinesComponent implements OnInit {
     this.orderInfo = this.profileOrderService.orderData;
     this.orderLines = this.orderInfo.dialog_order.order_lines;
     this.removeDuplicates(this.orderLines);
-    // this.orderStatus(this.noDuplicateOrderLine);
+    // this.OrderLineStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
@@ -67,10 +66,10 @@ export class OrderLinesComponent implements OnInit {
         });
       const gender = el.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
       // if (instancArr.indexOf(el.product_instance._id) === -1) {
-        instancArr.push(el.product_instance._id);
-        el.quantity = 1;
-        el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
-        this.noDuplicateOrderLine.push(el);
+      instancArr.push(el.product_instance._id);
+      el.quantity = 1;
+      el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
+      this.noDuplicateOrderLine.push(el);
       // } 
       // else {
       //   this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
@@ -106,17 +105,17 @@ export class OrderLinesComponent implements OnInit {
       useGrouping: isPrice
     });
   }
-  orderStatus(ol) {
-    return ol.tickets.length !== 0 ? OrderStatus.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
+  OrderLineStatus(ol) {
+    return ol.tickets.length !== 0 ? OrderLineStatuses.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
   }
 
-  // orderStatus(arr) {
+  // OrderLineStatus(arr) {
   //   let tickets = [];
   //   let statusText = '';
   //   arr.forEach(el => {
   //     tickets = el.tickets;
   //     if (tickets.length)
-  //       statusText = OrderStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
+  //       statusText = OrderLineStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
   //     else statusText = '--';
   //     el.statusText = statusText;
   //   });
@@ -128,8 +127,8 @@ export class OrderLinesComponent implements OnInit {
 
   checkReturnOrderLine(ol) {
     const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
-    return ol.tickets.find(tk => tk.status === STATUS.Delivered &&
-      (tk.status !== STATUS.Return || tk.status !== STATUS.CustomerCancel) &&
+    return ol.tickets.find(tk => tk.status === ORDER_LINE_STATUS.Delivered &&
+      (tk.status !== ORDER_LINE_STATUS.Return || tk.status !== ORDER_LINE_STATUS.CustomerCancel) &&
       !ol['returnFlag'] &&
       date > Date.now()
     );
@@ -215,8 +214,8 @@ export class OrderLinesComponent implements OnInit {
 
   checkCancelOrderLine(ol) {
     return ol.tickets.every(tk =>
-      tk.status !== STATUS.OnDelivery && tk.status !== STATUS.Delivered &&
-      tk.status !== STATUS.CustomerCancel && tk.status !== STATUS.Return &&
+      tk.status !== ORDER_LINE_STATUS.OnDelivery && tk.status !== ORDER_LINE_STATUS.Delivered &&
+      tk.status !== ORDER_LINE_STATUS.CustomerCancel && tk.status !== ORDER_LINE_STATUS.Return &&
       !ol['cancelFlag']
     );
   }
