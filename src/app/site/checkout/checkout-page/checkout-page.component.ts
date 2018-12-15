@@ -234,7 +234,6 @@ export class CheckoutPageComponent implements OnInit {
       .then((res) => {
         this.bankData = res;
         this.bankDataId.nativeElement.submit();
-
       })
       .then(res => {
         // this.checkoutService.checkout();
