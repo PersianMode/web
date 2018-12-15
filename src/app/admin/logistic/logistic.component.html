@@ -92,8 +92,11 @@
     <mat-tab label="return-view">
       <ng-template mat-tab-label>
         <span>ارسال ها</span>
+        <mat-chip-list *ngIf="UnassignedInternalDeliveryCount">
+          <mat-chip color="accent" selected="true">{{UnassignedInternalDeliveryCount}}</mat-chip>
+        </mat-chip-list>
       </ng-template>
-      <app-delivery></app-delivery>
+      <app-delivery (OnUnassignedInternalDeliveryCount)="UnassignedInternalDeliveryCount = $event"></app-delivery>
     </mat-tab>
 
 

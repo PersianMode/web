@@ -34,15 +34,20 @@ import {InternalDeliveryBoxComponent} from './components/internal-delivery-box/i
 import {ExternalDeliveryBoxComponent} from './components/external-delivery-box/external-delivery-box.component';
 import {CCDeliveryComponent} from './components/cc-delivery-box/cc-delivery-box.component';
 import {ShelvsViewComponent} from './components/shelvs-view/shelvs-view.component';
-import { ReturnToWarehouseBoxComponent } from './components/return-to-warehouse-box/return-to-warehouse-box.component';
+import {ReturnToWarehouseBoxComponent} from './components/return-to-warehouse-box/return-to-warehouse-box.component';
 import {DeliveryComponent} from './components/delivery/delivery.component';
 import {DeliveryTrackingComponent} from './components/delivery/components/delivery-tracking/delivery-tracking.component';
+import {DeliveryHistoryComponent} from './components/delivery/components/delivery-history/delivery-history.component';
+import {NewInternalDeliveryComponent} from './components/delivery/components/new-internal-delivery/new-internal-delivery.component';
+import {DeliveryDetailsComponent} from './components/delivery/components/delivery-details/delivery-details.component';
 
 @NgModule({
   declarations: [
     LogisticComponent,
     OrderAddressComponent,
     DeliveryComponent,
+    NewInternalDeliveryComponent,
+    DeliveryHistoryComponent,
     InboxComponent,
     SmInboxComponent,
     ProductViewerComponent,
@@ -57,7 +62,8 @@ import {DeliveryTrackingComponent} from './components/delivery/components/delive
     CCDeliveryComponent,
     ShelvsViewComponent,
     ReturnToWarehouseBoxComponent,
-    DeliveryTrackingComponent
+    DeliveryTrackingComponent,
+    DeliveryDetailsComponent
   ],
   imports: [
     LogisticRouting,
@@ -94,7 +100,8 @@ import {DeliveryTrackingComponent} from './components/delivery/components/delive
     DeliveryShowComponent,
     DeliveryShelfCodeComponent,
     MismatchConfirmComponent,
-    DeliveryTrackingComponent],
+    DeliveryTrackingComponent,
+    DeliveryDetailsComponent],
 })
 export class LogisticModule {
 }

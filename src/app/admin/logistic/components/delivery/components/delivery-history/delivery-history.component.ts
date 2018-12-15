@@ -2,13 +2,13 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSort, MatSnackBar, MatTableDataSource, MatDialog} from '@angular/material';
 import {FormControl} from '@angular/forms';
 import {SelectionModel} from '@angular/cdk/collections';
-import {DeliveryDetailsComponent} from './components/delivery-details/delivery-details.component';
 import * as moment from 'moment';
-import {DeliveryTrackingComponent} from './components/delivery-tracking/delivery-tracking.component';
 import {HttpService} from 'app/shared/services/http.service';
 import {ProgressService} from 'app/shared/services/progress.service';
 import {AuthService} from 'app/shared/services/auth.service';
 import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
+import {DeliveryDetailsComponent} from '../delivery-details/delivery-details.component';
+import {DeliveryTrackingComponent} from '../delivery-tracking/delivery-tracking.component';
 
 export interface DeliveryItem {
   _id: String;
@@ -26,11 +26,11 @@ export interface DeliveryItem {
 }
 
 @Component({
-  selector: 'app-delivery',
-  templateUrl: './delivery.component.html',
-  styleUrls: ['./delivery.component.css'] 
+  selector: 'app-delivery-history',
+  templateUrl: './delivery-history.component.html',
+  styleUrls: ['./delivery-history.component.css'] 
 })
-export class DeliveryComponent implements OnInit {
+export class DeliveryHistoryComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('table') table;
   limit: any = 10;
