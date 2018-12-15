@@ -77,29 +77,15 @@ export class UpsertAddressComponent implements OnInit {
 
   initForm() {
     this.addressForm = new FormBuilder().group({
-      // recipient_email: [this.addressInfo.addressId ? this.addressData.recipient_email : '',
-      //   this.emailRequired ? [Validators.required] : []],
-      // recipient_name: [this.addressInfo.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
-      //   Validators.required,
-      // ]],
-      // recipient_surname: [this.addressInfo.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
-      //   Validators.required,
-      // ]],
-      // recipient_national_id: [this.addressInfo.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
-      //   Validators.required,
-      //   Validators.maxLength(10),
-      //   Validators.minLength(10),
-      //   Validators.pattern(/^[\u0660-\u06690-9\u06F0-\u06F9]+$/)
-      // ]],
-      recipient_email: ['s@s.com',
+      recipient_email: [this.addressInfo.addressId ? this.addressData.recipient_email : '',
         this.emailRequired ? [Validators.required] : []],
-      recipient_name: ['ساره', [
+      recipient_name: [this.addressInfo.addressId ? this.addressData.recipient_name : this.authService.userDetails.name, [
         Validators.required,
       ]],
-      recipient_surname: ['صالحیی', [
+      recipient_surname: [this.addressInfo.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
         Validators.required,
       ]],
-      recipient_national_id: ['0385051182', [
+      recipient_national_id: [this.addressInfo.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
         Validators.required,
         Validators.maxLength(10),
         Validators.minLength(10),

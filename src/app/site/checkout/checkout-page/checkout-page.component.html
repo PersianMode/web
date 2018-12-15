@@ -41,20 +41,18 @@
                                (durationType)="calculateDiscount($event)"></app-address-table>
           </mat-expansion-panel>
         </mat-accordion>
-        <div *ngIf="bankData">
-          <form ngNoForm #bankDataa [formGroup]="bankDataForm" method="post" Action="https://pep.shaparak.ir/gateway.aspx">
-            <!--<input formControlName="invoiceNumber" [value]="bankData.invoiceNumber" #invoiceNumber/>-->
-            <input  formControlName="invoiceNumber" name="invoiceNumber"/>
-            <input  formControlName="invoiceDate" name="invoiceDate" [value]="bankData.invoiceDate"/>
-            <input  formControlName="amount" name="amount" [value]="bankData.amount"/>
-            <input  formControlName="terminalCode" name="terminalCode" [value]="bankData.terminalCode"/>
-            <input  formControlName="merchantCode" name="merchantCode" [value]="bankData.merchantCode"/>
-            <input  formControlName="redirectAddress" name="redirectAddress" [value]="bankData.redirectAddress"/>
-            <input  formControlName="timeStamp" name="timeStamp" [value]="bankData.timeStamp"/>
-            <input  formControlName="action" name="action" [value]="bankData.action"/>
-            <input  formControlName="sign" name="sign" [value]="bankData.sign"/>
-            <!--<input type="submit" name="submit" [value]="'ارسال'"/>-->
-            <button type="submit" (click)="bankDataa.submit()">Send my greetings</button>
+        <div>
+          <form #bankDataId method="post" Action="https://pep.shaparak.ir/gateway.aspx">
+            <input name="invoiceNumber" [value]="bankData ? bankData.invoiceNumber : null"/>
+            <input name="invoiceDate" [value]="bankData ? bankData.invoiceDate : null"/>
+            <input name="amount" [value]="bankData ? bankData.amount : null"/>
+            <input name="terminalCode" [value]="bankData ? bankData.terminalCode : null"/>
+            <input name="merchantCode" [value]="bankData ? bankData.merchantCode : null"/>
+            <input name="redirectAddress" [value]="bankData ? bankData.redirectAddress : null"/>
+            <input name="timeStamp" [value]="bankData ? bankData.timeStamp : null"/>
+            <input name="action" [value]="bankData ? bankData.action : null"/>
+            <input name="sign" [value]="bankData ? bankData.sign : null"/>
+            <button type="submit" (click)="bankDataId.submit()">Send data to bank</button>
           </form>
         </div>
         <button mat-raised-button
