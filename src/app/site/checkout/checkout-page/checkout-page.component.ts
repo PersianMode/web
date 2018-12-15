@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {PaymentType} from '../../../shared/enum/payment.type.enum';
 import {CheckoutService} from '../../../shared/services/checkout.service';
 import {HttpService} from '../../../shared/services/http.service';
@@ -14,6 +14,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {DOCUMENT, Location} from '@angular/common';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {RequestOptions} from '@angular/http';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-checkout-page',
@@ -21,6 +22,8 @@ import {RequestOptions} from '@angular/http';
   styleUrls: ['./checkout-page.component.css']
 })
 export class CheckoutPageComponent implements OnInit {
+  @ViewChild('bankDataa') bankDataEl;
+  // @ViewChild('invoiceNumber', {read: ElementRef}) invoiceNumberEl: ElementRef;
   total = 0;
   discount = 0;
   deliveryDiscount;
@@ -45,6 +48,7 @@ export class CheckoutPageComponent implements OnInit {
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
   bankData: any = null;
+  bankDataForm: FormGroup = null;
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -231,6 +235,8 @@ export class CheckoutPageComponent implements OnInit {
       })
       .then((res) => {
         this.bankData = res;
+        console.log(this.bankData);
+        this.initForm();
         // const body = new HttpParams()
         //   .set('merchantCode', this.bankData.merchantCode)
         //   .set('terminalCode', this.bankData.terminalCode)
@@ -241,44 +247,89 @@ export class CheckoutPageComponent implements OnInit {
         //   .set('timeStamp', this.bankData.timeStamp)
         //   .set('redirectAddress', this.bankData.redirectAddress)
         //   .set('sign', this.bankData.sign);
-
-        const body = new FormData();
-          body.append('merchantCode', this.bankData.merchantCode)
-          body.append('terminalCode', this.bankData.terminalCode)
-          body.append('action', this.bankData.action)
-          body.append('amount', this.bankData.amount)
-          body.append('invoiceDate', this.bankData.invoiceDate)
-          body.append('invoiceNumber', this.bankData.invoiceNumber)
-          body.append('timeStamp', this.bankData.timeStamp)
-          body.append('redirectAddress', this.bankData.redirectAddress)
-          body.append('sign', this.bankData.sign);
-
-
-        console.log('---->>',  body, body.toString());
-        return this.http.post('https://pep.shaparak.ir/gateway.aspx', body, {
-          headers: {'Content-Type': 'application/form-data; charset=UTF-8',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Request-Method': 'POST, OPTIONS',
-          'Access-Control-Allow-Credentials': 'true'}
-        }).subscribe(
-          (info: any) => {
-            console.log(info);
-          }, err => {
-            console.log('err: ', err);
-          }
-        );
+        // console.log('====>>', body);
+        // console.log(body.toString());
+        // return this.http.post('https://pep.shaparak.ir/gateway.aspx', body.toString(), {
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        //   }
+        // }).subscribe(
+        //   (info: any) => {
+        //     console.log(info);
+        //   }, err => {
+        //     console.log('err: ', err);
+        //   }
+        // );
       })
-      .then(res => {
-        // this.checkoutService.checkout();
-      })
+      // .then(res => {
+      //   // this.checkoutService.checkout();
+      // })
       .catch(err => {
         console.error('Error in final check: ', err);
       });
   }
+
+  sendDataToBank() {
+    // const body = new HttpParams()
+    //   .set('merchantCode', this.bankData.merchantCode)
+    //   .set('terminalCode', this.bankData.terminalCode)
+    //   .set('action', this.bankData.action)
+    //   .set('amount', this.bankData.amount)
+    //   .set('invoiceDate', this.bankData.invoiceDate)
+    //   .set('invoiceNumber', this.bankData.invoiceNumber)
+    //   .set('timeStamp', this.bankData.timeStamp)
+    //   .set('redirectAddress', this.bankData.redirectAddress)
+    //   .set('sign', this.bankData.sign);
+
+      // return this.http.post('https://pep.shaparak.ir/gateway.aspx', body.toString(), {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data; charset=UTF-8'
+    //   }
+    // }).subscribe(
+    //   (info: any) => {
+    //     console.log(info);
+    //   }, err => {
+    //     console.log('err: ', err);
+    //   }
+    // );
+  }
+
+  initForm() {
+    this.bankDataForm = new FormBuilder().group({
+      invoiceNumber: [this.bankData.invoiceNumber ? this.bankData.invoiceNumber : null],
+      invoiceDate: [this.bankData.invoiceDate ? this.bankData.invoiceDate : null],
+      amount: [this.bankData.amount ? this.bankData.amount : null],
+      terminalCode: [this.bankData.terminalCode ? this.bankData.terminalCode : null],
+      merchantCode: [this.bankData.merchantCode ? this.bankData.merchantCode : null],
+      redirectAddress: [this.bankData.redirectAddress ? this.bankData.redirectAddress : null],
+      timeStamp: [this.bankData.timeStamp ? this.bankData.timeStamp : null],
+      action: [this.bankData.action ? this.bankData.action : null],
+      sign: [this.bankData.sign ? this.bankData.sign : null],
+    });
+    // this.invoiceNumberEl.nativeElement.value = this.bankData.invoiceNumber;
+  }
 }
+
+
 
 // const xhr = new XMLHttpRequest();
 // xhr.open('POST', 'https://pep.shaparak.ir/gateway.aspx', true);
 // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
 // xhr.send(body.toString());
+
+// const body = new FormData();
+//   body.append('merchantCode', this.bankData.merchantCode)
+//   body.append('terminalCode', this.bankData.terminalCode)
+//   body.append('action', this.bankData.action)
+//   body.append('amount', this.bankData.amount)
+//   body.append('invoiceDate', this.bankData.invoiceDate)
+//   body.append('invoiceNumber', this.bankData.invoiceNumber)
+//   body.append('timeStamp', this.bankData.timeStamp)
+//   body.append('redirectAddress', this.bankData.redirectAddress)
+//   body.append('sign', this.bankData.sign);
+
 //
+// 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+//   'Access-Control-Allow-Origin': '*',
+//   'Access-Control-Request-Method': 'POST, OPTIONS',
+//   'Access-Control-Allow-Credentials': 'true'

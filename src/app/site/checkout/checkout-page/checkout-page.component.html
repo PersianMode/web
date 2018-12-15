@@ -42,18 +42,19 @@
           </mat-expansion-panel>
         </mat-accordion>
         <div *ngIf="bankData">
-          <form id="Form2" method="post" Action="https://pep.shaparak.ir/gateway.aspx">
-            <input type="hidden" name="invoiceNumber" [value]="bankData.invoiceNumber"/>
-            <input type="hidden" name="invoiceDate" [value]="bankData.invoiceDate"/>
-            <input type="hidden" name="amount" [value]="bankData.amount"/>
-            <input type="hidden" name="terminalCode" [value]="bankData.terminalCode"/>
-            <input type="hidden" name="merchantCode" [value]="bankData.merchantCode"/>
-            <input type="hidden" name="redirectAddress" [value]="bankData.redirectAddress"/>
-            <input type="hidden" name="timeStamp" [value]="bankData.timeStamp"/>
-            <input type="hidden" name="action" [value]="bankData.action"/>
-            <input type="hidden" name="sign" [value]="bankData.sign"/>
+          <form ngNoForm #bankDataa [formGroup]="bankDataForm" method="post" Action="https://pep.shaparak.ir/gateway.aspx">
+            <!--<input formControlName="invoiceNumber" [value]="bankData.invoiceNumber" #invoiceNumber/>-->
+            <input  formControlName="invoiceNumber" name="invoiceNumber"/>
+            <input  formControlName="invoiceDate" name="invoiceDate" [value]="bankData.invoiceDate"/>
+            <input  formControlName="amount" name="amount" [value]="bankData.amount"/>
+            <input  formControlName="terminalCode" name="terminalCode" [value]="bankData.terminalCode"/>
+            <input  formControlName="merchantCode" name="merchantCode" [value]="bankData.merchantCode"/>
+            <input  formControlName="redirectAddress" name="redirectAddress" [value]="bankData.redirectAddress"/>
+            <input  formControlName="timeStamp" name="timeStamp" [value]="bankData.timeStamp"/>
+            <input  formControlName="action" name="action" [value]="bankData.action"/>
+            <input  formControlName="sign" name="sign" [value]="bankData.sign"/>
             <!--<input type="submit" name="submit" [value]="'ارسال'"/>-->
-            <button type="submit">Send my greetings</button>
+            <button type="submit" (click)="bankDataa.submit()">Send my greetings</button>
           </form>
         </div>
         <button mat-raised-button
@@ -66,3 +67,4 @@
   </div>
   <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
 </div>
+
