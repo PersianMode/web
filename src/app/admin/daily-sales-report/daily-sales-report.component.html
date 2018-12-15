@@ -7,20 +7,20 @@
       <button mat-icon-button color="primary" (click)="getData()" style="margin-top: 10px;">
         <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
       </button>
-
-    <button color="primary" (click)="getData()">چاپ گزارش روزانه</button>
+    <div class="button">
+    <button color="primary"  (click)="getData()">چاپ گزارش روزانه</button></div>
 
       <mat-table #table [dataSource]="dataSource" matSort>
 
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+          <mat-cell *matCellDef="let i"> {{i.index}} </mat-cell>
         </ng-container>
 
          requested_time Column
         <ng-container matColumnDef="order_time">
           <mat-header-cell *matHeaderCellDef mat-sort-header>زمان خرید </mat-header-cell>
-          <!--<mat-cell *matCellDef="let element"> {{getShamsiDate(element.order_time)}} </mat-cell>-->
+          <mat-cell *matCellDef="let element"> {{getShamsiDate(element.order_time)}} </mat-cell>
         </ng-container>
 
         <!-- balance Column -->
@@ -38,7 +38,7 @@
         <!-- Status Column -->
         <ng-container matColumnDef="customer_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header> نام خریدار  </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.customer_name}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{element.customer.first_name}} {{element.customer.surname}} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

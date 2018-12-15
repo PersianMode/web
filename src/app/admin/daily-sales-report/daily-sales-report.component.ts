@@ -5,6 +5,7 @@ import {MessageType} from '../../shared/enum/messageType.enum';
 import * as moment from 'jalali-moment';
 import {MessageService} from '../../shared/services/message.service';
 import {ProgressService} from '../../shared/services/progress.service';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-daily-sales-report',
@@ -12,11 +13,12 @@ import {ProgressService} from '../../shared/services/progress.service';
   styleUrls: ['./daily-sales-report.component.css']
 })
 export class DailySalesReportComponent implements OnInit {
-
   dataTemp;
+  index = [];
   totalRecords = 0;
   position;
   displayedColumns = ['position', 'order_time', 'total_amount', 'total_order_lines', 'customer_name'];
+
   dataSource: MatTableDataSource<any>;
 
   constructor(private dialog: MatDialog, private httpService: HttpService,
@@ -31,9 +33,17 @@ export class DailySalesReportComponent implements OnInit {
     this.progressService.enable();
     this.httpService.get('daily_sales_report').subscribe(data => {
       console.log('data report', data);
-      this.dataTemp = data.result;
-      this.dataSource = new MatTableDataSource(data.result);
-
+      this.dataSource = new MatTableDataSource(data);
+      // this.dataTemp =  data;
+      // for(let i = 0 ; i < this.dataTemp.length; i++)
+      // {this.index[i] = i + 1;}
+      // console.log('index', this.index);
+      // let i = 0
+      // this.dataTemp = data.forEach(x =>
+      // { x.push( {index : i});
+      //  i++;
+      // });
+      console.log('temp: ',this.dataTemp);
       this.totalRecords = data && data.total ? data.total : 0;
       this.progressService.disable();
 
