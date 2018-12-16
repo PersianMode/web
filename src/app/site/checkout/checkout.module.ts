@@ -11,7 +11,7 @@ import {
   MatButtonToggleModule,
   MatExpansionModule,
   MatTooltipModule,
-  MatRadioModule,
+  MatRadioModule, MatProgressSpinnerModule,
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -44,6 +44,7 @@ import { CheckoutWarningConfirmComponent } from './checkout-warning-confirm/chec
     MarkdownModule,
     MatCheckboxModule,
     SharedModule,
+    MatProgressSpinnerModule
   ],
   declarations: [
     CheckoutPageComponent,

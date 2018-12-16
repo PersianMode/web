@@ -12,8 +12,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
 import {DOCUMENT, Location} from '@angular/common';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {SpinnerService} from '../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -21,7 +20,17 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./checkout-page.component.css']
 })
 export class CheckoutPageComponent implements OnInit {
-  @ViewChild('bankDataId', {read: ElementRef}) bankDataId: ElementRef;
+  @ViewChild('bankDataId') bankDataId: ElementRef;
+  @ViewChild('invoiceNumber') invoiceNumber: ElementRef;
+  @ViewChild('invoiceDate') invoiceDate: ElementRef;
+  @ViewChild('amount') amount: ElementRef;
+  @ViewChild('terminalCode') terminalCode: ElementRef;
+  @ViewChild('merchantCode') merchantCode: ElementRef;
+  @ViewChild('redirectAddress') redirectAddress: ElementRef;
+  @ViewChild('timeStamp') timeStamp: ElementRef;
+  @ViewChild('action') action: ElementRef;
+  @ViewChild('sign') sign: ElementRef;
+
   total = 0;
   discount = 0;
   deliveryDiscount;
@@ -46,7 +55,7 @@ export class CheckoutPageComponent implements OnInit {
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
   bankData: any = null;
-  bankDataForm: FormGroup = null;
+  spinnerEnabled = false;
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -55,11 +64,15 @@ export class CheckoutPageComponent implements OnInit {
               private cartService: CartService,
               private titleService: TitleService,
               private progressService: ProgressService,
+              private spinnerService: SpinnerService,
               private router: Router, @Inject(DOCUMENT) private document: any, private location: Location,
-              private productService: ProductService, private route: ActivatedRoute, private http: HttpClient) {
+              private productService: ProductService, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
+    this.spinnerService.isSpinner$.subscribe(is_spinner => {
+      this.spinnerEnabled = is_spinner;
+    });
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {
@@ -233,13 +246,29 @@ export class CheckoutPageComponent implements OnInit {
       })
       .then((res) => {
         this.bankData = res;
-        // this.bankDataId.nativeElement.submit();
+
+        this.invoiceNumber.nativeElement.value = this.bankData.invoiceNumber;
+        this.invoiceDate.nativeElement.value = this.bankData.invoiceDate;
+        this.amount.nativeElement.value = this.bankData.amount;
+        this.terminalCode.nativeElement.value = this.bankData.terminalCode;
+        this.merchantCode.nativeElement.value = this.bankData.merchantCode;
+        this.redirectAddress.nativeElement.value = this.bankData.redirectAddress;
+        this.timeStamp.nativeElement.value = this.bankData.timeStamp;
+        this.action.nativeElement.value = this.bankData.action;
+        this.sign.nativeElement.value = this.bankData.sign;
+
+        this.spinnerService.enable();
+        // setTimeout(() => {
+          this.bankDataId.nativeElement.submit();
+        // }, 1000);
       })
-      // .then(res => {
+      .then(res => {
         // this.checkoutService.checkout();
-      // })
+        console.log(res);
+      })
       .catch(err => {
         console.error('Error in final check: ', err);
+        this.spinnerService.disable();
       });
   }
 }
