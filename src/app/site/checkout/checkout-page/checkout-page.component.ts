@@ -233,11 +233,11 @@ export class CheckoutPageComponent implements OnInit {
       })
       .then((res) => {
         this.bankData = res;
-        this.bankDataId.nativeElement.submit();
+        // this.bankDataId.nativeElement.submit();
       })
-      .then(res => {
+      // .then(res => {
         // this.checkoutService.checkout();
-      })
+      // })
       .catch(err => {
         console.error('Error in final check: ', err);
       });
