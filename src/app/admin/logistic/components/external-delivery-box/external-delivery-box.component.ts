@@ -1,11 +1,15 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/material';
+import {Component, OnInit, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter} from '@angular/core';
+import {MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
 import {ORDERS} from '../order-mock';
 import {OrderAddressComponent} from '../order-address/order-address.component';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
+import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
+import {HttpService} from 'app/shared/services/http.service';
+import {SocketService} from 'app/shared/services/socket.service';
+import {ProgressService} from 'app/shared/services/progress.service';
 
 @Component({
   selector: 'app-external-delivery-box',
@@ -19,38 +23,84 @@ import {ProductViewerComponent} from '../product-viewer/product-viewer.component
     ]),
   ],
 })
-export class ExternalDeliveryBoxComponent implements OnInit {
+export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @Output() OnExternalDeliveryBoxCount = new EventEmitter();
+
+  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'process_order'];
   dataSource: MatTableDataSource<any>;
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'used_balance', 'process_order'];
-  expandedElement: any;
 
   pageSize = 10;
-  resultsLength: Number;
+  total;
+
+  trigger = ScanTrigger.SendCustomer;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  socketSubscription: any = null;
+
+  expandedElement: any;
+
   showBarcodeScanner = false;
 
-
-  constructor(private dialog: MatDialog) { }
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
-  ngOnInit() {
-    this.loadData();
+  constructor(private httpService: HttpService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private socketService: SocketService,
+    private progressService: ProgressService) {
+
   }
 
-  loadData() {
-    this.dataSource = new MatTableDataSource<any>(ORDERS);
-    this.resultsLength = this.dataSource.data.length;
+
+  ngOnInit() {
+    this.load();
   }
+
+  ngAfterViewInit(): void {
+    this.load();
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
+  }
+
+  load() {
+    this.progressService.enable();
+
+    const options = {
+      sort: this.sort.active,
+      dir: this.sort.direction,
+      type: 'ScanInternalDelivery',
+      manual: false
+    };
+    const offset = this.paginator.pageIndex * +this.pageSize;
+    const limit = this.pageSize;
+
+    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+      this.progressService.disable();
+
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
+      });
+      this.dataSource = new MatTableDataSource<any>(res.data);
+      this.total = res.total || 0;
+      this.OnInternalDeliveryBoxCount.emit(this.total);
+    }, err => {
+      this.progressService.disable();
+      this.openSnackBar('خطا در دریافت لیست سفارش‌های عادی');
+    });
+  }
+
 
   onSortChange($event: any) {
     this.paginator.pageIndex = 0;
-    this.loadData();
+    this.load();
   }
 
   onPageChange($event: any) {
-    this.loadData();
+    this.load();
   }
 
   getDate(orderTime) {
@@ -97,4 +147,8 @@ export class ExternalDeliveryBoxComponent implements OnInit {
   onScanOrder() {
     this.showBarcodeScanner = true;
   }
+
+  ngOnDestroy(): void {
+    this.socketSubscription.unsubscribe();
+}
 }
