@@ -28,7 +28,7 @@
         <!-- customer column -->
         <ng-container matColumnDef="customer">
           <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}} </mat-cell>
+          <mat-cell *matCellDef="let order">{{order.customer?.first_name + ' ' + order.customer?.surname}} </mat-cell>
         </ng-container>
 
         <!-- order_time column -->
@@ -40,7 +40,7 @@
         <!-- total_order_lines column -->
         <ng-container matColumnDef="total_order_lines">
           <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
+          <mat-cell *matCellDef="let order"> {{order.order_lines?.length}}/{{order.total_order_lines}}</mat-cell>
         </ng-container>
 
         <!-- address column -->
@@ -72,15 +72,15 @@
                 </td>
                 <td>
                   <p>
-                    <b>بارکد:</b> {{ol.instance.barcode}}</p>
+                    <b>بارکد:</b> {{ol.instance?.barcode}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>نام:</b> {{ol.instance.product_name}}</p>
+                    <b>نام:</b> {{ol.instance?.product_name}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>سایز:</b> {{ol.instance.size}}</p>
+                    <b>سایز:</b> {{ol.instance?.size}}</p>
                 </td>
               </tr>
             </table>

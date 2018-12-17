@@ -28,7 +28,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   @Output() OnExternalDeliveryBoxCount = new EventEmitter();
 
   displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'process_order'];
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
   pageSize = 10;
   total;
@@ -72,7 +72,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
-      type: 'ScanInternalDelivery',
+      type: 'ScanExternalDelivery',
       manual: false
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
@@ -81,17 +81,29 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
 
+      const rows = [];
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
+        rows.push(order, {detailRow: true, order});
       });
-      this.dataSource = new MatTableDataSource<any>(res.data);
+      this.dataSource.data = rows;
+      this.total = res.total ? res.total : 0;
       this.total = res.total || 0;
-      this.OnInternalDeliveryBoxCount.emit(this.total);
+      this.OnExternalDeliveryBoxCount.emit(this.total);
+
     }, err => {
       this.progressService.disable();
       this.openSnackBar('خطا در دریافت لیست سفارش‌های عادی');
     });
   }
+
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 2000,
+    });
+  }
+
 
 
   onSortChange($event: any) {
@@ -104,12 +116,15 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   }
 
   getDate(orderTime) {
-    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
+    try {
+      return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
+    } catch (err) {
+      console.log('-> error on parsing order time : ', err);
+    }
   }
 
   showAddress(order) {
     if (!order.address) {
-      // need to create message service and return this message => ('order line has no address!)
       return;
     }
     this.dialog.open(OrderAddressComponent, {
@@ -150,5 +165,5 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   ngOnDestroy(): void {
     this.socketSubscription.unsubscribe();
-}
+  }
 }
