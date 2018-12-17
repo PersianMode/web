@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import {HttpService} from 'app/shared/services/http.service';
 import {ProgressService} from 'app/shared/services/progress.service';
 import {SocketService} from 'app/shared/services/socket.service';
+import {OrderLineStatuses} from '../../../../../../shared/lib/status';
 
 @Component({
   selector: 'app-new-internal-delivery',
@@ -69,6 +70,8 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
 
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
+        console.log('res data', res.data);
+
       });
       this.dataSource = new MatTableDataSource<any>(res.data);
       this.total = res.total || 0;
@@ -126,6 +129,13 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
 
   onPageChange($event: any) {
     this.load();
+  }
+
+  getOrderLineStatus(orderLine) {
+    if (orderLine && orderLine.tickets) {
+      const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
+      return OrderLineStatuses.find(x => x.status === lastTicket.status).name;
+    }
   }
 
   openSnackBar(message: string) {
