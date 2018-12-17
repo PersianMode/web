@@ -55,7 +55,6 @@ export class CheckoutPageComponent implements OnInit {
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
   bankData: any = null;
-  spinnerEnabled = false;
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -70,9 +69,6 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spinnerService.isSpinner$.subscribe(is_spinner => {
-      this.spinnerEnabled = is_spinner;
-    });
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {
@@ -258,13 +254,10 @@ export class CheckoutPageComponent implements OnInit {
         this.sign.nativeElement.value = this.bankData.sign;
 
         this.spinnerService.enable();
-        // setTimeout(() => {
-          this.bankDataId.nativeElement.submit();
-        // }, 1000);
+        this.bankDataId.nativeElement.submit();
       })
       .then(res => {
         // this.checkoutService.checkout();
-        console.log(res);
       })
       .catch(err => {
         console.error('Error in final check: ', err);
