@@ -242,7 +242,6 @@ export class CheckoutPageComponent implements OnInit {
       })
       .then((res) => {
         this.bankData = res;
-
         this.invoiceNumber.nativeElement.value = this.bankData.invoiceNumber;
         this.invoiceDate.nativeElement.value = this.bankData.invoiceDate;
         this.amount.nativeElement.value = this.bankData.amount;

@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import { IAddressInfo } from '../interfaces/iaddressInfo.interface';
 import { HttpService } from './http.service';
 import { CartService } from './cart.service';
@@ -8,7 +8,6 @@ import { AuthService } from './auth.service';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs/Rx';
-import {DOCUMENT} from '@angular/common';
 
 @Injectable()
 export class CheckoutService {
@@ -42,7 +41,7 @@ export class CheckoutService {
 
   constructor(private cartService: CartService, private httpService: HttpService,
     private authService: AuthService, private snackBar: MatSnackBar,
-    private router: Router, @Inject(DOCUMENT) private document: any) {
+    private router: Router) {
     this.cartService.cartItems.subscribe(
       data => {
         this.dataIsReady.next(data && data.length);
