@@ -107,7 +107,11 @@ export class ProductService {
       const conv = safeColorConverter(color[col]);
       mappedColor[col] = conv ? conv : this.dict.translateColor(col);
     }
-    color = Array.from(new Set(mappedColor));
+    color = Array.from(new Set(mappedColor)).filter((element) =>{
+      return element !== 'نامعین'
+    });
+    
+    
 
 
     let price = [];

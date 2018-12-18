@@ -1,7 +1,18 @@
 <!-- barcode checker -->
-<app-barcode-checker *ngIf="showBarcodeScanner"  (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+<app-barcode-checker [showScanner]="showBarcodeScanner" [trigger]="trigger" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
 
 <mat-card>
+
+   <!-- header -->
+   <mat-card-header>
+      <mat-card-title>آماده خروج از انبار</mat-card-title>
+      <mat-card-subtitle>
+        <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
+          <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+        </button>
+      </mat-card-subtitle>
+    </mat-card-header>
+    
   <mat-card-content>
 
     <div class="example-container mat-elevation-z8">
@@ -17,7 +28,7 @@
         <!-- customer column -->
         <ng-container matColumnDef="customer">
           <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}} </mat-cell>
+          <mat-cell *matCellDef="let order">{{order.customer?.first_name + ' ' + order.customer?.surname}} </mat-cell>
         </ng-container>
 
         <!-- order_time column -->
@@ -29,7 +40,7 @@
         <!-- total_order_lines column -->
         <ng-container matColumnDef="total_order_lines">
           <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
+          <mat-cell *matCellDef="let order"> {{order.order_lines?.length}}/{{order.total_order_lines}}</mat-cell>
         </ng-container>
 
         <!-- address column -->
@@ -38,12 +49,6 @@
           <mat-cell *matCellDef="let order">
             <button mat-button color="primary" (click)="showAddress(order)">نمایش</button>
           </mat-cell>
-        </ng-container>
-
-        <!-- used_balance column -->
-        <ng-container matColumnDef="used_balance">
-          <mat-header-cell *matHeaderCellDef> بالانس </mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.used_balance}}</mat-cell>
         </ng-container>
 
         <!-- process_order column -->
@@ -67,15 +72,15 @@
                 </td>
                 <td>
                   <p>
-                    <b>بارکد:</b> {{ol.instance.barcode}}</p>
+                    <b>بارکد:</b> {{ol.instance?.barcode}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>نام:</b> {{ol.instance.product_name}}</p>
+                    <b>نام:</b> {{ol.instance?.product_name}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>سایز:</b> {{ol.instance.size}}</p>
+                    <b>سایز:</b> {{ol.instance?.size}}</p>
                 </td>
               </tr>
             </table>
