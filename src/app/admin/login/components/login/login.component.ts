@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(private authService: AuthService,
     private router: Router,
     private progressService: ProgressService,
-    private snakBar: MatSnackBar, private titleService: TitleService) {
+    private snackBar: MatSnackBar, private titleService: TitleService) {
   }
 
   ngOnInit() {
@@ -121,7 +121,7 @@ export class LoginComponent implements OnInit {
   }
 
   openSnackBar(message: string) {
-    this.snakBar.open(message, null, {
+    this.snackBar.open(message, null, {
       duration: 2000,
     });
   }

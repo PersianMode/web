@@ -5,6 +5,7 @@ import {HttpService} from 'app/shared/services/http.service';
 import {ProgressService} from 'app/shared/services/progress.service';
 import {SocketService} from 'app/shared/services/socket.service';
 import {OrderLineStatuses} from '../../../../../../shared/lib/status';
+import {AuthService} from '../../../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-new-internal-delivery',
@@ -27,7 +28,8 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
 
   pageSize = 10;
   total;
-
+  dataTemp;
+  warehouseName;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -38,7 +40,7 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
 
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
-    private snackBar: MatSnackBar, private dialog: MatDialog, private socketService: SocketService
+    private snackBar: MatSnackBar, private dialog: MatDialog, private socketService: SocketService, private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -70,7 +72,6 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
 
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
-        console.log('res data', res.data);
 
       });
       this.dataSource = new MatTableDataSource<any>(res.data);
@@ -138,11 +139,16 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
     }
   }
 
+  getWarehousesName(orderline) {
+    return this.warehouseName = this.authService.warehouses.find(x => x._id === orderline.to.warehouse_id).name;
+  }
+
   openSnackBar(message: string) {
     this.snackBar.open(message, null, {
       duration: 2000,
     });
   }
+
   ngOnDestroy(): void {
     this.socketSubscription.unsubscribe();
   }
