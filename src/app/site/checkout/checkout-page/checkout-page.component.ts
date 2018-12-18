@@ -20,7 +20,7 @@ import {SpinnerService} from '../../../shared/services/spinner.service';
   styleUrls: ['./checkout-page.component.css']
 })
 export class CheckoutPageComponent implements OnInit {
-  @ViewChild('bankDataId') bankDataId: ElementRef;
+  @ViewChild('bankDataFormId') bankDataFormId: ElementRef;
   @ViewChild('invoiceNumber') invoiceNumber: ElementRef;
   @ViewChild('invoiceDate') invoiceDate: ElementRef;
   @ViewChild('amount') amount: ElementRef;
@@ -238,26 +238,30 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   checkout() {
+    const IdArray = ['invoiceNumber',
+      'invoiceDate',
+      'amount',
+      'terminalCode',
+      'merchantCode',
+      'redirectAddress',
+      'timeStamp',
+      'action',
+      'mobile',
+      'email',
+      'sign'];
+
     this.finalCheckItems()
       .then(res => {   // redirect to bank payment page
         return this.checkoutService.sendDataToBank();
       })
       .then((res) => {
         this.bankData = res;
-        this.invoiceNumber.nativeElement.value = this.bankData.invoiceNumber;
-        this.invoiceDate.nativeElement.value = this.bankData.invoiceDate;
-        this.amount.nativeElement.value = this.bankData.amount;
-        this.terminalCode.nativeElement.value = this.bankData.terminalCode;
-        this.merchantCode.nativeElement.value = this.bankData.merchantCode;
-        this.redirectAddress.nativeElement.value = this.bankData.redirectAddress;
-        this.timeStamp.nativeElement.value = this.bankData.timeStamp;
-        this.action.nativeElement.value = this.bankData.action;
-        this.mobile.nativeElement.value = this.bankData.mobile;
-        this.email.nativeElement.value = this.bankData.email;
-        this.sign.nativeElement.value = this.bankData.sign;
 
+        IdArray.forEach(el => {
+          this[el].nativeElement.value = this.bankData[el];
+        })
         this.spinnerService.enable();
-        this.bankDataId.nativeElement.submit();
+        this.bankDataFormId.nativeElement.submit();
       })
       .then(res => {
         // this.checkoutService.checkout();
