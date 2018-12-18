@@ -221,23 +221,13 @@ export class CheckoutService {
   }
 
   sendDataToBank() {
-    if (!this.withDelivery)
-      if (this.ccRecipientData) {
-        this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
-        this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
-        this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
-        this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
-        this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
-        this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
-      } else {
-        return;
-      }
-    const data = {
-      total_amount : this.total,
-      address: this.addressObj
+    const data = this.accumulateData();
+    const paymentData = {
+      total_amount : data.total_amount,
+      address: data.address
     };
     return new Promise((resolve, reject) => {
-      this.httpService.post('ipgpayment', data)
+      this.httpService.post('payment', paymentData)
         .subscribe(res => {
             resolve(res);
           },

@@ -29,6 +29,8 @@ export class CheckoutPageComponent implements OnInit {
   @ViewChild('redirectAddress') redirectAddress: ElementRef;
   @ViewChild('timeStamp') timeStamp: ElementRef;
   @ViewChild('action') action: ElementRef;
+  @ViewChild('mobile') mobile: ElementRef;
+  @ViewChild('email') email: ElementRef;
   @ViewChild('sign') sign: ElementRef;
 
   total = 0;
@@ -250,6 +252,8 @@ export class CheckoutPageComponent implements OnInit {
         this.redirectAddress.nativeElement.value = this.bankData.redirectAddress;
         this.timeStamp.nativeElement.value = this.bankData.timeStamp;
         this.action.nativeElement.value = this.bankData.action;
+        this.mobile.nativeElement.value = this.bankData.mobile;
+        this.email.nativeElement.value = this.bankData.email;
         this.sign.nativeElement.value = this.bankData.sign;
 
         this.spinnerService.enable();
