@@ -1,0 +1,62 @@
+<mat-card class="card-container">
+  <div>
+    <h2>
+      <button mat-icon-button (click)="load()">
+        <mat-icon color="primary" aria-label="refresh">refresh</mat-icon>
+      </button>
+      <label>تکمیل ارسال</label>
+    </h2>
+
+    <div>
+      <mat-table #table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef class="header">ردیف</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{formatter(element.position)}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="start">
+          <mat-header-cell *matHeaderCellDef class="header">تاریخ ارسال</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            {{ getDate(element.start) }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delivery_agent">
+          <mat-header-cell *matHeaderCellDef class="header">مسئول ارسال</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            <div *ngIf="element.agent">
+              {{element.agent.first_name}} {{element.agent.surname}}
+            </div>
+            <mat-select *ngIf="!element.agent" class="select-label" placeholder="انتخاب پیک" [ngModel]="element.delivery_agent?._id"
+              (change)="deliveryAgentChange(element._id, $event.value)" >
+              <mat-option *ngFor="let dg of deliveryAgentList" [value]="dg._id">
+                {{dg.first_name}} - {{dg.surname}}
+              </mat-option>
+            </mat-select>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="receiver">
+          <mat-header-cell *matHeaderCellDef class="header">گیرنده</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            <span >{{element.destination?.name}}</span>
+          </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef class="header">وضعیت</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            <span >{{element.destination?.name}}</span>
+          </mat-cell>
+        </ng-container>
+
+     
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </div>
+    <div dir="ltr">
+      <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+    </div>
+  </div>
+
+</mat-card>
