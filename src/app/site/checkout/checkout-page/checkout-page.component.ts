@@ -7,7 +7,7 @@ import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
 import {MatDialog} from '@angular/material';
 import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
@@ -67,7 +67,7 @@ export class CheckoutPageComponent implements OnInit {
               private progressService: ProgressService,
               private spinnerService: SpinnerService,
               private router: Router, @Inject(DOCUMENT) private document: any, private location: Location,
-              private productService: ProductService, private route: ActivatedRoute) {
+              private productService: ProductService) {
   }
 
   ngOnInit() {
@@ -264,6 +264,7 @@ export class CheckoutPageComponent implements OnInit {
         this.bankDataFormId.nativeElement.submit();
       })
       .then(res => {
+        console.log(res);
         // this.checkoutService.checkout();
       })
       .catch(err => {

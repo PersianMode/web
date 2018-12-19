@@ -282,7 +282,7 @@ export class CheckoutService {
 
   private accumulateData() {
     if (!this.withDelivery) {
-      this.addressObj.wharehouse_name = this.addressObj.name;
+      this.addressObj.warehouse_name = this.addressObj.name;
     }
 
     if (!this.withDelivery)
