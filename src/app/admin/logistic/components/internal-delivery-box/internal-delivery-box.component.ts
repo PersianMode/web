@@ -6,6 +6,7 @@ import {ProgressService} from 'app/shared/services/progress.service';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {OrderLineStatuses} from 'app/shared/lib/status';
+import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
 
 @Component({
   selector: 'app-internal-delivery-box',
@@ -23,6 +24,8 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   pageSize = 10;
   total;
+
+  trigger = ScanTrigger.SendInternal;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
