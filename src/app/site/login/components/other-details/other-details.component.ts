@@ -47,6 +47,7 @@ export class OtherDetailsComponent implements OnInit {
 
   addMobileNumber() {
     if (this.mobile_no && !this.mobileHasError) {
+      console.log('got the mobile', this.mobile_no);
       this.httpService.post('register/mobile', {
         username: this.authService.userDetails.username,
         mobile_no: this.mobile_no,

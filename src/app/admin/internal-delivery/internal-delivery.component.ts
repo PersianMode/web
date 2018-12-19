@@ -3,10 +3,10 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
-import { HttpService } from 'app/shared/services/http.service';
-import { SpinnerService } from 'app/shared/services/spinner.service';
-import { MessageType } from 'app/shared/enum/messageType.enum';
-import { MessageService } from 'app/shared/services/message.service';
+import {HttpService} from 'app/shared/services/http.service';
+import {SpinnerService} from 'app/shared/services/spinner.service';
+import {MessageType} from 'app/shared/enum/messageType.enum';
+import {MessageService} from 'app/shared/services/message.service';
 
 export interface Agent {
   _id: string;
@@ -33,12 +33,13 @@ export class InternalDeliveryComponent implements OnInit {
 
   constructor(private httpService: HttpService, private spinnerService: SpinnerService, private messageService: MessageService) {
     this.agentCtrl = new FormControl();
-   }
+  }
 
   ngOnInit() {
     this.loadAgents(); // loading agents that (status = internal delivery)
     this.loadAgent(); // loading agents that (status = internal delivery)
   }
+
   async loadAgent() {
     try {
       this.spinnerService.enable();
@@ -57,7 +58,7 @@ export class InternalDeliveryComponent implements OnInit {
 
   async loadAgents() {
     try {
-    this.spinnerService.enable();
+      this.spinnerService.enable();
       let agents = await this.httpService.get('internal_delivery/get_agents').toPromise();
       agents = this.mapData(agents); // data mapped
       this.agents = agents; // data set into input
@@ -71,10 +72,10 @@ export class InternalDeliveryComponent implements OnInit {
 
   filterData() {
     this.filteredAgents = this.agentCtrl.valueChanges
-    .pipe(
-      startWith(''),
-      map(agent => agent ? this.filterAgents(agent) : this.agents.slice())
-    );
+      .pipe(
+        startWith(''),
+        map(agent => agent ? this.filterAgents(agent) : this.agents.slice())
+      );
   }
 
   mapData(agents = null) {
@@ -96,7 +97,7 @@ export class InternalDeliveryComponent implements OnInit {
   filterAgents(inputValue: string) {
     return this.agents.filter(agent =>
       agent.surname.toLowerCase().indexOf(inputValue.toLowerCase()) === 0 ||
-       agent.firstname.toLowerCase().indexOf(inputValue.toLowerCase()) === 0);
+      agent.firstname.toLowerCase().indexOf(inputValue.toLowerCase()) === 0);
   }
 
   agentSelect(agent: Agent) {

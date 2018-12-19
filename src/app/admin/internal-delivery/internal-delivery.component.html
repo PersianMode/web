@@ -7,10 +7,13 @@
   <mat-card-content>
     <!-- form autocomplete for type name of agents -->
     <mat-form-field class="example-full-width">
-      <input matInput placeholder="نام مامور ارسال" aria-label="Agent" [matAutocomplete]="auto" [formControl]="agentCtrl" dir="rtl">
+      <input matInput placeholder="نام مامور ارسال" aria-label="Agent" [matAutocomplete]="auto"
+             [formControl]="agentCtrl" dir="rtl">
       <mat-autocomplete #auto="matAutocomplete">
-        <mat-option  (onSelectionChange)="agentSelect(agent)" *ngFor="let agent of filteredAgents | async" [value]="agent.surname">
-          <small>نام: {{agent.firstname}}</small>  |
+        <mat-option (onSelectionChange)="agentSelect(agent)" *ngFor="let agent of filteredAgents | async"
+                    [value]="agent.surname">
+          <small>نام: {{agent.firstname}}</small>
+          |
           <span>نام خانوادگی: {{ agent.surname }}</span>
         </mat-option>
       </mat-autocomplete>
