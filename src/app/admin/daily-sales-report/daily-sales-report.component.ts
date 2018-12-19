@@ -33,6 +33,10 @@ export class DailySalesReportComponent implements OnInit {
     this.progressService.enable();
     this.httpService.get('daily_sales_report').subscribe(data => {
       console.log('data report', data);
+      // let currentDate = moment();
+      // let prevDay = currentDate.add(-1, 'd');
+      // console.log('previous day',prevDay.format('YYYY-MM-DD HH:mm'));
+
       this.dataSource = new MatTableDataSource(data);
       // this.dataTemp =  data;
       // for(let i = 0 ; i < this.dataTemp.length; i++)
@@ -43,7 +47,7 @@ export class DailySalesReportComponent implements OnInit {
       // { x.push( {index : i});
       //  i++;
       // });
-      console.log('temp: ',this.dataTemp);
+      // console.log('temp: ',this.dataTemp);
       this.totalRecords = data && data.total ? data.total : 0;
       this.progressService.disable();
 
