@@ -38,3 +38,8 @@ mat-header-cell, mat-cell{
   font-size: 20px;
   margin: 10px;
 }
+
+.total-amount{
+  margin: 10px;
+  font-weight: bold;
+}

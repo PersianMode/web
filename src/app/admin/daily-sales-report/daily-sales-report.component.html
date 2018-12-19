@@ -1,6 +1,6 @@
 <mat-card class="card-container">
   <mat-card-header>
-    <mat-card-title>لیست خرید 24 ساعت گذشته</mat-card-title>
+    <mat-card-title>لیست خریدهایی که از ساعت ۷ صبح دیروز (تا ۷ صبح امروز) انجام شده است</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <div class="example-container mat-elevation-z8">
@@ -8,13 +8,13 @@
         <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
       </button>
     <div class="button">
-    <button color="primary"  (click)="getData()">چاپ گزارش روزانه</button></div>
+    <button color="primary" (click)="getData()">چاپ گزارش روزانه</button></div>
 
       <mat-table #table [dataSource]="dataSource" matSort>
 
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
-          <mat-cell *matCellDef="let i"> {{i.index}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{orderNumber.indexOf(element)+1}} </mat-cell>
         </ng-container>
 
          requested_time Column
@@ -37,14 +37,14 @@
 
         <!-- Status Column -->
         <ng-container matColumnDef="customer_name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> نام خریدار  </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header> نام خریدار </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.customer.first_name}} {{element.customer.surname}} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
-
+      <span class="total-amount">{{' مجموع خریدهای انجام شده: '}}{{ total }}{{ ' تومان ' }}</span>
     </div>
   </mat-card-content>
 </mat-card>
