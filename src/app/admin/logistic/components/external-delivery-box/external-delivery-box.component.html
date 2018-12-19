@@ -50,12 +50,21 @@
             <button mat-button color="primary" (click)="showAddress(order)">نمایش</button>
           </mat-cell>
         </ng-container>
+        <!-- address column -->
+       
+        <ng-container matColumnDef="aggregated">
+          <mat-header-cell *matHeaderCellDef>تجمیع شده</mat-header-cell>
+          <mat-cell *matCellDef="let order">
+            <img  style="width: 25px; height: 25px;"
+            [src]="order.total_order_lines === order.order_lines.length ? '../../../../../assets/logos/accept.png' : '../../../../../assets/logos/fail.png' ">
+          </mat-cell>
+        </ng-container>
 
         <!-- process_order column -->
         <ng-container matColumnDef="process_order">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let order">
-            <button mat-button color="primary" (click)="onScanOrder()">پردازش</button>
+            <button mat-button color="primary" (click)="onScanOrder(order)">پردازش</button>
           </mat-cell>
         </ng-container>
 
