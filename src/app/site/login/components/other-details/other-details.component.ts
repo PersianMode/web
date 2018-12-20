@@ -47,7 +47,6 @@ export class OtherDetailsComponent implements OnInit {
 
   addMobileNumber() {
     if (this.mobile_no && !this.mobileHasError) {
-      console.log('got the mobile', this.mobile_no);
       this.httpService.post('register/mobile', {
         username: this.authService.userDetails.username,
         mobile_no: this.mobile_no,
@@ -83,10 +82,10 @@ export class OtherDetailsComponent implements OnInit {
       username: this.authService.userDetails.username,
       code: this.code,
     }).subscribe(
-      (data) => {
+      data => {
         console.log('New code is sent: ', data);
       },
-      (err) => {
+      err => {
         console.error('Cannot send new code: ', err);
       }
     );
