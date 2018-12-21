@@ -96,7 +96,7 @@ export class ShelvsViewComponent implements OnInit {
       transferee: this.transferee,
       trackingCode: this.trackingCode,
 
-      type: 'shelvesList',
+      type: 'ShelvesList',
       manual: false
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
