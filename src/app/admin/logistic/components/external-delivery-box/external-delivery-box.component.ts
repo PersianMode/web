@@ -27,7 +27,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   @Output() OnExternalDeliveryBoxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'process_order'];
+  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'aggregated', 'process_order'];
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
   pageSize = 10;
@@ -159,8 +159,8 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     //
   }
 
-  onScanOrder() {
-    this.showBarcodeScanner = true;
+  onScanOrder(order) {
+    this.showBarcodeScanner = order.total_order_lines === order.order_lines.length;
   }
 
   ngOnDestroy(): void {
