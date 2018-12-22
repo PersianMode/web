@@ -35,8 +35,8 @@ export class ShelvsViewComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'trackingCode', 'address',  'shelf_code'];
-
+  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'trackingCode', 'address' ];
+  // 'shelf_code'
   expandedElement: any;
   total;
   pageSize = 10;
