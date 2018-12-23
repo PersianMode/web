@@ -1,9 +1,29 @@
-<mat-card>
-  <mat-card-content>
-    <mat-card-title>نتیجه تراکنش</mat-card-title>
-    <div>شماره فاکتور : {{bankReferData.iN}}</div>
-    <div>تاریخ فاکتور : {{bankReferData.iD}}</div>
-    <div>
-      شماره پیگیری : {{bankReferData.tref}}</div>
-  </mat-card-content>
-</mat-card>
+<div *ngIf="!spinnerEnabled" fxLayout="row" fxLayoutAlign="center center">
+  <div fxFlex="5"></div>
+  <div fxFlex="90">
+  <mat-card class="result-card">
+      <mat-card-content>
+        <mat-card-title>
+          نتیجه تراکنش
+          <span *ngIf="resultObj?.result[0] == 'True'">{{'موفق'}}</span>
+          <span *ngIf="resultObj?.result[0] == 'False'">{{'ناموفق'}}</span>
+        </mat-card-title>
+        <div>شماره فاکتور : {{resultObj?.invoiceNumber}}</div>
+        <div>تاریخ فاکتور : {{jalali_date[1]}}, {{jalali_date[0]}}</div>
+        <div>
+          شماره پیگیری : {{makePersianNumber(resultObj?.transactionReferenceID)}}
+        </div>
+        <div>
+          مبلغ فاکتور : {{makePersianNumber(resultObj?.amount[0])}} تومان
+        </div>
+        <div>
+          شماره پذیرنده : {{makePersianNumber(resultObj?.merchantCode[0])}}
+        </div>
+        <div>
+          شماره ترمینال : {{makePersianNumber(resultObj?.terminalCode[0])}}
+        </div>
+      </mat-card-content>
+  </mat-card>
+</div>
+<div fxFlex="5"></div>
+</div>
