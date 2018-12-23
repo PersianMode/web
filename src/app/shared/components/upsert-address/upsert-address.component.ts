@@ -85,7 +85,8 @@ export class UpsertAddressComponent implements OnInit {
       recipient_surname: [this.addressInfo.addressId ? this.addressData.recipient_surname : this.authService.userDetails.surname, [
         Validators.required,
       ]],
-      recipient_national_id: [this.addressInfo.addressId ? this.addressData.recipient_national_id : this.authService.userDetails.national_id, [
+      recipient_national_id: [this.addressInfo.addressId ? this.addressData.recipient_national_id :
+        this.authService.userDetails.national_id, [
         Validators.required,
         Validators.maxLength(10),
         Validators.minLength(10),

@@ -30,7 +30,7 @@ export class BreadcrumbComponent implements OnInit {
       this.tags = res.map(r => r.name);
     });
     this.productService.type$.subscribe(res => {
-      this.type = res.map(r => r.name).filter(el => el);
+      if (res) this.type = res.map(r => r.name).filter(el => el);
       this.type_fa = this.dict.translateWord((this.type.length ? this.type[0] : '').toString());
     });
 
