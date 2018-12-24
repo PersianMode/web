@@ -40,6 +40,7 @@ import {DeliveryTrackingComponent} from './components/delivery/components/delive
 import {DeliveryHistoryComponent} from './components/delivery/components/delivery-history/delivery-history.component';
 import {NewInternalDeliveryComponent} from './components/delivery/components/new-internal-delivery/new-internal-delivery.component';
 import {DeliveryDetailsComponent} from './components/delivery/components/delivery-details/delivery-details.component';
+import {ExpiredDateDialogComponent} from './components/delivery/components/expired-date-dialog/expired-date-dialog.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import {DeliveryDetailsComponent} from './components/delivery/components/deliver
     ShelvsViewComponent,
     ReturnToWarehouseBoxComponent,
     DeliveryTrackingComponent,
-    DeliveryDetailsComponent
+    DeliveryDetailsComponent,
+    ExpiredDateDialogComponent
   ],
   imports: [
     LogisticRouting,
@@ -101,7 +103,9 @@ import {DeliveryDetailsComponent} from './components/delivery/components/deliver
     DeliveryShelfCodeComponent,
     MismatchConfirmComponent,
     DeliveryTrackingComponent,
-    DeliveryDetailsComponent],
+    DeliveryDetailsComponent,
+    ExpiredDateDialogComponent
+  ]
 })
 export class LogisticModule {
 }
