@@ -5,22 +5,17 @@
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
       <div fxFlex="30" class="filtering-box">
         <mat-input-container class="filtering-field">
-          <input class="filtering-field" matInput type="text" placeholder="شماره پیگیری" [formControl]="trackingCodeCtrl">
-        </mat-input-container>
-      </div>
-      <div fxFlex="30" class="filtering-box">
-        <mat-input-container class="filtering-field">
           <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری" [formControl]="transfereeCtrl">
         </mat-input-container>
       </div>
       <div fxFlex="30" class="filtering-box">
         <mat-input-container class="filtering-field">
           <input matInput placeholder="کد قفسه" aria-label="shelf-code" [matAutocomplete]="auto" [formControl]="shelfCodeCtrl">
-          <mat-autocomplete #auto="matAutocomplete">
-            <mat-option *ngFor="let shelf of filteredShelfCodes | async" [value]="shelf.code">
-              <span>{{ shelf.code }}</span>
-            </mat-option>
-          </mat-autocomplete>
+          <!--<mat-autocomplete #auto="matAutocomplete">-->
+            <!--<mat-option *ngFor="let shelf of filteredShelfCodes | async" [value]="shelf.code">-->
+              <!--<span>{{ shelf.code }}</span>-->
+            <!--</mat-option>-->
+          <!--</mat-autocomplete>-->
         </mat-input-container>
       </div>
     </div>
@@ -57,15 +52,15 @@
         <!--</ng-container>-->
 
          <!--category column-->
-        <!--<ng-container matColumnDef="category">-->
-          <!--<mat-header-cell *matHeaderCellDef>نوع</mat-header-cell>-->
-          <!--<mat-cell *matCellDef="let order">{{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>-->
-        <!--</ng-container>-->
+        <ng-container matColumnDef="category">
+          <mat-header-cell *matHeaderCellDef>نوع</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{getCategory(order.to)}}</mat-cell>
+        </ng-container>
 
     <!--status column-->
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.last_ticket.status}}</mat-cell>
+          <mat-cell *matCellDef="let order">{{getStatus(order.last_ticket.status)}}</mat-cell>
         </ng-container>
 
          <!--Expanded Content Column - The order lines rows is made up of this one column-->
@@ -93,8 +88,6 @@
                 </td>
               </tr>
             </table>
-
-
           </mat-cell>
         </ng-container>
 

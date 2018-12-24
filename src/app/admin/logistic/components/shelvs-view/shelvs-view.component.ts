@@ -11,7 +11,7 @@ import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
-
+import {DeliveryStatuses} from '../../../../shared/lib/status';
 
 @Component({
   selector: 'app-shelvs-view',
@@ -32,23 +32,21 @@ export class ShelvsViewComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'shelf_code',  'status'  ];
-  //'order_details', 'category',
+  displayedColumns = ['position', 'shelf_code',  'status' , 'category' ];
+  //'order_details',,
   //
   expandedElement: any;
   total;
   pageSize = 10;
   resultsLength: Number;
   showBarcodeScanner = false;
-  trackingCodeCtrl = new FormControl();
   transfereeCtrl = new FormControl();
   shelfCodeCtrl = new FormControl();
-
+  statusList = [{status: 1, message: 'پیش فرض'}, {status: 2, message: 'تعیین مسئول ارسال'} , {status: 3, message: 'درخواست محموله توسط پیک'}]
 
   filteredShelfCodes: Observable<any[]>;
   shelfCodes = null;
   transferee = null;
-  trackingCode = null;
   dataSource = new MatTableDataSource();
 
   constructor(private dialog: MatDialog, private progressService: ProgressService, private httpService: HttpService, private snackBar: MatSnackBar) {
@@ -64,15 +62,6 @@ export class ShelvsViewComponent implements OnInit {
 
   ngOnInit() {
     this.load();
-
-    this.trackingCodeCtrl.valueChanges.debounceTime(500).subscribe(
-      data => {
-        this.trackingCode = data.trim() !== '' ? data.trim() : null;
-        this.load();
-      }, err => {
-        console.error('Couldn\'t refresh when tracking code is changed: ', err);
-      }
-    );
 
     this.transfereeCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
@@ -101,7 +90,6 @@ export class ShelvsViewComponent implements OnInit {
       dir: this.sort.direction,
 
       transferee: this.transferee,
-      trackingCode: this.trackingCode,
       shelfCodes: this.shelfCodes,
 
       type: 'ShelvesList',
@@ -111,7 +99,6 @@ export class ShelvsViewComponent implements OnInit {
 
     this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
-
       console.log('res: ', res);
       const rows = [];
       res.data.forEach((order, index) => {
@@ -120,7 +107,6 @@ export class ShelvsViewComponent implements OnInit {
       });
 
       this.dataSource.data = rows;
-      console.log('rows: ', rows);;
 
       this.resultsLength = res.total ? res.total : 0;
       this.OnNewInboxCount.emit(res.total);
@@ -196,6 +182,17 @@ export class ShelvsViewComponent implements OnInit {
 
   onScanOrder() {
     this.showBarcodeScanner = true;
+  }
+
+  getStatus(status) {
+    return DeliveryStatuses.find(x => x.status === status).name || '-';
+  }
+
+  getCategory(category) {
+    if(category.customer._id)
+      return 'خارجی';
+    else if (category.warehouse_id)
+      return 'داخلی'
   }
 }
 
