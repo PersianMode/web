@@ -267,10 +267,6 @@ export class CheckoutPageComponent implements OnInit {
         this.spinnerService.enable();
         this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
       })
-      // .then(res => {
-      //   console.log(res);
-        // this.checkoutService.checkout();
-      // })
       .catch(err => {
         console.error('Error in final check: ', err);
         this.spinnerService.disable();
