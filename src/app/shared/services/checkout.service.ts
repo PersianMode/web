@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { IAddressInfo } from '../interfaces/iaddressInfo.interface';
-import { HttpService } from './http.service';
-import { CartService } from './cart.service';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { PaymentType } from '../enum/payment.type.enum';
-import { AuthService } from './auth.service';
-import { MatSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import {IAddressInfo} from '../interfaces/iaddressInfo.interface';
+import {HttpService} from './http.service';
+import {CartService} from './cart.service';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {PaymentType} from '../enum/payment.type.enum';
+import {AuthService} from './auth.service';
+import {MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
+import {ReplaySubject} from 'rxjs/Rx';
 
 @Injectable()
 export class CheckoutService {
@@ -229,7 +229,7 @@ export class CheckoutService {
           let addresses = [];
           localStorage.removeItem('address');
           if (!this.withDelivery) {
-            addresses = this.warehouseAddresses.map(r => Object.assign({ name: r.name }, r.address));
+            addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
           }
           this.addresses$.next(addresses);
         }
@@ -266,7 +266,8 @@ export class CheckoutService {
   private accumulateData() {
 
     if (!this.withDelivery) {
-      this.addressObj.wharehouse_name = this.addressObj.name;
+      this.addressObj.warehouse_name = this.addressObj.name;
+      this.addressObj.warehouse_id = this.warehouseAddresses.find(x => x.address._id === this.addressObj._id)._id;
     }
 
     if (!this.withDelivery)
@@ -290,8 +291,8 @@ export class CheckoutService {
       total_amount: this.total,
       discount: this.discount,
       is_collect: !this.withDelivery,
-      duration_days: this.withDelivery ? this.deliveryDays: null,
-      time_slot: this.withDelivery? this.deliveryTime : null,
+      duration_days: this.withDelivery ? this.deliveryDays : null,
+      time_slot: this.withDelivery ? this.deliveryTime : null,
       paymentType: this.selectedPaymentType,
       loyalty: this.earnSpentPointObj,
     };
