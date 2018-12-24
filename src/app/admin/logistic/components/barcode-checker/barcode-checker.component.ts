@@ -7,6 +7,7 @@ import {DeliveryShelfCodeComponent} from '../delivery-shelf-code/delivery-shelf-
 import {AuthService} from '../../../../shared/services/auth.service';
 import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 import {MismatchConfirmComponent} from '../mismatch-confirm/mismatch-confirm.component';
+import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
 
 
 @Component({
@@ -20,9 +21,9 @@ export class BarcodeCheckerComponent implements OnInit {
   currentWarehouse: String;
 
 
-  @Input() isHub = false;
+  isHub = false;
   @Input() showScanner = false;
-  @Input() trigger: String;
+  @Input() trigger: Number;
 
   @Output() onMismatchListener = new EventEmitter();
 
@@ -34,6 +35,9 @@ export class BarcodeCheckerComponent implements OnInit {
 
 
   ngOnInit() {
+
+
+    this.isHub = this.authService.userDetails.warehouse_id === this.authService.warehouses.find(x => x.is_hub)._id;
 
     this.barcodeCtrl = new FormControl();
     this.barcodeCtrl.valueChanges.debounceTime(150).subscribe(
@@ -59,14 +63,14 @@ export class BarcodeCheckerComponent implements OnInit {
     }).subscribe(res => {
       this.progressService.disable();
 
-      if (this.isHub)
+      if (this.isHub && this.trigger === ScanTrigger.Inbox)
         this.dialog.open(DeliveryShelfCodeComponent, {
           width: '400px',
           disableClose: !(res && res.exist),
           data: res
         });
-      console.log('-> ', res);
     }, err => {
+      console.log('-> ', err);
       this.progressService.disable();
       this.openSnackBar('خطا به هنگام اسکن محصول')
     });
