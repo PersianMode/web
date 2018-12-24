@@ -22,8 +22,8 @@ export class BarcodeCheckerComponent implements OnInit {
 
 
   isHub = false;
-  @Input() showScanner = false;
   @Input() trigger: Number;
+  @Input() extra: any;
 
   @Output() onMismatchListener = new EventEmitter();
 
@@ -57,10 +57,16 @@ export class BarcodeCheckerComponent implements OnInit {
       return;
     }
     this.progressService.enable();
-    this.httpService.post('order/ticket/scan', {
+
+    let body = {
       barcode,
       trigger: this.trigger
-    }).subscribe(res => {
+    };
+
+    if (this.extra)
+      body = Object.assign(body, this.extra);
+
+    this.httpService.post('order/ticket/scan', body).subscribe(res => {
       this.progressService.disable();
 
       if (this.isHub && this.trigger === ScanTrigger.Inbox)
