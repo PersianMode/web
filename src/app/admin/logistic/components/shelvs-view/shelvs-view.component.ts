@@ -35,8 +35,8 @@ export class ShelvsViewComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'trackingCode', 'address' ];
-  // 'shelf_code'
+  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'trackingCode', 'address', 'shelf_code' ];
+  //
   expandedElement: any;
   total;
   pageSize = 10;
@@ -97,12 +97,13 @@ export class ShelvsViewComponent implements OnInit {
       trackingCode: this.trackingCode,
 
       type: 'ShelvesList',
-      manual: false
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
-    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+
+    this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
+
       console.log('res: ', res);
       const rows = [];
       res.data.forEach((order, index) => {

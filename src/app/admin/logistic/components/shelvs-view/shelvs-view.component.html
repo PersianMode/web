@@ -59,7 +59,7 @@
          <!--total_order_lines column-->
         <ng-container matColumnDef="total_order_lines">
           <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>
+          <!--<mat-cell *matCellDef="let order">{{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>-->
         </ng-container>
 
     <!--trackingCode column-->
@@ -77,10 +77,10 @@
         </ng-container>
 
          <!--used_balance column-->
-        <!--<ng-container matColumnDef="shelf_code">-->
-          <!--<mat-header-cell *matHeaderCellDef> کد قفسه </mat-header-cell>-->
-          <!--&lt;!&ndash;<mat-cell > {{shelfCodes[0].code}}</mat-cell>&ndash;&gt;-->
-        <!--</ng-container>-->
+        <ng-container matColumnDef="shelf_code">
+          <mat-header-cell *matHeaderCellDef> کد قفسه </mat-header-cell>
+          <!--<mat-cell > {{shelfCodes[0].code}}</mat-cell>-->
+        </ng-container>
 
          <!--Expanded Content Column - The order lines rows is made up of this one column-->
         <ng-container matColumnDef="expandedDetail">
