@@ -194,6 +194,7 @@ export class CheckoutService {
 
     return 0;
   }
+
   submitAddresses(data): Promise<any> {
     if (!data) {
       return Promise.reject('');
@@ -235,7 +236,6 @@ export class CheckoutService {
 
   checkout() {
     const data = this.accumulateData();
-    console.log('DATA : ', data);
     this.httpService.post('checkout', data).subscribe(res => {
         if (!this.authService.userDetails.userId) {
           this.ccRecipientData = null;
@@ -279,6 +279,7 @@ export class CheckoutService {
   accumulateData() {
     if (!this.withDelivery) {
       this.addressObj.warehouse_name = this.addressObj.name;
+      this.addressObj.warehouse_id = this.warehouseAddresses.find(x => x.address._id === this.addressObj._id)._id;
     }
 
     if (!this.withDelivery)

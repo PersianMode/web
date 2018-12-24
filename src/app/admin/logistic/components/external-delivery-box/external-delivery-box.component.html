@@ -1,18 +1,18 @@
 <!-- barcode checker -->
-<app-barcode-checker [showScanner]="showBarcodeScanner" [trigger]="trigger" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+<app-barcode-checker  *ngIf="!!selectedOrder" [trigger]="trigger" [extra]="{orderId: selectedOrder._id}" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
 
 <mat-card>
 
-   <!-- header -->
-   <mat-card-header>
-      <mat-card-title>آماده خروج از انبار</mat-card-title>
-      <mat-card-subtitle>
-        <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
-          <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
-        </button>
-      </mat-card-subtitle>
-    </mat-card-header>
-    
+  <!-- header -->
+  <mat-card-header>
+    <mat-card-title>آماده خروج از انبار</mat-card-title>
+    <mat-card-subtitle>
+      <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
+        <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+
   <mat-card-content>
 
     <div class="example-container mat-elevation-z8">
@@ -51,13 +51,18 @@
           </mat-cell>
         </ng-container>
         <!-- address column -->
-       
+
         <ng-container matColumnDef="aggregated">
           <mat-header-cell *matHeaderCellDef>تجمیع شده</mat-header-cell>
           <mat-cell *matCellDef="let order">
-            <img  style="width: 25px; height: 25px;"
-            [src]="order.total_order_lines === order.order_lines.length ? '../../../../../assets/logos/accept.png' : '../../../../../assets/logos/fail.png' ">
+            <img style="width: 25px; height: 25px;" [src]="order.total_order_lines === order.order_lines.length ? '../../../../../assets/logos/accept.png' : '../../../../../assets/logos/fail.png' ">
           </mat-cell>
+        </ng-container>
+
+        <!-- order status column -->
+        <ng-container matColumnDef="order_status">
+          <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
+          <mat-cell *matCellDef="let order"> {{getOrderStatus(order)}}</mat-cell>
         </ng-container>
 
         <!-- process_order column -->
@@ -91,6 +96,10 @@
                   <p>
                     <b>سایز:</b> {{ol.instance?.size}}</p>
                 </td>
+                <td>
+                  <p>
+                    <b>وضعیت:</b> {{getOrderLineStatus(ol)}}</p>
+                </td>
               </tr>
             </table>
 
@@ -115,6 +124,6 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+    <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
   </mat-card-actions>
 </mat-card>
