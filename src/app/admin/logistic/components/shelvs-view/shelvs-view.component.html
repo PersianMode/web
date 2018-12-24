@@ -40,46 +40,32 @@
 
         <!-- position column -->
         <ng-container matColumnDef="position">
-          <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> ردیف</mat-header-cell>
           <mat-cell *matCellDef="let order"> {{order.index}}</mat-cell>
         </ng-container>
 
-        <!-- customer column -->
-        <ng-container matColumnDef="customer">
-          <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.customer.first_name + ' ' + order.customer.surname}} </mat-cell>
-        </ng-container>
-
-        <!-- order_time column -->
-        <ng-container matColumnDef="order_time">
-          <mat-header-cell *matHeaderCellDef>تاریخ خرید</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
-        </ng-container>
-
-         <!--total_order_lines column-->
-        <ng-container matColumnDef="total_order_lines">
-          <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
-          <!--<mat-cell *matCellDef="let order">{{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>-->
-        </ng-container>
-
-    <!--trackingCode column-->
-        <ng-container matColumnDef="trackingCode">
-          <mat-header-cell *matHeaderCellDef>شماره پیگیری</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.transaction_id}}</mat-cell>
-        </ng-container>
-
-        <!-- address column -->
-        <ng-container matColumnDef="address">
-          <mat-header-cell *matHeaderCellDef>آدرس</mat-header-cell>
-          <mat-cell *matCellDef="let order">
-            <button mat-button color="primary" (click)="showAddress(order)">نمایش</button>
-          </mat-cell>
-        </ng-container>
-
-         <!--used_balance column-->
+        <!-- shelf_code column -->
         <ng-container matColumnDef="shelf_code">
-          <mat-header-cell *matHeaderCellDef> کد قفسه </mat-header-cell>
-          <!--<mat-cell > {{shelfCodes[0].code}}</mat-cell>-->
+          <mat-header-cell *matHeaderCellDef> کد قفسه</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{order.shelf_code}} </mat-cell>
+        </ng-container>
+
+        <!-- order_details column -->
+        <!--<ng-container matColumnDef="order_details">-->
+          <!--<mat-header-cell *matHeaderCellDef>محتویات</mat-header-cell>-->
+          <!--<mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>-->
+        <!--</ng-container>-->
+
+         <!--category column-->
+        <!--<ng-container matColumnDef="category">-->
+          <!--<mat-header-cell *matHeaderCellDef>نوع</mat-header-cell>-->
+          <!--<mat-cell *matCellDef="let order">{{order.order_lines.length}}/{{order.total_order_lines}}</mat-cell>-->
+        <!--</ng-container>-->
+
+    <!--status column-->
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{order.last_ticket.status}}</mat-cell>
         </ng-container>
 
          <!--Expanded Content Column - The order lines rows is made up of this one column-->

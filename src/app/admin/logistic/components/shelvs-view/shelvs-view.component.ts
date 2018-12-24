@@ -6,14 +6,11 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
-import {ORDERS} from '../order-mock';
 import {OrderAddressComponent} from '../order-address/order-address.component';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
-
-
 
 
 @Component({
@@ -35,7 +32,8 @@ export class ShelvsViewComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'trackingCode', 'address', 'shelf_code' ];
+  displayedColumns = ['position', 'shelf_code',  'status'  ];
+  //'order_details', 'category',
   //
   expandedElement: any;
   total;
@@ -48,7 +46,7 @@ export class ShelvsViewComponent implements OnInit {
 
 
   filteredShelfCodes: Observable<any[]>;
-  shelfCodes = SHELF_CODES; // mock
+  shelfCodes = null;
   transferee = null;
   trackingCode = null;
   dataSource = new MatTableDataSource();
@@ -85,6 +83,15 @@ export class ShelvsViewComponent implements OnInit {
       }
     );
 
+    this.shelfCodeCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.shelfCodes = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+      }
+    );
+
   }
 
   load() {
@@ -95,6 +102,7 @@ export class ShelvsViewComponent implements OnInit {
 
       transferee: this.transferee,
       trackingCode: this.trackingCode,
+      shelfCodes: this.shelfCodes,
 
       type: 'ShelvesList',
     };
@@ -112,6 +120,7 @@ export class ShelvsViewComponent implements OnInit {
       });
 
       this.dataSource.data = rows;
+      console.log('rows: ', rows);;
 
       this.resultsLength = res.total ? res.total : 0;
       this.OnNewInboxCount.emit(res.total);
@@ -160,7 +169,7 @@ export class ShelvsViewComponent implements OnInit {
   }
 
   getProductDetail(orderLine) {
-    const product_color = orderLine.product_colors.find(x => x._id === orderLine.product_color_id);
+    const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
     const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
       imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id) :
       null;
@@ -190,17 +199,3 @@ export class ShelvsViewComponent implements OnInit {
   }
 }
 
-const SHELF_CODES = [
-  {
-    code: 'as23sd3',
-  },
-  {
-    code: '99sd23',
-  },
-  {
-    code: '023d34',
-  },
-  {
-    code: '3sd342s',
-  }
-];
