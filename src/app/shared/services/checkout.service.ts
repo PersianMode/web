@@ -221,14 +221,9 @@ export class CheckoutService {
     }
   }
 
-  sendDataToBank() {
-    const data = this.accumulateData();
-    const paymentData = {
-      total_amount : data.total_amount,
-      address: data.address
-    };
+  sendDataToBankGateway(data) {
     return new Promise((resolve, reject) => {
-      this.httpService.post('payment', paymentData)
+      this.httpService.post('payment', data)
         .subscribe(res => {
             resolve(res);
           },
@@ -240,6 +235,7 @@ export class CheckoutService {
 
   checkout() {
     const data = this.accumulateData();
+    console.log('DATA : ', data);
     this.httpService.post('checkout', data).subscribe(res => {
         if (!this.authService.userDetails.userId) {
           this.ccRecipientData = null;
@@ -280,7 +276,7 @@ export class CheckoutService {
     });
   }
 
-  private accumulateData() {
+  accumulateData() {
     if (!this.withDelivery) {
       this.addressObj.warehouse_name = this.addressObj.name;
     }

@@ -238,6 +238,8 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   checkout() {
+    const orderData = this.checkoutService.accumulateData();
+    console.log('ORDER DATA : ', orderData);
     const IdArray = ['invoiceNumber',
       'invoiceDate',
       'amount',
@@ -251,22 +253,24 @@ export class CheckoutPageComponent implements OnInit {
       'sign'];
 
     this.finalCheckItems()
-      .then(res => {   // redirect to bank payment page
-        return this.checkoutService.sendDataToBank();
+      .then(res => {
+        // first-step-1 :
+        // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
+        // from server to post and redirect to bank gateway page
+        return this.checkoutService.sendDataToBankGateway(orderData);
       })
       .then((res) => {
         this.bankData = res;
-
         IdArray.forEach(el => {
           this[el].nativeElement.value = this.bankData[el];
-        })
+        });
         this.spinnerService.enable();
-        this.bankDataFormId.nativeElement.submit();
+        this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
       })
-      .then(res => {
-        console.log(res);
+      // .then(res => {
+      //   console.log(res);
         // this.checkoutService.checkout();
-      })
+      // })
       .catch(err => {
         console.error('Error in final check: ', err);
         this.spinnerService.disable();

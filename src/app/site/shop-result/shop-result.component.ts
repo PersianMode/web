@@ -4,6 +4,7 @@ import {HttpService} from '../../shared/services/http.service';
 import {HttpClient} from '@angular/common/http';
 import {dateFormatter} from '../../shared/lib/dateFormatter';
 import {SpinnerService} from '../../shared/services/spinner.service';
+import {CheckoutService} from '../../shared/services/checkout.service';
 
 @Component({
   selector: 'app-shop-result',
@@ -14,33 +15,28 @@ export class ShopResultComponent implements OnInit {
   bankReferData: any = null;
   resultObj: any = null;
   jalali_date = [];
-  spinnerEnabled = true;
 
   constructor(private router: Router, private route: ActivatedRoute,
               private httpService: HttpService,
-              private spinnerService: SpinnerService) {
+              private spinnerService: SpinnerService,
+              private checkoutService: CheckoutService) {
   }
 
   ngOnInit() {
     this.spinnerService.enable();
     this.route.queryParams.subscribe(params => {
-      this.bankReferData = params;
+      this.bankReferData = {
+        tref: params.tref,
+        invoiceNumber: params.iN,
+        invoiceDate: params.iD,
+      };
     });
-    const shopData = {
-      merchantCode: 4480470,
-      terminalCode: 1660557,
-      tref: this.bankReferData.tref,
-      invoiceNumber: this.bankReferData.iN,
-      invoiceDate: this.bankReferData.iD,
-    };
     return new Promise((resolve, reject) => {
-      this.httpService.post('payResult', shopData)
+      this.httpService.post('payResult', this.bankReferData)
         .subscribe(res => {
             this.resultObj = res.resultObj;
             this.jalali_date = dateFormatter(this.resultObj.invoiceDate[0]);
             this.spinnerService.disable();
-            this.spinnerEnabled = false;
-            resolve(res);
           },
           err => {
             reject();

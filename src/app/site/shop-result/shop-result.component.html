@@ -1,29 +1,39 @@
-<div *ngIf="!spinnerEnabled" fxLayout="row" fxLayoutAlign="center center">
+<div *ngIf="resultObj" fxLayout="row" fxLayoutAlign="center center">
   <div fxFlex="5"></div>
   <div fxFlex="90">
-  <mat-card class="result-card">
+    <mat-card class="result-card">
       <mat-card-content>
         <mat-card-title>
-          نتیجه تراکنش
+          نتیجه تراکنش :
+          <span *ngIf="resultObj?.action[0] == 1003">{{'خرید'}}</span>
+          <span *ngIf="resultObj?.action[0] == 1004">{{'بازگشت خرید'}}</span>
           <span *ngIf="resultObj?.result[0] == 'True'">{{'موفق'}}</span>
           <span *ngIf="resultObj?.result[0] == 'False'">{{'ناموفق'}}</span>
         </mat-card-title>
         <div>شماره فاکتور : {{resultObj?.invoiceNumber}}</div>
         <div>تاریخ فاکتور : {{jalali_date[1]}}, {{jalali_date[0]}}</div>
         <div>
-          شماره پیگیری : {{makePersianNumber(resultObj?.transactionReferenceID)}}
+          شماره تراکنش : {{makePersianNumber(resultObj?.transactionReferenceID)}}
         </div>
         <div>
-          مبلغ فاکتور : {{makePersianNumber(resultObj?.amount[0])}} تومان
+          شماره پیگیری : {{makePersianNumber(resultObj?.traceNumber[0])}}
         </div>
         <div>
-          شماره پذیرنده : {{makePersianNumber(resultObj?.merchantCode[0])}}
+          شماره ارجاع : {{makePersianNumber(resultObj?.referenceNumber[0])}}
         </div>
         <div>
           شماره ترمینال : {{makePersianNumber(resultObj?.terminalCode[0])}}
         </div>
+        <div>
+          شماره فروشگاه : {{makePersianNumber(resultObj?.merchantCode[0])}}
+        </div>
+
+        <div>
+          مبلغ فاکتور : {{makePersianNumber(resultObj?.amount[0])}} تومان
+        </div>
+
       </mat-card-content>
-  </mat-card>
-</div>
-<div fxFlex="5"></div>
+    </mat-card>
+  </div>
+  <div fxFlex="5"></div>
 </div>
