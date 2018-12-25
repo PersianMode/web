@@ -42,7 +42,7 @@ export class ShelvsViewComponent implements OnInit {
   showBarcodeScanner = false;
   transfereeCtrl = new FormControl();
   shelfCodeCtrl = new FormControl();
-  statusList = [{status: 1, message: 'پیش فرض'}, {status: 2, message: 'تعیین مسئول ارسال'} , {status: 3, message: 'درخواست محموله توسط پیک'}]
+  statusList = {internalMessage: 'داخلی', externalMessage: 'خارجی'}
 
   filteredShelfCodes: Observable<any[]>;
   shelfCodes = null;
@@ -190,9 +190,9 @@ export class ShelvsViewComponent implements OnInit {
 
   getCategory(category) {
     if(category.customer._id)
-      return 'خارجی';
+      return this.statusList.externalMessage;
     else if (category.warehouse_id)
-      return 'داخلی'
+      return this.statusList.internalMessage;
   }
 }
 
