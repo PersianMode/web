@@ -169,6 +169,21 @@ export class ShelvsViewComponent implements OnInit {
     };
   }
 
+  // getProductDetail(orderLine) {
+  //   const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
+  //   const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
+  //     imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id) :
+  //     null;
+  //   return {
+  //     name: orderLine.instance.product_name,
+  //     thumbnailURL,
+  //     color: product_color ? product_color.name : null,
+  //     color_code: product_color ? product_color.code : null,
+  //     size: orderLine.instance.size,
+  //     product_id: orderLine.instance.product_id
+  //   };
+  // }
+
   showDetail(orderLine) {
     this.dialog.open(ProductViewerComponent, {
       width: '400px',
@@ -194,5 +209,6 @@ export class ShelvsViewComponent implements OnInit {
     else if (category.warehouse_id)
       return this.statusList.internalMessage;
   }
+
 }
 

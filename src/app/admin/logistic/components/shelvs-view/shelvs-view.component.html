@@ -5,17 +5,15 @@
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
       <div fxFlex="30" class="filtering-box">
         <mat-input-container class="filtering-field">
-          <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری" [formControl]="transfereeCtrl">
+          <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری"
+                 [formControl]="transfereeCtrl">
         </mat-input-container>
       </div>
       <div fxFlex="30" class="filtering-box">
         <mat-input-container class="filtering-field">
-          <input matInput placeholder="کد قفسه" aria-label="shelf-code" [matAutocomplete]="auto" [formControl]="shelfCodeCtrl">
-          <!--<mat-autocomplete #auto="matAutocomplete">-->
-            <!--<mat-option *ngFor="let shelf of filteredShelfCodes | async" [value]="shelf.code">-->
-              <!--<span>{{ shelf.code }}</span>-->
-            <!--</mat-option>-->
-          <!--</mat-autocomplete>-->
+          <input matInput placeholder="کد قفسه" aria-label="shelf-code"
+                 [formControl]="shelfCodeCtrl">
+
         </mat-input-container>
       </div>
     </div>
@@ -31,7 +29,7 @@
 
     <div class="example-container mat-elevation-z8">
       <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created"
-        matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
+                 matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
 
         <!-- position column -->
         <ng-container matColumnDef="position">
@@ -42,66 +40,96 @@
         <!-- shelf_code column -->
         <ng-container matColumnDef="shelf_code">
           <mat-header-cell *matHeaderCellDef> کد قفسه</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.shelf_code}} </mat-cell>
+          <mat-cell *matCellDef="let order">{{order.shelf_code}}</mat-cell>
         </ng-container>
 
         <!-- order_details column -->
         <!--<ng-container matColumnDef="order_details">-->
-          <!--<mat-header-cell *matHeaderCellDef>محتویات</mat-header-cell>-->
-          <!--<mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>-->
+        <!--<mat-header-cell *matHeaderCellDef>محتویات</mat-header-cell>-->
+        <!--<mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>-->
         <!--</ng-container>-->
 
-         <!--category column-->
-        <ng-container matColumnDef="category">
-          <mat-header-cell *matHeaderCellDef>نوع</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{getCategory(order.to)}}</mat-cell>
-        </ng-container>
-
-    <!--status column-->
+        <!--status column-->
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
           <mat-cell *matCellDef="let order">{{getStatus(order.last_ticket.status)}}</mat-cell>
         </ng-container>
 
-         <!--Expanded Content Column - The order lines rows is made up of this one column-->
+        <!--category column-->
+        <ng-container matColumnDef="category">
+          <mat-header-cell *matHeaderCellDef>نوع</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{getCategory(order.to)}}</mat-cell>
+        </ng-container>
+
+        <!--Expanded Content Column - The order rows is made up of this one column-->
         <ng-container matColumnDef="expandedDetail">
           <mat-cell *matCellDef="let detail">
 
             <table class='orderLineDetail'>
-              <tr *ngFor='let ol of detail.order.order_lines'>
+              <tr>
                 <td>
-                  <div class="imgWrapper">
-                    <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetail(ol)">
-                  </div>
+                  <p>
+                    <b> تاریخ ثبت سفارش: </b> {{getDate(detail.order.order_time)}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>بارکد:</b> {{ol.instance.barcode}}</p>
+                    <b>شماره فاکتور: </b> {{detail.order.transaction_id}}</p>
                 </td>
                 <td>
                   <p>
-                    <b>نام:</b> {{ol.instance.product_name}}</p>
+                    <b> تعداد: </b>{{detail.order.sum_order_lines}}
+                  </p>
                 </td>
-                <td>
-                  <p>
-                    <b>سایز:</b> {{ol.instance.size}}</p>
-                </td>
-              </tr>
+                  <!--<td *ngFor='let ol of detail.order.orders'>-->
+                  <!--{{detail.order.orders.order_lines}}-->
+                  <p (click)="showDetail(ol)">
+                    <b> نمایش جزییات: </b>
+                                    <!--{{ getProductDetail(ol)}}-->
+                  </p>
+                    <!--{{ol.order_lines}}-->
+                <!--</td>-->
             </table>
           </mat-cell>
         </ng-container>
 
 
+        <!--<ng-container matColumnDef="expandedDetail">-->
+        <!--<mat-cell *matCellDef="let detail">-->
+
+        <!--<table class='orderLineDetail'>-->
+        <!--<tr *ngFor='let ol of detail.order.order_lines'>-->
+        <!--<td>-->
+        <!--<div class="imgWrapper">-->
+        <!--<img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetail(ol)">-->
+        <!--</div>-->
+        <!--</td>-->
+        <!--<td>-->
+        <!--<p>-->
+        <!--<b>بارکد:</b> {{ol.instance.barcode}}</p>-->
+        <!--</td>-->
+        <!--<td>-->
+        <!--<p>-->
+        <!--<b>نام:</b> {{ol.instance.product_name}}</p>-->
+        <!--</td>-->
+        <!--<td>-->
+        <!--<p>-->
+        <!--<b>سایز:</b> {{ol.instance.size}}</p>-->
+        <!--</td>-->
+        <!--</tr>-->
+        <!--</table>-->
+        <!--</mat-cell>-->
+        <!--</ng-container>-->
+
         <!-- mat-row and mat-row-collapsed -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
-          (click)="expandedElement = row._id">
+        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row"
+                 [class.expanded]="expandedElement == row._id"
+                 (click)="expandedElement = row._id">
         </mat-row>
-        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
-          style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
+        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+                 [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
+                 style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
         </mat-row>
-
-
       </mat-table>
     </div>
 
