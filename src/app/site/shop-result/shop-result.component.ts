@@ -3,7 +3,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../shared/services/http.service';
 import {dateFormatter} from '../../shared/lib/dateFormatter';
 import {SpinnerService} from '../../shared/services/spinner.service';
-import {CheckoutService} from '../../shared/services/checkout.service';
 
 @Component({
   selector: 'app-shop-result',
@@ -18,8 +17,7 @@ export class ShopResultComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute,
               private httpService: HttpService,
-              private spinnerService: SpinnerService,
-              private checkoutService: CheckoutService) {
+              private spinnerService: SpinnerService) {
   }
 
   ngOnInit() {
