@@ -15,6 +15,7 @@ export class ShopResultComponent implements OnInit {
   bankReferData: any = null;
   resultObj: any = null;
   jalali_date = [];
+  persian_trefId = '';
 
   constructor(private router: Router, private route: ActivatedRoute,
               private httpService: HttpService,
@@ -36,6 +37,7 @@ export class ShopResultComponent implements OnInit {
         .subscribe(res => {
             this.resultObj = res.resultObj;
             this.jalali_date = dateFormatter(this.resultObj.invoiceDate[0]);
+            this.persian_trefId = this.resultObj.transactionReferenceID[0].split('').map(ch => (+ch).toLocaleString('fa')).join('');
             this.spinnerService.disable();
           },
           err => {
