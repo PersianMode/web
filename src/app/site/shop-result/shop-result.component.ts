@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../shared/services/http.service';
-import {HttpClient} from '@angular/common/http';
 import {dateFormatter} from '../../shared/lib/dateFormatter';
 import {SpinnerService} from '../../shared/services/spinner.service';
 import {CheckoutService} from '../../shared/services/checkout.service';
