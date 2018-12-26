@@ -42,8 +42,8 @@ export class CheckoutPageComponent implements OnInit {
   balanceValue = 0;
   loyaltyPoint = 0;
   paymentType = PaymentType;
-  disabled: boolean = false;
-  changeMessage: string = '';
+  disabled = false;
+  changeMessage = '';
   soldOuts: any[] = [];
   discountChanges: any[];
   priceChanges: any[];
@@ -232,7 +232,7 @@ export class CheckoutPageComponent implements OnInit {
             resolve();
         },
         err => {
-          reject();
+          reject(err);
         });
     });
   }
@@ -259,13 +259,13 @@ export class CheckoutPageComponent implements OnInit {
         // from server to post and redirect to bank gateway page
         return this.checkoutService.sendDataToBankGateway(orderData);
       })
-      .then((res) => {
+      .then(res => {
         this.bankData = res;
         IdArray.forEach(el => {
           this[el].nativeElement.value = this.bankData[el];
         });
         this.spinnerService.enable();
-        this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
+        this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
       })
       .catch(err => {
         console.error('Error in final check: ', err);

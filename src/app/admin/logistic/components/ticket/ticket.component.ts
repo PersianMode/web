@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {Component, OnInit, Inject, ViewChild} from '@angular/core';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatPaginator, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import * as moment from 'jalali-moment';
-import { HttpService } from '../../../../shared/services/http.service';
-import { OrderLineStatuses } from '../../../../shared/lib/status';
+import {HttpService} from '../../../../shared/services/http.service';
+import {OrderLineStatuses} from '../../../../shared/lib/status';
 
 @Component({
   selector: 'app-ticket',
@@ -12,14 +12,14 @@ import { OrderLineStatuses } from '../../../../shared/lib/status';
 })
 
 
-
 export class TicketComponent implements OnInit {
   // 'desc'
   displayedColumns = ['position', 'agent_fullname', 'receiver', 'is_processed', 'status', 'timestamp'];
   dataSource = new MatTableDataSource();
 
-  constructor(private httpService: HttpService , public dialogRef: MatDialogRef<TicketComponent>,
-     @Inject(MAT_DIALOG_DATA) public data: any) { }
+  constructor(private httpService: HttpService, public dialogRef: MatDialogRef<TicketComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   ngOnInit() {
     const dataArr = [];
@@ -38,13 +38,13 @@ export class TicketComponent implements OnInit {
               position: index + 1,
               agent_fullname: ticket.agent[0] ? ticket.agent[0].first_name + ' ' + ticket.agent[0].surname : 'نامشخص',
               receiver: ticket.receiver_warehouse[0] ? ticket.receiver_warehouse[0].name :
-                        ticket.receiver_agent[0].first_name + ticket.receiver_agent[0].surname ,
+                ticket.receiver_agent[0].first_name + ticket.receiver_agent[0].surname,
               // desc: ticket.desc,
               is_processed: ticket.is_processed,
               status: ticket.status,
               timestamp: moment(ticket.timestamp).format('jYYYY/jMM/jDD HH:mm:ss')
             });
-        });
+          });
         this.dataSource.data = dataArr;
       });
   }
