@@ -45,6 +45,7 @@ import { OrderReturnComponent } from './profile/components/order-return/order-re
 import {OtherDetailsComponent} from './login/components/other-details/other-details.component';
 import {ProductService} from '../shared/services/product.service';
 import {BlockUIModule} from 'primeng/blockui';
+import { ShopResultComponent } from './shop-result/shop-result.component';
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import {BlockUIModule} from 'primeng/blockui';
     UpsertAddressComponent,
     GenDialogComponent,
     OrderLinesComponent,
-    OrderReturnComponent
+    OrderReturnComponent,
+    ShopResultComponent
   ],
   entryComponents: [GenDialogComponent],
   providers: [AuthGuard]

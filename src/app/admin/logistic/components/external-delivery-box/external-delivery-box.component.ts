@@ -2,7 +2,6 @@ import {Component, OnInit, ViewChild, AfterViewInit, OnDestroy, Output, EventEmi
 import {MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
-import {ORDERS} from '../order-mock';
 import {OrderAddressComponent} from '../order-address/order-address.component';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
@@ -10,6 +9,7 @@ import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
 import {HttpService} from 'app/shared/services/http.service';
 import {SocketService} from 'app/shared/services/socket.service';
 import {ProgressService} from 'app/shared/services/progress.service';
+import {OrderLineStatuses, OrderStatuses} from 'app/shared/lib/status';
 
 @Component({
   selector: 'app-external-delivery-box',
@@ -27,7 +27,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   @Output() OnExternalDeliveryBoxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'process_order'];
+  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'aggregated', 'order_status', 'process_order'];
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
   pageSize = 10;
@@ -42,7 +42,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   expandedElement: any;
 
-  showBarcodeScanner = false;
+  selectedOrder: any;
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
@@ -148,19 +148,31 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     };
   }
 
+  getOrderStatus(order) {
+    const lastTicket = order.tickets[order.tickets.length - 1];
+    return OrderStatuses.find(x => x.status === lastTicket.status).name || '-';
+  }
+
+  getOrderLineStatus(orderLine) {
+    const lastTicket = orderLine.tickets[orderLine.tickets.length - 1];
+    return OrderLineStatuses.find(x => x.status === lastTicket.status).name || '-';
+
+  }
+
   showDetial(orderLine) {
     this.dialog.open(ProductViewerComponent, {
       width: '400px',
       data: this.getProductDetail(orderLine)
     });
   }
-
   onMismatchDetected() {
     //
   }
 
-  onScanOrder() {
-    this.showBarcodeScanner = true;
+  onScanOrder(order) {
+    if (order.total_order_lines === order.order_lines.length) {
+      this.selectedOrder = order;
+    }
   }
 
   ngOnDestroy(): void {

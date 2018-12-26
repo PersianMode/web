@@ -222,6 +222,18 @@ export class CheckoutService {
     }
   }
 
+  public sendDataToBankGateway(data) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('payment', data)
+        .subscribe(res => {
+            resolve(res);
+          },
+          err => {
+            reject(err);
+          });
+    });
+  }
+
   checkout() {
     const data = this.accumulateData();
     this.httpService.post('checkout', data).subscribe(res => {
@@ -264,10 +276,10 @@ export class CheckoutService {
     });
   }
 
-  private accumulateData() {
-
+  accumulateData() {
     if (!this.withDelivery) {
       this.addressObj.warehouse_name = this.addressObj.name;
+      this.addressObj.warehouse_id = this.warehouseAddresses.find(x => x.address._id === this.addressObj._id)._id;
     }
 
     if (!this.withDelivery)

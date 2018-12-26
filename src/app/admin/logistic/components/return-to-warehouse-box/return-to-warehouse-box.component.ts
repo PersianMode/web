@@ -27,7 +27,7 @@ export class ReturnToWarehouseBoxComponent implements OnInit {
     this.loadData();
   }
 
-  onSortChange() {
+  onSortChange(event) {
     this.paginator.pageIndex = 0;
     this.loadData();
   }
