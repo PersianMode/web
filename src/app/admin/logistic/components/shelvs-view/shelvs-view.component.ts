@@ -43,7 +43,7 @@ export class ShelvsViewComponent implements OnInit {
   transfereeCtrl = new FormControl();
   shelfCodeCtrl = new FormControl();
   statusList = {internalMessage: 'داخلی', externalMessage: 'خارجی'}
-
+  _status = null;
   filteredShelfCodes: Observable<any[]>;
   shelfCodes = null;
   transferee = null;
@@ -101,6 +101,15 @@ export class ShelvsViewComponent implements OnInit {
       this.progressService.disable();
       console.log('res: ', res);
       const rows = [];
+
+      if (this._status === true) {
+        res = new MatTableDataSource(res.data.filter(el => el.to.warehouse_id));
+      }
+
+      if (this._status === false) {
+        res = new MatTableDataSource(res.data.filter(el => el.to.customer));
+      }
+
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
@@ -165,6 +174,14 @@ export class ShelvsViewComponent implements OnInit {
     });
   }
 
+
+  showOrderLine(orderLine) {
+    this.dialog.open(ProductViewerComponent, {
+      width: '400px',
+      data: this.getProductDetail(orderLine)
+    });
+  }
+
   onMismatchDetected() {
     this.progressService.enable();
   }
@@ -184,5 +201,17 @@ export class ShelvsViewComponent implements OnInit {
       return this.statusList.internalMessage;
   }
 
+  changeStatus() {
+    if (this._status === null) {
+      this.load();
+      this._status = true;
+    } else if (this._status === true) {
+      this.load();
+      this._status = false;
+    } else if (this._status === false) {
+      this.load();
+      this._status = null;
+    }
+  }
 }
 
