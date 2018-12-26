@@ -5,7 +5,7 @@
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
       <div fxFlex="30" class="filtering-box">
         <mat-input-container class="filtering-field">
-          <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری"
+          <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده: انبار - مشتری"
                  [formControl]="transfereeCtrl">
         </mat-input-container>
       </div>
@@ -68,26 +68,23 @@
             <table class='orderLineDetail'>
               <tr>
                 <td>
-                  <p>
+                  <p style="margin: 10px">
                     <b> تاریخ ثبت سفارش: </b> {{getDate(detail.order.order_time)}}</p>
                 </td>
                 <td>
-                  <p>
-                    <b>شماره فاکتور: </b> {{detail.order.transaction_id}}</p>
-                </td>
-                <td>
-                  <p>
+                  <p style="margin: 10px">
                     <b> تعداد: </b>{{detail.order.sum_order_lines}}
                   </p>
                 </td>
-                  <!--<td *ngFor='let ol of detail.order.orders'>-->
-                  <!--{{detail.order.orders.order_lines}}-->
-                  <p (click)="showDetail(ol)">
-                    <b> نمایش جزییات: </b>
-                                    <!--{{ getProductDetail(ol)}}-->
-                  </p>
-                    <!--{{ol.order_lines}}-->
-                <!--</td>-->
+
+                  <td *ngFor='let ol of detail.order.orders'>
+
+                     <span *ngFor='let el of ol.order_lines'>
+                  <div (click)="showDetail(el)"> <b>نمایش:</b>
+                  </div>
+                  </span>
+                  </td>
+
             </table>
           </mat-cell>
         </ng-container>

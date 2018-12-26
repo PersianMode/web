@@ -143,17 +143,6 @@ export class ShelvsViewComponent implements OnInit {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
   }
 
-  showAddress(order) {
-    if (!order.address) {
-      // need to create message service and return this message => ('order line has no address!)
-      return;
-    }
-    this.dialog.open(OrderAddressComponent, {
-      width: '400px',
-      data: {address: order.address, is_collect: !!order.is_collect}
-    });
-  }
-
   getProductDetail(orderLine) {
     const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
     const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
@@ -168,21 +157,6 @@ export class ShelvsViewComponent implements OnInit {
       product_id: orderLine.instance.product_id
     };
   }
-
-  // getProductDetail(orderLine) {
-  //   const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
-  //   const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-  //     imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id) :
-  //     null;
-  //   return {
-  //     name: orderLine.instance.product_name,
-  //     thumbnailURL,
-  //     color: product_color ? product_color.name : null,
-  //     color_code: product_color ? product_color.code : null,
-  //     size: orderLine.instance.size,
-  //     product_id: orderLine.instance.product_id
-  //   };
-  // }
 
   showDetail(orderLine) {
     this.dialog.open(ProductViewerComponent, {
@@ -204,7 +178,7 @@ export class ShelvsViewComponent implements OnInit {
   }
 
   getCategory(category) {
-    if(category.customer._id)
+    if(category.customer)
       return this.statusList.externalMessage;
     else if (category.warehouse_id)
       return this.statusList.internalMessage;
