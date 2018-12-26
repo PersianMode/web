@@ -1,5 +1,6 @@
 <!-- barcode checker -->
-<app-barcode-checker  *ngIf="!!selectedOrder" [trigger]="trigger" [extra]="{orderId: selectedOrder._id}" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+<app-barcode-checker *ngIf="!!selectedOrder" [trigger]="trigger" [extra]="{orderId: selectedOrder._id}"
+  (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
 
 <mat-card>
 
@@ -73,6 +74,14 @@
           </mat-cell>
         </ng-container>
 
+        <!-- process_order column -->
+        <ng-container matColumnDef="invoice">
+          <mat-header-cell *matHeaderCellDef>صدور فاکتور</mat-header-cell>
+          <mat-cell *matCellDef="let order">
+            <button *ngIf="readyForInvoice(order)" mat-button color="warn" (click)="invoice(order)">درخواست</button>
+          </mat-cell>
+        </ng-container>
+
 
         <!-- Expanded Content Column - The order lines rows is made up of this one column -->
         <ng-container matColumnDef="expandedDetail">
@@ -110,8 +119,8 @@
         <!-- row-header and mat-row and mat-row-collapse-detail -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [ngClass]="{'expanded highlight-row': expandedElement == row._id}"
-          (click)="expandedElement = row._id">
+        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [ngClass]="{'expanded highlight-row': expandedElement == row._id}">
+          <!-- (click)="expandedElement = row._id"> -->
         </mat-row>
         <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
           style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">

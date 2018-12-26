@@ -10,6 +10,8 @@ import {HttpService} from 'app/shared/services/http.service';
 import {SocketService} from 'app/shared/services/socket.service';
 import {ProgressService} from 'app/shared/services/progress.service';
 import {OrderLineStatuses, OrderStatuses} from 'app/shared/lib/status';
+import {STATUS_CODES} from 'http';
+import {ORDER_STATUS} from 'app/shared/enum/status.enum';
 
 @Component({
   selector: 'app-external-delivery-box',
@@ -27,13 +29,21 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   @Output() OnExternalDeliveryBoxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'aggregated', 'order_status', 'process_order'];
+  displayedColumns = ['position',
+    'customer',
+    'order_time',
+    'total_order_lines',
+    'address',
+    'aggregated',
+    'order_status',
+    'process_order',
+    'invoice'];
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
   pageSize = 10;
   total;
 
-  trigger = ScanTrigger.SendCustomer;
+  trigger = ScanTrigger.SendExternal;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -69,6 +79,8 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   load() {
     this.progressService.enable();
 
+    this.expandedElement = null;
+
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
@@ -91,9 +103,15 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
       this.total = res.total || 0;
       this.OnExternalDeliveryBoxCount.emit(this.total);
 
+      if (this.selectedOrder) {
+        setTimeout(() => {
+          this.expandedElement = this.selectedOrder._id;
+        }, 100);
+      }
+
     }, err => {
       this.progressService.disable();
-      this.openSnackBar('خطا در دریافت لیست سفارش‌های عادی');
+      this.openSnackBar('خطا در لیست ارسال های خارجی');
     });
   }
 
@@ -165,14 +183,35 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
       data: this.getProductDetail(orderLine)
     });
   }
+
+  readyForInvoice(order) {
+    const lastTicket = order.tickets[order.tickets.length - 1];
+    return lastTicket.status === ORDER_STATUS.WaitForInvoice;
+  }
+  invoice(order) {
+
+    this.progressService.enable();
+
+    this.httpService.post('order/invoice', {
+      orderId: order._id
+    }).subscribe(res => {
+      this.progressService.disable();
+      this.openSnackBar('درخواست صدور فاکتور با موفقیت ارسال شد');
+
+    }, err => {
+      this.progressService.disable();
+      this.openSnackBar('خطا به هنگام تلاش برای صدور فاکتور');
+    });
+
+  }
+
   onMismatchDetected() {
     //
   }
 
   onScanOrder(order) {
-    if (order.total_order_lines === order.order_lines.length) {
-      this.selectedOrder = order;
-    }
+    this.selectedOrder = order;
+    this.expandedElement = order._id;
   }
 
   ngOnDestroy(): void {
