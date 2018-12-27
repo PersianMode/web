@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter, Input} from '@angular/core';
 import {MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
@@ -10,7 +10,6 @@ import {HttpService} from 'app/shared/services/http.service';
 import {SocketService} from 'app/shared/services/socket.service';
 import {ProgressService} from 'app/shared/services/progress.service';
 import {OrderLineStatuses, OrderStatuses} from 'app/shared/lib/status';
-import {STATUS_CODES} from 'http';
 import {ORDER_STATUS} from 'app/shared/enum/status.enum';
 
 @Component({
@@ -28,6 +27,7 @@ import {ORDER_STATUS} from 'app/shared/enum/status.enum';
 export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() OnExternalDeliveryBoxCount = new EventEmitter();
+  @Input() isHub = false;
 
   displayedColumns = ['position',
     'customer',
@@ -43,7 +43,8 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   pageSize = 10;
   total;
 
-  trigger = ScanTrigger.SendExternal;
+
+  trigger;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -74,6 +75,9 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
       this.load();
     });
+
+    this.trigger = this.isHub ? ScanTrigger.SendExternal : ScanTrigger.CCDelivery;
+
   }
 
   load() {
@@ -84,9 +88,9 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
-      type: 'ScanExternalDelivery',
-      manual: false
+      type: this.isHub ? 'ScanExternalDelivery' : 'ScanToCustomerDelivery'
     };
+
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
 
