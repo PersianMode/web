@@ -6,7 +6,7 @@
 
   <!-- header -->
   <mat-card-header>
-    <mat-card-title>آماده خروج از انبار</mat-card-title>
+    <mat-card-title>{{isHub ? 'آماده خروج از انبار' : 'اماده تحویل به مشتری' }}</mat-card-title>
     <mat-card-subtitle>
       <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
         <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
