@@ -22,3 +22,7 @@ h1, h3{
   position: relative;
 }
 
+.image-wrapper {
+  display: inline-block;
+  padding: 5px;
+}

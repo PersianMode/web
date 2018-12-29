@@ -104,7 +104,8 @@ import { OrderLineViewerComponent } from './components/order-line-viewer/order-l
     MismatchConfirmComponent,
     DeliveryTrackingComponent,
     DeliveryDetailsComponent,
-    ExpiredDateDialogComponent
+    ExpiredDateDialogComponent,
+    OrderLineViewerComponent
   ]
 })
 export class LogisticModule {

@@ -37,7 +37,6 @@
       </div>
     </div>
 
-
     <div class="example-container mat-elevation-z8">
       <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created"
                  matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
@@ -81,47 +80,14 @@
                     <b>شماره فاکتور: </b>{{ol.transaction_id}}
                   </p>
                 </td>
-                <td *ngFor="let el of ol.order_lines">
-                  <div (click)="showOrderLine(el)"><b>نمایش </b></div>
-
+                <td>
+                  <button mat-button color="primary" (click)="showOrderLine(ol.order_lines)">نمایش</button>
                 </td>
               </tr>
-
-              <!--<div style="margin: 10px" *ngFor="let el of ol.order_lines">-->
-              <!--<div (click)="showDetail(el)"><b>نمایش </b> </div>-->
-              <!--</div>-->
-
+              
             </table>
           </mat-cell>
         </ng-container>
-
-
-        <!--<ng-container matColumnDef="expandedDetail">-->
-        <!--<mat-cell *matCellDef="let detail">-->
-
-        <!--<table class='orderLineDetail'>-->
-        <!--<tr *ngFor='let ol of detail.order.order_lines'>-->
-        <!--<td>-->
-        <!--<div class="imgWrapper">-->
-        <!--<img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetail(ol)">-->
-        <!--</div>-->
-        <!--</td>-->
-        <!--<td>-->
-        <!--<p>-->
-        <!--<b>بارکد:</b> {{ol.instance.barcode}}</p>-->
-        <!--</td>-->
-        <!--<td>-->
-        <!--<p>-->
-        <!--<b>نام:</b> {{ol.instance.product_name}}</p>-->
-        <!--</td>-->
-        <!--<td>-->
-        <!--<p>-->
-        <!--<b>سایز:</b> {{ol.instance.size}}</p>-->
-        <!--</td>-->
-        <!--</tr>-->
-        <!--</table>-->
-        <!--</mat-cell>-->
-        <!--</ng-container>-->
 
         <!-- mat-row and mat-row-collapsed -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

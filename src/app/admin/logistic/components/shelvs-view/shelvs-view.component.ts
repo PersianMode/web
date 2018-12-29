@@ -6,13 +6,11 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
-import {OrderAddressComponent} from '../order-address/order-address.component';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {DeliveryStatuses} from '../../../../shared/lib/status';
-import {OrderLinesComponent} from '../../../../site/profile/components/order-lines/order-lines.component';
 import {OrderLineViewerComponent} from '../order-line-viewer/order-line-viewer.component';
 
 @Component({
@@ -34,9 +32,7 @@ export class ShelvsViewComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'shelf_code',  'status' , 'category' ];
-  //'order_details',,
-  //
+  displayedColumns = ['position', 'shelf_code',  'status' , 'category'];
   expandedElement: any;
   total;
   pageSize = 10;
@@ -82,7 +78,6 @@ export class ShelvsViewComponent implements OnInit {
         console.error('Couldn\'t refresh when receiver name is changed: ', err);
       }
     );
-
   }
 
   load() {
@@ -154,43 +149,15 @@ export class ShelvsViewComponent implements OnInit {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
   }
 
-  getProductDetail(orderLines) {
-    const product_color = orderLines.product_colors.find(x => x._id === orderLines.instance.product_color_id);
-    const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      imagePathFixer(product_color.image.thumbnail, orderLines.instance.product_id, product_color._id) :
-      null;
-    return {
-      name: orderLines.instance.product_name,
-      thumbnailURL,
-      color: product_color ? product_color.name : null,
-      color_code: product_color ? product_color.code : null,
-      size: orderLines.instance.size,
-      product_id: orderLines.instance.product_id
-    };
-  }
-
-  showDetail(orderLines) {
-    this.dialog.open(ProductViewerComponent, {
-      width: '400px',
-      data: this.getProductDetail(orderLines)
-    });
-  }
-
-
   showOrderLine(orderLines) {
-    // orderLines.map(x => x)
     this.dialog.open(OrderLineViewerComponent, {
       width: '800px',
-      data: this.getProductDetail(orderLines)
+      data: orderLines
     });
   }
 
   onMismatchDetected() {
     this.progressService.enable();
-  }
-
-  onScanOrder() {
-    this.showBarcodeScanner = true;
   }
 
   getStatus(status) {
