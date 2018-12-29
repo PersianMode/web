@@ -5,6 +5,7 @@ import {MessageType} from '../../shared/enum/messageType.enum';
 import * as moment from 'jalali-moment';
 import {MessageService} from '../../shared/services/message.service';
 import {ProgressService} from '../../shared/services/progress.service';
+import {PrintService} from '../../shared/services/print.service';
 
 @Component({
   selector: 'app-daily-sales-report',
@@ -21,7 +22,7 @@ export class DailySalesReportComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   constructor(private dialog: MatDialog, private httpService: HttpService,
-              private messageService: MessageService, private progressService: ProgressService) {
+              private messageService: MessageService, private progressService: ProgressService, private printService: PrintService) {
   }
 
   ngOnInit() {
@@ -54,4 +55,7 @@ export class DailySalesReportComponent implements OnInit {
     return moment(date).format('jYYYY/jMM/jDD HH:mm:ss');
   }
 
+  printReport(data) {
+  this.printService.dailySalesReportPrint(data);
+  }
 }
