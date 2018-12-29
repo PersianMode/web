@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from '../../shared/services/http.service';
-import {HttpClient} from '@angular/common/http';
 import {dateFormatter} from '../../shared/lib/dateFormatter';
 import {SpinnerService} from '../../shared/services/spinner.service';
-import {CheckoutService} from '../../shared/services/checkout.service';
+import {CartService} from '../../shared/services/cart.service';
+import {AuthService} from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-shop-result',
@@ -15,11 +15,11 @@ export class ShopResultComponent implements OnInit {
   bankReferData: any = null;
   resultObj: any = null;
   jalali_date = [];
+  persian_trefId = '';
 
   constructor(private router: Router, private route: ActivatedRoute,
-              private httpService: HttpService,
-              private spinnerService: SpinnerService,
-              private checkoutService: CheckoutService) {
+              private httpService: HttpService, private cartService: CartService,
+              private spinnerService: SpinnerService, private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -34,11 +34,24 @@ export class ShopResultComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.httpService.post('payResult', this.bankReferData)
         .subscribe(res => {
+            console.log('++++++++++', res.resultObj);
             this.resultObj = res.resultObj;
+            if (this.resultObj.result[0] === 'True') {
+              localStorage.removeItem('address');
+              this.cartService.emptyCart();
+            } else {
+              this.cartService.loadCartsForShopRes();
+            }
             this.jalali_date = dateFormatter(this.resultObj.invoiceDate[0]);
+            this.persian_trefId = this.resultObj.transactionReferenceID[0].split('').map(ch => (+ch).toLocaleString('fa')).join('');
             this.spinnerService.disable();
           },
           err => {
+            console.log('----------');
+            console.log('ERR : ', err);
+            this.resultObj = err.error.resultObj;
+            this.cartService.loadCartsForShopRes();
+            this.spinnerService.disable();
             reject();
           });
     });

@@ -238,8 +238,7 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   checkout() {
-    const orderData = this.checkoutService.accumulateData();
-    console.log('ORDER DATA : ', orderData);
+    const orderData: any = this.checkoutService.accumulateData();
     const IdArray = ['invoiceNumber',
       'invoiceDate',
       'amount',
@@ -264,6 +263,12 @@ export class CheckoutPageComponent implements OnInit {
         IdArray.forEach(el => {
           this[el].nativeElement.value = this.bankData[el];
         });
+        orderData.invoice_number = this.bankData.invoiceNumber;
+        orderData.invoice_date = this.bankData.invoiceDate;
+        this.checkoutService.checkout(orderData);
+      })
+      .then(res => {
+        console.log(res);
         this.spinnerService.enable();
         this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
       })

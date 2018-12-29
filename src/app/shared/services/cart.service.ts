@@ -60,9 +60,21 @@ export class CartService {
       });
   }
 
+  loadCartsForShopRes() {
+    const items = this.getItemsFromStorage();
+    if (this.authService.userIsLoggedIn()) {
+      this.getUserCart();
+    } else if (items && items.length) {
+      this.getItemsDetail(items);
+    } else {
+      this.setCartItem(null, [], false);
+    }
+  }
+
   getUserCart() {
     this.httpService.get('cart/items').subscribe(
       res => {
+        console.log('--->>>', res);
         this.getItemsDetail(res);
       });
   }

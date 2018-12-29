@@ -234,19 +234,18 @@ export class CheckoutService {
     });
   }
 
-  checkout() {
-    const data = this.accumulateData();
+  checkout(data) {
+    // const data = this.accumulateData();
     this.httpService.post('checkout', data).subscribe(res => {
         if (!this.authService.userDetails.userId) {
           this.ccRecipientData = null;
           let addresses = [];
-          localStorage.removeItem('address');
           if (!this.withDelivery) {
             addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
           }
           this.addresses$.next(addresses);
         }
-        this.cartService.emptyCart();
+        // this.cartService.emptyCart();
         this.selectedCustomerAddress = -1;
         this.selectedWarehouseAddress = -1;
         this.withDelivery = true;
@@ -255,7 +254,7 @@ export class CheckoutService {
         this.addressObj = {};
         this.ccRecipientData = null;
         this.addedProvince = '';
-        this.router.navigate(['/', 'profile']);
+        // this.router.navigate(['/', 'profile']);
       },
       err => console.error(err));
   }
@@ -297,7 +296,7 @@ export class CheckoutService {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.addressObj,
-      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
+      transaction_id: null,
       used_point: 0,
       used_balance: 0,
       total_amount: this.total,

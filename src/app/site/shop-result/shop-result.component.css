@@ -2,3 +2,9 @@
   font-family: iranyekan;
   margin-top: 10px;
 }
+
+.cancel-div {
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+}
