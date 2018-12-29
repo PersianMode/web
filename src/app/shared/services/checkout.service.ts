@@ -235,28 +235,32 @@ export class CheckoutService {
   }
 
   checkout(data) {
-    // const data = this.accumulateData();
-    this.httpService.post('checkout', data).subscribe(res => {
-        if (!this.authService.userDetails.userId) {
-          this.ccRecipientData = null;
-          let addresses = [];
-          if (!this.withDelivery) {
-            addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-          }
-          this.addresses$.next(addresses);
-        }
-        // this.cartService.emptyCart();
-        this.selectedCustomerAddress = -1;
-        this.selectedWarehouseAddress = -1;
-        this.withDelivery = true;
-        this.deliveryDays = null;
-        this.deliveryTime = null;
-        this.addressObj = {};
-        this.ccRecipientData = null;
-        this.addedProvince = '';
-        // this.router.navigate(['/', 'profile']);
-      },
-      err => console.error(err));
+    return new Promise((resolve, reject) => {
+      this.httpService.post('checkout', data)
+        .subscribe(res => {
+            if (!this.authService.userDetails.userId) {
+              this.ccRecipientData = null;
+              let addresses = [];
+              if (!this.withDelivery) {
+                addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+              }
+              this.addresses$.next(addresses);
+            }
+            this.selectedCustomerAddress = -1;
+            this.selectedWarehouseAddress = -1;
+            this.withDelivery = true;
+            this.deliveryDays = null;
+            this.deliveryTime = null;
+            this.addressObj = {};
+            this.ccRecipientData = null;
+            this.addedProvince = '';
+            resolve(res);
+          },
+          err => {
+            console.error('err', err);
+            reject(err);
+          });
+    });
   }
 
   calculateDeliveryDiscount(durationId) {

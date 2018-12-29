@@ -265,10 +265,10 @@ export class CheckoutPageComponent implements OnInit {
         });
         orderData.invoice_number = this.bankData.invoiceNumber;
         orderData.invoice_date = this.bankData.invoiceDate;
-        this.checkoutService.checkout(orderData);
+        return this.checkoutService.checkout(orderData);
       })
       .then(res => {
-        console.log(res);
+        console.log('resss : ', res);
         this.spinnerService.enable();
         this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
       })
