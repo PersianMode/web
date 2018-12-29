@@ -73,7 +73,7 @@ export class BarcodeCheckerComponent implements OnInit {
     this.httpService.post('order/ticket/scan', body).subscribe(res => {
       this.progressService.disable();
 
-      if (this.isHub && this.trigger === ScanTrigger.Inbox)
+      if (this.isHub && this._trigger === ScanTrigger.Inbox)
         this.dialog.open(DeliveryShelfCodeComponent, {
           width: '400px',
           disableClose: !(res && res.exist),
