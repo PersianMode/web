@@ -38,13 +38,14 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
+
   }
 
   ngAfterViewInit(): void {
     this.load();
-    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
-      this.load();
-    });
   }
 
   load() {

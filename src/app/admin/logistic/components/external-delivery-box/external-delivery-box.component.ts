@@ -67,14 +67,13 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
 
   ngOnInit() {
-    this.load();
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
   }
 
   ngAfterViewInit(): void {
     this.load();
-    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
-      this.load();
-    });
 
     this.trigger = this.isHub ? ScanTrigger.SendExternal : ScanTrigger.CCDelivery;
 
