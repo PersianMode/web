@@ -81,15 +81,14 @@
                     <b>شماره فاکتور: </b>{{ol.transaction_id}}
                   </p>
                 </td>
-
                 <td *ngFor="let el of ol.order_lines">
-                  {{ol.order_lines}}
-                  <div (click)="showOrderLine(el)"><b>نمایش </b> </div>
+                  <div (click)="showOrderLine(el)"><b>نمایش </b></div>
+         
                 </td>
               </tr>
 
               <!--<div style="margin: 10px" *ngFor="let el of ol.order_lines">-->
-                <!--<div (click)="showDetail(el)"><b>نمایش </b> </div>-->
+              <!--<div (click)="showDetail(el)"><b>نمایش </b> </div>-->
               <!--</div>-->
 
             </table>

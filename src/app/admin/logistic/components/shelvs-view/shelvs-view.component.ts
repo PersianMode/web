@@ -178,8 +178,9 @@ export class ShelvsViewComponent implements OnInit {
 
 
   showOrderLine(orderLines) {
+    // orderLines.map(x => x)
     this.dialog.open(OrderLineViewerComponent, {
-      width: '400px',
+      width: '800px',
       data: this.getProductDetail(orderLines)
     });
   }
