@@ -54,12 +54,6 @@
           <mat-cell *matCellDef="let order">{{order.shelf_code}}</mat-cell>
         </ng-container>
 
-        <!-- order_details column -->
-        <!--<ng-container matColumnDef="order_details">-->
-        <!--<mat-header-cell *matHeaderCellDef>محتویات</mat-header-cell>-->
-        <!--<mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>-->
-        <!--</ng-container>-->
-
         <!--status column-->
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
@@ -87,8 +81,10 @@
                     <b>شماره فاکتور: </b>{{ol.transaction_id}}
                   </p>
                 </td>
-                <td>
-                  <div (click)="showOrderLine(ol.order_lines)"><b>نمایش </b> </div>
+
+                <td *ngFor="let el of ol.order_lines">
+                  {{ol.order_lines}}
+                  <div (click)="showOrderLine(el)"><b>نمایش </b> </div>
                 </td>
               </tr>
 
