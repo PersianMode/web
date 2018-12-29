@@ -29,10 +29,9 @@
       </mat-tab>
     </ng-container>
 
-    <!-- when agent is not sales manager -->
+    <!-- not sales manager -->
     <ng-container *ngIf="!isSalesManager">
 
-      <!-- inbox (صندوق ورودی) -->
       <mat-tab label="inbox">
         <ng-template mat-tab-label>
           <span>صندوق ورودی</span>
@@ -54,25 +53,15 @@
         <app-internal-delivery-box (OnInternalDeliveryBoxCount)="InternalDeliveryBoxCount = $event"></app-internal-delivery-box>
       </mat-tab>
 
-
-      <mat-tab label="external-delivery-box" *ngIf="isHubClerk">
+      <mat-tab label="external-delivery-box" *ngIf="isShopClerk || isHubClerk">
         <ng-template mat-tab-label>
-          <span>صندوق ارسال به مشتری</span>
+          <span>{{isShopClerk ? 'صندوق تحویل به مشتری': 'صندوق ارسال به مشتری'}}</span>
           <mat-chip-list *ngIf="ExternalDeliveryBoxCount">
               <mat-chip color="accent" selected="true">{{ExternalDeliveryBoxCount}}</mat-chip>
             </mat-chip-list>
         </ng-template>
-        <app-external-delivery-box (OnExternalDeliveryBoxCount)="ExternalDeliveryBoxCount = $event"></app-external-delivery-box>
+        <app-external-delivery-box (OnExternalDeliveryBoxCount)="ExternalDeliveryBoxCount = $event" [isHub]="isHubClerk"></app-external-delivery-box>
       </mat-tab>
-
-
-      <mat-tab label="cc-delivery-box" *ngIf="isShopClerk && !isCentralStore">
-        <ng-template mat-tab-label>
-          <span>تحویل به مشتری</span>
-        </ng-template>
-        <app-cc-delivery-box></app-cc-delivery-box>
-      </mat-tab>
-
 
       <mat-tab label="return-view" *ngIf="isHubClerk">
         <ng-template mat-tab-label>

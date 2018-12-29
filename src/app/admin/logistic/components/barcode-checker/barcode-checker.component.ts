@@ -5,7 +5,6 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {DeliveryShelfCodeComponent} from '../delivery-shelf-code/delivery-shelf-code.component';
 import {AuthService} from '../../../../shared/services/auth.service';
-import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 import {MismatchConfirmComponent} from '../mismatch-confirm/mismatch-confirm.component';
 import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
 
@@ -22,7 +21,13 @@ export class BarcodeCheckerComponent implements OnInit {
 
 
   isHub = false;
-  @Input() trigger: Number;
+  _trigger: Number;
+
+  @Input()
+  set trigger(value: Number) {
+    this._trigger = value;
+  }
+
   @Input() extra: any;
 
   @Output() onMismatchListener = new EventEmitter();
@@ -35,7 +40,6 @@ export class BarcodeCheckerComponent implements OnInit {
 
 
   ngOnInit() {
-
 
     this.isHub = this.authService.userDetails.warehouse_id === this.authService.warehouses.find(x => x.is_hub)._id;
 
@@ -52,7 +56,7 @@ export class BarcodeCheckerComponent implements OnInit {
     );
   }
   checkBarcode(barcode) {
-    if (!this.trigger) {
+    if (!this._trigger) {
       this.openSnackBar('نوع اسکن مشخص نیست');
       return;
     }
@@ -60,7 +64,7 @@ export class BarcodeCheckerComponent implements OnInit {
 
     let body = {
       barcode,
-      trigger: this.trigger
+      trigger: this._trigger
     };
 
     if (this.extra)

@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {TitleService} from '../../shared/services/title.service';
-import { MatDialog } from '@angular/material';
-import { TicketComponent } from './components/ticket/ticket.component';
-import { AuthService } from '../../shared/services/auth.service';
+import {MatDialog} from '@angular/material';
+import {TicketComponent} from './components/ticket/ticket.component';
+import {AuthService} from '../../shared/services/auth.service';
+import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
 
 @Component({
   selector: 'app-logistic',
@@ -21,25 +22,22 @@ export class LogisticComponent implements OnInit {
   isSalesManager = false;
   isHubClerk = false;
   isShopClerk = false;
-  isCentralStore = false;
 
-  constructor( private dialog: MatDialog, private titleService: TitleService, private authService: AuthService) {
+  constructor(private titleService: TitleService, private authService: AuthService) {
   }
 
   ngOnInit() {
-    if (this.authService.userDetails.access_level === 1 ) {
+
+    const userDetails = this.authService.userDetails;
+    if (userDetails.access_level === AccessLevel.SalesManager) {
       this.isSalesManager = true;
     }
-    if (this.authService.userDetails.access_level === 2 ) {
-      this.isShopClerk = true;
+    if (userDetails.access_level === AccessLevel.ShopClerk) {
+      const foundWarehouse = this.authService.warehouses.find(x => x._id === userDetails.warehouse_id);
+      this.isShopClerk = foundWarehouse.has_customer_pickup;
     }
-    if (this.authService.userDetails.access_level === 3 ) {
+    if (userDetails.access_level === AccessLevel.HubClerk) {
       this.isHubClerk = true;
-    }
-    // you must to check central store
-    const is_central_warehouse = this.authService.warehouses.filter(w => !w.has_customer_pickup && !w.is_hub)[0]._id;
-    if (is_central_warehouse === this.authService.userDetails.warehouse_id) {
-      this.isCentralStore = true;
     }
 
     this.titleService.setTitleWithOutConstant('ادمین: سفارش‌ها');

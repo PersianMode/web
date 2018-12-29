@@ -32,7 +32,6 @@ import {InboxComponent} from './components/inbox/inbox.component';
 import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-confirm.component';
 import {InternalDeliveryBoxComponent} from './components/internal-delivery-box/internal-delivery-box.component';
 import {ExternalDeliveryBoxComponent} from './components/external-delivery-box/external-delivery-box.component';
-import {CCDeliveryComponent} from './components/cc-delivery-box/cc-delivery-box.component';
 import {ShelvsViewComponent} from './components/shelvs-view/shelvs-view.component';
 import {ReturnToWarehouseBoxComponent} from './components/return-to-warehouse-box/return-to-warehouse-box.component';
 import {DeliveryComponent} from './components/delivery/delivery.component';
@@ -40,6 +39,7 @@ import {DeliveryTrackingComponent} from './components/delivery/components/delive
 import {DeliveryHistoryComponent} from './components/delivery/components/delivery-history/delivery-history.component';
 import {NewInternalDeliveryComponent} from './components/delivery/components/new-internal-delivery/new-internal-delivery.component';
 import {DeliveryDetailsComponent} from './components/delivery/components/delivery-details/delivery-details.component';
+import {ExpiredDateDialogComponent} from './components/delivery/components/expired-date-dialog/expired-date-dialog.component';
 
 @NgModule({
   declarations: [
@@ -59,11 +59,11 @@ import {DeliveryDetailsComponent} from './components/delivery/components/deliver
     MismatchConfirmComponent,
     InternalDeliveryBoxComponent,
     ExternalDeliveryBoxComponent,
-    CCDeliveryComponent,
     ShelvsViewComponent,
     ReturnToWarehouseBoxComponent,
     DeliveryTrackingComponent,
-    DeliveryDetailsComponent
+    DeliveryDetailsComponent,
+    ExpiredDateDialogComponent
   ],
   imports: [
     LogisticRouting,
@@ -101,7 +101,9 @@ import {DeliveryDetailsComponent} from './components/delivery/components/deliver
     DeliveryShelfCodeComponent,
     MismatchConfirmComponent,
     DeliveryTrackingComponent,
-    DeliveryDetailsComponent],
+    DeliveryDetailsComponent,
+    ExpiredDateDialogComponent
+  ]
 })
 export class LogisticModule {
 }
