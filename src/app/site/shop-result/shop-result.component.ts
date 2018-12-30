@@ -41,80 +41,101 @@ export class ShopResultComponent implements OnInit {
       };
     });
 
-    this.cartService.cartItems.subscribe( carts => {
-      const productIds = [];
-      carts.forEach(p => productIds.push(p.product_id));
-      return new Promise((resolve, reject) => {
-        this.productService.loadProducts(productIds)
-          .then((data: any[]) => {
-          this.products = [];
-          carts.forEach(p => {
-            const item = {};
-            const product: any = data.filter(e => e._id === p.product_id)[0];
-            const instance = product.instances.filter(i => i._id === p.instance_id)[0];
-            const color = product.colors.filter(c => c._id === instance.product_color_id)[0];
-            const instances = [];
-            product.instances.forEach(instance => {
-              const newIncatnce = {
-                'price': instance.price,
-                'size': instance.size,
-                'instance_id': instance._id
-              };
-              newIncatnce['quantity'] = 0;
-              instance.inventory.forEach(inventory => newIncatnce['quantity'] += inventory.count - inventory.reserved);
-              instances.push(newIncatnce);
-            });
-            item['base_price'] = product.base_price;
-            item['color'] = {
-              '_id': color._id,
-              'color_id': color.color_id,
-              'name': color.name
-            };
-            item['count'] = 0;
-            instance.inventory.forEach(inventory => item['count'] += inventory.count - inventory.reserved);
-            item['discount'] = product.discount;
-            item['discountedPrice'] = instance.discountedPrice;
-            item['instance_id'] = p.instance_id;
-            item['instance_price'] = instance.price;
-            item['instances'] = instances;
-            item['name'] = product.name;
-            item['order_id'] = p.order_id;
-            item['price'] = instance.price;
-            item['product_id'] = p.product_id;
-            item['quantity'] = p.quantity;
-            item['size'] = instance.size;
-            item['tags'] = product.tags;
-            item['thumbnail'] = color.image.thumbnail;
-            item['type'] = product.type;
-            item['_id'] = p.instance_id;
-            this.products.push(item);
-          });
-          if (this.products)
-            this.checkoutService.setProductData(this.products);
-          this.bankReferData.cartItems = this.checkoutService.prepareCartItemsForShopRes();
-          return this.httpService.post('payResult', this.bankReferData)
-            .subscribe(res => {
-                this.resultObj = res.resultObj;
-                if (this.resultObj.result[0] === 'True') {
-                  localStorage.removeItem('address');
-                  this.cartService.emptyCart();
-                } else {
-                  this.cartService.loadCartsForShopRes();
-                }
-                this.jalali_date = dateFormatter(this.resultObj.invoiceDate[0]);
-                this.persian_trefId = this.resultObj.transactionReferenceID[0].split('').map(ch => (+ch).toLocaleString('fa')).join('');
-                this.spinnerService.disable();
-              },
-              err => {
-                console.log('ERR : ', err);
-                this.resultObj = err.error.resultObj;
-                this.cartService.loadCartsForShopRes();
-                this.spinnerService.disable();
-                reject();
+    return new Promise((resolve, reject) => {
+      this.httpService.post('payResult', this.bankReferData)
+        .subscribe(res => {
+            this.resultObj = res.resultObj;
+            if (this.resultObj.result[0] === 'True') {
+              this.cartService.cartItems.subscribe( carts => {
+                const productIds = [];
+                carts.forEach(p => productIds.push(p.product_id));
+                  return this.productService.loadProducts(productIds)
+                    .then((data: any[]) => {
+                      this.products = [];
+                      carts.forEach(p => {
+                        const item = {};
+                        const product: any = data.filter(e => e._id === p.product_id)[0];
+                        const instance = product.instances.filter(i => i._id === p.instance_id)[0];
+                        const color = product.colors.filter(c => c._id === instance.product_color_id)[0];
+                        const instances = [];
+                        product.instances.forEach(instance => {
+                          const newIncatnce = {
+                            'price': instance.price,
+                            'size': instance.size,
+                            'instance_id': instance._id
+                          };
+                          newIncatnce['quantity'] = 0;
+                          instance.inventory.forEach(inventory => newIncatnce['quantity'] += inventory.count - inventory.reserved);
+                          instances.push(newIncatnce);
+                        });
+                        item['base_price'] = product.base_price;
+                        item['color'] = {
+                          '_id': color._id,
+                          'color_id': color.color_id,
+                          'name': color.name
+                        };
+                        item['count'] = 0;
+                        instance.inventory.forEach(inventory => item['count'] += inventory.count - inventory.reserved);
+                        item['discount'] = product.discount;
+                        item['discountedPrice'] = instance.discountedPrice;
+                        item['instance_id'] = p.instance_id;
+                        item['instance_price'] = instance.price;
+                        item['instances'] = instances;
+                        item['name'] = product.name;
+                        item['order_id'] = p.order_id;
+                        item['price'] = instance.price;
+                        item['product_id'] = p.product_id;
+                        item['quantity'] = p.quantity;
+                        item['size'] = instance.size;
+                        item['tags'] = product.tags;
+                        item['thumbnail'] = color.image.thumbnail;
+                        item['type'] = product.type;
+                        item['_id'] = p.instance_id;
+                        this.products.push(item);
+                      });
+                      if (this.products)
+                        this.checkoutService.setProductData(this.products);
+                      this.bankReferData.cartItems = this.checkoutService.prepareCartItemsForShopRes();
+                      
+                      return this.httpService.post('payResult', this.bankReferData)
+                        .subscribe(res => {
+                            this.resultObj = res.resultObj;
+                            if (this.resultObj.result[0] === 'True') {
+                              localStorage.removeItem('address');
+                              this.cartService.emptyCart();
+                            } else {
+                              this.cartService.loadCartsForShopRes();
+                            }
+                            this.jalali_date = dateFormatter(this.resultObj.invoiceDate[0]);
+                            this.persian_trefId = this.resultObj.transactionReferenceID[0].split('').map(ch => (+ch).toLocaleString('fa')).join('');
+                            this.spinnerService.disable();
+                          },
+                          err => {
+                            console.log('ERR : ', err);
+                            this.resultObj = err.error.resultObj;
+                            this.cartService.loadCartsForShopRes();
+                            this.spinnerService.disable();
+                            reject();
+                          });
+                    });
               });
-        });
-      });
-      });
+              localStorage.removeItem('address');
+              this.cartService.emptyCart();
+            } else {
+              this.cartService.loadCartsForShopRes();
+            }
+            this.jalali_date = dateFormatter(this.resultObj.invoiceDate[0]);
+            this.persian_trefId = this.resultObj.transactionReferenceID[0].split('').map(ch => (+ch).toLocaleString('fa')).join('');
+            this.spinnerService.disable();
+          },
+          err => {
+            console.log('ERR : ', err);
+            this.resultObj = err.error.resultObj;
+            this.cartService.loadCartsForShopRes();
+            this.spinnerService.disable();
+            reject();
+          });
+    });
   }
 
   makePersianNumber(a: string) {
@@ -123,3 +144,5 @@ export class ShopResultComponent implements OnInit {
     return (+a).toLocaleString('fa', {useGrouping: false});
   }
 }
+
+
