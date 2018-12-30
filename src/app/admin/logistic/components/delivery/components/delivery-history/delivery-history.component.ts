@@ -131,40 +131,40 @@ export class DeliveryHistoryComponent implements OnInit {
   }
 
   getDeliveryItems() {
-    this.progressService.enable();
-    this.httpService.post('delivery/items/' + (this.offset ? this.offset : 0) + '/' + (this.limit ? this.limit : 10), {
-      sort_column: this.sortColumn,
-      agentName: this.agentName,
-      transferee: this.transferee,
-      direction: this.direction,
-      delivery_end: this.endDateSearch,
-      delivery_start: this.startDateSearch,
-      isInternal: this.isInternal,
-      isDelivered: this.isDelivered,
-      isReturn: this.isReturn,
-      missDeliveryAgent: this.missDeliveryAgent,
-    }).subscribe(
-      data => {
-        this.deliveryItems = [];
+    // this.progressService.enable();
+    // this.httpService.post('delivery/items/' + (this.offset ? this.offset : 0) + '/' + (this.limit ? this.limit : 10), {
+    //   sort_column: this.sortColumn,
+    //   agentName: this.agentName,
+    //   transferee: this.transferee,
+    //   direction: this.direction,
+    //   delivery_end: this.endDateSearch,
+    //   delivery_start: this.startDateSearch,
+    //   isInternal: this.isInternal,
+    //   isDelivered: this.isDelivered,
+    //   isReturn: this.isReturn,
+    //   missDeliveryAgent: this.missDeliveryAgent,
+    // }).subscribe(
+    //   data => {
+    //     this.deliveryItems = [];
 
-        if (data) {
-          this.deliveryItems = data.result;
-          this.selection.clear();
-          this.setDataSource(this.deliveryItems);
-        } else
-          this.setDataSource([]);
+    //     if (data) {
+    //       this.deliveryItems = data.result;
+    //       this.selection.clear();
+    //       this.setDataSource(this.deliveryItems);
+    //     } else
+    //       this.setDataSource([]);
 
-        this.totalRecords = data && data.total ? data.total : 0;
-        this.progressService.disable();
-      },
-      err => {
-        console.error('Cannot get data: ', err);
-        this.snackBar.open('در حال حاضر قادر به دریافت اطلاعات نیستیم. دوباره تلاش کنید', null, {
-          duration: 3200,
-        });
-        this.progressService.disable();
-      }
-    );
+    //     this.totalRecords = data && data.total ? data.total : 0;
+    //     this.progressService.disable();
+    //   },
+    //   err => {
+    //     console.error('Cannot get data: ', err);
+    //     this.snackBar.open('در حال حاضر قادر به دریافت اطلاعات نیستیم. دوباره تلاش کنید', null, {
+    //       duration: 3200,
+    //     });
+    //     this.progressService.disable();
+    //   }
+    // );
   }
 
   setDataSource(data) {

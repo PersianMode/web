@@ -12,7 +12,9 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "types": ["jasmine"],
+    "types": [
+      "jasmine"
+    ],
     "lib": [
       "es2016",
       "dom"
@@ -20,3 +22,7 @@
     "module": "es2015"
   }
 }
+
+
+
+

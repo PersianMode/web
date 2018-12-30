@@ -42,14 +42,15 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource();
-    this.getDeliveryAgents();
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
+
   }
 
   ngAfterViewInit(): void {
     this.load();
-    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
-      this.load();
-    });
+    this.getDeliveryAgents();
   }
 
 
