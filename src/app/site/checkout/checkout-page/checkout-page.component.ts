@@ -253,6 +253,7 @@ export class CheckoutPageComponent implements OnInit {
 
     this.finalCheckItems()
       .then(res => {
+        console.log('FINAL CHECK RESULT : ', res);
         // first-step-1 :
         // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
         // from server to post and redirect to bank gateway page
@@ -268,7 +269,6 @@ export class CheckoutPageComponent implements OnInit {
         return this.checkoutService.checkout(orderData);
       })
       .then(res => {
-        console.log('resss : ', res);
         this.spinnerService.enable();
         this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
       })

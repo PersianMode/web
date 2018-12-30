@@ -74,7 +74,6 @@ export class CartService {
   getUserCart() {
     this.httpService.get('cart/items').subscribe(
       res => {
-        console.log('--->>>', res);
         this.getItemsDetail(res);
       });
   }
@@ -106,7 +105,7 @@ export class CartService {
       // Update local storage
       let tempItems = this.getItemsFromStorage();
       tempItems = tempItems.filter(el => el.product_id !== value.product_id
-        && el.instance_id !== value.instance_id);
+        || el.instance_id !== value.instance_id);
 
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));

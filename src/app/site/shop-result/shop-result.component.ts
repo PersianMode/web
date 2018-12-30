@@ -23,15 +23,19 @@ export class ShopResultComponent implements OnInit {
   }
 
   ngOnInit() {
+    const cartItems = null;
     this.spinnerService.enable();
+    // this.cartService.loadCartsForShopRes();
     this.route.queryParams.subscribe(params => {
       this.bankReferData = {
         tref: params.tref,
         invoiceNumber: params.iN,
         invoiceDate: params.iD,
+        cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       };
     });
     return new Promise((resolve, reject) => {
+      console.log(cartItems);
       this.httpService.post('payResult', this.bankReferData)
         .subscribe(res => {
             this.resultObj = res.resultObj;
