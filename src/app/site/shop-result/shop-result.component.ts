@@ -96,7 +96,7 @@ export class ShopResultComponent implements OnInit {
                       if (this.products)
                         this.checkoutService.setProductData(this.products);
                       this.bankReferData.cartItems = this.checkoutService.prepareCartItemsForShopRes();
-                      
+
                       return this.httpService.post('payResult', this.bankReferData)
                         .subscribe(res => {
                             this.resultObj = res.resultObj;
