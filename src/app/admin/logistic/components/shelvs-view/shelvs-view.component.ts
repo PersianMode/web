@@ -32,7 +32,7 @@ export class ShelvsViewComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'shelf_code',  'status' , 'category'];
+  displayedColumns = ['position', 'shelf_code', 'status', 'category'];
   expandedElement: any;
   total;
   pageSize = 10;
@@ -97,6 +97,27 @@ export class ShelvsViewComponent implements OnInit {
     this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
       console.log('res: ', res);
+
+      for (let delivery of res.data) {
+        const order_data = [];
+        let order_details = delivery.order_details;
+        let order_lines = delivery.order_lines;
+        order_lines.forEach(x => {
+          let foundOrder = order_details.find(y => y.order_line_ids === x.order_lines_id);
+          let preOrderData = order_data.find(y => y.order_id === foundOrder.order_id)
+          if (preOrderData) {
+            preOrderData.order_lines.push(x)
+          } else {
+            order_data.push(Object.assign(foundOrder, {order_lines: [x]}, {transaction_id: delivery.transaction_id},
+              {order_time: delivery.order_time}));
+          }
+        });
+
+        delivery.orders = order_data;
+      }
+
+      console.log('dliveries', res.data);
+
       const rows = [];
 
       if (this._status === true) {
@@ -165,7 +186,7 @@ export class ShelvsViewComponent implements OnInit {
   }
 
   getCategory(category) {
-    if(category.customer)
+    if (category.customer)
       return this.statusList.externalMessage;
     else if (category.warehouse_id)
       return this.statusList.internalMessage;
