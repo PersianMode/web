@@ -18,7 +18,7 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   @Output() OnInternalDeliveryBoxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status'];
+  displayedColumns = ['position', 'details', 'name', 'barcode', 'status'];
   dataSource: MatTableDataSource<any>;
 
 
