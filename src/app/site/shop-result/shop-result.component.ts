@@ -34,7 +34,6 @@ export class ShopResultComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.httpService.post('payResult', this.bankReferData)
         .subscribe(res => {
-            console.log('++++++++++', res.resultObj);
             this.resultObj = res.resultObj;
             if (this.resultObj.result[0] === 'True') {
               localStorage.removeItem('address');
@@ -47,7 +46,6 @@ export class ShopResultComponent implements OnInit {
             this.spinnerService.disable();
           },
           err => {
-            console.log('----------');
             console.log('ERR : ', err);
             this.resultObj = err.error.resultObj;
             this.cartService.loadCartsForShopRes();
