@@ -7,8 +7,9 @@
       <button mat-icon-button color="primary" (click)="getData()" style="margin-top: 10px;">
         <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
       </button>
-    <div class="button">
-    <button color="primary" (click)="printReport('x')">چاپ گزارش روزانه</button></div>
+    <div class="button" *ngIf="printButton">
+    <button color="primary" (click)="printReport('x')">چاپ گزارش روزانه</button>
+    </div>
 
       <mat-table #table [dataSource]="dataSource" matSort>
 

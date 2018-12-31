@@ -18,7 +18,7 @@ export class DailySalesReportComponent implements OnInit {
   totalRecords = 0;
   position;
   displayedColumns = ['position', 'order_time', 'total_amount', 'total_order_lines', 'customer_name'];
-
+  printButton = false;
   dataSource: MatTableDataSource<any>;
 
   constructor(private dialog: MatDialog, private httpService: HttpService,
@@ -36,11 +36,15 @@ export class DailySalesReportComponent implements OnInit {
 
       this.dataSource = new MatTableDataSource(data);
       this.orderNumber = data;
-      if(data) {
+      if(data.length) {
+        this.printButton = true;
         this.total = 0;
         data.forEach(x => { return this.total += x.total_amount});
       }
-      else this.total = 0;
+      else {
+        this.total = 0;
+        this.printButton = false;
+      }
 
       this.totalRecords = data && data.total ? data.total : 0;
       this.progressService.disable();
