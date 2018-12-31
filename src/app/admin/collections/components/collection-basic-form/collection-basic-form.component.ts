@@ -1,10 +1,10 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {HttpService} from '../../../../shared/services/http.service';
-import {isUndefined} from 'util';
-import {MatSnackBar} from '@angular/material';
-import {ProgressService} from '../../../../shared/services/progress.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { HttpService } from '../../../../shared/services/http.service';
+import { isUndefined } from 'util';
+import { MatSnackBar } from '@angular/material';
+import { ProgressService } from '../../../../shared/services/progress.service';
 
 @Component({
   selector: 'app-collection-basic-form',
@@ -16,12 +16,12 @@ export class CollectionBasicFormComponent implements OnInit {
   @Output() onCollectionIdChanged = new EventEmitter<string>();
   originalCollection: any = null;
   collectionForm: FormGroup;
-
+  id: string = null;
   anyChanges = false;
   upsertBtnShouldDisabled = false;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-              private httpService: HttpService, private snackBar: MatSnackBar) {
+    private httpService: HttpService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -29,7 +29,9 @@ export class CollectionBasicFormComponent implements OnInit {
 
     this.route.params.subscribe(
       (params) => {
+
         this.collectionId = params['id'] && params['id'] !== 'null' ? params['id'] : null;
+        this.id = params['id'] && params['id'] !== 'null' ? params['id'] : null;
         this.initCollectionInfo();
       }
     );
@@ -52,8 +54,8 @@ export class CollectionBasicFormComponent implements OnInit {
         Validators.required,
       ]],
     }, {
-      validator: this.basicInfoValidation
-    });
+        validator: this.basicInfoValidation
+      });
   }
 
   initCollectionInfo() {
@@ -92,6 +94,7 @@ export class CollectionBasicFormComponent implements OnInit {
   }
 
   submitCollection() {
+
     const sendingData = {
       name: this.collectionForm.controls['name'].value,
       name_fa: this.collectionForm.controls['name_fa'].value,
@@ -114,12 +117,13 @@ export class CollectionBasicFormComponent implements OnInit {
 
         this.anyChanges = false;
         this.collectionId = data._id;
-        this.originalCollection = Object.assign({_id: data._id}, data);
+        this.originalCollection = Object.assign({ _id: data._id }, data);
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
 
         this.collectionId = data._id;
         this.onCollectionIdChanged.emit(this.collectionId);
+        this.submitpage()
 
 
       },
@@ -161,5 +165,25 @@ export class CollectionBasicFormComponent implements OnInit {
 
   basicInfoValidation(AC: AbstractControl) {
 
+  }
+  submitpage() {
+    const data = {
+      address: 'collection/' + this.collectionForm.controls['name'].value,
+      title: this.collectionForm.controls['name_fa'].value,
+      is_app: false,
+      collection_id: this.collectionId,
+      content: null,
+    };
+    this.progressService.enable();
+    let func;
+    // add a new page
+    func = this.httpService.put(`page`, data);
+    func.subscribe(
+      (result: any) => {
+        this.snackBar.open('page is ' + (this.id ? 'updated' : 'added'), null, {
+          duration: 2300,
+        });
+      }
+    );
   }
 }

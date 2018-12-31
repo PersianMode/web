@@ -7,6 +7,7 @@ import {AuthService} from '../../services/auth.service';
 import {PageService} from '../../services/page.service';
 import {WINDOW} from '../../services/window.service';
 import {CartService} from '../../services/cart.service';
+import {CheckoutService} from '../../services/checkout.service'
 import {LoginStatus} from '../../../site/login/login-status.enum';
 
 @Component({
@@ -25,6 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(public dialog: MatDialog, private authService: AuthService,
               private pageService: PageService, private router: Router,
+              private CheckoutService : CheckoutService,
               @Inject(WINDOW) private window, private cartService: CartService) {
   }
 
@@ -88,6 +90,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
+    this.CheckoutService.ccRecipientData=null;
+
   }
 
   ngOnDestroy() {
