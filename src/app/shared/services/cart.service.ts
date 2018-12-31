@@ -47,16 +47,12 @@ export class CartService {
                 );
             });
           }
-
           this.getUserCart();
-
         } else if (items && items.length) {
           this.getItemsDetail(items);
         } else {
           this.setCartItem(null, [], false);
         }
-
-
       });
   }
 
@@ -66,15 +62,32 @@ export class CartService {
       this.getUserCart();
     } else if (items && items.length) {
       this.getItemsDetail(items);
-    } else {
-      this.setCartItem(null, [], false);
     }
   }
+
 
   getUserCart() {
     this.httpService.get('cart/items').subscribe(
       res => {
         this.getItemsDetail(res);
+      });
+  }
+
+  getItemsDetail(overallDetails) {
+    this.productService.loadProducts(overallDetails.map(x => x.product_id))
+      .then(res => {
+        try {
+          this.setCartItem(overallDetails, res, false);
+        } catch (err) {
+          console.error('-> ', err);
+        }
+      })
+      .catch(err => {
+        try {
+          this.setCartItem(null, [], false);
+        } catch (err) {
+          console.error('-> ', err);
+        }
       });
   }
 
@@ -188,23 +201,6 @@ export class CartService {
     }
   }
 
-  getItemsDetail(overallDetails) {
-    this.productService.loadProducts(overallDetails.map(x => x.product_id))
-      .then(res => {
-        try {
-          this.setCartItem(overallDetails, res, false);
-        } catch (err) {
-          console.error('-> ', err);
-        }
-      })
-      .catch(err => {
-        try {
-          this.setCartItem(null, [], false);
-        } catch (err) {
-          console.error('-> ', err);
-        }
-      });
-  }
 
   private setCartItem(overallDetails, products, isUpdate = true) {
     const itemList = [];

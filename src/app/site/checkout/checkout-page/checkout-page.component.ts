@@ -277,5 +277,6 @@ export class CheckoutPageComponent implements OnInit {
         this.spinnerService.disable();
       });
   }
+
 }
 
