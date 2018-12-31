@@ -113,41 +113,17 @@ export class ShopResultComponent implements OnInit {
                   return this.finalCheckItems();
                 })
                 .then((finalCheckData: any) => {
-                  console.log('Final check res : ', finalCheckData);
-                  this.soldOuts = finalCheckData.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
-                  this.discountChanges =
-                    finalCheckData.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
-                  this.priceChanges = finalCheckData.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
-                  if ((this.soldOuts && this.soldOuts.length) ||
-                    (this.discountChanges && this.discountChanges.length) ||
-                    (this.priceChanges && this.priceChanges.length)) {
-                    this.changeMessage = '';
-
-                    if (!!this.soldOuts && !!this.soldOuts.length)
-                      this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
-                    else if (this.discountChanges && this.discountChanges.length)
-                      this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
-                    else if (this.priceChanges && this.priceChanges.length)
-                      this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
-
-                    this.productService.updateProducts(finalCheckData);
-                    console.log('--->>>>>>>>>>>>>', this.changeMessage);
-
-
-                    if (this.changeMessage) {
-                      this.spinnerService.disable();
-                      return Promise.reject(this.changeMessage);
-                    }
+                  if (this.changeMessage) {
+                    console.log(finalCheckData);
                   } else {
                     this.bankReferData.amount = this.payResult.amount[0];
                     return this.httpService.post('verifyTransaction', this.bankReferData)
                       .subscribe(verifyRes => {
-                          // this.resultObj = res.resultObj;
-                          if (verifyRes.resultObj.result[0] === 'True') {
+                          if (verifyRes.actionResult.result[0] === 'True') {
                             localStorage.removeItem('address');
                             this.cartService.emptyCart();
                             this.spinnerService.disable();
-                          } else if (verifyRes.resultObj.result[0] === 'False') {
+                          } else if (verifyRes.actionResult.result[0] === 'False') {
                             this.cartService.loadCartsForShopRes();
                             this.spinnerService.disable();
                             return Promise.reject('Verify Failed');
@@ -182,6 +158,31 @@ export class ShopResultComponent implements OnInit {
   finalCheckItems() {
     return new Promise((resolve, reject) => {
       this.checkoutService.finalCheck().subscribe(res => {
+          console.log('Final check res : ', res);
+          this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
+          this.discountChanges =
+            res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
+          this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
+          if ((this.soldOuts && this.soldOuts.length) ||
+            (this.discountChanges && this.discountChanges.length) ||
+            (this.priceChanges && this.priceChanges.length)) {
+            this.changeMessage = '';
+
+            if (!!this.soldOuts && !!this.soldOuts.length)
+              this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده اند';
+            else if (this.discountChanges && this.discountChanges.length)
+              this.changeMessage = 'برخی از تخفیف ها تغییر کرده است';
+            else if (this.priceChanges && this.priceChanges.length)
+              this.changeMessage = 'برخی از قیمت ها تغییر کرده است';
+
+            this.productService.updateProducts(res);
+
+            if (this.changeMessage) {
+              reject(this.changeMessage);
+            } else {
+              resolve(res);
+            }
+          }
           resolve(res);
         },
         err => {
