@@ -40,13 +40,13 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
 
   ngOnInit() {
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
   }
 
   ngAfterViewInit(): void {
     this.load();
-    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
-      this.load();
-    });
   }
 
   load() {
@@ -126,7 +126,7 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngOnDestroy(): void {
-      this.socketSubscription.unsubscribe();
+    this.socketSubscription.unsubscribe();
   }
 
 
