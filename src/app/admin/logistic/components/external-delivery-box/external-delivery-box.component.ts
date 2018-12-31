@@ -180,6 +180,14 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   }
 
+  getCustomer(order) {
+    try {
+      return order.address.recipient_name + ' ' + order.address.recipient_surname;
+    } catch (err) {
+    }
+
+  }
+
   showDetial(orderLine) {
     this.dialog.open(ProductViewerComponent, {
       width: '400px',
