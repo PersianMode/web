@@ -74,7 +74,6 @@ export class CartService {
   getUserCart() {
     this.httpService.get('cart/items').subscribe(
       res => {
-        console.log('--->>>', res);
         this.getItemsDetail(res);
       });
   }

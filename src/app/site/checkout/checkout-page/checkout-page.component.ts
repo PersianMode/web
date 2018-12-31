@@ -268,7 +268,6 @@ export class CheckoutPageComponent implements OnInit {
         return this.checkoutService.checkout(orderData);
       })
       .then(res => {
-        console.log('resss : ', res);
         this.spinnerService.enable();
         this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
       })

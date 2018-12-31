@@ -43,19 +43,19 @@ export class CartComponent implements OnInit, OnDestroy {
 
     this.showHideSpinner(true);
     this.subs = this.cartService.cartItems.subscribe(carts => {
-      let productIds = [];
+      const productIds = [];
       carts.forEach(p => productIds.push(p.product_id));
       const prevProductCount = this.products.length;
       this.productService.loadProducts(productIds).then((data: any[]) => {
         this.products = [];
         carts.forEach(p => {
-          let item = {};
-          let product: any = data.filter(e => e._id === p.product_id)[0];
-          let instance = product.instances.filter(i => i._id === p.instance_id)[0];
-          let color = product.colors.filter(c => c._id === instance.product_color_id)[0];
-          let instances = [];
+          const item = {};
+          const product: any = data.filter(e => e._id === p.product_id)[0];
+          const instance = product.instances.filter(i => i._id === p.instance_id)[0];
+          const color = product.colors.filter(c => c._id === instance.product_color_id)[0];
+          const instances = [];
           product.instances.forEach(instance => {
-            let newIncatnce = {
+            const newIncatnce = {
               'price': instance.price,
               'size': instance.size,
               'instance_id': instance._id
