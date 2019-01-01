@@ -10,6 +10,8 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {ORDER_LINE_STATUS, ORDER_STATUS} from '../../../../shared/enum/status.enum';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
+import {OrderStatuses} from '../../../../shared/lib/status';
+import * as moment from 'moment';
 
 
 @Component({
@@ -19,12 +21,14 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 })
 export class OrdersComponent implements OnInit, OnDestroy {
   profileOrder = [];
-
+  checkOrder;
   displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'discount', 'used_point', 'address', 'view_details', 'return_order'];
   isMobile = false;
   selectedOrder;
   isQuantityMoreThanOne;
   quantities: any[] = [];
+  orderInfo: any;
+  returnOrderTime;
   @Output() closeDialog = new EventEmitter<boolean>();
 
 
@@ -41,8 +45,10 @@ export class OrdersComponent implements OnInit, OnDestroy {
       if (!result.length)
         return;
       this.profileOrder = result;
+      this.orderInfo = result;
       this.profileOrder.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.order_time));
     });
+    console.log('order info', this.orderInfo);
     this.isMobile = this.responsiveService.isMobile;
     this.profileOrderService.getAllOrders();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
@@ -56,7 +62,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   goToOrderLines(orderId) {
     this.profileOrderService.getAllOrders();
-
+    console.log('profile order', this.profileOrder);
     this.selectedOrder = {
       orderId: orderId,
       dialog_order: this.profileOrder.find(el => el._id === orderId),
@@ -87,7 +93,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     let options: any = {
       orderId: this.orderInfo.orderId,
       orderLineId: ol.order_line_id,
-      productIntanceId: ol.product_instance._id
+      // productInstanceId: ol.product_instance._id
     }
     if (multi) {
       options = {
@@ -95,7 +101,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         orderLineId: ol.order_line_id,
         quantity: 1,
         // this.quantitySelected,
-        productIntanceId: ol.product_instance._id
+        productInstanceId: ol.product_instance._id
       };
     }
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
@@ -110,7 +116,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
             .subscribe(
               data => {
                 this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
-                this.changeOrderLine(ol);
+                // this.changeOrderLine(ol);
                 this.closeDialog.emit(false);
                 this.progressService.disable();
               },
@@ -128,25 +134,27 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
 
   checkCancelOrder(order) {
-    return order.tickets.every(tk =>
-      tk.status === ORDER_STATUS.WaitForAggregation
-    );
+    return (order.last_ticket.status === ORDER_STATUS.WaitForAggregation)
   }
 
   checkReturnOrder(order) {
+    this.returnOrderTime = moment(order.order_time).add(7, 'd');
+    console.log('return time', this.returnOrderTime);
+    // const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
+    if (this.returnOrderTime > order.order_time)
+      return (order.last_ticket.status === ORDER_STATUS.Delivered)
+    // else return false;
+    // );
+    // this.ticket.desc.day.day_slot =  moment(this.dateObject, 'jYYYY/jM/jD').format('YYYY-M-D hh:mm:ss');
 
-    const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
-    return order.tickets.find(tk => tk.status === ORDER_STATUS.Return
-      && date > Date.now()
-    );
   }
 
-  returnOrder(orders) {
-    this.orderObject = {
-      orderLine: orders,
-      order: this.orderInfo
-    };
-    this.profileOrderService.orderData = this.orderObject;
+  returnOrder(order) {
+    // this.orderObject = {
+    //   orderLine: orders,
+    //   order: this.orderInfo
+    // };
+    // this.profileOrderService.orderData = this.orderObject;
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/profile/orderline/return`]);
     } else {
@@ -162,20 +170,26 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }
   }
 
-  cancelOrder(orders) {
+  cancelOrder(order) {
     this.quantities = [];
     // check if quantity more than 1, we need show have many order_line need to cancel
-    if (orders.quantity > 1) {
-      for (let index = 1; index <= orders.quantity; index++) {
+    if (order.quantity > 1) {
+      for (let index = 1; index <= order.quantity; index++) {
         this.quantities.push({
           value: index,
           viewValue: index
         });
       }
-      this.isQuantityMoreThanOne = orders.order_line_id;
+      this.isQuantityMoreThanOne = order.order_line_id;
     } else {
-      this.showDialogCancelOrder(orders, false);
+      this.showDialogCancelOrder(order, false);
     }
   }
+
+  checkOrderStatus(order) {
+    if (!(order.last_ticket.status === ORDER_STATUS.Delivered || order.last_ticket.status === ORDER_STATUS.WaitForAggregation))
+      return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
+  }
+
 }
 

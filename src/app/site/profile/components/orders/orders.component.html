@@ -56,18 +56,15 @@
 
   <!-- return order -->
   <ng-container matColumnDef="return_order">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>مرجوع - لغو سفارش</mat-header-cell>
-        <mat-cell *matCellDef="let order" style=" font-size: 20px">
-          <button *ngIf="checkReturnOrder(orders)" matTooltip="مرجوع کردن کالا" class="action-button" (click)="returnOrder(orders)">
-            <i class="fa fa-undo"></i>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>وضعیت سفارش</mat-header-cell>
+        <mat-cell *matCellDef="let order" style=" font-size: 12px">
+          <button *ngIf="checkReturnOrder(order)" class="status-button" (click)="returnOrder(order)">
+          {{"بازگشت کالا"}}
           </button>
-          <button *ngIf="checkCancelOrder(orders)" matTooltip="کنسل کردن خرید" class="action-button" (click)="cancelOrder(orders)">
-            <i class="fa fa-times"></i>
+          <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
+            {{"لغو خرید"}}
           </button>
-            <!--<button class="action-button" (click)="returnOrder(order._id)" >-->
-              <!--&lt;!&ndash;[disabled]="orderTime(order)"&ndash;&gt;-->
-              <!--<i class="fa fa-undo"></i>-->
-            <!--</button>-->
+           <div>{{checkOrderStatus(order)}}</div>
           </mat-cell>
   </ng-container>
 
