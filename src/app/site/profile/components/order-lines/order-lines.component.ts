@@ -70,7 +70,7 @@ export class OrderLinesComponent implements OnInit {
       el.quantity = 1;
       el.product_instance.displaySize = this.dict.setShoesSize(el.product_instance.size, gender, el.product.product_type.name);
       this.noDuplicateOrderLine.push(el);
-      // } 
+      // }
       // else {
       //   this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
       // }
@@ -105,7 +105,7 @@ export class OrderLinesComponent implements OnInit {
       useGrouping: isPrice
     });
   }
-  
+
   OrderLineStatus(ol) {
     return ol.tickets.length !== 0 ? OrderLineStatuses.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
   }
@@ -128,9 +128,7 @@ export class OrderLinesComponent implements OnInit {
 
   checkReturnOrderLine(ol) {
     const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
-    return ol.tickets.find(tk => tk.status === ORDER_LINE_STATUS.Delivered &&
-      (tk.status !== ORDER_LINE_STATUS.Return || tk.status !== ORDER_LINE_STATUS.CustomerCancel) &&
-      !ol['returnFlag'] &&
+    return ol.tickets.find(tk => tk.status === ORDER_LINE_STATUS.Return &&
       date > Date.now()
     );
   }

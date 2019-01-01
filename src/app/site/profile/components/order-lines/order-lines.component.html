@@ -56,7 +56,7 @@
               <div style="height: 20%">
 
                 <ng-container *ngIf="isQuantityMoreThanOne !== ol.order_line_id; else elseTemplate">
-                  <button *ngIf="checkCancelOrderLine(ol)" matTooltip="کنسل کردن خرید" class="clickable-link" (click)="cancelOrderLine(ol)">
+                  <button *ngIf="checkCancelOrderLine(ol)" matTooltip="کنسل کردن خرید" class="action-button" (click)="cancelOrderLine(ol)">
                     <i class="fa fa-times"></i>
                   </button>
                 </ng-container>
@@ -69,7 +69,7 @@
                   </button>
                 </ng-template>
 
-                <button *ngIf="checkReturnOrderLine(ol)" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrderLine(ol)">
+                <button *ngIf="checkReturnOrderLine(ol)" matTooltip="مرجوع کردن کالا" class="action-button" (click)="returnOrderLine(ol)">
                   <i class="fa fa-undo"></i>
                 </button>
               </div>

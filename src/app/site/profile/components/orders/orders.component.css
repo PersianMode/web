@@ -40,7 +40,7 @@ mat-cell {
 }
 
 .button.disabled {
-    opacity: 0.65; 
+    opacity: 0.65;
     cursor: not-allowed;
 }
 
@@ -49,6 +49,15 @@ dp-day-calendar .dp-day-calendar-container {
     top: -300px !important;
     right: -300px !important;
   }
-  
-  
-  
+
+.action-button {
+  text-align: center;
+  padding: 3px;
+  background-color: black;
+  color: white;
+  height: 35px !important;
+  border: 0;
+  margin: 1px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

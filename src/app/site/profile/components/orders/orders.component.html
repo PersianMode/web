@@ -55,14 +55,21 @@
   </ng-container>
 
   <!-- return order -->
-  <!-- <ng-container matColumnDef="return_order">
-    <mat-header-cell *matHeaderCellDef mat-sort-header> مرجوع سفارش</mat-header-cell>
+  <ng-container matColumnDef="return_order">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>مرجوع - لغو سفارش</mat-header-cell>
         <mat-cell *matCellDef="let order" style=" font-size: 20px">
-            <button class="clickable-link" (click)="returnOrder(order._id)" [disabled]="orderTime(order)">
-              <i class="fa fa-undo"></i>
-            </button>
+          <button *ngIf="checkReturnOrder(orders)" matTooltip="مرجوع کردن کالا" class="action-button" (click)="returnOrder(orders)">
+            <i class="fa fa-undo"></i>
+          </button>
+          <button *ngIf="checkCancelOrder(orders)" matTooltip="کنسل کردن خرید" class="action-button" (click)="cancelOrder(orders)">
+            <i class="fa fa-times"></i>
+          </button>
+            <!--<button class="action-button" (click)="returnOrder(order._id)" >-->
+              <!--&lt;!&ndash;[disabled]="orderTime(order)"&ndash;&gt;-->
+              <!--<i class="fa fa-undo"></i>-->
+            <!--</button>-->
           </mat-cell>
-  </ng-container> -->
+  </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns:displayedColumns"></mat-row>
