@@ -57,6 +57,7 @@ export class CheckoutPageComponent implements OnInit {
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
   bankData: any = null;
+  isDev: boolean = true;
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -71,6 +72,7 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isDev = this.httpService.isInDevMode();
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {
@@ -253,7 +255,6 @@ export class CheckoutPageComponent implements OnInit {
 
     this.finalCheckItems()
       .then(res => {
-        console.log('FINAL CHECK RESULT : ', res);
         // first-step-1 :
         // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
         // from server to post and redirect to bank gateway page
@@ -278,5 +279,15 @@ export class CheckoutPageComponent implements OnInit {
       });
   }
 
+
+  checkoutDemo() {
+    this.finalCheckItems()
+      .then(res => {
+        this.checkoutService.checkoutDemo();
+      })
+      .catch(err => {
+        console.error('Error in final check: ', err);
+      });
+  }
 }
 

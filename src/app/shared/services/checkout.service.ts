@@ -300,6 +300,61 @@ export class CheckoutService {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.addressObj,
+      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
+      used_point: 0,
+      used_balance: 0,
+      total_amount: this.total,
+      discount: this.discount,
+      is_collect: !this.withDelivery,
+      duration_days: this.withDelivery ? this.deliveryDays : null,
+      time_slot: this.withDelivery ? this.deliveryTime : null,
+      paymentType: this.selectedPaymentType,
+      loyalty: this.earnSpentPointObj,
+    };
+  }
+
+  checkoutDemo() {
+    const data = this.accumulateDataDemo();
+    this.httpService.post('checkoutDemo', data)
+      .subscribe(res => {
+          if (!this.authService.userDetails.userId) {
+            this.ccRecipientData = null;
+            let addresses = [];
+            localStorage.removeItem('address');
+            if (!this.withDelivery) {
+              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+            }
+            this.addresses$.next(addresses);
+          }
+          this.cartService.emptyCart();
+          this.router.navigate(['/', 'profile']);
+        },
+        err => console.error(err));
+  }
+
+  accumulateDataDemo() {
+
+
+    if (!this.withDelivery) {
+      this.addressObj.warehouse_name = this.addressObj.name;
+      this.addressObj.warehouse_id = this.warehouseAddresses.find(x => x.address._id === this.addressObj._id)._id;
+    }
+
+    if (!this.withDelivery)
+      if (this.ccRecipientData) {
+        this.addressObj.recipient_name = this.ccRecipientData.recipient_name;
+        this.addressObj.recipient_surname = this.ccRecipientData.recipient_surname;
+        this.addressObj.recipient_national_id = this.ccRecipientData.recipient_national_id;
+        this.addressObj.recipient_mobile_no = this.ccRecipientData.recipient_mobile_no;
+        this.addressObj.recipient_title = this.ccRecipientData.recipient_title;
+        this.addressObj.recipient_email = this.ccRecipientData.recipient_email ? this.ccRecipientData.recipient_email : null;
+      } else {
+        return;
+      }
+    return {
+      cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
+      order_id: this.cartService.getOrderId(),
+      address: this.addressObj,
       transaction_id: null,
       used_point: 0,
       used_balance: 0,
