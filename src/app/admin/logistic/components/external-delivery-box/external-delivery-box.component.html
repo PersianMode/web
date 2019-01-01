@@ -29,7 +29,7 @@
         <!-- customer column -->
         <ng-container matColumnDef="customer">
           <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.customer?.first_name + ' ' + order.customer?.surname}} </mat-cell>
+          <mat-cell *matCellDef="let order">{{getCustomer(order)}} </mat-cell>
         </ng-container>
 
         <!-- order_time column -->

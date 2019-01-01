@@ -57,6 +57,7 @@ export class CheckoutPageComponent implements OnInit {
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
   bankData: any = null;
+  isDev: boolean = true;
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -71,6 +72,7 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isDev = this.httpService.isInDevMode();
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {
@@ -270,6 +272,17 @@ export class CheckoutPageComponent implements OnInit {
       .catch(err => {
         console.error('Error in final check: ', err);
         this.spinnerService.disable();
+      });
+  }
+
+
+  checkoutDemo() {
+    this.finalCheckItems()
+      .then(res => {
+        this.checkoutService.checkoutDemo();
+      })
+      .catch(err => {
+        console.error('Error in final check: ', err);
       });
   }
 }
