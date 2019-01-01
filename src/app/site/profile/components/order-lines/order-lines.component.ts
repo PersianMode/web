@@ -12,8 +12,10 @@ import {ResponsiveService} from '../../../../shared/services/responsive.service'
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {OrderLineStatuses} from '../../../../shared/lib/status';
+import {OrderLineStatuses, OrderStatuses} from '../../../../shared/lib/status';
 import {ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
+import {ORDER_STATUS} from '../../../../shared/enum/status.enum';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-order-lines',
@@ -32,6 +34,9 @@ export class OrderLinesComponent implements OnInit {
   orderInfo: any;
   orderLines = [];
   noDuplicateOrderLine = [];
+  returnOrderTime;
+  expiredTime = false;
+  statusList = {Delivered: "بازگشت کالا", WaitForAggregation: "لغو خرید"}
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
 
@@ -48,7 +53,9 @@ export class OrderLinesComponent implements OnInit {
 
   ngOnInit() {
     this.orderInfo = this.profileOrderService.orderData;
+    console.log('orderInfo', this.orderInfo);
     this.orderLines = this.orderInfo.dialog_order.order_lines;
+    console.log('orderLines',this.orderLines);
     this.removeDuplicates(this.orderLines);
     // this.OrderLineStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
@@ -126,24 +133,146 @@ export class OrderLinesComponent implements OnInit {
     return imagePathFixer(boughtColor.image.thumbnail, product._id, boughtColor._id);
   }
 
-  checkReturnOrderLine(ol) {
-    const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
-    return ol.tickets.find(tk => tk.status === ORDER_LINE_STATUS.Return &&
-      date > Date.now()
-    );
+  // checkReturnOrderLine(ol) {
+  //   const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
+  //   return ol.tickets.find(tk => tk.status === ORDER_LINE_STATUS.Return &&
+  //     date > Date.now()
+  //   );
+  // }
+
+  // returnOrderLine(ol) {
+  //   this.orderObject = {
+  //     orderLine: ol,
+  //     order: this.orderInfo
+  //   };
+  //   this.profileOrderService.orderData = this.orderObject;
+  //   if (this.responsiveService.isMobile) {
+  //     this.router.navigate([`/profile/orderline/return`]);
+  //   } else {
+  //     const rmDialog = this.dialog.open(GenDialogComponent, {
+  //       width: '700px',
+  //       data: {
+  //         componentName: DialogEnum.orderReturnComponent
+  //       }
+  //     });
+  //     rmDialog.afterClosed().subscribe(res => {
+  //       this.closeDialog.emit(false);
+  //     });
+  //   }
+  // }
+  //
+  // checkCancelOrderLine(ol) {
+  //   return ol.tickets.every(tk =>
+  //     tk.status !== ORDER_LINE_STATUS.OnDelivery && tk.status !== ORDER_LINE_STATUS.Delivered &&
+  //     tk.status !== ORDER_LINE_STATUS.CustomerCancel && tk.status !== ORDER_LINE_STATUS.Return &&
+  //     !ol['cancelFlag']
+  //   );
+  // }
+  //
+  // cancelOrderLine(ol) {
+  //   this.quantities = [];
+  //   // check if quantity more than 1, we need show have many order_line need to cancel
+  //   if (ol.quantity > 1) {
+  //     for (let index = 1; index <= ol.quantity; index++) {
+  //       this.quantities.push({
+  //         value: index,
+  //         viewValue: index
+  //       });
+  //     }
+  //     this.isQuantityMoreThanOne = ol.order_line_id;
+  //   } else {
+  //     this.showDialogCancelOrderLine(ol, false);
+  //   }
+  // }
+
+  showDialogCancelOrder(ol, multi: boolean) {
+    let options: any = {
+      orderId: this.orderInfo.orderId,
+      orderLineId: ol.order_line_id,
+      // productInstanceId: ol.product_instance._id
+    }
+    if (multi) {
+      options = {
+        orderId: this.orderInfo.orderId,
+        orderLineId: ol.order_line_id,
+        quantity: 1,
+        // this.quantitySelected,
+        productInstanceId: ol.product_instance._id
+      };
+    }
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+    });
+    rmDialog.afterClosed().subscribe(
+      status => {
+        if (status) {
+          this.progressService.enable();
+          // this request expect cancel order_lines
+          this.httpService.post(`order/cancel`, options)
+            .subscribe(
+              data => {
+                this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
+                // this.changeOrderLine(ol);
+                this.closeDialog.emit(false);
+                this.progressService.disable();
+              },
+              err => {
+                this.openSnackBar('خطا در هنگام کنسل کردن');
+                console.error('error in canceling order:', err);
+                this.progressService.disable();
+              }
+            );
+        }
+      }, err => {
+        console.log('Error in dialog: ', err);
+      });
   }
 
-  returnOrderLine(ol) {
-    this.orderObject = {
-      orderLine: ol,
-      order: this.orderInfo
-    };
-    this.profileOrderService.orderData = this.orderObject;
+  checkCancelOrderLine(order) {
+    return (order.last_ticket.status === ORDER_STATUS.WaitForAggregation)
+  }
+
+  cancelOrderLine(order) {
+    this.quantities = [];
+    // check if quantity more than 1, we need show have many order_line need to cancel
+    if (order.quantity > 1) {
+      for (let index = 1; index <= order.quantity; index++) {
+        this.quantities.push({
+          value: index,
+          viewValue: index
+        });
+      }
+      this.isQuantityMoreThanOne = order.order_line_id;
+    } else {
+      this.showDialogCancelOrder(order, false);
+    }
+  }
+
+  checkReturnOrderLine(order) {
+    this.returnOrderTime = moment(order.order_time).add(7, 'd');
+    if (this.returnOrderTime > Date.now()) {
+      this.expiredTime = false;
+      return (order.last_ticket.status === ORDER_STATUS.Delivered)
+    }
+    else {
+      this.expiredTime = true;
+      return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
+
+    }
+
+  }
+
+  returnOrderLine(order) {
+    // this.orderObject = {
+    //   orderLine: orders,
+    //   order: this.orderInfo
+    // };
+    // this.profileOrderService.orderData = this.orderObject;
     if (this.responsiveService.isMobile) {
       this.router.navigate([`/profile/orderline/return`]);
     } else {
       const rmDialog = this.dialog.open(GenDialogComponent, {
-        width: '700px',
+        width: '600px',
         data: {
           componentName: DialogEnum.orderReturnComponent
         }
@@ -154,21 +283,11 @@ export class OrderLinesComponent implements OnInit {
     }
   }
 
-  cancelOrderLine(ol) {
-    this.quantities = [];
-    // check if quantity more than 1, we need show have many order_line need to cancel
-    if (ol.quantity > 1) {
-      for (let index = 1; index <= ol.quantity; index++) {
-        this.quantities.push({
-          value: index,
-          viewValue: index
-        });
-      }
-      this.isQuantityMoreThanOne = ol.order_line_id;
-    } else {
-      this.showDialogCancelOrderLine(ol, false);
-    }
+  checkOrderLineStatus(order) {
+    if (!((order.last_ticket.status === ORDER_STATUS.Delivered && !this.expiredTime) || order.last_ticket.status === ORDER_STATUS.WaitForAggregation) )
+      return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
   }
+
 
   showDialogCancelOrderLine(ol, multi: boolean) {
     let options: any = {
@@ -210,14 +329,6 @@ export class OrderLinesComponent implements OnInit {
       }, err => {
         console.log('Error in dialog: ', err);
       });
-  }
-
-  checkCancelOrderLine(ol) {
-    return ol.tickets.every(tk =>
-      tk.status !== ORDER_LINE_STATUS.OnDelivery && tk.status !== ORDER_LINE_STATUS.Delivered &&
-      tk.status !== ORDER_LINE_STATUS.CustomerCancel && tk.status !== ORDER_LINE_STATUS.Return &&
-      !ol['cancelFlag']
-    );
   }
 
   openSnackBar(message: string) {
