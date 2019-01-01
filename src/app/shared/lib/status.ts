@@ -13,7 +13,7 @@ const OrderLineStatuses: any[] = [
   {name: 'بررسی نهایی موفق', title: 'در حال پردازش', status: ols.Checked},
   {name: 'ناموجود', title: 'ناموجود', status: ols.NotExists},
   {name: 'بازگشت کالا', title: 'بازگشت کالا', status: ols.Return},
-  {name: 'لغو سفارش', title: 'لغو سفارش', status: ols.CustomerCancel},
+  {name: 'لغو سفارش', title: 'لغو سفارش', status: ols.Cancel},
   {name: 'ّعدم موجودی انبار', title: 'بررسی توسط مسئول فروش', status: ols.StoreCancel},
   {name: 'ّاز سر گیری فرایند', title: 'در حال پردازش', status: ols.Renew},
 ];
@@ -26,7 +26,7 @@ const OrderStatuses: any[] = [
   {name: 'در حال ارسال', title: 'در حال ارسال', status: os.OnDelivery},
   {name: 'تحویل شده', title: 'تحویل شده', status: os.Delivered},
   {name: 'درخواست بازگشت کالا', title: 'درخواست بازگشت کالا', status: os.Return},
-  {name: 'لغو', title: 'لغو', status: os.CustomerCancel},
+  {name: 'لغو', title: 'لغو', status: os.Cancel},
 ];
 
 const DeliveryStatuses: any[] = [
