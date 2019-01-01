@@ -300,7 +300,7 @@ export class CheckoutService {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.addressObj,
-      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
+      transaction_id: null,
       used_point: 0,
       used_balance: 0,
       total_amount: this.total,
@@ -333,8 +333,6 @@ export class CheckoutService {
   }
 
   accumulateDataDemo() {
-
-
     if (!this.withDelivery) {
       this.addressObj.warehouse_name = this.addressObj.name;
       this.addressObj.warehouse_id = this.warehouseAddresses.find(x => x.address._id === this.addressObj._id)._id;
