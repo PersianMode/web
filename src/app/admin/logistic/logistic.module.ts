@@ -25,7 +25,7 @@ import {ProductViewerComponent} from './components/product-viewer/product-viewer
 import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
 import {TicketComponent} from './components/ticket/ticket.component';
 import {SmInboxComponent} from './components/sm-inbox/sm-inbox.component';
-import {SmSendComponent} from './components/sm-send/sm-send.component';
+import {SmOrderComponent} from './components/sm-order/sm-order.component';
 import {DeliveryShowComponent} from './components/delivery-show/delivery-show.component';
 import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/delivery-shelf-code.component';
 import {InboxComponent} from './components/inbox/inbox.component';
@@ -54,7 +54,7 @@ import { OrderLineViewerComponent } from './components/order-line-viewer/order-l
     ProductViewerComponent,
     BarcodeCheckerComponent,
     TicketComponent,
-    SmSendComponent,
+    SmOrderComponent,
     DeliveryShowComponent,
     DeliveryShelfCodeComponent,
     MismatchConfirmComponent,

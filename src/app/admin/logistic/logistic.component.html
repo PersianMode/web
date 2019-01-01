@@ -16,18 +16,14 @@
 
 
       <!-- tracking orders (پیگیری سفارشات)-->
-      <mat-tab label="outbox" *ngIf="isSalesManager">
+      <mat-tab label="orders" *ngIf="isSalesManager">
         <ng-template mat-tab-label>
           <span>پیگیری سفارشات</span>
-          <mat-chip-list *ngIf="newOutboxCount">
-            <mat-chip color="accent" selected="true">{{newOutboxCount}}</mat-chip>
-          </mat-chip-list>
         </ng-template>
-        <app-sm-send (OnNewOutboxCount)="newOutboxCount = $event"> </app-sm-send>
-        <!-- comment this line beacuse error component  -->
-        <!-- <app-sc-send  *ngIf="!isSalesManager"  (OnNewOutboxCount)="newOutboxCount = $event"> </app-sc-send> -->
+        <app-sm-order> </app-sm-order>
       </mat-tab>
     </ng-container>
+
 
     <!-- not sales manager -->
     <ng-container *ngIf="!isSalesManager">
@@ -57,8 +53,8 @@
         <ng-template mat-tab-label>
           <span>{{isShopClerk ? 'صندوق تحویل به مشتری': 'صندوق ارسال به مشتری'}}</span>
           <mat-chip-list *ngIf="ExternalDeliveryBoxCount">
-              <mat-chip color="accent" selected="true">{{ExternalDeliveryBoxCount}}</mat-chip>
-            </mat-chip-list>
+            <mat-chip color="accent" selected="true">{{ExternalDeliveryBoxCount}}</mat-chip>
+          </mat-chip-list>
         </ng-template>
         <app-external-delivery-box (OnExternalDeliveryBoxCount)="ExternalDeliveryBoxCount = $event" [isHub]="isHubClerk"></app-external-delivery-box>
       </mat-tab>
