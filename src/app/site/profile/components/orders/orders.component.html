@@ -58,11 +58,11 @@
   <ng-container matColumnDef="return_order">
     <mat-header-cell *matHeaderCellDef mat-sort-header>وضعیت سفارش</mat-header-cell>
         <mat-cell *matCellDef="let order" style=" font-size: 12px">
-          <button *ngIf="checkReturnOrder(order)" class="status-button" (click)="returnOrder(order)">
-          {{"بازگشت کالا"}}
+          <button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">
+           {{statusList.Delivered}}
           </button>
           <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
-            {{"لغو خرید"}}
+            {{statusList.WaitForAggregation}}
           </button>
            <div>{{checkOrderStatus(order)}}</div>
           </mat-cell>
@@ -104,6 +104,15 @@
             {{order.address.unit ? 'واحد' + makePersianNumber(order.address.unit, false) : ''}}</span>
         </div>
         <div class="eye-style"><a (click)="goToOrderLines(order._id)" class="clickable-link"><i class="fa fa-eye"></i></a></div>
+        <div>{{"وضعیت: "}}
+        <button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">
+          {{statusList.Delivered}}
+        </button>
+        <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
+          {{statusList.WaitForAggregation}}
+        </button>
+        <label>{{checkOrderStatus(order)}}</label>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

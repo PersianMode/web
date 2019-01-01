@@ -29,6 +29,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
   quantities: any[] = [];
   orderInfo: any;
   returnOrderTime;
+  expiredTime = false;
+  statusList = {Delivered: "بازگشت کالا", WaitForAggregation: "لغو خرید"}
   @Output() closeDialog = new EventEmitter<boolean>();
 
 
@@ -132,20 +134,37 @@ export class OrdersComponent implements OnInit, OnDestroy {
       });
   }
 
-
   checkCancelOrder(order) {
     return (order.last_ticket.status === ORDER_STATUS.WaitForAggregation)
   }
 
+  cancelOrder(order) {
+    this.quantities = [];
+    // check if quantity more than 1, we need show have many order_line need to cancel
+    if (order.quantity > 1) {
+      for (let index = 1; index <= order.quantity; index++) {
+        this.quantities.push({
+          value: index,
+          viewValue: index
+        });
+      }
+      this.isQuantityMoreThanOne = order.order_line_id;
+    } else {
+      this.showDialogCancelOrder(order, false);
+    }
+  }
+
   checkReturnOrder(order) {
     this.returnOrderTime = moment(order.order_time).add(7, 'd');
-    console.log('return time', this.returnOrderTime);
-    // const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
-    if (this.returnOrderTime > order.order_time)
+    if (this.returnOrderTime > Date.now()) {
+      this.expiredTime = false;
       return (order.last_ticket.status === ORDER_STATUS.Delivered)
-    // else return false;
-    // );
-    // this.ticket.desc.day.day_slot =  moment(this.dateObject, 'jYYYY/jM/jD').format('YYYY-M-D hh:mm:ss');
+    }
+    else {
+      this.expiredTime = true;
+      return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
+
+    }
 
   }
 
@@ -170,24 +189,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }
   }
 
-  cancelOrder(order) {
-    this.quantities = [];
-    // check if quantity more than 1, we need show have many order_line need to cancel
-    if (order.quantity > 1) {
-      for (let index = 1; index <= order.quantity; index++) {
-        this.quantities.push({
-          value: index,
-          viewValue: index
-        });
-      }
-      this.isQuantityMoreThanOne = order.order_line_id;
-    } else {
-      this.showDialogCancelOrder(order, false);
-    }
-  }
-
   checkOrderStatus(order) {
-    if (!(order.last_ticket.status === ORDER_STATUS.Delivered || order.last_ticket.status === ORDER_STATUS.WaitForAggregation))
+    if (!((order.last_ticket.status === ORDER_STATUS.Delivered && !this.expiredTime) || order.last_ticket.status === ORDER_STATUS.WaitForAggregation) )
       return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
   }
 
