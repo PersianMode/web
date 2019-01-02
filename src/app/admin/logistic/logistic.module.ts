@@ -25,7 +25,7 @@ import {ProductViewerComponent} from './components/product-viewer/product-viewer
 import {BarcodeCheckerComponent} from './components/barcode-checker/barcode-checker.component';
 import {TicketComponent} from './components/ticket/ticket.component';
 import {SmInboxComponent} from './components/sm-inbox/sm-inbox.component';
-import {SmSendComponent} from './components/sm-send/sm-send.component';
+import {SmOrderComponent} from './components/sm-order/sm-order.component';
 import {DeliveryShowComponent} from './components/delivery-show/delivery-show.component';
 import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/delivery-shelf-code.component';
 import {InboxComponent} from './components/inbox/inbox.component';
@@ -40,6 +40,7 @@ import {DeliveryHistoryComponent} from './components/delivery/components/deliver
 import {NewInternalDeliveryComponent} from './components/delivery/components/new-internal-delivery/new-internal-delivery.component';
 import {DeliveryDetailsComponent} from './components/delivery/components/delivery-details/delivery-details.component';
 import {ExpiredDateDialogComponent} from './components/delivery/components/expired-date-dialog/expired-date-dialog.component';
+import { OrderLineViewerComponent } from './components/order-line-viewer/order-line-viewer.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,7 @@ import {ExpiredDateDialogComponent} from './components/delivery/components/expir
     ProductViewerComponent,
     BarcodeCheckerComponent,
     TicketComponent,
-    SmSendComponent,
+    SmOrderComponent,
     DeliveryShowComponent,
     DeliveryShelfCodeComponent,
     MismatchConfirmComponent,
@@ -63,7 +64,8 @@ import {ExpiredDateDialogComponent} from './components/delivery/components/expir
     ReturnToWarehouseBoxComponent,
     DeliveryTrackingComponent,
     DeliveryDetailsComponent,
-    ExpiredDateDialogComponent
+    ExpiredDateDialogComponent,
+    OrderLineViewerComponent
   ],
   imports: [
     LogisticRouting,
@@ -102,7 +104,8 @@ import {ExpiredDateDialogComponent} from './components/delivery/components/expir
     MismatchConfirmComponent,
     DeliveryTrackingComponent,
     DeliveryDetailsComponent,
-    ExpiredDateDialogComponent
+    ExpiredDateDialogComponent,
+    OrderLineViewerComponent
   ]
 })
 export class LogisticModule {
