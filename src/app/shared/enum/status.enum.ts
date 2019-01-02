@@ -12,7 +12,7 @@ enum ORDER_LINE_STATUS {
   Checked = 10,
   NotExists = 11,
   Return = 12,
-  CustomerCancel = 13,
+  Cancel = 13,
   StoreCancel = 14,
   Renew = 15
 }
@@ -27,7 +27,7 @@ enum ORDER_STATUS {
   OnDelivery = 6,
   Delivered = 7,
   Return = 8,
-  CustomerCancel = 9,
+  Cancel = 9,
 }
 
 enum Delivery_STATUS {

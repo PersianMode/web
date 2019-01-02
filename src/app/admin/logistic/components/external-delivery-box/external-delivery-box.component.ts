@@ -67,14 +67,13 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
 
   ngOnInit() {
-    this.load();
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
   }
 
   ngAfterViewInit(): void {
     this.load();
-    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
-      this.load();
-    });
 
     this.trigger = this.isHub ? ScanTrigger.SendExternal : ScanTrigger.CCDelivery;
 
@@ -178,6 +177,14 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   getOrderLineStatus(orderLine) {
     const lastTicket = orderLine.tickets[orderLine.tickets.length - 1];
     return OrderLineStatuses.find(x => x.status === lastTicket.status).name || '-';
+
+  }
+
+  getCustomer(order) {
+    try {
+      return order.address.recipient_name + ' ' + order.address.recipient_surname;
+    } catch (err) {
+    }
 
   }
 

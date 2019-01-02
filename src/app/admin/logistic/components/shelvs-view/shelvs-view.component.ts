@@ -1,18 +1,17 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatPaginator, MatSort, MatDialog} from '@angular/material';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
-import { FormControl } from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
-import {ORDERS} from '../order-mock';
-import {OrderAddressComponent} from '../order-address/order-address.component';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
+import {ProgressService} from '../../../../shared/services/progress.service';
+import {HttpService} from '../../../../shared/services/http.service';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
-
-
-
+import {DeliveryStatuses} from '../../../../shared/lib/status';
+import {OrderLineViewerComponent} from '../order-line-viewer/order-line-viewer.component';
 
 @Component({
   selector: 'app-shelvs-view',
@@ -31,39 +30,120 @@ export class ShelvsViewComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dataSource: MatTableDataSource<any>;
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'address', 'used_balance'];
-  expandedElement: any;
+  @Output() OnNewInboxCount = new EventEmitter();
 
+  displayedColumns = ['position', 'shelf_code', 'status', 'category'];
+  expandedElement: any;
+  total;
   pageSize = 10;
   resultsLength: Number;
   showBarcodeScanner = false;
-  trackingCodeCtrl = new FormControl();
   transfereeCtrl = new FormControl();
   shelfCodeCtrl = new FormControl();
-
-
+  statusList = {internalMessage: 'داخلی', externalMessage: 'خارجی'}
+  _status = null;
   filteredShelfCodes: Observable<any[]>;
-  shelfCodes = SHELF_CODES; // mock
+  shelfCodes = null;
+  transferee = null;
+  dataSource = new MatTableDataSource();
 
-
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private progressService: ProgressService, private httpService: HttpService, private snackBar: MatSnackBar) {
     this.shelfCodeCtrl = new FormControl();
     this.filteredShelfCodes = this.shelfCodeCtrl.valueChanges
       .pipe(
         startWith(''),
         map(shelf => shelf ? this.filterShelfCodes(shelf) : this.shelfCodes.slice())
       );
-   }
+  }
+
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   ngOnInit() {
-    this.loadData();
+    this.load();
+
+    this.transfereeCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.transferee = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+      }
+    );
+
+    this.shelfCodeCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.shelfCodes = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+      }
+    );
   }
 
-  loadData() {
-    this.dataSource = new MatTableDataSource<any>(ORDERS);
-    this.resultsLength = this.dataSource.data.length;
+  load() {
+    this.progressService.enable();
+    const options = {
+      sort: this.sort.active,
+      dir: this.sort.direction,
+
+      transferee: this.transferee,
+      shelfCodes: this.shelfCodes,
+
+      type: 'ShelvesList',
+    };
+    const offset = this.paginator.pageIndex * +this.pageSize;
+    const limit = this.pageSize;
+
+    this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
+      this.progressService.disable();
+      console.log('res: ', res);
+
+      for (let delivery of res.data) {
+        const order_data = [];
+        let order_details = delivery.order_details;
+        let order_lines = delivery.order_lines;
+        order_lines.forEach(x => {
+          let foundOrder = order_details.find(y => y.order_line_ids === x.order_lines_id);
+          let preOrderData = order_data.find(y => y.order_id === foundOrder.order_id)
+          if (preOrderData) {
+            preOrderData.order_lines.push(x)
+          } else {
+            order_data.push(Object.assign(foundOrder, {order_lines: [x]}, {transaction_id: delivery.transaction_id},
+              {order_time: delivery.order_time}));
+          }
+        });
+
+        delivery.orders = order_data;
+      }
+
+      console.log('dliveries', res.data);
+
+      const rows = [];
+
+      if (this._status === true) {
+        res = new MatTableDataSource(res.data.filter(el => el.to.warehouse_id));
+      }
+
+      if (this._status === false) {
+        res = new MatTableDataSource(res.data.filter(el => el.to.customer));
+      }
+
+      res.data.forEach((order, index) => {
+        order['index'] = index + 1;
+        rows.push(order, {detailRow: true, order});
+      });
+
+      this.dataSource.data = rows;
+
+      this.resultsLength = res.total ? res.total : 0;
+      this.OnNewInboxCount.emit(res.total);
+
+    }, err => {
+      this.progressService.disable();
+      this.OnNewInboxCount.emit(0);
+      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
+    });
+
   }
 
   filterShelfCodes(code: string) {
@@ -73,70 +153,56 @@ export class ShelvsViewComponent implements OnInit {
 
   onSortChange($event: any) {
     this.paginator.pageIndex = 0;
-    this.loadData();
+    this.load();
   }
 
   onPageChange($event: any) {
-    this.loadData();
+    this.load();
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, null, {
+      duration: 2000,
+    });
   }
 
   getDate(orderTime) {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
   }
 
-  showAddress(order) {
-    if (!order.address) {
-      // need to create message service and return this message => ('order line has no address!)
-      return;
-    }
-    this.dialog.open(OrderAddressComponent, {
-      width: '400px',
-      data: {address: order.address, is_collect: !!order.is_collect}
-    });
-  }
-
-  getProductDetail(orderLine) {
-    const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
-    const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id) :
-      null;
-    return {
-      name: orderLine.instance.product_name,
-      thumbnailURL,
-      color: product_color ? product_color.name : null,
-      color_code: product_color ? product_color.code : null,
-      size: orderLine.instance.size,
-      product_id: orderLine.instance.product_id
-    };
-  }
-
-  showDetial(orderLine) {
-    this.dialog.open(ProductViewerComponent, {
-      width: '400px',
-      data: this.getProductDetail(orderLine)
+  showOrderLine(orderLines) {
+    this.dialog.open(OrderLineViewerComponent, {
+      width: '800px',
+      data: orderLines
     });
   }
 
   onMismatchDetected() {
-    //
+    this.progressService.enable();
   }
 
-  onScanOrder() {
-    this.showBarcodeScanner = true;
+  getStatus(status) {
+    return DeliveryStatuses.find(x => x.status === status).name || '-';
+  }
+
+  getCategory(category) {
+    if (category.customer)
+      return this.statusList.externalMessage;
+    else if (category.warehouse_id)
+      return this.statusList.internalMessage;
+  }
+
+  changeStatus() {
+    if (this._status === null) {
+      this.load();
+      this._status = true;
+    } else if (this._status === true) {
+      this.load();
+      this._status = false;
+    } else if (this._status === false) {
+      this.load();
+      this._status = null;
+    }
   }
 }
 
-const SHELF_CODES = [
-  {
-    code: 'as23sd3',
-  },
-  {
-    code: '99sd23',
-  },
-  {
-    code: '023d34',
-  },
-  {
-    code: '3sd342s',
-  }
-];

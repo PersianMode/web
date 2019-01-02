@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {TitleService} from '../../shared/services/title.service';
-import {MatDialog} from '@angular/material';
-import {TicketComponent} from './components/ticket/ticket.component';
 import {AuthService} from '../../shared/services/auth.service';
 import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
 
