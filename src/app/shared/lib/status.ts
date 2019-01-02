@@ -1,4 +1,4 @@
-import {ORDER_LINE_STATUS as ols , ORDER_STATUS as os} from '../enum/status.enum';
+import {ORDER_LINE_STATUS as ols, ORDER_STATUS as os, Delivery_STATUS as ds, } from '../enum/status.enum';
 
 const OrderLineStatuses: any[] = [
   {name: 'تایید پرداخت', title: 'تایید پرداخت', status: ols.default},
@@ -29,9 +29,19 @@ const OrderStatuses: any[] = [
   {name: 'لغو', title: 'لغو', status: os.Cancel},
 ];
 
+const DeliveryStatuses: any[] = [
+  {name: 'پیش فرض', title: 'پیش فرض', status: ds.default},
+  {name: 'تعیین مسئول ارسال', title: 'تعیین مسئول ارسال', status: ds.agentSet},
+  {name: 'درخواست محموله توسط پیک', title: 'درخواست محموله توسط پیک', status: ds.requestPackage},
+  {name: 'شروع', title: 'شروع', status: ds.started},
+  {name: 'پایان', title: 'پایان', status: ds.ended},
+
+];
+
 export {
   OrderLineStatuses,
-  OrderStatuses
+  OrderStatuses,
+  DeliveryStatuses
 }
 
 
