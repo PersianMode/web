@@ -46,7 +46,6 @@ export class ShopResultComponent implements OnInit {
       };
     });
 
-
     this.checkoutService.readPayResult(this.bankReferData)
       .then((res: any) => {
         console.log('Pay Result :', res);
@@ -56,7 +55,7 @@ export class ShopResultComponent implements OnInit {
         this.persian_trefId = this.payResult.transactionReferenceID[0].split('').map(ch => (+ch).toLocaleString('fa')).join('');
         if (this.payResult.result[0] === 'False') {
           this.spinnerService.disable();
-          return Promise.reject('Un Successful Shop/Return Shop');
+          return Promise.reject('Unsuccessful/Return Shop');
         } else if (this.payResult.result[0] === 'True') {
           if (this.payResult.action[0] === '1003') {
             // should final check and verify shop proccess if final check result is valid(no error , no warning)

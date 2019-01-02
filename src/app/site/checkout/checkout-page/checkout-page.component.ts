@@ -258,19 +258,15 @@ export class CheckoutPageComponent implements OnInit {
         // first-step-1 :
         // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
         // from server to post and redirect to bank gateway page
-        return this.checkoutService.sendDataToBankGateway(orderData);
+        return this.checkoutService.getDataFromServerToSendBank(orderData);
       })
       .then((res) => {
+        this.checkoutService.updateVariablesAfterCheckout();
+        this.spinnerService.enable();
         this.bankData = res;
         IdArray.forEach(el => {
           this[el].nativeElement.value = this.bankData[el];
         });
-        orderData.invoice_number = this.bankData.invoiceNumber;
-        orderData.invoice_date = this.bankData.invoiceDate;
-        return this.checkoutService.checkout(orderData);
-      })
-      .then(res => {
-        this.spinnerService.enable();
         this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
       })
       .catch(err => {

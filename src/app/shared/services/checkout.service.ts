@@ -222,9 +222,9 @@ export class CheckoutService {
     }
   }
 
-  sendDataToBankGateway(data) {
+  getDataFromServerToSendBank(data) {
     return new Promise((resolve, reject) => {
-      this.httpService.post('payment', data)
+      this.httpService.post('prepareDataForBankGateway', data)
         .subscribe(res => {
             resolve(res);
           },
@@ -234,33 +234,24 @@ export class CheckoutService {
     });
   }
 
-  checkout(data) {
-    return new Promise((resolve, reject) => {
-      this.httpService.post('checkout', data)
-        .subscribe(res => {
-            if (!this.authService.userDetails.userId) {
-              this.ccRecipientData = null;
-              let addresses = [];
-              if (!this.withDelivery) {
-                addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-              }
-              this.addresses$.next(addresses);
-            }
-            this.selectedCustomerAddress = -1;
-            this.selectedWarehouseAddress = -1;
-            this.withDelivery = true;
-            this.deliveryDays = null;
-            this.deliveryTime = null;
-            this.addressObj = {};
-            this.ccRecipientData = null;
-            this.addedProvince = '';
-            resolve(res);
-          },
-          err => {
-            console.error('err', err);
-            reject(err);
-          });
-    });
+
+  updateVariablesAfterCheckout() {
+    if (!this.authService.userDetails.userId) {
+      this.ccRecipientData = null;
+      let addresses = [];
+      if (!this.withDelivery) {
+        addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+      }
+      this.addresses$.next(addresses);
+    }
+    this.selectedCustomerAddress = -1;
+    this.selectedWarehouseAddress = -1;
+    this.withDelivery = true;
+    this.deliveryDays = null;
+    this.deliveryTime = null;
+    this.addressObj = {};
+    this.ccRecipientData = null;
+    this.addedProvince = '';
   }
 
   calculateDeliveryDiscount(durationId) {
