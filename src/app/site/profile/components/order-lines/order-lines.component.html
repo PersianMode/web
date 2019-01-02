@@ -74,10 +74,10 @@
                 <!--</button>-->
                   <div>
                   <button *ngIf="checkReturnOrderLine(orderInfo.dialog_order) && !expiredTime" class="status-button" (click)="returnOrderLine(orderInfo.dialog_order)">
-                    {{statusList.Delivered}}
+                    بازگشت کالا
                   </button>
                   <button *ngIf="checkCancelOrderLine(orderInfo.dialog_order)" class="status-button" (click)="cancelOrderLine(orderInfo.dialog_order)">
-                    {{statusList.WaitForAggregation}}
+                    لغو خرید
                   </button>
                   </div>
               </div>

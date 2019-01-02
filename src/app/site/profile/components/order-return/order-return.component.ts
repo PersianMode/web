@@ -64,12 +64,10 @@ export class OrderReturnComponent implements OnInit {
 
   setReturnOrder() {
     this.ticket.desc.address_id = this.addressObject._id;
-    this.ticket.desc.day.time_slot = this.timeReturn;
-    this.ticket.desc.day.day_slot =  moment(this.dateObject, 'jYYYY/jM/jD').format('YYYY-M-D hh:mm:ss');
     this.progressService.enable();
     this.httpService.post('order/return', {orderId: this.order._id, orderLineId: this.orderLine._id, desc: this.ticket.desc}).subscribe(
       data => {
-        this.snackBar.open('عمیلات با موفقیت انجام گردید.', null, {
+        this.snackBar.open('عملیات با موفقیت انجام گردید.', null, {
           duration: 2000,
         });
         this.changeOrderLine(this.orderLine);
@@ -87,7 +85,6 @@ export class OrderReturnComponent implements OnInit {
     const updateOrderLines = [];
     this.profileOrderService.orderData.order.dialog_order.order_lines.forEach(el => {
       if (el.order_line_id === ol._id) {
-        el['returnFlag'] = true;
         updateOrderLines.push(el);
       } else updateOrderLines.push(el);
     });

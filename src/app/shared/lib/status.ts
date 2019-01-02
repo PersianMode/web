@@ -21,12 +21,12 @@ const OrderStatuses: any[] = [
   {name: 'در انتظار تجمیع', title: 'در حال آماده سازی', status: os.WaitForAggregation},
   {name: 'در انتظار صدور فاکتور', title: 'صدور فاکتور', status: os.WaitForInvoice},
   {name: 'تایید صدور فاکتور', title: 'صدور فاکتور', status: os.InvoiceVerified},
-  {name: 'آماده ارسال', title: 'اماده سازی جهت ارسال', status: os.ReadyToDeliver},
-  {name: 'تخصیص ارسال', title: 'در حال بسته بندی', status: os.DeliverySet},
+  {name: 'آماده ارسال', title: 'آماده سازی جهت ارسال', status: os.ReadyToDeliver},
+  {name: 'تخصیص ارسال', title: 'در حال آماده سازی', status: os.DeliverySet},
   {name: 'در حال ارسال', title: 'در حال ارسال', status: os.OnDelivery},
   {name: 'تحویل شده', title: 'تحویل شده', status: os.Delivered},
-  {name: 'درخواست بازگشت کالا', title: 'درخواست بازگشت کالا', status: os.Return},
-  {name: 'لغو', title: 'لغو', status: os.CustomerCancel},
+  {name: 'درخواست بازگشت کالا', title: 'بازگشت سفارش', status: os.Return},
+  {name: 'لغو', title: 'لغو سفارش', status: os.CustomerCancel},
 ];
 
 const DeliveryStatuses: any[] = [

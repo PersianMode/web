@@ -36,7 +36,6 @@ export class OrderLinesComponent implements OnInit {
   noDuplicateOrderLine = [];
   returnOrderTime;
   expiredTime = false;
-  statusList = {Delivered: "بازگشت کالا", WaitForAggregation: "لغو خرید"}
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
 
@@ -133,12 +132,6 @@ export class OrderLinesComponent implements OnInit {
     return imagePathFixer(boughtColor.image.thumbnail, product._id, boughtColor._id);
   }
 
-  // checkReturnOrderLine(ol) {
-  //   const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
-  //   return ol.tickets.find(tk => tk.status === ORDER_LINE_STATUS.Return &&
-  //     date > Date.now()
-  //   );
-  // }
 
   // returnOrderLine(ol) {
   //   this.orderObject = {
@@ -161,13 +154,7 @@ export class OrderLinesComponent implements OnInit {
   //   }
   // }
   //
-  // checkCancelOrderLine(ol) {
-  //   return ol.tickets.every(tk =>
-  //     tk.status !== ORDER_LINE_STATUS.OnDelivery && tk.status !== ORDER_LINE_STATUS.Delivered &&
-  //     tk.status !== ORDER_LINE_STATUS.CustomerCancel && tk.status !== ORDER_LINE_STATUS.Return &&
-  //     !ol['cancelFlag']
-  //   );
-  // }
+
   //
   // cancelOrderLine(ol) {
   //   this.quantities = [];
@@ -186,6 +173,7 @@ export class OrderLinesComponent implements OnInit {
   // }
 
   showDialogCancelOrder(ol, multi: boolean) {
+    console.log('olllll',ol);
     let options: any = {
       orderId: this.orderInfo.orderId,
       orderLineId: ol.order_line_id,
@@ -207,13 +195,16 @@ export class OrderLinesComponent implements OnInit {
       status => {
         if (status) {
           this.progressService.enable();
+          ol.last_ticket.status = 9;
+          this.orderLineCheck(ol);
+
           // this request expect cancel order_lines
           this.httpService.post(`order/cancel`, options)
             .subscribe(
               data => {
                 this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
                 // this.changeOrderLine(ol);
-                this.closeDialog.emit(false);
+                // this.closeDialog.emit(true);
                 this.progressService.disable();
               },
               err => {
@@ -310,6 +301,7 @@ export class OrderLinesComponent implements OnInit {
       status => {
         if (status) {
           this.progressService.enable();
+
           // this request expect cancel order_lines
           this.httpService.post(`order/cancel`, options)
             .subscribe(
@@ -351,5 +343,10 @@ export class OrderLinesComponent implements OnInit {
   cancelOrderLineByQuantity(ol) {
     console.log('ol', ol);
     this.showDialogCancelOrderLine(ol, true);
+  }
+
+  orderLineCheck(ol) {
+    // ol.order_lines.ticket
+    console.log(111);
   }
 }

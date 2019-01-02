@@ -30,7 +30,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
   orderInfo: any;
   returnOrderTime;
   expiredTime = false;
-  statusList = {Delivered: "بازگشت کالا", WaitForAggregation: "لغو خرید"}
   @Output() closeDialog = new EventEmitter<boolean>();
 
 
@@ -113,6 +112,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
       status => {
         if (status) {
           this.progressService.enable();
+          ol.last_ticket.status = 9;
           // this request expect cancel order_lines
           this.httpService.post(`order/cancel`, options)
             .subscribe(
@@ -140,7 +140,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   cancelOrder(order) {
     this.quantities = [];
-    // check if quantity more than 1, we need show have many order_line need to cancel
+    // check if quantity more than 1, we need show how many order_line need to cancel
     if (order.quantity > 1) {
       for (let index = 1; index <= order.quantity; index++) {
         this.quantities.push({
@@ -163,9 +163,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     else {
       this.expiredTime = true;
       return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
-
     }
-
   }
 
   returnOrder(order) {
@@ -185,14 +183,14 @@ export class OrdersComponent implements OnInit, OnDestroy {
       });
       rmDialog.afterClosed().subscribe(res => {
         this.closeDialog.emit(false);
+
       });
     }
   }
 
   checkOrderStatus(order) {
-    if (!((order.last_ticket.status === ORDER_STATUS.Delivered && !this.expiredTime) || order.last_ticket.status === ORDER_STATUS.WaitForAggregation) )
+    if (!((order.last_ticket.status === ORDER_STATUS.Delivered && !this.expiredTime) || order.last_ticket.status === ORDER_STATUS.WaitForAggregation))
       return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
   }
-
 }
 
