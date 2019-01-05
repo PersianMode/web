@@ -351,7 +351,7 @@ export class ProductService {
   }
 
   loadProducts(productIds) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.httpService.post('product/getMultiple', {productIds})
         .subscribe(data => {
           if (data) {
@@ -364,6 +364,8 @@ export class ProductService {
             });
           }
           resolve(data);
+        }, err => {
+          reject(err);
         });
     });
   }

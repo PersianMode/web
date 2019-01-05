@@ -73,7 +73,7 @@ export class CheckoutPageComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
-      (data) => {
+      data => {
         if (data) {
           const totalDiscount = this.checkoutService.getTotalDiscount();
           this.total = totalDiscount.total;
@@ -183,7 +183,7 @@ export class CheckoutPageComponent implements OnInit {
           this.deliveryDiscount = res.res_delivery_discount;
         })
         .catch(err => {
-          console.error('error occured in getting delivery cost and discount', err);
+          console.error('error occurred in getting delivery cost and discount', err);
         });
     }
   }

@@ -3,12 +3,12 @@
     <div fxFlex=0 fxFlex.lg="10" fxFlex.xl="20">&nbsp;</div>
     <div class="main-divs" fxFlex="20" fxFlex.md="30">
       <app-summary (recalculateDiscount)="calculateDiscount($event)" [disabled]="disabled"
-                   [productsData]="products"></app-summary>
+                   [discount]="discountValue" [productsData]="products"></app-summary>
     </div>
     <div class="main-divs" fxFlex=80 fxFlex.md=70 fxFlex.lg="70" fxFlex.xl="60" style="max-width: calc(100% - 350px)">
       <div class="signUp-div" *ngIf="!isLoggedIn">
         عضویت رایگان
-        <span style="padding-left : 10px"><a (click)="goToRegister()" class="membership-style">به ما بپیوندید</a></span>
+        <span style="padding-left: 10px"><a (click)="goToRegister()" class="membership-style">به ما بپیوندید</a></span>
       </div>
       <div class="basket-div">
         سبد خرید شما ({{numberOfProducts}})

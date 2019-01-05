@@ -144,8 +144,17 @@ export class CartComponent implements OnInit, OnDestroy {
     }
   }
 
-  calculateDiscount(considerCoupon = false) {
-    this.discountValue = this.cartService.calculateDiscount(this.products, considerCoupon);
+  calculateDiscount(res = null) {
+    if (res === false) { // this is clear signal sent by summary component
+      this.cartService.clearCoupon();
+      this.clearCoupon();
+      return;
+    }
+    this.discountValue = this.cartService.calculateDiscount(this.products);
+  }
+
+  clearCoupon() {
+    this.discountValue = 0;
   }
 
   changeValidation(isValid, i) {
