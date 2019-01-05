@@ -85,7 +85,7 @@ export class SummaryComponent implements OnInit, OnChanges {
     this.cartService.cartItems.subscribe(() => {
       if (this.productsData) {
         this.total = this.checkoutService.calculateTotal(this.productsData);
-        this.discount = this.cartService.calculateDiscount(this.productsData, !!this.coupon_code);
+        this.discount = this.cartService.calculateDiscount(this.productsData);
       }
     });
   }

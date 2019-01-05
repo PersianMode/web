@@ -176,7 +176,7 @@ export class CheckoutService {
 
   getTotalDiscount() {
     this.total = this.calculateTotal();
-    this.discount = this.cartService.calculateDiscount(this.productData, true);
+    this.discount = this.cartService.calculateDiscount(this.productData);
     return {
       total: this.total,
       discount: this.discount,
