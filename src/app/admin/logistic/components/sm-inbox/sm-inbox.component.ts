@@ -5,17 +5,13 @@ import {AuthService} from '../../../../shared/services/auth.service';
 import {SocketService} from '../../../../shared/services/socket.service';
 import {OrderLineStatuses} from '../../../../shared/lib/status';
 import {OrderAddressComponent} from '../order-address/order-address.component';
-import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
-import {ORDER_LINE_STATUS} from '../../../../shared/enum/status.enum';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {BarcodeCheckerComponent} from '../barcode-checker/barcode-checker.component';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
-import {FormControl} from '@angular/forms';
 import {TicketComponent} from '../ticket/ticket.component';
-import {last} from 'rxjs/operators';
 
 @Component({
   selector: 'app-sm-inbox',
@@ -63,12 +59,12 @@ export class SmInboxComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.load();
+    // this.load();
 
     this.socketObserver = this.socketService.getOrderLineMessage();
     if (this.socketObserver) {
       this.socketObserver.subscribe(msg => {
-        this.load();
+        // this.load();
       });
     }
 

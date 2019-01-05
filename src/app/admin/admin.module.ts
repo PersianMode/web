@@ -15,7 +15,7 @@ import {AdminAuthGuard} from './admin.auth.guard';
 
 
 @NgModule({
-  declarations: [
+  declarations: [ 
     HomeComponent,
     FooterComponent,
     HeaderComponent,

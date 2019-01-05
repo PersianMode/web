@@ -263,7 +263,7 @@ export class OrderLinesComponent implements OnInit {
       this.router.navigate([`/profile/orderline/return`]);
     } else {
       const rmDialog = this.dialog.open(GenDialogComponent, {
-        width: '600px',
+        width: '700px',
         data: {
           componentName: DialogEnum.orderReturnComponent
         }
@@ -322,6 +322,14 @@ export class OrderLinesComponent implements OnInit {
         console.log('Error in dialog: ', err);
       });
   }
+
+  // checkCancelOrderLine(ol) {
+  //   return ol.tickets.every(tk =>
+  //     tk.status !== ORDER_LINE_STATUS.OnDelivery && tk.status !== ORDER_LINE_STATUS.Delivered &&
+  //     tk.status !== ORDER_LINE_STATUS.Cancel && tk.status !== ORDER_LINE_STATUS.Return &&
+  //     !ol['cancelFlag']
+  //   );
+  // }
 
   openSnackBar(message: string) {
     this.snackBar.open(message, null, {
