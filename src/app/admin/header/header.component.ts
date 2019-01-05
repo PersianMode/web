@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit {
     {label: 'تنظیمات هزینه ارسال', path: '/agent/deliverycost', active: false},
     {label: 'گروه وفاداری', path: '/agent/loyaltygroup', active: false},
     {label: 'اولویت ارسال',path:'/agent/deliverypriority',active:false },
-    {label: 'تعیین مامور ارسال', path: '/agent/internal_delivery', active: false},
     {label: 'شرایط تحویل رایگان', path: '/agent/deliverycost/free/option', active: false},
     {label: 'بازپرداخت مبلغ', path: '/agent/refund_bank', active: false},
   ];

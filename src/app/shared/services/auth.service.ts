@@ -115,9 +115,9 @@ export class AuthService {
           this.populateUserDetails(data);
           this.isLoggedIn.next(data);
           this.isVerified.next(!!data.is_verified);
-          if (this.userDetails.warehouse_id) {
-            this.socketService.init();
-          }
+          // if (this.userDetails.warehouse_id) {
+          //   this.socketService.init();
+          // }
           resolve(data);
         },
         (err) => {

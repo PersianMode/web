@@ -18,7 +18,7 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   @Output() OnInternalDeliveryBoxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status'];
+  displayedColumns = ['position', 'details', 'name', 'barcode', 'status'];
   dataSource: MatTableDataSource<any>;
 
 
@@ -40,13 +40,13 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
 
   ngOnInit() {
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
   }
 
   ngAfterViewInit(): void {
     this.load();
-    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
-      this.load();
-    });
   }
 
   load() {
@@ -126,7 +126,7 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngOnDestroy(): void {
-      this.socketSubscription.unsubscribe();
+    this.socketSubscription.unsubscribe();
   }
 
 
