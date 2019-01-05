@@ -16,6 +16,7 @@ import {OrderLineStatuses, OrderStatuses} from '../../../../shared/lib/status';
 import {ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
 import {ORDER_STATUS} from '../../../../shared/enum/status.enum';
 import * as moment from 'moment';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-order-lines',
@@ -54,7 +55,7 @@ export class OrderLinesComponent implements OnInit {
     this.orderInfo = this.profileOrderService.orderData;
     console.log('orderInfo', this.orderInfo);
     this.orderLines = this.orderInfo.dialog_order.order_lines;
-    console.log('orderLines',this.orderLines);
+    console.log('orderLines', this.orderLines);
     this.removeDuplicates(this.orderLines);
     // this.OrderLineStatus(this.noDuplicateOrderLine);
     this.findBoughtColor(this.noDuplicateOrderLine);
@@ -133,27 +134,27 @@ export class OrderLinesComponent implements OnInit {
   }
 
 
-  // returnOrderLine(ol) {
-  //   this.orderObject = {
-  //     orderLine: ol,
-  //     order: this.orderInfo
-  //   };
-  //   this.profileOrderService.orderData = this.orderObject;
-  //   if (this.responsiveService.isMobile) {
-  //     this.router.navigate([`/profile/orderline/return`]);
-  //   } else {
-  //     const rmDialog = this.dialog.open(GenDialogComponent, {
-  //       width: '700px',
-  //       data: {
-  //         componentName: DialogEnum.orderReturnComponent
-  //       }
-  //     });
-  //     rmDialog.afterClosed().subscribe(res => {
-  //       this.closeDialog.emit(false);
-  //     });
-  //   }
-  // }
-  //
+  returnOrder(ol) {
+    this.orderObject = {
+      orderLine: ol,
+      order: this.orderInfo
+    };
+    this.profileOrderService.orderData = this.orderObject;
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/profile/orderlines/return`]);
+    } else {
+      const rmDialog = this.dialog.open(GenDialogComponent, {
+        width: '700px',
+        data: {
+          componentName: DialogEnum.orderReturnComponent
+        }
+      });
+      rmDialog.afterClosed().subscribe(res => {
+        this.closeDialog.emit(false);
+      });
+    }
+  }
+
 
   //
   // cancelOrderLine(ol) {
@@ -173,7 +174,6 @@ export class OrderLinesComponent implements OnInit {
   // }
 
   showDialogCancelOrder(ol, multi: boolean) {
-    console.log('olllll',ol);
     let options: any = {
       orderId: this.orderInfo.orderId,
       orderLineId: ol.order_line_id,
@@ -220,8 +220,18 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkCancelOrderLine(order) {
-    return (order.last_ticket.status === ORDER_STATUS.WaitForAggregation)
-  }
+
+    if (order.last_ticket.status === ORDER_STATUS.WaitForAggregation &&
+
+      order.order_lines.map(x => {
+        if (x.order_lines_ticket.status === ORDER_STATUS.WaitForAggregation)
+          return true;})
+    )
+      return (order.last_ticket.status === ORDER_STATUS.WaitForAggregation)
+
+    else return false;
+    }
+
 
   cancelOrderLine(order) {
     this.quantities = [];
@@ -248,10 +258,9 @@ export class OrderLinesComponent implements OnInit {
     else {
       this.expiredTime = true;
       return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
-
     }
-
   }
+
 
   returnOrderLine(order) {
     // this.orderObject = {
@@ -260,7 +269,7 @@ export class OrderLinesComponent implements OnInit {
     // };
     // this.profileOrderService.orderData = this.orderObject;
     if (this.responsiveService.isMobile) {
-      this.router.navigate([`/profile/orderline/return`]);
+      this.router.navigate([`/profile/orderlines/return`]);
     } else {
       const rmDialog = this.dialog.open(GenDialogComponent, {
         width: '700px',
@@ -275,7 +284,7 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkOrderLineStatus(order) {
-    if (!((order.last_ticket.status === ORDER_STATUS.Delivered && !this.expiredTime) || order.last_ticket.status === ORDER_STATUS.WaitForAggregation) )
+    if (!((order.last_ticket.status === ORDER_STATUS.Delivered && !this.expiredTime) || order.last_ticket.status === ORDER_STATUS.WaitForAggregation))
       return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
   }
 

@@ -12,6 +12,7 @@ import {ORDER_LINE_STATUS, ORDER_STATUS} from '../../../../shared/enum/status.en
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {OrderStatuses} from '../../../../shared/lib/status';
 import * as moment from 'moment';
+import {OrderReturnComponent} from '../order-return/order-return.component';
 
 
 @Component({
@@ -49,7 +50,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
       this.orderInfo = result;
       this.profileOrder.forEach(el => [el.jalali_date, el.time] = dateFormatter(el.order_time));
     });
-    console.log('order info', this.orderInfo);
     this.isMobile = this.responsiveService.isMobile;
     this.profileOrderService.getAllOrders();
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
@@ -77,8 +77,10 @@ export class OrdersComponent implements OnInit, OnDestroy {
         data: {
           componentName: DialogEnum.orderLinesComponent,
         }
+
       });
     }
+
   };
 
   ngOnDestroy() {
@@ -173,13 +175,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
     // };
     // this.profileOrderService.orderData = this.orderObject;
     if (this.responsiveService.isMobile) {
-      this.router.navigate([`/profile/orderline/return`]);
+      this.router.navigate([`/profile/orderlines/return`]);
     } else {
-      const rmDialog = this.dialog.open(GenDialogComponent, {
+      const rmDialog = this.dialog.open(OrderReturnComponent, {
         width: '700px',
-        data: {
-          componentName: DialogEnum.orderReturnComponent
-        }
+        data: this.profileOrder.find(x => x._id === order._id),
+
       });
       rmDialog.afterClosed().subscribe(res => {
         this.closeDialog.emit(false);

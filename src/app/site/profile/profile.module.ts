@@ -18,7 +18,7 @@ import {
   MatRadioModule,
   MatTableModule,
   MatSlideToggleModule,
-  MatListModule,
+  MatListModule, MatDialogRef, MAT_DIALOG_DATA,
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DpDatePickerModule} from 'ng2-jalali-date-picker';
@@ -48,5 +48,9 @@ import { OrderCancelComponent } from './components/order-cancel/order-cancel.com
 
   ],
   declarations: [BasicInfoComponent, OrdersComponent, ProfileComponent, WishListComponent, PreferenceComponent, OrderCancelComponent],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
+  ]
 })
 export class ProfileModule { }
