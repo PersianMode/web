@@ -47,8 +47,7 @@ export class ShopResultComponent implements OnInit {
       .then((res: any) => {
         console.log('Pay Result :', res);
         this.payResult = res.xmlToNodeReadRes;
-        this.verifyResult = res.xmlToNodeVerifyRes ? res.xmlToNodeVerifyRes.actionResult : null;
-        this.bankReferData.amount = this.payResult.amount[0];
+        this.verifyResult = res.xmlToNodeVerifyRes ? res.xmlToNodeVerifyRes : null;
         this.jalali_date = dateFormatter(this.payResult.invoiceDate[0]);
         this.persian_trefId = this.payResult.transactionReferenceID[0].split('').map(ch => (+ch).toLocaleString('fa')).join('');
         if (this.payResult.result[0] === 'False') {
