@@ -85,17 +85,7 @@ export class OrderLinesComponent implements OnInit {
   OrderLineStatus(ol) {
     return ol.tickets.length !== 0 ? OrderLineStatuses.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
   }
-  // OrderLineStatus(arr) {
-  //   let tickets = [];
-  //   let statusText = '';
-  //   arr.forEach(el => {
-  //     tickets = el.tickets;
-  //     if (tickets.length)
-  //       statusText = OrderLineStatus.filter(os => os.status === tickets[tickets.length - 1].status)[0].title;
-  //     else statusText = '--';
-  //     el.statusText = statusText;
-  //   });
-  // }
+
 
   getThumbnailURL(boughtColor, product) {
     return imagePathFixer(boughtColor.image.thumbnail, product._id, boughtColor._id);
@@ -121,23 +111,6 @@ export class OrderLinesComponent implements OnInit {
       });
     }
   }
-
-  //
-  // cancelOrderLine(ol) {
-  //   this.quantities = [];
-  //   // check if quantity more than 1, we need show have many order_line need to cancel
-  //   if (ol.quantity > 1) {
-  //     for (let index = 1; index <= ol.quantity; index++) {
-  //       this.quantities.push({
-  //         value: index,
-  //         viewValue: index
-  //       });
-  //     }
-  //     this.isQuantityMoreThanOne = ol.order_line_id;
-  //   } else {
-  //     this.showDialogCancelOrderLine(ol, false);
-  //   }
-  // }
 
   showDialogCancelOrderLine(ol) {
     let options: any = {

@@ -67,7 +67,6 @@ export class OrderReturnComponent implements OnInit {
           duration: 2000,
         });
 
-        // this.changeOrderLine(this.orderLine);
         if (this.responsiveService.isMobile) {
           this.location.back();
         } else {
