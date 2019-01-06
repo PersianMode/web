@@ -2,7 +2,6 @@ import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/c
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
-import {EditOrderComponent} from '../../../cart/components/edit-order/edit-order.component';
 import {MatDialogRef, MatDialog, MatSnackBar} from '@angular/material';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
@@ -13,10 +12,8 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {OrderLineStatuses, OrderStatuses} from '../../../../shared/lib/status';
-import {ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
 import {ORDER_STATUS} from '../../../../shared/enum/status.enum';
 import * as moment from 'moment';
-import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-order-lines',
@@ -82,7 +79,10 @@ export class OrderLinesComponent implements OnInit {
       //   this.noDuplicateOrderLine.find(x => x.product_instance._id === el.product_instance._id).quantity++;
       // }
     });
+    console.log('  this.noDuplicateOrderLine', this.noDuplicateOrderLine);
+
   }
+
 
   findBoughtColor(arr) {
     arr.forEach(el => {
@@ -219,46 +219,41 @@ export class OrderLinesComponent implements OnInit {
       });
   }
 
-  checkCancelOrderLine(order) {
-
-    if (order.last_ticket.status === ORDER_STATUS.WaitForAggregation &&
-
-      order.order_lines.map(x => {
-        if (x.order_lines_ticket.status === ORDER_STATUS.WaitForAggregation)
-          return true;})
-    )
-      return (order.last_ticket.status === ORDER_STATUS.WaitForAggregation)
-
-    else return false;
-    }
+  checkCancelOrderLine(ol) {
+    console.log('order info cancel ', this.orderInfo);
+    if (ol.order_lines_ticket.status === ORDER_STATUS.WaitForAggregation && this.orderInfo.dialog_order.last_ticket.status === ORDER_STATUS.WaitForAggregation)
+      return true;
+  }
 
 
-  cancelOrderLine(order) {
-    this.quantities = [];
-    // check if quantity more than 1, we need show have many order_line need to cancel
-    if (order.quantity > 1) {
-      for (let index = 1; index <= order.quantity; index++) {
-        this.quantities.push({
-          value: index,
-          viewValue: index
-        });
-      }
-      this.isQuantityMoreThanOne = order.order_line_id;
-    } else {
-      this.showDialogCancelOrder(order, false);
-    }
+  cancelOrderLine(ol) {
+    // this.quantities = [];
+    // // check if quantity more than 1, we need show have many order_line need to cancel
+    // if (ol.quantity > 1) {
+    //   for (let index = 1; index <= ol.quantity; index++) {
+    //     this.quantities.push({
+    //       value: index,
+    //       viewValue: index
+    //     });
+    //   }
+    //   this.isQuantityMoreThanOne = ol.order_line_id;
+    // } else {
+    //   this.showDialogCancelOrder(ol, false);
+    // }
+      this.showDialogCancelOrder(ol, false);
+
   }
 
   checkReturnOrderLine(order) {
-    this.returnOrderTime = moment(order.order_time).add(7, 'd');
-    if (this.returnOrderTime > Date.now()) {
-      this.expiredTime = false;
-      return (order.last_ticket.status === ORDER_STATUS.Delivered)
-    }
-    else {
-      this.expiredTime = true;
-      return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
-    }
+    // this.returnOrderTime = moment(order.order_time).add(7, 'd');
+    // if (this.returnOrderTime > Date.now()) {
+    //   this.expiredTime = false;
+    //   return (order.last_ticket.status === ORDER_STATUS.Delivered)
+    // }
+    // else {
+    //   this.expiredTime = true;
+    //   return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
+    // }
   }
 
 
