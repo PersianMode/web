@@ -65,8 +65,8 @@ export class ShopResultComponent implements OnInit {
         }
       })
       .catch(err => {
-        console.log('ERR : ', err);
-        this.payResult = err.error;
+        this.payResult = err;
+        console.log('ERR :', this.payResult);
         this.cartService.loadCartsForShopRes();
         this.spinnerService.disable();
       });
