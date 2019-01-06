@@ -56,11 +56,6 @@ export class ShopResultComponent implements OnInit {
               this.spinnerService.disable();
               return Promise.reject('Verify Failed');
             }
-            // err => {
-            //   this.resultObj = err.error.resultObj;
-            //   return Promise.reject(err);
-            // }
-
           }
         }
       })
