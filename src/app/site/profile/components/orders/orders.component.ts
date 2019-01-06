@@ -8,7 +8,7 @@ import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {ORDER_LINE_STATUS, ORDER_STATUS} from '../../../../shared/enum/status.enum';
+import {ORDER_STATUS} from '../../../../shared/enum/status.enum';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {OrderStatuses} from '../../../../shared/lib/status';
 import * as moment from 'moment';
@@ -26,8 +26,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
   displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'discount', 'used_point', 'address', 'view_details', 'return_order'];
   isMobile = false;
   selectedOrder;
-  isQuantityMoreThanOne;
-  quantities: any[] = [];
   orderInfo: any;
   returnOrderTime;
   expiredTime = false;
@@ -77,10 +75,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
         data: {
           componentName: DialogEnum.orderLinesComponent,
         }
-
       });
     }
-
   };
 
   ngOnDestroy() {
@@ -120,7 +116,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
             .subscribe(
               data => {
                 this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
-                // this.changeOrderLine(ol);
                 this.closeDialog.emit(false);
                 this.progressService.disable();
               },
@@ -141,19 +136,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   cancelOrder(order) {
-    this.quantities = [];
-    // check if quantity more than 1, we need show how many order_line need to cancel
-    if (order.quantity > 1) {
-      for (let index = 1; index <= order.quantity; index++) {
-        this.quantities.push({
-          value: index,
-          viewValue: index
-        });
-      }
-      this.isQuantityMoreThanOne = order.order_line_id;
-    } else {
-      this.showDialogCancelOrder(order, false);
-    }
+    this.showDialogCancelOrder(order, false);
   }
 
   checkReturnOrder(order) {
@@ -183,8 +166,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
       });
       rmDialog.afterClosed().subscribe(res => {
-        this.closeDialog.emit(false);
-
+        // this.closeDialog.emit(true);
       });
     }
   }
