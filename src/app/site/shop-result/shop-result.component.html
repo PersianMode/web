@@ -1,5 +1,5 @@
 <div *ngIf="changeMessage" class="cancel-div">{{changeMessage}}, در صورت کسر مبلغ از حساب شما تا 72 ساعت آینده هزینه به حساب شما باز میگردد.</div>
-<div *ngIf="payResult && payResult.action[0] !== 'NOTRANSACTON'" fxLayout="row" fxLayoutAlign="center center">
+<div *ngIf="payResult && payResult.action[0] !== 'NOTRANSACTON' && payResult.action[0] !== 'NOINVOICE'" fxLayout="row" fxLayoutAlign="center center">
   <div fxFlex="5"></div>
   <div fxFlex="90">
     <mat-card class="result-card">
@@ -40,4 +40,7 @@
 </div>
 <div *ngIf="payResult && payResult.result[0] === 'False' && payResult.action[0] === 'NOTRANSACTON'" class="cancel-div">
   <span>سفارش به درخواست شما لغو گردید.</span>
+</div>
+<div *ngIf="payResult && payResult.result[0] === 'False' && payResult.action[0] === 'NOINVOICE'" class="cancel-div">
+  <span>چنین فاکتوری وجود ندارد.</span>
 </div>
