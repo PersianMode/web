@@ -62,8 +62,11 @@
       <mat-tab label="return-view" *ngIf="isHubClerk">
         <ng-template mat-tab-label>
           <span>بازگشت به انبار</span>
+          <mat-chip-list *ngIf="ReturnDeliveryBoxCount">
+            <mat-chip color="accent" selected="true">{{ReturnDeliveryBoxCount}}</mat-chip>
+          </mat-chip-list>
         </ng-template>
-        <app-return-to-warehouse-box></app-return-to-warehouse-box>
+        <app-return-to-warehouse-box (OnReturnDeliveryBoxCount)="ReturnDeliveryBoxCount = $event"></app-return-to-warehouse-box>
       </mat-tab>
 
 
