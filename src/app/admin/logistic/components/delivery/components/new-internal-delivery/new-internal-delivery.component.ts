@@ -135,6 +135,7 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
     });
   }
   ngOnDestroy(): void {
-    this.socketSubscription.unsubscribe();
+    if (this.socketSubscription)
+      this.socketSubscription.unsubscribe();
   }
 }
