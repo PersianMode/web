@@ -10,7 +10,7 @@ import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from 
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import {FormControl} from '@angular/forms';
-import {ORDER_STATUS} from 'app/shared/enum/status.enum';
+import {ORDER_STATUS, ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
 import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
@@ -204,9 +204,9 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   getStatus(item, isOrderLine) {
 
     if (isOrderLine)
-      return OrderLineStatuses.find(x => x.status === item.ticket.status).name;
+      return OrderLineStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
     else
-      return OrderStatuses.find(x => x.status === item.ticket.status).name;
+      return OrderStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
 
   }
   showTicket(order, orderLine) {
@@ -217,8 +217,17 @@ export class SmOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  isCancellable(order) {
-    return order.ticket.status === ORDER_STATUS.WaitForAggregation;
+  isCancellable(order, orderLine) {
+    const cond1 = order.tickets[order.tickets.length - 1].status === ORDER_STATUS.WaitForInvoice;
+    console.log('-> ', order);
+    let cond2;
+    if (!orderLine) {
+      cond2 = order.order_lines.find(x => !x.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.CancelRequested));
+    } else {
+      cond2 = !orderLine.tickets.map(x => x.status).includes(ORDER_LINE_STATUS.CancelRequested);
+    }
+    return cond1 && !!cond2;
+
   }
 
   cancel(order, orderLine) {
@@ -229,10 +238,16 @@ export class SmOrderComponent implements OnInit, OnDestroy {
     rmDialog.afterClosed().subscribe(
       status => {
         if (status) {
+
+          const body: any = {
+            orderId: order._id
+          };
+
+          if (orderLine)
+            body.orderLineId = orderLine._id;
+
           this.progressService.enable();
-          this.httpService.post('loyaltygroup/delete', {
-            
-          }).subscribe(
+          this.httpService.post('order/cancel', body).subscribe(
             data => {
               this.progressService.disable();
             },
