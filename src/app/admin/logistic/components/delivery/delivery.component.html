@@ -1,3 +1,3 @@
-<app-new-internal-delivery (OnUnassignedDeliveryCount)="OnUnassignedDeliveryChanged($event)"></app-new-internal-delivery>
+<app-new-internal-delivery *ngIf="!isSalesManager" (OnUnassignedDeliveryCount)="OnUnassignedDeliveryChanged($event)"></app-new-internal-delivery>
 
 <app-delivery-history></app-delivery-history>
