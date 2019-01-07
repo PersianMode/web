@@ -97,8 +97,8 @@
 .shop-button {
   color: black;
   font-size: large ;
-  font-family: 'irankharazmi';
-  font-weight: bolder;
+  font-family: iranyekan, sans-serif;
+  font-weight: bold;
 }
 .full-width {
   width: 100%;
@@ -125,6 +125,6 @@
 .shop-button-mobile{
   color: black;
   font-size: medium ;
-  font-family: 'irankharazmi';
+  font-family: iranyekan, sans-serif;
   font-weight: bold;
 }

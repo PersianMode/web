@@ -14,18 +14,18 @@
       <mat-card class="card-view" (click)="select(campaign._id)"
                 [ngClass]="{'mat-elevation-z24': campaign._id === selectedId}">
         <mat-card-content>
-          <div dir="rtl" style="font-weight: bold; font-family: 'irankharazmi'">
+          <div dir="rtl" style="font-weight: bold; font-family: iranyekan, sans-serif">
             {{campaign.name}}
           </div>
-          <div dir="rtl" style="font-family: 'irankharazmi'">
+          <div dir="rtl" style="font-weight: bold; font-family: iranyekan, sans-serif">
             <span>تخفیف پایه :</span>
             {{campaign.discount_ref}}
           </div>
-          <div dir="rtl" style="font-family: 'irankharazmi'">
+          <div dir="rtl" style="font-weight: bold; font-family: iranyekan, sans-serif">
             <span>نوع :</span>
             {{ campaign.coupon_code ? 'کوپن تخفیف' : 'مجموعه کالکشن'}}
           </div>
-          <div dir="rtl" style="font-family: 'irankharazmi'">
+          <div dir="rtl" style="font-weight: bold; font-family: iranyekan, sans-serif">
             <span>وضعیت :</span>
             {{getCampaignStatus(campaign) ? 'فعال' : 'غیر فعال'}}
           </div>
