@@ -66,10 +66,10 @@ button:focus{
   position: absolute;
   transform: rotate(-45deg) translateY(-11px) translateX(12px);
   width: auto;
-  font-weight: 400;
+  font-weight: bold;
   display: inline-block;
   font-size: 40px;
-  font-family: irankharazmi, sans-serif;
+  font-family: iranyekan, sans-serif;
   opacity: .6;
 }
 .selectedImg {
