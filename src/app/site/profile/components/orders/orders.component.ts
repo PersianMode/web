@@ -61,7 +61,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   goToOrderLines(orderId) {
     this.profileOrderService.getAllOrders();
-    console.log('profile order', this.profileOrder);
     this.selectedOrder = {
       orderId: orderId,
       dialog_order: this.profileOrder.find(el => el._id === orderId),
@@ -89,7 +88,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   showDialogCancelOrder(order) {
-    console.log('orderssss', order);
     let options: any = {
       orderId: order._id,
       orderLines: order.order_lines,
@@ -101,14 +99,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
       status => {
         if (status) {
           this.progressService.enable();
-          // order.last_ticket.status = 9;
-          // this request expect cancel order_lines
           this.httpService.post(`order/cancel`, options)
             .subscribe(
               data => {
                 this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
                 this.closeDialog.emit(false);
                 this.progressService.disable();
+                this.checkOrderStatus(order)
               },
               err => {
                 this.openSnackBar('خطا در هنگام کنسل کردن');
@@ -123,7 +120,8 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   checkCancelOrder(order) {
-    return (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForAggregation || ORDER_STATUS.DeliverySet))
+    return !order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) &&
+      !!order.order_lines.find(x => !x.cancel)
   }
 
   cancelOrder(order) {
@@ -131,43 +129,43 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   checkReturnOrder(order) {
-    this.returnOrderTime = moment(order.order_time).add(7, 'd');
-    if (this.returnOrderTime > Date.now()) {
-      this.expiredTime = false;
-      return (order.last_ticket.status === ORDER_STATUS.Delivered)
-    }
-    else {
-      this.expiredTime = true;
-      return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
-    }
+    // this.returnOrderTime = moment(order.order_time).add(7, 'd');
+    // if (this.returnOrderTime > Date.now()) {
+    //   this.expiredTime = false;
+    //   return (order.last_ticket.status === ORDER_STATUS.Delivered)
+    // }
+    // else {
+    //   this.expiredTime = true;
+    //   return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
+    // }
   }
 
   returnOrder(order) {
-    // this.orderObject = {
-    //   orderLine: orders,
-    //   order: this.orderInfo
-    // };
-    // this.profileOrderService.orderData = this.orderObject;
-    if (this.responsiveService.isMobile) {
-      this.router.navigate([`/profile/orderlines/return`]);
-    } else {
-      const rmDialog = this.dialog.open(OrderReturnComponent, {
-        width: '700px',
-        data: this.profileOrder.find(x => x._id === order._id),
-
-      });
-      rmDialog.afterClosed().subscribe(res => {
-        // this.closeDialog.emit(true);
-      });
-    }
+    // if (this.responsiveService.isMobile) {
+    //   this.router.navigate([`/profile/orderlines/return`]);
+    // } else {
+    //   const rmDialog = this.dialog.open(OrderReturnComponent, {
+    //     width: '700px',
+    //     data: this.profileOrder.find(x => x._id === order._id),
+    //
+    //   });
+    //   rmDialog.afterClosed().subscribe(res => {
+    //     // this.closeDialog.emit(true);
+    //   });
+    // }
   }
 
   checkOrderStatus(order) {
-    if (!(order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForAggregation || ORDER_STATUS.DeliverySet)))
+
+    if (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice || order.order_lines.find(x => x.cancel)))
+      // return 'sefresh';
+      return OrderStatuses.find(x => x.status === ORDER_STATUS.CancelRequested).title || '-';
+
+    else if(!(!order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) &&
+      !!order.order_lines.find(x => !x.cancel)))
       return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
   }
-
 }
 
-// if (!((order.status === ORDER_STATUS.Delivered && !this.expiredTime) || (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice)))
-//   return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
+
+
