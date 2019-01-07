@@ -1,0 +1,51 @@
+<mat-card class="card-container">
+  <mat-card-header>
+    <mat-card-title>لیست خریدهایی که از ساعت ۷ صبح دیروز (تا ۷ صبح امروز) انجام شده است</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="example-container mat-elevation-z8">
+      <button mat-icon-button color="primary" (click)="getData()" style="margin-top: 10px;">
+        <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+      </button>
+    <div class="button" *ngIf="printButton">
+    <button color="primary" (click)="printReport('x')">چاپ گزارش روزانه</button>
+    </div>
+
+      <mat-table #table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{orderNumber.indexOf(element)+1}} </mat-cell>
+        </ng-container>
+
+         requested_time Column
+        <ng-container matColumnDef="order_time">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>زمان خرید </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{getShamsiDate(element.order_time)}} </mat-cell>
+        </ng-container>
+
+        <!-- balance Column -->
+        <ng-container matColumnDef="total_amount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>میزان خرید </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.total_amount}} </mat-cell>
+        </ng-container>
+
+        <!-- Detail Column -->
+        <ng-container matColumnDef="total_order_lines">
+          <mat-header-cell *matHeaderCellDef>تعداد اقلام سفارش </mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.total_order_lines}}</mat-cell>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="customer_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> نام خریدار </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.customer.first_name}} {{element.customer.surname}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <span class="total-amount">{{' مجموع خریدهای انجام شده: '}}{{ total }}{{ ' تومان ' }}</span>
+    </div>
+  </mat-card-content>
+</mat-card>
