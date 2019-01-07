@@ -89,7 +89,7 @@
         <ng-container matColumnDef="proccess">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell  *matCellDef="let order">
-              <button *ngIf="isCancellable(order)" mat-button color="warn" (click)='cancel(order)'>لغو</button>
+              <button *ngIf="isCancellable(order)" mat-button color="warn" (click)='cancel(order)'>لفو کل سفارش</button>
           </mat-cell>
         </ng-container>
 
@@ -130,7 +130,7 @@
                     </td>
                     <td>
                       <p>
-                          <button mat-button color="warn" *ngIf="isCancellable(detail.order)" (click)='cancel(detail.order, ol)'>لغو</button> 
+                          <button mat-button color="warn" *ngIf="isCancellable(detail.order, ol)" (click)='cancel(detail.order, ol)'>لغو</button> 
                       </p>
                     </td>
                   </tr>
