@@ -88,21 +88,12 @@ export class OrdersComponent implements OnInit, OnDestroy {
     });
   }
 
-  showDialogCancelOrder(ol, multi: boolean) {
+  showDialogCancelOrder(order) {
+    console.log('orderssss', order);
     let options: any = {
-      orderId: this.orderInfo.orderId,
-      orderLineId: ol.order_line_id,
-      // productInstanceId: ol.product_instance._id
-    }
-    if (multi) {
-      options = {
-        orderId: this.orderInfo.orderId,
-        orderLineId: ol.order_line_id,
-        quantity: 1,
-        // this.quantitySelected,
-        productInstanceId: ol.product_instance._id
-      };
-    }
+      orderId: order._id,
+      orderLines: order.order_lines,
+    };
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
@@ -110,7 +101,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
       status => {
         if (status) {
           this.progressService.enable();
-          ol.last_ticket.status = 9;
+          // order.last_ticket.status = 9;
           // this request expect cancel order_lines
           this.httpService.post(`order/cancel`, options)
             .subscribe(
@@ -132,11 +123,11 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   checkCancelOrder(order) {
-    return (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice))
+    return (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForAggregation || ORDER_STATUS.DeliverySet))
   }
 
   cancelOrder(order) {
-    this.showDialogCancelOrder(order, false);
+    this.showDialogCancelOrder(order);
   }
 
   checkReturnOrder(order) {
@@ -172,11 +163,9 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   checkOrderStatus(order) {
-    if (!((order.status === ORDER_STATUS.Delivered && !this.expiredTime) ||
-        (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice))))
+    if (!(order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForAggregation || ORDER_STATUS.DeliverySet)))
       return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
   }
-
 
 }
 

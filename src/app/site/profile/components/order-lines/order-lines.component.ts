@@ -117,7 +117,6 @@ export class OrderLinesComponent implements OnInit {
       orderId: this.orderInfo.orderId,
       orderLineId: ol.order_line_id,
     }
-    console.log('options: ', options);
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
@@ -125,13 +124,10 @@ export class OrderLinesComponent implements OnInit {
       status => {
         if (status) {
           this.progressService.enable();
-          ol.order_lines_ticket.status = ORDER_STATUS.CancelRequested;
-          this.checkCancelOrderLine(ol);
           // this request expect cancel order_lines
           this.httpService.post(`order/cancel`, options)
             .subscribe(
               data => {
-                console.log('data order cancel',data);
                 this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
                 this.progressService.disable();
               },
@@ -148,10 +144,7 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkCancelOrderLine(ol) {
-    console.log('orderInfo cancel',this.orderInfo);
-    console.log('ol: ',ol);
-
-    if (!(this.orderInfo.dialog_order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice)) &&
+    if ((this.orderInfo.dialog_order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForAggregation || ORDER_STATUS.DeliverySet)) &&
       !(ol.tickets.map(x => x.status).includes(ORDER_LINE_STATUS.CancelRequested)))
       return true;
   }
