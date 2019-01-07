@@ -31,7 +31,7 @@ export class TicketComponent implements OnInit {
 
   isOrder = true;
 
-  constructor(private httpService: HttpService, public dialogRef: MatDialogRef<TicketComponent>, private progressService: ProgressService
+  constructor(private httpService: HttpService, public dialogRef: MatDialogRef<TicketComponent>, private progressService: ProgressService,
     @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit() {
