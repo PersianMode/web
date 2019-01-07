@@ -11,8 +11,6 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 import {ORDER_STATUS} from '../../../../shared/enum/status.enum';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
 import {OrderStatuses} from '../../../../shared/lib/status';
-import * as moment from 'moment';
-import {OrderReturnComponent} from '../order-return/order-return.component';
 
 
 @Component({
@@ -22,12 +20,10 @@ import {OrderReturnComponent} from '../order-return/order-return.component';
 })
 export class OrdersComponent implements OnInit, OnDestroy {
   profileOrder = [];
-  checkOrder;
   displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'discount', 'used_point', 'address', 'view_details', 'return_order'];
   isMobile = false;
   selectedOrder;
   orderInfo: any;
-  returnOrderTime;
   expiredTime = false;
   @Output() closeDialog = new EventEmitter<boolean>();
 
@@ -105,7 +101,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
                 this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
                 this.closeDialog.emit(false);
                 this.progressService.disable();
-                this.checkOrderStatus(order)
+                this.profileOrderService.getAllOrders();
               },
               err => {
                 this.openSnackBar('خطا در هنگام کنسل کردن');
@@ -156,13 +152,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   checkOrderStatus(order) {
-  //
-    if (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) || order.order_lines.find(x => x.cancel))
+  if (!order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForAggregation) )
+      return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
+
+
+  else if (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForAggregation) && !order.order_lines.find(x => !x.cancel))
       return OrderStatuses.find(x => x.status === ORDER_STATUS.CancelRequested).title || '-';
-  //
-  //   else if(!(!order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) &&
-  //     !!order.order_lines.find(x => !x.cancel)))
-  //     return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
+
   }
 }
 

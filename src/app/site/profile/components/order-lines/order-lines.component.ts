@@ -26,7 +26,6 @@ export class OrderLinesComponent implements OnInit {
   isMobile = false;
   orderInfo: any;
   orderLines = [];
-  returnOrderTime;
   expiredTime = false;
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
@@ -127,6 +126,9 @@ export class OrderLinesComponent implements OnInit {
               data => {
                 this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
                 this.progressService.disable();
+                this.orderInfo = this.profileOrderService.orderData;
+                this.profileOrderService.getAllOrders();
+
               },
               err => {
                 this.openSnackBar('خطا در هنگام کنسل کردن');
