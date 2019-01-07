@@ -218,7 +218,7 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   }
 
   isCancellable(order, orderLine) {
-    const cond1 = order.tickets[order.tickets.length - 1].status === ORDER_STATUS.WaitForInvoice;
+    const cond1 = !order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice);
     console.log('-> ', order);
     let cond2;
     if (!orderLine) {
