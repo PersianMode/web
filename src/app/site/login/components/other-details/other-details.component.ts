@@ -83,13 +83,13 @@ export class OtherDetailsComponent implements OnInit {
       code: this.code,
     }).subscribe(
       (data) => {
-        console.log('New code is sent: ', data);
+        // console.log('New code is sent: ', data);
       },
       (err) => {
         console.error('Cannot send new code: ', err);
       }
     );
-  }
+  } 
 
   checkMobilePattern() {
     if ((/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/).test(this.mobile_no))
