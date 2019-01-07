@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(public dialog: MatDialog, private authService: AuthService,
               private pageService: PageService, private router: Router,
-              private CheckoutService : CheckoutService,
+              private CheckoutService: CheckoutService,
               @Inject(WINDOW) private window, private cartService: CartService) {
   }
 

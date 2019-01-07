@@ -23,47 +23,79 @@ export class CartService {
               private productService: ProductService,
               private snackBar: MatSnackBar) {
     this.authService.isLoggedIn.subscribe(
-      isLoggedIn => {
+      async isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
         const items = this.getItemsFromStorage();
         if (this.authService.userIsLoggedIn()) {
-
           if (items && items.length) {
-            items.forEach((el, i) => {
-              this.httpService.post('order', {
-                product_id: el.product_id,
-                product_instance_id: el.instance_id,
-                number: el.quantity,
-              })
-                .subscribe(() => {
-                    items.splice(i, 1);
-                    try {
-                      localStorage.setItem(this.localStorageKey, JSON.stringify(items));
-                    } catch (e) {
-                      console.error('could not update local storage after login', e);
-                    }
-                  },
-                  err => console.error('orders error: ', el, err)
-                );
-            });
+            for (let i = items.length - 1; i >= 0; i--) {
+              await this.saveLocalStorageCartsToServer(items[i]);
+              items.splice(i, 1);
+              try {
+                localStorage.setItem(this.localStorageKey, JSON.stringify(items));
+              } catch (e) {
+                console.error('could not update local storage after login', e);
+              }
+            }
           }
-
           this.getUserCart();
-
         } else if (items && items.length) {
           this.getItemsDetail(items);
         } else {
           this.setCartItem(null, [], false);
         }
-
-
       });
   }
+
+  async saveLocalStorageCartsToServer(item) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('order', {
+        product_id: item.product_id,
+        product_instance_id: item.instance_id,
+        number: item.quantity,
+      }).subscribe((res) => {
+          resolve(res);
+        },
+        (err) => {
+          console.error('orders error: ', item, err);
+          reject(err);
+        }
+      );
+    });
+  }
+
+  loadCartsForShopRes() {
+    const items = this.getItemsFromStorage();
+    if (this.authService.userIsLoggedIn()) {
+      this.getUserCart();
+    } else if (items && items.length) {
+      this.getItemsDetail(items);
+    }
+  }
+
 
   getUserCart() {
     this.httpService.get('cart/items').subscribe(
       res => {
         this.getItemsDetail(res);
+      });
+  }
+
+  getItemsDetail(overallDetails) {
+    this.productService.loadProducts(overallDetails.map(x => x.product_id))
+      .then(res => {
+        try {
+          this.setCartItem(overallDetails, res, false);
+        } catch (err) {
+          console.error('-> ', err);
+        }
+      })
+      .catch(err => {
+        try {
+          this.setCartItem(null, [], false);
+        } catch (err) {
+          console.error('-> ', err);
+        }
       });
   }
 
@@ -94,7 +126,7 @@ export class CartService {
       // Update local storage
       let tempItems = this.getItemsFromStorage();
       tempItems = tempItems.filter(el => el.product_id !== value.product_id
-        && el.instance_id !== value.instance_id);
+        || el.instance_id !== value.instance_id);
 
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
@@ -177,23 +209,6 @@ export class CartService {
     }
   }
 
-  getItemsDetail(overallDetails) {
-    this.productService.loadProducts(overallDetails.map(x => x.product_id))
-      .then(res => {
-        try {
-          this.setCartItem(overallDetails, res, false);
-        } catch (err) {
-          console.error('-> ', err);
-        }
-      })
-      .catch(err => {
-        try {
-          this.setCartItem(null, [], false);
-        } catch (err) {
-          console.error('-> ', err);
-        }
-      });
-  }
 
   private setCartItem(overallDetails, products, isUpdate = true) {
     const itemList = [];
