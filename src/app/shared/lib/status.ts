@@ -3,7 +3,9 @@ import {ORDER_LINE_STATUS as ols, ORDER_STATUS as os, Delivery_STATUS as ds, } f
 const OrderLineStatuses: any[] = [
   {name: 'تایید پرداخت', title: 'تایید پرداخت', status: ols.default},
   {name: 'انتظار تایید انبار آنلاین', title: 'در حال پردازش', status: ols.WaitForOnlineWarehouse},
+  {name: 'انتظار لغو سفارش توسط انبار آنلاین', title: 'در حال پردازش', status: ols.WaitForOnlineWarehouseCancel},
   {name: 'تایید انبار آنلاین', title: 'در حال پردازش', status: ols.OnlineWarehouseVerified},
+  {name: 'لغو توسط انبار آنلاین', title: 'در حال پردازش', status: ols.OnlineWarehouseCanceled},
   {name: 'آماده تحویل', title: 'آماده تحویل', status: ols.ReadyToDeliver},
   {name: 'تعیین ارسال', title: 'آماده تحویل', status: ols.DeliverySet},
   {name: 'در حال ارسال', title: 'در حال ارسال', status: ols.OnDelivery},
@@ -13,20 +15,22 @@ const OrderLineStatuses: any[] = [
   {name: 'بررسی نهایی موفق', title: 'در حال پردازش', status: ols.Checked},
   {name: 'ناموجود', title: 'ناموجود', status: ols.NotExists},
   {name: 'بازگشت کالا', title: 'بازگشت کالا', status: ols.Return},
-  {name: 'لغو سفارش', title: 'لغو سفارش', status: ols.Cancel},
+  {name: 'درخواست لغو سفارش', title: 'لغو سفارش', status: ols.CancelRequested},
   {name: 'ّعدم موجودی انبار', title: 'بررسی توسط مسئول فروش', status: ols.StoreCancel},
   {name: 'ّاز سر گیری فرایند', title: 'در حال پردازش', status: ols.Renew},
+  {name: 'ّلغو سفارش', title: 'در حال پردازش', status: ols.Canceled},
 ];
 const OrderStatuses: any[] = [
   {name: 'در انتظار تجمیع', title: 'در حال آماده سازی', status: os.WaitForAggregation},
   {name: 'در انتظار صدور فاکتور', title: 'صدور فاکتور', status: os.WaitForInvoice},
   {name: 'تایید صدور فاکتور', title: 'صدور فاکتور', status: os.InvoiceVerified},
-  {name: 'آماده ارسال', title: 'آماده سازی جهت ارسال', status: os.ReadyToDeliver},
+  {name: 'آماده ارسال', title: 'اماده سازی جهت ارسال', status: os.ReadyToDeliver},
   {name: 'تخصیص ارسال', title: 'در حال آماده سازی', status: os.DeliverySet},
   {name: 'در حال ارسال', title: 'در حال ارسال', status: os.OnDelivery},
   {name: 'تحویل شده', title: 'تحویل شده', status: os.Delivered},
-  {name: 'درخواست بازگشت کالا', title: 'بازگشت سفارش', status: os.Return},
-  {name: 'لغو', title: 'لغو سفارش', status: os.Cancel},
+  {name: 'درخواست بازگشت کالا', title: 'درخواست بازگشت کالا', status: os.Return},
+  {name: 'درخواست لغو کل سفارش', title: 'لغو', status: os.CancelRequested},
+  {name: 'لغو سفارش', title: 'لغو', status: os.Canceled},
 ];
 
 const DeliveryStatuses: any[] = [
