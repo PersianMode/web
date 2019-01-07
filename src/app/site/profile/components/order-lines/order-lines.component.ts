@@ -129,7 +129,7 @@ export class OrderLinesComponent implements OnInit {
   checkReturnOrderLine(ol) {
     const date = Date.parse(this.orderInfo.dialog_order.order_time) + (1000 * 60 * 60 * 24 * 14);
     return ol.tickets.find(tk => tk.status === ORDER_LINE_STATUS.Delivered &&
-      (tk.status !== ORDER_LINE_STATUS.Return || tk.status !== ORDER_LINE_STATUS.CustomerCancel) &&
+      (tk.status !== ORDER_LINE_STATUS.Return || tk.status !== ORDER_LINE_STATUS.CancelRequested) &&
       !ol['returnFlag'] &&
       date > Date.now()
     );
@@ -217,7 +217,7 @@ export class OrderLinesComponent implements OnInit {
   checkCancelOrderLine(ol) {
     return ol.tickets.every(tk =>
       tk.status !== ORDER_LINE_STATUS.OnDelivery && tk.status !== ORDER_LINE_STATUS.Delivered &&
-      tk.status !== ORDER_LINE_STATUS.CustomerCancel && tk.status !== ORDER_LINE_STATUS.Return &&
+      tk.status !== ORDER_LINE_STATUS.CancelRequested && tk.status !== ORDER_LINE_STATUS.Return &&
       !ol['cancelFlag']
     );
   }

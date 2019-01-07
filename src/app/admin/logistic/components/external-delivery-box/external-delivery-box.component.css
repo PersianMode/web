@@ -26,3 +26,7 @@ mat-cell {
 .highlight-row {
   background-color: rgb(240, 240, 240);
 }
+
+.orderLineDetail{
+  width: 100%
+}

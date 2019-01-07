@@ -10,8 +10,8 @@
             <mat-expansion-panel-header>خلاصه</mat-expansion-panel-header>
 
 
-            <app-checkout-summary [total]="total" [discount] = "discount" [usedBalance] = "usedBalance"
-                                  [usedLoyaltyPoint] = "usedLoyaltyPoint" [deliveryCost]="deliveryCost"
+            <app-checkout-summary [total]="total" [discount]="discount" [usedBalance]="usedBalance"
+                                  [usedLoyaltyPoint]="usedLoyaltyPoint" [deliveryCost]="deliveryCost"
                                   [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
                                   [earnedLoyaltyPoint]="earnedLoyaltyPoint"
                                   [showCostLabel]="showCostLabel"
@@ -36,18 +36,37 @@
             </mat-expansion-panel-header>
 
 
-            <app-address-table [isProfile] = false (deliveryType)="setCostLabel($event)"
+            <app-address-table [isProfile]=false (deliveryType)="setCostLabel($event)"
                                (noDuration)="noDuration = $event"
                                (durationType)="calculateDiscount($event)"></app-address-table>
           </mat-expansion-panel>
         </mat-accordion>
+        <form #bankDataFormId method="post" Action="https://pep.shaparak.ir/gateway.aspx">
+          <input type="hidden" #invoiceNumber name="invoiceNumber"/>
+          <input type="hidden" #invoiceDate name="invoiceDate"/>
+          <input type="hidden" #amount name="amount"/>
+          <input type="hidden" #terminalCode name="terminalCode"/>
+          <input type="hidden" #merchantCode name="merchantCode"/>
+          <input type="hidden" #redirectAddress name="redirectAddress"/>
+          <input type="hidden" #timeStamp name="timeStamp"/>
+          <input type="hidden" #action name="action"/>
+          <input type="hidden" #mobile name="mobile"/>
+          <input type="hidden" #email name="email"/>
+          <input type="hidden" #sign name="sign"/>
+        </form>
         <button mat-raised-button
                 class="payment-button"
                 (click)="checkout()" [disabled]="disabled"
                 [style.background]="disabled ? 'gray' : 'black'">پرداخت
+        </button>
+        <button mat-raised-button
+                class="payment-button"
+                (click)="checkoutDemo()" [disabled]="!isDev || disabled"
+                [style.background]="!isDev || disabled ? 'gray' : 'black'">دمو پرداخت
         </button>
       </div>
     </div>
   </div>
   <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
 </div>
+

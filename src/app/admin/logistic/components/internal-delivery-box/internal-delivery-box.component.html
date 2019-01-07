@@ -1,5 +1,5 @@
 <!-- barcode checker -->
-<app-barcode-checker [showScanner]="total" [trigger]="trigger" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+<app-barcode-checker *ngIf="total" [trigger]="trigger" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
 
 <mat-card>
   <!-- header -->
@@ -48,12 +48,7 @@
           <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.barcode}}</span></mat-cell>
         </ng-container>
 
-        <!-- count column -->
-        <ng-container matColumnDef="count">
-          <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
-          <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
-        </ng-container>
-        
+         
         <!-- status column -->
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>

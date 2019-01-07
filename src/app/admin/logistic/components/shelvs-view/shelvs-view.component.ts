@@ -6,15 +6,12 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
-
-
-import {ORDERS} from '../order-mock';
-import {OrderAddressComponent} from '../order-address/order-address.component';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
-import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {HttpService} from '../../../../shared/services/http.service';
-
+import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
+import {DeliveryStatuses} from '../../../../shared/lib/status';
+import {OrderLineViewerComponent} from '../order-line-viewer/order-line-viewer.component';
 
 @Component({
   selector: 'app-shelvs-view',
@@ -35,22 +32,19 @@ export class ShelvsViewComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'customer', 'order_time', 'total_order_lines', 'trackingCode', 'address'];
-  //must added above: , 'shelf_code'
+  displayedColumns = ['position', 'shelf_code', 'status', 'category'];
   expandedElement: any;
   total;
   pageSize = 10;
   resultsLength: Number;
   showBarcodeScanner = false;
-  trackingCodeCtrl = new FormControl();
   transfereeCtrl = new FormControl();
   shelfCodeCtrl = new FormControl();
-
-
+  statusList = {internalMessage: 'داخلی', externalMessage: 'خارجی'}
+  _status = null;
   filteredShelfCodes: Observable<any[]>;
-  shelfCodes = SHELF_CODES; // mock
+  shelfCodes = null;
   transferee = null;
-  trackingCode = null;
   dataSource = new MatTableDataSource();
 
   constructor(private dialog: MatDialog, private progressService: ProgressService, private httpService: HttpService, private snackBar: MatSnackBar) {
@@ -67,15 +61,6 @@ export class ShelvsViewComponent implements OnInit {
   ngOnInit() {
     this.load();
 
-    this.trackingCodeCtrl.valueChanges.debounceTime(500).subscribe(
-      data => {
-        this.trackingCode = data.trim() !== '' ? data.trim() : null;
-        this.load();
-      }, err => {
-        console.error('Couldn\'t refresh when tracking code is changed: ', err);
-      }
-    );
-
     this.transfereeCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
         this.transferee = data.trim() !== '' ? data.trim() : null;
@@ -85,6 +70,14 @@ export class ShelvsViewComponent implements OnInit {
       }
     );
 
+    this.shelfCodeCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.shelfCodes = data.trim() !== '' ? data.trim() : null;
+        this.load();
+      }, err => {
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+      }
+    );
   }
 
   load() {
@@ -94,23 +87,54 @@ export class ShelvsViewComponent implements OnInit {
       dir: this.sort.direction,
 
       transferee: this.transferee,
-      trackingCode: this.trackingCode,
+      shelfCodes: this.shelfCodes,
 
-      type: 'shelvesList',
-      manual: false
+      type: 'ShelvesList',
     };
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
-    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+
+    this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
+      console.log('res: ', res);
+
+      for (let delivery of res.data) {
+        const order_data = [];
+        let order_details = delivery.order_details;
+        let order_lines = delivery.order_lines;
+        order_lines.forEach(x => {
+          let foundOrder = order_details.find(y => y.order_line_ids === x.order_lines_id);
+          let preOrderData = order_data.find(y => y.order_id === foundOrder.order_id)
+          if (preOrderData) {
+            preOrderData.order_lines.push(x)
+          } else {
+            order_data.push(Object.assign(foundOrder, {order_lines: [x]}, {transaction_id: delivery.transaction_id},
+              {order_time: delivery.order_time}));
+          }
+        });
+
+        delivery.orders = order_data;
+      }
+
+      console.log('dliveries', res.data);
 
       const rows = [];
+
+      if (this._status === true) {
+        res = new MatTableDataSource(res.data.filter(el => el.to.warehouse_id));
+      }
+
+      if (this._status === false) {
+        res = new MatTableDataSource(res.data.filter(el => el.to.customer));
+      }
+
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
 
       this.dataSource.data = rows;
+
       this.resultsLength = res.total ? res.total : 0;
       this.OnNewInboxCount.emit(res.total);
 
@@ -146,36 +170,10 @@ export class ShelvsViewComponent implements OnInit {
     return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
   }
 
-  showAddress(order) {
-    if (!order.address) {
-      // need to create message service and return this message => ('order line has no address!)
-      return;
-    }
-    this.dialog.open(OrderAddressComponent, {
-      width: '400px',
-      data: {address: order.address, is_collect: !!order.is_collect}
-    });
-  }
-
-  getProductDetail(orderLine) {
-    const product_color = orderLine.product_colors.find(x => x._id === orderLine.product_color_id);
-    const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id) :
-      null;
-    return {
-      name: orderLine.instance.product_name,
-      thumbnailURL,
-      color: product_color ? product_color.name : null,
-      color_code: product_color ? product_color.code : null,
-      size: orderLine.instance.size,
-      product_id: orderLine.instance.product_id
-    };
-  }
-
-  showDetail(orderLine) {
-    this.dialog.open(ProductViewerComponent, {
-      width: '400px',
-      data: this.getProductDetail(orderLine)
+  showOrderLine(orderLines) {
+    this.dialog.open(OrderLineViewerComponent, {
+      width: '800px',
+      data: orderLines
     });
   }
 
@@ -183,22 +181,28 @@ export class ShelvsViewComponent implements OnInit {
     this.progressService.enable();
   }
 
-  onScanOrder() {
-    this.showBarcodeScanner = true;
+  getStatus(status) {
+    return DeliveryStatuses.find(x => x.status === status).name || '-';
+  }
+
+  getCategory(category) {
+    if (category.customer)
+      return this.statusList.externalMessage;
+    else if (category.warehouse_id)
+      return this.statusList.internalMessage;
+  }
+
+  changeStatus() {
+    if (this._status === null) {
+      this.load();
+      this._status = true;
+    } else if (this._status === true) {
+      this.load();
+      this._status = false;
+    } else if (this._status === false) {
+      this.load();
+      this._status = null;
+    }
   }
 }
 
-const SHELF_CODES = [
-  {
-    code: 'as23sd3',
-  },
-  {
-    code: '99sd23',
-  },
-  {
-    code: '023d34',
-  },
-  {
-    code: '3sd342s',
-  }
-];
