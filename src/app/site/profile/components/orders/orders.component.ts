@@ -157,7 +157,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   checkOrderStatus(order) {
   //
-    if (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice || order.order_lines.find(x => x.cancel)))
+    if (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) || order.order_lines.find(x => x.cancel))
       return OrderStatuses.find(x => x.status === ORDER_STATUS.CancelRequested).title || '-';
   //
   //   else if(!(!order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) &&
