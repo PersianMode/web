@@ -61,9 +61,9 @@
   <ng-container matColumnDef="return_order">
     <mat-header-cell *matHeaderCellDef mat-sort-header>وضعیت سفارش</mat-header-cell>
     <mat-cell *matCellDef="let order" style=" font-size: 12px">
-      <button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">
-        بازگشت کالا
-      </button>
+      <!--<button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">-->
+        <!--بازگشت کالا-->
+      <!--</button>-->
       <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
        لغو خرید
       </button>
@@ -110,9 +110,9 @@
         <div class="eye-style"><a (click)="goToOrderLines(order._id)" class="clickable-link"><i
           class="fa fa-eye"></i></a></div>
         <div>{{"وضعیت: "}}
-          <button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">
-            بازگشت کالا
-          </button>
+          <!--<button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">-->
+            <!--بازگشت کالا-->
+          <!--</button>-->
           <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
             لغو خرید
           </button>

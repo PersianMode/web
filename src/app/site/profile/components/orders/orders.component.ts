@@ -132,7 +132,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   checkCancelOrder(order) {
-    return (order.last_ticket.status === ORDER_STATUS.WaitForAggregation)
+    return (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice))
   }
 
   cancelOrder(order) {
@@ -172,8 +172,13 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   checkOrderStatus(order) {
-    if (!((order.last_ticket.status === ORDER_STATUS.Delivered && !this.expiredTime) || order.last_ticket.status === ORDER_STATUS.WaitForAggregation))
+    if (!((order.status === ORDER_STATUS.Delivered && !this.expiredTime) ||
+        (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice))))
       return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
   }
+
+
 }
 
+// if (!((order.status === ORDER_STATUS.Delivered && !this.expiredTime) || (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice)))
+//   return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';

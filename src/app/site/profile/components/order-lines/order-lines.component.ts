@@ -12,7 +12,7 @@ import {RemovingConfirmComponent} from '../../../../shared/components/removing-c
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {OrderLineStatuses, OrderStatuses} from '../../../../shared/lib/status';
-import {ORDER_STATUS} from '../../../../shared/enum/status.enum';
+import {ORDER_LINE_STATUS, ORDER_STATUS} from '../../../../shared/enum/status.enum';
 import * as moment from 'moment';
 
 @Component({
@@ -116,8 +116,8 @@ export class OrderLinesComponent implements OnInit {
     let options: any = {
       orderId: this.orderInfo.orderId,
       orderLineId: ol.order_line_id,
-      // productInstanceId: ol.product_instance._id
     }
+    console.log('options: ', options);
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
     });
@@ -125,12 +125,13 @@ export class OrderLinesComponent implements OnInit {
       status => {
         if (status) {
           this.progressService.enable();
-          ol.order_lines_ticket.status = ORDER_STATUS.Cancel;
+          ol.order_lines_ticket.status = ORDER_STATUS.CancelRequested;
           this.checkCancelOrderLine(ol);
           // this request expect cancel order_lines
           this.httpService.post(`order/cancel`, options)
             .subscribe(
               data => {
+                console.log('data order cancel',data);
                 this.openSnackBar('کالای مورد نظر با موفقیت کنسل شد.');
                 this.progressService.disable();
               },
@@ -147,7 +148,11 @@ export class OrderLinesComponent implements OnInit {
   }
 
   checkCancelOrderLine(ol) {
-    if (this.orderInfo.dialog_order.last_ticket.status === ORDER_STATUS.WaitForAggregation && !(ol.order_lines_ticket.status === ORDER_STATUS.Cancel))
+    console.log('orderInfo cancel',this.orderInfo);
+    console.log('ol: ',ol);
+
+    if (!(this.orderInfo.dialog_order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice)) &&
+      !(ol.tickets.map(x => x.status).includes(ORDER_LINE_STATUS.CancelRequested)))
       return true;
   }
 
