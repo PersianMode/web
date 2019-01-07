@@ -107,6 +107,8 @@ export class SmOrderComponent implements OnInit, OnDestroy {
 
     this.progressService.enable();
 
+    const tempId = this.expandedElement;
+    this.expandedElement = null;
     const options = {
       transId: this.transId,
       receiver: this.receiver,
@@ -127,6 +129,10 @@ export class SmOrderComponent implements OnInit, OnDestroy {
       this.dataSource.data = rows;
 
       this.total = res.total ? res.total : 0;
+
+      setTimeout(() => {
+        this.expandedElement = tempId;
+      }, 100);
 
     }, err => {
       this.progressService.disable();
@@ -221,9 +227,9 @@ export class SmOrderComponent implements OnInit, OnDestroy {
     const cond1 = !order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice);
     let cond2;
     if (!orderLine) {
-      cond2 = order.order_lines.find(x => !x.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.CancelRequested));
+      cond2 = order.order_lines.find(x => !x.cancel);
     } else {
-      cond2 = !orderLine.tickets.map(x => x.status).includes(ORDER_LINE_STATUS.CancelRequested);
+      cond2 = !orderLine.cancel;
     }
     return cond1 && !!cond2;
 
@@ -262,6 +268,9 @@ export class SmOrderComponent implements OnInit, OnDestroy {
         console.error('Error when subscribing on rmDialog.afterClosed() function: ', err);
       });
   }
+
+
+
   ngOnDestroy(): void {
   }
 
