@@ -18,7 +18,7 @@ const OrderLineStatuses: any[] = [
   {name: 'درخواست لغو سفارش', title: 'لغو سفارش', status: ols.CancelRequested},
   {name: 'ّعدم موجودی انبار', title: 'بررسی توسط مسئول فروش', status: ols.StoreCancel},
   {name: 'ّاز سر گیری فرایند', title: 'در حال پردازش', status: ols.Renew},
-  {name: 'ّلغو سفارش', title: 'در حال پردازش', status: ols.Canceled},
+  {name: 'لغو سفارش', title: 'در حال پردازش', status: ols.Canceled},
 ];
 const OrderStatuses: any[] = [
   {name: 'در انتظار تجمیع', title: 'در حال آماده سازی', status: os.WaitForAggregation},
