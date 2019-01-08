@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {PaymentType} from '../../../shared/enum/payment.type.enum';
 import {CheckoutService} from '../../../shared/services/checkout.service';
 import {HttpService} from '../../../shared/services/http.service';
@@ -7,11 +7,12 @@ import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
 import {MatDialog} from '@angular/material';
 import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 
 import {ProgressService} from '../../../shared/services/progress.service';
 import {AuthService} from '../../../shared/services/auth.service';
-import {isUndefined} from 'util';
+import {DOCUMENT, Location} from '@angular/common';
+import {SpinnerService} from '../../../shared/services/spinner.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -19,6 +20,19 @@ import {isUndefined} from 'util';
   styleUrls: ['./checkout-page.component.css']
 })
 export class CheckoutPageComponent implements OnInit {
+  @ViewChild('bankDataFormId') bankDataFormId: ElementRef;
+  @ViewChild('invoiceNumber') invoiceNumber: ElementRef;
+  @ViewChild('invoiceDate') invoiceDate: ElementRef;
+  @ViewChild('amount') amount: ElementRef;
+  @ViewChild('terminalCode') terminalCode: ElementRef;
+  @ViewChild('merchantCode') merchantCode: ElementRef;
+  @ViewChild('redirectAddress') redirectAddress: ElementRef;
+  @ViewChild('timeStamp') timeStamp: ElementRef;
+  @ViewChild('action') action: ElementRef;
+  @ViewChild('mobile') mobile: ElementRef;
+  @ViewChild('email') email: ElementRef;
+  @ViewChild('sign') sign: ElementRef;
+
   total = 0;
   discount = 0;
   deliveryDiscount;
@@ -42,6 +56,8 @@ export class CheckoutPageComponent implements OnInit {
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this
   showEarnPointLabel = true;
+  bankData: any = null;
+  isDev: boolean = true;
 
   constructor(private checkoutService: CheckoutService,
               private httpService: HttpService,
@@ -50,11 +66,13 @@ export class CheckoutPageComponent implements OnInit {
               private cartService: CartService,
               private titleService: TitleService,
               private progressService: ProgressService,
-              private router: Router,
-              private productService: ProductService, private route: ActivatedRoute) {
+              private spinnerService: SpinnerService,
+              private router: Router, @Inject(DOCUMENT) private document: any, private location: Location,
+              private productService: ProductService) {
   }
 
   ngOnInit() {
+    this.isDev = this.httpService.isInDevMode();
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
       (data) => {
@@ -222,12 +240,50 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   checkout() {
+    const orderData: any = this.checkoutService.accumulateData();
+    const IdArray = ['invoiceNumber',
+      'invoiceDate',
+      'amount',
+      'terminalCode',
+      'merchantCode',
+      'redirectAddress',
+      'timeStamp',
+      'action',
+      'mobile',
+      'email',
+      'sign'];
+
     this.finalCheckItems()
       .then(res => {
-        this.checkoutService.checkout();
+        // first-step-1 :
+        // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
+        // from server to post and redirect to bank gateway page
+        return this.checkoutService.getDataFromServerToSendBank(orderData);
+      })
+      .then((res) => {
+        this.checkoutService.updateVariablesAfterCheckout();
+        this.spinnerService.enable();
+        this.bankData = res;
+        IdArray.forEach(el => {
+          this[el].nativeElement.value = this.bankData[el];
+        });
+        this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
+      })
+      .catch(err => {
+        console.error('Error in final check: ', err);
+        this.spinnerService.disable();
+      });
+  }
+
+
+  checkoutDemo() {
+    this.finalCheckItems()
+      .then(res => {
+        this.checkoutService.checkoutDemo();
       })
       .catch(err => {
         console.error('Error in final check: ', err);
       });
   }
 }
+

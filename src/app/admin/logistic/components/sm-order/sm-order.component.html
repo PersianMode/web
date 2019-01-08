@@ -1,0 +1,159 @@
+<mat-card>
+
+  <mat-card-content>
+
+    <!-- search inputs -->
+    <div class="search-area">
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxFlex="50" class="filtering-box">
+          <mat-input-container class="filtering-field">
+            <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری" [formControl]="receiverSearchCtrl">
+          </mat-input-container>
+        </div>
+        <div fxFlex="50" class="filtering-box">
+          <mat-input-container class="filtering-field">
+            <input class="filtering-field" matInput type="text" placeholder="کد پیگیری" [formControl]="transIdCtrl">
+          </mat-input-container>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center start">
+        <div fxFlex="50" class="filtering-box">
+          <mat-form-field class="filtering-field">
+            <input matInput [matDatepicker]="picker" placeholder="تاریخ خرید" [(ngModel)]="orderTime" (ngModelChange)="load()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50" class="filtering-box">
+          <mat-form-field class="filtering-field">
+            <mat-select placeholder="وضعیت سفارش" [formControl]="statusSearchCtrl">
+              <mat-option *ngFor="let object of listStatus" [value]="object.status">
+                {{object.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <!-- table items -->
+
+    <div class="example-container mat-elevation-z8">
+
+      <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
+        <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+      </button>
+
+      <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created"
+        matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
+
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
+          <mat-cell *matCellDef="let order"> {{order.index}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="customer">
+          <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{getCustomer(order)}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+          <mat-header-cell *matHeaderCellDef> آدرس</mat-header-cell>
+          <mat-cell *matCellDef="let order">
+            <button mat-button color="primary" (click)='showAddress(order)'>نمایش آدرس</button>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="order_time">
+          <mat-header-cell *matHeaderCellDef>تاریخ خرید</mat-header-cell>
+          <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="transaction_id">
+          <mat-header-cell *matHeaderCellDef>شماره پیگیری</mat-header-cell>
+          <mat-cell *matCellDef="let order"> {{order.transaction_id}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
+          <mat-cell *matCellDef="let order">{{getStatus(order)}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tickets">
+          <mat-header-cell *matHeaderCellDef>نمایش تیکت ها</mat-header-cell>
+          <mat-cell *matCellDef="let order">
+            <button mat-button color="primary" (click)='showTicket(order)'>نمایش تیکت ها</button>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="proccess">
+          <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
+          <mat-cell *matCellDef="let order">
+            <button *ngIf="isCancellable(order)" mat-button color="warn" (click)='cancel(order)'>لفو کل سفارش</button>
+          </mat-cell>
+        </ng-container>
+
+
+
+        <!-- Expanded Content Column - The order lines rows is made up of this one column -->
+        <ng-container matColumnDef="expandedDetail">
+          <mat-cell *matCellDef="let detail">
+
+
+            <table class='orderLineDetail'>
+              <tr *ngFor='let ol of detail.order.order_lines'>
+                <td>
+                  <div class="imgWrapper">
+                    <img [src]="getProductDetail(ol).thumbnailURL" style="width:100%" style="width:100%" (click)="showDetial(ol)">
+                  </div>
+                </td>
+                <td>
+                  <p>
+                    <b>بارکد:</b> {{ol.instance?.barcode}}</p>
+                </td>
+                <td>
+                  <p>
+                    <b>نام:</b> {{ol.instance?.product_name}}</p>
+                </td>
+                <td>
+                  <p>
+                    <b>سایز:</b> {{ol.instance?.size}}</p>
+                </td>
+                <td>
+                  <p>
+                    <b>وضعیت:</b> {{getStatus(ol, true)}}</p>
+                </td>
+                <td>
+                  <p>
+                    <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>نمایش تیکت ها</button>
+                  </p>
+                </td>
+                <td>
+                  <p>
+                    <button mat-button color="warn" *ngIf="isCancellable(detail.order, ol)" (click)='cancel(detail.order, ol)'>لغو</button>
+                  </p>
+                </td>
+              </tr>
+            </table>
+
+
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
+          (click)="expandedElement = row._id"></mat-row>
+        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
+          style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
+        </mat-row>
+
+
+      </mat-table>
+
+
+      <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+    </div>
+
+  </mat-card-content>
+</mat-card>

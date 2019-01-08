@@ -1,0 +1,95 @@
+<div class="main">
+  <mat-tab-group dir="rtl">
+
+    <!-- when agents is sales manager -->
+    <ng-container *ngIf="isSalesManager">
+      <!-- inbox (صندوق ورودی) -->
+      <mat-tab label="inbox">
+        <ng-template mat-tab-label>
+          <span>صندوق ورودی</span>
+          <mat-chip-list *ngIf="newInboxCount">
+            <mat-chip color="accent" selected="true">{{newInboxCount}}</mat-chip>
+          </mat-chip-list>
+        </ng-template>
+        <app-sm-inbox (OnNewInboxCount)="newInboxCount = $event"></app-sm-inbox>
+      </mat-tab>
+
+
+      <!-- tracking orders (پیگیری سفارشات)-->
+      <mat-tab label="orders" *ngIf="isSalesManager">
+        <ng-template mat-tab-label>
+          <span>پیگیری سفارشات</span>
+        </ng-template>
+        <app-sm-order> </app-sm-order>
+      </mat-tab>
+    </ng-container>
+
+
+    <!-- not sales manager -->
+    <ng-container *ngIf="!isSalesManager">
+
+      <mat-tab label="inbox">
+        <ng-template mat-tab-label>
+          <span>صندوق ورودی</span>
+          <mat-chip-list *ngIf="InboxCount">
+            <mat-chip color="accent" selected="true">{{InboxCount}}</mat-chip>
+          </mat-chip-list>
+        </ng-template>
+        <app-inbox (OnNewInboxCount)="InboxCount = $event"></app-inbox>
+      </mat-tab>
+
+
+      <mat-tab label="internal-delivery-box">
+        <ng-template mat-tab-label>
+          <span>صندوق انتقال داخلی</span>
+          <mat-chip-list *ngIf="InternalDeliveryBoxCount">
+            <mat-chip color="accent" selected="true">{{InternalDeliveryBoxCount}}</mat-chip>
+          </mat-chip-list>
+        </ng-template>
+        <app-internal-delivery-box (OnInternalDeliveryBoxCount)="InternalDeliveryBoxCount = $event"></app-internal-delivery-box>
+      </mat-tab>
+
+      <mat-tab label="external-delivery-box" *ngIf="isShopClerk || isHubClerk">
+        <ng-template mat-tab-label>
+          <span>{{isShopClerk ? 'صندوق تحویل به مشتری': 'صندوق ارسال به مشتری'}}</span>
+          <mat-chip-list *ngIf="ExternalDeliveryBoxCount">
+            <mat-chip color="accent" selected="true">{{ExternalDeliveryBoxCount}}</mat-chip>
+          </mat-chip-list>
+        </ng-template>
+        <app-external-delivery-box (OnExternalDeliveryBoxCount)="ExternalDeliveryBoxCount = $event" [isHub]="isHubClerk"></app-external-delivery-box>
+      </mat-tab>
+
+      <mat-tab label="return-view" *ngIf="isHubClerk">
+        <ng-template mat-tab-label>
+          <span>بازگشت به انبار</span>
+          <mat-chip-list *ngIf="ReturnDeliveryBoxCount">
+            <mat-chip color="accent" selected="true">{{ReturnDeliveryBoxCount}}</mat-chip>
+          </mat-chip-list>
+        </ng-template>
+        <app-return-to-warehouse-box (OnReturnDeliveryBoxCount)="ReturnDeliveryBoxCount = $event"></app-return-to-warehouse-box>
+      </mat-tab>
+
+
+      <mat-tab label="shelvs-view" *ngIf="isHubClerk">
+        <ng-template mat-tab-label>
+          <span>فهرست قفسه ها</span>
+        </ng-template>
+        <app-shelvs-view></app-shelvs-view>
+      </mat-tab>
+
+    </ng-container>
+
+
+    <mat-tab label="return-view">
+      <ng-template mat-tab-label>
+        <span>ارسال ها</span>
+        <mat-chip-list *ngIf="UnassignedInternalDeliveryCount">
+          <mat-chip color="accent" selected="true">{{UnassignedInternalDeliveryCount}}</mat-chip>
+        </mat-chip-list>
+      </ng-template>
+      <app-delivery (OnUnassignedInternalDeliveryCount)="UnassignedInternalDeliveryCount = $event"></app-delivery>
+    </mat-tab>
+
+
+  </mat-tab-group>
+</div>

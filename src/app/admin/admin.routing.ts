@@ -2,6 +2,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HomeComponent} from './home/home.component';
 import {AdminAuthGuard} from './admin.auth.guard';
+import {DailySalesReportModule} from './daily-sales-report/daily-sales-report.module';
 
 const Admin_ROUTES: Routes = [
   {
@@ -13,7 +14,7 @@ const Admin_ROUTES: Routes = [
       {path: 'products', loadChildren: 'app/admin/product/product.module#ProductModule', canActivate: [AdminAuthGuard]},
       {path: 'campaigns', loadChildren: 'app/admin/campaign/campaign.module#CampaignModule', canActivate: [AdminAuthGuard]},
       {path: 'pages', loadChildren: 'app/admin/page/page.module#PageModule', canActivate: [AdminAuthGuard]},
-      {path: 'orders', loadChildren: 'app/admin/order/order.module#OrderModule', canActivate: [AdminAuthGuard]},
+      {path: 'logistic', loadChildren: 'app/admin/logistic/logistic.module#LogisticModule', canActivate: [AdminAuthGuard]},
       {
         path: 'deliverycost',
         loadChildren: 'app/admin/delivery-cost/delivery-cost.module#DeliveryCostModule',
@@ -28,13 +29,15 @@ const Admin_ROUTES: Routes = [
         canActivate: [AdminAuthGuard]
       },
       {
-        path: 'delivery',
-        loadChildren: 'app/admin/delivery/delivery.module#DeliveryModule',
+
+        path: 'refund_bank',
+        loadChildren: 'app/admin/refund-bank/refund-bank.module#RefundBankModule',
         canActivate: [AdminAuthGuard]
       },
       {
-        path: 'internal_delivery',
-        loadChildren: 'app/admin/internal-delivery/internal-delivery.module#InternalDeliveryModule',
+
+        path: 'daily_report',
+        loadChildren: 'app/admin/daily-sales-report/daily-sales-report.module#DailySalesReportModule',
         canActivate: [AdminAuthGuard]
       }
     ]

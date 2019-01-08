@@ -19,13 +19,13 @@ export class HeaderComponent implements OnInit {
     {label: 'دیکشنری ', path: '/agent/dictionary', active: false},
     {label: 'محصولات تمام شده ', path: '/agent/soldouts', active: false},
     {label: 'بارگذاری فایل', path: '/agent/uploads', active: false},
-    {label: 'سفارش‌ها', path: '/agent/orders', active: false},
+    {label: 'لوجستیک', path: '/agent/logistic', active: false},
     {label: 'تنظیمات هزینه ارسال', path: '/agent/deliverycost', active: false},
     {label: 'گروه وفاداری', path: '/agent/loyaltygroup', active: false},
-    {label: 'ارسال', path: '/agent/delivery', active: false},
     {label: 'اولویت ارسال',path:'/agent/deliverypriority',active:false },
-    {label: 'تعیین مامور ارسال', path: '/agent/internal_delivery', active: false},
     {label: 'شرایط تحویل رایگان', path: '/agent/deliverycost/free/option', active: false},
+    {label: 'بازپرداخت مبلغ', path: '/agent/refund_bank', active: false},
+    {label: 'لیست خرید روزانه', path: '/agent/daily_report', active: false},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;

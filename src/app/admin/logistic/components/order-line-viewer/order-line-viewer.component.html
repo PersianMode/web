@@ -1,0 +1,20 @@
+<div class="main">
+  <div mat-dialog-content *ngFor="let el of data">
+    <div class="image-wrapper">
+      <img [src]="getProductDetail(el).thumbnailURL" style="width: 100%" (click)="showDetail(el)">
+    </div>
+    <h3>
+      <b>نام:</b> {{' ' + el.instance?.product_name}}
+    </h3>
+    <h3>
+      <b>بارکد:</b> {{' ' + el.instance?.barcode}}
+    </h3>
+    <h3>
+      <b>سایز:</b> {{' ' + el.instance?.size}}
+    </h3>
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="close()">Ok</button>
+  </div>
+</div>

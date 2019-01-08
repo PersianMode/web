@@ -83,4 +83,17 @@ h3 a {
     max-height: calc(100vh - 200px);
     overflow-y: auto;
   }
-  
+
+.status-button {
+  text-align: center;
+  padding: 4px;
+  background-color: black;
+  color: white;
+  height: 40px !important;
+  border: 0;
+  margin: 2px;
+  border-radius: 5px;
+  font-size: 12px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
+}

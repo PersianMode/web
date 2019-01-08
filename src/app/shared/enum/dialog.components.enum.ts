@@ -4,5 +4,6 @@ export enum DialogEnum {
   upsertAddress,
   orderLinesComponent,
   forgotPassword,
-  orderReturnComponent
+  orderReturnComponent,
+  refundBank
 };

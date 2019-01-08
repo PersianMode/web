@@ -1,0 +1,72 @@
+<!-- barcode checker -->
+<app-barcode-checker *ngIf="total" [trigger]="trigger" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+
+<mat-card>
+  <!-- header -->
+  <mat-card-header>
+    <mat-card-title>آماده خروج از انبار</mat-card-title>
+    <mat-card-subtitle>
+      <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
+        <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <!-- content -->
+  <mat-card-content>
+
+    <div class="example-container mat-elevation-z8">
+
+      <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created"
+        matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
+
+        <!-- position column -->
+        <ng-container matColumnDef="position">
+          <mat-header-cell *matHeaderCellDef>شماره</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine"> {{orderLine.index}}</mat-cell>
+        </ng-container>
+
+        <!-- detail column -->
+        <ng-container matColumnDef="details">
+          <mat-header-cell *matHeaderCellDef>جزئیات</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine">
+            <div class="imgWrapper">
+              <img [src]="getProductDetail(orderLine).thumbnailURL" style="width: 100%" (click)="showDetial(orderLine)">
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- name column -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>نام</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.product_name}}</span></mat-cell>
+        </ng-container>
+
+        <!-- barcode column -->
+        <ng-container matColumnDef="barcode">
+          <mat-header-cell *matHeaderCellDef>بارکد</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.barcode}}</span></mat-cell>
+        </ng-container>
+
+         
+        <!-- status column -->
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine"> {{getOrderLineStatus(orderLine)}}</mat-cell>
+        </ng-container>
+
+        <!-- row header -->
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple></mat-row>
+
+      </mat-table>
+    </div>
+
+
+  </mat-card-content>
+
+  <!-- actions -->
+  <mat-card-actions>
+    <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+  </mat-card-actions>
+</mat-card>

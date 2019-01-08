@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
           if (parseInt(this.loginForm.controls['loginAs'].value, 10) === 0)
             this.router.navigate(['/agent/collections']);
           else
-            this.router.navigate(['/agent/orders']);
+            this.router.navigate(['/agent/logistic']);
         })
         .catch(err => {
           this.progressService.disable();

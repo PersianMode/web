@@ -10,6 +10,7 @@ import {AuthGuard} from './auth.guard';
 import {OrderLinesComponent} from './profile/components/order-lines/order-lines.component';
 import {ForgotPasswordComponent} from './login/components/forgot-password/forgot-password.component';
 import { OrderReturnComponent } from './profile/components/order-return/order-return.component';
+import {ShopResultComponent} from './shop-result/shop-result.component';
 
 const Site_ROUTES: Routes = [
   {
@@ -29,7 +30,8 @@ const Site_ROUTES: Routes = [
     {path: 'checkout/address', component: UpsertAddressComponent},
     {path: 'profile', loadChildren: 'app/site/profile/profile.module#ProfileModule', canActivate: [AuthGuard]},
     {path: 'profile/orderlines', component: OrderLinesComponent},
-    {path: 'profile/orderline/return', component: OrderReturnComponent},
+    {path: 'profile/orderlines/return', component: OrderReturnComponent},
+    {path: 'shopResult', component: ShopResultComponent},
   ]
   }
 ];
