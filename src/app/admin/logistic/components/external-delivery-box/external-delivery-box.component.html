@@ -90,7 +90,7 @@
               <tr *ngFor='let ol of detail.order.order_lines'>
                 <td>
                   <div class="imgWrapper">
-                    <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetial(ol)">
+                    <img [src]="getProductDetail(ol).thumbnailURL"  style="width:100%" (click)="showDetial(ol)">
                   </div>
                 </td>
                 <td>
