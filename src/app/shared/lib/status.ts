@@ -29,7 +29,7 @@ const OrderStatuses: any[] = [
   {name: 'در حال ارسال', title: 'در حال ارسال', status: os.OnDelivery},
   {name: 'تحویل شده', title: 'تحویل شده', status: os.Delivered},
   {name: 'درخواست بازگشت کالا', title: 'درخواست بازگشت کالا', status: os.Return},
-  {name: 'درخواست لغو کل سفارش', title: 'لغو', status: os.CancelRequested},
+  {name: 'درخواست لغو کل سفارش', title: 'لغو سفارش', status: os.CancelRequested},
   {name: 'لغو سفارش', title: 'لغو', status: os.Canceled},
 ];
 

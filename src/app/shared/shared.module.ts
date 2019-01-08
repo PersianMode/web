@@ -5,7 +5,7 @@ import {
   MatInputModule,
   MatMenuModule,
   MatOptionModule, MatRadioModule, MatSelectModule, MatStepperModule,
-  MatToolbarModule, MatSnackBarModule, MatSlideToggleModule, MatButtonToggleModule, MatProgressSpinnerModule
+  MatToolbarModule, MatSnackBarModule, MatSlideToggleModule, MatButtonToggleModule, MatProgressSpinnerModule, MatDialogRef, MAT_DIALOG_DATA,
 } from '@angular/material';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -97,6 +97,10 @@ import { BankRefundFormComponent } from './components/bank-refund-form/bank-refu
     SizePickerComponent,
     BankRefundFormComponent
   ],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
+  ]
 })
 export class SharedModule {
 
