@@ -1,11 +1,11 @@
 .view-title {
-  font-family: irankharazmi;
+  font-family: iranyekan, sans-serif;
   font-weight: bold;
   font-size: 1.3em;
 }
 
 .view-content {
-  font-family: irankharazmi;
+  font-family: iranyekan, sans-serif;
   font-weight: normal;
   font-size: 1em;
   padding-right: 10px;
@@ -13,12 +13,12 @@
 
 
 .table thead {
-  font-family: irankharazmi;
+  font-family: iranyekan, sans-serif;
   font-weight: bold;
 }
 
 .table tbody {
-  font-family: irankharazmi;
+  font-family: iranyekan, sans-serif;
 }
 
 .table td {

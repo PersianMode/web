@@ -14,7 +14,7 @@
         </div>
         <div>
           <div *ngFor="let product of products;let i = index" style="margin-bottom: 10px;">
-            <app-cart-items [product]="product" (updateProduct)="updateProduct($event, product)" (valid)="changeValidation($event, i)"></app-cart-items>
+            <app-cart-items [product]="product" (updateProduct)="updateProduct($event, product, i)" (valid)="changeValidation($event, i)"></app-cart-items>
           </div>
         </div>
         <div class="center-content" *ngIf="showWaitingSpinner">

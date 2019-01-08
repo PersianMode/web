@@ -60,30 +60,52 @@ export class TicketComponent implements OnInit {
 
 
   getAgent(element) {
-    return element.agent ? element.agent.first_name + ' ' + element.agent.surname : '-';
+    try {
+
+      return element.agent ? element.agent.first_name + ' ' + element.agent.surname : '-';
+    } catch (err) {
+      return '-';
+    }
   }
 
   getAgentType(element) {
-    if (element.agent) {
-      return AccessTypes.find(x => x.level === element.agent.access_level).name;
+    try {
+      if (element.agent) {
+        return AccessTypes.find(x => x.level === element.agent.access_level).name;
+      }
+      return '-';
+
+    } catch (err) {
+      return '-';
     }
-    return '-';
   }
 
   getReceiver(element) {
-    if (element.agent_receiver) {
-      return element.agent_receiver.first_name + ' ' + element.agent_receiver.surname;
-    } else if (element.warehouse_receiver) {
-      return element.warehouse_receiver.name;
-    } else
+    try {
+      if (element.agent_receiver) {
+        return element.agent_receiver.first_name + ' ' + element.agent_receiver.surname;
+      } else if (element.warehouse_receiver) {
+        return element.warehouse_receiver.name;
+      } else
+        return '-';
+
+    } catch (err) {
       return '-';
+    }
+
 
   }
   getReceiverType(element) {
-    if (element.agent_receiver) {
-      return AccessTypes.find(x => x.level === element.agent_receiver.access_level).name;
-    } else
+    try {
+      if (element.agent_receiver) {
+        return AccessTypes.find(x => x.level === element.agent_receiver.access_level).name;
+      } else
+        return '-';
+
+    } catch (err) {
       return '-';
+    }
+
 
   }
   getStatus(element) {
@@ -93,13 +115,19 @@ export class TicketComponent implements OnInit {
       else
         return OrderLineStatuses.find(x => x.status === element.status).name;
     } catch (err) {
-      console.log('-> ', element);
+      return '-';
     }
   }
 
 
   getTime(element) {
-    return moment(element.timestamp).format('jYYYY/jMM/jDD HH:mm:ss');
+    try {
+
+      return moment(element.timestamp).format('jYYYY/jMM/jDD HH:mm:ss');
+    } catch (err) {
+      return '-';
+    }
+
   }
 
 }

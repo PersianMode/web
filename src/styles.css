@@ -32,7 +32,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: irankharazmi, sans-serif;
+  font-family: iranyekan, sans-serif, sans-serif;
 }
 
 .gnav-member-bar {
@@ -196,7 +196,7 @@ nav {
   padding: 0 20px;
   font-size: 16px;
   height: 66px;
-  font-family: irankharazmi;
+  font-family: iranyekan, sans-serif;
 }
 
 .second-bar li:hover {
@@ -632,8 +632,8 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .title {
-  font-family: irankharazmi, sans-serif;
-  font-weight: 200;
+  font-family: iranyekan, sans-serif;
+  font-weight: bold;
 }
 
 .content {
