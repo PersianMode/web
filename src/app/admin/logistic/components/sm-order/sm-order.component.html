@@ -60,7 +60,7 @@
         <ng-container matColumnDef="address">
           <mat-header-cell *matHeaderCellDef> آدرس</mat-header-cell>
           <mat-cell *matCellDef="let order">
-              <button mat-button color="primary" (click)='showAddress(order)'>نمایش آدرس</button>
+            <button mat-button color="primary" (click)='showAddress(order)'>نمایش آدرس</button>
           </mat-cell>
         </ng-container>
 
@@ -78,65 +78,65 @@
           <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
           <mat-cell *matCellDef="let order">{{getStatus(order)}}</mat-cell>
         </ng-container>
-        
+
         <ng-container matColumnDef="tickets">
           <mat-header-cell *matHeaderCellDef>نمایش تیکت ها</mat-header-cell>
           <mat-cell *matCellDef="let order">
-              <button mat-button color="primary" (click)='showTicket(order)'>نمایش تیکت ها</button>
+            <button mat-button color="primary" (click)='showTicket(order)'>نمایش تیکت ها</button>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="proccess">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
-          <mat-cell  *matCellDef="let order">
-              <button *ngIf="isCancellable(order)" mat-button color="warn" (click)='cancel(order)'>لفو کل سفارش</button>
+          <mat-cell *matCellDef="let order">
+            <button *ngIf="isCancellable(order)" mat-button color="warn" (click)='cancel(order)'>لفو کل سفارش</button>
           </mat-cell>
         </ng-container>
 
-   
+
 
         <!-- Expanded Content Column - The order lines rows is made up of this one column -->
         <ng-container matColumnDef="expandedDetail">
           <mat-cell *matCellDef="let detail">
 
 
-              <table class='orderLineDetail'>
-                  <tr *ngFor='let ol of detail.order.order_lines'>
-                    <td>
-                      <div class="imgWrapper">
-                        <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetial(ol)">
-                      </div>
-                    </td>
-                    <td>
-                      <p>
-                        <b>بارکد:</b> {{ol.instance?.barcode}}</p>
-                    </td>
-                    <td>
-                      <p>
-                        <b>نام:</b> {{ol.instance?.product_name}}</p>
-                    </td>
-                    <td>
-                      <p>
-                        <b>سایز:</b> {{ol.instance?.size}}</p>
-                    </td>
-                    <td>
-                      <p>
-                        <b>وضعیت:</b> {{getStatus(ol, true)}}</p>
-                    </td>
-                    <td>
-                      <p>
-                          <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>نمایش تیکت ها</button> 
-                      </p>
-                    </td>
-                    <td>
-                      <p>
-                          <button mat-button color="warn" *ngIf="isCancellable(detail.order, ol)" (click)='cancel(detail.order, ol)'>لغو</button> 
-                      </p>
-                    </td>
-                  </tr>
-                </table>
+            <table class='orderLineDetail'>
+              <tr *ngFor='let ol of detail.order.order_lines'>
+                <td>
+                  <div class="imgWrapper">
+                    <img [src]="getProductDetail(ol).thumbnailURL" style="width:100%" (click)="showDetial(ol)">
+                  </div>
+                </td>
+                <td>
+                  <p>
+                    <b>بارکد:</b> {{ol.instance?.barcode}}</p>
+                </td>
+                <td>
+                  <p>
+                    <b>نام:</b> {{ol.instance?.product_name}}</p>
+                </td>
+                <td>
+                  <p>
+                    <b>سایز:</b> {{ol.instance?.size}}</p>
+                </td>
+                <td>
+                  <p>
+                    <b>وضعیت:</b> {{getStatus(ol, true)}}</p>
+                </td>
+                <td>
+                  <p>
+                    <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>نمایش تیکت ها</button>
+                  </p>
+                </td>
+                <td>
+                  <p>
+                    <button mat-button color="warn" *ngIf="isCancellable(detail.order, ol)" (click)='cancel(detail.order, ol)'>لغو</button>
+                  </p>
+                </td>
+              </tr>
+            </table>
 
-          
+
           </mat-cell>
         </ng-container>
 
