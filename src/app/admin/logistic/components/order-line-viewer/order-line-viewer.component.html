@@ -1,6 +1,6 @@
 <div class="main">
   <div mat-dialog-content *ngFor="let el of data">
-    <div class="image-wrapper">
+    <div class="imgWrapper">
       <img [src]="getProductDetail(el).thumbnailURL" style="width: 100%" (click)="showDetail(el)">
     </div>
     <h3>
