@@ -5,25 +5,7 @@
     <app-address-table (selectedChange)="addressSelected($event)" [isModify]="false" style="direction: rtl;"></app-address-table>
     <br>
 
-    <h3 style="text-align: center">انتخاب روز و ساعت جهت دریافت کالا توسط پیک:</h3>
     <mat-card>
-      <mat-card-content>
-
-        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.xs="center center" fxLayout.xs="column">
-          <div fxFlex="50">
-            <label for=""> روز تحویل:</label>
-            <dp-date-picker class="label-field" dir="rtl" [(ngModel)]="dateObject" mode="day" placeholder="تاریخ" theme="dp-material"> </dp-date-picker>
-          </div>
-          <div fxFlex="50" style="margin-right: 50px">
-            <label class="">ساعت تحویل</label>
-            <mat-radio-group [(ngModel)]="timeReturn" class="label-field">
-              <mat-radio-button [value]="'10-18'">ساعت ۱۰ تا ۱۸</mat-radio-button>
-              <mat-radio-button [value]="'18-22'">ساعت ۱۸ تا ۲۲</mat-radio-button>
-            </mat-radio-group>
-          </div>
-
-        </div>
-      </mat-card-content>
       <mat-card-footer>
         <div fxLayout="row">
           <button mat-button fxFlex="50" class="action-button" (click)="cancelReturnOrder()">

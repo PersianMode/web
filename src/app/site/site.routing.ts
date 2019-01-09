@@ -30,7 +30,7 @@ const Site_ROUTES: Routes = [
     {path: 'checkout/address', component: UpsertAddressComponent},
     {path: 'profile', loadChildren: 'app/site/profile/profile.module#ProfileModule', canActivate: [AuthGuard]},
     {path: 'profile/orderlines', component: OrderLinesComponent},
-    {path: 'profile/orderline/return', component: OrderReturnComponent},
+    {path: 'profile/orderlines/return', component: OrderReturnComponent},
     {path: 'shopResult', component: ShopResultComponent},
   ]
   }

@@ -4,7 +4,7 @@
   </b>
 </div>
 <div class="dialog-style2">
-  <mat-card style="margin-bottom: 5px" *ngFor="let ol of noDuplicateOrderLine">
+  <mat-card style="margin-bottom: 5px" *ngFor="let ol of orderLines">
     <mat-card-content>
       <div fxLayout="row" fxLayoutAlign="center top" fxLayout.xs="column" dir="rtl">
         <div fxFlex="25">
@@ -50,37 +50,19 @@
             <div fxFlex="30" class="total_price">
               <div style="height: 80%">
                 <span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : (ol.product.instances.price ? ol.product.instances.price
-                  : ol.product.base_price))* ol.quantity), true)}}</span>
+                  : ol.product.base_price))), true)}}</span>
                 تومان
               </div>
               <div style="height: 20%">
-
-                <ng-container *ngIf="isQuantityMoreThanOne !== ol.order_line_id; else elseTemplate">
-                  <button *ngIf="checkCancelOrderLine(ol)" matTooltip="کنسل کردن خرید" class="clickable-link" (click)="cancelOrderLine(ol)">
-                    <i class="fa fa-times"></i>
+                <ng-container>
+                  <button *ngIf="checkCancelOrderLine(ol)" class="status-button" (click)="cancelOrderLine(ol)">
+                    لغو خرید
+                  </button>
+                  <button *ngIf="checkReturnOrderLine(ol) && !expiredTime" class="status-button" (click)="returnOrderLine(ol)">
+                    بازگشت کالا
                   </button>
                 </ng-container>
-                <ng-template #elseTemplate>
-                  <select [(ngModel)]="quantitySelected">
-                    <option *ngFor="let quantity of quantities" [value]="quantity.value">{{quantity.viewValue}}</option>
-                  </select>
-                  <button matTooltip="تایید کردن" class="clickable-link" (click)="cancelOrderLineByQuantity(ol)">
-                    <i class="fa fa-check"></i>
-                  </button>
-                </ng-template>
-
-                <button *ngIf="checkReturnOrderLine(ol)" matTooltip="مرجوع کردن کالا" class="clickable-link" (click)="returnOrderLine(ol)">
-                  <i class="fa fa-undo"></i>
-                </button>
               </div>
-              <!--<div class="submit-cancel-change-btn">-->
-              <!--<button mat-button class="action-button"-->
-              <!--*ngIf="ol.tickets[ol.tickets.length - 1].status === 2 || ol.tickets[ol.tickets.length - 1].status === 3 || ol.tickets[ol.tickets.length - 1].status === 4">لغو سفارش-->
-              <!--</button>-->
-              <!--<button mat-button class="action-button"-->
-              <!--*ngIf="ol.tickets[ol.tickets.length - 1].status === 5 || ol.tickets[ol.tickets.length - 1].status === 1">بازگشت کالا-->
-              <!--</button>-->
-              <!--</div>-->
             </div>
           </div>
         </div>
