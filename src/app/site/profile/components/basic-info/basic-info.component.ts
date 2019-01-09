@@ -201,7 +201,7 @@ export class BasicInfoComponent implements OnInit {
   }
 
   initChangePassForm() {
-    // TODO set form fiels with change_pass_obj if they have value(insted of set null every time)
+    // TODO set form fields with change_pass_obj if they have value(instead of set null every time)
     this.changePassForm = new FormBuilder().group({
       oldPass: [null, [
         Validators.required,

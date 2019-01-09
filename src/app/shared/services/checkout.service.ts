@@ -222,7 +222,6 @@ export class CheckoutService {
     }
   }
 
-  // TODO: search for sendDataToBankGateway occurrence
   getDataFromServerToSendBank(data) {
     return new Promise((resolve, reject) => {
       this.httpService.post('prepareDataForBankGateway', data)
