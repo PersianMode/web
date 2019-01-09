@@ -28,7 +28,7 @@ export interface DeliveryItem {
 @Component({
   selector: 'app-delivery-history',
   templateUrl: './delivery-history.component.html',
-  styleUrls: ['./delivery-history.component.css'] 
+  styleUrls: ['./delivery-history.component.css']
 })
 export class DeliveryHistoryComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
@@ -123,6 +123,7 @@ export class DeliveryHistoryComponent implements OnInit {
   getDeliveryAgents() {
     this.httpService.get('delivery/agent').subscribe(
       data => {
+        console.log('delivery agent: ',data);
         this.deliveryAgentList = data;
       },
       err => {

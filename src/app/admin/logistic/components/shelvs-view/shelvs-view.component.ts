@@ -116,7 +116,7 @@ export class ShelvsViewComponent implements OnInit {
         delivery.orders = order_data;
       }
 
-      console.log('dliveries', res.data);
+      console.log('deliveries', res.data);
 
       const rows = [];
 
