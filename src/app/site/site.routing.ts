@@ -31,7 +31,7 @@ const Site_ROUTES: Routes = [
     {path: 'profile', loadChildren: 'app/site/profile/profile.module#ProfileModule', canActivate: [AuthGuard]},
     {path: 'profile/orderlines', component: OrderLinesComponent},
     {path: 'profile/orderlines/return', component: OrderReturnComponent},
-    {path: 'shopResult', component: ShopResultComponent},
+    {path: 'shopResult/:tref/:iN/:iD', component: ShopResultComponent},
   ]
   }
 ];

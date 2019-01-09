@@ -27,11 +27,11 @@ export class ShopResultComponent implements OnInit {
   ngOnInit() {
     this.spinnerService.enable();
     this.cartService.loadCartsForShopRes();
-    this.route.queryParams.subscribe(params => {
+    this.route.paramMap.subscribe(params => {
       this.bankReferData = {
-        tref: params.tref,
-        invoiceNumber: params.iN,
-        invoiceDate: params.iD,
+        tref: params.get('tref'),
+        invoiceNumber: params.get('iN'),
+        invoiceDate: params.get('iD'),
       };
     });
     // should final check and verify shop proccess if final check result is valid(no error , no warning)

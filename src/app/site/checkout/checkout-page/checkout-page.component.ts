@@ -264,14 +264,18 @@ export class CheckoutPageComponent implements OnInit {
         // from server to post and redirect to bank gateway page
         return this.checkoutService.getDataFromServerToSendBank(orderData);
       })
-      .then((res) => {
+      .then((res: any) => {
         this.checkoutService.updateVariablesAfterCheckout();
-        this.spinnerService.enable();
+        // this.spinnerService.enable();
         this.bankData = res;
-        IdArray.forEach(el => {
-          this[el].nativeElement.value = this.bankData[el];
-        });
-        this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
+        const tref = 'xyz' + Math.floor(Math.random() * 100000);
+        const iN = this.bankData.invoiceNumber;
+        const iD = this.bankData.invoiceDate;
+        this.router.navigate(['shopResult', tref, iN, iD]);
+        // IdArray.forEach(el => {
+        //   this[el].nativeElement.value = this.bankData[el];
+        // });
+        // this.bankDataFormId.nativeElement.submit(); // first-step-2 : post recieved data from server to bank gateway via form
       })
       .catch(err => {
         console.error('Error in final check: ', err);
