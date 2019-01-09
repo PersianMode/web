@@ -47,7 +47,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router,
               @Inject(WINDOW) private window, public dialog: MatDialog, private httpService: HttpService,
-              private dict: DictionaryService, private messageService: MessageService, private spinnerService: SpinnerService) {
+              private dict: DictionaryService, private messageService: MessageService,
+              private spinnerService: SpinnerService) {
   }
 
   ngOnInit() {
@@ -58,7 +59,7 @@ export class LoginComponent implements OnInit {
   getTagTypes() {
     this.spinnerService.enable();
     this.httpService.get('tags/Category').subscribe(tags => {
-    this.spinnerService.disable();
+      this.spinnerService.disable();
       tags.forEach(el => {
         this.tagsType.push({name: this.dict.translateWord(el.name.trim()), '_id': el._id});
       });
@@ -290,11 +291,15 @@ export class LoginComponent implements OnInit {
 
   addMobileNumber() { // only when came from google login
     if (this.mobile_no && !this.mobileHasError) {
+      this.spinnerService.enable();
       this.authService.addMobileNumber(this.mobile_no)
         .then(data => {
+          this.spinnerService.disable();
           this.loginStatus = this.Status.VerifiedEmail;
         })
         .catch(err => {
+          this.spinnerService.disable();
+          console.error('could not add mobile: ', err);
         });
     }
   }
