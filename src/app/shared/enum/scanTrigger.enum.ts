@@ -3,4 +3,5 @@ export enum ScanTrigger {
   SendInternal = 2,
   SendExternal = 3,
   CCDelivery = 4,
+  ReturnDelivery = 5
 };

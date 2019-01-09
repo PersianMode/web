@@ -83,7 +83,8 @@ export class OtherDetailsComponent implements OnInit {
       code: this.code,
     }).subscribe(
       data => {
-        console.log('New code is sent: ', data);
+        // console.log('New code is sent: ', data);
+        // TODO: potential bug
       },
       err => {
         console.error('Cannot send new code: ', err);

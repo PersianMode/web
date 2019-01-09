@@ -10,7 +10,7 @@ import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from 
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import {FormControl} from '@angular/forms';
-import {ORDER_STATUS} from 'app/shared/enum/status.enum';
+import {ORDER_STATUS, ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
 import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
@@ -107,6 +107,8 @@ export class SmOrderComponent implements OnInit, OnDestroy {
 
     this.progressService.enable();
 
+    const tempId = this.expandedElement;
+    this.expandedElement = null;
     const options = {
       transId: this.transId,
       receiver: this.receiver,
@@ -127,6 +129,10 @@ export class SmOrderComponent implements OnInit, OnDestroy {
       this.dataSource.data = rows;
 
       this.total = res.total ? res.total : 0;
+
+      setTimeout(() => {
+        this.expandedElement = tempId;
+      }, 100);
 
     }, err => {
       this.progressService.disable();
@@ -204,9 +210,9 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   getStatus(item, isOrderLine) {
 
     if (isOrderLine)
-      return OrderLineStatuses.find(x => x.status === item.ticket.status).name;
+      return OrderLineStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
     else
-      return OrderStatuses.find(x => x.status === item.ticket.status).name;
+      return OrderStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
 
   }
   showTicket(order, orderLine) {
@@ -217,8 +223,16 @@ export class SmOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  isCancellable(order) {
-    return order.ticket.status === ORDER_STATUS.WaitForAggregation;
+  isCancellable(order, orderLine) {
+    const cond1 = !order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice);
+    let cond2;
+    if (!orderLine) {
+      cond2 = order.order_lines.find(x => !x.cancel);
+    } else {
+      cond2 = !orderLine.cancel;
+    }
+    return cond1 && !!cond2;
+
   }
 
   cancel(order, orderLine) {
@@ -229,10 +243,16 @@ export class SmOrderComponent implements OnInit, OnDestroy {
     rmDialog.afterClosed().subscribe(
       status => {
         if (status) {
+
+          const body: any = {
+            orderId: order._id
+          };
+
+          if (orderLine)
+            body.orderLineId = orderLine._id;
+
           this.progressService.enable();
-          this.httpService.post('loyaltygroup/delete', {
-            
-          }).subscribe(
+          this.httpService.post('order/cancel', body).subscribe(
             data => {
               this.progressService.disable();
             },
@@ -248,6 +268,9 @@ export class SmOrderComponent implements OnInit, OnDestroy {
         console.error('Error when subscribing on rmDialog.afterClosed() function: ', err);
       });
   }
+
+
+
   ngOnDestroy(): void {
   }
 

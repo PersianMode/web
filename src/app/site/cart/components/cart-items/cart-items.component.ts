@@ -61,7 +61,7 @@ export class CartItemsComponent implements OnInit {
     rmDialog.afterClosed().subscribe(
       (data) => {
         if (data) {
-          this.updateProduct.emit({type: 'update', value: data});
+          this.updateProduct.emit({type: 'update', value: data, });
         }
       },
       (err) => {

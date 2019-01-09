@@ -42,7 +42,7 @@
             <ul *ngFor='let ol of detail.order.order_lines'>
               <li>
                 <div class="imgWrapper">
-                  <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetial(ol)">
+                  <img [src]="getProductDetail(ol).thumbnailURL" style="width:100%" (click)="showDetial(ol)">
                 </div>
               </li>
               <li>

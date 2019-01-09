@@ -56,7 +56,7 @@
         <ng-container matColumnDef="aggregated">
           <mat-header-cell *matHeaderCellDef>تجمیع شده</mat-header-cell>
           <mat-cell *matCellDef="let order">
-            <img style="width: 25px; height: 25px;" [src]="order.total_order_lines === order.order_lines.length ? '../../../../../assets/logos/accept.png' : '../../../../../assets/logos/fail.png' ">
+            <img style="width: 25px; height: 25px;" [src]="isAggregated(order) ? '../../../../../assets/logos/accept.png' : '../../../../../assets/logos/fail.png' ">
           </mat-cell>
         </ng-container>
 
@@ -90,7 +90,7 @@
               <tr *ngFor='let ol of detail.order.order_lines'>
                 <td>
                   <div class="imgWrapper">
-                    <img [src]="getProductDetail(ol).thumbnailURL" (click)="showDetial(ol)">
+                    <img [src]="getProductDetail(ol).thumbnailURL"  style="width:100%" (click)="showDetial(ol)">
                   </div>
                 </td>
                 <td>

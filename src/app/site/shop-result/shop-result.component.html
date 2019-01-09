@@ -1,39 +1,59 @@
-<div *ngIf="resultObj" fxLayout="row" fxLayoutAlign="center center">
+<div
+  *ngIf="payResult && !payResult.error && payResult.action[0] !== 'NOTRANSACTON' && payResult.action[0] !== 'NOINVOICE'"
+  fxLayout="row" fxLayoutAlign="center center">
   <div fxFlex="5"></div>
   <div fxFlex="90">
     <mat-card class="result-card">
       <mat-card-content>
         <mat-card-title>
           نتیجه تراکنش :
-          <span *ngIf="resultObj?.action[0] == 1003">{{'خرید'}}</span>
-          <span *ngIf="resultObj?.action[0] == 1004">{{'بازگشت خرید'}}</span>
-          <span *ngIf="resultObj?.result[0] == 'True'">{{'موفق'}}</span>
-          <span *ngIf="resultObj?.result[0] == 'False'">{{'ناموفق'}}</span>
+          <span *ngIf="payResult?.action[0] === 1003">{{'خرید'}}</span>
+          <span *ngIf="payResult?.action[0] === 1004">{{'بازگشت خرید'}}</span>
+          <span *ngIf="payResult?.result[0] === 'True'">{{'موفق'}}</span>
+          <span *ngIf="payResult?.result[0] === 'False'">{{'ناموفق'}}</span>
         </mat-card-title>
-        <div>شماره فاکتور : {{resultObj?.invoiceNumber}}</div>
+        <div>شماره فاکتور : {{payResult?.invoiceNumber}}</div>
         <div>تاریخ فاکتور : {{jalali_date[1]}}, {{jalali_date[0]}}</div>
         <div>
           شماره تراکنش : {{persian_trefId}}
         </div>
         <div>
-          شماره پیگیری : {{makePersianNumber(resultObj?.traceNumber[0])}}
+          شماره پیگیری : {{makePersianNumber(payResult?.traceNumber[0])}}
         </div>
         <div>
-          شماره ارجاع : {{makePersianNumber(resultObj?.referenceNumber[0])}}
+          شماره ارجاع : {{makePersianNumber(payResult?.referenceNumber[0])}}
         </div>
         <div>
-          شماره ترمینال : {{makePersianNumber(resultObj?.terminalCode[0])}}
+          شماره ترمینال : {{makePersianNumber(payResult?.terminalCode[0])}}
         </div>
         <div>
-          شماره فروشگاه : {{makePersianNumber(resultObj?.merchantCode[0])}}
+          شماره فروشگاه : {{makePersianNumber(payResult?.merchantCode[0])}}
         </div>
 
         <div>
-          مبلغ فاکتور : {{makePersianNumber(resultObj?.amount[0])}} تومان
+          مبلغ فاکتور : {{makePersianNumber(payResult?.amount[0])}} تومان
         </div>
 
       </mat-card-content>
     </mat-card>
   </div>
   <div fxFlex="5"></div>
+</div>
+<div *ngIf="payResult && payResult.error">
+  <div *ngIf="payResult.error.result && payResult.error.action">
+    <div *ngIf="payResult.error.result[0] === 'False' && payResult.error.action[0] === 'NOTRANSACTON'"
+         class="cancel-div">
+      <span>سفارش به درخواست شما لغو گردید.</span>
+    </div>
+    <div *ngIf="payResult.error.result[0] === 'False' && payResult.error.action[0] === 'NOINVOICE'"
+         class="cancel-div">
+      <span>چنین فاکتوری وجود ندارد.</span>
+    </div>
+  </div>
+  <div *ngIf="payResult.error === 'Invalid Invoice'" class="cancel-div">
+    <span>چنین فاکتوری وجود ندارد.</span>
+  </div>
+  <div *ngIf="payResult.error === 'Sold out before payment'" class="cancel-div">
+    <span>متاسفانه برخی از محصولات تمام شده اند.در صورت کسر مبلغ از حساب شما تا 72 ساعت آینده هزینه به حساب شما باز میگردد.</span>
+  </div>
 </div>

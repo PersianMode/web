@@ -121,9 +121,10 @@ export class CartComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  updateProduct(data, currentProduct) {
+  updateProduct(data, currentProduct, index) {
     switch (data.type) {
       case 'delete': {
+        this.valid.splice(index, 1);
         this.cartService.removeItem({instance_id: currentProduct.instance_id, product_id: currentProduct.product_id});
       }
         break;

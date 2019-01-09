@@ -15,7 +15,7 @@
       </div>
       <div>
         <div *ngFor="let product of products; let i = index" style="margin-bottom: 10px;">
-          <app-cart-items [product]="product" (updateProduct)="updateProduct($event, product)"
+          <app-cart-items [product]="product" (updateProduct)="updateProduct($event, product, i)"
                           (valid)="changeValidation($event, i)"></app-cart-items>
         </div>
       </div>

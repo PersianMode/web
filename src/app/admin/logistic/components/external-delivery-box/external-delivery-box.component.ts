@@ -225,6 +225,11 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     this.expandedElement = order._id;
   }
 
+  isAggregated(order) {
+
+      return order.total_order_lines  === order.order_lines.length;
+  }
+
   ngOnDestroy(): void {
     this.socketSubscription.unsubscribe();
   }

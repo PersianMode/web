@@ -58,14 +58,18 @@
   </ng-container>
 
   <!-- return order -->
-  <!-- <ng-container matColumnDef="return_order">
-    <mat-header-cell *matHeaderCellDef mat-sort-header> مرجوع سفارش</mat-header-cell>
-        <mat-cell *matCellDef="let order" style=" font-size: 20px">
-            <button class="clickable-link" (click)="returnOrder(order._id)" [disabled]="orderTime(order)">
-              <i class="fa fa-undo"></i>
-            </button>
-          </mat-cell>
-  </ng-container> -->
+  <ng-container matColumnDef="return_order">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>وضعیت سفارش</mat-header-cell>
+    <mat-cell *matCellDef="let order" style=" font-size: 12px">
+      <!--<button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">-->
+      <!--بازگشت کالا-->
+      <!--</button>-->
+      <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
+        لغو خرید
+      </button>
+      <div>{{checkOrderStatus(order)}}</div>
+    </mat-cell>
+  </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns:displayedColumns"></mat-row>
@@ -105,6 +109,15 @@
         </div>
         <div class="eye-style"><a (click)="goToOrderLines(order._id)" class="clickable-link"><i
           class="fa fa-eye"></i></a></div>
+        <div>{{"وضعیت: "}}
+          <button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">
+            بازگشت کالا
+          </button>
+          <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
+            لغو خرید
+          </button>
+          <label>{{checkOrderStatus(order)}}</label>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>
