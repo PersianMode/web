@@ -5,7 +5,7 @@ import {HttpService} from '../../../shared/services/http.service';
 import {CartService} from '../../../shared/services/cart.service';
 import {TitleService} from '../../../shared/services/title.service';
 import {ProductService} from '../../../shared/services/product.service';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
 import {Router} from '@angular/router';
 
@@ -66,6 +66,7 @@ export class CheckoutPageComponent implements OnInit {
               private cartService: CartService,
               private titleService: TitleService,
               private progressService: ProgressService,
+              private snackBar: MatSnackBar,
               private spinnerService: SpinnerService,
               private router: Router, @Inject(DOCUMENT) private document: any, private location: Location,
               private productService: ProductService) {
@@ -224,7 +225,10 @@ export class CheckoutPageComponent implements OnInit {
                 else {
                   if (!!this.soldOuts && !!this.soldOuts.length)
                     this.router.navigate(['/', 'cart']);
-                  reject();
+                  reject({
+                    errMsg: this.changeMessage,
+                    errCode: 800,
+                  });
                 }
               });
             } else {
@@ -234,7 +238,7 @@ export class CheckoutPageComponent implements OnInit {
             resolve();
         },
         err => {
-          reject();
+          reject(err);
         });
     });
   }
@@ -271,6 +275,10 @@ export class CheckoutPageComponent implements OnInit {
       })
       .catch(err => {
         console.error('Error in final check: ', err);
+        if (!err.errCode)
+          this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید.', null, {
+            duration: 3200,
+          });
         this.spinnerService.disable();
       });
   }
