@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { HttpService } from './http.service';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { IFilter } from '../interfaces/ifilter.interface';
-import { DictionaryService } from './dictionary.service';
-import { imagePathFixer } from '../lib/imagePathFixer';
-import { discountCalc } from '../lib/discountCalc';
-import { productColorMap } from '../lib/colorNameMap';
-import { SpinnerService } from './spinner.service';
-import { AuthService } from './auth.service';
-import { safeColorConverter } from './colorConverter';
+import {Injectable} from '@angular/core';
+import {HttpService} from './http.service';
+import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {IFilter} from '../interfaces/ifilter.interface';
+import {DictionaryService} from './dictionary.service';
+import {imagePathFixer} from '../lib/imagePathFixer';
+import {discountCalc} from '../lib/discountCalc';
+import {productColorMap} from '../lib/colorNameMap';
+import {SpinnerService} from './spinner.service';
+import {AuthService} from './auth.service';
+import {safeColorConverter} from './colorConverter';
 
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
@@ -22,7 +22,7 @@ const newestSort = function (a, b) {
   }
 };
 
-const extractPrices = function(products) {
+const extractPrices = function (products) {
   const pricesHelper = products.map(product => product.instances.map(instance => instance.discountedPrice));
   return [].concat(...pricesHelper);
 };
@@ -61,6 +61,7 @@ export class ProductService {
   tag$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
+  allFiltering$ = new ReplaySubject<IFilter[]>(1);
   product$: ReplaySubject<any> = new ReplaySubject<any>();
   collectionTags: any = {};
   collectionTagsAfterFilter: any = {};
@@ -70,9 +71,11 @@ export class ProductService {
   private collectionId;
 
   constructor(private httpService: HttpService, private dict: DictionaryService,
-    private spinnerService: SpinnerService, private authService: AuthService) { }
+              private spinnerService: SpinnerService, private authService: AuthService) {
+    this.allFiltering$.subscribe(f => this.filtering$.next(f));
+  }
 
-  extractFilters(filters = [], trigger = '') {
+  extractFilters(filters = [], trigger = '', emit = true) {
     const products = trigger ? this.filteredProducts : this.products;
     let tags: any = {};
 
@@ -107,12 +110,9 @@ export class ProductService {
       const conv = safeColorConverter(color[col]);
       mappedColor[col] = conv ? conv : this.dict.translateColor(col);
     }
-    color = Array.from(new Set(mappedColor)).filter((element) =>{
-      return element !== 'نامعین'
+    color = Array.from(new Set(mappedColor)).filter((element) => {
+      return element !== 'نامعین';
     });
-    
-    
-
 
     let price = [];
     if (trigger === 'price') {
@@ -138,7 +138,7 @@ export class ProductService {
       discount = [minDiscount, maxDiscount];
     }
 
-    tags = { brand, type, price, size, shoesSize, color };
+    tags = {brand, type, price, size, shoesSize, color};
 
     if (discount && discount.length && discount[0] !== discount[1])
       tags.discount = discount;
@@ -160,6 +160,7 @@ export class ProductService {
     } else {
       this.collectionTags = tags;
     }
+
     const emittedValue = [];
     for (const name in tags) {
       if (tags.hasOwnProperty(name)) {
@@ -175,19 +176,27 @@ export class ProductService {
         }
       }
     }
-    this.filtering$.next(emittedValue);
+    if (emit)
+      this.allFiltering$.next(emittedValue);
+    else
+      this.filtering$.next(emittedValue)
   }
 
   emptyFilters() {
     this.filtering$.next([]);
   }
 
-  applyFilters(filters, trigger) {
+  countProducts(tag, value) {
+    return this.filteredProducts
+      .filter(p => p.tags.find(t => value === t.name))
+      .length;
+  }
+
+  applyFilters(filters, trigger, emit = true) {
 
     setTimeout(() => {
       this.spinnerService.enable();
       this.filteredProducts = JSON.parse(JSON.stringify(this.products));
-
 
 
       filters.forEach(f => {
@@ -246,7 +255,7 @@ export class ProductService {
             this.filteredProducts = this.filteredProducts.filter(p => p.discount >= f.values[0] && p.discount <= f.values[1]);
           } else {
             this.filteredProducts = this.filteredProducts
-              .filter(p => p.tags.filter(t => Array.from(f.values).includes(t.name)).length);
+              .filter(p => p.tags.find(t => Array.from(f.values).includes(t.name)));
           }
         }
 
@@ -254,7 +263,7 @@ export class ProductService {
       });
       setTimeout(() => {
         this.sortProductsAndEmit();
-        this.extractFilters(filters, trigger);
+        this.extractFilters(filters, trigger, emit);
       }, 0);
     }, 0);
   }
@@ -274,7 +283,7 @@ export class ProductService {
     }
   }
 
-   private enrichProductData(data) {
+  private enrichProductData(data) {
     data.id = data._id;
     data.type = data.product_type;
     data.price = data.base_price;
@@ -354,7 +363,7 @@ export class ProductService {
 
   loadProducts(productIds) {
     return new Promise((resolve) => {
-      this.httpService.post('product/getMultiple', { productIds })
+      this.httpService.post('product/getMultiple', {productIds})
         .subscribe(data => {
           if (data) {
             data.forEach(product => {
