@@ -6,8 +6,9 @@ h1, h3{
 }
 
 .imgWrapper{
-  width: 72px;
-  height: 72px;
+  width: 72px !important;
+  height: 72px !important;
+  
   margin: 10px 10px;
   text-align: left;
   max-height: 72px;
@@ -18,7 +19,9 @@ h1, h3{
 }
 
 .imgWrapper img{
-  height: 72px;
+  width: 72px !important;
+  height: 72px !important;
+  
   position: relative;
 }
 
