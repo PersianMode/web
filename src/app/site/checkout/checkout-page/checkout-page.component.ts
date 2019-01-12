@@ -280,7 +280,7 @@ export class CheckoutPageComponent implements OnInit {
       .catch(err => {
         console.error('Error in final check: ', err);
         if (!err.errCode)
-          this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید.', null, {
+          this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید', null, {
             duration: 3200,
           });
         this.spinnerService.disable();
