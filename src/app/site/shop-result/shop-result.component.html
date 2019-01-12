@@ -40,6 +40,7 @@
   <div fxFlex="5"></div>
 </div>
 <div *ngIf="payResult && payResult.error">
+  <div class="cancel-div" style="color: darkred"><span>تراکنش ناموفق</span></div>
   <div *ngIf="payResult.error.result && payResult.error.action">
     <div *ngIf="payResult.error.result[0] === 'False' && payResult.error.action[0] === 'NOTRANSACTON'"
          class="cancel-div">
