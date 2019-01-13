@@ -39,8 +39,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   selectedMinDiscountFormatted = '';
   selectedMaxDiscountFormatted = '';
   filter_options$: any;
-  sideOptions: any;
+  sideOptions: any[] = [];
   moreSides = false;
+  allCount = '';
 
   constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
@@ -52,6 +53,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.filter_options$ = this.productService.allFiltering$.subscribe(r => {
       this.filter_options = r;
       this.sideOptions = [];
+      this.allCount = this.productService.countProducts().toLocaleString('fa');
       r.filter(o => o.name === 'Category')
         .forEach((o, i) => o.values.forEach((v, j) => {
           const count = this.productService.countProducts(o.name, v);
@@ -151,12 +153,12 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
         if (k1 !== name || k2 !== value) {
           if (this.isChecked[k1][k2]) {
-            if (k1 !== 'main')
+            if (k1 !== 'main' && k1 === 'Category')
               this.changeFilterState(k1, k2, false);
             this.isChecked[k1][k2] = false;
           }
         } else if (!this.isChecked[k1][k2]) {
-          if (k1 !== 'main')
+          if (k1 !== 'main' && k1 === 'Category')
             this.changeFilterState(k1, k2, false);
           this.isChecked[k1][k2] = true;
         }
@@ -207,7 +209,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
     this.sortedBy = null;
     this.sortedByChange.emit(this.sortedBy);
-
+    this.isChecked.main = {all: true};
     this.productService.applyFilters(this.current_filter_state, '');
   }
 

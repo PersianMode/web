@@ -186,10 +186,14 @@ export class ProductService {
     this.filtering$.next([]);
   }
 
-  countProducts(tag, value) {
-    return this.filteredProducts
-      .filter(p => p.tags.find(t => value === t.name))
-      .length;
+  countProducts(tag = null, value = null) {
+    if (tag && value) {
+      return this.filteredProducts
+        .filter(p => p.tags.find(t => value === t.name))
+        .length;
+    } else {
+      return this.filteredProducts.length;
+    }
   }
 
   applyFilters(filters, trigger, emit = true) {

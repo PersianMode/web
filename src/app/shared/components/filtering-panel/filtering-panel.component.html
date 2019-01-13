@@ -1,4 +1,5 @@
-<button mat-button [style.fontWeight]="isChecked.main.all ? 900 : 100" (click)="sideOptionClicked('main','all')">همه محصولات</button>
+<span *ngIf="sideOptions.length">
+<button mat-button [style.fontWeight]="isChecked.main.all ? 900 : 100" (click)="sideOptionClicked('main','all')">همه محصولات ({{allCount}})</button>
 <div *ngFor="let fo of sideOptions;let i=index">
   <button *ngIf="i < 5 || moreSides"mat-button class="check-box-text" [style.fontWeight]="isChecked[fo.name][fo.value] ? 900 : 100"
           (click)="sideOptionClicked(fo.name, fo.value)">
@@ -9,7 +10,7 @@
         (click)="moreSides = true">
   + بیشتر
 </button>
-
+</span>
 
 <div [ngClass]="isMobile ? 'set-size-mobile' : null">
   <h1 *ngIf="filter_options?.length">فیلترها</h1>
