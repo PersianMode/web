@@ -229,7 +229,7 @@ export class CheckoutService {
             resolve(res);
           },
           err => {
-            reject();
+            reject(err);
           });
     });
   }

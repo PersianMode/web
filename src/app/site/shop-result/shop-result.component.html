@@ -40,6 +40,7 @@
   <div fxFlex="5"></div>
 </div>
 <div *ngIf="payResult && payResult.error">
+  <div class="cancel-div" style="color: darkred"><span>تراکنش ناموفق</span></div>
   <div *ngIf="payResult.error.result && payResult.error.action">
     <div *ngIf="payResult.error.result[0] === 'False' && payResult.error.action[0] === 'NOTRANSACTON'"
          class="cancel-div">
@@ -49,6 +50,11 @@
          class="cancel-div">
       <span>چنین فاکتوری وجود ندارد.</span>
     </div>
+  </div>
+  <div
+    *ngIf="payResult.error.result && payResult.error.result[0] === 'False' && payResult.error.resultMessage[0] === 'فاکتور ارسالي شما پيدا نشد'"
+    class="cancel-div">
+    <span>{{payResult.error.resultMessage[0]}}</span>
   </div>
   <div *ngIf="payResult.error === 'Invalid Invoice'" class="cancel-div">
     <span>چنین فاکتوری وجود ندارد.</span>
