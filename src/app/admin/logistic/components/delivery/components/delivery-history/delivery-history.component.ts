@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatSort, MatSnackBar, MatTableDataSource, MatDialog} from '@angular/material';
+import {MatSort, MatSnackBar, MatTableDataSource, MatDialog, MatPaginator} from '@angular/material';
 import {FormControl} from '@angular/forms';
 import {SelectionModel} from '@angular/cdk/collections';
 import * as moment from 'moment';
@@ -31,11 +31,14 @@ export interface DeliveryItem {
   styleUrls: ['./delivery-history.component.css']
 })
 export class DeliveryHistoryComponent implements OnInit {
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('table') table;
   limit: any = 10;
   offset: any = 0;
   dataSource = null;
+  pageSize = 10;
   totalRecords = 0;
   selection = null;
   sortColumn = null;
@@ -132,40 +135,52 @@ export class DeliveryHistoryComponent implements OnInit {
   }
 
   getDeliveryItems() {
-    // this.progressService.enable();
-    // this.httpService.post('delivery/items/' + (this.offset ? this.offset : 0) + '/' + (this.limit ? this.limit : 10), {
-    //   sort_column: this.sortColumn,
-    //   agentName: this.agentName,
-    //   transferee: this.transferee,
-    //   direction: this.direction,
-    //   delivery_end: this.endDateSearch,
-    //   delivery_start: this.startDateSearch,
-    //   isInternal: this.isInternal,
-    //   isDelivered: this.isDelivered,
-    //   isReturn: this.isReturn,
-    //   missDeliveryAgent: this.missDeliveryAgent,
-    // }).subscribe(
-    //   data => {
-    //     this.deliveryItems = [];
+    this.progressService.enable();
+    const options = {
 
-    //     if (data) {
-    //       this.deliveryItems = data.result;
-    //       this.selection.clear();
-    //       this.setDataSource(this.deliveryItems);
-    //     } else
-    //       this.setDataSource([]);
+      // sort_column: this.sortColumn,
+      // agentName: this.agentName,
+      // transferee: this.transferee,
+      // direction: this.direction,
+      // delivery_end: this.endDateSearch,
+      // delivery_start: this.startDateSearch,
+      // isInternal: this.isInternal,
+      // isDelivered: this.isDelivered,
+      // isReturn: this.isReturn,
 
-    //     this.totalRecords = data && data.total ? data.total : 0;
-    //     this.progressService.disable();
-    //   },
-    //   err => {
-    //     console.error('Cannot get data: ', err);
-    //     this.snackBar.open('در حال حاضر قادر به دریافت اطلاعات نیستیم. دوباره تلاش کنید', null, {
-    //       duration: 3200,
-    //     });
-    //     this.progressService.disable();
-    //   }
-    // );
+      sort: this.sort.active,
+      dir: this.sort.direction,
+
+      type: 'DeliveryHistory',
+    };
+    const offset = this.paginator.pageIndex * +this.pageSize;
+    const limit = this.pageSize;
+    this.progressService.enable();
+    this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
+        this.progressService.disable();
+
+
+        console.log('delivery items', res.data);
+        this.deliveryItems = [];
+
+        if (res.data) {
+          this.deliveryItems = res.data[0].result;
+          this.selection.clear();
+          this.setDataSource(this.deliveryItems);
+        } else
+          this.setDataSource([]);
+
+        this.totalRecords = res && res.total ? res.total : 0;
+        this.progressService.disable();
+      },
+      err => {
+        console.error('Cannot get data: ', err);
+        this.snackBar.open('در حال حاضر قادر به دریافت اطلاعات نیستیم. دوباره تلاش کنید', null, {
+          duration: 3200,
+        });
+        this.progressService.disable();
+      }
+    );
   }
 
   setDataSource(data) {
@@ -193,7 +208,7 @@ export class DeliveryHistoryComponent implements OnInit {
       });
     });
 
-    this.dataSource.data = tempData;
+    this.dataSource = tempData;
   }
 
   changePageSetting(data) {
@@ -323,5 +338,10 @@ export class DeliveryHistoryComponent implements OnInit {
           duration: 2000,
         });
       });
+  }
+
+  onSortChange($event: any) {
+    this.paginator.pageIndex = 0;
+    this.getDeliveryItems();
   }
 }
