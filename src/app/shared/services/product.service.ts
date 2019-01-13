@@ -61,7 +61,7 @@ export class ProductService {
   tag$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
-  allFiltering$ = new ReplaySubject<IFilter[]>(1);
+  side$ = new ReplaySubject<IFilter[]>(1);
   product$: ReplaySubject<any> = new ReplaySubject<any>();
   collectionTags: any = {};
   collectionTagsAfterFilter: any = {};
@@ -72,10 +72,9 @@ export class ProductService {
 
   constructor(private httpService: HttpService, private dict: DictionaryService,
               private spinnerService: SpinnerService, private authService: AuthService) {
-    this.allFiltering$.subscribe(f => this.filtering$.next(f));
   }
 
-  extractFilters(filters = [], trigger = '', emit = true) {
+  extractFilters(filters = [], trigger = '', sideChange = true) {
     const products = trigger ? this.filteredProducts : this.products;
     let tags: any = {};
 
@@ -176,10 +175,10 @@ export class ProductService {
         }
       }
     }
-    if (emit)
-      this.allFiltering$.next(emittedValue);
-    else
-      this.filtering$.next(emittedValue)
+    if (sideChange)
+      this.side$.next(emittedValue);
+
+      this.filtering$.next(emittedValue);
   }
 
   emptyFilters() {
@@ -405,7 +404,7 @@ export class ProductService {
             this.filteredProducts = this.products.slice();
 
             this.sortProductsAndEmit();
-            this.extractFilters();
+            this.extractFilters([], '', true);
           }
           this.spinnerService.disable();
 

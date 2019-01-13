@@ -39,6 +39,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   selectedMinDiscountFormatted = '';
   selectedMaxDiscountFormatted = '';
   filter_options$: any;
+  side_options$: any;
   sideOptions: any[] = [];
   moreSides = false;
   allCount = '';
@@ -49,11 +50,8 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isEU = this.productService.collectionIsEU;
     this.isEUSubescriber = this.productService.collectionIsEUObject.subscribe(value => this.isEU = value);
-
-    this.filter_options$ = this.productService.allFiltering$.subscribe(r => {
-      this.filter_options = r;
+    this.side_options$ = this.productService.side$.subscribe(r => {
       this.sideOptions = [];
-      this.allCount = this.productService.countProducts().toLocaleString('fa');
       r.filter(o => o.name === 'Category')
         .forEach((o, i) => o.values.forEach((v, j) => {
           const count = this.productService.countProducts(o.name, v);
@@ -69,7 +67,19 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
         }));
       this.sideOptions.sort((x, y) => y.count - x.count);
       this.isChecked.main = {all: true};
+      this.allCount = this.productService.countProducts().toLocaleString('fa');
+    });
+
+    this.filter_options$ = this.productService.filtering$.subscribe(r => {
+      this.allCount = this.productService.countProducts().toLocaleString('fa');
+      this.filter_options = r;
       this.filter_options.forEach(el => {
+        if (this.sideOptions.length) {
+          this.sideOptions.forEach(so => {
+            so.count = this.productService.countProducts(so.name, so.value);
+            so.countFa = so.count.toLocaleString('fa');
+          });
+        } else this.productService.side$.next(r);
         const found = this.current_filter_state.find(cfs => cfs.name === el.name);
         if (!found) {
           this.current_filter_state.push({name: el.name, values: []});
@@ -151,15 +161,14 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   sideOptionClicked(name, value) {
     for (const k1 in this.isChecked) if (this.isChecked.hasOwnProperty(k1)) {
       for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
-        if (k1 !== name || k2 !== value) {
+        if (k1 === 'Category')
+        if (k2 !== value) {
           if (this.isChecked[k1][k2]) {
-            if (k1 !== 'main' && k1 === 'Category')
-              this.changeFilterState(k1, k2, false);
+            this.changeFilterState(k1, k2, false);
             this.isChecked[k1][k2] = false;
           }
         } else if (!this.isChecked[k1][k2]) {
-          if (k1 !== 'main' && k1 === 'Category')
-            this.changeFilterState(k1, k2, false);
+          this.changeFilterState(k1, k2, false);
           this.isChecked[k1][k2] = true;
         }
       }
@@ -228,6 +237,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.filter_options$.unsubscribe();
+    this.side_options$.unsubscribe();
     this.isEUSubescriber.unsubscribe();
   }
 

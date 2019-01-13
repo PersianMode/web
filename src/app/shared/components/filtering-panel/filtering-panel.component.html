@@ -3,7 +3,7 @@
 <div *ngFor="let fo of sideOptions;let i=index">
   <button *ngIf="i < 5 || moreSides"mat-button class="check-box-text" [style.fontWeight]="isChecked[fo.name][fo.value] ? 900 : 100"
           (click)="sideOptionClicked(fo.name, fo.value)">
-    {{fo.fa}} ({{fo.countFa}})
+    {{fo.fa}} <span *ngIf="fo.count">({{fo.countFa}})</span>
   </button>
 </div>
 <button *ngIf="sideOptions.length > 4 && !moreSides" mat-button class="check-box-text"
