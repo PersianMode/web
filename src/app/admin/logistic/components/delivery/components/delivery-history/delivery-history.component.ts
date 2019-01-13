@@ -47,8 +47,8 @@ export class DeliveryHistoryComponent implements OnInit {
   deliveryItems = null;
   displayedColumns = [
     'position',
-    'end',
-    'min_slot',
+    // 'end',
+    // 'min_slot',
     'delivery_agent',
     'receiver_sender_name',
     'shelf_code',
@@ -139,13 +139,13 @@ export class DeliveryHistoryComponent implements OnInit {
     const options = {
 
       // sort_column: this.sortColumn,
-      // agentName: this.agentName,
-      // transferee: this.transferee,
+      agentName: this.agentName,
+      transferee: this.transferee,
       // direction: this.direction,
-      // delivery_end: this.endDateSearch,
-      // delivery_start: this.startDateSearch,
+      delivery_end: this.endDateSearch,
+      delivery_start: this.startDateSearch,
       // isInternal: this.isInternal,
-      // isDelivered: this.isDelivered,
+      isDelivered: this.isDelivered,
       // isReturn: this.isReturn,
 
       sort: this.sort.active,
@@ -158,7 +158,6 @@ export class DeliveryHistoryComponent implements OnInit {
     this.progressService.enable();
     this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
         this.progressService.disable();
-
 
         console.log('delivery items', res.data);
         this.deliveryItems = [];
@@ -209,6 +208,7 @@ export class DeliveryHistoryComponent implements OnInit {
     });
 
     this.dataSource = tempData;
+    console.log('datasource:', this.dataSource);
   }
 
   changePageSetting(data) {

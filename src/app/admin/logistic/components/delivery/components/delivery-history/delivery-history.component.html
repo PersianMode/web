@@ -38,37 +38,61 @@
         </div>
       </div>
       <div fxLayout="row" fxLayoutAlign="start start">
-        <div fxFlex="25" class="filtering-box" style="margin-top: 20px">
-          <mat-checkbox class="filtering-field" [ngModel]="isDelivered" (change)="changeDeliverStatus()"
-            [indeterminate]="isDelivered === null">
-            <span *ngIf="isDelivered" class="checkbox-label">تحویل داده شده</span>
-            <span *ngIf="isDelivered === false" class="checkbox-label">تحویل داده نشده</span>
-            <span *ngIf="isDelivered === null" class="checkbox-label">همه موارد</span>
-          </mat-checkbox>
-        </div>
-        <div fxFlex="25" class="filtering-box" style="margin-top: 20px">
-          <mat-checkbox class="filtering-field" [ngModel]="missDeliveryAgent" (change)="changeDeliveryAgentStatus()"
-            [indeterminate]="missDeliveryAgent === null">
-            <span *ngIf="missDeliveryAgent" class="checkbox=label">بدون مسئول ارسال</span>
-            <span *ngIf="missDeliveryAgent === false" class="checkbox=label">مسئول ارسال تعیین شده</span>
-            <span *ngIf="missDeliveryAgent === null" class="checkbox=label">همه ی انواع</span>
-          </mat-checkbox>
-        </div>
+        <!--<div fxFlex="25" class="filtering-box" style="margin-top: 20px">-->
+          <!--<mat-checkbox class="filtering-field" [ngModel]="isDelivered" (change)="changeDeliverStatus()"-->
+            <!--[indeterminate]="isDelivered === null">-->
+            <!--<span *ngIf="isDelivered" class="checkbox-label">تحویل داده شده</span>-->
+            <!--<span *ngIf="isDelivered === false" class="checkbox-label">تحویل داده نشده</span>-->
+            <!--<span *ngIf="isDelivered === null" class="checkbox-label">همه موارد</span>-->
+          <!--</mat-checkbox>-->
+        <!--</div>-->
+        <!--<div fxFlex="25" class="filtering-box" style="margin-top: 20px">-->
+          <!--<mat-checkbox class="filtering-field" [ngModel]="missDeliveryAgent" (change)="changeDeliveryAgentStatus()"-->
+            <!--[indeterminate]="missDeliveryAgent === null">-->
+            <!--<span *ngIf="missDeliveryAgent" class="checkbox=label">بدون مسئول ارسال</span>-->
+            <!--<span *ngIf="missDeliveryAgent === false" class="checkbox=label">مسئول ارسال تعیین شده</span>-->
+            <!--<span *ngIf="missDeliveryAgent === null" class="checkbox=label">همه ی انواع</span>-->
+          <!--</mat-checkbox>-->
+        <!--</div>-->
         <div fxFlex="25" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
+          <label>مبدا:  </label>
           <mat-checkbox class="filtering-field" [ngModel]="isInternal" (change)="changeInternalStatus()"
             [indeterminate]="isInternal === null">
-            <span *ngIf="isInternal" class="checkbox-label">انتقالات داخلی</span>
-            <span *ngIf="isInternal === false" class="checkbox-label">انتقالات خارجی</span>
-            <span *ngIf="isInternal === null" class="checkbox-label">همه انتقالات</span>
+            <span *ngIf="isInternal" class="checkbox-label">انبار</span>
+            <span *ngIf="isInternal === false" class="checkbox-label">مشتری</span>
+            <span *ngIf="isInternal === null" class="checkbox-label">همه موارد</span>
           </mat-checkbox>
+          <mat-input-container *ngIf="is_internal === false">
+            <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"  [formControl]="receiverSearchCtrl">
+          </mat-input-container>
+          <!--<mat-input-container *ngIf="is_internal">-->
+            <!--<input class="filtering-field" matInput type="text">-->
+          <!--</mat-input-container>-->
         </div>
+        <!--<div fxFlex="25" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">-->
+          <!--<mat-checkbox class="filtering-field" [ngModel]="isReturn" (change)="changeReturnStatus()" [indeterminate]="isReturn === null">-->
+            <!--<span *ngIf="isReturn" class="checkbox=label">برگشت داده شده ها</span>-->
+            <!--<span *ngIf="isReturn === false" class="checkbox=label">برگشت داده نشده ها</span>-->
+            <!--<span *ngIf="isReturn === null" class="checkbox=label">همه نوع مرسوله ای</span>-->
+          <!--</mat-checkbox>-->
+        <!--</div>-->
         <div fxFlex="25" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
-          <mat-checkbox class="filtering-field" [ngModel]="isReturn" (change)="changeReturnStatus()" [indeterminate]="isReturn === null">
-            <span *ngIf="isReturn" class="checkbox=label">برگشت داده شده ها</span>
-            <span *ngIf="isReturn === false" class="checkbox=label">برگشت داده نشده ها</span>
-            <span *ngIf="isReturn === null" class="checkbox=label">همه نوع مرسوله ای</span>
+          <label>مقصد:  </label>
+          <mat-checkbox class="filtering-field" [ngModel]="isInternal" (change)="changeInternalStatus()"
+                        [indeterminate]="isInternal === null">
+            <span *ngIf="isInternal" class="checkbox-label">انبار
+              <mat-input-container>
+            <input matInput type="text" placeholder="انبار"  [formControl]="receiverSearchCtrl">
+          </mat-input-container>
+            </span>
+            <span *ngIf="isInternal === false" class="checkbox-label">مشتری
+            <mat-input-container>
+              <input matInput type="text" placeholder="نام مشتری - کد ملی"  [formControl]="receiverSearchCtrl">
+            </mat-input-container></span>
+            <span *ngIf="isInternal === null" class="checkbox-label">همه موارد</span>
           </mat-checkbox>
         </div>
+
       </div>
     </div>
     <div>
@@ -78,17 +102,17 @@
           <mat-cell *matCellDef="let element" class="content"> {{formatter(element.position)}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="end">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تاریخ دریافت</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content" [style.color]="isAfterMaxValidEndDate(element._id) ? 'red' : 'black'">
-            {{element.end}} </mat-cell>
-        </ng-container>
+        <!--<ng-container matColumnDef="end">-->
+          <!--<mat-header-cell *matHeaderCellDef mat-sort-header class="header">تاریخ دریافت</mat-header-cell>-->
+          <!--<mat-cell *matCellDef="let element" class="content" [style.color]="isAfterMaxValidEndDate(element._id) ? 'red' : 'black'">-->
+            <!--{{element.end}} </mat-cell>-->
+        <!--</ng-container>-->
 
-        <ng-container matColumnDef="min_slot">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">بازه دریافتی مطلوب</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content"> {{element.min_slot?.lower_bound}} -
-            {{element.min_slot?.upper_bound}}</mat-cell>
-        </ng-container>
+        <!--<ng-container matColumnDef="min_slot">-->
+          <!--<mat-header-cell *matHeaderCellDef mat-sort-header class="header">بازه دریافتی مطلوب</mat-header-cell>-->
+          <!--<mat-cell *matCellDef="let element" class="content"> {{element.min_slot?.lower_bound}} - -->
+            <!--{{element.min_slot?.upper_bound}}</mat-cell>-->
+        <!--</ng-container>-->
 
         <ng-container matColumnDef="delivery_agent">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مسئول ارسال</mat-header-cell>
