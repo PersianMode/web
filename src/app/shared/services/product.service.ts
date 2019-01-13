@@ -10,6 +10,7 @@ import {SpinnerService} from './spinner.service';
 import {AuthService} from './auth.service';
 import {safeColorConverter} from './colorConverter';
 
+const allMappedColor = {};
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
     return (a.year * 8 + a.season) - (b.year * 8 + b.season);
@@ -104,14 +105,21 @@ export class ProductService {
       .reduce((x, y) => x.concat(y), [])
     ]));
 
-    const mappedColor = [];
+    const mappedColor: any = {};
     for (const col in color) if (color.hasOwnProperty(col)) {
-      const conv = safeColorConverter(color[col]);
-      mappedColor[col] = conv ? conv : this.dict.translateColor(col);
+      let conv;
+      if (allMappedColor[color[col]]) {
+        conv = allMappedColor[color[col]];
+      } else {
+        conv = safeColorConverter(color[col]);
+        if (!conv)
+          conv = this.dict.translateColor(color[col]);
+        allMappedColor[color[col]] = conv;
+      }
+      mappedColor[color[col]] = conv;
     }
-    color = Array.from(new Set(mappedColor)).filter((element) => {
-      return element !== 'نامعین';
-    });
+
+    color = Array.from(new Set(Object.keys(mappedColor).map(r => mappedColor[r]).filter(e => e !== 'نامعین')));
 
     let price = [];
     if (trigger === 'price') {
@@ -178,7 +186,7 @@ export class ProductService {
     if (sideChange)
       this.side$.next(emittedValue);
 
-      this.filtering$.next(emittedValue);
+    this.filtering$.next(emittedValue);
   }
 
   emptyFilters() {
@@ -201,22 +209,14 @@ export class ProductService {
       this.spinnerService.enable();
       this.filteredProducts = JSON.parse(JSON.stringify(this.products));
 
-
       filters.forEach(f => {
         if (f.values.length) {
           if (['brand', 'type'].includes(f.name)) {
             this.filteredProducts = this.filteredProducts.filter(r => Array.from(f.values).includes(r[f.name]));
           } else if (f.name === 'color') {
-
             this.filteredProducts.forEach((p, pi) => {
-              this.filteredProducts[pi].colors = p.colors.filter(c => {
-                const result = f.values.filter(v => {
-                  return c.name ? c.name.split('/').find(a => {
-                    return safeColorConverter(a) === v;
-                  }) : false;
-                });
-                return result.length;
-              });
+              this.filteredProducts[pi].colors = p.colors
+                .filter(c => c.name ? c.name.split('/').map(a => a.split('-')).reduce((x , y) => x.concat(y)).find(a => f.values.includes(allMappedColor[a])) : false);
             });
 
             this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
