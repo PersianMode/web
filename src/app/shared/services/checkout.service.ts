@@ -229,7 +229,7 @@ export class CheckoutService {
             resolve(res);
           },
           err => {
-            reject();
+            reject(err);
           });
     });
   }
@@ -344,7 +344,7 @@ export class CheckoutService {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.addressObj,
-      transaction_id: null,
+      transaction_id: `xy-${Math.floor(Math.random() * Math.floor(1000))}`,
       used_point: 0,
       used_balance: 0,
       total_amount: this.total,
