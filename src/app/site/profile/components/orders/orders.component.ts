@@ -8,9 +8,11 @@ import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {ORDER_STATUS} from '../../../../shared/enum/status.enum';
+import {ORDER_STATUS, ORDER_LINE_STATUS} from '../../../../shared/enum/status.enum';
 import {RemovingConfirmComponent} from '../../../../shared/components/removing-confirm/removing-confirm.component';
-import {OrderStatuses} from '../../../../shared/lib/status';
+import {OrderStatuses, OrderLineStatuses} from '../../../../shared/lib/status';
+import * as moment from 'moment';
+import {OrderReturnComponent} from '../order-return/order-return.component';
 
 
 @Component({
@@ -18,21 +20,31 @@ import {OrderStatuses} from '../../../../shared/lib/status';
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css']
 })
-export class OrdersComponent implements OnInit, OnDestroy {
+export class OrdersComponent implements OnInit {
   profileOrder = [];
-  displayedColumns = ['col_no', 'date', 'order_lines', 'total_amount', 'discount', 'used_point', 'address', 'view_details', 'return_order'];
+  displayedColumns = [
+    'col_no',
+    'date',
+    'order_lines',
+    'total_amount',
+    'discount',
+    'used_point',
+    'address',
+    'view_details',
+    'status',
+    'actions'
+  ];
   isMobile = false;
   selectedOrder;
   orderInfo: any;
-  expiredTime = false;
   @Output() closeDialog = new EventEmitter<boolean>();
 
 
   constructor(private profileOrderService: ProfileOrderService, private router: Router,
-              private responsiveService: ResponsiveService,
-              private dialog: MatDialog, protected httpService: HttpService,
-              private snackBar: MatSnackBar,
-              protected progressService: ProgressService) {
+    private responsiveService: ResponsiveService,
+    private dialog: MatDialog, protected httpService: HttpService,
+    private snackBar: MatSnackBar,
+    protected progressService: ProgressService) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -74,8 +86,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     }
   };
 
-  ngOnDestroy() {
-  };
+
 
   openSnackBar(message: string) {
     this.snackBar.open(message, null, {
@@ -83,13 +94,25 @@ export class OrdersComponent implements OnInit, OnDestroy {
     });
   }
 
-  showDialogCancelOrder(order) {
-    let options: any = {
+  checkCancelOrder(order) {
+    try {
+      return !order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) &&
+        !!order.order_lines.find(x => !x.cancel);
+    } catch (err) {
+      return false;
+    }
+  }
+
+  cancelOrder(order) {
+    const options: any = {
       orderId: order._id,
-      orderLines: order.order_lines,
     };
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
+      data: {
+        name: 'لغو سفارش',
+        message: 'در صورت لغو سفارش هزینه آن به موجودی شما افزوده خواهد شد.'
+      }
     });
     rmDialog.afterClosed().subscribe(
       status => {
@@ -115,49 +138,64 @@ export class OrdersComponent implements OnInit, OnDestroy {
       });
   }
 
-  checkCancelOrder(order) {
-    return !order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) &&
-      !!order.order_lines.find(x => !x.cancel)
-  }
-
-  cancelOrder(order) {
-    this.showDialogCancelOrder(order);
-  }
-
   checkReturnOrder(order) {
-    // this.returnOrderTime = moment(order.order_time).add(7, 'd');
-    // if (this.returnOrderTime > Date.now()) {
-    //   this.expiredTime = false;
-    //   return (order.last_ticket.status === ORDER_STATUS.Delivered)
-    // }
-    // else {
-    //   this.expiredTime = true;
-    //   return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
-    // }
+    try {
+
+      const lastTicket = order.tickets[order.tickets.length - 1];
+
+      const delivered = lastTicket.status === ORDER_STATUS.Delivered;
+
+      const validTime = moment(lastTicket.timestamp).isAfter(moment().add(-7, 'd'));
+
+      const hasAvailableOrderLine =
+        !!order.order_lines.find(x => !x.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.ReturnRequested));
+
+      return delivered && validTime && hasAvailableOrderLine;
+    } catch (err) {
+      return false;
+    }
   }
 
   returnOrder(order) {
-    // if (this.responsiveService.isMobile) {
-    //   this.router.navigate([`/profile/orderlines/return`]);
-    // } else {
-    //   const rmDialog = this.dialog.open(OrderReturnComponent, {
-    //     width: '700px',
-    //     data: this.profileOrder.find(x => x._id === order._id),
-    //
-    //   });
-    //   rmDialog.afterClosed().subscribe(res => {
-    //     // this.closeDialog.emit(true);
-    //   });
-    // }
+
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/profile/orderlines/return`]);
+    } else {
+      this.dialog.open(OrderReturnComponent, {
+        width: '700px',
+        data: {
+          order: this.profileOrder.find(x => x._id === order._id),
+        }
+      });
+    }
+
   }
 
-  checkOrderStatus(order) {
-  if (!order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForAggregation) )
-      return OrderStatuses.find(x => x.status === order.last_ticket.status).title || '-';
+  getOrderStatus(order) {
 
+    try {
 
-  else if (order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForAggregation) && !order.order_lines.find(x => !x.cancel))
-      return OrderStatuses.find(x => x.status === ORDER_STATUS.CancelRequested).title || '-';
+      const isDelivered = order.tickets.map(x => x.status).includes(ORDER_STATUS.Delivered);
+      const hasNotCanceledOrderLine = order.order_lines.find(x => {
+        return !x.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.CancelRequested);
+      });
+      const hasNotReturnedOrderLine = order.order_lines.find(x => {
+        return !x.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.ReturnRequested);
+      });
+
+      if (isDelivered && hasNotReturnedOrderLine) {
+        return OrderStatuses.find(x => x.status === ORDER_STATUS.Delivered).title;
+      } else if (isDelivered && !hasNotReturnedOrderLine) {
+        return OrderLineStatuses.find(x => x.status === ORDER_LINE_STATUS.ReturnRequested).title;
+      } else if (!isDelivered && !hasNotCanceledOrderLine) {
+        return OrderLineStatuses.find(x => x.status === ORDER_LINE_STATUS.CancelRequested).title;
+      } else if (!isDelivered && hasNotCanceledOrderLine) {
+        return OrderStatuses.find(x => x.status === order.tickets[order.tickets.length - 1].status).title;
+      }
+
+    } catch (error) {
+      return 'نامشخص';
+    }
 
   }
 }

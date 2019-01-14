@@ -57,7 +57,7 @@ export class BasicInfoComponent implements OnInit {
 
 
   constructor(private authService: AuthService, private httpService: HttpService,
-              private snackBar: MatSnackBar, protected progressService: ProgressService, private dialog: MatDialog) {
+    private snackBar: MatSnackBar, protected progressService: ProgressService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -76,9 +76,9 @@ export class BasicInfoComponent implements OnInit {
       this.balance = res.balance;
       this.loyaltyPoints = res.loyalty_points;
       this.loyaltyPointsValue = res.loyalty_points * this.loyaltyValue;
-      this.balanceFa = this.balance.toLocaleString('fa');
-      this.loyaltyPointsFa = this.loyaltyPoints.toLocaleString('fa');
-      this.loyaltyPointsValueFa = this.loyaltyPointsValue.toLocaleString('fa');
+      this.balanceFa = this.balance ? this.balance.toLocaleString('fa') : '-';
+      this.loyaltyPointsFa = this.loyaltyPoints ? this.loyaltyPoints.toLocaleString('fa') : '-';
+      this.loyaltyPointsValueFa = this.loyaltyPointsValue ? this.loyaltyPointsValue.toLocaleString('fa') : '-';
     });
   }
 
