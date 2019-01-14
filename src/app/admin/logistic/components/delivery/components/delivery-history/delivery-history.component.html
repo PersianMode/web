@@ -145,15 +145,8 @@
         </ng-container>
 
         <ng-container matColumnDef="is_delivered">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">تحویل گرفته شده</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content">
-            <div *ngIf="element.is_delivered">
-              <mat-icon style="color: green" aria-label="delivered">check</mat-icon>
-            </div>
-            <div *ngIf="!element.is_delivered">
-              <mat-icon style="color: red" aria-label="not delivered">close</mat-icon>
-            </div>
-          </mat-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">وضعیت</mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">{{getDeliveryStatus(element)}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="tracking">

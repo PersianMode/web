@@ -9,6 +9,7 @@ import {AuthService} from 'app/shared/services/auth.service';
 import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
 import {DeliveryDetailsComponent} from '../delivery-details/delivery-details.component';
 import {DeliveryTrackingComponent} from '../delivery-tracking/delivery-tracking.component';
+import {DeliveryStatuses} from '../../../../../../shared/lib/status';
 
 export interface DeliveryItem {
   _id: String;
@@ -69,6 +70,7 @@ export class DeliveryHistoryComponent implements OnInit {
   agentName = null;
   isSalesManager = false;
   isHubClerk = false;
+  search;
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
     private snackBar: MatSnackBar, private dialog: MatDialog,
@@ -158,18 +160,17 @@ export class DeliveryHistoryComponent implements OnInit {
     this.progressService.enable();
     this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
         this.progressService.disable();
-
-        console.log('delivery items', res.data);
+        this.search = res.data[0];
         this.deliveryItems = [];
 
-        if (res.data) {
-          this.deliveryItems = res.data[0].result;
+        if (this.search) {
+          this.deliveryItems = this.search.result;
           this.selection.clear();
           this.setDataSource(this.deliveryItems);
         } else
           this.setDataSource([]);
 
-        this.totalRecords = res && res.total ? res.total : 0;
+        this.totalRecords = this.search && this.search.total ? this.search.total : 0;
         this.progressService.disable();
       },
       err => {
@@ -204,6 +205,7 @@ export class DeliveryHistoryComponent implements OnInit {
           ? (el.from.customer ? (el.from.customer.first_name + ' ' + el.from.customer.surname) : null)
           : (Object.keys(el.to.customer || {}).length ? (el.to.customer.first_name + ' ' + el.to.customer.surname) : el.to.warehouse.name),
         is_delivered: this.deliveryIsDone(el),
+        last_ticket: el.last_ticket
       });
     });
 
@@ -343,5 +345,11 @@ export class DeliveryHistoryComponent implements OnInit {
   onSortChange($event: any) {
     this.paginator.pageIndex = 0;
     this.getDeliveryItems();
+  }
+
+  getDeliveryStatus(delivery) {
+    if (delivery && delivery.last_ticket) {
+      return DeliveryStatuses.find(x => x.status === delivery.last_ticket.status).name;
+    }
   }
 }
