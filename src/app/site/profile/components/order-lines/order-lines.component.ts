@@ -14,6 +14,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 import {OrderLineStatuses, OrderStatuses} from '../../../../shared/lib/status';
 import {ORDER_LINE_STATUS, ORDER_STATUS} from '../../../../shared/enum/status.enum';
 import * as moment from 'moment';
+import {OrderReturnComponent} from '../order-return/order-return.component';
 
 @Component({
   selector: 'app-order-lines',
@@ -31,13 +32,13 @@ export class OrderLinesComponent implements OnInit {
   @Output() closeDialog = new EventEmitter<boolean>();
 
   constructor(private profileOrderService: ProfileOrderService,
-              private dialog: MatDialog,
-              private httpService: HttpService,
-              private snackBar: MatSnackBar,
-              private progressService: ProgressService,
-              private location: Location, private router: Router,
-              private dict: DictionaryService,
-              private responsiveService: ResponsiveService) {
+    private dialog: MatDialog,
+    private httpService: HttpService,
+    private snackBar: MatSnackBar,
+    private progressService: ProgressService,
+    private location: Location, private router: Router,
+    private dict: DictionaryService,
+    private responsiveService: ResponsiveService) {
     this.isMobile = this.responsiveService.isMobile;
   }
 
@@ -108,13 +109,29 @@ export class OrderLinesComponent implements OnInit {
     }
   }
 
-  showDialogCancelOrderLine(ol) {
-    let options: any = {
+  checkCancelOrderLine(ol) {
+    try {
+      const order = this.profileOrderService.orderData.dialog_order;
+
+      return !order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) && !ol.cancel;
+    } catch (err) {
+      return false;
+    }
+
+  }
+
+  cancelOrderLine(ol) {
+    const options: any = {
       orderId: this.orderInfo.orderId,
       orderLineId: ol.order_line_id,
     }
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
+      data: {
+        name: 'لغو سفارش',
+        message: 'در صورت لغو سفارش هزینه آن به موجودی شما افزوده خواهد شد.'
+      }
+
     });
     rmDialog.afterClosed().subscribe(
       status => {
@@ -142,47 +159,44 @@ export class OrderLinesComponent implements OnInit {
       });
   }
 
-  checkCancelOrderLine(ol) {
-    return !this.orderInfo.dialog_order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice) && !ol.cancel;
-
-  }
-
-  cancelOrderLine(ol) {
-    this.showDialogCancelOrderLine(ol);
-  }
-
   checkReturnOrderLine(ol) {
-    // this.returnOrderTime = moment(this.orderInfo.dialog_order.order_time).add(7, 'd');
-    // if (this.returnOrderTime > Date.now()) {
-    //   this.expiredTime = false;
-    //   return (this.orderInfo.dialog_order.last_ticket.status === ORDER_STATUS.Delivered && !(ol.order_lines_ticket.status === ORDER_STATUS.Return))
-    // }
-    // else {
-    //   this.expiredTime = true;
-    //   return OrderStatuses.find(x => x.status === this.orderInfo.dialog_order.last_ticket.status).title || '-';
-    // }
+    try {
+      const order = this.profileOrderService.orderData.dialog_order;
+
+      const lastTicket = order.tickets[order.tickets.length - 1];
+
+      const delivered = lastTicket.status === ORDER_STATUS.Delivered;
+
+      const validTime = moment(lastTicket.timestamp).isAfter(moment().add(-7, 'd'));
+
+      const isAvailable = !ol.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.ReturnRequested);
+
+      return delivered && validTime && isAvailable;
+    } catch (err) {
+      return false;
+    }
+
+
   }
 
 
-  returnOrderLine(order) {
-    // this.orderObject = {
-    //   orderLine: orders,
-    //   order: this.orderInfo
-    // };
-    // this.profileOrderService.orderData = this.orderObject;
-    // if (this.responsiveService.isMobile) {
-    //   this.router.navigate([`/profile/orderlines/return`]);
-    // } else {
-    //   const rmDialog = this.dialog.open(GenDialogComponent, {
-    //     width: '700px',
-    //     data: {
-    //       componentName: DialogEnum.orderReturnComponent
-    //     }
-    //   });
-    //   rmDialog.afterClosed().subscribe(res => {
-    //     this.closeDialog.emit(false);
-    //   });
-    // }
+
+  returnOrderLine(orderLine) {
+    const order = this.profileOrderService.orderData.dialog_order;
+
+    if (this.responsiveService.isMobile) {
+      this.router.navigate([`/profile/orderlines/return`]);
+    } else {
+      this.dialog.open(OrderReturnComponent, {
+        width: '700px',
+        data: {
+          order,
+          orderLine
+        },
+
+      });
+    }
+
   }
 
   openSnackBar(message: string) {
