@@ -24,12 +24,11 @@ export class SocketService {
 
   }
 
-  getOrderLineMessage() {
-    if (this.orderLineSocket)
+  public getOrderLineMessage() {
       return this.orderLine$;
   }
 
-  disconnect() {
+  public disconnect() {
     if (this.orderLineSocket)
       this.orderLineSocket.disconnect();
   }

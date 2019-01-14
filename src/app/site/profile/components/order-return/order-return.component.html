@@ -11,7 +11,8 @@
           <button mat-button fxFlex="50" class="action-button" (click)="cancelReturnOrder()">
             انصراف
           </button>
-          <button mat-button fxFlex="50" class="action-button" (click)="setReturnOrder()">
+          <button mat-button fxFlex="50" class="action-button" (click)="setReturnOrder()" [disabled]="!order || !addressObject"
+          [style.background]="!order || !addressObject ? 'gray' : 'black'">
             ثبت درخواست
           </button>
         </div>
