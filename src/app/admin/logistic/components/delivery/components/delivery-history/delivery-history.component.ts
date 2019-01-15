@@ -54,7 +54,7 @@ export class DeliveryHistoryComponent implements OnInit {
     'receiver_sender_name',
     'shelf_code',
     'is_delivered',
-    'tracking',
+    // 'tracking',
     'view_details',
   ];
   deliveryAgentList = [];
@@ -71,10 +71,12 @@ export class DeliveryHistoryComponent implements OnInit {
   isSalesManager = false;
   isHubClerk = false;
   search;
+  _sent = null;
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
-    private snackBar: MatSnackBar, private dialog: MatDialog,
-    private authService: AuthService) {}
+              private snackBar: MatSnackBar, private dialog: MatDialog,
+              private authService: AuthService) {
+  }
 
   ngOnInit() {
     this.isHubClerk = this.authService.userDetails.isAgent && +this.authService.userDetails.accessLevel === AccessLevel.HubClerk;
@@ -128,7 +130,7 @@ export class DeliveryHistoryComponent implements OnInit {
   getDeliveryAgents() {
     this.httpService.get('delivery/agent').subscribe(
       data => {
-        console.log('delivery agent: ',data);
+        console.log('delivery agent: ', data);
         this.deliveryAgentList = data;
       },
       err => {
@@ -144,8 +146,7 @@ export class DeliveryHistoryComponent implements OnInit {
       agentName: this.agentName,
       transferee: this.transferee,
       // direction: this.direction,
-      delivery_end: this.endDateSearch,
-      delivery_start: this.startDateSearch,
+      startDateSearch: this.startDateSearch,
       // isInternal: this.isInternal,
       isDelivered: this.isDelivered,
       // isReturn: this.isReturn,
@@ -161,16 +162,63 @@ export class DeliveryHistoryComponent implements OnInit {
     this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
         this.progressService.disable();
         this.search = res.data[0];
+        console.log('search', this.search);
         this.deliveryItems = [];
 
         if (this.search) {
           this.deliveryItems = this.search.result;
-          this.selection.clear();
+          // this.selection.clear();
           this.setDataSource(this.deliveryItems);
         } else
           this.setDataSource([]);
-
         this.totalRecords = this.search && this.search.total ? this.search.total : 0;
+
+        // internal and external delivery filter
+        if (this.isSalesManager || this.isHubClerk) {
+          if (this.isInternal) {
+            if (this.search) {
+              this.deliveryItems = this.search.result;
+              this.deliveryItems = this.deliveryItems.filter(x => x.to.hasOwnProperty('warehouse') && x.from.hasOwnProperty('warehouse'))
+              this.setDataSource(this.deliveryItems);
+            } else
+              this.setDataSource([]);
+            this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
+          }
+        }
+        if (this.isSalesManager || this.isHubClerk) {
+          if (this.isInternal === false) {
+            if (this.search) {
+              this.deliveryItems = this.search.result;
+              this.deliveryItems = this.deliveryItems.filter(x => x.to.hasOwnProperty('customer') && x.to.customer._id || x.from.hasOwnProperty('customer') && x.from.customer._id)
+              // || x.to.hasOwnProperty('warehouse') && x.from.hasOwnProperty('customer'))
+              this.setDataSource(this.deliveryItems);
+            } else
+              this.setDataSource([]);
+            this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
+          }
+        }
+
+        // start delivery  filter
+          if (this._sent) {
+            if (this.search) {
+              this.deliveryItems = this.search.result;
+              this.deliveryItems = this.deliveryItems.filter(x => x.delivery_start !== null)
+              this.setDataSource(this.deliveryItems);
+            } else
+              this.setDataSource([]);
+            this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
+          }
+          if (this._sent === false) {
+            if (this.search) {
+              this.deliveryItems = this.search.result;
+              this.deliveryItems = this.deliveryItems.filter(x => x.delivery_start === null)
+              this.setDataSource(this.deliveryItems);
+            } else
+              this.setDataSource([]);
+            this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
+          }
+
+
         this.progressService.disable();
       },
       err => {
@@ -205,7 +253,11 @@ export class DeliveryHistoryComponent implements OnInit {
           ? (el.from.customer ? (el.from.customer.first_name + ' ' + el.from.customer.surname) : null)
           : (Object.keys(el.to.customer || {}).length ? (el.to.customer.first_name + ' ' + el.to.customer.surname) : el.to.warehouse.name),
         is_delivered: this.deliveryIsDone(el),
-        last_ticket: el.last_ticket
+        last_ticket: el.last_ticket,
+        to: el.to,
+        from: el.from,
+        to_customer_name: el.to_customer_name,
+        to_warehouse_name: el.to_warehouse_name
       });
     });
 
@@ -246,12 +298,23 @@ export class DeliveryHistoryComponent implements OnInit {
   }
 
   changeDeliverStatus() {
-    if (this.isDelivered === null)
-      this.isDelivered = true;
-    else if (this.isDelivered === true)
-      this.isDelivered = false;
-    else if (this.isDelivered === false)
-      this.isDelivered = null;
+    if (this.isInternal === null)
+      this.isInternal = true;
+    else if (this.isInternal === true)
+      this.isInternal = false;
+    else if (this.isInternal === false)
+      this.isInternal = null;
+
+    this.getDeliveryItems();
+  }
+
+  changeStartDeliverStatus() {
+    if (this._sent === null)
+      this._sent = true;
+    else if (this._sent === true)
+      this._sent = false;
+    else if (this._sent === false)
+      this._sent = null;
 
     this.getDeliveryItems();
   }
