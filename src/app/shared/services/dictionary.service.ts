@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {colorConverter} from './colorConverter';
+import {safeColorConverter} from './colorConverter';
 import {HttpService} from './http.service';
 import {AuthService} from './auth.service';
 
@@ -50,7 +50,7 @@ export class DictionaryService {
     }
 
     try {
-      convertedColor = colorConverter(convertedColor);
+      convertedColor = safeColorConverter(convertedColor);
     } catch (e) {
       return null;
     }
