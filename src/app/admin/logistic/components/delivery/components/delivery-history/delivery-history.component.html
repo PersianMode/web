@@ -173,8 +173,45 @@
           </mat-cell>
         </ng-container>
 
+        <!--<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
+        <!--<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>-->
+
+        <!--Expanded Content Column - The order rows is made up of this one column-->
+        <!--<ng-container matColumnDef="expandedDetail">-->
+          <!--<mat-cell *matCellDef="let detail">-->
+
+            <!--<table class='orderLineDetail'>-->
+              <!--<tr *ngFor='let ol of detail.order.orders'>-->
+                <!--<td>-->
+                  <!--<p style="margin: 10px">-->
+                    <!--<b> تاریخ ثبت سفارش: </b> {{getDate(ol.order_time)}}</p>-->
+                <!--</td>-->
+                <!--<td>-->
+                  <!--<p style="margin: 10px">-->
+                    <!--<b>شماره فاکتور: </b>{{ol.transaction_id}}-->
+                  <!--</p>-->
+                <!--</td>-->
+                <!--<td>-->
+                  <!--<button mat-button color="primary" (click)="showOrderLine(ol.order_lines)">نمایش</button>-->
+                <!--</td>-->
+              <!--</tr>-->
+
+            <!--</table>-->
+          <!--</mat-cell>-->
+        <!--</ng-container>-->
+
+        <!-- mat-row and mat-row-collapsed -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+        <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
+                 (click)="expandedElement = row._id"></mat-row>
+        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
+                 style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
+        </mat-row>
+
+
+
+
       </mat-table>
     </div>
     <div dir="ltr">

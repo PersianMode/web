@@ -10,6 +10,7 @@ import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
 import {DeliveryDetailsComponent} from '../delivery-details/delivery-details.component';
 import {DeliveryTrackingComponent} from '../delivery-tracking/delivery-tracking.component';
 import {DeliveryStatuses} from '../../../../../../shared/lib/status';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 export interface DeliveryItem {
   _id: String;
@@ -29,13 +30,21 @@ export interface DeliveryItem {
 @Component({
   selector: 'app-delivery-history',
   templateUrl: './delivery-history.component.html',
-  styleUrls: ['./delivery-history.component.css']
+  styleUrls: ['./delivery-history.component.css'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
+      state('expanded', style({height: '*', visibility: 'visible'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class DeliveryHistoryComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('table') table;
+  expandedElement: any;
   limit: any = 10;
   offset: any = 0;
   dataSource = null;
@@ -72,6 +81,8 @@ export class DeliveryHistoryComponent implements OnInit {
   isHubClerk = false;
   search;
   _sent = null;
+
+  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
               private snackBar: MatSnackBar, private dialog: MatDialog,
@@ -156,12 +167,32 @@ export class DeliveryHistoryComponent implements OnInit {
 
       type: 'DeliveryHistory',
     };
-    const offset = this.paginator.pageIndex * +this.pageSize;
-    const limit = this.pageSize;
+    const offset = this.offset ? this.offset : 0;
+    const limit = this.limit ? this.limit : 10;
     this.progressService.enable();
     this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
         this.progressService.disable();
+
+        //
+        const rows = [];
+        // res.data.forEach((order, index) => {
+        //   order['index'] = index + 1;
+        //   rows.push(order, {detailRow: true, order});
+        // });
+        // this.dataSource.data = rows;
+
+        //
         this.search = res.data[0];
+        console.log('search', this.search);
+
+
+        this.search.result.forEach((order, index) => {
+          order['index'] = index + 1;
+          rows.push(order, {detailRow: true, order});
+        });
+        this.dataSource.data = rows;
+        console.log('rows',rows);
+
         console.log('search', this.search);
         this.deliveryItems = [];
 
@@ -268,7 +299,6 @@ export class DeliveryHistoryComponent implements OnInit {
   changePageSetting(data) {
     this.limit = data.pageSize ? data.pageSize : 10;
     this.offset = data.pageIndex * this.limit;
-
     this.getDeliveryItems();
   }
 
