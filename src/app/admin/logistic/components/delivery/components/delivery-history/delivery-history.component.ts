@@ -102,7 +102,7 @@ export class DeliveryHistoryComponent implements OnInit {
     }
 
     if (!this.isSalesManager && !this.isHubClerk) {
-      this.displayedColumns = this.displayedColumns.filter(el => !['view_details', 'shelf_code', 'end', 'min_slot'].includes(el));
+      this.displayedColumns = this.displayedColumns.filter(el => !['view_details', 'shelf_code'].includes(el));
     }
 
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
@@ -179,52 +179,50 @@ export class DeliveryHistoryComponent implements OnInit {
         //   order['index'] = index + 1;
         //   rows.push(order, {detailRow: true, order});
         // });
-        // this.dataSource.data = rows;
 
         //
         this.search = res.data[0];
         console.log('search', this.search);
 
 
-        this.search.result.forEach((order, index) => {
-          order['index'] = index + 1;
-          rows.push(order, {detailRow: true, order});
-        });
-        this.dataSource.data = rows;
-        console.log('rows',rows);
+        // this.dataSource.data = rows;
+        // console.log('rows',rows);
 
-        console.log('search', this.search);
-        this.deliveryItems = [];
+        // console.log('search', this.search);
+        this.deliveryItems =  this.search.result;
+
+        // console.log(' this.deliveryItems', this.deliveryItems);
 
         if (this.search) {
           this.deliveryItems = this.search.result;
+          // this.deliveryItems = rows;
           // this.selection.clear();
-          this.setDataSource(this.deliveryItems);
+          // this.setDataSource(this.deliveryItems);
         } else
-          this.setDataSource([]);
+          this.deliveryItems = "";
         this.totalRecords = this.search && this.search.total ? this.search.total : 0;
 
         // internal and external delivery filter
         if (this.isSalesManager || this.isHubClerk) {
           if (this.isInternal) {
             if (this.search) {
-              this.deliveryItems = this.search.result;
+              this.deliveryItems =  this.search.result;
               this.deliveryItems = this.deliveryItems.filter(x => x.to.hasOwnProperty('warehouse') && x.from.hasOwnProperty('warehouse'))
-              this.setDataSource(this.deliveryItems);
+              // this.setDataSource(this.deliveryItems);
             } else
-              this.setDataSource([]);
+              this.deliveryItems = "";
             this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
           }
         }
         if (this.isSalesManager || this.isHubClerk) {
           if (this.isInternal === false) {
             if (this.search) {
-              this.deliveryItems = this.search.result;
+              this.deliveryItems =  this.search.result;
               this.deliveryItems = this.deliveryItems.filter(x => x.to.hasOwnProperty('customer') && x.to.customer._id || x.from.hasOwnProperty('customer') && x.from.customer._id)
               // || x.to.hasOwnProperty('warehouse') && x.from.hasOwnProperty('customer'))
-              this.setDataSource(this.deliveryItems);
+              // this.setDataSource(this.deliveryItems);
             } else
-              this.setDataSource([]);
+              this.deliveryItems = "";
             this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
           }
         }
@@ -232,22 +230,29 @@ export class DeliveryHistoryComponent implements OnInit {
         // start delivery  filter
           if (this._sent) {
             if (this.search) {
-              this.deliveryItems = this.search.result;
+              this.deliveryItems =  this.search.result;
               this.deliveryItems = this.deliveryItems.filter(x => x.delivery_start !== null)
-              this.setDataSource(this.deliveryItems);
+              // this.setDataSource(this.deliveryItems);
             } else
-              this.setDataSource([]);
+              this.deliveryItems = "";
             this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
           }
           if (this._sent === false) {
             if (this.search) {
-              this.deliveryItems = this.search.result;
+              this.deliveryItems =  this.search.result;
               this.deliveryItems = this.deliveryItems.filter(x => x.delivery_start === null)
-              this.setDataSource(this.deliveryItems);
+              // this.setDataSource(this.deliveryItems);
             } else
-              this.setDataSource([]);
+              this.deliveryItems = "";
             this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
           }
+
+        this.deliveryItems.forEach((order, index) => {
+          order['index'] = index + 1;
+          rows.push(order, {detailRow: true, order});
+        });
+
+        this.dataSource = rows;
 
 
         this.progressService.disable();
@@ -262,39 +267,40 @@ export class DeliveryHistoryComponent implements OnInit {
     );
   }
 
-  setDataSource(data) {
-    let counter = this.offset;
-    const tempData = [];
-
-    data.forEach(el => {
-      tempData.push({
-        _id: el._id,
-        is_return: el.is_return,
-        position: ++counter,
-        min_slot: el.min_slot ? el.min_slot : null,
-        delivery_agent: el.delivery_agent,
-        shelf_code: el.shelf_code,
-        order_line_count: el.order_line_count,
-        is_internal: el.is_internal,
-        start: el.start ? moment(el.start).format('YYYY-MM-DD') : null,
-        end: el.end ? moment(el.end).format('YYYY-MM-DD') : null,
-        delivery_start: el.delivery_start ? moment(el.delivery_start).format('YYYY-MM-DD') : null,
-        delivery_end: el.delivery_end ? moment(el.delivery_end).format('YYYY-MM-DD') : null,
-        receiver_sender_name: el.is_return
-          ? (el.from.customer ? (el.from.customer.first_name + ' ' + el.from.customer.surname) : null)
-          : (Object.keys(el.to.customer || {}).length ? (el.to.customer.first_name + ' ' + el.to.customer.surname) : el.to.warehouse.name),
-        is_delivered: this.deliveryIsDone(el),
-        last_ticket: el.last_ticket,
-        to: el.to,
-        from: el.from,
-        to_customer_name: el.to_customer_name,
-        to_warehouse_name: el.to_warehouse_name
-      });
-    });
-
-    this.dataSource = tempData;
-    console.log('datasource:', this.dataSource);
-  }
+  // setDataSource(data) {
+  //   let counter = this.offset;
+  //   const tempData = [];
+  //
+  //   data.forEach(el => {
+  //     tempData.push({
+  //       _id: el._id,
+  //       is_return: el.is_return,
+  //       position: ++counter,
+  //       min_slot: el.min_slot ? el.min_slot : null,
+  //       delivery_agent: el.delivery_agent,
+  //       shelf_code: el.shelf_code,
+  //       order_line_count: el.order_line_count,
+  //       is_internal: el.is_internal,
+  //       start: el.start ? moment(el.start).format('YYYY-MM-DD') : null,
+  //       end: el.end ? moment(el.end).format('YYYY-MM-DD') : null,
+  //       delivery_start: el.delivery_start ? moment(el.delivery_start).format('YYYY-MM-DD') : null,
+  //       delivery_end: el.delivery_end ? moment(el.delivery_end).format('YYYY-MM-DD') : null,
+  //       receiver_sender_name: el.is_return
+  //         ? (el.from.customer ? (el.from.customer.first_name + ' ' + el.from.customer.surname) : null)
+  //         // : (Object.keys(el.to.customer || {}).length ? (el.to.customer.first_name + ' ' + el.to.customer.surname)
+  //         : (el.to_warehouse_name),
+  //       is_delivered: this.deliveryIsDone(el),
+  //       last_ticket: el.last_ticket,
+  //       to: el.to,
+  //       from: el.from,
+  //       to_customer_name: el.to_customer_name,
+  //       to_warehouse_name: el.to_warehouse_name
+  //     });
+  //   });
+  //
+  //   this.dataSource = tempData;
+  //   console.log('datasource:', this.dataSource);
+  // }
 
   changePageSetting(data) {
     this.limit = data.pageSize ? data.pageSize : 10;
@@ -419,7 +425,7 @@ export class DeliveryHistoryComponent implements OnInit {
         foundDeliveryItem.delivery_agent['surname'] = foundDeliveryAgent.surname;
         foundDeliveryItem.delivery_agent['username'] = foundDeliveryAgent.username;
 
-        this.setDataSource(this.deliveryItems);
+        // this.setDataSource(this.deliveryItems);
 
         this.progressService.disable();
         this.snackBar.open('مسئول ارسال با موفقیت ثبت شد', null, {
