@@ -182,8 +182,8 @@ export class CheckoutPageComponent implements OnInit {
     if (durationId) {
       this.checkoutService.calculateDeliveryDiscount(durationId)
         .then((res: any) => {
-          this.deliveryCost = res.res_delivery_cost;
-          this.deliveryDiscount = res.res_delivery_discount;
+          this.deliveryCost = res.delivery_cost;
+          this.deliveryDiscount = res.delivery_discount;
         })
         .catch(err => {
           console.error('error occurred in getting delivery cost and discount', err);

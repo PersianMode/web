@@ -57,16 +57,16 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   transId = null;
   status = null;
   orderTime = null;
-  listStatus: {name: string, status: number}[] = [
+  listStatus: { name: string, status: number }[] = [
     {name: 'همه موارد', status: null}
   ];
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private progressService: ProgressService) {
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -208,13 +208,16 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   }
 
   getStatus(item, isOrderLine) {
-
-    if (isOrderLine)
-      return OrderLineStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
-    else
-      return OrderStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
-
+    try {
+      if (isOrderLine)
+        return OrderLineStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
+      else
+        return OrderStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
+    } catch (e) {
+      console.error('error in getStatus. (.length, probably?)');
+    }
   }
+
   showTicket(order, orderLine) {
     this.dialog.open(TicketComponent, {
       width: '1000px',
@@ -224,14 +227,18 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   }
 
   isCancellable(order, orderLine) {
-    const cond1 = !order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice);
-    let cond2;
-    if (!orderLine) {
-      cond2 = order.order_lines.find(x => !x.cancel);
-    } else {
-      cond2 = !orderLine.cancel;
+    try {
+      const cond1 = !order.tickets.map(x => x.status).includes(ORDER_STATUS.WaitForInvoice);
+      let cond2;
+      if (!orderLine) {
+        cond2 = order.order_lines.find(x => !x.cancel);
+      } else {
+        cond2 = !orderLine.cancel;
+      }
+      return cond1 && !!cond2;
+    } catch (e) {
+      console.error('error in isCancellable. (.map, probably?)');
     }
-    return cond1 && !!cond2;
 
   }
 
@@ -268,7 +275,6 @@ export class SmOrderComponent implements OnInit, OnDestroy {
         console.error('Error when subscribing on rmDialog.afterClosed() function: ', err);
       });
   }
-
 
 
   ngOnDestroy(): void {
