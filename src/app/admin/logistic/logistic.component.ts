@@ -13,6 +13,7 @@ export class LogisticComponent implements OnInit {
 
 
   InboxCount: number;
+  SMInboxCount: number;
   UnassignedInternalDeliveryCount: number;
   InternalDeliveryBoxCount: number;
   ExternalDeliveryBoxCount: number;

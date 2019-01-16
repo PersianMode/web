@@ -98,7 +98,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
       const rows = [];
       res.data.forEach((order, index) => {
-        order['index'] = index + 1;
+        order['position'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
       this.dataSource.data = rows;
