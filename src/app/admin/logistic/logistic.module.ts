@@ -42,6 +42,7 @@ import {DeliveryDetailsComponent} from './components/delivery/components/deliver
 import {ExpiredDateDialogComponent} from './components/delivery/components/expired-date-dialog/expired-date-dialog.component';
 import { OrderLineViewerComponent } from './components/order-line-viewer/order-line-viewer.component';
 import { ReturnDeliveryGeneratorComponent } from './components/sm-inbox/components/return-delivery-generator/return-delivery-generator.component';
+import { SmReportComponent } from './components/sm-inbox/components/sm-report/sm-report.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { ReturnDeliveryGeneratorComponent } from './components/sm-inbox/componen
     DeliveryDetailsComponent,
     ExpiredDateDialogComponent,
     OrderLineViewerComponent,
-    ReturnDeliveryGeneratorComponent
+    ReturnDeliveryGeneratorComponent,
+    SmReportComponent
   ],
   imports: [
     LogisticRouting,
@@ -108,7 +110,8 @@ import { ReturnDeliveryGeneratorComponent } from './components/sm-inbox/componen
     DeliveryDetailsComponent,
     ExpiredDateDialogComponent,
     OrderLineViewerComponent,
-    ReturnDeliveryGeneratorComponent
+    ReturnDeliveryGeneratorComponent,
+    SmReportComponent
   ]
 })
 export class LogisticModule {
