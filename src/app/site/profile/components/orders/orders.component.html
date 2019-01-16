@@ -16,7 +16,7 @@
   </ng-container>
 
   <ng-container matColumnDef="order_lines">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>تعداد ارقام کالا</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>تعداد اقلام</mat-header-cell>
     <mat-cell *matCellDef="let order">{{order.order_lines.length.toLocaleString('fa')}}</mat-cell>
   </ng-container>
 
@@ -51,23 +51,31 @@
   </ng-container>
 
   <ng-container matColumnDef="view_details">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>مشاهده جزییات</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>جزییات</mat-header-cell>
     <mat-cell *matCellDef="let order" style=" font-size: 20px"><a class="clickable-link"
                                                                   (click)="goToOrderLines(order._id)"><i
       class="fa fa-eye"></i></a></mat-cell>
   </ng-container>
 
-  <!-- return order -->
-  <ng-container matColumnDef="return_order">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>وضعیت سفارش</mat-header-cell>
+  <!-- status -->
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>وضعیت</mat-header-cell>
     <mat-cell *matCellDef="let order" style=" font-size: 12px">
-      <!--<button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">-->
-      <!--بازگشت کالا-->
-      <!--</button>-->
-      <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
-        لغو خرید
+      <div>{{getOrderStatus(order)}}</div>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{checkReturnOrder(order) || checkCancelOrder(order) ? 'فعالیت'
+      : '' }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let order" style=" font-size: 12px">
+      <button *ngIf="checkReturnOrder(order)" class="status-button" (click)="returnOrder(order)">
+        بازگشت سفارش
       </button>
-      <div>{{checkOrderStatus(order)}}</div>
+      <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
+        لغو سفارش
+      </button>
     </mat-cell>
   </ng-container>
 
@@ -88,8 +96,9 @@
         </div>
         <div>
           <span>هزینه کل: </span>
-          <span><span *ngIf="order.discount" class="overridden" style="margin-left: 20px; display: inline-block">{{makePersianNumber(order.total_amount, true)}} تومان</span><span
-            style="display: inline-block">{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}} تومان</span></span>
+          <span><span *ngIf="order.discount" class="overridden" style="margin-left: 20px; display: inline-block">{{makePersianNumber(order.total_amount,
+              true)}} تومان</span><span style="display: inline-block">{{makePersianNumber(order.total_amount -
+              (order.discount ? order.discount : 0), true)}} تومان</span></span>
         </div>
         <div>
           <span>تخفیف: </span>
@@ -109,14 +118,19 @@
         </div>
         <div class="eye-style"><a (click)="goToOrderLines(order._id)" class="clickable-link"><i
           class="fa fa-eye"></i></a></div>
-        <div>{{"وضعیت: "}}
-          <button *ngIf="checkReturnOrder(order) && !expiredTime" class="status-button" (click)="returnOrder(order)">
+        <div>
+          {{"وضعیت: "}}
+          <label>{{checkOrderStatus(order)}}</label>
+        </div>
+
+        <div>
+          {{checkReturnOrder(order) || checkCancelOrder(order) ? 'فعالیت' : ''}}
+          <button *ngIf="checkReturnOrder(order)" class="status-button" (click)="returnOrder(order)">
             بازگشت کالا
           </button>
           <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
             لغو خرید
           </button>
-          <label>{{checkOrderStatus(order)}}</label>
         </div>
       </mat-card-content>
     </mat-card>

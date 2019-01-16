@@ -10,6 +10,7 @@ import {SpinnerService} from './spinner.service';
 import {AuthService} from './auth.service';
 import {safeColorConverter} from './colorConverter';
 
+const allMappedColor = {};
 const newestSort = function (a, b) {
   if (a.year && b.year && a.season && b.season && ((a.year * 8 + a.season) - (b.year * 8 + b.season))) {
     return (a.year * 8 + a.season) - (b.year * 8 + b.season);
@@ -61,6 +62,7 @@ export class ProductService {
   tag$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
+  side$ = new ReplaySubject<IFilter[]>(1);
   product$: ReplaySubject<any> = new ReplaySubject<any>();
   collectionTags: any = {};
   collectionTagsAfterFilter: any = {};
@@ -73,7 +75,7 @@ export class ProductService {
               private spinnerService: SpinnerService, private authService: AuthService) {
   }
 
-  extractFilters(filters = [], trigger = '') {
+  extractFilters(filters = [], trigger = '', sideChange = true) {
     const products = trigger ? this.filteredProducts : this.products;
     let tags: any = {};
 
@@ -103,15 +105,21 @@ export class ProductService {
       .reduce((x, y) => x.concat(y), [])
     ]));
 
-    const mappedColor = [];
+    const mappedColor: any = {};
     for (const col in color) if (color.hasOwnProperty(col)) {
-      const conv = safeColorConverter(color[col]);
-      mappedColor[col] = conv ? conv : this.dict.translateColor(col);
+      let conv;
+      if (allMappedColor[color[col]]) {
+        conv = allMappedColor[color[col]];
+      } else {
+        conv = safeColorConverter(color[col]);
+        if (!conv)
+          conv = this.dict.translateColor(color[col]);
+        allMappedColor[color[col]] = conv;
+      }
+      mappedColor[color[col]] = conv;
     }
-    color = Array.from(new Set(mappedColor)).filter((element) => {
-      return element !== 'نامعین'
-    });
 
+    color = Array.from(new Set(Object.keys(mappedColor).map(r => mappedColor[r]).filter(e => e !== 'نامعین')));
 
     let price = [];
     if (trigger === 'price') {
@@ -159,6 +167,7 @@ export class ProductService {
     } else {
       this.collectionTags = tags;
     }
+
     const emittedValue = [];
     for (const name in tags) {
       if (tags.hasOwnProperty(name)) {
@@ -174,6 +183,9 @@ export class ProductService {
         }
       }
     }
+    if (sideChange)
+      this.side$.next(emittedValue);
+
     this.filtering$.next(emittedValue);
   }
 
@@ -181,7 +193,17 @@ export class ProductService {
     this.filtering$.next([]);
   }
 
-  applyFilters(filters, trigger) {
+  countProducts(tag = null, value = null) {
+    if (tag && value) {
+      return this.filteredProducts
+        .filter(p => p.tags.find(t => value === t.name))
+        .length;
+    } else {
+      return this.filteredProducts.length;
+    }
+  }
+
+  applyFilters(filters, trigger, emit = true) {
 
     setTimeout(() => {
       this.spinnerService.enable();
@@ -193,16 +215,9 @@ export class ProductService {
           if (['brand', 'type'].includes(f.name)) {
             this.filteredProducts = this.filteredProducts.filter(r => Array.from(f.values).includes(r[f.name]));
           } else if (f.name === 'color') {
-
             this.filteredProducts.forEach((p, pi) => {
-              this.filteredProducts[pi].colors = p.colors.filter(c => {
-                const result = f.values.filter(v => {
-                  return c.name ? c.name.split('/').find(a => {
-                    return safeColorConverter(a) === v;
-                  }) : false;
-                });
-                return result.length;
-              });
+              this.filteredProducts[pi].colors = p.colors
+                .filter(c => c.name ? c.name.split('/').map(a => a.split('-')).reduce((x , y) => x.concat(y)).find(a => f.values.includes(allMappedColor[a])) : false);
             });
 
             this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
@@ -244,7 +259,7 @@ export class ProductService {
             this.filteredProducts = this.filteredProducts.filter(p => p.discount >= f.values[0] && p.discount <= f.values[1]);
           } else {
             this.filteredProducts = this.filteredProducts
-              .filter(p => p.tags.filter(t => Array.from(f.values).includes(t.name)).length);
+              .filter(p => p.tags.find(t => Array.from(f.values).includes(t.name)));
           }
         }
 
@@ -252,7 +267,7 @@ export class ProductService {
       });
       setTimeout(() => {
         this.sortProductsAndEmit();
-        this.extractFilters(filters, trigger);
+        this.extractFilters(filters, trigger, emit);
       }, 0);
     }, 0);
   }
@@ -392,7 +407,7 @@ export class ProductService {
             this.filteredProducts = this.products.slice();
 
             this.sortProductsAndEmit();
-            this.extractFilters();
+            this.extractFilters([], '', true);
           }
           this.spinnerService.disable();
 
