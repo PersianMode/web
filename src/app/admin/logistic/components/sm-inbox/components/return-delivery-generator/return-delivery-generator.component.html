@@ -14,7 +14,7 @@
         <b>تاریخ شروع:</b> {{ delivery.start + ' ' }}
       </h3>
       <h3>
-        <b>مسئول ارسال :</b> {{delivery.agent?.first_name + ' ' +  delivery.agent?.surname +  ' ' }}
+        <b>مسئول ارسال :</b> {{getAgent() +  ' ' }}
       </h3>
       <h3>
         <b>وضعیت:</b> {{ getDeliveryStatus() + ' ' }}

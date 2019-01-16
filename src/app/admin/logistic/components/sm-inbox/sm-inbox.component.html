@@ -52,7 +52,7 @@
         <ng-container matColumnDef="close">
           <mat-header-cell *matHeaderCellDef>بستن</mat-header-cell>
           <mat-cell *matCellDef="let message">
-            <button mat-button color="warn">اعلام گزارش</button>
+            <button mat-button color="warn" *ngIf="message.is_processed" (click)="close(message)">اعلام گزارش</button>
           </mat-cell>
         </ng-container>
 
