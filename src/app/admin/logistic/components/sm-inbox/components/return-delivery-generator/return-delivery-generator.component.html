@@ -1,0 +1,37 @@
+<div class="main">
+  <div mat-dialog-content>
+    <h2>{{this.delivery ? 'تخصیص به ارسال موجود' : 'ایجاد ارسال جدید'}}</h2>
+    <hr />
+    <h2>مشتری</h2>
+    <h3>
+      <b>نام:</b> {{ data.message.customer.first_name  + ' ' + data.message.customer.surname + ' ' }}
+    </h3>
+
+    <div *ngIf='delivery'>
+      <hr />
+      <h2>اطلاعات ارسال</h2>
+      <h3>
+        <b>تاریخ شروع:</b> {{ delivery.start + ' ' }}
+      </h3>
+      <h3>
+        <b>مسئول ارسال :</b> {{delivery.agent?.first_name + ' ' +  delivery.agent?.surname +  ' ' }}
+      </h3>
+      <h3>
+        <b>وضعیت:</b> {{ getDeliveryStatus() + ' ' }}
+      </h3>
+    </div>
+    <div *ngIf='address'>
+      <hr />
+      <h2>آدرس</h2>
+      <h3 *ngFor="let part of address_parts ">
+        <b>{{part.fa_name}}</b> {{ getAdressPart(part.name) +  ' ' }}
+      </h3>
+    </div>
+
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button color="warn" (click)="close()">انصراف</button>
+    <button mat-button color="primary" (click)="process()">{{delivery ? 'تخصیص به اسال فعلی' : 'تخصیص و ایجاد ارسال'}}</button>
+  </div>
+</div>
