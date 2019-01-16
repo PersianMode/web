@@ -52,6 +52,7 @@ export class ReturnDeliveryGeneratorComponent implements OnInit {
     private snackBar: MatSnackBar) {}
 
   ngOnInit() {
+    this.progressService.enable();
 
     this.httpService.post('sm/assignToReturn', {
       customerId: this.data.message.customer._id,
@@ -82,6 +83,15 @@ export class ReturnDeliveryGeneratorComponent implements OnInit {
     }
   }
 
+  getAgent() {
+    try {
+      return this.delivery.agent.first_name + ' ' + this.delivery.agent.surname
+    } catch (error) {
+
+    }
+    return 'نامشخص';
+  }
+
   getAdressPart(name) {
     try {
       return this.address[name];
@@ -97,6 +107,7 @@ export class ReturnDeliveryGeneratorComponent implements OnInit {
       this.openSnackBar('کالای بازگشتی مشخص نیست');
       return;
     }
+    this.progressService.enable();
 
     this.httpService.post('sm/assignToReturn', {
       id: this.data.message._id,
@@ -108,7 +119,7 @@ export class ReturnDeliveryGeneratorComponent implements OnInit {
     }).subscribe(res => {
       this.progressService.disable();
       this.openSnackBar('تخصیص به ارسال با موفقیت انجام شد');
-
+      this.dialogRef.close();
     }, err => {
       this.progressService.disable();
       this.openSnackBar('خطا در دریافت آدرس و اطلاعات ارسال');

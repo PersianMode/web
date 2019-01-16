@@ -1085,3 +1085,7 @@ p {
 .msg-warning {
   background-color: #ed9357 !important;
 }
+
+.mat-form-field-subscript-wrapper {
+  overflow: unset !important;
+}

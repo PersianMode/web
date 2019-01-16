@@ -14,6 +14,7 @@ import * as moment from 'jalali-moment';
 import {TicketComponent} from '../ticket/ticket.component';
 import {SMMessageTypes} from 'app/shared/enum/sm_message';
 import {ReturnDeliveryGeneratorComponent} from './components/return-delivery-generator/return-delivery-generator.component';
+import {SmReportComponent} from './components/sm-report/sm-report.component';
 
 @Component({
   selector: 'app-sm-inbox',
@@ -198,6 +199,15 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.dialog.open(component, {
+      width: '700px',
+      data: {
+        message,
+      }
+    });
+  }
+
+  close(message) {
+    this.dialog.open(SmReportComponent, {
       width: '700px',
       data: {
         message,
