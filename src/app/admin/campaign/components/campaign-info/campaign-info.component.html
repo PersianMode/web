@@ -38,7 +38,6 @@
             <app-dob [date]="start_date" [isDOB]="false" (change)="setStartDate($event)"></app-dob>
           </div>
           <label class="field-error dp-hint" *ngIf="startDateError || !start_date">تاریخ شروع کمپین نادرست است</label>
-
         </div>
 
         <div fxFlex="25" class="field-container">
@@ -113,7 +112,8 @@
 
       <div role="submit-button" style="text-align: left">
         <button mat-icon-button type="submit"
-                [disabled]="(!campaignInfoForm.valid || startDateError || endDateError || discountRefError || !isFieldChanged)" tabindex="6"
+                [disabled]="(!campaignInfoForm.valid || startDateError || endDateError || discountRefError || !isFieldChanged)"
+                tabindex="6"
                 color="accent">
           <mat-icon aria-label="accept">done</mat-icon>
         </button>

@@ -35,8 +35,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitleWithConstant('سبد خرید');
-    this.authService.isLoggedIn.subscribe(
-      (data) => this.isLoggedIn = this.authService.userIsLoggedIn()
+    this.authService.isLoggedIn.subscribe(data =>
+      this.isLoggedIn = this.authService.userIsLoggedIn()
     );
 
     this.showHideSpinner(true);

@@ -320,6 +320,8 @@ export class CartService {
   }
 
   calculateDiscount(cartData) {
+    if (!cartData) return;
+
     let dc = cartData
       .map(r => Object.assign({
         p: r.price || 0,
