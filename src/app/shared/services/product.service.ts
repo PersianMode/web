@@ -209,6 +209,7 @@ export class ProductService {
       this.spinnerService.enable();
       this.filteredProducts = JSON.parse(JSON.stringify(this.products));
 
+
       filters.forEach(f => {
         if (f.values.length) {
           if (['brand', 'type'].includes(f.name)) {
@@ -249,7 +250,7 @@ export class ProductService {
             this.filteredProducts = [];
             filteredProductBefore.forEach(product => {
               if ((product.instances.filter(instance => instance.discountedPrice >= f.values[0] &&
-                instance.discountedPrice <= f.values[1])).length > 0) {
+                  instance.discountedPrice <= f.values[1])).length > 0) {
                 this.filteredProducts.push(product);
               }
             });
@@ -365,7 +366,7 @@ export class ProductService {
   }
 
   loadProducts(productIds) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.httpService.post('product/getMultiple', {productIds})
         .subscribe(data => {
           if (data) {
@@ -378,6 +379,8 @@ export class ProductService {
             });
           }
           resolve(data);
+        }, err => {
+          reject(err);
         });
     });
   }

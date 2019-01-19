@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {SoldOutRouting} from './soldout.routing';
 import {
-  MatDialogModule, MatCardModule, MatGridListModule, MatIconModule,
+  MatCardModule, MatGridListModule, MatIconModule,
   MatInputModule, MatPaginatorModule, MatSelectModule, MatSnackBarModule, MatCheckboxModule, MatFormFieldModule,
   MatProgressSpinnerModule, MatTableModule, MatButtonModule
 } from '@angular/material';
@@ -22,10 +22,11 @@ import {SoldOutComponent} from './soldout.component';
     MatPaginatorModule,
     MatIconModule,
     MatSnackBarModule,
+    MatSelectModule,
     ColorPickerModule,
     FlexLayoutModule,
     MatGridListModule,
-    MatIconModule,
+    ReactiveFormsModule,
     MatButtonModule,
     FormsModule,
     MatFormFieldModule,
