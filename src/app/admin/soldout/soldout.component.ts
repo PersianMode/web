@@ -5,7 +5,7 @@ import {ProgressService} from '../../shared/services/progress.service';
 import {HttpService} from '../../shared/services/http.service';
 import {TitleService} from '../../shared/services/title.service';
 import {imagePathFixer} from '../../shared/lib/imagePathFixer';
-import {element} from 'protractor';
+import {FormControl} from '@angular/forms';
 
 
 @Component({
@@ -26,19 +26,22 @@ export class SoldOutComponent implements OnInit {
   dataSource = new MatTableDataSource();
   resultsLength = 0;
   pageSize = 3;
-  phrase: string = '';
+  phrase = '';
   offset = 0;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  soldOutCtrl: FormControl;
 
   constructor(private httpService: HttpService,
-    private snackBar: MatSnackBar,
-    private progressService: ProgressService, private titleService: TitleService) {
+              private snackBar: MatSnackBar,
+              private progressService: ProgressService, private titleService: TitleService) {
+    this.soldOutCtrl = new FormControl();
   }
 
   ngOnInit() {
     this.titleService.setTitleWithOutConstant('ادمین: محصولات تمام شده');
     this.load();
+    this.soldOutCtrl.valueChanges.debounceTime(500).subscribe(t => this.load());
   }
 
   load() {
@@ -81,16 +84,14 @@ export class SoldOutComponent implements OnInit {
     this.offset = $event.pageIndex * this.pageSize;
     this.load();
   }
-  getPIThumbnail(element: any) {
 
+  getPIThumbnail(element: any) {
     const color = element.product.colors.find(x => x._id === element.product.instances.product_color_id);
     if (color && color.image.thumbnail)
       return imagePathFixer(color.image.thumbnail, element.product._id, color._id);
-
   }
 
   changeSoldOutStatus(element, soldOutStatus) {
-
     this.progressService.enable();
     this.httpService.post('soldout/setFlag', {
       productId: element.product._id,
@@ -98,17 +99,12 @@ export class SoldOutComponent implements OnInit {
       soldOutStatus
     }).subscribe(res => {
       this.progressService.disable();
-
       this.openSnackBar(soldOutStatus ? 'محصول نمایش نداده خواهد شد' : 'محصول نمایش داده خواهد شد')
       this.load();
-      
-    },err =>{
+    }, err => {
       this.progressService.disable();
-      this.openSnackBar('خطا در بروز رسانی وضعیت محصول')
-      
-    })
-
-
+      this.openSnackBar('خطا در بروز رسانی وضعیت محصول');
+    });
   }
 
 }

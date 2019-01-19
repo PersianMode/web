@@ -82,7 +82,6 @@ export class DictionaryComponent implements OnInit {
       status => {
         if (status) {
           this.progressService.enable();
-          // TODO send delete request
           this.httpService.delete(`/dictionary/${element._id}`).subscribe(
             res => {
               this.openSnackBar('مدخل با موفقیت پاک شد');

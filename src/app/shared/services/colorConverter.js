@@ -1,16 +1,20 @@
 const color = require('css-color-converter');
-const colorConverter = function(col) {
+const colorNameList = require('color-name-list');
+const colorConverter = function (col) {
   return color(col.toLowerCase()).toHexString();
 };
-const safeColorConverter = function(col) {
+const safeColorConverter = function (col) {
   if (col) {
-  let words = col.split(' ');
-  for (let i =0; i < words.length; i ++ ) {
-    try {
-        let cc = colorConverter(words[i]);
+    const words = col.split(' ').map(a => a.split('-')).reduce((x , y) => x.concat(y)).map(a => a.split('/')).reduce((x , y) => x.concat(y));
+    for (let i = 0; i < words.length; i++) {
+      try {
+        const cc = colorConverter(words[i]);
         return cc;
-      }  catch (e) {}
+      } catch (e) {}
     }
+    const cc = colorNameList.find(r => col.toLowerCase() === r.name.toLowerCase());
+    if (cc)
+      return cc.hex;
   }
   return null;
 };

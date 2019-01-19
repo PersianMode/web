@@ -117,17 +117,17 @@ export class CheckoutService {
   }
 
   finalCheck() {
+    if (!this.productData) return null;
+
     let cartItems: any = {};
-    if (this.productData) {
-      cartItems = this.productData.map(r => Object.assign({}, {
-        product_id: r.product_id,
-        product_instance_id: r.instance_id,
-        price: r.price,
-        count: r.count - (r.reserved ? r.reserved : 0),
-        quantity: r.quantity,
-        discount: r.discount
-      }));
-    }
+    cartItems = this.productData.map(r => Object.assign({}, {
+      product_id: r.product_id,
+      product_instance_id: r.instance_id,
+      price: r.price,
+      count: r.count - (r.reserved ? r.reserved : 0),
+      quantity: r.quantity,
+      discount: r.discount
+    }));
     return this.httpService.post('finalCheck', cartItems);
   }
 
@@ -176,7 +176,7 @@ export class CheckoutService {
 
   getTotalDiscount() {
     this.total = this.calculateTotal();
-    this.discount = this.cartService.calculateDiscount(this.productData, true);
+    this.discount = this.cartService.calculateDiscount(this.productData);
     return {
       total: this.total,
       discount: this.discount,
@@ -356,6 +356,7 @@ export class CheckoutService {
       loyalty: this.earnSpentPointObj,
     };
   }
+
   readPayResult(bankData) {
     return new Promise((resolve, reject) => {
       this.httpService.post('payResult', bankData).subscribe(

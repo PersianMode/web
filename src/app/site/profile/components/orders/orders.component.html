@@ -1,5 +1,6 @@
 <div *ngIf="!profileOrder.length">هیچ سفارش ثبت شده ای موجود نمی باشد.</div>
-<mat-table *ngIf="!isMobile && profileOrder.length" [dataSource]="profileOrder" class="example-container mat-elevation-z8">
+<mat-table *ngIf="!isMobile && profileOrder.length" [dataSource]="profileOrder"
+           class="example-container mat-elevation-z8">
   <ng-container matColumnDef="col_no">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
     <mat-cell *matCellDef="let order">{{(profileOrder.indexOf(order)+1).toLocaleString('fa')}}</mat-cell>
@@ -22,7 +23,7 @@
   <ng-container matColumnDef="total_amount">
     <mat-header-cell *matHeaderCellDef mat-sort-header>هزینه کل (تومان)</mat-header-cell>
     <mat-cell *matCellDef="let order"><span *ngIf="order.discount" class="overridden">{{makePersianNumber(order.total_amount,
-        true)}}<br /></span>{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}
+        true)}}<br/></span>{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}
     </mat-cell>
   </ng-container>
   <ng-container matColumnDef="discount">
@@ -51,8 +52,9 @@
 
   <ng-container matColumnDef="view_details">
     <mat-header-cell *matHeaderCellDef mat-sort-header>جزییات</mat-header-cell>
-    <mat-cell *matCellDef="let order" style=" font-size: 20px"><a class="clickable-link" (click)="goToOrderLines(order._id)"><i
-          class="fa fa-eye"></i></a></mat-cell>
+    <mat-cell *matCellDef="let order" style=" font-size: 20px"><a class="clickable-link"
+                                                                  (click)="goToOrderLines(order._id)"><i
+      class="fa fa-eye"></i></a></mat-cell>
   </ng-container>
 
   <!-- status -->
@@ -65,14 +67,16 @@
 
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef mat-sort-header>{{checkReturnOrder(order) || checkCancelOrder(order) ? 'فعالیت'
-      : '' }}</mat-header-cell>
+      : '' }}
+    </mat-header-cell>
     <mat-cell *matCellDef="let order" style=" font-size: 12px">
       <button *ngIf="checkReturnOrder(order)" class="status-button" (click)="returnOrder(order)">
         بازگشت سفارش
       </button>
       <button *ngIf="checkCancelOrder(order)" class="status-button" (click)="cancelOrder(order)">
         لغو سفارش
-      </button> </mat-cell>
+      </button>
+    </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -112,7 +116,8 @@
             makePersianNumber(order.address.no, false) : ''}}
             {{order.address.unit ? 'واحد' + makePersianNumber(order.address.unit, false) : ''}}</span>
         </div>
-        <div class="eye-style"><a (click)="goToOrderLines(order._id)" class="clickable-link"><i class="fa fa-eye"></i></a></div>
+        <div class="eye-style"><a (click)="goToOrderLines(order._id)" class="clickable-link"><i
+          class="fa fa-eye"></i></a></div>
         <div>
           {{"وضعیت: "}}
           <label>{{checkOrderStatus(order)}}</label>

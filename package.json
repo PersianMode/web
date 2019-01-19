@@ -31,6 +31,7 @@
     "angular2-markdown": "^2.2.3",
     "boom": "^7.2.0",
     "bootstrap": "^4.0.0",
+    "color-name-list": "^3.52.1",
     "core-js": "^2.4.1",
     "css-color-converter": "^1.1.0",
     "font-awesome": "^4.7.0",

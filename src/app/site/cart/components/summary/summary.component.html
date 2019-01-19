@@ -4,12 +4,12 @@
   </div>
   <hr class="hr-style">
   <div class="rows">
-    <span class="s-right-text"> امتیاز :</span>
+    <span class="s-right-text"> امتیاز:</span>
     <span class="s-left-text">{{loyaltyPoint}}</span>
   </div>
   <hr class="hr-style">
   <div class="rows">
-    <span class="s-right-text"> موجودی :</span>
+    <span class="s-right-text"> موجودی:</span>
     <span class="s-left-text">{{balanceValue}}  تومان</span>
   </div>
   <hr class="hr-style">
@@ -20,12 +20,16 @@
         <span *ngIf="show_coupon_area"><i class="open-close-field-sign material-icons">keyboard_arrow_up</i></span>
       </label>
     </div>
-    <div class="coupon_area" fxLayout="row" fxLayoutAlign="start start" *ngIf="show_coupon_area" >
+    <div class="coupon_area" fxLayout="row" fxLayoutAlign="start start" *ngIf="show_coupon_area">
       <div fxFlex="80">
-        <input class="coupon_field" type="text" [(ngModel)]="coupon_code"/>
+        <input *ngIf="!used_coupon_code" class="coupon_field" type="text" [(ngModel)]="coupon_code"/>
+        <input *ngIf="!!used_coupon_code" class="coupon_field" type="text" [value]="used_coupon_code" readonly/>
       </div>
       <div fxFlex="20">
-        <div class="coupon_code_btn" (click)="applyCoupon()">اعمال</div>
+        <div class="coupon_code_btn" (click)="applyCoupon()">
+          <span *ngIf="!used_coupon_code">اعمال</span>
+          <span *ngIf="!!used_coupon_code">حذف</span>
+        </div>
       </div>
     </div>
   </div>
@@ -46,6 +50,8 @@
   </div>
   <hr class="hr-style">
   <div>
-    <button mat-button class="payment-button" [class.disabled]="disabled" (click)="pay()" [disabled]="disabled">تأیید نهایی</button>
+    <button mat-button class="payment-button" [class.disabled]="disabled" (click)="pay()" [disabled]="disabled">تأیید
+      نهایی
+    </button>
   </div>
 </div>
