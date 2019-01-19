@@ -31,7 +31,7 @@
         </div>
       </div>
       <div *ngIf="isSalesManager || isHubClerk ">
-        <div fxFlex="25" class="filtering-box" style="margin-top: 20px">
+        <div fxFlex="25" class="filtering-box" style="margin-top: 20px" fxLayout="row">
           <mat-checkbox class="filtering-field" [ngModel]="isInternal" (change)="changeDeliverStatus()"
                         [indeterminate]="isInternal === null">
             <span *ngIf="isInternal" class="checkbox-label"> ارسال داخلی</span>
@@ -40,13 +40,13 @@
           </mat-checkbox>
         </div>
       </div>
-      <div fxLayout="row" fxLayoutAlign="start start">
+      <div fxLayoutAlign="start start">
           <div fxFlex="25" class="filtering-box" style="margin-top: 20px">
-            <mat-checkbox class="filtering-field" [ngModel]="_sent" (change)="changeStartDeliverStatus()"
-                          [indeterminate]="_sent === null">
-              <span *ngIf="_sent" class="checkbox-label"> ارسال شده</span>
-              <span *ngIf="_sent === false" class="checkbox-label">ارسال نشده</span>
-              <span *ngIf="_sent === null" class="checkbox-label">همه موارد</span>
+            <mat-checkbox class="filtering-field" [ngModel]="isDelivered" (change)="changeStartDeliverStatus()"
+                          [indeterminate]="isDelivered === null">
+              <span *ngIf="isDelivered" class="checkbox-label"> ارسال شده</span>
+              <span *ngIf="isDelivered === false" class="checkbox-label">ارسال نشده</span>
+              <span *ngIf="isDelivered === null" class="checkbox-label">همه موارد</span>
             </mat-checkbox>
           </div>
       </div>
@@ -58,21 +58,23 @@
       <!--<span *ngIf="missDeliveryAgent === null" class="checkbox=label">همه ی انواع</span>-->
       <!--</mat-checkbox>-->
       <!--</div>-->
-      <!--<div fxFlex="25" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">-->
-      <!--<label>مبدا:  </label>-->
-      <!--<mat-checkbox class="filtering-field" [ngModel]="isInternal" (change)="changeInternalStatus()"-->
-      <!--[indeterminate]="isInternal === null">-->
-      <!--<span *ngIf="isInternal" class="checkbox-label">انبار</span>-->
-      <!--<span *ngIf="isInternal === false" class="checkbox-label">مشتری</span>-->
-      <!--<span *ngIf="isInternal === null" class="checkbox-label">همه موارد</span>-->
-      <!--</mat-checkbox>-->
-      <!--<mat-input-container *ngIf="is_internal === false">-->
-      <!--<input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"  [formControl]="receiverSearchCtrl">-->
-      <!--</mat-input-container>-->
-      <!--<mat-input-container *ngIf="is_internal">-->
-      <!--<input class="filtering-field" matInput type="text">-->
-      <!--</mat-input-container>-->
-      <!--</div>-->
+      <div fxLayout="row"  class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
+      <div fxFlex="50">
+        <label>  مبدا:  </label>
+        <mat-checkbox class="filtering-field" [ngModel]="isOrigin" (change)="changeOriginStatus()"
+                      [indeterminate]="isOrigin === null">
+          <span *ngIf="isOrigin" class="checkbox-label"></span>
+          <span *ngIf="isOrigin === false" class="checkbox-label"></span>
+          <span *ngIf="isOrigin === null" class="checkbox-label">همه موارد</span>
+        </mat-checkbox>
+        <mat-input-container *ngIf="isOrigin === false">
+          <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"  [formControl]="receiverSearchCtrl">
+        </mat-input-container>
+        <mat-input-container *ngIf="isOrigin">
+          <input matInput type="text" placeholder="انبار"  [formControl]="receiverSearchCtrl">
+        </mat-input-container>
+      </div>
+
       <!--<div fxFlex="25" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">-->
       <!--<mat-checkbox class="filtering-field" [ngModel]="isReturn" (change)="changeReturnStatus()" [indeterminate]="isReturn === null">-->
       <!--<span *ngIf="isReturn" class="checkbox=label">برگشت داده شده ها</span>-->
@@ -80,23 +82,23 @@
       <!--<span *ngIf="isReturn === null" class="checkbox=label">همه نوع مرسوله ای</span>-->
       <!--</mat-checkbox>-->
       <!--</div>-->
-      <!--<div fxFlex="25" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">-->
-      <!--<label>مقصد:  </label>-->
-      <!--<mat-checkbox class="filtering-field" [ngModel]="isInternal" (change)="changeInternalStatus()"-->
-      <!--[indeterminate]="isInternal === null">-->
-      <!--<span *ngIf="isInternal" class="checkbox-label">انبار-->
-      <!--<mat-input-container>-->
-      <!--<input matInput type="text" placeholder="انبار"  [formControl]="receiverSearchCtrl">-->
-      <!--</mat-input-container>-->
-      <!--</span>-->
-      <!--<span *ngIf="isInternal === false" class="checkbox-label">مشتری-->
-      <!--<mat-input-container>-->
-      <!--<input matInput type="text" placeholder="نام مشتری - کد ملی"  [formControl]="receiverSearchCtrl">-->
-      <!--</mat-input-container></span>-->
-      <!--<span *ngIf="isInternal === null" class="checkbox-label">همه موارد</span>-->
-      <!--</mat-checkbox>-->
-      <!--</div>-->
-
+      <div fxFlex="50" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
+      <label> مقصد:  </label>
+      <mat-checkbox class="filtering-field" [ngModel]="isDestination" (change)="changeDestinationStatus()"
+      [indeterminate]="isDestination === null">
+      <span *ngIf="isDestination" class="checkbox-label">
+      <mat-input-container>
+      <input matInput type="text" placeholder="انبار"  [formControl]="receiverSearchCtrl">
+      </mat-input-container>
+      </span>
+      <span *ngIf="isDestination === false" class="checkbox-label">
+      <mat-input-container>
+      <input matInput type="text" placeholder="نام مشتری - کد ملی"  [formControl]="receiverSearchCtrl">
+      </mat-input-container></span>
+      <span *ngIf="isDestination === null" class="checkbox-label">همه موارد</span>
+      </mat-checkbox>
+      </div>
+      </div>
 
     </div>
     <div>
@@ -140,8 +142,8 @@
         <ng-container matColumnDef="receiver_sender_name">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">نام مشتری / فروشگاه</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">
-            <span *ngIf="element.receiver_sender_name">{{element.receiver_sender_name}}</span>
-            <span *ngIf="!element.receiver_sender_name">-</span>
+            <span *ngIf="element.to_customer_name">{{element.to_customer_name}}</span>
+            <span *ngIf="!element.to_customer_name">{{element.to_warehouse_name}}</span>
           </mat-cell>
         </ng-container>
 
