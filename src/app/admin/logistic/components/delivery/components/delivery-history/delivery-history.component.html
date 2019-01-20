@@ -68,10 +68,10 @@
           <span *ngIf="isOrigin === null" class="checkbox-label">همه موارد</span>
         </mat-checkbox>
         <mat-input-container *ngIf="isOrigin === false">
-          <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"  [formControl]="receiverSearchCtrl">
+          <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"  [formControl]="SenderSearchCtrl">
         </mat-input-container>
         <mat-input-container *ngIf="isOrigin">
-          <input matInput type="text" placeholder="انبار"  [formControl]="receiverSearchCtrl">
+          <input matInput type="text" placeholder="انبار"  [formControl]="SenderSearchCtrl">
         </mat-input-container>
       </div>
 
@@ -174,9 +174,6 @@
             </div>
           </mat-cell>
         </ng-container>
-
-        <!--<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>-->
-        <!--<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>-->
 
         <!--Expanded Content Column - The order rows is made up of this one column-->
         <ng-container matColumnDef="expandedDetail">

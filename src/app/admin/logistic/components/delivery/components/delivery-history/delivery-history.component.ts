@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSort, MatSnackBar, MatTableDataSource, MatDialog, MatPaginator} from '@angular/material';
 import {FormControl} from '@angular/forms';
 import {SelectionModel} from '@angular/cdk/collections';
-import * as moment from 'moment';
+import * as moment from 'jalali-moment';
 import {HttpService} from 'app/shared/services/http.service';
 import {ProgressService} from 'app/shared/services/progress.service';
 import {AuthService} from 'app/shared/services/auth.service';
@@ -11,6 +11,7 @@ import {DeliveryDetailsComponent} from '../delivery-details/delivery-details.com
 import {DeliveryTrackingComponent} from '../delivery-tracking/delivery-tracking.component';
 import {DeliveryStatuses} from '../../../../../../shared/lib/status';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {OrderLineViewerComponent} from '../../../order-line-viewer/order-line-viewer.component';
 
 export interface DeliveryItem {
   _id: String;
@@ -69,14 +70,15 @@ export class DeliveryHistoryComponent implements OnInit {
   deliveryAgentList = [];
   receiverSearchCtrl = new FormControl();
   agentSearchCtrl = new FormControl();
+  SenderSearchCtrl = new FormControl();
   isDelivered = null;
   isInternal = null;
   isReturn = null;
   missDeliveryAgent = null;
   startDateSearch = null;
-  endDateSearch = null;
   transferee = null;
   agentName = null;
+  sender = null;
   isSalesManager = false;
   isHubClerk = false;
   search;
@@ -125,6 +127,15 @@ export class DeliveryHistoryComponent implements OnInit {
       }
     );
 
+    this.SenderSearchCtrl.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.sender = data.trim() !== '' ? data.trim() : null;
+        this.getDeliveryItems();
+      }, err => {
+        console.error('Could\'t refresh when sender name is changed: ', err);
+      }
+    );
+
     this.dataSource = new MatTableDataSource<DeliveryItem>();
     this.selection = new SelectionModel<DeliveryItem>(true, []);
 
@@ -154,14 +165,14 @@ export class DeliveryHistoryComponent implements OnInit {
   getDeliveryItems() {
     this.progressService.enable();
     const options = {
-
-      // sort_column: this.sortColumn,
+      sort_column: this.sortColumn,
       agentName: this.agentName,
       transferee: this.transferee,
-      // direction: this.direction,
+      direction: this.direction,
       startDateSearch: this.startDateSearch,
       isInternal: this.isInternal,
       isDelivered: this.isDelivered,
+      sender: this.sender,
       // isReturn: this.isReturn,
 
       sort: this.sort.active,
@@ -175,64 +186,46 @@ export class DeliveryHistoryComponent implements OnInit {
     this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
         this.progressService.disable();
 
-        //
         const rows = [];
-        // res.data.forEach((order, index) => {
-        //   order['index'] = index + 1;
-        //   rows.push(order, {detailRow: true, order});
-        // });
-
-        //
         this.search = res.data[0];
+        if (this.search) {
+          for (let delivery of this.search.result) {
+            const order_data = [];
+            let order_details = delivery.order_details;
+            let order_lines = delivery.order_lines;
+            order_lines.forEach(x => {
+              let foundOrder = order_details.find(y => y.order_line_ids === x.order_lines_id);
+              let preOrderData = order_data.find(y => y.order_id === foundOrder.order_id)
+              if (preOrderData) {
+                preOrderData.order_lines.push(x)
+              } else {
+                order_data.push(Object.assign(foundOrder, {order_lines: [x]}, {transaction_id: delivery.transaction_id},
+                  {order_time: delivery.order_time}));
+              }
+            });
+
+            delivery.orders = order_data;
+          }
+        }
         console.log('search', this.search);
-
-
-        // this.dataSource.data = rows;
-        // console.log('rows',rows);
-
-        // console.log('search', this.search);
-        // this.deliveryItems = this.search.result;
-
-        // console.log(' this.deliveryItems', this.deliveryItems);
 
         if (this.search) {
           this.deliveryItems = this.search.result;
-          // this.deliveryItems = rows;
-          // this.selection.clear();
-          // this.setDataSource(this.deliveryItems);
         } else
           this.deliveryItems = '';
         this.totalRecords = this.search && this.search.total ? this.search.total : 0;
 
-        // start delivery  filter
-        // if (this._sent) {
-        //   if (this.search) {
-        //     this.deliveryItems = this.search.result;
-        //     this.deliveryItems = this.deliveryItems.filter(x => x.delivery_start !== null)
-        //     // this.setDataSource(this.deliveryItems);
-        //   } else
-        //     this.deliveryItems = '';
-        //   this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
-        // }
-        // if (this._sent === false) {
-        //   if (this.search) {
-        //     this.deliveryItems = this.search.result;
-        //     this.deliveryItems = this.deliveryItems.filter(x => x.delivery_start === null)
-        //     // this.setDataSource(this.deliveryItems);
-        //   } else
-        //     this.deliveryItems = '';
-        //   this.totalRecords = this.deliveryItems.length ? this.deliveryItems.length : 0;
-        // }
+        if (this.deliveryItems) {
+          this.deliveryItems.forEach((order, index) => {
+            order['index'] = index + 1;
+            rows.push(order, {detailRow: true, order});
+          });
 
-        if(this.deliveryItems) {
-        this.deliveryItems.forEach((order, index) => {
-          order['index'] = index + 1;
-          rows.push(order, {detailRow: true, order});
-        });
-
-        this.dataSource = rows;
+          this.dataSource = rows;
         }
         else this.dataSource = '';
+
+        console.log('datasource', this.dataSource);
 
         this.progressService.disable();
       },
@@ -441,5 +434,16 @@ export class DeliveryHistoryComponent implements OnInit {
     if (delivery && delivery.last_ticket) {
       return DeliveryStatuses.find(x => x.status === delivery.last_ticket.status).name;
     }
+  }
+
+  getDate(orderTime) {
+    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
+  }
+
+  showOrderLine(orderLines) {
+    this.dialog.open(OrderLineViewerComponent, {
+      width: '800px',
+      data: orderLines
+    });
   }
 }
