@@ -71,6 +71,8 @@ export class DeliveryHistoryComponent implements OnInit {
   receiverSearchCtrl = new FormControl();
   agentSearchCtrl = new FormControl();
   SenderSearchCtrl = new FormControl();
+  fromWarehouseId = new FormControl();
+  toWarehouseId = new FormControl();
   isDelivered = null;
   isInternal = null;
   isReturn = null;
@@ -85,6 +87,9 @@ export class DeliveryHistoryComponent implements OnInit {
   _sent = null;
   isOrigin = null;
   isDestination = null;
+  fromWarehouse = null;
+  toWarehouse = null;
+
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
@@ -173,6 +178,8 @@ export class DeliveryHistoryComponent implements OnInit {
       isInternal: this.isInternal,
       isDelivered: this.isDelivered,
       sender: this.sender,
+      fromWarehouse: this.fromWarehouse,
+      toWarehouse: this.toWarehouse,
       // isReturn: this.isReturn,
 
       sort: this.sort.active,
@@ -445,5 +452,20 @@ export class DeliveryHistoryComponent implements OnInit {
       width: '800px',
       data: orderLines
     });
+  }
+
+  getClerkWarehouses() {
+    return this.authService.warehouses
+      .sort((a, b) => a.priority > b.priority ? 1 : a.priority < b.priority ? -1 : 0);
+  }
+
+  fromWarehouseChange(fromWarehouseId) {
+    this.fromWarehouse = fromWarehouseId;
+    this.getDeliveryItems();
+  }
+
+  toWarehouseChange(toWarehouseId) {
+    this.toWarehouse = toWarehouseId;
+    this.getDeliveryItems();
   }
 }

@@ -40,3 +40,28 @@
 .checkbox-label {
   margin-right: 5px;
 }
+
+.select-style {
+  width: 120px;
+  height: 30px;
+  vertical-align: baseline;
+  border: 0 !important;
+  outline: 0;
+  background: 0 0;
+  z-index: 3;
+  border-radius: 2px;
+  background-color: black;
+  color: #fff;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 8px;
+  font-family:iranyekan;
+}
+
+.style-select-wrapper {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  height: 30px;
+  text-align: right;
+}
