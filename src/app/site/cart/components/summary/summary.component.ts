@@ -56,12 +56,13 @@ export class SummaryComponent implements OnInit, OnChanges {
   isLoggedIn = false;
 
   constructor(private cartService: CartService, private authService: AuthService,
-              private router: Router, private checkoutService: CheckoutService) {
+    private router: Router, private checkoutService: CheckoutService) {
   }
 
   ngOnInit() {
     this.cartService.used_coupon_code$.subscribe(data => {
       this.used_coupon_code = data;
+      this.coupon_code = data;
       if (this.used_coupon_code)
         this.recalculateDiscount.emit();
     });
@@ -115,12 +116,16 @@ export class SummaryComponent implements OnInit, OnChanges {
   }
 
   pay() {
-    this.cartService.applyCoupon(this.coupon_code)
-      .then(res => {
-        this.router.navigate(['/checkout']);
-      })
-      .catch(err => {
-        console.error('Cannot apply coupon code: ', err);
-      });
+    if (this.isLoggedIn) {
+      this.cartService.applyCoupon(this.coupon_code)
+        .then(res => {
+          this.router.navigate(['/checkout']);
+        })
+        .catch(err => {
+          console.error('Cannot apply coupon code: ', err);
+        });
+    } else {
+      this.router.navigate(['/checkout']);
+    }
   }
 }

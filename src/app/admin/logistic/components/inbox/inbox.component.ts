@@ -7,6 +7,9 @@ import {ProductViewerComponent} from '../product-viewer/product-viewer.component
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
+import {AuthService} from 'app/shared/services/auth.service';
+import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
+import {ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
 
 
 @Component({
@@ -18,7 +21,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status'];
+  displayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status', 'process'];
   dataSource: MatTableDataSource<any>;
 
   pageSize = 10;
@@ -34,7 +37,8 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private socketService: SocketService,
-    private progressService: ProgressService) {
+    private progressService: ProgressService,
+    private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -122,6 +126,17 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onMismatchDetected() {
     this.progressService.enable();
+  }
+
+  shouldCheckProduct(orderline) {
+    const isHubClerk = this.authService.userDetails.access_level === AccessLevel.HubClerk;
+    const isReturnOrderLine = orderline.tickets.find(x => x.status === ORDER_LINE_STATUS.ReturnRequested);
+
+    return isHubClerk && isReturnOrderLine;
+  }
+
+  informDamage(orderLine) {
+ 
   }
 
   ngOnDestroy(): void {
