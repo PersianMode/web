@@ -65,7 +65,7 @@ export class CAndCComponent implements OnInit {
         const add_point = [];
         data.forEach(el => add_point.push(el));
         this.clickAndCollectInfo = {
-          is_c_and_c: true,
+          is_collect: true,
           add_point: add_point,
         };
       },
@@ -108,7 +108,7 @@ export class CAndCComponent implements OnInit {
   }
 
   submitTotalInfo() {
-    if (this.clickAndCollectInfo.is_c_and_c === false)
+    if (this.clickAndCollectInfo.is_collect === false)
       return;
     this.progressService.enable();
     this.httpService.post('deliverycc', this.clickAndCollectInfo).subscribe(
