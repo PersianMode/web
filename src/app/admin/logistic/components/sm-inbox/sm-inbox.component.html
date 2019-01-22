@@ -7,72 +7,85 @@
         <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
       </button>
 
-      <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
-        (matSortChange)="onSortChange($event)">
+      <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created"
+        matSortDisableClear matSortDirection="asc" (matSortChange)="onSortChange($event)">
 
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.index}}</mat-cell>
+          <mat-cell *matCellDef="let message"> {{message.position}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="customer">
           <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
-          <mat-cell *matCellDef="let order">{{order.customer.name + ' ' + order.customer.surname}}</mat-cell>
+          <mat-cell *matCellDef="let message">{{getCustomer(message)}}</mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="order_time">
+
+        <ng-container matColumnDef="publish_date">
           <mat-header-cell *matHeaderCellDef>تاریخ خرید</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{getDate(order.order_time)}}</mat-cell>
+          <mat-cell *matCellDef="let message"> {{getDate(message.publish_date)}}</mat-cell>
         </ng-container>
 
-        <!--tarikhe bazagasht-->
 
-        <!--<ng-container matColumnDef="address">-->
-        <!--<mat-header-cell *matHeaderCellDef>آدرس</mat-header-cell>-->
-        <!--<mat-cell *matCellDef="let order">-->
-        <!--<button mat-button color="primary" (click)="showAddress(order)">نمایش</button>-->
-        <!--</mat-cell>-->
-        <!--</ng-container>-->
+        <ng-container matColumnDef="desc">
+          <mat-header-cell *matHeaderCellDef>توضیحات</mat-header-cell>
+          <mat-cell *matCellDef="let message">
+            <button mat-button color="primary">نمایش</button>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef>پردازش شده؟</mat-header-cell>
+          <mat-cell *matCellDef="let message">
+            <img style="width: 25px; height: 25px;" [src]="message.is_processed ? '../../../../../assets/logos/accept.png' : '../../../../../assets/logos/fail.png' ">
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="process">
+          <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
+          <mat-cell *matCellDef="let message">
+            <button mat-button color="primary" *ngIf="!message.is_processed" (click)="process(message)" >{{getProcessTitle(message)}}</button>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="close">
+          <mat-header-cell *matHeaderCellDef>بستن</mat-header-cell>
+          <mat-cell *matCellDef="let message">
+            <button mat-button color="warn" *ngIf="message.is_processed" (click)="close(message)">اعلام گزارش</button>
+          </mat-cell>
+        </ng-container>
+
+
 
         <!-- Expanded Content Column - The order lines rows is made up of this one column -->
         <ng-container matColumnDef="expandedDetail">
           <mat-cell *matCellDef="let detail">
 
 
-            <ul *ngFor='let ol of detail.order.order_lines'>
-              <li>
-                <div class="imgWrapper">
-                  <img [src]="getProductDetail(ol).thumbnailURL" style="width:100%" (click)="showDetial(ol)">
-                </div>
-              </li>
-              <li>
-                <span>
-                  <b>بارکد:</b> {{ol.instance.barcode}}</span>
-              </li>
-              <li>
-                <span>
-                  <b>نام:</b> {{ol.instance.product_name}}</span>
-              </li>
-              <li>
-                <span>
-                  <b>سایز:</b> {{ol.instance.size}}</span>
-              </li>
-              <li>
-                <span>
-                  <b>آخرین وضعیت:</b> {{getOrderLineStatus(ol)}}</span>
-              </li>
-              <li>
-                <span *ngIf="ol.isDelivered">
-                  <b>تاریخ بازگشت</b> {{getDate(ol.returnTime)}}
-                </span>
-              </li>
-              <li>
-                <button mat-button color="primary" (click)="showAddress(detail.order,ol.order_line_id)">نمایش آدرس</button>
-              </li>
-              <li>
-                <button mat-button color="primary" (click)='showTicket(detail.order, ol)'>تیکت ها</button>
-              </li>
-            </ul>
+            <table class='messageDetail'>
+              <tr>
+                <td>
+                  <div class="imgWrapper">
+                    <img [src]="getProductDetail(detail.message).thumbnailURL" style="width:100%" style="width:100%"
+                      (click)="showDetial(detail.message)">
+                  </div>
+                </td>
+                <td>
+                  <p>
+                    <b>بارکد:</b> {{detail.message.instance?.barcode}}</p>
+                </td>
+                <td>
+                  <p>
+                    <b>نام:</b> {{detail.message.instance?.product_name}}</p>
+                </td>
+                <td>
+                  <p>
+                    <b>سایز:</b> {{detail.message.instance?.size}}</p>
+                </td>
+              </tr>
+            </table>
+
 
           </mat-cell>
         </ng-container>
@@ -81,15 +94,15 @@
 
         <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple class="element-row" [class.expanded]="expandedElement == row._id"
           (click)="expandedElement = row._id"></mat-row>
-        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.order._id == expandedElement ? 'expanded' : 'collapsed'"
-          style="overflow: hidden">
+        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow" [@detailExpand]="row.message._id == expandedElement ? 'expanded' : 'collapsed'"
+          style="overflow: hidden; height: 0px; min-height: 0px ;visibility: hidden">
         </mat-row>
 
 
       </mat-table>
 
 
-      <mat-paginator [length]="resultsLength" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+      <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
     </div>
 
   </mat-card-content>

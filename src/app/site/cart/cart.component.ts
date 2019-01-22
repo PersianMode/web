@@ -7,8 +7,6 @@ import {GenDialogComponent} from '../../shared/components/gen-dialog/gen-dialog.
 import {Router} from '@angular/router';
 import {DialogEnum} from '../../shared/enum/dialog.components.enum';
 import {MatDialog} from '@angular/material';
-import {HttpService} from '../../shared/services/http.service';
-import {imagePathFixer} from '../../shared/lib/imagePathFixer';
 import {TitleService} from '../../shared/services/title.service';
 import {ProductService} from '../../shared/services/product.service';
 import {CheckoutService} from '../../shared/services/checkout.service';
@@ -37,8 +35,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.titleService.setTitleWithConstant('سبد خرید');
-    this.authService.isLoggedIn.subscribe(
-      (data) => this.isLoggedIn = this.authService.userIsLoggedIn()
+    this.authService.isLoggedIn.subscribe(data =>
+      this.isLoggedIn = this.authService.userIsLoggedIn()
     );
 
     this.showHideSpinner(true);
@@ -50,19 +48,19 @@ export class CartComponent implements OnInit, OnDestroy {
         this.products = [];
         carts.forEach(p => {
           const item = {};
-          const product: any = data.filter(e => e._id === p.product_id)[0];
-          const instance = product.instances.filter(i => i._id === p.instance_id)[0];
-          const color = product.colors.filter(c => c._id === instance.product_color_id)[0];
+          const product = data.filter(e => e._id === p.product_id)[0];
+          const instance = product.instances.find(i => i._id === p.instance_id) || {inventory: []};
+          const color = product.colors.find(c => c._id === instance.product_color_id) || {image: {}};
           const instances = [];
-          product.instances.forEach(instance => {
-            const newIncatnce = {
-              'price': instance.price,
-              'size': instance.size,
-              'instance_id': instance._id
+          product.instances.forEach(inst => {
+            const newInstance = {
+              'price': inst.price,
+              'size': inst.size,
+              'instance_id': inst._id
             };
-            newIncatnce['quantity'] = 0;
-            instance.inventory.forEach(inventory => newIncatnce['quantity'] += inventory.count - inventory.reserved);
-            instances.push(newIncatnce);
+            newInstance['quantity'] = 0;
+            inst.inventory.forEach(inventory => newInstance['quantity'] += inventory.count - inventory.reserved);
+            instances.push(newInstance);
           });
           item['base_price'] = product.base_price;
           item['color'] = {
@@ -82,7 +80,7 @@ export class CartComponent implements OnInit, OnDestroy {
           item['price'] = instance.price;
           item['product_id'] = p.product_id;
           item['quantity'] = p.quantity;
-          item['size'] = instance.size;
+          item['size'] = instance.size || 'نامشخص';
           item['tags'] = product.tags;
           item['thumbnail'] = color.image.thumbnail;
           item['type'] = product.type;
@@ -98,6 +96,9 @@ export class CartComponent implements OnInit, OnDestroy {
         } else if (prevProductCount) {
           this.router.navigate(['/']);
         }
+        this.showHideSpinner(false);
+      }).catch(err => {
+        console.error('error in getting cart items: ', err);
         this.showHideSpinner(false);
       });
     });
@@ -144,8 +145,17 @@ export class CartComponent implements OnInit, OnDestroy {
     }
   }
 
-  calculateDiscount(considerCoupon = false) {
-    this.discountValue = this.cartService.calculateDiscount(this.products, considerCoupon);
+  calculateDiscount(res = null) {
+    if (res === false) { // this is clear signal sent by summary component
+      this.cartService.clearCoupon();
+      this.clearCoupon();
+      return;
+    }
+    this.discountValue = this.cartService.calculateDiscount(this.products);
+  }
+
+  clearCoupon() {
+    this.discountValue = 0;
   }
 
   changeValidation(isValid, i) {

@@ -18,22 +18,23 @@
             {{campaign.name}}
           </div>
           <div dir="rtl" style="font-weight: bold; font-family: iranyekan, sans-serif">
-            <span>تخفیف پایه :</span>
+            <span>تخفیف پایه:</span>
             {{campaign.discount_ref}}
           </div>
           <div dir="rtl" style="font-weight: bold; font-family: iranyekan, sans-serif">
-            <span>نوع :</span>
-            {{ campaign.coupon_code ? 'کوپن تخفیف' : 'مجموعه کالکشن'}}
+            <span>نوع:</span>
+            {{campaign.coupon_code ? 'کوپن تخفیف' : 'مجموعه کالکشن'}}
           </div>
           <div dir="rtl" style="font-weight: bold; font-family: iranyekan, sans-serif">
-            <span>وضعیت :</span>
-            {{getCampaignStatus(campaign) ? 'فعال' : 'غیر فعال'}}
+            <span>وضعیت:</span>
+            {{getCampaignStatus(campaign) ? 'فعال' : 'غیرفعال'}}
           </div>
-       
+
 
         </mat-card-content>
         <mat-card-actions style="text-align: left" *ngIf="campaign._id == selectedId">
-          <button mat-icon-button type (click)="endCampaign(campaign._id)" color="warn" *ngIf="getCampaignStatus(campaign)">
+          <button mat-icon-button type (click)="endCampaign(campaign._id)" color="warn"
+                  *ngIf="getCampaignStatus(campaign)">
             <mat-icon aria-label="schedule">schedule</mat-icon>
           </button>
           <button mat-icon-button (click)="openForm(campaign._id)" color="accent">

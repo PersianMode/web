@@ -3,14 +3,15 @@
 
     <div class="row">
       <mat-form-field class="center">
-        <input matInput placeholder="جستجو" [(ngModel)]="phrase" (ngModelChange)="load()" >
+        <input matInput placeholder="جستجو" [(ngModel)]="phrase" [formControl]="soldOutCtrl">
       </mat-form-field>
     </div>
 
     <div class="row">
       <div class="example-container mat-elevation-z8">
-        <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created" matSortDisableClear matSortDirection="asc"
-          (matSortChange)="onSortChange($event)">
+        <mat-table #table [dataSource]="dataSource" class="example-table" matSort matSortActive="created"
+                   matSortDisableClear matSortDirection="asc"
+                   (matSortChange)="onSortChange($event)">
           <ng-container matColumnDef="number">
             <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
             <mat-cell *matCellDef="let element">{{getIndex(element)}}</mat-cell>
@@ -18,8 +19,8 @@
 
           <ng-container matColumnDef="thumbnail">
             <mat-header-cell *matHeaderCellDef> تصویر</mat-header-cell>
-            <mat-cell *matCellDef="let element">
-              <img [src]="getPIThumbnail(element)" />
+            <mat-cell *matCellDef="let element" style="height: 100px;">
+              <img [src]="getPIThumbnail(element)" style="height: 100%;"/>
             </mat-cell>
           </ng-container>
 
@@ -52,7 +53,7 @@
             <mat-header-cell *matHeaderCellDef> Article No.</mat-header-cell>
             <mat-cell *matCellDef="let element">
               <div>
-                {{element.product.instances.article_no}}
+                {{element.product.article_no}}
               </div>
             </mat-cell>
           </ng-container>
@@ -60,10 +61,12 @@
           <ng-container matColumnDef="edit">
             <mat-header-cell *matHeaderCellDef> تغییر وضعیت نمایش</mat-header-cell>
             <mat-cell *matCellDef="let element">
-              <button *ngIf="element.product.instances.sold_out" mat-icon-button (click)="changeSoldOutStatus(element,false)" color="warn">
+              <button *ngIf="element.product.instances.sold_out" mat-icon-button
+                      (click)="changeSoldOutStatus(element,false)" color="warn">
                 <mat-icon aria-label="visibility_off">visibility_off</mat-icon>
               </button>
-              <button *ngIf="!element.product.instances.sold_out" mat-icon-button (click)="changeSoldOutStatus(element,true)" color="warn">
+              <button *ngIf="!element.product.instances.sold_out" mat-icon-button
+                      (click)="changeSoldOutStatus(element,true)" color="warn">
                 <mat-icon aria-label="visibility">visibility</mat-icon>
               </button>
             </mat-cell>

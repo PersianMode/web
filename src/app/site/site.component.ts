@@ -41,8 +41,8 @@ export class SiteComponent implements OnInit, OnDestroy {
     this.isMobile = this.isMobileCalc();
     this.updateResponsiveService();
     this.authService.checkValidation(this.router.url)
-      .then(() => {
-      }).catch(err => console.error(err));
+      .then(() => {})
+      .catch(() => {});
     this.loadInitialPlacements();
     this.onResize(null, this.curWidth, this.curHeight);
   }

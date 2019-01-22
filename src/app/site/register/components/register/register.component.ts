@@ -125,7 +125,6 @@ export class RegisterComponent implements OnInit {
     this.spinnerService.enable();
     this.httpService.post('register/resend', {
       username: this.registerForm.controls['username'].value,
-      // code: this.code
     }).subscribe(
       (data) => {
         this.spinnerService.disable();

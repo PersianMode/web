@@ -12,9 +12,6 @@ import {AccessTypes} from 'app/shared/lib/access_types';
   templateUrl: './ticket.component.html',
   styleUrls: ['./ticket.component.css']
 })
-
-
-
 export class TicketComponent implements OnInit {
   // 'desc'
   displayedColumns = [
@@ -31,8 +28,11 @@ export class TicketComponent implements OnInit {
 
   isOrder = true;
 
-  constructor(private httpService: HttpService, public dialogRef: MatDialogRef<TicketComponent>, private progressService: ProgressService,
-    @Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(private httpService: HttpService,
+              public dialogRef: MatDialogRef<TicketComponent>,
+              private progressService: ProgressService,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
+  }
 
   ngOnInit() {
 
@@ -95,6 +95,8 @@ export class TicketComponent implements OnInit {
 
 
   }
+
+
   getReceiverType(element) {
     try {
       if (element.agent_receiver) {
@@ -108,6 +110,8 @@ export class TicketComponent implements OnInit {
 
 
   }
+
+
   getStatus(element) {
     try {
       if (this.isOrder)
@@ -131,5 +135,3 @@ export class TicketComponent implements OnInit {
   }
 
 }
-
-
