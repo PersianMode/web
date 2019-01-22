@@ -11,7 +11,7 @@
         <div fxFlex="30" class="filtering-box">
           <mat-input-container class="filtering-field">
             <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری"
-                   [formControl]="receiverSearchCtrl">
+                   [formControl]="recipient_name">
           </mat-input-container>
         </div>
         <div fxFlex="30" class="filtering-box">
@@ -23,7 +23,7 @@
 
         <div fxFlex="30" class="filtering-box">
           <mat-form-field class="filtering-field">
-            <input matInput [matDatepicker]="epicker" placeholder="انتقالات از تاریخ ..." [(ngModel)]="startDateSearch"
+            <input matInput [matDatepicker]="epicker" placeholder="انتقالات در تاریخ ..." [(ngModel)]="startDateSearch"
                    (ngModelChange)="getDeliveryItems()">
             <mat-datepicker-toggle matSuffix [for]="epicker"></mat-datepicker-toggle>
             <mat-datepicker #epicker></mat-datepicker>
@@ -61,11 +61,11 @@
       <div fxLayout="row" fxLayoutAlign="start start">
         <div fxFlex="50" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
           <label> مبدا: </label>
-          <mat-checkbox class="filtering-field" [ngModel]="isOrigin" (change)="changeOriginStatus()"
-                        [indeterminate]="isOrigin === null">
+          <mat-checkbox class="filtering-field" [ngModel]="isOrigin" (change)="changeOriginStatus()">
+                        <!--[indeterminate]="isOrigin === null">-->
             <span *ngIf="isOrigin" class="checkbox-label">انبار</span>
             <span *ngIf="isOrigin === false" class="checkbox-label"></span>
-            <span *ngIf="isOrigin === null" class="checkbox-label">همه موارد</span>
+            <!--<span *ngIf="isOrigin === null" class="checkbox-label">همه موارد</span>-->
           </mat-checkbox>
           <mat-input-container *ngIf="isOrigin === false">
             <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
@@ -74,18 +74,18 @@
           <span class="style-select-wrapper" *ngIf="isOrigin">
             <select class="select-style" formControlName="fromWarehouseId"
                     (change)="fromWarehouseChange($event.target.value)">
-              <option *ngFor="let warehouse of getClerkWarehouses()" [value]="warehouse._id">{{warehouse.name}}
+              <option *ngFor="let warehouse of getWarehouses()" [value]="warehouse._id">{{warehouse.name}}
               </option>
             </select>
           </span>
         </div>
         <div fxFlex="50" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
           <label> مقصد: </label>
-          <mat-checkbox class="filtering-field" [ngModel]="isDestination" (change)="changeDestinationStatus()"
-                        [indeterminate]="isDestination === null">
+          <mat-checkbox class="filtering-field" [ngModel]="isDestination" (change)="changeDestinationStatus()">
+                        <!--[indeterminate]="isDestination === null">-->
             <span *ngIf="isDestination" class="checkbox-label">انبار</span>
             <span *ngIf="isDestination === false" class="checkbox-label"></span>
-            <span *ngIf="isDestination === null" class="checkbox-label">همه موارد</span>
+            <!--<span *ngIf="isDestination === null" class="checkbox-label">همه موارد</span>-->
           </mat-checkbox>
           <mat-input-container *ngIf="isDestination === false">
             <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
@@ -94,7 +94,7 @@
           <span class="style-select-wrapper" *ngIf="isDestination">
             <select class="select-style" formControlName="toWarehouseId"
                     (change)="toWarehouseChange($event.target.value)">
-              <option *ngFor="let warehouse of getClerkWarehouses()" [value]="warehouse._id">{{warehouse.name}}
+              <option *ngFor="let warehouse of getWarehouses()" [value]="warehouse._id">{{warehouse.name}}
               </option>
             </select>
           </span>

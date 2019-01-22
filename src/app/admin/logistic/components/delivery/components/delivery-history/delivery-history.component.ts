@@ -69,24 +69,23 @@ export class DeliveryHistoryComponent implements OnInit {
   ];
   deliveryAgentList = [];
   receiverSearchCtrl = new FormControl();
+  recipient_name = new FormControl();
   agentSearchCtrl = new FormControl();
   SenderSearchCtrl = new FormControl();
-  fromWarehouseId = new FormControl();
-  toWarehouseId = new FormControl();
   isDelivered = null;
   isInternal = null;
   isReturn = null;
   missDeliveryAgent = null;
   startDateSearch = null;
   transferee = null;
+  recipient = null;
   agentName = null;
   sender = null;
   isSalesManager = false;
   isHubClerk = false;
   search;
-  _sent = null;
-  isOrigin = null;
-  isDestination = null;
+  isOrigin = true;
+  isDestination = true;
   fromWarehouse = null;
   toWarehouse = null;
 
@@ -117,6 +116,15 @@ export class DeliveryHistoryComponent implements OnInit {
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
         this.transferee = data.trim() !== '' ? data.trim() : null;
+        this.getDeliveryItems();
+      }, err => {
+        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+      }
+    );
+
+    this.recipient_name.valueChanges.debounceTime(500).subscribe(
+      data => {
+        this.recipient = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();
       }, err => {
         console.error('Couldn\'t refresh when receiver name is changed: ', err);
@@ -180,6 +188,7 @@ export class DeliveryHistoryComponent implements OnInit {
       sender: this.sender,
       fromWarehouse: this.fromWarehouse,
       toWarehouse: this.toWarehouse,
+      recipient: this.recipient,
       // isReturn: this.isReturn,
 
       sort: this.sort.active,
@@ -335,24 +344,21 @@ export class DeliveryHistoryComponent implements OnInit {
   }
 
   changeOriginStatus() {
-    if (this.isOrigin === null) {
-      this.isOrigin = true;
-    } else if (this.isOrigin === true) {
+   if (this.isOrigin === true) {
       this.isOrigin = false;
     } else if (this.isOrigin === false) {
-      this.isOrigin = null;
+      this.isOrigin = true;
     }
 
     this.getDeliveryItems();
   }
 
   changeDestinationStatus() {
-    if (this.isDestination === null) {
-      this.isDestination = true;
-    } else if (this.isDestination === true) {
+
+      if (this.isDestination === true) {
       this.isDestination = false;
     } else if (this.isDestination === false) {
-      this.isDestination = null;
+      this.isDestination = true;
     }
 
     this.getDeliveryItems();
@@ -454,7 +460,7 @@ export class DeliveryHistoryComponent implements OnInit {
     });
   }
 
-  getClerkWarehouses() {
+  getWarehouses() {
     return this.authService.warehouses
       .sort((a, b) => a.priority > b.priority ? 1 : a.priority < b.priority ? -1 : 0);
   }
@@ -462,10 +468,12 @@ export class DeliveryHistoryComponent implements OnInit {
   fromWarehouseChange(fromWarehouseId) {
     this.fromWarehouse = fromWarehouseId;
     this.getDeliveryItems();
+    this.fromWarehouse = false;
   }
 
   toWarehouseChange(toWarehouseId) {
     this.toWarehouse = toWarehouseId;
     this.getDeliveryItems();
+    this.toWarehouse = false;
   }
 }
