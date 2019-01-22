@@ -23,8 +23,7 @@ export class CampaignsComponent extends AbstractSearchComponent implements OnIni
   }
 
 
-  getCampaignStatus(campaign) : boolean{
-
+  getCampaignStatus(campaign): boolean {
     const now = new Date();
     if (campaign.end_date) {
       const end = new Date(campaign.end_date);
@@ -32,8 +31,6 @@ export class CampaignsComponent extends AbstractSearchComponent implements OnIni
     } else {
       return true;
     }
-
-
   }
 
   endCampaign(id: string = null): void {

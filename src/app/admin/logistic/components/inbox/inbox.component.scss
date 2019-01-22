@@ -8,8 +8,8 @@ mat-header-cell, mat-cell{
 .imgWrapper{
   min-width: 72px;
   min-height: 72px;
-  width: 72px;
-  height: 72px;
+  width: 72px !important;
+  height: 72px !important;
   margin: 10px;
   text-align: left;
   max-height: 72px;
@@ -25,8 +25,9 @@ mat-header-cell, mat-cell{
 }
 
 .imgWrapper img{
-  height: 72px;
-  position: relative;
+  width: 72px !important;
+  height: 72px !important;
+   position: relative;
 }
 
 // mat-cell{

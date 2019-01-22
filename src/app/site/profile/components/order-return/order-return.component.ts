@@ -1,21 +1,12 @@
-import { Component, OnInit, Inject, Input, Output, EventEmitter } from '@angular/core';
-import * as moment from 'moment';
-import { HttpService } from 'app/shared/services/http.service';
-import { Location } from '@angular/common';
-import { ProfileOrderService } from '../../../../shared/services/profile-order.service';
-import { MatSnackBar } from '@angular/material';
+import {Component, OnInit, Inject, Input, Output, EventEmitter} from '@angular/core';
+import {HttpService} from 'app/shared/services/http.service';
+import {Location} from '@angular/common';
+import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
 import {ProgressService} from '../../../../shared/services/progress.service';
+import {ResponsiveService} from '../../../../shared/services/responsive.service';
+import {ProfileOrderService} from 'app/shared/services/profile-order.service';
 
 
-export interface ITicket {
-  desc: {
-    day: {
-      time_slot: string,
-      day_slot: string
-    },
-    address_id: string
-  };
-}
 @Component({
   selector: 'app-order-return',
   templateUrl: './order-return.component.html',
@@ -24,74 +15,80 @@ export interface ITicket {
 
 export class OrderReturnComponent implements OnInit {
   @Input() isNotMobile;
+
   @Output() closeDialog = new EventEmitter<boolean>();
 
   order: any;
   orderLine: any;
-  ticket: ITicket = {
-    desc: {
-      day: {
-        time_slot: '',
-        day_slot: ''
-      },
-      address_id: ''
-    }
-  };
   addressObject;
-  dateObject;
-  timeReturn: string;
-  constructor( private httpService: HttpService, private location: Location,
+
+  constructor(private httpService: HttpService, private location: Location,
     private snackBar: MatSnackBar,
     private progressService: ProgressService,
-    private profileOrderService: ProfileOrderService) { }
+    private dialogRef: MatDialogRef<OrderReturnComponent>,
+    private profileOrderService: ProfileOrderService,
+    @Inject(MAT_DIALOG_DATA) private data: any, private responsiveService: ResponsiveService) {
+  }
 
   ngOnInit() {
-    this.order = {_id: this.profileOrderService.orderData.order.orderId};
-    this.orderLine = {_id: this.profileOrderService.orderData.orderLine.order_line_id};
-  }
-  cancelReturnOrder() {
-    if (this.isNotMobile) {
-      this.closeDialog.emit(false);
-    } else {
-      this.location.back();
-    }
+    this.order = this.data.order;
+    this.orderLine = this.data.orderLine;
   }
 
+  cancelReturnOrder() {
+    if (this.responsiveService.isMobile) {
+      this.location.back();
+    } else {
+      this.dialogRef.close(true);
+    }
+
+  }
 
   addressSelected(address) {
     this.addressObject = address;
+
   }
 
   setReturnOrder() {
-    this.ticket.desc.address_id = this.addressObject._id;
-    this.ticket.desc.day.time_slot = this.timeReturn;
-    this.ticket.desc.day.day_slot =  moment(this.dateObject, 'jYYYY/jM/jD').format('YYYY-M-D hh:mm:ss');
+    if (!this.order) {
+      this.snackBar.open('سفارش مشخص نیست', null, {
+        duration: 2000,
+      });
+      return;
+    }
     this.progressService.enable();
-    this.httpService.post('order/return', {orderId: this.order._id, orderLineId: this.orderLine._id, desc: this.ticket.desc}).subscribe(
+    this.httpService.post('order/return', {
+      orderId: this.order._id,
+      orderLineId: this.orderLine ? this.orderLine.order_line_id : null,
+      addressId: this.addressObject._id
+    }).subscribe(
       data => {
-        this.snackBar.open('عمیلات با موفقیت انجام گردید.', null, {
+        this.snackBar.open('عملیات با موفقیت انجام گردید.', null, {
           duration: 2000,
         });
-        this.changeOrderLine(this.orderLine);
-        if (this.isNotMobile) {
-          this.closeDialog.emit(false);
-        } else {
+
+        if (this.responsiveService.isMobile) {
           this.location.back();
+        } else {
+          this.dialogRef.close(true);
         }
         this.progressService.disable();
-      },
-    );
+        this.profileOrderService.getAllOrders();
+       
+      }
+      , err => {
+        this.snackBar.open('خطا به هنگام درخواست بازگشت سفارش.', null, {
+          duration: 2000,
+        });
+        if (this.responsiveService.isMobile) {
+          this.location.back();
+        } else {
+          this.dialogRef.close(true);
+        }
+        this.progressService.disable();
+
+      });
   }
 
-  changeOrderLine(ol) {
-    const updateOrderLines = [];
-    this.profileOrderService.orderData.order.dialog_order.order_lines.forEach(el => {
-      if (el.order_line_id === ol._id) {
-        el['returnFlag'] = true;
-        updateOrderLines.push(el);
-      } else updateOrderLines.push(el);
-    });
-    this.profileOrderService.orderData.order.dialog_order.order_lines = updateOrderLines;
-  }
 
 }

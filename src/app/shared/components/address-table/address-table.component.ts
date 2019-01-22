@@ -62,6 +62,7 @@ export class AddressTableComponent implements OnInit {
   async ngOnInit() {
     this.durations = await this.checkoutService.getDurations();
     this.withDelivery = this.checkoutService.withDelivery;
+    this.changeWithDelivery();
     this.selectedCustomerAddress = this.checkoutService.selectedCustomerAddress;
     this.selectedWarehouseAddress = this.checkoutService.selectedWarehouseAddress;
     this.setAddressDataForService();

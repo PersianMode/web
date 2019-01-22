@@ -11,8 +11,8 @@ mat-cell {
   visibility: hidden;
 }
 .imgWrapper{
-  width: 72px;
-  height: 72px;
+  width: 72px !important;
+  height: 72px !important;
   margin: 10px;
   text-align: left;
   max-height: 72px;

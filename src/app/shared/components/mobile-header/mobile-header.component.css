@@ -107,14 +107,16 @@
   color: gray;
   background-color: white;
   text-align: center;
+  font-weight: bold;
 }
 
 .menu-static-title {
   color: #8d8d8d;
   background-color: white;
-  font-family: irankharazmi;
+  font-family: iranyekan, sans-serif;
   padding: 10px;
   text-align: right !important;
+  font-weight: bold;
 }
 
 .mat-drawer-backdrop.mat-drawer-shown {

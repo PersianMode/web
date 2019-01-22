@@ -15,4 +15,5 @@ export let links: any[] = [
   {address: '/agent/internal_delivery', access: [AccessLevel.SalesManager]},
   {address: '/agent/deliverycost/free/option', access: [AccessLevel.SalesManager]},
   {address: '/agent/refund_bank', access: [AccessLevel.SalesManager]},
+  {address: '/agent/daily_report', access: [AccessLevel.SalesManager]},
 ];

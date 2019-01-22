@@ -41,9 +41,11 @@ export class SummaryComponent implements OnInit, OnChanges {
 
   @Input() disabled;
   @Input() productsData;
+
   @Output() recalculateDiscount = new EventEmitter();
   private _total: any;
   private _discount: any = 0;
+  used_coupon_code = '';
   discountValue: any = 0;
   totalValue: any = 0;
   balanceValue: any = 0;
@@ -58,6 +60,12 @@ export class SummaryComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.cartService.used_coupon_code$.subscribe(data => {
+      this.used_coupon_code = data;
+      if (this.used_coupon_code)
+        this.recalculateDiscount.emit();
+    });
+
     this.authService.isLoggedIn.subscribe(
       (data) => this.isLoggedIn = this.authService.userIsLoggedIn(),
       (err) => {
@@ -77,7 +85,7 @@ export class SummaryComponent implements OnInit, OnChanges {
     this.cartService.cartItems.subscribe(() => {
       if (this.productsData) {
         this.total = this.checkoutService.calculateTotal(this.productsData);
-        this.discount = this.cartService.calculateDiscount(this.productsData, !!this.coupon_code);
+        this.discount = this.cartService.calculateDiscount(this.productsData);
       }
     });
   }
@@ -91,6 +99,12 @@ export class SummaryComponent implements OnInit, OnChanges {
   }
 
   applyCoupon() {
+    if (this.used_coupon_code) {
+      // false is a signal to let the cart component and service
+      // know that they have to clear the used coupon code field
+      this.recalculateDiscount.emit(false);
+      return;
+    }
     this.cartService.addCoupon(this.coupon_code)
       .then(res => {
         this.recalculateDiscount.emit(res);

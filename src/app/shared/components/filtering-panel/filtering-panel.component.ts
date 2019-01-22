@@ -7,7 +7,6 @@ import {DictionaryService} from '../../services/dictionary.service';
 import * as ntc from 'ntcjs';
 
 
-
 @Component({
   selector: 'app-filtering-panel',
   templateUrl: './filtering-panel.component.html',
@@ -40,23 +39,48 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   selectedMinDiscountFormatted = '';
   selectedMaxDiscountFormatted = '';
   filter_options$: any;
+  side_options$: any;
+  sideOptions: any[] = [];
+  moreSides = false;
+  allCount = '';
 
- 
   constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
-
-    
     this.isEU = this.productService.collectionIsEU;
     this.isEUSubescriber = this.productService.collectionIsEUObject.subscribe(value => this.isEU = value);
+    this.side_options$ = this.productService.side$.subscribe(r => {
+      this.sideOptions = [];
+      r.filter(o => o.name === 'Category')
+        .forEach((o, i) => o.values.forEach((v, j) => {
+          const count = this.productService.countProducts(o.name, v);
+          if (count) {
+            this.sideOptions.push({
+              fa: o.values_fa[j],
+              name: o.name,
+              value: v,
+              count,
+              countFa: count.toLocaleString('fa'),
+            });
+          }
+        }));
+      this.sideOptions.sort((x, y) => y.count - x.count);
+      this.isChecked.main = {all: true};
+      this.allCount = this.productService.countProducts().toLocaleString('fa');
+    });
 
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
+      this.allCount = this.productService.countProducts().toLocaleString('fa');
       this.filter_options = r;
-    
-      
       this.filter_options.forEach(el => {
-      const found = this.current_filter_state.find(cfs => cfs.name === el.name);
+        if (this.sideOptions.length) {
+          this.sideOptions.forEach(so => {
+            so.count = this.productService.countProducts(so.name, so.value);
+            so.countFa = so.count.toLocaleString('fa');
+          });
+        } else this.productService.side$.next(r);
+        const found = this.current_filter_state.find(cfs => cfs.name === el.name);
         if (!found) {
           this.current_filter_state.push({name: el.name, values: []});
         }
@@ -70,12 +94,12 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       let prices: any = r.find(fo => fo.name === 'price');
       if (prices && prices.values.length) {
         prices = prices.values;
-          this.minPrice = prices[0];
-          this.maxPrice = prices[3];
+        this.minPrice = prices[0];
+        this.maxPrice = prices[3];
 
         this.rangeValues = [prices[1], prices[2]];
         this.formatPrices();
-    }
+      }
 
       const discount = r.find(fo => fo.name === 'discount');
       if (discount && discount.values.length) {
@@ -91,7 +115,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       for (const col in this.isChecked.color) if (this.isChecked.color.hasOwnProperty(col)) {
         let color;
         color = this.dict.convertColor(col);
-        if(this.dict.translateWord(col) !== 'نامعین'){
+        if (this.dict.translateWord(col) !== 'نامعین') {
           this.translatedColor[col] = ntc.name(this.dict.translateWord(col))[1];
         }
         if (color) {
@@ -119,7 +143,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.rangeValues = this.rangeValues.map(r => Math.round(r / 1000) * 1000);
     this.current_filter_state.find(r => r.name === 'price').values = this.rangeValues;
     this.formatPrices();
-    this.productService.applyFilters(this.current_filter_state, 'price');
+    this.productService.applyFilters(this.current_filter_state, 'price', false);
     this.expanded.price = true;
   }
 
@@ -134,6 +158,23 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     return this.dict.USToEU(size, 'WOMENS');
   }
 
+  sideOptionClicked(name, value) {
+    for (const k1 in this.isChecked) if (this.isChecked.hasOwnProperty(k1)) {
+      for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
+        if (k1 === 'Category')
+        if (k2 !== value) {
+          if (this.isChecked[k1][k2]) {
+            this.changeFilterState(k1, k2, false);
+            this.isChecked[k1][k2] = false;
+          }
+        } else if (!this.isChecked[k1][k2]) {
+          this.changeFilterState(k1, k2, false);
+          this.isChecked[k1][k2] = true;
+        }
+      }
+    }
+  }
+
   getValue(name, value) {
     this.isChecked[name][value] = !this.isChecked[name][value];
     this.expanded[name] = true;
@@ -143,6 +184,10 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.changeFilterState(name, value);
+  }
+
+  private changeFilterState(name, value, emit = true) {
     this.current_filter_state.forEach(el => {
       if (el.name === name) {
         if (el.values.length === 0 || el.values.findIndex(i => i === value) === -1)
@@ -155,7 +200,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       }
     });
     this.clear_box = null;
-    this.productService.applyFilters(this.current_filter_state, name);
+    this.productService.applyFilters(this.current_filter_state, name, emit);
   }
 
   clearFilters() {
@@ -173,7 +218,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
     this.sortedBy = null;
     this.sortedByChange.emit(this.sortedBy);
-
+    this.isChecked.main = {all: true};
     this.productService.applyFilters(this.current_filter_state, '');
   }
 
@@ -192,6 +237,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.filter_options$.unsubscribe();
+    this.side_options$.unsubscribe();
     this.isEUSubescriber.unsubscribe();
   }
 

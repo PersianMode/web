@@ -57,7 +57,7 @@ export class BasicInfoComponent implements OnInit {
 
 
   constructor(private authService: AuthService, private httpService: HttpService,
-              private snackBar: MatSnackBar, protected progressService: ProgressService, private dialog: MatDialog) {
+    private snackBar: MatSnackBar, protected progressService: ProgressService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -76,9 +76,9 @@ export class BasicInfoComponent implements OnInit {
       this.balance = res.balance;
       this.loyaltyPoints = res.loyalty_points;
       this.loyaltyPointsValue = res.loyalty_points * this.loyaltyValue;
-      this.balanceFa = this.balance.toLocaleString('fa');
-      this.loyaltyPointsFa = this.loyaltyPoints.toLocaleString('fa');
-      this.loyaltyPointsValueFa = this.loyaltyPointsValue.toLocaleString('fa');
+      this.balanceFa = this.balance ? this.balance.toLocaleString('fa') : '-';
+      this.loyaltyPointsFa = this.loyaltyPoints ? this.loyaltyPoints.toLocaleString('fa') : '-';
+      this.loyaltyPointsValueFa = this.loyaltyPointsValue ? this.loyaltyPointsValue.toLocaleString('fa') : '-';
     });
   }
 
@@ -201,7 +201,7 @@ export class BasicInfoComponent implements OnInit {
   }
 
   initChangePassForm() {
-    // TODO set form fiels with change_pass_obj if they have value(insted of set null every time)
+    // TODO set form fields with change_pass_obj if they have value(instead of set null every time)
     this.changePassForm = new FormBuilder().group({
       oldPass: [null, [
         Validators.required,

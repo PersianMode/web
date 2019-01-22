@@ -1,11 +1,15 @@
 <!-- barcode checker -->
-<app-barcode-checker  (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+<app-barcode-checker *ngIf="total" [trigger]="trigger" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
 
 <mat-card>
   <!-- header -->
   <mat-card-header>
-    <mat-card-title>بازگشت به انبار</mat-card-title>
-    <mat-card-subtitle>در این قسمت کالاهای مرجوع شده نمایش داده شده است</mat-card-subtitle>
+    <mat-card-title>آماده بازگشت به انبار مرکزی</mat-card-title>
+    <mat-card-subtitle>
+      <button mat-icon-button color="primary" (click)="load()" style="margin-top: 10px;">
+        <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+      </button>
+    </mat-card-subtitle>
   </mat-card-header>
 
   <!-- content -->
@@ -27,7 +31,7 @@
           <mat-header-cell *matHeaderCellDef>جزئیات</mat-header-cell>
           <mat-cell *matCellDef="let orderLine">
             <div class="imgWrapper">
-              <img [src]="getProductDetail(orderLine).thumbnailURL" (click)="showDetial(orderLine)">
+              <img [src]="getProductDetail(orderLine).thumbnailURL" style="width: 100%" (click)="showDetial(orderLine)">
             </div>
           </mat-cell>
         </ng-container>
@@ -44,10 +48,11 @@
           <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.barcode}}</span></mat-cell>
         </ng-container>
 
-        <!-- count column -->
-        <ng-container matColumnDef="count">
-          <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
-          <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
+         
+        <!-- status column -->
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef>وضعیت</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine"> {{getOrderLineStatus(orderLine)}}</mat-cell>
         </ng-container>
 
         <!-- row header -->
@@ -62,6 +67,6 @@
 
   <!-- actions -->
   <mat-card-actions>
-    <mat-paginator [length]="scanTotal" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
+    <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
   </mat-card-actions>
 </mat-card>

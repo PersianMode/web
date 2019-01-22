@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
@@ -12,6 +12,9 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
 import {TicketComponent} from '../ticket/ticket.component';
+import {SMMessageTypes} from 'app/shared/enum/sm_message';
+import {ReturnDeliveryGeneratorComponent} from './components/return-delivery-generator/return-delivery-generator.component';
+import {SmReportComponent} from './components/sm-report/sm-report.component';
 
 @Component({
   selector: 'app-sm-inbox',
@@ -25,199 +28,94 @@ import {TicketComponent} from '../ticket/ticket.component';
     ]),
   ],
 })
-export class SmInboxComponent implements OnInit, OnDestroy {
+export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
-  @Output() OnNewInboxCount = new EventEmitter();
+  @Output() OnNewSMInboxCount = new EventEmitter();
 
   displayedColumns = [
     'position',
     'customer',
-    'order_time',
+    'publish_date',
+    'desc',
+    'status',
+    'process',
+    'close'
   ];
-
-  dataSource = new MatTableDataSource();
-  expandedElement: any;
+  dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
   pageSize = 10;
-  resultsLength: Number;
+  total;
 
-  batchScanDialogRef;
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  socketObserver: any = null;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  socketSubscription: any = null;
+
+  expandedElement: any;
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private authService: AuthService,
     private socketService: SocketService,
     private progressService: ProgressService) {
+
   }
 
+
   ngOnInit() {
-    // this.load();
+    this.socketSubscription = this.socketService.getOrderLineMessage().subscribe(msg => {
+      this.load();
+    });
+  }
 
-    this.socketObserver = this.socketService.getOrderLineMessage();
-    if (this.socketObserver) {
-      this.socketObserver.subscribe(msg => {
-        // this.load();
-      });
-    }
-
+  ngAfterViewInit(): void {
+    this.load();
   }
 
   load() {
-
     this.progressService.enable();
+
+    this.expandedElement = null;
 
     const options = {
       sort: this.sort.active,
       dir: this.sort.direction,
-      type: 'inbox'
+      type: 'SMInbox'
     };
+
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
 
-    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+    this.httpService.post('search/SMMessage', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
+
       const rows = [];
-      res.data.forEach((order, index) => {
-        order['index'] = index + 1;
-        rows.push(order, {detailRow: true, order});
+      res.data.forEach((message, index) => {
+        message['position'] = index + 1;
+        rows.push(message, {detailRow: true, message});
       });
       this.dataSource.data = rows;
-      this.resultsLength = res.total ? res.total : 0;
-      console.log('-> ', this.dataSource.data);
-      this.dataSource.data.forEach((o: any) => {
-        if (o.order_lines) {
+      this.total = res.total ? res.total : 0;
+      this.total = res.total || 0;
+      this.OnNewSMInboxCount.emit(this.total);
 
-          o.order_lines.forEach(ol => {
-            const lastTicket = ol.tickets[ol.tickets.length - 1];
-            if (lastTicket.status === 10) {
-              ol.isDelivered = true;
-              ol.returnTime = lastTicket.desc.day_slot;
-            } else {
-              ol.isDelivered = false;
-            }
-          });
-        }
-      });
-      this.OnNewInboxCount.emit(res.total);
     }, err => {
       this.progressService.disable();
-      this.OnNewInboxCount.emit(0);
-      this.openSnackBar('خطا در دریافت لیست سفارش‌ها');
+      this.openSnackBar('خطا درد دریافت لیست پیام های مسئول فروش');
     });
   }
 
-
-  // getIndex(order) {
-
-  //   let index = this.dataSource.data.findIndex((elem: any) => order._id === elem._id);
-  //   if (index === 0)
-  //     index = 1;
-  //   return index;
-  // }
-
-  getDate(orderTime) {
-    return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
-  }
-
-  getProductDetail(orderLine) {
-
-    const product_color = orderLine.product_colors.find(x => x._id === orderLine.instance.product_color_id);
-    const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
-      imagePathFixer(product_color.image.thumbnail, orderLine.instance.product_id, product_color._id)
-      : null;
-    return {
-      name: orderLine.instance.product_name,
-      thumbnailURL,
-      color: product_color ? product_color.name : null,
-      color_code: product_color ? product_color.code : null,
-      size: orderLine.instance.size,
-      product_id: orderLine.instance.product_id
-    };
-  }
-
-  batchScan() {
-    this.batchScanDialogRef = this.dialog.open(BarcodeCheckerComponent, {
-      disableClose: true,
-      width: '960px',
-      height: '600px',
-    });
-    this.batchScanDialogRef.afterClosed().subscribe(res => {
-      this.load();
-    });
-
-  }
-
-  showDetial(orderLine) {
-    this.dialog.open(ProductViewerComponent, {
-      width: '400px',
-      data: this.getProductDetail(orderLine)
-    });
-  }
-
-
-  getOrderLineStatus(orderLine) {
-    if (orderLine && orderLine.tickets) {
-      const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return OrderLineStatuses.find(x => x.status === lastTicket.status).name;
-    }
-  }
-
-  showAddress(order, order_line = -1) {
-    console.log(order);
-    let finalAddress = order.address;
-    if (order_line !== -1) {
-      const ticketsOfOrderLine = order.order_lines.find(x => x.order_line_id.toString() === order_line).tickets;
-      const lastTicketOfOrderLine = ticketsOfOrderLine[ticketsOfOrderLine.length - 1];
-      if (lastTicketOfOrderLine && lastTicketOfOrderLine.status === 10) {
-        const returnAddressId = lastTicketOfOrderLine.desc.reciver_id.toString();
-        finalAddress = order.customer.addresses.find(x => x._id.toString() === returnAddressId);
-      }
-    }
-    if (!order.address) {
-      this.openSnackBar('order line has no address!');
-      return;
-    }
-
-    this.dialog.open(OrderAddressComponent, {
-      width: '400px',
-      data: {address: finalAddress, is_collect: !!order.is_collect}
-    });
-
-  }
-
-
-  isReadyForInvoice(order) {
-    // return order.order_lines.every(x => {
-    //   const lastTicket = x.tickets && x.tickets.length ? x.tickets[x.tickets.length - 1] : null;
-    //   return lastTicket && !lastTicket.is_processed && (lastTicket.status === STATUS.ReadyForInvoice ||
-    //     lastTicket.status === STATUS.WaitForInvoice);
-    // });
-  }
-
-  requestInvoice(order) {
-    this.httpService.post('order/ticket/invoice', {
-      orderId: order._id
-    }).subscribe(res => {
-      this.openSnackBar('درخواست صدور فاکتور با موفقیت انجام شد');
-    }, err => {
-      this.openSnackBar('خطا به هنگام درخواست صدور فاکتور');
-
-    });
-  }
 
   openSnackBar(message: string) {
     this.snackBar.open(message, null, {
       duration: 2000,
     });
   }
+
+
 
   onSortChange($event: any) {
     this.paginator.pageIndex = 0;
@@ -228,23 +126,97 @@ export class SmInboxComponent implements OnInit, OnDestroy {
     this.load();
   }
 
-  // ngOnDestroy(): void {
-  // if (this.socketObserver)
-  //   this.socketObserver.unsubscribe();
-  // }
+  getDate(orderTime) {
+    try {
+      return moment(orderTime).format('jYYYY/jMM/jDD HH:mm:ss');
+    } catch (err) {
+      console.log('-> error on parsing order time : ', err);
+    }
+  }
 
-  showTicket(order, orderLine) {
-    const _orderId = order._id;
-    const _orderLineId = orderLine.order_line_id;
-    this.dialog.open(TicketComponent, {
-      width: '1000px',
-      data: {_orderId, _orderLineId}
+  showAddress(order) {
+    if (!order.address) {
+      return;
+    }
+    this.dialog.open(OrderAddressComponent, {
+      width: '400px',
+      data: {address: order.address, is_collect: !!order.is_collect}
     });
   }
-  ngOnDestroy(): void {
-    if (this.socketObserver)
-      this.socketObserver.unsubscribe();
 
+  getProductDetail(message) {
+    const product_color = message.instance.product_colors.find(x => x._id === message.instance.product_color_id);
+    const thumbnailURL = (product_color && product_color.image && product_color.image.thumbnail) ?
+      imagePathFixer(product_color.image.thumbnail, message.instance.product_id, product_color._id) :
+      null;
+    return {
+      name: message.instance.product_name,
+      thumbnailURL,
+      color: product_color ? product_color.name : null,
+      color_code: product_color ? product_color.code : null,
+      size: message.instance.size,
+      product_id: message.instance.product_id
+    };
+  }
+
+
+  getCustomer(message) {
+    try {
+      if (message.customer)
+        return message.customer.first_name + ' ' + message.customer.surname;
+      else
+
+        return message.address.recipient_name + ' ' + message.address.recipient_surname;
+    } catch (err) {
+    }
+  }
+
+  showDetial(message) {
+    this.dialog.open(ProductViewerComponent, {
+      width: '400px',
+      data: this.getProductDetail(message)
+    });
+  }
+
+  getProcessTitle(message) {
+    switch (message.type) {
+      case SMMessageTypes.ReturnRequest:
+        return 'اختصاص ارسال';
+      default:
+        return '-';
+    }
+  }
+
+  process(message) {
+    let component;
+    switch (message.type) {
+      case SMMessageTypes.ReturnRequest:
+        component = ReturnDeliveryGeneratorComponent;
+        break;
+
+      default:
+        break;
+    }
+
+    this.dialog.open(component, {
+      width: '700px',
+      data: {
+        message,
+      }
+    });
+  }
+
+  close(message) {
+    this.dialog.open(SmReportComponent, {
+      width: '700px',
+      data: {
+        message,
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.socketSubscription.unsubscribe();
   }
 }
 

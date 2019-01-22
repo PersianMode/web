@@ -107,11 +107,11 @@ button:focus {
 .soldOut {
   color: #d00000;
   position: absolute;
-  transform: rotate(-45deg) translateY(-6px) translateX(8px);
+  transform: rotate(-45deg) translateY(-3px) translateX(6px);
   display: inline-block;
   z-index: 10;
-  font-weight: 400;
-  font-family: irankharazmi, sans-serif;
+  font-weight: bold;
+  font-family: iranyekan, sans-serif;
   font-size: 23px;
   opacity: .5;
 }

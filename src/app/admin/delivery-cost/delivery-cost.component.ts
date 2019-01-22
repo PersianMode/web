@@ -41,7 +41,7 @@ export class DeliveryCostComponent implements OnInit {
         eventObj.cities && eventObj.delivery_loyalty && (eventObj.is_c_and_c === false)) {
         this.showTabs = true;
       }
-      // TODO : else case to notify compelete info for select duration (navigate to form)
+      // TODO : else case to notify complete info for select duration (navigate to form)
       this.durationObject = {
         is_c_and_c: false,
         _id: eventObj._id,

@@ -117,17 +117,17 @@ export class CheckoutService {
   }
 
   finalCheck() {
+    if (!this.productData) return null;
+
     let cartItems: any = {};
-    if (this.productData) {
-      cartItems = this.productData.map(r => Object.assign({}, {
-        product_id: r.product_id,
-        product_instance_id: r.instance_id,
-        price: r.price,
-        count: r.count - (r.reserved ? r.reserved : 0),
-        quantity: r.quantity,
-        discount: r.discount
-      }));
-    }
+    cartItems = this.productData.map(r => Object.assign({}, {
+      product_id: r.product_id,
+      product_instance_id: r.instance_id,
+      price: r.price,
+      count: r.count - (r.reserved ? r.reserved : 0),
+      quantity: r.quantity,
+      discount: r.discount
+    }));
     return this.httpService.post('finalCheck', cartItems);
   }
 
@@ -176,7 +176,7 @@ export class CheckoutService {
 
   getTotalDiscount() {
     this.total = this.calculateTotal();
-    this.discount = this.cartService.calculateDiscount(this.productData, true);
+    this.discount = this.cartService.calculateDiscount(this.productData);
     return {
       total: this.total,
       discount: this.discount,
@@ -222,42 +222,36 @@ export class CheckoutService {
     }
   }
 
-  sendDataToBankGateway(data) {
+  getDataFromServerToSendBank(data) {
     return new Promise((resolve, reject) => {
-      this.httpService.post('payment', data)
+      this.httpService.post('prepareDataForBankGateway', data)
         .subscribe(res => {
             resolve(res);
           },
           err => {
-            reject();
+            reject(err);
           });
     });
   }
 
-  checkout() {
-    const data = this.accumulateData();
-    this.httpService.post('checkout', data).subscribe(res => {
-        if (!this.authService.userDetails.userId) {
-          this.ccRecipientData = null;
-          let addresses = [];
-          localStorage.removeItem('address');
-          if (!this.withDelivery) {
-            addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-          }
-          this.addresses$.next(addresses);
-        }
-        this.cartService.emptyCart();
-        this.selectedCustomerAddress = -1;
-        this.selectedWarehouseAddress = -1;
-        this.withDelivery = true;
-        this.deliveryDays = null;
-        this.deliveryTime = null;
-        this.addressObj = {};
-        this.ccRecipientData = null;
-        this.addedProvince = '';
-        this.router.navigate(['/', 'profile']);
-      },
-      err => console.error(err));
+
+  updateVariablesAfterCheckout() {
+    if (!this.authService.userDetails.userId) {
+      this.ccRecipientData = null;
+      let addresses = [];
+      if (!this.withDelivery) {
+        addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+      }
+      this.addresses$.next(addresses);
+    }
+    this.selectedCustomerAddress = -1;
+    this.selectedWarehouseAddress = -1;
+    this.withDelivery = true;
+    this.deliveryDays = null;
+    this.deliveryTime = null;
+    this.addressObj = {};
+    this.ccRecipientData = null;
+    this.addedProvince = '';
   }
 
   calculateDeliveryDiscount(durationId) {
@@ -297,7 +291,7 @@ export class CheckoutService {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.addressObj,
-      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
+      transaction_id: null,
       used_point: 0,
       used_balance: 0,
       total_amount: this.total,
@@ -330,8 +324,6 @@ export class CheckoutService {
   }
 
   accumulateDataDemo() {
-
-
     if (!this.withDelivery) {
       this.addressObj.warehouse_name = this.addressObj.name;
       this.addressObj.warehouse_id = this.warehouseAddresses.find(x => x.address._id === this.addressObj._id)._id;
@@ -352,7 +344,7 @@ export class CheckoutService {
       cartItems: this.authService.userIsLoggedIn() ? {} : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.addressObj,
-      transaction_id: 'xyz' + Math.floor(Math.random() * 100000),
+      transaction_id: `xy-${Math.floor(Math.random() * Math.floor(1000))}`,
       used_point: 0,
       used_balance: 0,
       total_amount: this.total,
@@ -364,4 +356,18 @@ export class CheckoutService {
       loyalty: this.earnSpentPointObj,
     };
   }
+
+  readPayResult(bankData) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('payResult', bankData).subscribe(
+        (data) => {
+          resolve(data);
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+    });
+  }
+
 }

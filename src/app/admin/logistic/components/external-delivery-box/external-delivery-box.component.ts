@@ -98,7 +98,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
       const rows = [];
       res.data.forEach((order, index) => {
-        order['index'] = index + 1;
+        order['position'] = index + 1;
         rows.push(order, {detailRow: true, order});
       });
       this.dataSource.data = rows;
@@ -223,6 +223,11 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   onScanOrder(order) {
     this.selectedOrder = order;
     this.expandedElement = order._id;
+  }
+
+  isAggregated(order) {
+
+      return order.total_order_lines  === order.order_lines.length;
   }
 
   ngOnDestroy(): void {

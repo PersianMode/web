@@ -8,11 +8,11 @@
       <mat-card class="card-view" (click)="select(product._id)"
                 [ngClass]="{'mat-elevation-z24': product._id === selectedId}">
         <mat-card-content>
-          <div dir="rtl" style="font-weight: bold; font-family: 'irankharazmi'">
+          <div dir="rtl" style="font-weight: bold; font-family: iranyekan, sans-serif">
             {{product.name}}
           </div>
-          <div dir="rtl" style="font-family: 'irankharazmi'">
-            <span>قیمت پایه :</span>
+          <div dir="rtl">
+            <span style="font-family:iranyekan, sans-serif">قیمت پایه :</span>
             {{product.base_price}}
           </div>
         </mat-card-content>

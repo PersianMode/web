@@ -5,6 +5,8 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {ProductService} from './product.service';
+import {getDiscounted} from '../lib/discountCalc';
+import {SpinnerService} from './spinner.service';
 
 const SNACK_CONFIG: MatSnackBarConfig = {
   duration: 3200,
@@ -14,6 +16,7 @@ const SNACK_CONFIG: MatSnackBarConfig = {
 @Injectable()
 export class CartService {
   cartItems: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  used_coupon_code$: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private localStorageKey = 'cart';
   coupon_discount = 0;
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
@@ -21,54 +24,92 @@ export class CartService {
   constructor(private httpService: HttpService,
               private authService: AuthService,
               private productService: ProductService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private spinnerService: SpinnerService) {
     this.authService.isLoggedIn.subscribe(
-      isLoggedIn => {
+      async isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
         const items = this.getItemsFromStorage();
         if (this.authService.userIsLoggedIn()) {
-
           if (items && items.length) {
-            items.forEach((el, i) => {
-              this.httpService.post('order', {
-                product_id: el.product_id,
-                product_instance_id: el.instance_id,
-                number: el.quantity,
-              })
-                .subscribe(() => {
-                    items.splice(i, 1);
-                    try {
-                      localStorage.setItem(this.localStorageKey, JSON.stringify(items));
-                    } catch (e) {
-                      console.error('could not update local storage after login', e);
-                    }
-                  },
-                  err => console.error('orders error: ', el, err)
-                );
-            });
+            for (let i = items.length - 1; i >= 0; i--) {
+              await this.saveLocalStorageCartsToServer(items[i]);
+              items.splice(i, 1);
+              try {
+                localStorage.setItem(this.localStorageKey, JSON.stringify(items));
+              } catch (e) {
+                console.error('could not update local storage after login', e);
+              }
+            }
           }
-
           this.getUserCart();
-
         } else if (items && items.length) {
           this.getItemsDetail(items);
         } else {
           this.setCartItem(null, [], false);
         }
-
-
       });
   }
+
+  async saveLocalStorageCartsToServer(item) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('order', {
+        product_id: item.product_id,
+        product_instance_id: item.instance_id,
+        number: item.quantity,
+      }).subscribe((res) => {
+          resolve(res);
+        },
+        (err) => {
+          console.error('orders error: ', item, err);
+          reject(err);
+        }
+      );
+    });
+  }
+
+  loadCartsForShopRes() {
+    const items = this.getItemsFromStorage();
+    if (this.authService.userIsLoggedIn()) {
+      this.getUserCart();
+    } else if (items && items.length) {
+      this.getItemsDetail(items);
+    }
+  }
+
 
   getUserCart() {
     this.httpService.get('cart/items').subscribe(
       res => {
+        const coup_code = res[0] && res[0]['coupon_code'] || '';
+        this.used_coupon_code$.next(coup_code);
         this.getItemsDetail(res);
+      }, err => {
+        console.error('could not load cart items: ', err);
+      });
+  }
+
+  getItemsDetail(overallDetails) {
+    this.productService.loadProducts(overallDetails.map(x => x.product_id))
+      .then(res => {
+        try {
+          this.setCartItem(overallDetails, res, false);
+        } catch (err) {
+          console.error('-> ', err);
+        }
+      })
+      .catch(err => {
+        try {
+          this.setCartItem(null, [], false);
+        } catch (err) {
+          console.error('-> ', err);
+        }
       });
   }
 
   emptyCart() {
     this.cartItems.next([]);
+    this.clearCoupon();
     if (!this.authService.userIsLoggedIn()) {
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify([]));
@@ -94,7 +135,7 @@ export class CartService {
       // Update local storage
       let tempItems = this.getItemsFromStorage();
       tempItems = tempItems.filter(el => el.product_id !== value.product_id
-        && el.instance_id !== value.instance_id);
+        || el.instance_id !== value.instance_id);
 
       try {
         localStorage.setItem(this.localStorageKey, JSON.stringify(tempItems));
@@ -177,23 +218,6 @@ export class CartService {
     }
   }
 
-  getItemsDetail(overallDetails) {
-    this.productService.loadProducts(overallDetails.map(x => x.product_id))
-      .then(res => {
-        try {
-          this.setCartItem(overallDetails, res, false);
-        } catch (err) {
-          console.error('-> ', err);
-        }
-      })
-      .catch(err => {
-        try {
-          this.setCartItem(null, [], false);
-        } catch (err) {
-          console.error('-> ', err);
-        }
-      });
-  }
 
   private setCartItem(overallDetails, products, isUpdate = true) {
     const itemList = [];
@@ -206,8 +230,8 @@ export class CartService {
     overallDetails.forEach(el => {
       if (!el.instance_id)
         el.instance_id = el._id;
-      const foundProudct = products.find(i => i._id === el.product_id);
-      if (foundProudct) {
+      const foundProduct = products.find(i => i._id === el.product_id);
+      if (foundProduct) {
         itemList.push({
           'instance_id': el.instance_id,
           'order_id': el.order_id,
@@ -221,6 +245,7 @@ export class CartService {
       this.cartItems.next(this.cartItems.getValue().concat(itemList));
     else
       this.cartItems.next(itemList);
+    if (this.used_coupon_code$.getValue()) this.addCoupon(this.used_coupon_code$.getValue());
   }
 
   private getItemsFromStorage() {
@@ -294,15 +319,24 @@ export class CartService {
     });
   }
 
-  calculateDiscount(cartData, considerCoupon = false) {
-    return cartData
-      .map(r => Object.assign({}, {
-        p: r.price ? r.price : 0,
-        d: r.discountedPrice ? r.discountedPrice : 0,
-        q: r.quantity ? r.quantity : 1,
+  calculateDiscount(cartData) {
+    if (!cartData) return;
+
+    let dc = cartData
+      .map(r => Object.assign({
+        p: r.price || 0,
+        d: r.discountedPrice || 0,
+        q: r.quantity || 1,
       }))
       .map(r => r.q * (r.p - r.d))
       .reduce((x, y) => x + y, 0);
+
+    if (this.coupon_discount >= 100) {
+      dc += this.coupon_discount;
+    } else if (this.coupon_discount > 0) {
+      dc += getDiscounted(cartData.map(r => (r.price || 0) * (r.quantity || 1)).reduce((x, y) => x + y, 0), this.coupon_discount);
+    }
+    return dc;
   }
 
   addCoupon(coupon_code = '') {
@@ -313,43 +347,55 @@ export class CartService {
       return Promise.resolve(false);
 
     return new Promise((resolve, reject) => {
-      if (this.cartItems && this.cartItems.getValue().length > 0)
+      if (this.cartItems && this.cartItems.getValue().length > 0) {
+        this.spinnerService.enable();
         this.httpService.post('coupon/code/valid', {
           product_ids: Array.from(new Set(this.cartItems.getValue().map(el => el.product_id))),
           coupon_code: coupon_code,
         }).subscribe(
-          (data) => {
+          data => {
+            this.spinnerService.disable();
             data = data[0];
-            const someItems = this.cartItems.getValue().filter(el => el.product_id === data.product_id);
-            if (someItems && someItems.length > 0) {
-              someItems.forEach(el => {
-                el['coupon_discount'] = 1 - data.discount;
-              });
-              resolve(true);
-            } else
-              reject({});
+            if (!data) {
+              this.snackBar.open('کوپن وجود ندارد یا منقضی شده است', null, {duration: 2700});
+              this.coupon_discount = 0;
+              return Promise.reject('invalid coupon');
+            }
+            this.coupon_discount = data['discount_ref'] || 0;
+            this.used_coupon_code$.next(coupon_code);
+            resolve(data);
           },
-          (err) => {
+          err => {
+            this.spinnerService.disable();
+            this.snackBar.open('کوپن وجود ندارد یا منقضی شده است', null, {duration: 2700});
+            this.coupon_discount = 0;
             reject(err);
           });
+      }
     });
   }
 
   applyCoupon(coupon_code): any {
-    if (!coupon_code)
-      return Promise.resolve();
-
     return new Promise((resolve, reject) => {
+      this.spinnerService.enable();
       this.httpService.post('coupon/code/apply', {
         coupon_code: coupon_code,
       }).subscribe(
-        (data) => {
-          resolve();
+        data => {
+          this.spinnerService.disable();
+          this.used_coupon_code$.next(coupon_code);
+          resolve(data);
         },
-        (err) => {
+        err => {
+          this.spinnerService.disable();
           reject(err);
         });
     });
+  }
+
+  clearCoupon() {
+    this.used_coupon_code$.next('');
+    this.coupon_discount = 0;
   }
 
   getCheckoutItems() {

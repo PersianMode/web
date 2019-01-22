@@ -4,14 +4,14 @@
     <!-- when agents is sales manager -->
     <ng-container *ngIf="isSalesManager">
       <!-- inbox (صندوق ورودی) -->
-      <mat-tab label="inbox">
+      <mat-tab label="sm-inbox">
         <ng-template mat-tab-label>
           <span>صندوق ورودی</span>
-          <mat-chip-list *ngIf="newInboxCount">
-            <mat-chip color="accent" selected="true">{{newInboxCount}}</mat-chip>
+          <mat-chip-list *ngIf="SMInboxCount">
+            <mat-chip color="accent" selected="true">{{SMInboxCount}}</mat-chip>
           </mat-chip-list>
         </ng-template>
-        <app-sm-inbox (OnNewInboxCount)="newInboxCount = $event"></app-sm-inbox>
+        <app-sm-inbox (OnNewSMInboxCount)="SMInboxCount = $event"></app-sm-inbox>
       </mat-tab>
 
 
@@ -62,8 +62,11 @@
       <mat-tab label="return-view" *ngIf="isHubClerk">
         <ng-template mat-tab-label>
           <span>بازگشت به انبار</span>
+          <mat-chip-list *ngIf="ReturnDeliveryBoxCount">
+            <mat-chip color="accent" selected="true">{{ReturnDeliveryBoxCount}}</mat-chip>
+          </mat-chip-list>
         </ng-template>
-        <app-return-to-warehouse-box></app-return-to-warehouse-box>
+        <app-return-to-warehouse-box (OnReturnDeliveryBoxCount)="ReturnDeliveryBoxCount = $event"></app-return-to-warehouse-box>
       </mat-tab>
 
 

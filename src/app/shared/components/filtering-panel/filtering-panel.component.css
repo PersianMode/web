@@ -1,20 +1,22 @@
-.check-box-text{
-    font-size: 13px;
-    margin-right: 10px;
-    opacity: 1 !important;
+.check-box-text {
+  font-size: 13px;
+  font-weight: 100;
+  margin-right: 10px;
+  opacity: 1 !important;
 }
 
 .check-box-text:hover {
-    color: gray;
+  color: gray;
 }
 
-.circle{
+.circle {
   top: -27px;
   right: 3px;
   font-size: 13px;
   position: relative;
   display: table;
 }
+
 .color-span {
   width: 26px;
   overflow: hidden;
@@ -24,43 +26,49 @@
 }
 
 .fit-check-box {
-    margin-right: -10px
+  margin-right: -10px
 }
 
 .fit-check-box-mobile {
-    margin-right: -5px
+  margin-right: -5px
 }
 
 .set-size-mobile {
-    font-size: xx-small;
+  font-size: xx-small;
 }
+
 .checkbox-title {
   font-weight: bold;
   padding-bottom: 5px;
   display: inline-block;
   font-size: 14px;
-  font-family: irankharazmi;
+  font-family: iranyekan, sans-serif;
 }
+
 .actions {
   text-align: center;
 }
+
 .sort {
   font-size: 14px;
   margin-right: 10px;
 }
+
 .sorter {
   padding: 10px 0px;
 }
-.slider{
+
+.slider {
   margin: 10px;
 }
-@media(min-width: 960px) {
+
+@media (min-width: 960px) {
   .slider {
     text-align: left;
   }
 }
 
-@media(max-width: 959px){
+@media (max-width: 959px) {
   .slider {
     text-align: right;
   }

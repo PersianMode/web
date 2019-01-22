@@ -35,11 +35,11 @@ export class CartItemsComponent implements OnInit {
     this.valid.emit(!this.notExist);
 
     this.displayQuantity = this.dict.translateWord(this.product.quantity);
-    this.displayPrice = '@ ' + priceFormatter(this.product.price) + ' تومان';
-    this.discountedPrice = '@ ' + priceFormatter(this.product.discountedPrice) + ' تومان';
-    this.displayTotalPrice = priceFormatter(this.product.quantity * this.product.price) + ' تومان';
-    this.totalDiscountedPrice = priceFormatter(this.product.quantity * this.product.discountedPrice) + ' تومان';
-    this.color =  this.dict.translateColor(this.product.color);
+    this.displayPrice = '@ ' + priceFormatter(this.product.price || 0) + ' تومان';
+    this.discountedPrice = '@ ' + priceFormatter(this.product.discountedPrice || 0) + ' تومان';
+    this.displayTotalPrice = priceFormatter((this.product.quantity * this.product.price) || 0) + ' تومان';
+    this.totalDiscountedPrice = priceFormatter((this.product.quantity * this.product.discountedPrice) || 0) + ' تومان';
+    this.color = this.dict.translateColor(this.product.color);
 
     this.auth.isLoggedIn.subscribe(() => {
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
@@ -61,7 +61,7 @@ export class CartItemsComponent implements OnInit {
     rmDialog.afterClosed().subscribe(
       (data) => {
         if (data) {
-          this.updateProduct.emit({type: 'update', value: data});
+          this.updateProduct.emit({type: 'update', value: data, });
         }
       },
       (err) => {

@@ -1,0 +1,22 @@
+<form (ngSubmit)="setReport()" [formGroup]="form">
+  <mat-card dir="rtl">
+    <mat-card-title>
+      <h3>ثبت گزارش
+      </h3>
+    </mat-card-title>
+    <mat-card-content>
+      <mat-input-container style="width:100%">
+        <textarea matInput placeholder="گزارش" formControlName="report"></textarea>
+        <mat-hint>گزارش را وادر کنید</mat-hint>
+        <mat-error *ngIf="form.controls['report'].hasError('required')">وادر کردن گزارش پیام الزامی است
+        </mat-error>
+      </mat-input-container>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" type="submit" [disabled]="!form.valid">{{'ثبت
+        اطلاعات'}}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+</form>

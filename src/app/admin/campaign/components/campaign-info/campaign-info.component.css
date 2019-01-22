@@ -1,33 +1,38 @@
-.row{
-    margin: 0px 10px;
+.row {
+  margin: 0px 10px;
 }
 
-.field-container{
-    width: 100%;
-    margin: 5px;
+.field-container {
+  width: 100%;
+  margin: 5px;
 }
 
-.field{
-    width: 100%;
+.field {
+  width: 100%;
 }
 
-.farsi{
-    direction:rtl;
+.farsi {
+  direction: rtl;
 }
 
 .dob {
-    padding: 5px;
-    border: 2px solid rgb(229, 229, 229);
-    border-radius: 5px;
-    margin-left: 5px;
-    width: calc(100% - 7px);
-  }
-  mat-card-content{
-    font-family: iranyekan, sans-serif !important;
-  }
-  
-  td{
-    text-align: center;
-    font-family: iranyekan, sans-serif;
+  padding: 5px;
+  border: 2px solid rgb(229, 229, 229);
+  border-radius: 5px;
+  margin-left: 5px;
+  width: calc(100% - 7px);
+}
 
+mat-card-content {
+  font-family: iranyekan, sans-serif !important;
+}
+
+td {
+  text-align: center;
+  font-family: iranyekan, sans-serif;
+}
+
+.percent-toman {
+  margin-top: 20px !important;
+  display: block;
 }
