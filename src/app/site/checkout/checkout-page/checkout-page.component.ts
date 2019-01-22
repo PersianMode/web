@@ -14,6 +14,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {DOCUMENT, Location} from '@angular/common';
 import {SpinnerService} from '../../../shared/services/spinner.service';
 import {priceFormatter} from '../../../shared/lib/priceFormatter';
+import {FREE_DELIVERY_AMOUNT} from 'app/shared/enum/delivery.enum';
 
 @Component({
   selector: 'app-checkout-page',
@@ -96,6 +97,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.productService.loadProducts(productIds).then((data: any[]) => {
         this.loadAndFillProductsAndPrice(carts, data);
         this.calculateEarnPoint();
+        this.checkoutService.getTotalDiscount();
         this.spinnerService.disable();
       }).catch(err => {
         this.spinnerService.disable();
@@ -106,7 +108,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.finalCheckItems();
 
     this.checkoutService.isValid$.subscribe(r => {
-      this.disabled = !(r && (this.soldOuts || !this.soldOuts.length));
+      this.disabled = !(r && (!this.soldOuts || !this.soldOuts.length));
     });
 
     this.setPoints();
@@ -118,6 +120,9 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
     // this.checkoutService.setPaymentType(this.paymentType.cash);
     this.checkoutService.setPaymentType(this.paymentType[this.selectedPaymentType]);
+
+    if (this.checkoutService.deliveryDurationId)
+      this.calculateDiscount(this.checkoutService.deliveryDurationId);
   }
 
   loadAndFillProductsAndPrice(carts, data) {
@@ -275,6 +280,11 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   calculateDiscount(durationId) {
+    if (this.total - this.discount >= FREE_DELIVERY_AMOUNT) {
+      this.deliveryCost = 0;
+      this.deliveryDiscount = 0;
+      return;
+    }
     if (durationId) {
       this.checkoutService.calculateDeliveryDiscount(durationId)
         .then((res: any) => {
@@ -345,7 +355,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
   checkout() {
     const orderData: any = this.checkoutService.accumulateData();
-    const IdArray = ['invoiceNumber',
+    const IdArray = [
+      'invoiceNumber',
       'invoiceDate',
       'amount',
       'terminalCode',
@@ -355,7 +366,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       'action',
       'mobile',
       'email',
-      'sign'];
+      'sign'
+    ];
 
     this.finalCheckItems()
       .then(res => {

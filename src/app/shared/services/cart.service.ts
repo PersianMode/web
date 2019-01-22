@@ -322,7 +322,7 @@ export class CartService {
   calculateDiscount(cartData) {
     if (!cartData || !cartData.length) return;
 
-    let base = cartData.map(r => (r.price || 0) * (r.quantity || 1)).reduce((x, y) => x + y, 0);
+    const base = cartData.map(r => (r.price || 0) * (r.quantity || 1)).reduce((x, y) => x + y, 0);
     let dc = cartData
       .map(r => Object.assign({
         p: r.price || 0,
@@ -352,12 +352,10 @@ export class CartService {
       if (this.cartItems && this.cartItems.getValue().length > 0) {
         this.spinnerService.enable();
         this.httpService.post('coupon/code/valid', {
-          product_ids: Array.from(new Set(this.cartItems.getValue().map(el => el.product_id))),
           coupon_code: coupon_code,
         }).subscribe(
           data => {
             this.spinnerService.disable();
-            data = data[0];
             if (!data) {
               this.snackBar.open('کوپن وجود ندارد یا منقضی شده است', null, {duration: 2700});
               this.coupon_discount = 0;

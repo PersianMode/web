@@ -52,7 +52,7 @@
     </div>
   </div>
   <div
-    *ngIf="payResult.error.result && payResult.error.result[0] === 'False' && payResult.error.resultMessage[0] === 'فاکتور ارسالي شما پيدا نشد'"
+    *ngIf="payResult.error.result && payResult.error.result[0] === 'False'  && payResult.error.resultMessage[0] === 'فاکتور ارسالي شما پيدا نشد'"
     class="cancel-div">
     <span>{{payResult.error.resultMessage[0]}}</span>
   </div>
