@@ -62,10 +62,8 @@
         <div fxFlex="50" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
           <label> مبدا: </label>
           <mat-checkbox class="filtering-field" [ngModel]="isOrigin" (change)="changeOriginStatus()">
-                        <!--[indeterminate]="isOrigin === null">-->
             <span *ngIf="isOrigin" class="checkbox-label">انبار</span>
             <span *ngIf="isOrigin === false" class="checkbox-label"></span>
-            <!--<span *ngIf="isOrigin === null" class="checkbox-label">همه موارد</span>-->
           </mat-checkbox>
           <mat-input-container *ngIf="isOrigin === false">
             <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
@@ -82,10 +80,8 @@
         <div fxFlex="50" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
           <label> مقصد: </label>
           <mat-checkbox class="filtering-field" [ngModel]="isDestination" (change)="changeDestinationStatus()">
-                        <!--[indeterminate]="isDestination === null">-->
             <span *ngIf="isDestination" class="checkbox-label">انبار</span>
             <span *ngIf="isDestination === false" class="checkbox-label"></span>
-            <!--<span *ngIf="isDestination === null" class="checkbox-label">همه موارد</span>-->
           </mat-checkbox>
           <mat-input-container *ngIf="isDestination === false">
             <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
@@ -98,9 +94,7 @@
               </option>
             </select>
           </span>
-
         </div>
-
       </div>
 
     </div>
@@ -110,18 +104,6 @@
           <mat-header-cell *matHeaderCellDef class="header">ردیف</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content"> {{element.index}}</mat-cell>
         </ng-container>
-
-        <!--<ng-container matColumnDef="end">-->
-        <!--<mat-header-cell *matHeaderCellDef mat-sort-header class="header">تاریخ دریافت</mat-header-cell>-->
-        <!--<mat-cell *matCellDef="let element" class="content" [style.color]="isAfterMaxValidEndDate(element._id) ? 'red' : 'black'">-->
-        <!--{{element.end}} </mat-cell>-->
-        <!--</ng-container>-->
-
-        <!--<ng-container matColumnDef="min_slot">-->
-        <!--<mat-header-cell *matHeaderCellDef mat-sort-header class="header">بازه دریافتی مطلوب</mat-header-cell>-->
-        <!--<mat-cell *matCellDef="let element" class="content"> {{element.min_slot?.lower_bound}} - -->
-        <!--{{element.min_slot?.upper_bound}}</mat-cell>-->
-        <!--</ng-container>-->
 
         <ng-container matColumnDef="delivery_agent">
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مسئول ارسال</mat-header-cell>
@@ -142,12 +124,22 @@
           </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="receiver_sender_name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">گیرنده: نام مشتری / فروشگاه
+        <ng-container matColumnDef="sender_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مبدا
+          </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="content">
+            <span *ngIf="element.from_customer_name">{{element.from_customer_name}}</span>
+            <span *ngIf="!element.from_customer_name">{{element.from_warehouse_name}}</span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="receiver_name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مقصد
           </mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">
             <span *ngIf="element.to_customer_name">{{element.to_customer_name}}</span>
-            <span *ngIf="!element.to_customer_name">{{element.to_warehouse_name}}</span>
+            <span *ngIf="element.to_warehouse_name">{{element.to_warehouse_name}}</span>
+            <span *ngIf="!element.to_warehouse_name && !element.to_customer_name">{{element.to_recipient}}</span>
           </mat-cell>
         </ng-container>
 
@@ -160,15 +152,6 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header class="header">وضعیت</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">{{getDeliveryStatus(element)}}</mat-cell>
         </ng-container>
-
-        <!--<ng-container matColumnDef="tracking">-->
-        <!--<mat-header-cell *matHeaderCellDef class="header">رهگیری</mat-header-cell>-->
-        <!--<mat-cell *matCellDef="let element" class="content details-button">-->
-        <!--<div (click)="showTracking(element._id)">-->
-        <!--<mat-icon color="primary">zoom_in</mat-icon>-->
-        <!--</div>-->
-        <!--</mat-cell>-->
-        <!--</ng-container>-->
 
         <ng-container matColumnDef="view_details" *ngIf="isSalesManager">
           <mat-header-cell *matHeaderCellDef class="header">نمایش جزئیات</mat-header-cell>
@@ -195,8 +178,14 @@
                   </p>
                 </td>
                 <td>
+                  <p style="margin: 10px">
+                    <b>نام مشتری: </b>{{ol.to_customer_name ? ol.to_customer_name : ol.to_recipient}}
+                  </p>
+                </td>
+                <td>
                   <button mat-button color="primary" (click)="showOrderLine(ol.order_lines)">نمایش</button>
                 </td>
+
               </tr>
 
             </table>

@@ -121,33 +121,17 @@
     <hr />
     <div fxLayout="row" fxLayoutAlign="start center">
       <div fxFlex="30" class="header-label">
-        <label>زمان ارسال</label>
+        <label>زمان پیش فرض ارسال</label>
       </div>
       <div fxFlex="70">
         <div>
           <div class="address-part address-title">تاریخ</div>
           <div class="address-part">{{getFormattedDate(start_date)}}</div>
         </div>
-        <div>
-          <div class="address-part address-title">ساعت</div>
-          <div class="address-part">{{start_time.h || '-'}} : {{start_time.m || '-'}}</div>
-        </div>
-      </div>
-    </div>
-    <hr />
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <div fxFlex="30" class="header-label">
-        <label>زمان دریافت</label>
-      </div>
-      <div fxFlex="70">
-        <div>
-          <div class="address-part address-title">تاریخ</div>
-          <div class="address-part">{{getFormattedDate(end_date)}}</div>
-        </div>
-        <div>
-          <div class="address-part address-title">ساعت</div>
-          <div class="address-part">{{end_time.h || '-'}} : {{end_time.m || '-'}}</div>
-        </div>
+        <!--<div>-->
+          <!--<div class="address-part address-title">ساعت</div>-->
+          <!--<div class="address-part">{{start_time.h || '-'}} : {{start_time.m || '-'}}</div>-->
+        <!--</div>-->
       </div>
     </div>
     <hr />

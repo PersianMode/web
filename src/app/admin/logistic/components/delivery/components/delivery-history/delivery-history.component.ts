@@ -25,7 +25,8 @@ export interface DeliveryItem {
   delivery_end: Date;
   is_return: Boolean;
   is_delivered: Boolean;
-  receiver_sender_name: String;
+  sender_name: String;
+  receiver_name: String;
 }
 
 @Component({
@@ -52,19 +53,18 @@ export class DeliveryHistoryComponent implements OnInit {
   pageSize = 10;
   totalRecords = 0;
   selection = null;
-  sortColumn = null;
+  senderColumn = null;
+  receiverColumn = null;
   direction = 'asc';
   selectedDelivery = null;
   deliveryItems = null;
   displayedColumns = [
     'position',
-    // 'end',
-    // 'min_slot',
     'delivery_agent',
-    'receiver_sender_name',
+    'sender_name',
+    'receiver_name',
     'shelf_code',
     'is_delivered',
-    // 'tracking',
     'view_details',
   ];
   deliveryAgentList = [];
@@ -127,7 +127,7 @@ export class DeliveryHistoryComponent implements OnInit {
         this.recipient = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();
       }, err => {
-        console.error('Couldn\'t refresh when receiver name is changed: ', err);
+        console.error('Couldn\'t refresh when recipient name is changed: ', err);
       }
     );
 
@@ -154,7 +154,8 @@ export class DeliveryHistoryComponent implements OnInit {
 
     this.sort.sortChange.subscribe(
       data => {
-        this.sortColumn = data.active === 'receiver_sender_name' ? 'name' : data.active;
+        this.senderColumn = data.active === 'sender_name' ? 'name' : data.active;
+        this.receiverColumn = data.active === 'receiver_name' ? 'name' : data.active;
         this.direction = data.direction;
         this.getDeliveryItems();
       }
@@ -178,7 +179,8 @@ export class DeliveryHistoryComponent implements OnInit {
   getDeliveryItems() {
     this.progressService.enable();
     const options = {
-      sort_column: this.sortColumn,
+      senderColumn: this.senderColumn,
+      receiverColumn: this.receiverColumn,
       agentName: this.agentName,
       transferee: this.transferee,
       direction: this.direction,
@@ -189,7 +191,6 @@ export class DeliveryHistoryComponent implements OnInit {
       fromWarehouse: this.fromWarehouse,
       toWarehouse: this.toWarehouse,
       recipient: this.recipient,
-      // isReturn: this.isReturn,
 
       sort: this.sort.active,
       dir: this.sort.direction,
@@ -216,7 +217,7 @@ export class DeliveryHistoryComponent implements OnInit {
                 preOrderData.order_lines.push(x)
               } else {
                 order_data.push(Object.assign(foundOrder, {order_lines: [x]}, {transaction_id: delivery.transaction_id},
-                  {order_time: delivery.order_time}));
+                  {order_time: delivery.order_time}, {to_customer_name: delivery.to_customer_name}, {to_recipient: delivery.to_recipient}));
               }
             });
 
@@ -254,41 +255,6 @@ export class DeliveryHistoryComponent implements OnInit {
       }
     );
   }
-
-  // setDataSource(data) {
-  //   let counter = this.offset;
-  //   const tempData = [];
-  //
-  //   data.forEach(el => {
-  //     tempData.push({
-  //       _id: el._id,
-  //       is_return: el.is_return,
-  //       position: ++counter,
-  //       min_slot: el.min_slot ? el.min_slot : null,
-  //       delivery_agent: el.delivery_agent,
-  //       shelf_code: el.shelf_code,
-  //       order_line_count: el.order_line_count,
-  //       is_internal: el.is_internal,
-  //       start: el.start ? moment(el.start).format('YYYY-MM-DD') : null,
-  //       end: el.end ? moment(el.end).format('YYYY-MM-DD') : null,
-  //       delivery_start: el.delivery_start ? moment(el.delivery_start).format('YYYY-MM-DD') : null,
-  //       delivery_end: el.delivery_end ? moment(el.delivery_end).format('YYYY-MM-DD') : null,
-  //       receiver_sender_name: el.is_return
-  //         ? (el.from.customer ? (el.from.customer.first_name + ' ' + el.from.customer.surname) : null)
-  //         // : (Object.keys(el.to.customer || {}).length ? (el.to.customer.first_name + ' ' + el.to.customer.surname)
-  //         : (el.to_warehouse_name),
-  //       is_delivered: this.deliveryIsDone(el),
-  //       last_ticket: el.last_ticket,
-  //       to: el.to,
-  //       from: el.from,
-  //       to_customer_name: el.to_customer_name,
-  //       to_warehouse_name: el.to_warehouse_name
-  //     });
-  //   });
-  //
-  //   this.dataSource = tempData;
-  //   console.log('datasource:', this.dataSource);
-  // }
 
   changePageSetting(data) {
     this.limit = data.pageSize ? data.pageSize : 10;
@@ -339,23 +305,21 @@ export class DeliveryHistoryComponent implements OnInit {
       this.isDelivered = false;
     else if (this.isDelivered === false)
       this.isDelivered = null;
-
     this.getDeliveryItems();
   }
 
   changeOriginStatus() {
-   if (this.isOrigin === true) {
+    if (this.isOrigin === true) {
       this.isOrigin = false;
     } else if (this.isOrigin === false) {
       this.isOrigin = true;
     }
-
     this.getDeliveryItems();
   }
 
   changeDestinationStatus() {
 
-      if (this.isDestination === true) {
+    if (this.isDestination === true) {
       this.isDestination = false;
     } else if (this.isDestination === false) {
       this.isDestination = true;
@@ -364,17 +328,6 @@ export class DeliveryHistoryComponent implements OnInit {
     this.getDeliveryItems();
   }
 
-  changeReturnStatus() {
-    if (this.isReturn === null) {
-      this.isReturn = true;
-    } else if (this.isReturn === true) {
-      this.isReturn = false;
-    } else if (this.isReturn === false) {
-      this.isReturn = null;
-    }
-
-    this.getDeliveryItems();
-  }
 
   changeDeliveryAgentStatus() {
     if (this.missDeliveryAgent === null) {
@@ -386,15 +339,6 @@ export class DeliveryHistoryComponent implements OnInit {
     }
 
     this.getDeliveryItems();
-  }
-
-  deliveryIsDone(item) {
-    // return item.status_list && item.status_list.find(el => el.is_processed && el.status === STATUS.Delivered);
-  }
-
-  isAfterMaxValidEndDate(id) {
-    const delItem = this.deliveryItems.find(el => el._id === id);
-    return delItem.min_end ? moment(delItem.end, 'YYYY-MM-DD').isAfter(moment(delItem.min_end, 'YYYY-MM-DD')) : false;
   }
 
   deliveryAgentChange(deliveryId, data) {
@@ -456,6 +400,8 @@ export class DeliveryHistoryComponent implements OnInit {
   showOrderLine(orderLines) {
     this.dialog.open(OrderLineViewerComponent, {
       width: '800px',
+      height: '400px',
+      autoFocus: false,
       data: orderLines
     });
   }
