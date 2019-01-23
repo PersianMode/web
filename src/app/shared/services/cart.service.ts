@@ -377,6 +377,8 @@ export class CartService {
 
   // final application of coupon on order
   applyCoupon(coupon_code): any {
+    if (!coupon_code)
+      return;
     return new Promise((resolve, reject) => {
       this.spinnerService.enable();
       this.httpService.post('coupon/code/apply', {
