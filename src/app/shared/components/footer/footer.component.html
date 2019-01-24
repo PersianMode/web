@@ -12,7 +12,15 @@
           </div>
         </div>
         <div fxFlex="40" class="e-nemad-wrapper">
-          <img src="https://trustseal.enamad.ir/logo.aspx?id=100023&p=5JCVzc2aDSrCH87p" alt="" onclick="window.open('https://trustseal.enamad.ir/Verify.aspx?id=100023&p=5JCVzc2aDSrCH87p','Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')" style="cursor:pointer" id="5JCVzc2aDSrCH87p" class="e-nemad">
+
+          <img *ngIf="getDNSNumber() === 1" src="https://trustseal.enamad.ir/logo.aspx?id=100023&p=5JCVzc2aDSrCH87p"
+            alt="" onclick="window.open('https://trustseal.enamad.ir/Verify.aspx?id=100023&p=5JCVzc2aDSrCH87p','Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')"
+            style="cursor:pointer" id="5JCVzc2aDSrCH87p" class="e-nemad">
+
+          <img *ngIf="!isFirstDNS() === 2" src="https://trustseal.enamad.ir/logo.aspx?id=115846&p=JVmqzKEeVv9Kg4Vj" alt=""
+            onclick="window.open('https://trustseal.enamad.ir/Verify.aspx?id=115846&p=JVmqzKEeVv9Kg4Vj','Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')"
+            style="cursor:pointer" id="JVmqzKEeVv9Kg4Vj">
+
         </div>
         <div fxFlex="30" class="icons-outer-div">
           <div class="icons-inner-div">
