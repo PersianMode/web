@@ -67,7 +67,7 @@
           </mat-checkbox>
           <mat-input-container *ngIf="isOrigin === false">
             <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
-                   [formControl]="receiverSearchCtrl">
+                   [formControl]="SenderSearchCtrl">
           </mat-input-container>
           <span class="style-select-wrapper" *ngIf="isOrigin">
             <select class="select-style" formControlName="fromWarehouseId"
@@ -85,7 +85,7 @@
           </mat-checkbox>
           <mat-input-container *ngIf="isDestination === false">
             <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
-                   [formControl]="SenderSearchCtrl">
+                   [formControl]="receiverSearchCtrl">
           </mat-input-container>
           <span class="style-select-wrapper" *ngIf="isDestination">
             <select class="select-style" formControlName="toWarehouseId"
@@ -106,7 +106,7 @@
         </ng-container>
 
         <ng-container matColumnDef="delivery_agent">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مسئول ارسال</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef class="header">مسئول ارسال</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">
             <div *ngIf="!element.is_internal">
               {{element.delivery_agent.first_name}} {{element.delivery_agent.surname}}
@@ -125,7 +125,7 @@
         </ng-container>
 
         <ng-container matColumnDef="sender_name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مبدا
+          <mat-header-cell *matHeaderCellDef class="header">فرستنده
           </mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">
             <span *ngIf="element.from_customer_name">{{element.from_customer_name}}</span>
@@ -134,22 +134,21 @@
         </ng-container>
 
         <ng-container matColumnDef="receiver_name">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">مقصد
+          <mat-header-cell *matHeaderCellDef class="header">گیرنده
           </mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">
-            <span *ngIf="element.to_customer_name">{{element.to_customer_name}}</span>
             <span *ngIf="element.to_warehouse_name">{{element.to_warehouse_name}}</span>
-            <span *ngIf="!element.to_warehouse_name && !element.to_customer_name">{{element.to_recipient}}</span>
+            <span *ngIf="element.to_recipient">{{element.to_recipient}}</span>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="shelf_code" *ngIf="isHubClerk">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">کد قفسه</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef class="header">کد قفسه</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content"> {{element.shelf_code}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="is_delivered">
-          <mat-header-cell *matHeaderCellDef mat-sort-header class="header">وضعیت</mat-header-cell>
+          <mat-header-cell *matHeaderCellDef class="header">وضعیت</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">{{getDeliveryStatus(element)}}</mat-cell>
         </ng-container>
 
@@ -179,7 +178,7 @@
                 </td>
                 <td>
                   <p style="margin: 10px">
-                    <b>نام مشتری: </b>{{ol.to_customer_name ? ol.to_customer_name : ol.to_recipient}}
+                    <b>نام مشتری: </b>{{ol.toCustomerName ? ol.toCustomerName : 'مشتری مهمان: ' + ol.toRecipientName}}
                   </p>
                 </td>
                 <td>

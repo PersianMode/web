@@ -53,8 +53,7 @@ export class DeliveryHistoryComponent implements OnInit {
   pageSize = 10;
   totalRecords = 0;
   selection = null;
-  senderColumn = null;
-  receiverColumn = null;
+  sort_column = null;
   direction = 'asc';
   selectedDelivery = null;
   deliveryItems = null;
@@ -154,8 +153,7 @@ export class DeliveryHistoryComponent implements OnInit {
 
     this.sort.sortChange.subscribe(
       data => {
-        this.senderColumn = data.active === 'sender_name' ? 'name' : data.active;
-        this.receiverColumn = data.active === 'receiver_name' ? 'name' : data.active;
+        this.sort_column = data.active === 'sort_column' ? 'name' : data.active;
         this.direction = data.direction;
         this.getDeliveryItems();
       }
@@ -179,15 +177,14 @@ export class DeliveryHistoryComponent implements OnInit {
   getDeliveryItems() {
     this.progressService.enable();
     const options = {
-      senderColumn: this.senderColumn,
-      receiverColumn: this.receiverColumn,
+      sort_column: this.sort_column,
       agentName: this.agentName,
       transferee: this.transferee,
+      sender: this.sender,
       direction: this.direction,
       startDateSearch: this.startDateSearch,
       isInternal: this.isInternal,
       isDelivered: this.isDelivered,
-      sender: this.sender,
       fromWarehouse: this.fromWarehouse,
       toWarehouse: this.toWarehouse,
       recipient: this.recipient,
@@ -212,12 +209,13 @@ export class DeliveryHistoryComponent implements OnInit {
             let order_lines = delivery.order_lines;
             order_lines.forEach(x => {
               let foundOrder = order_details.find(y => y.order_line_ids === x.order_lines_id);
-              let preOrderData = order_data.find(y => y.order_id === foundOrder.order_id)
+              let preOrderData = order_data.find(y => y.order_id === foundOrder.order_id);
               if (preOrderData) {
-                preOrderData.order_lines.push(x)
+                preOrderData.order_lines.push(x);
+                // preOrderData.push(delivery.transaction_id);
               } else {
                 order_data.push(Object.assign(foundOrder, {order_lines: [x]}, {transaction_id: delivery.transaction_id},
-                  {order_time: delivery.order_time}, {to_customer_name: delivery.to_customer_name}, {to_recipient: delivery.to_recipient}));
+                  {order_time: delivery.order_time}, {toCustomerName: delivery.toCustomerName}, {toRecipientName: delivery.toRecipientName}));
               }
             });
 
