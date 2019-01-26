@@ -7,8 +7,8 @@ import {ProductService} from '../../../../shared/services/product.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {Subject, Subscription} from 'rxjs';
 import {TitleService} from '../../../../shared/services/title.service';
-import { AuthService } from 'app/shared/services/auth.service';
-import { HttpService } from 'app/shared/services/http.service';
+import {AuthService} from 'app/shared/services/auth.service';
+import {HttpService} from 'app/shared/services/http.service';
 
 const HEADER_HEIGHT = 209;
 
@@ -78,7 +78,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
         this.pageName += '/' + params.get('l1');
       }
       if ((params.get('l2'))) {
-        this.pageName += '/'  + params.get('l2');
+        this.pageName += '/' + params.get('l2');
       }
       this.pageService.getPage(this.pageName);
       this.subscription = this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
@@ -135,8 +135,8 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   private calcWidth() {
     this.curWidth = this.responsiveService.curWidth;
     this.curHeight = this.responsiveService.curHeight;
-    this.gridWidth = Math.max((this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10, 1708);
-    this.gridHeight = this.gridWidth + 90;
+    this.gridWidth = this.responsiveService.isMobile ? this.responsiveService.curWidth - 20 : Math.max((this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10, 1708);
+    this.gridHeight = this.responsiveService.isMobile ? this.gridWidth + 60 : this.gridWidth + 90;
     this.lazyRows = this.isMobile ? 10 :
       Math.round(Math.floor(this.gridWidth / 242) *
         Math.ceil((this.window.innerHeight - 105) / 348) * 1.5);
