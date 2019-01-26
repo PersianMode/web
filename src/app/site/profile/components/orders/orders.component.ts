@@ -27,7 +27,6 @@ export class OrdersComponent implements OnInit {
     'date',
     'order_lines',
     'total_amount',
-    'discount',
     'used_point',
     'address',
     'view_details',
