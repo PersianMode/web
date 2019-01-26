@@ -2,6 +2,7 @@ import {Component, Inject, Input, OnInit} from '@angular/core';
 import {WINDOW} from '../../../shared/services/window.service';
 import {PageService} from '../../services/page.service';
 import {IPlacement} from '../../../admin/page/interfaces/IPlacement.interface';
+import {HttpService} from 'app/shared/services/http.service';
 
 @Component({
   selector: 'app-footer',
@@ -80,5 +81,12 @@ export class FooterComponent implements OnInit {
 
   getKeyList(list) {
     return Object.keys(list);
+  }
+
+  getDNSNumber() {
+    if (HttpService.Host.toLowerCase().includes('bankofstyle'))
+      return 1;
+    else if (HttpService.Host.toLowerCase().includes('lithium.style'))
+      return 2;
   }
 }
