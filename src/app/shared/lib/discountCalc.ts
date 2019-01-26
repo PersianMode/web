@@ -1,9 +1,17 @@
 const ROUNDING_FACTOR = 500;
 
 export function discountCalc(price, discount) {
-  return Math.round(price * (100 - discount) / (100 * ROUNDING_FACTOR)) * ROUNDING_FACTOR;
+  if (discount < 100)
+    return Math.round(price * (100 - discount) / (100 * ROUNDING_FACTOR)) * ROUNDING_FACTOR;
+  else
+    return Math.round((price - discount) / ROUNDING_FACTOR) * ROUNDING_FACTOR;
+
 }
 
 export function getDiscounted(price, discount) {
-  return Math.round(price * discount / (100 * ROUNDING_FACTOR)) * ROUNDING_FACTOR;
+  if (discount < 100)
+    return Math.round(price * discount / (100 * ROUNDING_FACTOR)) * ROUNDING_FACTOR;
+  else
+    return Math.round(discount / ROUNDING_FACTOR) * ROUNDING_FACTOR;
+
 }

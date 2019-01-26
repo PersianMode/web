@@ -15,45 +15,31 @@
         <div fxFlex="75" class="order-data-div">
           <div fxLayout="row" fxLayoutAlign="center top" style="height : 100%">
             <div fxFlex="70">
-              <div>
-                <h3>
-                  <a (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">{{ol.product.name}}</a>
-                </h3>
-              </div>
+             
+              <h3>
+                <a (click)="navigateToProduct(ol.product._id, ol.boughtColor._id)">{{ol.product.name}}</a>
+              </h3>
+              
 
               <div fxLayout="row" fxLayout.xs="column" dir="rtl">
                 <div fxFlex="50">
                   <span>اندازه : </span>
-                  <span>{{ol.product_instance.displaySize}}</span>
-                </div>
-                <div fxFlex="50">
-                  <span>تعداد : </span>
-                  <span>{{makePersianNumber(ol.quantity, false)}} عدد</span>
-                </div>
-              </div>
-              <div fxLayout="row" fxLayout.xs="column" dir="rtl">
-                <div fxFlex="50">
-                  <span>قیمت واحد : </span>
-                  <span>{{makePersianNumber(ol.product.instances.price ? ol.product.instances.price : ol.product.base_price, true)}}</span>
-                </div>
-                <div fxFlex="50">
-                  <span>تخفیف : </span>
-                  <span> - </span>
+                  <span>{{ol.product_instance.size}}</span>
                 </div>
               </div>
               <div>
                 <span>وضعیت سفارش : </span>
                 <span>{{OrderLineStatus(ol)}}</span>
               </div>
+            
             </div>
 
             <div fxFlex="30" class="total_price">
-              <div style="height: 80%">
-                <span style="font-weight: bold;">{{makePersianNumber(((ol.paid_price ? ol.paid_price : (ol.product.instances.price ? ol.product.instances.price
-                  : ol.product.base_price))), true)}}</span>
+              <div style="height: 60%">
+                <span style="font-weight: bold;">{{calculateOrderLinePrice(ol)}}</span>
                 تومان
               </div>
-              <div style="height: 20%">
+              <div style="height: 40%">
                 <ng-container>
                   <button *ngIf="checkCancelOrderLine(ol)" class="status-button" (click)="cancelOrderLine(ol)">
                     لغو خرید
