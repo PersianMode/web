@@ -58,28 +58,36 @@
       <!--<span *ngIf="missDeliveryAgent === null" class="checkbox=label">همه ی انواع</span>-->
       <!--</mat-checkbox>-->
       <!--</div>-->
+      <form [formGroup]="warehouseSelected">
       <div fxLayout="row" fxLayoutAlign="start start">
-        <div fxFlex="50" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
+        <div fxFlex="50" class="filtering-box" style="margin-top: 10px" *ngIf="isSalesManager">
           <label> مبدا: </label>
-          <mat-checkbox class="filtering-field" [ngModel]="isOrigin" (change)="changeOriginStatus()">
+
+          <mat-checkbox class="filtering-field" [ngModel]="isOrigin" (change)="changeOriginStatus()" [ngModelOptions]="{standalone: true}">
+            <!--(ngSubmit)="changeOriginStatus()"-->
+            <!--[ngModelOptions]="{standalone: true}"-->
             <span *ngIf="isOrigin" class="checkbox-label">انبار</span>
             <span *ngIf="isOrigin === false" class="checkbox-label"></span>
           </mat-checkbox>
+
           <mat-input-container *ngIf="isOrigin === false">
             <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
                    [formControl]="SenderSearchCtrl">
           </mat-input-container>
           <span class="style-select-wrapper" *ngIf="isOrigin">
+
             <select class="select-style" formControlName="fromWarehouseId"
                     (change)="fromWarehouseChange($event.target.value)">
               <option *ngFor="let warehouse of getWarehouses()" [value]="warehouse._id">{{warehouse.name}}
               </option>
             </select>
+
           </span>
         </div>
         <div fxFlex="50" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
           <label> مقصد: </label>
-          <mat-checkbox class="filtering-field" [ngModel]="isDestination" (change)="changeDestinationStatus()">
+          <mat-checkbox class="filtering-field" [ngModel]="isDestination" (change)="changeDestinationStatus()" [ngModelOptions]="{standalone: true}">
+            <!--[ngModelOptions]="{standalone: true}"-->
             <span *ngIf="isDestination" class="checkbox-label">انبار</span>
             <span *ngIf="isDestination === false" class="checkbox-label"></span>
           </mat-checkbox>
@@ -96,7 +104,7 @@
           </span>
         </div>
       </div>
-
+      </form>
     </div>
     <div>
       <mat-table #table [dataSource]="dataSource" matSort>
@@ -185,9 +193,7 @@
                 <td>
                   <button mat-button color="primary" (click)="showOrderLine(ol.order_lines)">نمایش</button>
                 </td>
-
               </tr>
-
             </table>
           </mat-cell>
         </ng-container>
@@ -206,7 +212,7 @@
 
       </mat-table>
     </div>
-    <div dir="ltr">
+    <div dir="rtl">
       <mat-paginator [length]="totalRecords" [pageIndex]="offset / limit" [pageSize]="limit"
                      [pageSizeOptions]="[5, 10, 20, 50]"
                      (page)="changePageSetting($event)">

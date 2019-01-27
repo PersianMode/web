@@ -31,7 +31,7 @@ export class SmOrderComponent implements OnInit, OnDestroy {
     'position',
     'customer',
     'address',
-    'order_time',
+    // 'order_time',
     'transaction_id',
     'tickets',
     'status',

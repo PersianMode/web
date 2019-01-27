@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSort, MatSnackBar, MatTableDataSource, MatDialog, MatPaginator} from '@angular/material';
-import {FormControl} from '@angular/forms';
+import {FormControl, FormControlName, FormGroup} from '@angular/forms';
 import {SelectionModel} from '@angular/cdk/collections';
 import * as moment from 'jalali-moment';
 import {HttpService} from 'app/shared/services/http.service';
@@ -46,6 +46,7 @@ export class DeliveryHistoryComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('table') table;
+  warehouseSelected: FormGroup
   expandedElement: any;
   limit: any = 10;
   offset: any = 0;
@@ -71,6 +72,8 @@ export class DeliveryHistoryComponent implements OnInit {
   recipient_name = new FormControl();
   agentSearchCtrl = new FormControl();
   SenderSearchCtrl = new FormControl();
+  fromWarehouseId = new FormControl();
+  toWarehouseId = new FormControl();
   isDelivered = null;
   isInternal = null;
   isReturn = null;
@@ -114,8 +117,8 @@ export class DeliveryHistoryComponent implements OnInit {
 
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
-          this.transferee = data.trim() !== '' ? data.trim() : null;
-          this.getDeliveryItems();
+        this.transferee = data.trim() !== '' ? data.trim() : null;
+        this.getDeliveryItems();
       }, err => {
         console.error('Couldn\'t refresh when receiver name is changed: ', err);
       }
@@ -320,10 +323,8 @@ export class DeliveryHistoryComponent implements OnInit {
     } else if (this.isDestination === false) {
       this.isDestination = true;
     }
-
     this.getDeliveryItems();
   }
-
 
   changeDeliveryAgentStatus() {
     if (this.missDeliveryAgent === null) {
@@ -410,12 +411,18 @@ export class DeliveryHistoryComponent implements OnInit {
   fromWarehouseChange(fromWarehouseId) {
     this.fromWarehouse = fromWarehouseId;
     this.getDeliveryItems();
-    this.fromWarehouse = false;
+    if (!this.isOrigin) {
+      this.fromWarehouse = false;
+      this.getDeliveryItems();
+    }
   }
 
   toWarehouseChange(toWarehouseId) {
     this.toWarehouse = toWarehouseId;
     this.getDeliveryItems();
-    this.toWarehouse = false;
+    if (!this.isDestination) {
+      this.toWarehouse = false;
+      this.getDeliveryItems();
+    }
   }
 }
