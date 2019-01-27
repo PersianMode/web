@@ -101,7 +101,9 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets) {
       const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return OrderLineStatuses.find(x => x.status === lastTicket.status).name;
+      const ticketName =  OrderLineStatuses.find(x => x.status === lastTicket.status).name;
+      return orderLine.cancel ? `${'لغو شده'} - ${ticketName}` : ticketName; 
+
     }
   }
 

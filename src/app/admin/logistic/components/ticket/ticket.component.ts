@@ -29,9 +29,9 @@ export class TicketComponent implements OnInit {
   isOrder = true;
 
   constructor(private httpService: HttpService,
-              public dialogRef: MatDialogRef<TicketComponent>,
-              private progressService: ProgressService,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+    public dialogRef: MatDialogRef<TicketComponent>,
+    private progressService: ProgressService,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
   ngOnInit() {
@@ -116,8 +116,11 @@ export class TicketComponent implements OnInit {
     try {
       if (this.isOrder)
         return OrderStatuses.find(x => x.status === element.status).name;
-      else
-        return OrderLineStatuses.find(x => x.status === element.status).name;
+      else {
+        const ticketName = OrderLineStatuses.find(x => x.status === element.status).name;
+        return element.cancel ? `${'لغو شده'} - ${ticketName}` : ticketName;
+
+      }
     } catch (err) {
       return '-';
     }
