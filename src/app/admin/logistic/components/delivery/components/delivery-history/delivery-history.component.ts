@@ -114,8 +114,8 @@ export class DeliveryHistoryComponent implements OnInit {
 
     this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
       data => {
-        this.transferee = data.trim() !== '' ? data.trim() : null;
-        this.getDeliveryItems();
+          this.transferee = data.trim() !== '' ? data.trim() : null;
+          this.getDeliveryItems();
       }, err => {
         console.error('Couldn\'t refresh when receiver name is changed: ', err);
       }
@@ -212,10 +212,8 @@ export class DeliveryHistoryComponent implements OnInit {
               let preOrderData = order_data.find(y => y.order_id === foundOrder.order_id);
               if (preOrderData) {
                 preOrderData.order_lines.push(x);
-                // preOrderData.push(delivery.transaction_id);
               } else {
-                order_data.push(Object.assign(foundOrder, {order_lines: [x]}, {transaction_id: delivery.transaction_id},
-                  {order_time: delivery.order_time}, {toCustomerName: delivery.toCustomerName}, {toRecipientName: delivery.toRecipientName}));
+                order_data.push(Object.assign(foundOrder, {order_lines: [x]}));
               }
             });
 

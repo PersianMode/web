@@ -169,16 +169,17 @@
               <tr *ngFor='let ol of detail.order.orders'>
                 <td>
                   <p style="margin: 10px">
-                    <b> تاریخ ثبت سفارش: </b> {{getDate(ol.order_time)}}</p>
+                    <b> تاریخ ثبت سفارش: </b> {{getDate(ol.order_lines[0].order_time)}}</p>
                 </td>
                 <td>
                   <p style="margin: 10px">
-                    <b>شماره فاکتور: </b>{{ol.transaction_id}}
+                    <b>شماره فاکتور: </b>{{ol.order_lines[0].transaction_id}}
                   </p>
                 </td>
                 <td>
                   <p style="margin: 10px">
-                    <b>نام مشتری: </b>{{ol.toCustomerName ? ol.toCustomerName : 'مشتری مهمان: ' + ol.toRecipientName}}
+                    <b>نام مشتری: </b>{{ol.order_lines[0].toCustomerName ? ol.order_lines[0].toCustomerName
+                    : 'مشتری مهمان: ' + ol.order_lines[0].toRecipientName}}
                   </p>
                 </td>
                 <td>
