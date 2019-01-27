@@ -23,7 +23,7 @@
     <div class="coupon_area" fxLayout="row" fxLayoutAlign="start start" *ngIf="show_coupon_area">
       <div fxFlex="80">
         <input *ngIf="!used_coupon_code" class="coupon_field" type="text" [(ngModel)]="coupon_code"/>
-        <input *ngIf="!!used_coupon_code" class="coupon_field" type="text" [value]="used_coupon_code" readonly/>
+        <input *ngIf="!!used_coupon_code" class="coupon_field" type="text"  [value]="used_coupon_code" readonly/>
       </div>
       <div fxFlex="20">
         <div class="coupon_code_btn" (click)="applyCoupon()">

@@ -52,7 +52,7 @@
     </div>
   </div>
   <div
-    *ngIf="payResult.error.result && payResult.error.result[0] === 'False' && payResult.error.resultMessage[0] === 'فاکتور ارسالي شما پيدا نشد'"
+    *ngIf="payResult.error.result && payResult.error.result[0] === 'False'  && payResult.error.resultMessage[0] === 'فاکتور ارسالی شما پيدا نشد'"
     class="cancel-div">
     <span>{{payResult.error.resultMessage[0]}}</span>
   </div>
@@ -60,6 +60,6 @@
     <span>چنین فاکتوری وجود ندارد.</span>
   </div>
   <div *ngIf="payResult.error === 'Sold out before payment'" class="cancel-div">
-    <span>متاسفانه برخی از محصولات تمام شده اند.در صورت کسر مبلغ از حساب شما تا 72 ساعت آینده هزینه به حساب شما باز میگردد.</span>
+    <span>متاسفانه برخی از محصولات تمام شده‌اند. در صورت کسر مبلغ از حساب شما، این مبلغ تا ۷۲ ساعت آینده به حساب شما باز می‌گردد.</span>
   </div>
 </div>

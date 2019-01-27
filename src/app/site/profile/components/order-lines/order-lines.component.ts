@@ -15,6 +15,7 @@ import {OrderLineStatuses, OrderStatuses} from '../../../../shared/lib/status';
 import {ORDER_LINE_STATUS, ORDER_STATUS} from '../../../../shared/enum/status.enum';
 import * as moment from 'moment';
 import {OrderReturnComponent} from '../order-return/order-return.component';
+import {getDiscounted} from 'app/shared/lib/discountCalc';
 
 @Component({
   selector: 'app-order-lines',
@@ -204,5 +205,18 @@ export class OrderLinesComponent implements OnInit {
       duration: 2000,
     });
   }
+
+
+  calculateOrderLinePrice(orderLine) {
+
+    let price = orderLine.paid_price;
+    if (this.orderInfo.dialog_order.coupon_code && this.orderInfo.dialog_order.coupon_discount) {
+      price -= getDiscounted(price, this.orderInfo.dialog_order.coupon_discount);
+    }
+
+    return this.makePersianNumber(price, true);
+
+  }
+
 
 }

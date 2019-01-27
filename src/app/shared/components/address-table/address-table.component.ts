@@ -7,7 +7,7 @@ import {ResponsiveService} from '../../services/responsive.service';
 import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
-import {time_slotEnum} from '../../enum/time_slot.enum';
+import {TIME_SLOT} from '../../enum/delivery.enum';
 import {CheckoutService} from '../../services/checkout.service';
 import {ProgressService} from '../../services/progress.service';
 import {RemovingConfirmComponent} from '../removing-confirm/removing-confirm.component';
@@ -21,7 +21,7 @@ import {PlacementModifyEnum} from '../../../admin/page/enum/placement.modify.typ
 })
 export class AddressTableComponent implements OnInit {
   addressSelected;
-  time_slot = time_slotEnum;
+  time_slot = TIME_SLOT;
   @Input() isProfile = true;
   @Input() isModify = true;
   @Output() selectedChange = new EventEmitter();
@@ -281,6 +281,7 @@ export class AddressTableComponent implements OnInit {
   changeDurationType(durationId, deliveryDays) {
     this.addresses = this.checkoutService.addresses$.getValue();
     this.durationId = durationId;
+    this.checkoutService.deliveryDurationId = durationId;
     this.deliveryDays = deliveryDays;
     this.noDuration.emit(true);
     this.durationType.emit(durationId);

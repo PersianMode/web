@@ -51,6 +51,13 @@
           <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
           <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
         </ng-container>
+        
+        <ng-container matColumnDef="process">
+          <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine">
+            <button mat-button color="warn" *ngIf="shouldCheckProduct(orderLine)" (click)="informDamage(orderLine)">اعلام خرابی</button>
+          </mat-cell>
+        </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 

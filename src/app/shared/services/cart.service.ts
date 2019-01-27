@@ -22,10 +22,10 @@ export class CartService {
   itemAdded$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
   constructor(private httpService: HttpService,
-              private authService: AuthService,
-              private productService: ProductService,
-              private snackBar: MatSnackBar,
-              private spinnerService: SpinnerService) {
+    private authService: AuthService,
+    private productService: ProductService,
+    private snackBar: MatSnackBar,
+    private spinnerService: SpinnerService) {
     this.authService.isLoggedIn.subscribe(
       async isLoggedIn => {
         // Read data from localStorage and save in server if any data is exist in localStorage
@@ -58,8 +58,8 @@ export class CartService {
         product_instance_id: item.instance_id,
         number: item.quantity,
       }).subscribe((res) => {
-          resolve(res);
-        },
+        resolve(res);
+      },
         (err) => {
           console.error('orders error: ', item, err);
           reject(err);
@@ -174,10 +174,10 @@ export class CartService {
             product_instance_id: value.instance_id,
             number: value.number
           }).subscribe((dt) => {
-              update();
-            }, (err) => {
-              console.error('Cannot add new order-line to order in server: ', err);
-            }
+            update();
+          }, (err) => {
+            console.error('Cannot add new order-line to order in server: ', err);
+          }
           );
         },
         (err) => {
@@ -320,8 +320,9 @@ export class CartService {
   }
 
   calculateDiscount(cartData) {
-    if (!cartData) return;
+    if (!cartData || !cartData.length) return;
 
+    const base = cartData.map(r => (r.price || 0) * (r.quantity || 1)).reduce((x, y) => x + y, 0);
     let dc = cartData
       .map(r => Object.assign({
         p: r.price || 0,
@@ -334,11 +335,12 @@ export class CartService {
     if (this.coupon_discount >= 100) {
       dc += this.coupon_discount;
     } else if (this.coupon_discount > 0) {
-      dc += getDiscounted(cartData.map(r => (r.price || 0) * (r.quantity || 1)).reduce((x, y) => x + y, 0), this.coupon_discount);
+      dc += getDiscounted(base - dc, this.coupon_discount);
     }
     return dc;
   }
 
+  // check validity of coupon
   addCoupon(coupon_code = '') {
     if (!this.authService.userIsLoggedIn())
       return Promise.reject(403);
@@ -350,12 +352,10 @@ export class CartService {
       if (this.cartItems && this.cartItems.getValue().length > 0) {
         this.spinnerService.enable();
         this.httpService.post('coupon/code/valid', {
-          product_ids: Array.from(new Set(this.cartItems.getValue().map(el => el.product_id))),
           coupon_code: coupon_code,
         }).subscribe(
           data => {
             this.spinnerService.disable();
-            data = data[0];
             if (!data) {
               this.snackBar.open('کوپن وجود ندارد یا منقضی شده است', null, {duration: 2700});
               this.coupon_discount = 0;
@@ -375,7 +375,10 @@ export class CartService {
     });
   }
 
+  // final application of coupon on order
   applyCoupon(coupon_code): any {
+    if (!coupon_code)
+      return Promise.resolve();
     return new Promise((resolve, reject) => {
       this.spinnerService.enable();
       this.httpService.post('coupon/code/apply', {
