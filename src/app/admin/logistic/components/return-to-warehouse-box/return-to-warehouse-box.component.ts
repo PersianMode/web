@@ -17,7 +17,7 @@ import {OrderLineStatuses} from 'app/shared/lib/status';
 })
 export class ReturnToWarehouseBoxComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  
+
   @Output() OnReturnDeliveryBoxCount = new EventEmitter();
 
   displayedColumns = ['position', 'details', 'name', 'barcode', 'status'];
@@ -102,7 +102,9 @@ export class ReturnToWarehouseBoxComponent implements OnInit, AfterViewInit, OnD
   getOrderLineStatus(orderLine) {
     if (orderLine && orderLine.tickets) {
       const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return OrderLineStatuses.find(x => x.status === lastTicket.status).name;
+      const ticketName = OrderLineStatuses.find(x => x.status === lastTicket.status).name;
+      return orderLine.cancel ? `${'لغو شده'} - ${ticketName}` : ticketName;
+
     }
   }
 

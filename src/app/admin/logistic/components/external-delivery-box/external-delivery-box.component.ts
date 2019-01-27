@@ -175,8 +175,14 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   }
 
   getOrderLineStatus(orderLine) {
-    const lastTicket = orderLine.tickets[orderLine.tickets.length - 1];
-    return OrderLineStatuses.find(x => x.status === lastTicket.status).name || '-';
+    try {
+      const lastTicket = orderLine.tickets[orderLine.tickets.length - 1];
+      const ticketName = OrderLineStatuses.find(x => x.status === lastTicket.status).name || '-';
+      
+      return orderLine.cancel ? `${'لغو شده'} - ${ticketName}` : ticketName; 
+      
+    } catch (err) {
+    }
 
   }
 
@@ -227,7 +233,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   isAggregated(order) {
 
-      return order.total_order_lines  === order.order_lines.length;
+    return order.total_order_lines === order.order_lines.length;
   }
 
   ngOnDestroy(): void {
