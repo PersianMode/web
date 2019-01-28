@@ -45,7 +45,7 @@
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef class="header">وضعیت</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">
-            <span >{{element.destination?.name}}</span>
+            <span >{{getStatus(element)}}</span>
           </mat-cell>
         </ng-container>
 

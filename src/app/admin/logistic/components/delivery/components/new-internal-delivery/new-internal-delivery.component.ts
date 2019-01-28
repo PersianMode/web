@@ -1,9 +1,12 @@
+///<reference path="../../../../../../shared/enum/status.enum.ts"/>
 import {Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit, OnDestroy} from '@angular/core';
 import {MatSort, MatSnackBar, MatTableDataSource, MatDialog, MatPaginator} from '@angular/material';
-import * as moment from 'moment';
+import * as moment from 'jalali-moment';
 import {HttpService} from 'app/shared/services/http.service';
 import {ProgressService} from 'app/shared/services/progress.service';
 import {SocketService} from 'app/shared/services/socket.service';
+import {Delivery_STATUS} from '../../../../../../shared/enum/status.enum';
+import {DeliveryStatuses} from '../../../../../../shared/lib/status';
 
 @Component({
   selector: 'app-new-internal-delivery',
@@ -114,7 +117,7 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
   getDate(date) {
     if (!date)
       return '-';
-    return moment(date).format('YYYY-MM-DD');
+    return moment(date).format('jYYYY/jMM/jDD');
   }
 
   formatter(p) {
@@ -138,5 +141,8 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
   ngOnDestroy(): void {
     if (this.socketSubscription)
       this.socketSubscription.unsubscribe();
+  }
+  getStatus(el) {
+    return DeliveryStatuses.find(x => x.status === el.last_ticket.status).name;
   }
 }
