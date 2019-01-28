@@ -15,7 +15,6 @@ const OrderLineStatuses: any[] = [
   {name: 'بررسی نهایی موفق', title: 'در حال پردازش', status: ols.Checked},
   {name: 'ناموجود', title: 'ناموجود', status: ols.NotExists},
   {name: 'درخواست بازگشت سفارش', title: 'درخواست بازگشت سفارش', status: ols.ReturnRequested},
-  {name: 'درخواست لغو سفارش', title: 'لغو سفارش', status: ols.CancelRequested},
   {name: 'ّعدم موجودی انبار', title: 'بررسی توسط مسئول فروش', status: ols.StoreCancel},
   {name: 'ّاز سر گیری فرایند', title: 'در حال پردازش', status: ols.Renew},
   {name: 'لغو سفارش', title: 'در حال پردازش', status: ols.Canceled},

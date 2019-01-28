@@ -57,16 +57,16 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   transId = null;
   status = null;
   orderTime = null;
-  listStatus: { name: string, status: number }[] = [
+  listStatus: {name: string, status: number}[] = [
     {name: 'همه موارد', status: null}
   ];
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private progressService: ProgressService) {
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private progressService: ProgressService) {
   }
 
   ngOnInit() {
@@ -141,7 +141,11 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   }
 
   getDate(time) {
-    return moment(time).format('jYYYY/jMM/jDD HH:mm:ss');
+    try {
+      if (time)
+        return moment(time).format('jYYYY/jMM/jDD HH:mm:ss');
+    } catch (err) {
+    }
   }
 
   getProductDetail(orderLine) {
@@ -209,9 +213,11 @@ export class SmOrderComponent implements OnInit, OnDestroy {
 
   getStatus(item, isOrderLine) {
     try {
-      if (isOrderLine)
-        return OrderLineStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
-      else
+      if (isOrderLine) {
+        const ticket = OrderLineStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
+        if (item.cancel)
+          return `${'لفو شده'} - ${ticket}`;
+      } else
         return OrderStatuses.find(x => x.status === item.tickets[item.tickets.length - 1].status).name;
     } catch (e) {
       console.error('error in getStatus. (.length, probably?)');

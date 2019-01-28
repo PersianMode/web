@@ -81,7 +81,11 @@ export class OrderLinesComponent implements OnInit {
   }
 
   OrderLineStatus(ol) {
-    return ol.tickets.length !== 0 ? OrderLineStatuses.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title : 'نامشخص';
+    if (ol.tickets && ol.tickets.length) {
+      const ticketName = OrderLineStatuses.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title;
+      return ol.cancel ? `${'لغو شده'} - ${ticketName}` : ticketName;
+
+    }
   }
 
 
