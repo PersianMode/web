@@ -38,7 +38,7 @@
         <ng-container matColumnDef="receiver">
           <mat-header-cell *matHeaderCellDef class="header">گیرنده</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">
-            <span >{{element.destination?.name}}</span>
+            <span >{{element.warehouse.name}}</span>
           </mat-cell>
         </ng-container>
 
@@ -54,7 +54,7 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
     </div>
-    <div dir="ltr">
+    <div dir="rtl">
       <mat-paginator [length]="total" [pageSize]="pageSize" (page)="onPageChange($event)"></mat-paginator>
     </div>
   </div>
