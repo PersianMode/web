@@ -67,11 +67,12 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
 
     this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
-
+      console.log('res: ', res);
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
       });
       this.dataSource = new MatTableDataSource<any>(res.data);
+
       this.total = res.total || 0;
       this.OnUnassignedDeliveryCount.emit(this.total);
     }, err => {
