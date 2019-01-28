@@ -69,7 +69,7 @@
             </mat-checkbox>
 
             <mat-input-container *ngIf="isOrigin === false">
-              <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
+              <input class="filtering-field" matInput type="text" placeholder=" تحویل گیرنده - کد ملی"
                      formControlName="SenderSearchCtrl">
             </mat-input-container>
             <span class="style-select-warehouse" *ngIf="isOrigin">
@@ -89,7 +89,7 @@
               <span *ngIf="isDestination === false" class="checkbox-label"></span>
             </mat-checkbox>
             <mat-input-container *ngIf="isDestination === false">
-              <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
+              <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - کد ملی"
                      [formControl]="receiverSearchCtrl">
             </mat-input-container>
             <span class="style-select-warehouse" *ngIf="isDestination">
