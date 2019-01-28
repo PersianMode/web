@@ -222,8 +222,6 @@ export class DeliveryHistoryComponent implements OnInit {
             delivery.orders = order_data;
           }
         }
-        console.log('search', this.search);
-
         if (this.search) {
           this.deliveryItems = this.search.result;
         } else
@@ -239,8 +237,6 @@ export class DeliveryHistoryComponent implements OnInit {
           this.dataSource = rows;
         }
         else this.dataSource = '';
-
-        console.log('datasource', this.dataSource);
 
         this.progressService.disable();
       },
