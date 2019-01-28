@@ -33,15 +33,15 @@
   text-align: right;
 }
 
-.filtering-box {
-  margin: 5px;
+.filter-box {
+  margin: 15px;
 }
 
 .checkbox-label {
   margin-right: 5px;
 }
 
-.select-style {
+.select-style-dropDown {
   width: 120px;
   height: 30px;
   vertical-align: baseline;
@@ -52,14 +52,13 @@
   border-radius: 2px;
   background-color: black;
   color: #fff;
-  padding-right: 8px;
+  padding-right: 5px;
   font-family:iranyekan;
 }
 
-.style-select-wrapper {
-  display: inline-block;
+.style-select-warehouse {
+  /*display: inline-block;*/
   position: relative;
   overflow: hidden;
-  height: 30px;
   text-align: right;
 }

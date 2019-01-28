@@ -72,11 +72,8 @@ export class DeliveryHistoryComponent implements OnInit {
   recipient_name = new FormControl();
   agentSearchCtrl = new FormControl();
   SenderSearchCtrl = new FormControl();
-  fromWarehouseId = new FormControl();
-  toWarehouseId = new FormControl();
   isDelivered = null;
   isInternal = null;
-  isReturn = null;
   missDeliveryAgent = null;
   startDateSearch = null;
   transferee = null;
@@ -90,6 +87,8 @@ export class DeliveryHistoryComponent implements OnInit {
   isDestination = true;
   fromWarehouse = null;
   toWarehouse = null;
+  fromWarehouseId = new FormControl();
+  toWarehouseId = new FormControl();
 
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
@@ -310,8 +309,10 @@ export class DeliveryHistoryComponent implements OnInit {
   changeOriginStatus() {
     if (this.isOrigin === true) {
       this.isOrigin = false;
+      this.fromWarehouseChange(null);
     } else if (this.isOrigin === false) {
       this.isOrigin = true;
+      this.fromWarehouseChange(null);
     }
     this.getDeliveryItems();
   }
@@ -320,8 +321,10 @@ export class DeliveryHistoryComponent implements OnInit {
 
     if (this.isDestination === true) {
       this.isDestination = false;
+      this.toWarehouseChange(null);
     } else if (this.isDestination === false) {
       this.isDestination = true;
+      this.toWarehouseChange(null);
     }
     this.getDeliveryItems();
   }
@@ -408,21 +411,23 @@ export class DeliveryHistoryComponent implements OnInit {
       .sort((a, b) => a.priority > b.priority ? 1 : a.priority < b.priority ? -1 : 0);
   }
 
-  fromWarehouseChange(fromWarehouseId) {
-    this.fromWarehouse = fromWarehouseId;
-    this.getDeliveryItems();
-    if (!this.isOrigin) {
-      this.fromWarehouse = false;
+  fromWarehouseChange(fromWarehouse) {
+    if (!fromWarehouse) {
+      this.fromWarehouse = null
       this.getDeliveryItems();
+      return
     }
+    this.fromWarehouse = fromWarehouse;
+    this.getDeliveryItems();
   }
 
   toWarehouseChange(toWarehouseId) {
+    if (!toWarehouseId) {
+      this.toWarehouse = null;
+      this.getDeliveryItems();
+      return
+    }
     this.toWarehouse = toWarehouseId;
     this.getDeliveryItems();
-    if (!this.isDestination) {
-      this.toWarehouse = false;
-      this.getDeliveryItems();
-    }
   }
 }

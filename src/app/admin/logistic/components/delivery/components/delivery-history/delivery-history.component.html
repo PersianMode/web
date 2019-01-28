@@ -8,20 +8,20 @@
     </h2>
     <div class="search-area">
       <div fxLayout="row" fxLayoutAlign="start start">
-        <div fxFlex="30" class="filtering-box">
+        <div fxFlex="30" class="filter-box">
           <mat-input-container class="filtering-field">
             <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری"
                    [formControl]="recipient_name">
           </mat-input-container>
         </div>
-        <div fxFlex="30" class="filtering-box">
+        <div fxFlex="30" class="filter-box">
           <mat-input-container class="filtering-field">
             <input class="filtering-field" matInput type="text" placeholder="مسئول ارسال"
                    [formControl]="agentSearchCtrl">
           </mat-input-container>
         </div>
 
-        <div fxFlex="30" class="filtering-box">
+        <div fxFlex="30" class="filter-box">
           <mat-form-field class="filtering-field">
             <input matInput [matDatepicker]="epicker" placeholder="انتقالات در تاریخ ..." [(ngModel)]="startDateSearch"
                    (ngModelChange)="getDeliveryItems()">
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div *ngIf="isSalesManager || isHubClerk ">
-        <div fxFlex="25" class="filtering-box" style="margin-top: 20px" fxLayout="row">
+        <div fxFlex="25" class="filter-box" fxLayout="row">
           <mat-checkbox class="filtering-field" [ngModel]="isInternal" (change)="changeDeliverStatus()"
                         [indeterminate]="isInternal === null">
             <span *ngIf="isInternal" class="checkbox-label"> ارسال داخلی</span>
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div fxLayoutAlign="start start">
-        <div fxFlex="25" class="filtering-box" style="margin-top: 20px">
+        <div fxFlex="25" class="filter-box">
           <mat-checkbox class="filtering-field" [ngModel]="isDelivered" (change)="changeStartDeliverStatus()"
                         [indeterminate]="isDelivered === null">
             <span *ngIf="isDelivered" class="checkbox-label"> ارسال شده</span>
@@ -50,7 +50,7 @@
           </mat-checkbox>
         </div>
       </div>
-      <!--<div fxFlex="25" class="filtering-box" style="margin-top: 20px">-->
+      <!--<div fxFlex="25" class="filter-box" style="margin-top: 20px">-->
       <!--<mat-checkbox class="filtering-field" [ngModel]="missDeliveryAgent" (change)="changeDeliveryAgentStatus()"-->
       <!--[indeterminate]="missDeliveryAgent === null">-->
       <!--<span *ngIf="missDeliveryAgent" class="checkbox=label">بدون مسئول ارسال</span>-->
@@ -59,51 +59,49 @@
       <!--</mat-checkbox>-->
       <!--</div>-->
       <form [formGroup]="warehouseSelected">
-      <div fxLayout="row" fxLayoutAlign="start start">
-        <div fxFlex="50" class="filtering-box" style="margin-top: 10px" *ngIf="isSalesManager">
-          <label> مبدا: </label>
+        <div fxLayout="row" fxLayoutAlign="start start">
+          <div fxFlex="50" class="filter-box" *ngIf="isSalesManager">
+            <label> مبدا: </label>
+            <mat-checkbox class="filtering-field" [ngModel]="isOrigin" (change)="changeOriginStatus()"
+                          [ngModelOptions]="{standalone: true}">
+              <span *ngIf="isOrigin" class="checkbox-label"></span>
+              <span *ngIf="isOrigin === false" class="checkbox-label"></span>
+            </mat-checkbox>
 
-          <mat-checkbox class="filtering-field" [ngModel]="isOrigin" (change)="changeOriginStatus()" [ngModelOptions]="{standalone: true}">
-            <!--(ngSubmit)="changeOriginStatus()"-->
-            <!--[ngModelOptions]="{standalone: true}"-->
-            <span *ngIf="isOrigin" class="checkbox-label">انبار</span>
-            <span *ngIf="isOrigin === false" class="checkbox-label"></span>
-          </mat-checkbox>
-
-          <mat-input-container *ngIf="isOrigin === false">
-            <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
-                   [formControl]="SenderSearchCtrl">
-          </mat-input-container>
-          <span class="style-select-wrapper" *ngIf="isOrigin">
-
-            <select class="select-style" formControlName="fromWarehouseId"
+            <mat-input-container *ngIf="isOrigin === false">
+              <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
+                     formControlName="SenderSearchCtrl">
+            </mat-input-container>
+            <span class="style-select-warehouse" *ngIf="isOrigin">
+            <select class="select-style-dropDown" formControlName="fromWarehouseId"
                     (change)="fromWarehouseChange($event.target.value)">
+                <option value="undefined" disabled selected hidden>انتخاب انبار</option>
               <option *ngFor="let warehouse of getWarehouses()" [value]="warehouse._id">{{warehouse.name}}
               </option>
             </select>
-
           </span>
-        </div>
-        <div fxFlex="50" class="filtering-box" style="margin-top: 20px" *ngIf="isSalesManager">
-          <label> مقصد: </label>
-          <mat-checkbox class="filtering-field" [ngModel]="isDestination" (change)="changeDestinationStatus()" [ngModelOptions]="{standalone: true}">
-            <!--[ngModelOptions]="{standalone: true}"-->
-            <span *ngIf="isDestination" class="checkbox-label">انبار</span>
-            <span *ngIf="isDestination === false" class="checkbox-label"></span>
-          </mat-checkbox>
-          <mat-input-container *ngIf="isDestination === false">
-            <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
-                   [formControl]="receiverSearchCtrl">
-          </mat-input-container>
-          <span class="style-select-wrapper" *ngIf="isDestination">
-            <select class="select-style" formControlName="toWarehouseId"
+          </div>
+          <div fxFlex="50" class="filter-box" *ngIf="isSalesManager">
+            <label> مقصد: </label>
+            <mat-checkbox class="filtering-field" [ngModel]="isDestination" (change)="changeDestinationStatus()"
+                          [ngModelOptions]="{standalone: true}">
+              <span *ngIf="isDestination" class="checkbox-label" (change)="toWarehouseChange(null)"></span>
+              <span *ngIf="isDestination === false" class="checkbox-label"></span>
+            </mat-checkbox>
+            <mat-input-container *ngIf="isDestination === false">
+              <input class="filtering-field" matInput type="text" placeholder="نام مشتری - کد ملی"
+                     [formControl]="receiverSearchCtrl">
+            </mat-input-container>
+            <span class="style-select-warehouse" *ngIf="isDestination">
+            <select class="select-style-dropDown" formControlName="toWarehouseId"
                     (change)="toWarehouseChange($event.target.value)">
+              <option value="undefined" disabled selected hidden>انتخاب انبار</option>
               <option *ngFor="let warehouse of getWarehouses()" [value]="warehouse._id">{{warehouse.name}}
               </option>
             </select>
           </span>
+          </div>
         </div>
-      </div>
       </form>
     </div>
     <div>
