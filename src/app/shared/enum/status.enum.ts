@@ -16,7 +16,8 @@ enum ORDER_LINE_STATUS {
   ReturnRequested = 14,
   StoreCancel = 15,
   Renew = 16,
-  Canceled = 17
+  Canceled = 17,
+  Damaged = 18
 }
 
 
