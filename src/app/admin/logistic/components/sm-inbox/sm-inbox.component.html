@@ -37,7 +37,7 @@
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef>پردازش شده؟</mat-header-cell>
           <mat-cell *matCellDef="let message">
-            <img style="width: 25px; height: 25px;" [src]="message.is_processed ? '../../../../../assets/logos/accept.png' : '../../../../../assets/logos/fail.png' ">
+            <img style="width: 25px; height: 25px;" [src]="!needsProcess(message) ? '../../../../../assets/logos/accept.png' : '../../../../../assets/logos/fail.png' ">
           </mat-cell>
         </ng-container>
 
@@ -45,14 +45,14 @@
         <ng-container matColumnDef="process">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let message">
-            <button mat-button color="primary" *ngIf="!message.is_processed" (click)="process(message)" >{{getProcessTitle(message)}}</button>
+            <button mat-button color="primary" *ngIf="needsProcess(message)" (click)="process(message)" >{{getProcessTitle(message)}}</button>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="close">
           <mat-header-cell *matHeaderCellDef>بستن</mat-header-cell>
           <mat-cell *matCellDef="let message">
-            <button mat-button color="warn" *ngIf="message.is_processed" (click)="close(message)">اعلام گزارش</button>
+            <button mat-button color="warn" *ngIf="!needsProcess(message)" (click)="close(message)">اعلام گزارش</button>
           </mat-cell>
         </ng-container>
 

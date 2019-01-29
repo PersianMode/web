@@ -10,6 +10,7 @@ import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
 import {AuthService} from 'app/shared/services/auth.service';
 import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
 import {ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
+import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 
 
 @Component({
@@ -143,17 +144,32 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   informDamage(orderLine) {
 
-    console.log('-> ', orderLine  );
-    this.progressService.enable();
-    this.httpService.post('order/damage', {
-      orderId: orderLine.order_id,
-      orderLineId: orderLine._id
-    }).subscribe(res => {
-      this.progressService.disable();
-    }, err => {
-      this.progressService.disable();
-      this.openSnackBar('خطا به هنگام اعلام خرابی محصول');
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+      data: {
+        name: 'اعلام خرابی',
+        message: 'در صورت اعلام خرابی پیام به مسئول فروش جهت بررسی بیشتر ارسال خواهد شد'
+      }
+
     });
+    rmDialog.afterClosed().subscribe(
+      status => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.post('order/damage', {
+            orderId: orderLine.order_id,
+            orderLineId: orderLine.order_line_id
+          }).subscribe(res => {
+            this.progressService.disable();
+          }, err => {
+            this.progressService.disable();
+            this.openSnackBar('خطا به هنگام اعلام خرابی محصول');
+          });
+        }
+      }, err => {
+        console.log('Error in dialog: ', err);
+      });
+
 
   }
 
