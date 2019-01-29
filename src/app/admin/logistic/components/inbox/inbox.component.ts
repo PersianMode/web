@@ -131,7 +131,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onMismatchDetected() {
-    this.progressService.enable();
+    // this.progressService.enable();
   }
 
   shouldCheckProduct(orderline) {
@@ -142,6 +142,18 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   informDamage(orderLine) {
+
+    console.log('-> ', orderLine  );
+    this.progressService.enable();
+    this.httpService.post('order/damage', {
+      orderId: orderLine.order_id,
+      orderLineId: orderLine._id
+    }).subscribe(res => {
+      this.progressService.disable();
+    }, err => {
+      this.progressService.disable();
+      this.openSnackBar('خطا به هنگام اعلام خرابی محصول');
+    });
 
   }
 
