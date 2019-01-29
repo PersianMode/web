@@ -11,7 +11,7 @@
       <mat-table #table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef class="header">ردیف</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content"> {{formatter(element.index)}} </mat-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{element.index}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="start">

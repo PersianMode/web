@@ -120,10 +120,6 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
     return moment(date).format('jYYYY/jMM/jDD');
   }
 
-  formatter(p) {
-    return (+p).toLocaleString('fa');
-  }
-
   onSortChange($event: any) {
     this.paginator.pageIndex = 0;
     this.load();
