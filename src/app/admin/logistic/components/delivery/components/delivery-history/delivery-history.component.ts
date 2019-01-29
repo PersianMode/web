@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSort, MatSnackBar, MatTableDataSource, MatDialog, MatPaginator} from '@angular/material';
-import {FormControl, FormControlName, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 import {SelectionModel} from '@angular/cdk/collections';
 import * as moment from 'jalali-moment';
 import {HttpService} from 'app/shared/services/http.service';
@@ -46,7 +46,6 @@ export class DeliveryHistoryComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('table') table;
-  warehouseSelected: FormGroup
   expandedElement: any;
   limit: any = 10;
   offset: any = 0;
@@ -74,7 +73,6 @@ export class DeliveryHistoryComponent implements OnInit {
   SenderSearchCtrl = new FormControl();
   isDelivered = null;
   isInternal = null;
-  missDeliveryAgent = null;
   startDateSearch = null;
   transferee = null;
   recipient = null;
@@ -87,14 +85,15 @@ export class DeliveryHistoryComponent implements OnInit {
   isDestination = true;
   fromWarehouse = null;
   toWarehouse = null;
-  fromWarehouseId = new FormControl();
-  toWarehouseId = new FormControl();
-
+  warehouseSelected = new FormGroup({
+      fromWarehouseId: new FormControl(),
+      toWarehouseId: new FormControl()
+    }
+  );
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
-  constructor(private httpService: HttpService, private progressService: ProgressService,
-              private snackBar: MatSnackBar, private dialog: MatDialog,
+  constructor(private httpService: HttpService, private progressService: ProgressService, private snackBar: MatSnackBar, private dialog: MatDialog,
               private authService: AuthService) {
   }
 
@@ -203,9 +202,9 @@ export class DeliveryHistoryComponent implements OnInit {
         this.progressService.disable();
 
         const rows = [];
-        this.search = res.data[0];
+        this.search = res.data;
         if (this.search) {
-          for (let delivery of this.search.result) {
+          for (let delivery of this.search) {
             const order_data = [];
             let order_details = delivery.order_details;
             let order_lines = delivery.order_lines;
@@ -223,11 +222,11 @@ export class DeliveryHistoryComponent implements OnInit {
           }
         }
         if (this.search) {
-          this.deliveryItems = this.search.result;
+          this.deliveryItems = this.search;
         } else
           this.deliveryItems = '';
-        this.totalRecords = this.search && this.search.total ? this.search.total : 0;
-
+        this.totalRecords = res.total ? res.total : 0;
+        console.log('total', this.totalRecords);
         if (this.deliveryItems) {
           this.deliveryItems.forEach((order, index) => {
             order['index'] = index + 1;
@@ -254,10 +253,6 @@ export class DeliveryHistoryComponent implements OnInit {
     this.limit = data.pageSize ? data.pageSize : 10;
     this.offset = data.pageIndex * this.limit;
     this.getDeliveryItems();
-  }
-
-  formatter(p) {
-    return (+p).toLocaleString('fa');
   }
 
   showDetails(id) {
@@ -322,18 +317,6 @@ export class DeliveryHistoryComponent implements OnInit {
       this.isDestination = true;
       this.toWarehouseChange(null);
     }
-    this.getDeliveryItems();
-  }
-
-  changeDeliveryAgentStatus() {
-    if (this.missDeliveryAgent === null) {
-      this.missDeliveryAgent = true;
-    } else if (this.missDeliveryAgent === true) {
-      this.missDeliveryAgent = false;
-    } else if (this.missDeliveryAgent === false) {
-      this.missDeliveryAgent = null;
-    }
-
     this.getDeliveryItems();
   }
 
@@ -409,7 +392,8 @@ export class DeliveryHistoryComponent implements OnInit {
 
   fromWarehouseChange(fromWarehouse) {
     if (!fromWarehouse) {
-      this.fromWarehouse = null
+      this.fromWarehouse = null;
+      this.warehouseSelected.patchValue({fromWarehouseId: null});
       this.getDeliveryItems();
       return
     }
@@ -420,10 +404,14 @@ export class DeliveryHistoryComponent implements OnInit {
   toWarehouseChange(toWarehouseId) {
     if (!toWarehouseId) {
       this.toWarehouse = null;
+      this.warehouseSelected.patchValue({toWarehouseId: null});
       this.getDeliveryItems();
       return
     }
     this.toWarehouse = toWarehouseId;
     this.getDeliveryItems();
+  }
+
+  onSubmit() {
   }
 }

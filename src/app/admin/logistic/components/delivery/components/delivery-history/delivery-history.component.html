@@ -50,15 +50,8 @@
           </mat-checkbox>
         </div>
       </div>
-      <!--<div fxFlex="25" class="filter-box" style="margin-top: 20px">-->
-      <!--<mat-checkbox class="filtering-field" [ngModel]="missDeliveryAgent" (change)="changeDeliveryAgentStatus()"-->
-      <!--[indeterminate]="missDeliveryAgent === null">-->
-      <!--<span *ngIf="missDeliveryAgent" class="checkbox=label">بدون مسئول ارسال</span>-->
-      <!--<span *ngIf="missDeliveryAgent === false" class="checkbox=label">مسئول ارسال تعیین شده</span>-->
-      <!--<span *ngIf="missDeliveryAgent === null" class="checkbox=label">همه ی انواع</span>-->
-      <!--</mat-checkbox>-->
-      <!--</div>-->
-      <form [formGroup]="warehouseSelected">
+
+      <form [formGroup]="warehouseSelected" (ngSubmit)="onSubmit()">
         <div fxLayout="row" fxLayoutAlign="start start">
           <div fxFlex="50" class="filter-box" *ngIf="isSalesManager">
             <label> مبدا: </label>
@@ -70,12 +63,12 @@
 
             <mat-input-container *ngIf="isOrigin === false">
               <input class="filtering-field" matInput type="text" placeholder="نام تحویل گیرنده - کد ملی"
-                     formControlName="SenderSearchCtrl">
+                    [formControl]="SenderSearchCtrl">
             </mat-input-container>
             <span class="style-select-warehouse" *ngIf="isOrigin">
             <select class="select-style-dropDown" formControlName="fromWarehouseId"
                     (change)="fromWarehouseChange($event.target.value)">
-                <option value="undefined" disabled selected hidden>انتخاب انبار</option>
+                <option value="null" disabled selected hidden>انتخاب انبار</option>
               <option *ngFor="let warehouse of getWarehouses()" [value]="warehouse._id">{{warehouse.name}}
               </option>
             </select>
@@ -95,7 +88,7 @@
             <span class="style-select-warehouse" *ngIf="isDestination">
             <select class="select-style-dropDown" formControlName="toWarehouseId"
                     (change)="toWarehouseChange($event.target.value)">
-              <option value="undefined" disabled selected hidden>انتخاب انبار</option>
+              <option value="null" disabled selected hidden>انتخاب انبار</option>
               <option *ngFor="let warehouse of getWarehouses()" [value]="warehouse._id">{{warehouse.name}}
               </option>
             </select>
