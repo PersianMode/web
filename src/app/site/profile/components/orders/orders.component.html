@@ -26,10 +26,6 @@
         true)}}<br/></span>{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}
     </mat-cell>
   </ng-container>
-  <ng-container matColumnDef="discount">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>تخفیف (تومان)</mat-header-cell>
-    <mat-cell *matCellDef="let order">{{makePersianNumber(order.discount, true)}}</mat-cell>
-  </ng-container>
   <ng-container matColumnDef="used_point">
     <mat-header-cell *matHeaderCellDef mat-sort-header>امتیاز استفاده شده</mat-header-cell>
     <mat-cell *matCellDef="let order">{{makePersianNumber(order.used_point, false)}}
@@ -37,8 +33,8 @@
   </ng-container>
 
   <ng-container matColumnDef="address">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>ارسال شده به</mat-header-cell>
-    <mat-cell *matCellDef="let order" style="font-size: 13px; text-align: right"> {{ order.is_collect ? ' دریافت شده از
+    <mat-header-cell *matHeaderCellDef mat-sort-header>ارسال به</mat-header-cell>
+    <mat-cell *matCellDef="let order" style="font-size: 13px; text-align: right"> {{ order.is_collect ? ' دریافت از
       ' + order.address.warehouse_name + ' توسط ' + order.address.recipient_name + ' ' +
       order.address.recipient_surname :
       ' استان ' + order.address.province +
@@ -120,7 +116,7 @@
           class="fa fa-eye"></i></a></div>
         <div>
           {{"وضعیت: "}}
-          <label>{{checkOrderStatus(order)}}</label>
+          <label>{{getOrderStatus(order)}}</label>
         </div>
 
         <div>

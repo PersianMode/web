@@ -27,7 +27,6 @@ export class OrdersComponent implements OnInit {
     'date',
     'order_lines',
     'total_amount',
-    'discount',
     'used_point',
     'address',
     'view_details',
@@ -177,7 +176,7 @@ export class OrdersComponent implements OnInit {
 
       const isDelivered = order.tickets.map(x => x.status).includes(ORDER_STATUS.Delivered);
       const hasNotCanceledOrderLine = order.order_lines.find(x => {
-        return !x.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.CancelRequested);
+        return !x.cancel;
       });
       const hasNotReturnedOrderLine = order.order_lines.find(x => {
         return !x.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.ReturnRequested);
@@ -188,7 +187,7 @@ export class OrdersComponent implements OnInit {
       } else if (isDelivered && !hasNotReturnedOrderLine) {
         return OrderLineStatuses.find(x => x.status === ORDER_LINE_STATUS.ReturnRequested).title;
       } else if (!isDelivered && !hasNotCanceledOrderLine) {
-        return OrderLineStatuses.find(x => x.status === ORDER_LINE_STATUS.CancelRequested).title;
+        return 'لغو سفارش';
       } else if (!isDelivered && hasNotCanceledOrderLine) {
         return OrderStatuses.find(x => x.status === order.tickets[order.tickets.length - 1].status).title;
       }

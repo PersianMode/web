@@ -102,9 +102,15 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   getOrderLineStatus(orderLine) {
-    if (orderLine && orderLine.tickets) {
-      const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return OrderLineStatuses.find(x => x.status === lastTicket.status).name;
+    try {
+      if (orderLine && orderLine.tickets) {
+        const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
+        const ticketName = OrderLineStatuses.find(x => x.status === lastTicket.status).name;
+        return orderLine.cancel ? `${'لغو شده'} - ${ticketName}` : ticketName;
+
+      }
+    } catch (error) {
+
     }
   }
 
@@ -136,7 +142,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   informDamage(orderLine) {
- 
+
   }
 
   ngOnDestroy(): void {
