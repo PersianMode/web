@@ -119,7 +119,7 @@ export class ReturnDeliveryGeneratorComponent implements OnInit {
     }).subscribe(res => {
       this.progressService.disable();
       this.openSnackBar('تخصیص به ارسال با موفقیت انجام شد');
-      this.dialogRef.close();
+      this.dialogRef.close();    
     }, err => {
       this.progressService.disable();
       this.openSnackBar('خطا در دریافت آدرس و اطلاعات ارسال');
