@@ -226,7 +226,6 @@ export class DeliveryHistoryComponent implements OnInit {
         } else
           this.deliveryItems = '';
         this.totalRecords = res.total ? res.total : 0;
-        console.log('total', this.totalRecords);
         if (this.deliveryItems) {
           this.deliveryItems.forEach((order, index) => {
             order['index'] = index + 1;
