@@ -98,7 +98,7 @@ export class LoyaltyDiscountComponent implements OnInit {
   }
 
   submitTotalInfo() {
-    if (this.selectedDuration.is_c_and_c === true)
+    if (this.selectedDuration.is_collect === true)
       return;
     this.progressService.enable();
     this.httpService.post('deliveryduration', this.selectedDuration).subscribe(
