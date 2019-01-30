@@ -187,6 +187,13 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  needsProcess(message) {
+    return !message.is_processed &&
+      ![
+        SMMessageTypes.Damage
+      ].includes(message.type);
+
+  }
   process(message) {
     let component;
     switch (message.type) {
