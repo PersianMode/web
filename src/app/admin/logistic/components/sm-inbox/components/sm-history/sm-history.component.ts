@@ -88,7 +88,6 @@ export class SmHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     this.httpService.post('search/SMMessage', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
 
-      console.log('res: ', res.data);
       const rows = [];
       res.data.forEach((message, index) => {
         message['position'] = index + 1;
