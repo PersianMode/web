@@ -174,7 +174,7 @@ export class DurationFormComponent implements OnInit {
     this.formLoyaltyInfo.forEach(el => el.price = this.costValue[el.name]);
     const durationInfo = {
       _id: this.duration_id ? this.duration_id : null,
-      is_c_and_c: false,
+      is_collect: false,
       name: this.durationForm.controls['name'].value,
       delivery_days: this.durationForm.controls['delivery_days'].value,
       cities: [{

@@ -108,15 +108,14 @@ export class ShelvsViewComponent implements OnInit {
           if (preOrderData) {
             preOrderData.order_lines.push(x)
           } else {
-            order_data.push(Object.assign(foundOrder, {order_lines: [x]}, {transaction_id: delivery.transaction_id},
-              {order_time: delivery.order_time}));
+            order_data.push(Object.assign(foundOrder, {order_lines: [x]}));
           }
         });
 
         delivery.orders = order_data;
       }
 
-      console.log('dliveries', res.data);
+      console.log('deliveries', res.data);
 
       const rows = [];
 
@@ -173,6 +172,8 @@ export class ShelvsViewComponent implements OnInit {
   showOrderLine(orderLines) {
     this.dialog.open(OrderLineViewerComponent, {
       width: '800px',
+      height: '400px',
+      autoFocus: false,
       data: orderLines
     });
   }

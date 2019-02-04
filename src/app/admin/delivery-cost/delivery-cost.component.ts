@@ -38,12 +38,12 @@ export class DeliveryCostComponent implements OnInit {
     if (eventObj) {
       if (eventObj._id && eventObj.name &&
         eventObj.delivery_days &&
-        eventObj.cities && eventObj.delivery_loyalty && (eventObj.is_c_and_c === false)) {
+        eventObj.cities && eventObj.delivery_loyalty && (eventObj.is_collect === false)) {
         this.showTabs = true;
       }
       // TODO : else case to notify complete info for select duration (navigate to form)
       this.durationObject = {
-        is_c_and_c: false,
+        is_collect: false,
         _id: eventObj._id,
         name: eventObj.name,
         delivery_days: eventObj.delivery_days,

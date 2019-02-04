@@ -33,10 +33,32 @@
   text-align: right;
 }
 
-.filtering-box {
-  margin: 5px;
+.filter-box {
+  margin: 15px;
 }
 
 .checkbox-label {
   margin-right: 5px;
+}
+
+.select-style-dropDown {
+  width: 120px;
+  height: 30px;
+  vertical-align: baseline;
+  border: 0 !important;
+  outline: 0;
+  background: 0 0;
+  z-index: 3;
+  border-radius: 2px;
+  background-color: black;
+  color: #fff;
+  padding-right: 5px;
+  font-family:iranyekan;
+}
+
+.style-select-warehouse {
+  /*display: inline-block;*/
+  position: relative;
+  overflow: hidden;
+  text-align: right;
 }

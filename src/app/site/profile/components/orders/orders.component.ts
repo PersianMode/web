@@ -147,7 +147,7 @@ export class OrdersComponent implements OnInit {
       const validTime = moment(lastTicket.timestamp).isAfter(moment().add(-7, 'd'));
 
       const hasAvailableOrderLine =
-        !!order.order_lines.find(x => !x.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.ReturnRequested));
+        !!order.order_lines.find(x => !x.cancel && !x.tickets.map(y => y.status).includes(ORDER_LINE_STATUS.ReturnRequested));
 
       return delivered && validTime && hasAvailableOrderLine;
     } catch (err) {
