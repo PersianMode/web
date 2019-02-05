@@ -11,7 +11,7 @@
       <mat-table #table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef class="header">ردیف</mat-header-cell>
-          <mat-cell *matCellDef="let element" class="content"> {{formatter(element.position)}} </mat-cell>
+          <mat-cell *matCellDef="let element" class="content"> {{formatter(element.index)}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="start">
@@ -45,7 +45,7 @@
         <ng-container matColumnDef="status">
           <mat-header-cell *matHeaderCellDef class="header">وضعیت</mat-header-cell>
           <mat-cell *matCellDef="let element" class="content">
-            <span >{{element.destination?.name}}</span>
+            <span >{{getReceiver(element)}}</span>
           </mat-cell>
         </ng-container>
 

@@ -292,16 +292,10 @@ export class CheckoutService {
       cartItems: this.authService.userIsLoggedIn() ? null : this.cartService.getCheckoutItems(),
       order_id: this.cartService.getOrderId(),
       address: this.addressObj,
-      // transaction_id: null,
-      // used_point: 0,
-      // used_balance: 0,
-      // total_amount: this.total,
-      // discount: this.discount,
       is_collect: !this.withDelivery,
       duration_id: this.withDelivery ? this.deliveryDurationId : null,
       time_slot: this.withDelivery ? this.deliveryTime : null,
       paymentType: this.selectedPaymentType,
-      // loyalty: this.earnSpentPointObj,
     };
   }
 

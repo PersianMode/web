@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import {HttpService} from 'app/shared/services/http.service';
 import {ProgressService} from 'app/shared/services/progress.service';
 import {SocketService} from 'app/shared/services/socket.service';
+import {AuthService} from 'app/shared/services/auth.service';
 
 @Component({
   selector: 'app-new-internal-delivery',
@@ -37,7 +38,8 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
 
 
   constructor(private httpService: HttpService, private progressService: ProgressService,
-    private snackBar: MatSnackBar, private dialog: MatDialog, private socketService: SocketService
+    private snackBar: MatSnackBar, private dialog: MatDialog, private socketService: SocketService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -133,6 +135,13 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
     this.snackBar.open(message, null, {
       duration: 2000,
     });
+  }
+
+  getReceiver(element) {
+    try {
+      return this.authService.warehouses.find(x => x._id === element.to.warehouse_id).name;
+    } catch (err) {
+    }
   }
   ngOnDestroy(): void {
     if (this.socketSubscription)

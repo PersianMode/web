@@ -43,7 +43,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   usedLoyaltyPoint = 0;
   balanceValue = 0;
   loyaltyPoint = 0;
-  paymentType = PaymentType;
   disabled = false;
   changeMessage = '';
   soldOuts: any[] = [];
@@ -53,7 +52,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   noDuration = null;
   loyaltyGroups = [];
   addPointArray = [];
-  selectedPaymentType = 0;
+  selectedPaymentType = PaymentType.cash;
   earnedLoyaltyPoint = 0;
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this
@@ -119,7 +118,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     });
 
     // this.checkoutService.setPaymentType(this.paymentType.cash);
-    this.checkoutService.setPaymentType(this.paymentType[this.selectedPaymentType]);
+    this.checkoutService.setPaymentType(this.selectedPaymentType);
 
     if (this.checkoutService.deliveryDurationId)
       this.calculateDiscount(this.checkoutService.deliveryDurationId);
@@ -210,16 +209,16 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.selectedPaymentType = data;
 
     switch (data) {
-      case this.paymentType.cash: {
+      case PaymentType.cash: {
         this.checkoutService.setPaymentType(data);
       }
         break;
-      case this.paymentType.balance: {
+      case PaymentType.balance: {
         this.usedBalance = this.balanceValue;
         this.checkoutService.setPaymentType(data);
       }
         break;
-      case this.paymentType.loyaltyPoint: {
+      case PaymentType.loyaltyPoint: {
         this.usedLoyaltyPoint = this.loyaltyPoint * this.loyaltyValue;
         this.checkoutService.setPaymentType(data);
       }
@@ -247,7 +246,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         return;
       }
 
-      if (this.selectedPaymentType === 2)
+      if (this.selectedPaymentType === PaymentType.loyaltyPoint)
         this.earnedLoyaltyPoint = 0;
 
       else if (this.showCostLabel) {
