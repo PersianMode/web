@@ -73,11 +73,11 @@
               <tr *ngFor='let ol of detail.order.orders'>
                 <td>
                   <p style="margin: 10px">
-                    <b> تاریخ ثبت سفارش: </b> {{getDate(ol.order_time)}}</p>
+                    <b> تاریخ ثبت سفارش: </b> {{getDate(ol.order_lines[0].order_time)}}</p>
                 </td>
                 <td>
                   <p style="margin: 10px">
-                    <b>شماره فاکتور: </b>{{ol.transaction_id}}
+                    <b>شماره فاکتور: </b>{{ol.order_lines[0].transaction_id}}
                   </p>
                 </td>
                 <td>
