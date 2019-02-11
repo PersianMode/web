@@ -30,7 +30,7 @@
         <ng-container matColumnDef="desc">
           <mat-header-cell *matHeaderCellDef>توضیحات</mat-header-cell>
           <mat-cell *matCellDef="let message">
-            <button mat-button color="primary">نمایش</button>
+            <button mat-button color="primary" (click)="showDesc(message)">نمایش</button>
           </mat-cell>
         </ng-container>
 

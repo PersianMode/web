@@ -190,7 +190,8 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   needsProcess(message) {
     return !message.is_processed &&
       ![
-        SMMessageTypes.Damage
+        SMMessageTypes.Damage,
+        SMMessageTypes.SimpleOrderIssue,
       ].includes(message.type);
 
   }
@@ -211,6 +212,10 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
         message,
       }
     });
+  }
+
+  showDesc(message) {
+
   }
 
   close(message) {

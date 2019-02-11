@@ -95,33 +95,4 @@ export class BarcodeCheckerComponent implements OnInit {
   }
 
 
-  onWarehouseChange(warehouseId) {
-    this.currentWarehouse = warehouseId;
-  }
-
-  getClerkWarehouses(isHub = false) {
-    return this.authService.warehouses
-      .filter(x => x.is_hub === isHub)
-      .sort((a, b) => a.priority > b.priority ? 1 : a.priority < b.priority ? -1 : 0);
-  }
-
-
-  onMismatchDetected() {
-
-    const rmDialog = this.dialog.open(MismatchConfirmComponent, {
-      width: '400px',
-    });
-    rmDialog.afterClosed().subscribe(
-      (status) => {
-        if (status) {
-          this.onMismatchListener.emit();
-        }
-      },
-      (err) => {
-        console.log('Error in dialog: ', err);
-      }
-    );
-  }
-
 }
-
