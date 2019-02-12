@@ -45,6 +45,7 @@ import { ReturnDeliveryGeneratorComponent } from './components/sm-inbox/componen
 import { SmReportComponent } from './components/sm-inbox/components/sm-report/sm-report.component';
 import { SmHistoryComponent } from './components/sm-inbox/components/sm-history/sm-history.component';
 import { ShowReportComponent } from './components/sm-inbox/components/show-report/show-report.component';
+import { OrderCancelConfirmComponent } from './components/sm-inbox/components/order-cancel-confirm/order-cancel-confirm.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { ShowReportComponent } from './components/sm-inbox/components/show-repor
     ReturnDeliveryGeneratorComponent,
     SmReportComponent,
     SmHistoryComponent,
-    ShowReportComponent
+    ShowReportComponent,
+    OrderCancelConfirmComponent
   ],
   imports: [
     LogisticRouting,
@@ -116,7 +118,8 @@ import { ShowReportComponent } from './components/sm-inbox/components/show-repor
     OrderLineViewerComponent,
     ReturnDeliveryGeneratorComponent,
     SmReportComponent,
-    ShowReportComponent
+    ShowReportComponent,
+    OrderCancelConfirmComponent
   ]
 })
 export class LogisticModule {

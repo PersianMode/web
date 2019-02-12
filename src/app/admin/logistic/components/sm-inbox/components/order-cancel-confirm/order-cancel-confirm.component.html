@@ -1,0 +1,36 @@
+<mat-card class="center">
+  <mat-card-header class="content" style="float: right;">
+    بررسی سفارش
+  </mat-card-header>
+  <mat-card-content class="page">
+    <div *ngIf="!message" class="content" dir="rtl">
+      ادامه سفارش یا لغو کالا
+    </div>
+    <div class="content" dir="rtl">
+      چنانچه قصد از سرگیری فرایند را دارید ابتدا نسبت به افزایش موجودی انبار ها مطمئن شوید
+      <p *ngIf="!isGuest()">
+        در صورت لغو سفارش، هزینه آن به حساب کاربر بازگردانده خواهد شد
+      </p>
+      <p *ngIf="isGuest()">
+        سفارش برای کاربر مهمان است.در صورت لغو خرید، جهت بازگشت هزینه با تحویل گیرنده تماس بگیرید
+      </p>
+    </div>
+    <br />
+
+    <div *ngIf="hasMoreOrderLines()">
+      <mat-radio-group class="radio-group" [(ngModel)]="cancelAll">
+        <mat-radio-button class="radio-button" [value]="false">لغو همین کالا</mat-radio-button>
+        <mat-radio-button class="radio-button" [value]="true">لغو کل سفارش</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div fxLayout="row" rxLayout.xs="column" fxLayoutAlign="center center">
+      <div fxFlex="50" style="display: inline-block">
+
+        <button mat-button color="primary" (click)="renew()">از سر گیری فرایند</button>
+      </div>
+      <div fxFlex="50" style="display: inline-block">
+        <button mat-button color="warn" (click)="cancel()">لغو سفارش</button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

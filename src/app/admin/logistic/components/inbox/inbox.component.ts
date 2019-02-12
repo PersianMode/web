@@ -11,6 +11,7 @@ import {AuthService} from 'app/shared/services/auth.service';
 import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
 import {ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
 import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
+import {MismatchConfirmComponent} from '../mismatch-confirm/mismatch-confirm.component';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status', 'process'];
+  displayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status', 'process', 'loss'];
   dataSource: MatTableDataSource<any>;
 
   pageSize = 10;
@@ -131,9 +132,6 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.load();
   }
 
-  onMismatchDetected() {
-    // this.progressService.enable();
-  }
 
   shouldCheckProduct(orderline) {
     const isHubClerk = this.authService.userDetails.access_level === AccessLevel.HubClerk;
@@ -172,6 +170,33 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   }
+
+  informLoss(orderLine) {
+
+    const rmDialog = this.dialog.open(MismatchConfirmComponent, {
+      width: '400px',
+    });
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.post('order/loss', {
+            orderId: orderLine.order_id,
+            orderLineId: orderLine.order_line_id
+          }).subscribe(res => {
+            this.progressService.disable();
+          }, err => {
+            this.progressService.disable();
+            this.openSnackBar('خطا به هنگام اعلام مفقودی محصول');
+          });
+        }
+      },
+      (err) => {
+        console.log('Error in dialog: ', err);
+      }
+    );
+  }
+
 
   ngOnDestroy(): void {
     this.socketSubscription.unsubscribe();
