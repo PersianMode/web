@@ -15,6 +15,11 @@
           <mat-cell *matCellDef="let message"> {{message.position}}</mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef>نوع</mat-header-cell>
+          <mat-cell *matCellDef="let message"> {{getType(message)}}</mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="customer">
           <mat-header-cell *matHeaderCellDef> خریدار</mat-header-cell>
           <mat-cell *matCellDef="let message">{{getCustomer(message)}}</mat-cell>
@@ -24,14 +29,6 @@
         <ng-container matColumnDef="publish_date">
           <mat-header-cell *matHeaderCellDef>تاریخ ارسال پیام</mat-header-cell>
           <mat-cell *matCellDef="let message"> {{getDate(message.publish_date)}}</mat-cell>
-        </ng-container>
-
-
-        <ng-container matColumnDef="desc">
-          <mat-header-cell *matHeaderCellDef>توضیحات</mat-header-cell>
-          <mat-cell *matCellDef="let message">
-            <button mat-button color="primary" (click)="showDesc(message)">نمایش</button>
-          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="status">

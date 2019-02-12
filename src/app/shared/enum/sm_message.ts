@@ -1,7 +1,6 @@
 export enum SMMessageTypes {
   ReturnRequest = 1,
-  SimpleOrderIssue = 2,
-  ComplexOrderIssue = 3,
-  Loss = 4,
-  Damage = 5,
+  NotExists = 2,
+  Loss = 3,
+  Damage = 4,
 }

@@ -3,18 +3,18 @@ import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from 
 import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {SocketService} from '../../../../shared/services/socket.service';
-import {OrderLineStatuses} from '../../../../shared/lib/status';
 import {OrderAddressComponent} from '../order-address/order-address.component';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
-import {BarcodeCheckerComponent} from '../barcode-checker/barcode-checker.component';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
-import {TicketComponent} from '../ticket/ticket.component';
 import {SMMessageTypes} from 'app/shared/enum/sm_message';
 import {ReturnDeliveryGeneratorComponent} from './components/return-delivery-generator/return-delivery-generator.component';
 import {SmReportComponent} from './components/sm-report/sm-report.component';
+import {ShowReportComponent} from './components/show-report/show-report.component';
+import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
+import {OrderCancelConfirmComponent} from './components/order-cancel-confirm/order-cancel-confirm.component';
 
 @Component({
   selector: 'app-sm-inbox',
@@ -35,9 +35,9 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayedColumns = [
     'position',
+    'type',
     'customer',
     'publish_date',
-    'desc',
     'status',
     'process',
     'close'
@@ -171,6 +171,22 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  getType(message) {
+    try {
+      switch (message.type) {
+        case SMMessageTypes.ReturnRequest:
+          return 'درخواست بازگشت کالا';
+        case SMMessageTypes.Damage:
+          return 'گزارش خرابی کالا';
+        case SMMessageTypes.Loss:
+          return 'گزارش مفقودی کالا';
+        case SMMessageTypes.NotExists:
+          return 'عدم موجودی';
+      }
+    } catch (err) {
+    }
+  }
+
   showDetial(message) {
     this.dialog.open(ProductViewerComponent, {
       width: '400px',
@@ -182,6 +198,9 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     switch (message.type) {
       case SMMessageTypes.ReturnRequest:
         return 'اختصاص ارسال';
+      case SMMessageTypes.NotExists:
+        return 'بررسی سفارش';
+
       default:
         return '-';
     }
@@ -191,7 +210,6 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     return !message.is_processed &&
       ![
         SMMessageTypes.Damage,
-        SMMessageTypes.SimpleOrderIssue,
       ].includes(message.type);
 
   }
@@ -201,7 +219,9 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       case SMMessageTypes.ReturnRequest:
         component = ReturnDeliveryGeneratorComponent;
         break;
-
+      case SMMessageTypes.NotExists:
+        component = OrderCancelConfirmComponent;
+        break;
       default:
         break;
     }
@@ -209,12 +229,9 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dialog.open(component, {
       width: '700px',
       data: {
-        message,
+        message
       }
     });
-  }
-
-  showDesc(message) {
 
   }
 
