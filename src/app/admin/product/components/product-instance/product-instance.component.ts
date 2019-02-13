@@ -164,7 +164,7 @@ export class ProductInstanceComponent implements OnInit, OnChanges {
 
     this.httpService.post('product/instance/inventory', {
       id: this.product._id,
-      productInstanceId: foundInstance._id,
+      instanceId: foundInstance._id,
       warehouseId: this.warehouseId,
       count: this.productInstanceForm.controls['count'].value,
       price: this.productInstanceForm.controls['price'].value

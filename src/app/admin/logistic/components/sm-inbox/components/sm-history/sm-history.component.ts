@@ -1,25 +1,19 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild,} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
-import {HttpService} from '../../../../shared/services/http.service';
-import {AuthService} from '../../../../shared/services/auth.service';
-import {SocketService} from '../../../../shared/services/socket.service';
-import {OrderAddressComponent} from '../order-address/order-address.component';
-import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
-import {ProgressService} from '../../../../shared/services/progress.service';
+import {HttpService} from '../../../../../../shared/services/http.service';
+import {SocketService} from '../../../../../../shared/services/socket.service';
+import {ProductViewerComponent} from '../../../product-viewer/product-viewer.component';
+import {ProgressService} from '../../../../../../shared/services/progress.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
+import {imagePathFixer} from '../../../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
-import {SMMessageTypes} from 'app/shared/enum/sm_message';
-import {ReturnDeliveryGeneratorComponent} from './components/return-delivery-generator/return-delivery-generator.component';
-import {SmReportComponent} from './components/sm-report/sm-report.component';
-import {ShowReportComponent} from './components/show-report/show-report.component';
-import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
-import {OrderCancelConfirmComponent} from './components/order-cancel-confirm/order-cancel-confirm.component';
+import {ShowReportComponent} from '../show-report/show-report.component';
+
 
 @Component({
-  selector: 'app-sm-inbox',
-  templateUrl: './sm-inbox.component.html',
-  styleUrls: ['./sm-inbox.component.scss'],
+  selector: 'app-sm-history',
+  templateUrl: './sm-history.component.html',
+  styleUrls: ['./sm-history.component.css'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0', visibility: 'hidden'})),
@@ -28,19 +22,18 @@ import {OrderCancelConfirmComponent} from './components/order-cancel-confirm/ord
     ]),
   ],
 })
-export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SmHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   @Output() OnNewSMInboxCount = new EventEmitter();
 
   displayedColumns = [
     'position',
-    'type',
     'customer',
     'publish_date',
-    'status',
-    'process',
-    'close'
+    'close_date',
+    'desc',
+    'report'
   ];
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
 
@@ -51,17 +44,18 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   socketSubscription: any = null;
+  startDateSearch = null;
+  endDateSearch = null;
 
   expandedElement: any;
 
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private socketService: SocketService,
-    private progressService: ProgressService) {
-
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private socketService: SocketService,
+              private progressService: ProgressService) {
   }
 
 
@@ -74,16 +68,18 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.load();
   }
-
   load() {
     this.progressService.enable();
 
     this.expandedElement = null;
 
     const options = {
+      startDateSearch: this.startDateSearch,
+      endDateSearch: this.endDateSearch,
+
       sort: this.sort.active,
       dir: this.sort.direction,
-      type: 'SMInbox'
+      type: 'SMHistory'
     };
 
     const offset = this.paginator.pageIndex * +this.pageSize;
@@ -115,8 +111,6 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-
-
   onSortChange($event: any) {
     this.paginator.pageIndex = 0;
     this.load();
@@ -132,16 +126,6 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     } catch (err) {
       console.log('-> error on parsing order time : ', err);
     }
-  }
-
-  showAddress(order) {
-    if (!order.address) {
-      return;
-    }
-    this.dialog.open(OrderAddressComponent, {
-      width: '400px',
-      data: {address: order.address, is_collect: !!order.is_collect}
-    });
   }
 
   getProductDetail(message) {
@@ -171,22 +155,6 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getType(message) {
-    try {
-      switch (message.type) {
-        case SMMessageTypes.ReturnRequest:
-          return 'درخواست بازگشت کالا';
-        case SMMessageTypes.Damage:
-          return 'گزارش خرابی کالا';
-        case SMMessageTypes.Loss:
-          return 'گزارش مفقودی کالا';
-        case SMMessageTypes.NotExists:
-          return 'عدم موجودی';
-      }
-    } catch (err) {
-    }
-  }
-
   showDetial(message) {
     this.dialog.open(ProductViewerComponent, {
       width: '400px',
@@ -194,53 +162,10 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getProcessTitle(message) {
-    switch (message.type) {
-      case SMMessageTypes.ReturnRequest:
-        return 'اختصاص ارسال';
-      case SMMessageTypes.NotExists:
-        return 'بررسی سفارش';
-
-      default:
-        return '-';
-    }
-  }
-
-  needsProcess(message) {
-    return !message.is_processed &&
-      ![
-        SMMessageTypes.Damage,
-      ].includes(message.type);
-
-  }
-  process(message) {
-    let component;
-    switch (message.type) {
-      case SMMessageTypes.ReturnRequest:
-        component = ReturnDeliveryGeneratorComponent;
-        break;
-      case SMMessageTypes.NotExists:
-        component = OrderCancelConfirmComponent;
-        break;
-      default:
-        break;
-    }
-
-    this.dialog.open(component, {
-      width: '700px',
-      data: {
-        message
-      }
-    });
-
-  }
-
-  close(message) {
-    this.dialog.open(SmReportComponent, {
-      width: '700px',
-      data: {
-        message,
-      }
+  report(message) {
+   this.dialog.open(ShowReportComponent, {
+      width: '600px',
+      data: message
     });
   }
 

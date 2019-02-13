@@ -55,8 +55,7 @@ export class ReturnDeliveryGeneratorComponent implements OnInit {
     this.progressService.enable();
 
     this.httpService.post('sm/assignToReturn', {
-      customerId: this.data.message.customer._id,
-      addressId: this.data.message.extra.address_id,
+      id: this.data.message._id,
       preCheck: true
     }).subscribe(res => {
       this.progressService.disable();
@@ -111,15 +110,11 @@ export class ReturnDeliveryGeneratorComponent implements OnInit {
 
     this.httpService.post('sm/assignToReturn', {
       id: this.data.message._id,
-      customerId: this.data.message.customer._id,
-      addressId: this.data.message.extra.address_id,
-      orderId: this.data.message.order._id,
-      orderLineId: this.data.message.order.order_lines._id,
       preCheck: false
     }).subscribe(res => {
       this.progressService.disable();
       this.openSnackBar('تخصیص به ارسال با موفقیت انجام شد');
-      this.dialogRef.close();    
+      this.dialogRef.close();
     }, err => {
       this.progressService.disable();
       this.openSnackBar('خطا در دریافت آدرس و اطلاعات ارسال');

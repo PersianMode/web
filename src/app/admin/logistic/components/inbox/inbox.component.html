@@ -58,6 +58,13 @@
             <button mat-button color="warn" *ngIf="shouldCheckProduct(orderLine)" (click)="informDamage(orderLine)">اعلام خرابی</button>
           </mat-cell>
         </ng-container>
+       
+        <ng-container matColumnDef="loss">
+          <mat-header-cell *matHeaderCellDef>مفقودی</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine">
+            <button mat-button color="warn"  (click)="informLoss(orderLine)">اعلام مفقودی</button>
+          </mat-cell>
+        </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 

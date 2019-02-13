@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MismatchConfirmComponent } from './mismatch-confirm.component';
+import { ShowReportComponent } from './show-report.component';
 
-describe('MismatchConfirmComponent', () => {
-  let component: MismatchConfirmComponent;
-  let fixture: ComponentFixture<MismatchConfirmComponent>;
+describe('ShowReportComponent', () => {
+  let component: ShowReportComponent;
+  let fixture: ComponentFixture<ShowReportComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MismatchConfirmComponent ]
+      declarations: [ ShowReportComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MismatchConfirmComponent);
+    fixture = TestBed.createComponent(ShowReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
