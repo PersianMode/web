@@ -55,6 +55,13 @@
           <mat-cell *matCellDef="let orderLine"> {{getOrderLineStatus(orderLine)}}</mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="lost">
+          <mat-header-cell *matHeaderCellDef>مفقودی</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine">
+            <button mat-button color="warn"  (click)="lostReport(orderLine)">اعلام مفقودی</button>
+          </mat-cell>
+        </ng-container>
+
         <!-- row header -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple></mat-row>

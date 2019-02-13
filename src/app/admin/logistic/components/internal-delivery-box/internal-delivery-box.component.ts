@@ -7,6 +7,7 @@ import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 import {OrderLineStatuses} from 'app/shared/lib/status';
 import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
+import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-internal-delivery-box',
@@ -18,7 +19,7 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   @Output() OnInternalDeliveryBoxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'details', 'name', 'barcode', 'status'];
+  displayedColumns = ['position', 'details', 'name', 'barcode', 'status', 'lost'];
   dataSource: MatTableDataSource<any>;
 
 
@@ -123,9 +124,36 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     this.load();
   }
 
-  onMismatchDetected() {
-    this.progressService.enable();
+  lostReport(orderLine) {
+
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+      data: {
+        name: 'اعلام مفقودی',
+        message: 'در صورت اعلام مفقودی کالا، پیامی به مسئول فروش ارسال و فرایند تامین کالا از سر گرفته خواهد شد'
+      }
+    });
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.post('order/lost', {
+            orderId: orderLine.order_id,
+            orderLineId: orderLine.order_line_id
+          }).subscribe(res => {
+            this.progressService.disable();
+          }, err => {
+            this.progressService.disable();
+            this.openSnackBar('خطا به هنگام اعلام مفقودی محصول');
+          });
+        }
+      },
+      (err) => {
+        console.log('Error in dialog: ', err);
+      }
+    );
   }
+
 
   ngOnDestroy(): void {
     this.socketSubscription.unsubscribe();

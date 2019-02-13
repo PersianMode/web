@@ -59,10 +59,10 @@
           </mat-cell>
         </ng-container>
        
-        <ng-container matColumnDef="loss">
+        <ng-container matColumnDef="lost">
           <mat-header-cell *matHeaderCellDef>مفقودی</mat-header-cell>
           <mat-cell *matCellDef="let orderLine">
-            <button mat-button color="warn"  (click)="informLoss(orderLine)">اعلام مفقودی</button>
+            <button mat-button color="warn"  (click)="lostReport(orderLine)">اعلام مفقودی</button>
           </mat-cell>
         </ng-container>
 
