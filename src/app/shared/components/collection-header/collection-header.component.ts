@@ -1,17 +1,25 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { PageService } from '../../services/page.service';
-import { HttpService } from '../../services/http.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { DictionaryService } from '../../services/dictionary.service';
+import {Component, OnInit, HostListener, Inject, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {PageService} from '../../services/page.service';
+import {HttpService} from '../../services/http.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {DictionaryService} from '../../services/dictionary.service';
+import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
+import {LoginStatus} from '../../../site/login/login-status.enum';
+import {DialogEnum} from '../../enum/dialog.components.enum';
+import {MatDialog} from '@angular/material';
+import {AuthService} from '../../services/auth.service';
+import {CheckoutService} from '../../services/checkout.service';
+import {WINDOW} from '../../services/window.service';
+import {CartService} from '../../services/cart.service';
 
 @Component({
   selector: 'app-collection-header',
   templateUrl: './collection-header.component.html',
   styleUrls: ['./collection-header.component.css']
 })
-export class CollectionHeaderComponent implements OnInit {
+export class CollectionHeaderComponent implements OnInit, OnDestroy {
   hiddenGenderMenu = true;
   selected = {
     men: false,
@@ -29,11 +37,20 @@ export class CollectionHeaderComponent implements OnInit {
   searchCollectionList = [];
   searchWaiting = false;
   rows: any = [];
-
+  logos = [];
+  dialogEnum = DialogEnum;
+  isLoggedIn = false;
+  isVerified = false;
+  cartNumbers = '';
+  itemSubs;
+  display_name;
 
   constructor(private router: Router, private pageService: PageService,
-    private httpService: HttpService, private sanitizer: DomSanitizer,
-    private dictionaryService: DictionaryService) {
+              private httpService: HttpService, private sanitizer: DomSanitizer,
+              private dictionaryService: DictionaryService,
+              public dialog: MatDialog, private authService: AuthService,
+              private CheckoutService: CheckoutService,
+              @Inject(WINDOW) private window, private cartService: CartService) {
   }
 
   ngOnInit() {
@@ -69,6 +86,35 @@ export class CollectionHeaderComponent implements OnInit {
             });
         });
       });
+    this.authService.isLoggedIn.subscribe(
+      (data) => {
+        this.isLoggedIn = this.authService.userIsLoggedIn();
+        this.display_name = this.authService.userDetails.displayName;
+      },
+      (err) => {
+        console.error('Cannot subscribe on isLoggedIn: ', err);
+        this.isLoggedIn = false;
+      });
+    this.authService.isVerified.subscribe(
+      (data) => this.isVerified = data,
+      (err) => {
+        console.error('Cannot subscribe on isVerified: ', err);
+        this.isVerified = false;
+      }
+    );
+    this.itemSubs = this.cartService.cartItems.subscribe(
+      data => {
+        data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => (+a) + (+b)) : 0;
+        if (+data) {
+          this.cartNumbers = (+data).toLocaleString('fa', {useGrouping: false});
+        } else {
+          this.cartNumbers = '';
+        }
+      });
+    this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
+      this.logos = data && data.length ? data.sort((x, y) => x.info.column - y.info.column) : [];
+    });
+    this.display_name = this.authService.userDetails.displayName;
   }
 
   showList(type) {
@@ -277,5 +323,49 @@ export class CollectionHeaderComponent implements OnInit {
   public documentClick(e: any): void {
     if (!e.path.some(el => el.id === 'search-area'))
       this.searchUnfocused();
+  }
+
+  login() {
+    this.authService.checkValidation(this.router.url)
+      .then(() => {
+        return new Promise((innerResolve, innerReject) => {
+          this.authService.isVerified.subscribe(
+            (data) => {
+              if (!data) {
+                return innerReject('header::authService->isVerified is false');
+              }
+            }
+          );
+        });
+      })
+      .catch(err => {
+        this.dialog.open(GenDialogComponent, {
+          width: '500px',
+          data: {
+            componentName: this.dialogEnum.login,
+            extraData: {
+              loginStatus: LoginStatus.Login
+            }
+          }
+        });
+      });
+  }
+
+  logout() {
+    this.authService.logout();
+    this.CheckoutService.ccRecipientData = null;
+
+  }
+
+  ngOnDestroy() {
+    this.itemSubs.unsubscribe();
+  }
+
+  navigateToProfile() {
+    this.router.navigate(['/', 'profile']);
+  }
+
+  navigateToCart() {
+    this.router.navigate(['/', 'cart']);
   }
 }
