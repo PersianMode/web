@@ -17,7 +17,7 @@
               </h4>
             </div>
             <div fxFlex="30" class="main-price">
-              <section *ngIf="!notExist"><span
+              <section *ngIf="!notExist"><span style="color: black;font-size: 20px;"
                 [class.overridden]="product?.discount">{{displayTotalPrice}}</span><br/><span *ngIf="product?.discount">{{totalDiscountedPrice}}</span>
               </section>
               <section *ngIf="notExist && !product.count">ناموجود</section>
@@ -27,25 +27,32 @@
         </div>
         <div class="item-data">
           <div>
-            <p>اندازه:</p>
-            <span>{{displaySize}}</span>
+            <p style="color: grey;">سایز:</p>
+            <span style="position: relative;left: 9px;">{{displaySize}}</span>
           </div>
+          <section><p style="color: grey;">تعداد:</p><span style="position: relative;left: 20px;">{{displayQuantity}} {{' عدد'}}</span></section>
           <br>
-          <div>
-            <p>تعداد:</p>
-            <span>{{displayQuantity}} {{' عدد'}}</span>
-            <section><span [class.overridden]="product?.discount">{{displayPrice}}</span><span
-              *ngIf="product?.discount">{{discountedPrice}}</span></section>
-          </div>
+          <!-- <div> -->
+            <!-- <p>تعداد:</p> -->
+            <!-- <span>{{displayQuantity}} {{' عدد'}}</span> -->
+            <!-- <section><span [class.overridden]="product?.discount">{{displayPrice}}</span><span
+              *ngIf="product?.discount">{{discountedPrice}}</span></section> -->
+          <!-- </div> -->
           <br>
           <div>
             <p>رنگ:</p>
             <span>{{color}}</span>
           </div>
         </div>
-        <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
-          <button fxFlex="30" fxFlex.xs=50 (click)="deleteProduct()">حذف</button>
-          <button fxFlex="30" fxFlex.xs=50 (click)="openEditOrder()">ویرایش</button>
+        <div fxLayout="row" fxLayoutAlign="end end" class="btn-container">
+          <div class="btn-delete" fxFlex="30" fxFlex.xs=50 (click)="deleteProduct()">
+            <span class="btn-icon" ><mat-icon>clear</mat-icon></span>
+            <span class="btn-text">حذف</span>
+          </div>
+          <div class="btn-edit" fxFlex="30" fxFlex.xs=50 (click)="openEditOrder()">
+            <span class="btn-icon"><mat-icon>edit</mat-icon></span>
+            <span class="btn-text">ویرایش</span>
+          </div>
         </div>
       </div>
     </div>
