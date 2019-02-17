@@ -29,6 +29,7 @@ export class CollectionHeaderComponent implements OnInit {
   searchCollectionList = [];
   searchWaiting = false;
   rows: any = [];
+  searchEreaFlag = false;
 
 
   constructor(private router: Router, private pageService: PageService,
@@ -111,13 +112,13 @@ export class CollectionHeaderComponent implements OnInit {
   }
 
   searchFocused() {
-    this.searchIsFocused = true;
-    if (this.searchPhrase)
-      this.searchProduct();
-    else {
-      this.searchProductList = [];
-      this.searchCollectionList = [];
-    }
+    // this.searchIsFocused = true;
+    // if (this.searchPhrase)
+    //   this.searchProduct();
+    // else {
+    //   this.searchProductList = [];
+    //   this.searchCollectionList = [];
+    // }
   }
 
   searchUnfocused() {
@@ -140,7 +141,7 @@ export class CollectionHeaderComponent implements OnInit {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 6,
+      limit: 10,
     }).subscribe(
       (data) => {
         this.searchProductList = [];
@@ -178,7 +179,7 @@ export class CollectionHeaderComponent implements OnInit {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 6,
+      limit: 4,
     }).subscribe(
       (data) => {
         this.searchCollectionList = [];
@@ -224,6 +225,8 @@ export class CollectionHeaderComponent implements OnInit {
     this.searchIsFocused = false;
     this.searchProductList = [];
     this.searchCollectionList = [];
+    this.searchPhrase = null;
+    this.searchEreaFlag = false;
   }
 
   getProductThumbnail(product) {
@@ -253,7 +256,7 @@ export class CollectionHeaderComponent implements OnInit {
         chunk.push(this.searchProductList[sp]);
         counter++;
 
-        if (counter >= 2) {
+        if (counter >= 5) {
           counter = 0;
           this.rows.push(chunk);
           chunk = [];
@@ -271,6 +274,11 @@ export class CollectionHeaderComponent implements OnInit {
     this.searchCollectionList = [];
     this.searchWaiting = false;
     this.searchIsFocused = false;
+  }
+
+  openSearchErea() {
+    this.searchEreaFlag = !this.searchEreaFlag;
+    this.searchPhrase = null;
   }
 
   @HostListener('document:click', ['$event'])
