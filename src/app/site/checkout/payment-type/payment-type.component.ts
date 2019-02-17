@@ -61,7 +61,7 @@ export class PaymentTypeComponent implements OnInit {
       amount: 0,
     },
     {
-      name: 'امتیازهای وفاداری',
+      name: 'امتیاز',
       value: this.paymentType.loyaltyPoint,
       disabled: true,
       amount: 0,

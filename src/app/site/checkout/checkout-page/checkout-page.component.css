@@ -25,3 +25,11 @@ mat-panel-title {
   width:calc(100% - 30px);
 }
 
+.line {
+  margin-top: 4%;
+  background-color: #e2e2e2;
+}
+
+.font-color {
+  color: #8f8f8f
+}

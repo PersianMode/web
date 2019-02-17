@@ -1,40 +1,40 @@
-<div style="width: 100%;">
+<div style="width: 100%;" class="font-color">
   <div>
     <div>
-      <span class="co-right-text">جمع قیمت</span>
+      <span class="co-right-text"> جمع قیمت: </span>
       <span class="co-left-text">{{priceFormatter(total)}}  تومان</span>
     </div>
     <div>
-      <span class="co-right-text">تخفیف</span>
+      <span class="co-right-text">تخفیف: </span>
       <span class="co-left-text">{{priceFormatter(discount)}} تومان </span>
     </div>
     <div *ngIf="usedBalance">
-      <span class="co-right-text">موجودی</span>
+      <span class="co-right-text">موجودی: </span>
       <span class="co-left-text">{{priceFormatter(usedBalance)}} تومان </span>
     </div>
     <div *ngIf="usedLoyaltyPoint">
-      <span class="co-right-text">امتیاز وفاداری</span>
+      <span class="co-right-text">امتیاز وفاداری: </span>
       <span class="co-left-text">{{priceFormatter(usedLoyaltyPoint)}} امتیاز </span>
     </div>
     <br>
     <div *ngIf="showEarnPointLabel">
-      <span class="co-right-text">امتیاز بدست آمده از این خرید</span>
+      <span class="co-right-text">امتیاز بدست آمده از این خرید: </span>
       <span class="co-left-text">{{priceFormatter(earnedLoyaltyPoint)}} امتیاز </span>
     </div>
     <br>
     <div *ngIf="showCostLabel">
-      <span class="co-right-text">هزینه ارسال</span>
+      <span class="co-right-text">هزینه ارسال: </span>
       <span class="co-left-text"
             [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryCost)}} تومان </span>
     </div>
     <div *ngIf="showCostLabel" class="no-duration-selected">
-      <span class="co-right-text">تخفیف ارسال</span>
+      <span class="co-right-text">تخفیف ارسال: </span>
       <span class="co-left-text"
             [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryDiscount)}} تومان </span>
     </div>
     <div class="final-price">
-      <span class="co-right-text">قیمت نهایی</span>
-      <span class="co-left-text">{{priceFormatter(finalTotal)}} تومان </span>
+      <h2 class="co-right-text">قیمت نهایی:
+      {{priceFormatter(finalTotal)}} تومان </h2>
     </div>
   </div>
 </div>

@@ -4,11 +4,12 @@
       <mat-radio-button *ngFor="let type of paymentTypes" [value]="type.value" class="payment-type"
                         [disabled]="type.disabled" [color]="danger">
         <div fxLayout="row" style="width: 100%">
-          <div fxFlex="90">
+          <div fxFlex="40">
             <label>{{type.name}}</label>
           </div>
-          <div fxFlex="10">
-            <label *ngIf="type.amount !== null && type.amount !== undefined">({{priceFormatter(type.amount)}})</label>
+          <div fxFlex="60">
+            <label *ngIf="type.amount !== null && type.amount !== undefined">{{priceFormatter(type.amount)}}</label>
+            <label *ngIf="type.name === 'موجودی'">تومان </label>
           </div>
         </div>
       </mat-radio-button>

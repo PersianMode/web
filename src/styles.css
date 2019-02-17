@@ -42,12 +42,12 @@ h6 {
   height: 39px;
 }
 
-.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
-  border-color: #000 !important;
+.mat-radio-button.mat-accent .mat-radio-outer-circle {
+  border-color: #e2e2e2 !important;
 }
 
 .mat-radio-button.mat-accent .mat-radio-inner-circle {
-  background-color: #000 !important;
+  background-color: #cccccc !important;
 }
 
 .first-bar ul {
@@ -884,11 +884,9 @@ mat-panel-title {
 }
 
 .box-area {
-  border-color: #000;
-  border-style: solid;
-  border-radius: 5px;
-  border-width: thin;
   padding: 5px;
+  background-color: #f5f5f5;
+  width: 40%;
 }
 
 .mat-radio-label-content,

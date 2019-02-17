@@ -5,13 +5,10 @@
 }
 
 .co-left-text {
-  float: left;
   padding-left: 10px;
-  color: black;
 }
 
 .co-right-text {
-  color: black;
   padding: 5px;
 }
 
@@ -25,5 +22,9 @@
 }
 
 .no-duration-selected {
-  color : red;
+  color : #8f8f8f;
+}
+
+.font-color {
+  color: #8f8f8f;
 }
