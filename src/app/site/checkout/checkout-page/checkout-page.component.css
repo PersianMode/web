@@ -17,12 +17,14 @@ mat-panel-title {
 }
 
 .payment-button {
-  padding:10px;
-  margin:15px;
-  font-size:12pt;
-  background: black;
-  color:white;
-  width:calc(100% - 30px);
+  padding: 10px;
+  border: 0px;
+  font-size: 12pt;
+  background: #cfde29;
+  color: white;
+  width: 120px;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
 .line {
@@ -30,6 +32,6 @@ mat-panel-title {
   background-color: #e2e2e2;
 }
 
-.font-color {
-  color: #8f8f8f
+.checkout-page {
+  color: #8f8f8f;
 }

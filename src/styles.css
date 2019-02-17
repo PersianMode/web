@@ -44,10 +44,11 @@ h6 {
 
 .mat-radio-button.mat-accent .mat-radio-outer-circle {
   border-color: #e2e2e2 !important;
+  background-color: white;
 }
 
 .mat-radio-button.mat-accent .mat-radio-inner-circle {
-  background-color: #cccccc !important;
+  background-color: #8f8f8f !important;
 }
 
 .first-bar ul {
@@ -886,6 +887,7 @@ mat-panel-title {
 .box-area {
   padding: 5px;
   background-color: #f5f5f5;
+  margin: 5px;
   width: 40%;
 }
 

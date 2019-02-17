@@ -1,10 +1,8 @@
-<div fxLayout="row" class="outer-div font-color">
+<div fxLayout="row" class="outer-div checkout-page" fxLayoutAlign="center center">
   <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
   <div fxFlex="80" fxFlex.sm="80" fxFlex.xs="100">
-    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"
-         fxLayoutAlign="center center" fxLayoutAlign.sm="center center" fxLayoutAlign.xs="start center"
-         class="middle-div-wrapper">
-      <div fxFlex="70" class="middle-div">
+    <div class="middle-div-wrapper">
+      <div class="middle-div">
         <h2>خلاصه خرید</h2>
 
         <app-checkout-summary [total]="total" [discount]="discount" [usedBalance]="usedBalance"
@@ -15,42 +13,42 @@
                               [showEarnPointLabel]="showEarnPointLabel"
                               [noDuration]="noDuration"></app-checkout-summary>
         <hr class="line">
-        <h2><i class="fa fa-credit-card"></i> نوع پرداخت</h2>
+      </div>
+      <div><h2><i class="fa fa-credit-card"></i> نوع پرداخت</h2>
         <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
                           (selectedType)="changePaymentType($event)"></app-payment-type>
-
-        <hr class="line">
-        <h2><i class="fa fa-map-marker-alt"></i>آدرس</h2>
+      </div>
+      <hr class="line">
+      <div class="deliveryOptionsWrapper">
         <app-address-table [isProfile]=false (deliveryType)="setCostLabel($event)"
                            (noDuration)="noDuration = $event"
                            (durationType)="calculateDiscount($event)"></app-address-table>
-        <hr class="line">
-        <form #bankDataFormId method="post" Action="https://pep.shaparak.ir/gateway.aspx">
-          <input type="hidden" #invoiceNumber name="invoiceNumber"/>
-          <input type="hidden" #invoiceDate name="invoiceDate"/>
-          <input type="hidden" #amount name="amount"/>
-          <input type="hidden" #terminalCode name="terminalCode"/>
-          <input type="hidden" #merchantCode name="merchantCode"/>
-          <input type="hidden" #redirectAddress name="redirectAddress"/>
-          <input type="hidden" #timeStamp name="timeStamp"/>
-          <input type="hidden" #action name="action"/>
-          <input type="hidden" #mobile name="mobile"/>
-          <input type="hidden" #email name="email"/>
-          <input type="hidden" #sign name="sign"/>
-        </form>
-        <button mat-raised-button
-                class="payment-button"
-                (click)="checkout()" [disabled]="disabled"
-                [style.background]="disabled ? 'gray' : 'black'">پرداخت
-        </button>
-        <button mat-raised-button
-                class="payment-button"
-                (click)="checkoutDemo()"
-                [style.background]="!isDev || disabled ? 'gray' : 'black'">دمو پرداخت
-        </button>
       </div>
+      <hr class="line">
+      <form #bankDataFormId method="post" Action="https://pep.shaparak.ir/gateway.aspx">
+        <input type="hidden" #invoiceNumber name="invoiceNumber"/>
+        <input type="hidden" #invoiceDate name="invoiceDate"/>
+        <input type="hidden" #amount name="amount"/>
+        <input type="hidden" #terminalCode name="terminalCode"/>
+        <input type="hidden" #merchantCode name="merchantCode"/>
+        <input type="hidden" #redirectAddress name="redirectAddress"/>
+        <input type="hidden" #timeStamp name="timeStamp"/>
+        <input type="hidden" #action name="action"/>
+        <input type="hidden" #mobile name="mobile"/>
+        <input type="hidden" #email name="email"/>
+        <input type="hidden" #sign name="sign"/>
+      </form>
+      <button mat-raised-button
+              class="payment-button"
+              (click)="checkout()" [disabled]="disabled">پرداخت
+      </button>
+      <button mat-raised-button
+              class="payment-button"
+              (click)="checkoutDemo()">دمو پرداخت
+      </button>
     </div>
   </div>
   <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
 </div>
+
 

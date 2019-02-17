@@ -1,5 +1,4 @@
-<div style="width: 100%;" class="font-color">
-  <div>
+<div style="width: 100%;" class="checkout-summary">
     <div>
       <span class="co-right-text"> جمع قیمت: </span>
       <span class="co-left-text">{{priceFormatter(total)}}  تومان</span>
@@ -16,12 +15,10 @@
       <span class="co-right-text">امتیاز وفاداری: </span>
       <span class="co-left-text">{{priceFormatter(usedLoyaltyPoint)}} امتیاز </span>
     </div>
-    <br>
     <div *ngIf="showEarnPointLabel">
       <span class="co-right-text">امتیاز بدست آمده از این خرید: </span>
       <span class="co-left-text">{{priceFormatter(earnedLoyaltyPoint)}} امتیاز </span>
     </div>
-    <br>
     <div *ngIf="showCostLabel">
       <span class="co-right-text">هزینه ارسال: </span>
       <span class="co-left-text"
@@ -36,5 +33,4 @@
       <h2 class="co-right-text">قیمت نهایی:
       {{priceFormatter(finalTotal)}} تومان </h2>
     </div>
-  </div>
 </div>
