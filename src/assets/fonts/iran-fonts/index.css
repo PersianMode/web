@@ -102,18 +102,6 @@
   unicode-range: U+0600-06FF;
 }
 
-
-@font-face {
-  font-family: iranyekan, sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  src: url('IRAN-Kharazmi.eot');
-  src: url('IRAN-Kharazmi.eot?#iefix') format('embedded-opentype'),  /* IE6-8 */
-  url('IRAN-Kharazmi.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
-  url('IRAN-Kharazmi.ttf') format('truetype');
-  unicode-range: U+0600-06FF;
-}
-
 @font-face {
   font-family: nastaliq;
   font-style: normal;

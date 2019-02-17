@@ -174,7 +174,7 @@ nav {
 .logoButtons {
   position: absolute;
   top: 0px;
-  right: 13px;
+  right: 30px;
   direction: ltr;
 }
 .logoButtons button {
@@ -291,9 +291,6 @@ button {
   min-height: 250px;
   font-weight: bold;
   text-align: center;
-  border-bottom: 1px solid #E5E5E5;
-  padding-top: 40px;
-  background: #fff;
   z-index: 10;
 }
 
@@ -305,15 +302,15 @@ button {
 }
 
 .genderList div.middle {
-  border-left: 1px solid #E5E5E5;
-  border-right: 1px solid #E5E5E5;
+  border-left: 1px solid #E2E2E2;
+  border-right: 1px solid #E2E2E2;
   text-align: center;
 }
 
 .genderList ul {
   display: inline-block;
   list-style-type: none;
-  padding: 0px 15px;
+  padding: 0 45px;
   text-align: justify !important;
   vertical-align: top;
   margin: 0;
@@ -330,27 +327,25 @@ button {
 
 .headerList li {
   font-weight: bolder !important;
-  margin-bottom: 10px !important;
 }
 
 .genderList li {
-  margin-bottom: 5px;
+  font-size: 150%;
   font-weight: 200;
 }
 
 .headerItem {
   font-weight: bolder !important;
-  margin-bottom: 10px !important;
 }
 
 .genderList a {
   text-decoration: none;
-  color: black;
+  color: #ffffff;
   outline: none;
 }
 
 .genderList a:hover {
-  color: darkgray;
+  color: #e71096;
 }
 
 .genderList a:focus {
@@ -360,9 +355,11 @@ button {
 .genderListWrapper {
   width: 100% !important;
   min-width: 960px;
-  padding: 0;
+  padding: 150px 0;
   margin: 0;
   overflow: hidden;
+  background: #8f8f8f;
+  border:0;
 }
 
 .hidden {
