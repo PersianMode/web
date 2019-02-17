@@ -40,6 +40,8 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    
     this.desc =  this.data.tags
       .filter(r => tagNames.includes(r.tg_name))
       .sort((x, y) => tagNames.findIndex(r => x.tg_name === r) - tagNames.findIndex(r => y.tg_name === r))
@@ -56,12 +58,12 @@ export class ProductGridItemComponent implements OnInit {
     this.discounted = !!this.data.discount;
     this.setPrice();
   }
-
+ 
   private setPrice() {
     this.price = priceFormatter(this.data.colors[this.pos].price);
     this.discountedPrice = priceFormatter(this.data.colors[this.pos].discountedPrice);
   }
-
+  
   turnOn(e, time) {
     setTimeout(() => {
       this.on = e || true;

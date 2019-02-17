@@ -17,6 +17,13 @@
       </div>
       <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
     </div>
+    <!-- <div *ngFor =" let color of data.colors" class="colorprev">
+      <p>{{data.colors}}</p>
+    <svg height="15" width="15">
+        <rect x="1" y="1" width="20" height="20" 
+                attr.fill="{{color}}"></rect>
+      </svg>
+    </div> -->
     <p>{{data.colors.length.toLocaleString('fa')}} رنگ <span *ngIf="soldOut" class="soldOut">تمام شد</span></p>
     <h2>{{data.name}}</h2>
     <h3>{{desc}}</h3>
