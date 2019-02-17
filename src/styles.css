@@ -684,46 +684,49 @@ mat-panel-title {
 }
 
 .footer-link-bold {
-  color: white !important;
-  font-weight: bolder;
+  color: #ffffff !important;
+  font-weight: 600;
   font-size: .875em !important;
   text-decoration: none;
 }
 
 .footer-link {
-  color: gray;
-  font-size: .688em;
+  color: #ffffff;
+  font-size: .875em;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 200;
 }
 
 .footer-wrapper {
-  background-color: #191919;
+  background-color: #8f8f8f;
   clear: both;
   margin-top: 60px;
 }
 
 .hr-setting {
   width: 100%;
-  border-color: gray;
+  border-color: white;
   border-width: 0.5px;
 }
 
 .div-bottom {
+  color: #ffffff;
   width: 100%;
   font-size: 0.625em;
   direction: rtl;
 }
 
+.div-bottom a {
+  color: #ffffff;
+}
+
 .div-right-reserved-symbol {
-  color: lightgray;
   display: inline-block;
   padding: 2px 0px 13px 0px;
   font-size: small
 }
 
 .div-right-reserved {
-  color: lightgray;
   display: inline-block;
   padding: 2px 0px 13px 13px;
 }
@@ -777,10 +780,6 @@ mat-panel-title {
   padding: 2px 12px 13px 0px;
 }
 
-.footer-link1 {
-  color: gray;
-}
-
 .div-top {
   width: 100%;
   padding-bottom: 0px;
@@ -790,12 +789,11 @@ mat-panel-title {
 .e-nemad {
   width: 125px;
   height: 136px;
-  background: antiquewhite;
-  border-radius: 5px;
 }
 
 .e-nemad-wrapper {
-  text-align: center;
+  text-align: left;
+  padding: 0 50px
 }
 
 .mat-drawer-content {
