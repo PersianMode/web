@@ -132,6 +132,7 @@ export class CollectionHeaderComponent implements OnInit {
     if (!this.searchPhrase) {
       this.searchProductList = [];
       this.searchCollectionList = [];
+      this.searchWaiting = false;
       return;
     }
 
@@ -279,6 +280,7 @@ export class CollectionHeaderComponent implements OnInit {
   openSearchErea() {
     this.searchEreaFlag = !this.searchEreaFlag;
     this.searchPhrase = null;
+
   }
 
   @HostListener('document:click', ['$event'])
