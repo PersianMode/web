@@ -14,20 +14,20 @@
       جستجو در لیتیم
     </div>
     <div style="height: 55%;" fxLayout="row" fxLayoutAlign="start start">
-      <div fxFlex="10"></div>
-      <div fxFlex="80">
+      <div fxFlex="15"></div>
+      <div fxFlex="70">
         <input class="search-input" type="text" [(ngModel)]="searchPhrase"
                (ngModelChange)="searchProduct()"
                placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید">
       </div>
-      <div fxFlex="10"></div>
+      <div fxFlex="15"></div>
     </div>
   </div>
 </div>
 
 <div *ngIf="!searchWaiting && (searchProductList.length || searchCollectionList.length) && searchPhrase"
      class="search-result-wrapper">
-  <div style="color: white; font-family: iranyekan, sans-serif; font-size: 15px; font-weight: bold; margin-right: 60px">
+  <div class="best-offer">
     بهترین پیشنهادها
   </div>
   <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="start start">
@@ -46,12 +46,10 @@
       </div>
     </div>
     <div fxFlex="40" *ngIf="searchCollectionList && searchCollectionList.length">
-        <div *ngFor="let element of searchCollectionList" class="search-item"
-             style="text-align: left; font-size: 12px; padding-bottom: 8px"
-             (click)="selectSearchResult(element, false)">
+        <div *ngFor="let element of searchCollectionList"
+             (click)="selectSearchResult(element, false)" style="padding-bottom: 20px">
           <div *ngIf="element.pages && element.pages.length">
-            <div
-              style="text-align: left; margin-top: 5px; font-size: 15px; color: white; font-family: iranyekan; font-weight: bold">
+            <div class="search-name">
               {{element.name_fa}}
             </div>
           </div>
@@ -65,7 +63,7 @@
     <div fxFlex="2.5"></div>
   </div>
   <div  fxLayout="row" fxLayout.xs="row" fxLayoutAlign="start start"
-    style="color: white; text-align: left; margin-left: 20px; font-weight: bold; font-family: iranyekan, sans-serif; font-size: 12px">
+    class="all-prod">
     <div fxFlex="2.5"></div>
     <div fxFlex="95" style="margin-bottom: 30px">مشاهده همه محصولات</div>
     <div fxFlex="2.5"></div>

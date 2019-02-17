@@ -40,7 +40,7 @@
 }
 
 .search-name {
-  white-space: pre-wrap;
+  /*white-space: pre-wrap;*/
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
@@ -48,7 +48,8 @@
   font-size: 15px;
   color: white;
   font-family: iranyekan;
-  font-weight: bold
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .search-brand, .search-type, .search-article_no {
@@ -123,4 +124,19 @@ hr {
   font-family: iranyekan, sans-serif;
 }
 
+.best-offer {
+  color: white;
+  font-family: iranyekan, sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  margin-right: 60px
+}
+
+.all-prod {
+  color: white;
+  text-align: left;
+  font-weight: bold;
+  font-family: iranyekan, sans-serif;
+  font-size: 12px
+}
 
