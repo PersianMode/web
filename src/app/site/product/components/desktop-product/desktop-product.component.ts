@@ -51,7 +51,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input()
   set selectedProductColorID(id) {
     if (id) {
-      this.selectedProductColor = this.product.colors.find(r => r._id === id);
+      this.selectedProductColor = this.chunkProductColor(this.product.colors.find(r => r._id === id));
       this.productSize = this.product.sizesByColor[id];
     }
   };
@@ -126,5 +126,20 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     this.snackBar.open('لینک محصول در پس زمینه کپی شد', null, {
       duration: 2000,
     });
+  }
+
+  chunkProductColor (productColors) {
+    if (!productColors || !productColors.image || !productColors.image.angles.length) {
+      return productColors;
+    }
+    let i, j;
+    const temparray = [];
+    for (i = 0, j = productColors.image.angles.length; i < j; i += 3) {
+      temparray.push( productColors.image.angles.slice(i, i + 3));
+    }
+
+    productColors['image']['angles'] = [];
+    productColors['image']['angles'] = [...temparray];
+    return productColors;
   }
 }
