@@ -62,7 +62,7 @@
           <rect x="1" y="1" width="20" height="20" [attr.stroke]="needsBorder[v] ? '#ccc' : 'transparent' " stroke-width="1 "
                   attr.fill="{{filter_options[i]?.values_fa[j]}} "></rect>
         </svg>
-        <i *ngIf="isChecked[fo.name][v] " class="fa fa-check circle"></i>
+        <i *ngIf="isChecked[fo.name][v] " class="fa fa-check circle" [style.color]="oppositeColor[v] "></i>
       </span>
     </span>
     <span *ngIf="fo.name==='size' ">
