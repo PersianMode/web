@@ -1052,8 +1052,21 @@ p {
   font-family: iranyekan, sans-serif !important;
 }
 
+
 .overridden {
-  text-decoration: line-through;
+  font-size: 4em;
+  line-height: 3px;
+  position: relative;
+}
+.overridden::after {
+  border-bottom: 0.1em solid red;
+  content: "";
+  left: 0;
+  margin-top: calc(0.125em / 2 * -1);
+  position: absolute;
+  right: 0;
+  top: 50%;
+   transform: rotate(-10deg);
 }
 
 .wishlist {
