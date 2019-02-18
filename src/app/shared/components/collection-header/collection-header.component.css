@@ -18,6 +18,7 @@
   margin: 0;
   border: 0;
   z-index: 100;
+  padding-bottom: 5px;
 }
 
 .search-item {
@@ -28,12 +29,12 @@
 }
 
 .search-item div {
-  padding: 0 5px;
+  padding: 0 10px;
 }
 
 .search-item div img {
-  width: 90%;
-  height: 75%;
+  width: 100%;
+  /*height: 75%;*/
 }
 
 .search-name {
@@ -129,7 +130,7 @@
   text-align: left;
   font-weight: bold;
   font-size: 12px;
-  height: 15%;
+  height: 10%;
 }
 
 .font-style {
