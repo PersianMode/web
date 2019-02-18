@@ -1,3 +1,5 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
 .check-box-text {
   font-size: 13px;
   font-weight: 100;
@@ -9,10 +11,11 @@
   color: gray;
 }
 
+
 .circle {
-  top: -27px;
-  right: 3px;
-  font-size: 13px;
+  top: -25px;
+  right: 0px;
+  font-size: 15px;
   position: relative;
   display: table;
 }
@@ -22,7 +25,8 @@
   overflow: hidden;
   height: 26px;
   display: inline-block;
-  margin: 0 0 10px 10px;
+  margin: 0;
+  padding: 0;
 }
 
 .fit-check-box {
@@ -59,12 +63,13 @@
 }
 
 .slider {
+  padding: 0;
   margin: 10px;
 }
 
 @media (min-width: 960px) {
   .slider {
-    text-align: left;
+    text-align: right;
   }
 }
 
@@ -74,4 +79,6 @@
   }
 }
 
-
+.exp.indicator::after{
+display: none;
+}
