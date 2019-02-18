@@ -18,6 +18,7 @@
       <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
     </div>
     <div class="colorprev">
+        <span *ngIf="soldOut" class="soldOut">تمام شد</span>
     <div *ngFor =" let color of data.colors" style="display:inline-block " >
       <span *ngIf="color.colorcode == '#ffffff'" class="noborder" > 
         <svg  class="svgw" height="15" width="15">
