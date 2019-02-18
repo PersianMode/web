@@ -902,8 +902,7 @@ mat-panel-title {
 .box-area {
   padding: 5px;
   background-color: #f5f5f5;
-  margin: 5px;
-  width: 40%;
+  /*width: 40%;*/
 }
 
 .mat-radio-label-content,

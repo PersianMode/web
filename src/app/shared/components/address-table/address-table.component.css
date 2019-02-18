@@ -89,7 +89,6 @@ mat-icon {
 }
 
 .radio-field {
-  padding-right: 10px;
   display: inline-block;
 }
 
@@ -116,4 +115,9 @@ mat-icon {
 .type {
   display: block;
   margin: 5px;
+}
+
+.title-area {
+  margin-bottom: 15px;
+  margin-right: 5px;
 }

@@ -1,16 +1,22 @@
-<div class="box-area">
-  <mat-radio-group [(ngModel)]="selectedPaymentType" (change)="paymentTypeChanged()">
-    <mat-radio-button *ngFor="let type of paymentTypes" [value]="type.value" class="payment-type"
-                      [disabled]="type.disabled" [color]="danger">
-      <div fxLayout="row" style="padding-right: 5px">
-        <div fxFlex="40">
+<div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+     fxLayoutAlign.xs="center center">
+  <div fxFlex="40">
+  <h2 class="title-area"><i class="fa fa-credit-card"></i> نوع پرداخت</h2>
+  <div class="box-area">
+    <mat-radio-group [(ngModel)]="selectedPaymentType" (change)="paymentTypeChanged()">
+      <mat-radio-button *ngFor="let type of paymentTypes" [value]="type.value" class="payment-type"
+                        [disabled]="type.disabled" [color]="danger">
+        <div>
+          <div fxFlex="30">
           <label>{{type.name}}</label>
-        </div>
-        <div fxFlex="60">
+          </div>
+          <div fxFlex="30" style="margin-right: 10px;">
           <label *ngIf="type.amount !== null && type.amount !== undefined">{{priceFormatter(type.amount)}}</label>
           <label *ngIf="type.name === 'موجودی'">تومان </label>
+          </div>
         </div>
-      </div>
-    </mat-radio-button>
-  </mat-radio-group>
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+  </div>
 </div>

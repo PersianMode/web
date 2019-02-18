@@ -14,7 +14,7 @@
                               [noDuration]="noDuration"></app-checkout-summary>
         <hr class="line">
       </div>
-      <div><h2><i class="fa fa-credit-card"></i> نوع پرداخت</h2>
+      <div>
         <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
                           (selectedType)="changePaymentType($event)"></app-payment-type>
       </div>

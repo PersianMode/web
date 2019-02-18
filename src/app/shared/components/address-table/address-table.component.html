@@ -1,19 +1,19 @@
 <!--<h3 *ngIf="!isProfile">آدرس</h3>-->
 <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
-     fxLayoutAlign.xs="center center" style="padding-right: 5px">
+     fxLayoutAlign.xs="center center">
   <div *ngIf="!isProfile" fxFlex="40">
-    <h2><i class="fa fa-truck"></i> روش تحویل</h2>
-    <div  class="address-box">
+    <h2 class="title-area"><i class="fa fa-truck"></i> روش تحویل</h2>
+    <div class="address-box">
       <mat-radio-group [(ngModel)]="withDelivery" (change)="changeWithDelivery()">
         <mat-radio-button [value]="true" class="type">ارسال به آدرس شما</mat-radio-button>
         <mat-radio-button [value]="false" class="type">تحویل از فروشگاه</mat-radio-button>
       </mat-radio-group>
     </div>
-
   </div>
-  <div *ngIf="withDelivery && !isProfile" fxFlex="30" >
-    <h2>زمان تحویل</h2>
-    <div  class="address-box">
+
+  <div *ngIf="withDelivery && !isProfile" fxFlex="30">
+    <h2 class="title-area">زمان تحویل</h2>
+    <div class="address-box">
       <mat-radio-group [(ngModel)]="deliveryDays" class="radio-field">
         <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days"
                           (change)="changeDurationType(d._id, d.delivery_days)"
@@ -26,8 +26,8 @@
   </div>
 
   <div *ngIf="withDelivery && !isProfile" fxFlex="30">
-    <h2>ساعت تحویل</h2>
-    <div  class="address-box">
+    <h2 class="title-area">ساعت تحویل</h2>
+    <div class="address-box">
       <mat-radio-group [(ngModel)]="deliveryTime" class="radio-field">
         <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)" class="type">
           {{getDeliveryTimeDisplay(dh)}}
