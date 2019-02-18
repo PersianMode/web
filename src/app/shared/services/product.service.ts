@@ -246,15 +246,10 @@ export class ProductService {
               .filter(c => p.instances.map(i => i.product_color_id).includes(c._id)));
             this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
           } else if (f.name === 'price') {
-            const filteredProductBefore = this.filteredProducts;
-            this.filteredProducts = [];
-            filteredProductBefore.forEach(product => {
-              if ((product.instances.filter(instance => instance.discountedPrice >= f.values[0] &&
-                  instance.discountedPrice <= f.values[1])).length > 0) {
-                this.filteredProducts.push(product);
-              }
-            });
-            this.filteredProducts = this.filteredProducts.filter(p => p.price >= f.values[0] && p.price <= f.values[1]);
+            this.filteredProducts = this.filteredProducts
+              .filter(product =>
+                product.instances.find(instance => instance.discountedPrice >= f.values[0] &&
+                  instance.discountedPrice <= f.values[1]));
           } else if (f.name === 'discount') {
             this.filteredProducts = this.filteredProducts.filter(p => p.discount >= f.values[0] && p.discount <= f.values[1]);
           } else {
