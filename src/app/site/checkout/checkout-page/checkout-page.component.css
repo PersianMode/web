@@ -24,24 +24,26 @@ mat-panel-title {
   color: white;
   width: 120px;
   cursor: pointer;
-  margin-top: 10px;
   outline: none;
-  margin-right: 5px;
+  margin: 10px 10px 0 0;
 }
 
 .line {
   margin: 10px;
   background-color: #e2e2e2;
-  /*margin-right: 10px;*/
-  /*margin-left: 10px;*/
 }
 
 .line-breaker {
   background-color: #e2e2e2;
-  margin-right: 10px;
-  margin-left: 10px;
+  margin: 0 10px 10px 10px;
 }
 
 .checkout-page {
   color: #8f8f8f;
+}
+
+
+.bottom-line {
+  background-color: #e2e2e2;
+  margin: 20px 10px 5px 10px;
 }

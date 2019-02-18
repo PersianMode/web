@@ -121,13 +121,10 @@ mat-icon {
 }
 
 .title-area {
-  margin-bottom: 15px;
-  margin-right: 10px;
+  margin: 0 10px 15px 0;
 }
 
 .line {
   margin: 10px;
   background-color: #e2e2e2;
-  /*margin-right: 10px;*/
-  /*margin-left: 10px;*/
 }
