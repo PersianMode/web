@@ -6,7 +6,7 @@
     <mat-radio-group [(ngModel)]="selectedPaymentType" (change)="paymentTypeChanged()">
       <mat-radio-button *ngFor="let type of paymentTypes" [value]="type.value" class="payment-type"
                         [disabled]="type.disabled" [color]="danger">
-        <div>
+        <div fxLayout="row" fxLayoutAlign="start start">
           <div fxFlex="30">
           <label>{{type.name}}</label>
           </div>
