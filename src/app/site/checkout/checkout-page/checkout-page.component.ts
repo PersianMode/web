@@ -379,7 +379,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         this.checkoutService.updateVariablesAfterCheckout();
         this.spinnerService.enable();
         this.bankData = res;
-        this.bankData['redirectAddress'] = 'http://localhost:4200/shopResult';
         IdArray.forEach(el => {
           this[el].nativeElement.value = this.bankData[el];
         });
