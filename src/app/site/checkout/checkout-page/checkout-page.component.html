@@ -12,8 +12,8 @@
                               [showCostLabel]="showCostLabel"
                               [showEarnPointLabel]="showEarnPointLabel"
                               [noDuration]="noDuration"></app-checkout-summary>
-        <hr class="line">
       </div>
+      <hr class="line-breaker">
       <div>
         <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
                           (selectedType)="changePaymentType($event)"></app-payment-type>

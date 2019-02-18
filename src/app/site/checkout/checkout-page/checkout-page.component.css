@@ -26,11 +26,20 @@ mat-panel-title {
   cursor: pointer;
   margin-top: 10px;
   outline: none;
+  margin-right: 5px;
 }
 
 .line {
-  margin-top: 4%;
+  margin: 10px;
   background-color: #e2e2e2;
+  /*margin-right: 10px;*/
+  /*margin-left: 10px;*/
+}
+
+.line-breaker {
+  background-color: #e2e2e2;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .checkout-page {
