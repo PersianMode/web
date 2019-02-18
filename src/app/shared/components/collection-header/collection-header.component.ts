@@ -28,7 +28,6 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     girls: false,
   };
   persistedList = false;
-  searchIsFocused = false;
   menu: any = {};
   placements: any = {};
   topMenu = [];
@@ -44,6 +43,8 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   cartNumbers = '';
   itemSubs;
   display_name;
+  searchAreaFlag = false;
+
 
   constructor(private router: Router, private pageService: PageService,
               private httpService: HttpService, private sanitizer: DomSanitizer,
@@ -118,8 +119,9 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   showList(type) {
+    this.searchAreaFlag = false;
     setTimeout(() => {
-      this.searchUnfocused();
+      this.searchFinished();
       this.hiddenGenderMenu = false;
       this.selected[type] = true;
       this.menu = this.placements[type + 'Menu'];
@@ -148,28 +150,14 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToRoot() {
-    this.router.navigate(['']);
-  }
-
   getKeyList(list) {
     return Object.keys(list);
   }
 
-  searchFocused() {
-    this.searchIsFocused = true;
-    if (this.searchPhrase)
-      this.searchProduct();
-    else {
-      this.searchProductList = [];
-      this.searchCollectionList = [];
-    }
-  }
-
-  searchUnfocused() {
-    this.searchIsFocused = false;
+  searchFinished() {
     this.searchProductList = [];
     this.searchCollectionList = [];
+    this.searchWaiting = false;
   }
 
   searchProduct() {
@@ -177,6 +165,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     if (!this.searchPhrase) {
       this.searchProductList = [];
       this.searchCollectionList = [];
+      this.searchWaiting = false;
       return;
     }
 
@@ -186,7 +175,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 6,
+      limit: 10,
     }).subscribe(
       (data) => {
         this.searchProductList = [];
@@ -224,7 +213,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 6,
+      limit: 4,
     }).subscribe(
       (data) => {
         this.searchCollectionList = [];
@@ -262,14 +251,14 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   selectSearchResult(element, isProduct) {
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+    this.searchPhrase = null;
+    this.searchAreaFlag = false;
     if (isProduct)
       this.router.navigate([`/product/${element.id}`]);
     else
       this.router.navigate([`${element.pages[0].address}`]);
-
-    this.searchIsFocused = false;
-    this.searchProductList = [];
-    this.searchCollectionList = [];
   }
 
   getProductThumbnail(product) {
@@ -299,7 +288,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
         chunk.push(this.searchProductList[sp]);
         counter++;
 
-        if (counter >= 2) {
+        if (counter >= 5) {
           counter = 0;
           this.rows.push(chunk);
           chunk = [];
@@ -311,18 +300,18 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  onClose() {
+  openSearchArea() {
+    this.searchAreaFlag = !this.searchAreaFlag;
     this.searchPhrase = null;
     this.searchProductList = [];
     this.searchCollectionList = [];
     this.searchWaiting = false;
-    this.searchIsFocused = false;
   }
 
   @HostListener('document:click', ['$event'])
   public documentClick(e: any): void {
     if (!e.path.some(el => el.id === 'search-area'))
-      this.searchUnfocused();
+      this.searchFinished();
   }
 
   login() {
@@ -361,11 +350,33 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     this.itemSubs.unsubscribe();
   }
 
+  navigateToCart() {
+    this.router.navigate(['/', 'cart']);
+  }
+
   navigateToProfile() {
     this.router.navigate(['/', 'profile']);
   }
 
-  navigateToCart() {
-    this.router.navigate(['/', 'cart']);
+  goToRoot() {
+    this.router.navigate(['']);
   }
+
+  searchFocused() {
+    if (this.searchPhrase)
+      this.searchProduct();
+    else {
+      this.searchProductList = [];
+      this.searchCollectionList = [];
+      this.searchWaiting = false;
+    }
+  }
+
+  onClose() {
+    this.searchPhrase = null;
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+    this.searchWaiting = false;
+  }
+
 }
