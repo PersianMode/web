@@ -308,7 +308,7 @@ export class AddressTableComponent implements OnInit {
   }
 
   getDeliveryTimeDisplay(time_slot) {
-    return 'ساعت ' + (time_slot.lower_bound).toLocaleString('fa') + 'تا ' + (time_slot.upper_bound).toLocaleString('fa');
+    return 'ساعت ' + (time_slot.lower_bound).toLocaleString('fa') + ' - ' + (time_slot.upper_bound).toLocaleString('fa');
   }
 }
 

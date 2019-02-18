@@ -42,12 +42,13 @@ h6 {
   height: 39px;
 }
 
-.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
-  border-color: #000 !important;
+.mat-radio-button.mat-accent .mat-radio-outer-circle {
+  border-color: #e2e2e2 !important;
+  background-color: white;
 }
 
 .mat-radio-button.mat-accent .mat-radio-inner-circle {
-  background-color: #000 !important;
+  background-color: #8f8f8f !important;
 }
 
 .first-bar ul {
@@ -593,17 +594,20 @@ dp-date-picker.dp-material .dp-picker-input {
   width: 79px;
   padding: 4px 0 !important;
   text-align: center;
-  border: 1px rgba(221, 221, 221, .7) solid;
+  border: 2px rgba(221, 221, 221, .7) solid;
   color: black;
+  font-weight: bold;
 }
 
 .filter-size .mat-button-toggle-label-content {
+  
   width: 42px !important;
-  font-size: 14px !important;
+  font-size: 17px !important;
+  margin: 5px;
 }
 
 .mat-button-toggle-label-content:hover {
-  border: 1px black solid;
+  border: 2px black solid;
   z-index: 10;
 }
 
@@ -827,8 +831,11 @@ mat-panel-title {
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background,
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background: #999999 !important;
+  background: #ffffff !important;
+  border: 2px #111111 solid !important;
 }
+.mat-checkbox-checkmark-path {
+ stroke:black !important;}
 
 .mat-checkbox {
   font-family: iranyekan, sans-serif !important;
@@ -836,7 +843,7 @@ mat-panel-title {
 }
 
 .mat-checkbox-frame {
-  border: 1px #999999 solid !important;
+  border: 2px #111111 solid !important;
 }
 
 .mat-ripple-element {
@@ -869,19 +876,22 @@ mat-panel-title {
 
 .ui-slider-handle {
   background: white;
-  border-radius: 2px;
+  border-radius: 4px;
   border: 1px solid #ccc;
   height: 1.6em !important;
   top: -.5em !important;
+  
+
 }
 
 .ui-slider {
-  background: #ccc;
-
+  border-radius: 15px !important;
+  background: #ccc !important;
 }
 
 .ui-slider-range {
-  background: #999999;
+  border-radius: 15px;
+  background: #000000 !important;
 }
 
 .mat-content {
@@ -899,11 +909,9 @@ mat-panel-title {
 }
 
 .box-area {
-  border-color: #000;
-  border-style: solid;
-  border-radius: 5px;
-  border-width: thin;
-  padding: 5px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  margin: 10px;
 }
 
 .mat-radio-label-content,
@@ -946,12 +954,28 @@ mat-panel-title {
   display: inline !important;
 }
 
-.mat-slide-toggle-bar {
-  background: rgba(99, 99, 99, .5) !important;
+.mat-slide-toggle-thumb {
+  width: 11px !important;
+  height: 11px !important;
+  transform: translate(10%, 45%);
 }
 
-.mat-slide-toggle-thumb {
-  background: gray !important;
+.mat-slide-toggle-bar {
+background-color: rgb(131, 131, 131);
+height: 17px !important;
+}
+
+.mat-slide-toggle-thumb-container {
+top: -2px !important;
+left: -4px !important
+}
+
+.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+background-color: rgb(131, 131, 131);
+}
+
+.mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+background-color: #fff;
 }
 
 .persian-field input {

@@ -52,7 +52,7 @@
 }
 
 .on span {
-  border: 1px solid #ccc !important;
+  border: 1px solid #ccc;
   background: #fff;
 }
 .main p{
@@ -170,4 +170,16 @@
   height: 60px;
   display: inline-block;
   /*transform: scaleX(-1);*/
+}
+.colorprev{
+  margin: 1px 10px 0 2px;
+}
+.svgw{
+  display: inline-block;
+  border: 2px solid rgb(243, 243, 243);
+  padding: 0;
+  
+}
+.noborder{
+  border :none !important;
 }

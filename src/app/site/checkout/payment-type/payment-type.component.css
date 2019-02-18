@@ -1,9 +1,16 @@
 .payment-type {
   display: block;
   margin: 5px;
-  width: 200px;
+}
+
+.radio-field {
+  display: inline-block;
 }
 
 .payment-type-label {
   margin: 5px;
+}
+
+.title-area {
+  margin: 0 10px 15px 0;
 }
