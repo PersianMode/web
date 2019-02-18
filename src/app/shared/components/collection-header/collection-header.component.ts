@@ -159,6 +159,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     this.searchCollectionList = [];
     this.searchWaiting = false;
     this.searchAreaFlag = false;
+    this.searchPhrase = null;
   }
 
   searchProduct() {
@@ -252,10 +253,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   selectSearchResult(element, isProduct) {
-    this.searchProductList = [];
-    this.searchCollectionList = [];
-    this.searchPhrase = null;
-    this.searchAreaFlag = false;
+    this.searchFinished();
     if (isProduct)
       this.router.navigate([`/product/${element.id}`]);
     else
@@ -312,12 +310,12 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   public documentClick(e: any): void {
     if (!e.path.some(el => el.id === 'search-area')) {
-      this.searchFinished();
+      if (!e.path.some(el => el.id === 'search-icon'))
+        this.searchFinished();
     }
   }
 
   login() {
-    this.searchFinished();
     this.authService.checkValidation(this.router.url)
       .then(() => {
         return new Promise((innerResolve, innerReject) => {
@@ -344,7 +342,6 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.searchFinished();
     this.authService.logout();
     this.CheckoutService.ccRecipientData = null;
 
@@ -355,9 +352,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateToCart() {
-    this.searchAreaFlag = false;
     this.router.navigate(['/', 'cart']);
-    this.searchFinished();
   }
 
   navigateToProfile() {
