@@ -25,6 +25,7 @@ mat-panel-title {
   width: 120px;
   cursor: pointer;
   margin-top: 10px;
+  outline: none;
 }
 
 .line {

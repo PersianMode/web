@@ -29,7 +29,7 @@ td {
 
 th {
   text-align: justify;
-  padding: 0px 10px 10px 0px;
+  padding: 10px 10px 10px 0px;
 }
 
 .new-Address {
@@ -104,6 +104,9 @@ mat-icon {
   background: #e71096;
   color: white;
   font-size: 110%;
+  border: 0px;
+  shadow: none;
+  outline: none;
 }
 
 .address-box {
