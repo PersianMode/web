@@ -1,88 +1,85 @@
-<div class="photos" #photosDiv>
-  <section *ngIf="selectedProductColor">
-    <div *ngFor="let item of selectedProductColor?.image?.angles">
-      <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
-        <source src="{{item.url}}" type="video/webm"></video>
-      <img *ngIf="item.type !== 'video'" src="{{item.url}}">
-    </div>
-  </section>
-</div>
-<div class="description" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
-  [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
-     'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}"
-  #descPane>
-  <h1 *ngIf="product">{{product.name}}</h1>
-  <h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}}
-      تومان</span></h4>
-  <div *ngIf="product?.colors" class="colors">
-    <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
-      <span style="margin:0;" matTooltip="{{item?.translatedName}}">
-        <p *ngIf="item.soldOut && !focused[item._id]" class="soldOut">تمام شد</p>
-        <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id" src="{{item.image.thumbnail}}"
-          (mouseenter)="focused[item._id]=true" (mouseout)="focused[item._id]=false">
-      </span>
-    </a>
-  </div>
-  <app-size-picker [sizes]="productSize" [productType]="productType" [gender]="gender" (value)="newSize($event)"></app-size-picker>
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
-    <div fxFlex="80" class="full-width">
-      <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">در سبد بگذار</button>
-    </div>
-    <div fxFlex="20">
-      <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
-    </div>
-  </div>
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
-    <div fxFlex="30" class="share-parts">
-      <fb-like url="{{getProductShareLink()}}"></fb-like>
-    </div>
-    <div fxFlex="15" class="share-parts">
-      <google-plus url="{{getProductShareLink()}}"></google-plus>
-    </div>
-    <div fxFlex="15" class="share-parts">
-      <tweet url="{{getProductShareLink()}}"></tweet>
-    </div>
-    <div fxFlex="20" class="share-parts">
-      <linkedin-share url="{{getProductShareLink()}}"></linkedin-share>
-    </div>
-    <div fxFlex="20" class="share-parts">
-      <button mat-raised-button class="share-button clickable-link" (click)="copyLinkToClipboard()">
-        <div class="inner-copy-link">کپی لینک</div>
-      </button>
-    </div>
-  </div>
-  <mat-accordion>
-    <mat-expansion-panel [expanded]="false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          سایر مشخصات محصول
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <ul>
-        <li *ngIf="color"><strong>رنگ:</strong> {{color}}</li>
-        <li *ngIf="barcode"><strong>بارکد:</strong> {{barcode}}</li>
-        <li *ngIf="product.article_no"><strong>Article No:</strong> {{product.article_no}}</li>
-      </ul>
-    </mat-expansion-panel>
-    <mat-expansion-panel *ngIf="product.desc">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          بیشتر بدانید
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="description-md">
-        {{product.desc}}
+<!-- images and video -->
+<div>
+
+  <div class="photos" #photosDiv>
+    <section *ngIf="selectedProductColor" style="text-align: center">
+      <div *ngFor="let itemChunk of selectedProductColor?.image?.angles">
+        <div *ngFor="let item of itemChunk" class="photoWrapper">
+          <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
+            <source src="{{item.url}}" type="video/webm"></video>
+          <img *ngIf="item.type !== 'video'" src="{{item.url}}">
+        </div>
       </div>
-    </mat-expansion-panel>
-    <mat-expansion-panel *ngIf="product.reviews && product.reviews.length">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          نظرات مشتریان
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <p>
-        نظری داده نشده
-      </p>
-    </mat-expansion-panel>
-  </mat-accordion>
+    </section>
+  </div>
+
+  <!-- description and size picker -->
+  <div class="description" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
+    [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
+     'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}"
+    #descPane>
+    <h1 *ngIf="product">{{product.name}}</h1>
+    <div *ngIf="product?.colors" class="colors">
+      <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
+        <span style="margin:0;" matTooltip="{{item?.translatedName}}">
+          <p *ngIf="item.soldOut && !focused[item._id]" class="soldOut">تمام شد</p>
+          <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id" src="{{item.image.thumbnail}}"
+            (mouseenter)="focused[item._id]=true" (mouseout)="focused[item._id]=false">
+        </span>
+      </a>
+      <h2>{{sub}} <span style="margin: 0px" [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}}
+          تومان</span></h2>
+    </div>
+    <app-size-picker [sizes]="productSize" [productType]="productType" [gender]="gender" (value)="newSize($event)"></app-size-picker>
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+      <div fxFlex="80" class="full-width">
+        <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">اضافه کردن به
+          سبد خرید</button>
+      </div>
+      <div fxFlex="20">
+        <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+    <div>
+      <p *ngIf="color"><strong>رنگ:</strong> {{color}}</p>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              جزئیات بیشتر
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+        <mat-expansion-panel *ngIf="product.reviews && product.reviews.length">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                نظرات مشتریان
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p>
+              نظری داده نشده
+            </p>
+          </mat-expansion-panel>
+      </mat-accordion>
+      <div>
+        <span>
+          <span style="margin: 0px">
+            <mat-icon class="icon-large">reply</mat-icon>
+          </span>
+          <p>برگشت کالا</p>
+        </span>
+        <span>
+          <span style="margin: 0px">
+            <mat-icon class="icon-large">local_shipping</mat-icon>
+          </span>
+          <p>تحویل رایگان</p>
+        </span>
+      </div>
+      <span *ngIf="product.article_no"><strong style="color: #8F8F8F;">Article No</strong>
+        <h1>{{product.article_no}}</h1>
+      </span>
+    </div>
+  </div>
 </div>
+
+<div style="clear: both"></div>

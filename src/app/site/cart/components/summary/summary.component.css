@@ -15,7 +15,7 @@
 }
 
 .payment-button {
-  background-color: #FA5400;
+  background-color: #CFDE29;
   color: #fff;
   text-align: center;
   border: 0;
@@ -33,7 +33,7 @@
 }
 
 .payment-button:hover {
-  background: #c87951;
+  background: #E71096;
 }
 
 .total-payment {
@@ -53,7 +53,7 @@
 
 .hr-style {
   border: 0.5px solid #555;
-  margin: 0 0;
+  margin: 0 10px;
 }
 
 .coupon_code_btn {
@@ -83,4 +83,75 @@
 
 .open-close-field-sign {
   vertical-align: middle;
+}
+
+
+/* styling registration */
+.membership-style {
+  margin-right: 10px;
+  font-size: small;
+  text-decoration: underline;
+  color: #666;
+}
+
+.membership-style:hover {
+  color: black;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.row-register {
+  padding: 20px;
+  position: center;
+  margin-top: auto;
+  width: calc(100% - 40px);
+  background-color: white;
+  display: inline-flex;
+}
+
+.register-icon {
+  position: relative;
+  top: 36px;
+  left: 20px;
+}
+
+.row-register h2 {
+  color: #E71096;
+  position: relative;
+  left: 7px;
+  top: 10px;
+  font-size: 25px;
+}
+
+.row-register span {
+  color: #8F8F8F;
+  position: relative;
+  top: 36px;
+  left: 20px;
+  cursor: pointer;
+}
+
+/* row-coupon */
+.coupon-name {
+  color: white;
+  white-space: nowrap;
+  background-color: #CFDE29;
+  padding: 10px 3px;
+  position: relative;
+  top: 1px;
+}
+
+.coupon-input {
+  border-radius: 0px;
+  padding: 10px;
+  max-width: 148px;
+  width: 100%;
+  position: relative;
+  top: 1px
+}
+
+.coupon-btn {
+  width: 256px;
+  background-color: #E71096;
+  color: white;
 }
