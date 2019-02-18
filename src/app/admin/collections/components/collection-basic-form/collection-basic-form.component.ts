@@ -94,7 +94,6 @@ export class CollectionBasicFormComponent implements OnInit {
   }
 
   submitCollection() {
-
     const sendingData = {
       name: this.collectionForm.controls['name'].value,
       name_fa: this.collectionForm.controls['name_fa'].value,
@@ -123,9 +122,8 @@ export class CollectionBasicFormComponent implements OnInit {
 
         this.collectionId = data._id;
         this.onCollectionIdChanged.emit(this.collectionId);
-        this.submitpage()
-
-
+        this.submitpage();
+        this.progressService.disable();
       },
       error => {
         this.snackBar.open('Cannot ' + (this.collectionId ? 'update' : 'add') + ' this collection. Try again', null, {
@@ -183,6 +181,7 @@ export class CollectionBasicFormComponent implements OnInit {
         this.snackBar.open('page is ' + (this.id ? 'updated' : 'added'), null, {
           duration: 2300,
         });
+        this.progressService.disable();
       }
     );
   }
