@@ -85,12 +85,36 @@ hr {
   border-color: gray;
 }
 
-.close-search {
+.badge-icon {
+  font-size: 12px;
+  font-weight: 100;
   position: absolute;
-  left: 3px;
-  top: 3px;
-  cursor: pointer;
-  font-size: 20px;
+  color: white;
+  left: -6px;
+  top: -16px;
+  width: 13px;
+  text-align: center;
+  line-height: 13px;
+  z-index: 10;
+}
+
+#header-cart span:nth-child(1) {
+  position: relative;
+  z-index: 2;
+}
+
+#header-cart span:nth-child(2) svg {
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  z-index: 1;
+}
+
+#header-cart span:nth-child(3) {
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  z-index: 1;
 }
 
 .search-title-lith {

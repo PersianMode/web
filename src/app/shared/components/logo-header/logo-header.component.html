@@ -1,7 +1,7 @@
 <nav class="first-bar">
-  <ul>
-    <li *ngFor="let logo of logos"
-        [ngStyle]="{width: logo.info.style && logo.info.style.width ? logo.info.style.width + 'px' : '60px'}">
+  <ul style="direction:ltr">
+    <li *ngFor="let logo of logos;let i=index"
+        [ngStyle]="{'width.px': logo.info.style && logo.info.style.width ? logo.info.style.width  : 60, 'paddingLeft.px': i ? 5 : 35}">
       <a [href]="logo.info.href || '#'"
          class="gnav-member-bar"
          [title]="logo.info.text">

@@ -1,7 +1,6 @@
 <div class="second-bar">
-  <div style="position: fixed; top: 63px; right: 10px" (click)="openSearchErea()">
-    <i class="fa fa-search fa-flip-horizontal" style="right: 5px;">
-    </i>
+  <div class="persian-mode-logo" [routerLink]="['/']"><img style="height:60px" alt="Lithium"
+                                                           src="/assets/cliparts/logo.png">
   </div>
   <ul>
     <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]" (mouseenter)="showList(item.type)"
@@ -9,18 +8,88 @@
       <a [routerLink]="item.routerLink">{{item.info.text}}</a>
     </li>
   </ul>
-  <div *ngIf="searchEreaFlag" class="search-result-panel">
-    <div class="search-title-lith" (click)="searchEreaFlag = false; searchPhrase = null;">
-      جستجو در لیتیم
-    </div>
-    <div style="height: 55%;" fxLayout="row" fxLayoutAlign="start start">
-      <div fxFlex="15"></div>
-      <div fxFlex="70">
-        <input class="search-input" type="text" [(ngModel)]="searchPhrase"
-               (ngModelChange)="searchProduct()"
-               placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید">
+
+  <div class="logoButtons">
+    <span>
+      <button mat-button aria-label="search button" (click)="openSearchArea()" style="width:40px"
+              aria-label="Sign In or Register">
+        <span>
+          <img src="/assets/cliparts/search-icon.png">
+        </span>
+      </button>
+    </span>
+
+    <div *ngIf="searchEreaFlag" class="search-result-panel">
+      <div class="search-title-lith" (click)="searchEreaFlag = false; searchPhrase = null;">
+        جستجو در لیتیم
       </div>
-      <div fxFlex="15"></div>
+      <div style="height: 55%;" fxLayout="row" fxLayoutAlign="start start">
+        <div fxFlex="15"></div>
+        <div fxFlex="70">
+          <input class="search-input" type="text" [(ngModel)]="searchPhrase"
+                 (ngModelChange)="searchProduct()"
+                 placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید">
+        </div>
+        <div fxFlex="15"></div>
+      </div>
+    </div>
+
+    <span>
+      <button mat-button (click)="navigateToCart()" aria-label="Shopping Bag" id="header-cart"
+              [disabled]="!cartNumbers">
+        <span *ngIf="cartNumbers" class="badge-icon">
+          {{cartNumbers}}
+        </span>
+        <span *ngIf="cartNumbers">
+          <svg height="20" width="20">
+            <circle cx="10" cy="10" r="10" fill="#e71096"/>
+          </svg>
+        </span>
+        <span>
+          <img src="/assets/cliparts/cart-icon.png">
+        </span>
+      </button>
+    </span>
+    <span *ngIf="!isLoggedIn || !isVerified">
+      <button mat-button (click)="login()" aria-label="Sign In or Register">
+        <span>
+          <img src="/assets/cliparts/login-icon.png">
+        </span>
+      </button>
+    </span>
+    <span *ngIf="isLoggedIn && isVerified">
+      <button mat-button (click)="logout()" aria-label="Sign Out">
+        <span>
+          <img src="/assets/cliparts/login-icon.png" style="transform: scaleX(-1)">
+        </span>
+      </button>
+    </span>
+  </div>
+</div>
+<div class="genderList" [class.hidden]="hiddenGenderMenu" (mouseenter)="persistList()" (mouseleave)="hideList()">
+  <div class="genderListWrapper">
+    <div *ngIf="menu && menu.headerList" class="headerList">
+      <ul *ngFor="let key of getKeyList(menu.headerList)">
+        <li *ngFor="let item of menu.headerList[key]">
+          <a [routerLink]="item.routerLink">{{item.text}}</a>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="menu && menu.middleList" class="middle">
+      <ul *ngFor="let key of getKeyList(menu.middleList)">
+        <li *ngFor="let item of menu.middleList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header"
+            [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
+          <a [routerLink]="item.routerLink">{{item.text}}</a>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="menu && menu.leftList" class="leftColumn">
+      <ul *ngFor="let key of getKeyList(menu.leftList)">
+        <li *ngFor="let item of menu.leftList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header"
+            [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
+          <a [routerLink]="item.routerLink">{{item.text}}</a>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
@@ -46,24 +115,24 @@
       </div>
     </div>
     <div fxFlex="40" *ngIf="searchCollectionList && searchCollectionList.length">
-        <div *ngFor="let element of searchCollectionList"
-             (click)="selectSearchResult(element, false)" style="padding-bottom: 20px">
-          <div *ngIf="element.pages && element.pages.length">
-            <div class="search-name">
-              {{element.name_fa}}
-            </div>
+      <div *ngFor="let element of searchCollectionList"
+           (click)="selectSearchResult(element, false)" style="padding-bottom: 20px">
+        <div *ngIf="element.pages && element.pages.length">
+          <div class="search-name">
+            {{element.name_fa}}
           </div>
-          <div *ngIf="element.pages && element.pages.length">
-            <div class="search-name">
-              {{element.name}}
-            </div>
+        </div>
+        <div *ngIf="element.pages && element.pages.length">
+          <div class="search-name">
+            {{element.name}}
           </div>
         </div>
       </div>
+    </div>
     <div fxFlex="2.5"></div>
   </div>
   <div  fxLayout="row" fxLayout.xs="row" fxLayoutAlign="start start"
-    class="all-prod">
+        class="all-prod">
     <div fxFlex="2.5"></div>
     <div fxFlex="95" style="margin-bottom: 30px">مشاهده همه محصولات</div>
     <div fxFlex="2.5"></div>
@@ -74,6 +143,4 @@
                         [strokeWidth]="'2'">
   </mat-progress-spinner>
 </div>
-
-
 
