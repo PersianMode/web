@@ -158,6 +158,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     this.searchProductList = [];
     this.searchCollectionList = [];
     this.searchWaiting = false;
+    this.searchAreaFlag = false;
   }
 
   searchProduct() {
@@ -310,11 +311,13 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event'])
   public documentClick(e: any): void {
-    if (!e.path.some(el => el.id === 'search-area'))
+    if (!e.path.some(el => el.id === 'search-area')) {
       this.searchFinished();
+    }
   }
 
   login() {
+    this.searchFinished();
     this.authService.checkValidation(this.router.url)
       .then(() => {
         return new Promise((innerResolve, innerReject) => {
@@ -341,6 +344,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
+    this.searchFinished();
     this.authService.logout();
     this.CheckoutService.ccRecipientData = null;
 
@@ -351,7 +355,9 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateToCart() {
+    this.searchAreaFlag = false;
     this.router.navigate(['/', 'cart']);
+    this.searchFinished();
   }
 
   navigateToProfile() {

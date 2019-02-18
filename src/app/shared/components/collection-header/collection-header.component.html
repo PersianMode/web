@@ -1,15 +1,18 @@
-<div class="second-bar">
-  <div class="persian-mode-logo" [routerLink]="['/']"><img style="height:60px" alt="Lithium"
-                                                           src="/assets/cliparts/logo.png">
-  </div>
-  <ul>
-    <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]" (mouseenter)="showList(item.type)"
-        (mouseleave)="countDownHideList()">
-      <a [routerLink]="item.routerLink">{{item.info.text}}</a>
-    </li>
-  </ul>
+<div id="search-area">
+  <div class="second-bar">
+    <div class="persian-mode-logo" (click)="searchFinished()" [routerLink]="['/']"><img style="height:60px"
+                                                                                              alt="Lithium"
+                                                                                              src="/assets/cliparts/logo.png">
+    </div>
+    <ul>
+      <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
+          (mouseenter)="showList(item.type)"
+          (mouseleave)="countDownHideList()">
+        <a [routerLink]="item.routerLink">{{item.info.text}}</a>
+      </li>
+    </ul>
 
-  <div class="logoButtons">
+    <div class="logoButtons">
     <span>
       <button mat-button aria-label="search button" (click)="openSearchArea()" style="width:40px"
               aria-label="Sign In or Register">
@@ -19,21 +22,21 @@
       </button>
     </span>
 
-    <div *ngIf="searchAreaFlag" class="search-result-panel">
-      <div class="search-title-lith font-style">
-        جستجو در لیتیم
-      </div>
-      <div style="height: 70%;" fxLayout="row" fxLayoutAlign="start start">
-        <div fxFlex="15"></div>
-        <div fxFlex="70">
-          <input class="search-input font-style" type="text" [(ngModel)]="searchPhrase"
-                 (ngModelChange)="searchProduct()" placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید">
+      <div *ngIf="searchAreaFlag" class="search-result-panel">
+        <div class="search-title-lith font-style">
+          جستجو در لیتیم
         </div>
-        <div fxFlex="15"></div>
+        <div style="height: 70%;" fxLayout="row" fxLayoutAlign="start start">
+          <div fxFlex="15"></div>
+          <div fxFlex="70">
+            <input class="search-input font-style" type="text" [(ngModel)]="searchPhrase"
+                   (ngModelChange)="searchProduct()" placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید">
+          </div>
+          <div fxFlex="15"></div>
+        </div>
       </div>
-    </div>
 
-    <span>
+      <span>
       <button mat-button (click)="navigateToCart()" aria-label="Shopping Bag" id="header-cart"
               [disabled]="!cartNumbers">
         <span *ngIf="cartNumbers" class="badge-icon">
@@ -49,97 +52,101 @@
         </span>
       </button>
     </span>
-    <span *ngIf="!isLoggedIn || !isVerified">
+      <span *ngIf="!isLoggedIn || !isVerified">
       <button mat-button (click)="login()" aria-label="Sign In or Register">
         <span>
           <img src="/assets/cliparts/login-icon.png">
         </span>
       </button>
     </span>
-    <span *ngIf="isLoggedIn && isVerified">
+      <span *ngIf="isLoggedIn && isVerified">
       <button mat-button (click)="logout()" aria-label="Sign Out">
         <span>
           <img src="/assets/cliparts/login-icon.png" style="transform: scaleX(-1)">
         </span>
       </button>
     </span>
-  </div>
-</div>
-<div class="genderList" [class.hidden]="hiddenGenderMenu" (mouseenter)="persistList()" (mouseleave)="hideList()">
-  <div class="genderListWrapper">
-    <div *ngIf="menu && menu.headerList" class="headerList">
-      <ul *ngFor="let key of getKeyList(menu.headerList)">
-        <li *ngFor="let item of menu.headerList[key]">
-          <a [routerLink]="item.routerLink">{{item.text}}</a>
-        </li>
-      </ul>
-    </div>
-    <div *ngIf="menu && menu.middleList" class="middle">
-      <ul *ngFor="let key of getKeyList(menu.middleList)">
-        <li *ngFor="let item of menu.middleList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header"
-            [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
-          <a [routerLink]="item.routerLink">{{item.text}}</a>
-        </li>
-      </ul>
-    </div>
-    <div *ngIf="menu && menu.leftList" class="leftColumn">
-      <ul *ngFor="let key of getKeyList(menu.leftList)">
-        <li *ngFor="let item of menu.leftList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header"
-            [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
-          <a [routerLink]="item.routerLink">{{item.text}}</a>
-        </li>
-      </ul>
     </div>
   </div>
-</div>
+  <div class="genderList" [class.hidden]="hiddenGenderMenu" (mouseenter)="persistList()" (mouseleave)="hideList()">
+    <div class="genderListWrapper">
+      <div *ngIf="menu && menu.headerList" class="headerList">
+        <ul *ngFor="let key of getKeyList(menu.headerList)">
+          <li *ngFor="let item of menu.headerList[key]">
+            <a [routerLink]="item.routerLink">{{item.text}}</a>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="menu && menu.middleList" class="middle">
+        <ul *ngFor="let key of getKeyList(menu.middleList)">
+          <li *ngFor="let item of menu.middleList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header"
+              [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
+            <a [routerLink]="item.routerLink">{{item.text}}</a>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="menu && menu.leftList" class="leftColumn">
+        <ul *ngFor="let key of getKeyList(menu.leftList)">
+          <li *ngFor="let item of menu.leftList[key];first as isFirst" [class.headerItem]="isFirst || item.is_header"
+              [style.marginTop]="(!isFirst && item.is_header ? 15 : 0 )+ 'px'">
+            <a [routerLink]="item.routerLink">{{item.text}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-<div *ngIf="!searchWaiting && (searchProductList.length || searchCollectionList.length) && searchPhrase"
-     class="search-result-wrapper font-style">
-  <div class="best-offer">
-    بهترین پیشنهادها
-  </div>
-  <div *ngIf="!searchProductList.length" class="search-title-lith">محصولی برای جستجوی شما یافت نشد.</div>
-  <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="space-around stretch">
-    <div fxFlex="2.5"></div>
-    <div fxFlex="55">
-      <div *ngFor="let row of rows" fxLayout="row" fxLayout.xs="col">
-        <div *ngFor="let element of row" fxFlex="20" fxLayout="col" (click)="selectSearchResult(element, true)"
-             class="search-item">
-          <div>
-            <img [src]="element.imgUrl"/>
-            <div class="search-brand">{{element.name}}</div>
-            <div class="search-type">{{element.type}}{{' - '}}{{element.tags}}</div>
-          </div>
-        </div>
-      </div>
+  <div *ngIf="!searchWaiting && (searchProductList.length || searchCollectionList.length) && searchPhrase"
+       class="search-result-wrapper font-style">
+    <div class="best-offer">
+      بهترین پیشنهادها
     </div>
-    <div fxFlex="40">
-      <div style="height: 85%">
-        <div  *ngIf="!searchCollectionList || !searchCollectionList.length" class="search-title-lith" style="text-align: center">مجموعه ای متناسب با جستجوی شما یافت نشد.</div>
-        <div *ngIf="searchCollectionList && searchCollectionList.length" >
-        <div *ngFor="let element of searchCollectionList"
-             (click)="selectSearchResult(element, false)" style="padding-bottom: 20px">
-          <div *ngIf="element.pages && element.pages.length">
-            <div class="search-name">
-              {{element.name_fa}}
-            </div>
-          </div>
-          <div *ngIf="element.pages && element.pages.length">
-            <div class="search-name">
-              {{element.name}}
+    <div *ngIf="!searchProductList.length" class="search-title-lith">محصولی برای جستجوی شما یافت نشد.</div>
+    <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="space-around stretch">
+      <div fxFlex="2.5"></div>
+      <div fxFlex="55">
+        <div *ngFor="let row of rows" fxLayout="row" fxLayout.xs="col">
+          <div *ngFor="let element of row" fxFlex="20" fxLayout="col" (click)="selectSearchResult(element, true)"
+               class="search-item">
+            <div>
+              <img [src]="element.imgUrl"/>
+              <div class="search-brand">{{element.name}}</div>
+              <div class="search-type">{{element.type}}{{' - '}}{{element.tags}}</div>
             </div>
           </div>
         </div>
       </div>
+      <div fxFlex="40">
+        <div style="height: 85%">
+          <div *ngIf="!searchCollectionList || !searchCollectionList.length" class="search-title-lith"
+               style="text-align: center">مجموعه ای متناسب با جستجوی شما یافت نشد.
+          </div>
+          <div *ngIf="searchCollectionList && searchCollectionList.length">
+            <div *ngFor="let element of searchCollectionList"
+                 style="padding-bottom: 20px">
+              <div *ngIf="element.pages && element.pages.length">
+                <div class="search-name">
+                  <span (click)="selectSearchResult(element, false)" style="cursor: pointer">{{element.name_fa}}</span>
+                </div>
+              </div>
+              <div *ngIf="element.pages && element.pages.length">
+                <div class="search-name">
+                  <span (click)="selectSearchResult(element, false)" style="cursor: pointer">{{element.name}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="searchProductList.length && searchProductList.length >= 10" class="all-prod">مشاهده همه محصولات
+        </div>
       </div>
-      <div *ngIf="searchProductList.length" class="all-prod">مشاهده همه محصولات</div>
+      <div fxFlex="2.5"></div>
     </div>
-    <div fxFlex="2.5"></div>
   </div>
-</div>
-<div *ngIf="searchWaiting && searchAreaFlag">
-  <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
-                        [strokeWidth]="'2'">
-  </mat-progress-spinner>
+  <div *ngIf="searchWaiting && searchAreaFlag">
+    <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
+                          [strokeWidth]="'2'">
+    </mat-progress-spinner>
+  </div>
 </div>
 
