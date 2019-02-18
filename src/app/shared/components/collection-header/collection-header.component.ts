@@ -28,7 +28,6 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     girls: false,
   };
   persistedList = false;
-  searchIsFocused = false;
   menu: any = {};
   placements: any = {};
   topMenu = [];
@@ -44,7 +43,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   cartNumbers = '';
   itemSubs;
   display_name;
-  searchEreaFlag = false;
+  searchAreaFlag = false;
 
 
   constructor(private router: Router, private pageService: PageService,
@@ -120,6 +119,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   showList(type) {
+    this.searchAreaFlag = false;
     setTimeout(() => {
       this.searchUnfocused();
       this.hiddenGenderMenu = false;
@@ -150,28 +150,14 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  goToRoot() {
-    this.router.navigate(['']);
-  }
-
   getKeyList(list) {
     return Object.keys(list);
   }
 
-  searchFocused() {
-    // this.searchIsFocused = true;
-    // if (this.searchPhrase)
-    //   this.searchProduct();
-    // else {
-    //   this.searchProductList = [];
-    //   this.searchCollectionList = [];
-    // }
-  }
-
   searchUnfocused() {
-    this.searchIsFocused = false;
     this.searchProductList = [];
     this.searchCollectionList = [];
+    this.searchWaiting = false;
   }
 
   searchProduct() {
@@ -265,16 +251,14 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   selectSearchResult(element, isProduct) {
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+    this.searchPhrase = null;
+    this.searchAreaFlag = false;
     if (isProduct)
       this.router.navigate([`/product/${element.id}`]);
     else
       this.router.navigate([`${element.pages[0].address}`]);
-
-    this.searchIsFocused = false;
-    this.searchProductList = [];
-    this.searchCollectionList = [];
-    this.searchPhrase = null;
-    this.searchEreaFlag = false;
   }
 
   getProductThumbnail(product) {
@@ -316,18 +300,12 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  onClose() {
+  openSearchArea() {
+    this.searchAreaFlag = !this.searchAreaFlag;
     this.searchPhrase = null;
     this.searchProductList = [];
     this.searchCollectionList = [];
     this.searchWaiting = false;
-    this.searchIsFocused = false;
-  }
-
-  openSearchErea() {
-    this.searchEreaFlag = !this.searchEreaFlag;
-    this.searchPhrase = null;
-
   }
 
   @HostListener('document:click', ['$event'])
@@ -372,11 +350,33 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     this.itemSubs.unsubscribe();
   }
 
+  navigateToCart() {
+    this.router.navigate(['/', 'cart']);
+  }
+
   navigateToProfile() {
     this.router.navigate(['/', 'profile']);
   }
 
-  navigateToCart() {
-    this.router.navigate(['/', 'cart']);
+  goToRoot() {
+    this.router.navigate(['']);
   }
+
+  searchFocused() {
+    if (this.searchPhrase)
+      this.searchProduct();
+    else {
+      this.searchProductList = [];
+      this.searchCollectionList = [];
+      this.searchWaiting = false;
+    }
+  }
+
+  onClose() {
+    this.searchPhrase = null;
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+    this.searchWaiting = false;
+  }
+
 }

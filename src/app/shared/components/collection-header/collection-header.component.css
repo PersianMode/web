@@ -1,23 +1,19 @@
-.search-data {
-  z-index: 10000;
-}
-
 .search-result-panel {
   direction: rtl;
-  background-color: #ff1f8c;
+  background-color: #FF009C;
   padding: 3px;
   z-index: 100;
   width: 100%;
   position: fixed;
   left: 0px;
   top: 109px;
-  height: 300px;
+  height: 250px;
 }
 
 .search-result-wrapper {
-  background-color: #ff1f8c;
+  background-color: #FF009C;
   position: fixed;
-  top: 409px;
+  top: 359px;
   width: 100%;
   margin: 0;
   border: 0;
@@ -32,11 +28,12 @@
 }
 
 .search-item div {
-  padding: 0 10px;
+  padding: 0 5px;
 }
 
 .search-item div img {
-  width: 100%
+  width: 90%;
+  height: 75%;
 }
 
 .search-name {
@@ -46,43 +43,21 @@
   text-align: left;
   margin-bottom: 5px;
   font-size: 15px;
-  color: white;
-  font-family: iranyekan;
   font-weight: bold;
   cursor: pointer;
 }
 
-.search-brand, .search-type, .search-article_no {
+.search-brand, .search-type {
   font-size: 10px;
   text-align: right;
   color: white;
   padding-right: 0px !important;
 }
 
-.search-title {
-  font-size: 0.6em;
-  color: gray;
-  text-align: right;
-}
-
-.second-search-item {
-  text-align: right;
-  margin: 3px;
-}
-
 .not-found {
   color: darkred;
   margin: 10px;
   text-align: center;
-}
-
-hr {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  border-style: dashed;
-  border-width: 0.5px;
-  border-color: gray;
 }
 
 .badge-icon {
@@ -122,45 +97,42 @@ hr {
   margin-right: 60px;
   font-size: 20px;
   margin-top: 40px;
-  color: white;
-  height: 45%;
-  font-family: iranyekan, sans-serif
+  height: 30%;
 }
 
 .search-input {
   text-align: left;
-  color: white;
-  font-family: iranyekan, sans-serif;
   width: 50%;
   border-radius: 0px;
   border-style: none;
   height: 40px;
-  background: #ff1f8c;
+  background: #FF009C;
   font-size: 20px;
   position: relative;
   top: 60px
 }
 
 .search-input::placeholder {
-  color: white;
   text-align: center;
   font-size: 22px;
+  color: white;
   font-family: iranyekan, sans-serif;
 }
 
 .best-offer {
-  color: white;
-  font-family: iranyekan, sans-serif;
   font-size: 15px;
   font-weight: bold;
   margin-right: 60px
 }
 
 .all-prod {
-  color: white;
   text-align: left;
   font-weight: bold;
-  font-family: iranyekan, sans-serif;
-  font-size: 12px
+  font-size: 12px;
+  height: 15%;
 }
 
+.font-style {
+  color: white;
+  font-family: iranyekan, sans-serif;
+}

@@ -19,16 +19,15 @@
       </button>
     </span>
 
-    <div *ngIf="searchEreaFlag" class="search-result-panel">
-      <div class="search-title-lith" (click)="searchEreaFlag = false; searchPhrase = null;">
+    <div *ngIf="searchAreaFlag" class="search-result-panel">
+      <div class="search-title-lith font-style">
         جستجو در لیتیم
       </div>
-      <div style="height: 55%;" fxLayout="row" fxLayoutAlign="start start">
+      <div style="height: 70%;" fxLayout="row" fxLayoutAlign="start start">
         <div fxFlex="15"></div>
         <div fxFlex="70">
-          <input class="search-input" type="text" [(ngModel)]="searchPhrase"
-                 (ngModelChange)="searchProduct()"
-                 placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید">
+          <input class="search-input font-style" type="text" [(ngModel)]="searchPhrase"
+                 (ngModelChange)="searchProduct()" placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید">
         </div>
         <div fxFlex="15"></div>
       </div>
@@ -95,50 +94,50 @@
 </div>
 
 <div *ngIf="!searchWaiting && (searchProductList.length || searchCollectionList.length) && searchPhrase"
-     class="search-result-wrapper">
+     class="search-result-wrapper font-style">
   <div class="best-offer">
     بهترین پیشنهادها
   </div>
-  <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="start start">
+  <div *ngIf="!searchProductList.length" class="search-title-lith">محصولی برای جستجوی شما یافت نشد.</div>
+  <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="space-around stretch">
     <div fxFlex="2.5"></div>
     <div fxFlex="55">
       <div *ngFor="let row of rows" fxLayout="row" fxLayout.xs="col">
         <div *ngFor="let element of row" fxFlex="20" fxLayout="col" (click)="selectSearchResult(element, true)"
              class="search-item">
-
           <div>
             <img [src]="element.imgUrl"/>
             <div class="search-brand">{{element.name}}</div>
-            <div class="search-brand">{{element.type}}{{' - '}}{{element.tags}}</div>
+            <div class="search-type">{{element.type}}{{' - '}}{{element.tags}}</div>
           </div>
         </div>
       </div>
     </div>
-    <div fxFlex="40" *ngIf="searchCollectionList && searchCollectionList.length">
-      <div *ngFor="let element of searchCollectionList"
-           (click)="selectSearchResult(element, false)" style="padding-bottom: 20px">
-        <div *ngIf="element.pages && element.pages.length">
-          <div class="search-name">
-            {{element.name_fa}}
+    <div fxFlex="40">
+      <div style="height: 85%">
+        <div  *ngIf="!searchCollectionList || !searchCollectionList.length" class="search-title-lith" style="text-align: center">مجموعه ای متناسب با جستجوی شما یافت نشد.</div>
+        <div *ngIf="searchCollectionList && searchCollectionList.length" >
+        <div *ngFor="let element of searchCollectionList"
+             (click)="selectSearchResult(element, false)" style="padding-bottom: 20px">
+          <div *ngIf="element.pages && element.pages.length">
+            <div class="search-name">
+              {{element.name_fa}}
+            </div>
           </div>
-        </div>
-        <div *ngIf="element.pages && element.pages.length">
-          <div class="search-name">
-            {{element.name}}
+          <div *ngIf="element.pages && element.pages.length">
+            <div class="search-name">
+              {{element.name}}
+            </div>
           </div>
         </div>
       </div>
+      </div>
+      <div *ngIf="searchProductList.length" class="all-prod">مشاهده همه محصولات</div>
     </div>
-    <div fxFlex="2.5"></div>
-  </div>
-  <div  fxLayout="row" fxLayout.xs="row" fxLayoutAlign="start start"
-        class="all-prod">
-    <div fxFlex="2.5"></div>
-    <div fxFlex="95" style="margin-bottom: 30px">مشاهده همه محصولات</div>
     <div fxFlex="2.5"></div>
   </div>
 </div>
-<div *ngIf="searchWaiting">
+<div *ngIf="searchWaiting && searchAreaFlag">
   <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
                         [strokeWidth]="'2'">
   </mat-progress-spinner>
