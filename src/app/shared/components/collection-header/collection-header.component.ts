@@ -121,7 +121,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   showList(type) {
     this.searchAreaFlag = false;
     setTimeout(() => {
-      this.searchUnfocused();
+      this.searchFinished();
       this.hiddenGenderMenu = false;
       this.selected[type] = true;
       this.menu = this.placements[type + 'Menu'];
@@ -154,7 +154,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     return Object.keys(list);
   }
 
-  searchUnfocused() {
+  searchFinished() {
     this.searchProductList = [];
     this.searchCollectionList = [];
     this.searchWaiting = false;
@@ -311,7 +311,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   public documentClick(e: any): void {
     if (!e.path.some(el => el.id === 'search-area'))
-      this.searchUnfocused();
+      this.searchFinished();
   }
 
   login() {
