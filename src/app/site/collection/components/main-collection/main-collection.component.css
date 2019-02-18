@@ -49,17 +49,17 @@
 
 .gridwall-title {
   display: inline-block;
-  margin: 0px 0px 0px 40px;
-  padding: 0;
-  width: 100%;
+  padding: 0 0 30px;
   white-space: nowrap;
+  width: 100%;
 }
 
 .gridwall-title h1 {
   font-size: 19px !important;
   line-height: 24px !important;
   display: inline-block;
-  width: 80%;
+  float: left;
+  margin: 0;
 }
 
 .gridwall-title span {
@@ -107,7 +107,23 @@
 .gridwall-wrapper {
   display: inline-block;
   text-align: right;
-  width: 100%;
+  width: 1220px;
+}
+
+@media (min-width: 1520px) {
+  .gridwall-wrapper {
+    width: 1220px;
+  }
+}
+
+@media (max-width: 1519px) {
+  .gridwall-wrapper {
+    width: 100%;
+  }
+
+  .gridwall-title h1 {
+    padding-left: 30px;
+  }
 }
 
 .mobileScroll {
