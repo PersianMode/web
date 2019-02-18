@@ -1,0 +1,7 @@
+div {
+  color: #8f8f8f
+}
+
+div img {
+  filter: opacity(.51);
+}
