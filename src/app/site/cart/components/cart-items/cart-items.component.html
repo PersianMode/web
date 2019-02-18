@@ -17,8 +17,8 @@
               </h4>
             </div>
             <div fxFlex="30" class="main-price">
-              <section *ngIf="!notExist"><span style="color: black;font-size: 20px;"
-                [class.overridden]="product?.discount">{{displayTotalPrice}}</span><br/><span *ngIf="product?.discount">{{totalDiscountedPrice}}</span>
+              <section *ngIf="!notExist"><span style="color: #8F8F8F;font-size: 20px;"
+                [class.overridden]="product?.discount">{{displayTotalPrice}}</span><br/><span style="color: black;font-size: 20px;" *ngIf="product?.discount">{{totalDiscountedPrice}}</span>
               </section>
               <section *ngIf="notExist && !product.count">ناموجود</section>
               <section *ngIf="notExist && product.count">فقط {{stock}} عدد موجود است</section>
