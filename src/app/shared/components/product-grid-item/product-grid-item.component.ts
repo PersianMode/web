@@ -46,11 +46,7 @@ export class ProductGridItemComponent implements OnInit {
     this.data.colors.forEach(color => {
       let cc = safeColorConverter(color.name)
       color.colorcode = cc
-    });
-    console.log(this.data);
- 
-    
-    
+    }); 
     this.desc = this.data.tags
       .filter(r => tagNames.includes(r.tg_name))
       .sort((x, y) => tagNames.findIndex(r => x.tg_name === r) - tagNames.findIndex(r => y.tg_name === r))
