@@ -27,10 +27,10 @@
   </mat-expansion-panel>
   <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null"
                        [expanded]="expanded[fo.name]" (opened)="expanded[fo.name]=true"
-                       (closed)="expanded[fo.name]=false">
+                       (closed)="expanded[fo.name]=false" [hideToggle]="true" class="mat-elevation-z0">
     <mat-expansion-panel-header>
         
-      <div class="checkbox-title">{{fo.name_fa}}</div>
+      <div class="checkbox-title"><span *ngIf="expanded[fo.name]">-</span><span *ngIf="!expanded[fo.name]">+</span> {{fo.name_fa}}</div>
     </mat-expansion-panel-header>
     <div *ngFor="let v of filter_options[i].values;let j=index"
          [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
