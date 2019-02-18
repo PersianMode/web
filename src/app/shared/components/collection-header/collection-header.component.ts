@@ -178,7 +178,6 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
       limit: 10,
     }).subscribe(
       (data) => {
-        console.log('---->>>', data);
         this.searchProductList = [];
         if (data.data) {
           data.data.forEach(el => {
