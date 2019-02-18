@@ -45,6 +45,7 @@ h4 {
 }
 .main-price {
   text-align: left;
+  max-width: 100% !important;
 }
 .main-price section {
   margin: 19px 0px 19px 0px;

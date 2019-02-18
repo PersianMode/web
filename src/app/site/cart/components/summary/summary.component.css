@@ -33,7 +33,7 @@
 }
 
 .payment-button:hover {
-  background: #c87951;
+  background: #E71096;
 }
 
 .total-payment {
@@ -93,8 +93,9 @@
   text-decoration: underline;
   color: #666;
 }
-.membership-style:hover{
-  color : black;
+
+.membership-style:hover {
+  color: black;
   cursor: pointer;
   text-decoration: none;
 }
@@ -108,27 +109,49 @@
   display: inline-flex;
 }
 
-.row-register mat-icon {
-  color: #E71096;
-  font-size: 400%;
+.register-icon {
   position: relative;
-  right: 18px;
+  top: 36px;
+  left: 20px;
 }
 
 .row-register h2 {
   color: #E71096;
   position: relative;
-  right: 34px;
-  top: -13px;
+  left: 7px;
+  top: 10px;
   font-size: 25px;
 }
 
 .row-register span {
   color: #8F8F8F;
   position: relative;
-  bottom: 27px;
-  right: 32px;
+  top: 36px;
+  left: 20px;
   cursor: pointer;
 }
 
 /* row-coupon */
+.coupon-name {
+  color: white;
+  white-space: nowrap;
+  background-color: #CFDE29;
+  padding: 10px 3px;
+  position: relative;
+  top: 1px;
+}
+
+.coupon-input {
+  border-radius: 0px;
+  padding: 10px;
+  max-width: 148px;
+  width: 100%;
+  position: relative;
+  top: 1px
+}
+
+.coupon-btn {
+  width: 256px;
+  background-color: #E71096;
+  color: white;
+}

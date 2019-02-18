@@ -12,7 +12,7 @@ export class PriceFormatPipe implements PipeTransform {
     if (value === '۰') {
       return value;
     }
-    value = value + '۰';
+    // value = value + '۰';
     return value.split('٬').join(format);
   }
 

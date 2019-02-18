@@ -1,15 +1,21 @@
 <div class="summary">
   <div class="row-register">
-      <mat-icon>arrow_back</mat-icon>
+      <!-- <mat-icon>arrow_back</mat-icon> -->
+      <span class="register-icon">
+          <img width="60px" src="/assets/cliparts/login-icon.png">
+      </span> 
     <div>
-      <h2>عضویت رایگان</h2>
-      <span (click)="goToRegister()">به ما بپیوندید</span>
+      <h2 style="white-space: nowrap">عضویت رایگان</h2>
+      <p style="position: relative; bottom: 8px;" (click)="goToRegister()">به ما بپیوندید</p>
     </div>
   </div>
   <div class="rows">
     <div class="s-right-text total-payment" style="display: inline-flex;">
-      <mat-icon style="position: relative;right: 13px;font-size: 50px;">shopping_basket</mat-icon>
-      <span style="position: relative;top: 15px;right: 25px;">سبد خرید</span>  
+      <span>
+          <img width="60px" src="/assets/cliparts/cart-icon.png">
+      </span> 
+      <!-- <mat-icon style="position: relative;right: 13px;font-size: 50px;">shopping_basket</mat-icon> -->
+      <span style="position: relative;top: 20px;">سبد خرید</span>  
     </div>
   </div>
   <hr class="hr-style">
@@ -24,17 +30,17 @@
   <hr class="hr-style">
   <!-- coupon -->
   <div class="rows">
-    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="0px">
-        <span style="color: white;white-space: nowrap;background-color: #CFDE29;padding: 8px 4px;">کوپن تخفیف</span>
-        <input style="border-radius:0px;padding: 0.5rem;max-width: 148px;width: 100%;" matInput type="text">
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="0px">  
+        <span class="coupon-name">کوپن تخفیف</span>
+        <input class="coupon-input" matInput type="text">
     </div>
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="0px">
-        <button style="width: 256px ;background-color: #E71096;color:white;" mat-raised-button>اعمال</button>
+        <button class="coupon-btn" mat-raised-button>اعمال</button>
     </div>
   </div>
   <div class="rows">
     <span class="s-right-text"> موجودی</span>
-    <span class="s-left-text">{{balanceValue | priceFormat:'/'}}  ریال</span>
+    <span class="s-left-text">{{balanceValue | priceFormat:','}}  تومان</span>
   </div>
   <hr class="hr-style">
   <div class="rows" *ngIf="isLoggedIn">
@@ -60,17 +66,17 @@
   <hr class="hr-style"/>
   <div class="rows">
     <span class="s-right-text">جمع خرید</span>
-    <span class="s-left-text">{{totalValue | priceFormat:'/'}}  ریال</span>
+    <span class="s-left-text">{{totalValue | priceFormat:','}}  تومان</span>
   </div>
   <hr class="hr-style">
   <div class="rows">
     <span class="s-right-text">تخفیف</span>
-    <span class="s-left-text">{{discountValue | priceFormat:'/'}} ریال </span>
+    <span class="s-left-text">{{discountValue | priceFormat:','}} تومان </span>
   </div>
   <hr class="hr-style">
   <div class="rows nowrap-row-tp">
     <span class="s-right-text total-payment">قیمت نهایی</span>
-    <span class="s-left-text total-payment">{{finalTotal | priceFormat:'/'}}  ریال</span>
+    <span class="s-left-text total-payment">{{finalTotal | priceFormat:','}}  تومان</span>
   </div>
   <hr class="hr-style">
   <div>
