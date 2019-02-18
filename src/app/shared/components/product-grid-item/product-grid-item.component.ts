@@ -1,11 +1,12 @@
-import {Component, Input, OnInit, NgZone, Inject, ViewChild, HostListener} from '@angular/core';
-import {WINDOW} from '../../services/window.service';
-import {Router} from '@angular/router';
-import {priceFormatter} from '../../lib/priceFormatter';
-import {ResponsiveService} from '../../services/responsive.service';
-import {DomSanitizer} from '@angular/platform-browser';
-import {HttpService} from '../../services/http.service';
-import {DictionaryService} from '../../services/dictionary.service';
+import { Component, Input, OnInit, NgZone, Inject, ViewChild, HostListener } from '@angular/core';
+import { WINDOW } from '../../services/window.service';
+import { Router } from '@angular/router';
+import { priceFormatter } from '../../lib/priceFormatter';
+import { ResponsiveService } from '../../services/responsive.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { HttpService } from '../../services/http.service';
+import { DictionaryService } from '../../services/dictionary.service';
+import { safeColorConverter } from '../../services/colorConverter';
 const tagNames = ['Sub Division', 'Category', 'Gender'];
 @Component({
   selector: 'app-product-grid-item',
@@ -23,6 +24,7 @@ export class ProductGridItemComponent implements OnInit {
   on = 0;
   images = [];
   colors = [];
+
   slide = 0;
   slidesNum = 0;
   rect;
@@ -32,8 +34,8 @@ export class ProductGridItemComponent implements OnInit {
   discountedPrice: any;
 
   constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router,
-              private responsiveService: ResponsiveService, private sanitizer: DomSanitizer,
-              private dict: DictionaryService) {
+    private responsiveService: ResponsiveService, private sanitizer: DomSanitizer,
+    private dict: DictionaryService) {
     this.zone.runOutsideAngular(() => {
       this.window.document.addEventListener('mousemove', this.mouseMove.bind(this));
     });
@@ -41,8 +43,15 @@ export class ProductGridItemComponent implements OnInit {
 
   ngOnInit() {
     
+    this.data.colors.forEach(color => {
+      let cc = safeColorConverter(color.name)
+      color.colorcode = cc
+    });
+    console.log(this.data);
+ 
     
-    this.desc =  this.data.tags
+    
+    this.desc = this.data.tags
       .filter(r => tagNames.includes(r.tg_name))
       .sort((x, y) => tagNames.findIndex(r => x.tg_name === r) - tagNames.findIndex(r => y.tg_name === r))
       .map(x => this.dict.translateWord(x.name.trim()))
@@ -58,12 +67,12 @@ export class ProductGridItemComponent implements OnInit {
     this.discounted = !!this.data.discount;
     this.setPrice();
   }
- 
+
   private setPrice() {
     this.price = priceFormatter(this.data.colors[this.pos].price);
     this.discountedPrice = priceFormatter(this.data.colors[this.pos].discountedPrice);
   }
-  
+
   turnOn(e, time) {
     setTimeout(() => {
       this.on = e || true;

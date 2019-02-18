@@ -830,8 +830,11 @@ mat-panel-title {
 
 .mat-checkbox-checked.mat-accent .mat-checkbox-background,
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  background: #999999 !important;
+  background: #ffffff !important;
+  border: 2px #111111 solid !important;
 }
+.mat-checkbox-checkmark-path {
+ stroke:black !important;}
 
 .mat-checkbox {
   font-family: iranyekan, sans-serif !important;

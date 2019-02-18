@@ -11,6 +11,7 @@
   color: gray;
 }
 
+
 .circle {
   top: -25px;
   right: 0px;
@@ -79,3 +80,6 @@
   }
 }
 
+.exp.indicator::after{
+display: none;
+}

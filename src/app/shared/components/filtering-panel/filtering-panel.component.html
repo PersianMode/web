@@ -15,8 +15,8 @@
 <div [ngClass]="isMobile ? 'set-size-mobile' : null">
   <h1 *ngIf="filter_options?.length">فیلترها</h1>
 </div>
-<mat-accordion multi="true">
-  <mat-expansion-panel *ngIf="isMobile" [expanded]="expanded.sort">
+
+  <mat-expansion-panel class="exp" *ngIf="isMobile" [expanded]="expanded.sort">
     <mat-expansion-panel-header>
       <div class="checkbox-title">ترتیب نمایش</div>
     </mat-expansion-panel-header>
@@ -29,6 +29,7 @@
                        [expanded]="expanded[fo.name]" (opened)="expanded[fo.name]=true"
                        (closed)="expanded[fo.name]=false">
     <mat-expansion-panel-header>
+        
       <div class="checkbox-title">{{fo.name_fa}}</div>
     </mat-expansion-panel-header>
     <div *ngFor="let v of filter_options[i].values;let j=index"
@@ -85,7 +86,7 @@
       </mat-button-toggle>
     </span>
   </mat-expansion-panel>
-</mat-accordion>
+
 <div class="actions ">
   <button mat-button *ngIf="isMobile " (click)="changeDisplayFilter() ">اعمال فیلترها</button>
   <button mat-button *ngIf="filter_options?.length " (click)="clearFilters() ">برداشتن تمام فیلترها</button>
