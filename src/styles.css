@@ -668,8 +668,7 @@ dp-date-picker.dp-material .dp-picker-input {
 
 mat-expansion-panel {
   box-shadow: none !important;
-  border-top: 1px solid rgba(221, 221, 221, .7);
-  padding: 0px 10px !important;
+  padding: 0 10px !important;
 }
 
 .mat-expansion-panel-header:hover {
