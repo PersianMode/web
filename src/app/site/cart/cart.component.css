@@ -1,5 +1,4 @@
 .basket-div {
-  /* background-color: #eee; */
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   padding-top: 15px;
@@ -7,7 +6,6 @@
   padding-right: 15px;
   font-size: 20px;
   font-family: iranyekan, sans-serif;
-  /* font-weight: bold; */
   color: #8F8F8F;
 }
 .basket-div h1 {
