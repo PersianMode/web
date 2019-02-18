@@ -17,11 +17,33 @@ mat-panel-title {
 }
 
 .payment-button {
-  padding:10px;
-  margin:15px;
-  font-size:12pt;
-  background: black;
-  color:white;
-  width:calc(100% - 30px);
+  padding: 10px;
+  border: 0px;
+  font-size: 12pt;
+  background: #cfde29;
+  color: white;
+  width: 120px;
+  cursor: pointer;
+  outline: none;
+  margin: 10px 10px 0 0;
 }
 
+.line {
+  margin: 10px;
+  background-color: #e2e2e2;
+}
+
+.line-breaker {
+  background-color: #e2e2e2;
+  margin: 0 10px 10px 10px;
+}
+
+.checkout-page {
+  color: #8f8f8f;
+}
+
+
+.bottom-line {
+  background-color: #e2e2e2;
+  margin: 20px 10px 5px 10px;
+}
