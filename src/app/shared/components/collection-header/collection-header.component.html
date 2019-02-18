@@ -1,9 +1,11 @@
 <div class="second-bar">
-  <div class="persian-mode-logo" [routerLink]="['/']"><img style="height:60px" alt="Lithium"
+  <div class="persian-mode-logo" [routerLink]="['/']"><img style="height:60px"
+                                                           alt="Lithium"
                                                            src="/assets/cliparts/logo.png">
   </div>
   <ul>
-    <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]" (mouseenter)="showList(item.type)"
+    <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
+        (mouseenter)="showList(item.type)"
         (mouseleave)="countDownHideList()">
       <a [routerLink]="item.routerLink">{{item.info.text}}</a>
     </li>
@@ -11,27 +13,13 @@
 
   <div class="logoButtons">
     <span>
-      <button mat-button aria-label="search button" (click)="openSearchArea()" style="width:40px"
+      <button mat-button aria-label="search button" id="search-icon" (click)="openSearchArea()" style="width:40px"
               aria-label="Sign In or Register">
         <span>
           <img src="/assets/cliparts/search-icon.png">
         </span>
       </button>
     </span>
-
-    <div *ngIf="searchAreaFlag" class="search-result-panel">
-      <div class="search-title-lith font-style">
-        جستجو در لیتیم
-      </div>
-      <div style="height: 70%;" fxLayout="row" fxLayoutAlign="start start">
-        <div fxFlex="15"></div>
-        <div fxFlex="70">
-          <input class="search-input font-style" type="text" [(ngModel)]="searchPhrase"
-                 (ngModelChange)="searchProduct()" placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید">
-        </div>
-        <div fxFlex="15"></div>
-      </div>
-    </div>
 
     <span>
       <button mat-button (click)="navigateToCart()" aria-label="Shopping Bag" id="header-cart"
@@ -93,53 +81,72 @@
   </div>
 </div>
 
-<div *ngIf="!searchWaiting && (searchProductList.length || searchCollectionList.length) && searchPhrase"
-     class="search-result-wrapper font-style">
-  <div class="best-offer">
-    بهترین پیشنهادها
-  </div>
-  <div *ngIf="!searchProductList.length" class="search-title-lith">محصولی برای جستجوی شما یافت نشد.</div>
-  <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="space-around stretch">
-    <div fxFlex="2.5"></div>
-    <div fxFlex="55">
-      <div *ngFor="let row of rows" fxLayout="row" fxLayout.xs="col">
-        <div *ngFor="let element of row" fxFlex="20" fxLayout="col" (click)="selectSearchResult(element, true)"
-             class="search-item">
-          <div>
-            <img [src]="element.imgUrl"/>
-            <div class="search-brand">{{element.name}}</div>
-            <div class="search-type">{{element.type}}{{' - '}}{{element.tags}}</div>
-          </div>
-        </div>
-      </div>
+<div id="search-area">
+  <div *ngIf="searchAreaFlag" class="search-result-panel">
+    <div class="search-title-lith font-style">
+      جستجو در لیتیم
     </div>
-    <div fxFlex="40">
-      <div style="height: 85%">
-        <div  *ngIf="!searchCollectionList || !searchCollectionList.length" class="search-title-lith" style="text-align: center">مجموعه ای متناسب با جستجوی شما یافت نشد.</div>
-        <div *ngIf="searchCollectionList && searchCollectionList.length" >
-        <div *ngFor="let element of searchCollectionList"
-             (click)="selectSearchResult(element, false)" style="padding-bottom: 20px">
-          <div *ngIf="element.pages && element.pages.length">
-            <div class="search-name">
-              {{element.name_fa}}
-            </div>
-          </div>
-          <div *ngIf="element.pages && element.pages.length">
-            <div class="search-name">
-              {{element.name}}
+    <div fxLayout="row" fxLayoutAlign="start start">
+      <div fxFlex="15"></div>
+      <div fxFlex="70" style="text-align: center">
+        <input class="search-input font-style" type="text" [(ngModel)]="searchPhrase"
+               (ngModelChange)="searchProduct()" placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید">
+      </div>
+      <div fxFlex="15"></div>
+    </div>
+  </div>
+  <div *ngIf="!searchWaiting && (searchProductList.length || searchCollectionList.length) && searchPhrase"
+       class="search-result-wrapper font-style">
+    <div class="best-offer">
+      بهترین پیشنهادها
+    </div>
+    <div *ngIf="!searchProductList.length" class="search-title-lith">محصولی برای جستجوی شما یافت نشد.</div>
+    <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="space-around stretch">
+      <div fxFlex="2.5"></div>
+      <div fxFlex="55">
+        <div *ngFor="let row of rows" fxLayout="row" fxLayout.xs="col">
+          <div *ngFor="let element of row" fxFlex="20" fxLayout="col" (click)="selectSearchResult(element, true)"
+               class="search-item">
+            <div>
+              <img [src]="element.imgUrl"/>
+              <div class="search-brand">{{element.name}}</div>
+              <div class="search-type">{{element.type}}{{' - '}}{{element.tags}}</div>
             </div>
           </div>
         </div>
       </div>
+      <div fxFlex="40">
+        <div style="height: 85%">
+          <div *ngIf="!searchCollectionList || !searchCollectionList.length" class="search-title-lith"
+               style="text-align: center">مجموعه ای متناسب با جستجوی شما یافت نشد.
+          </div>
+          <div *ngIf="searchCollectionList && searchCollectionList.length">
+            <div *ngFor="let element of searchCollectionList"
+                 style="padding-bottom: 20px">
+              <div *ngIf="element.pages && element.pages.length">
+                <div class="search-name">
+                  <span (click)="selectSearchResult(element, false)" style="cursor: pointer">{{element.name_fa}}</span>
+                </div>
+              </div>
+              <div *ngIf="element.pages && element.pages.length">
+                <div class="search-name">
+                  <span (click)="selectSearchResult(element, false)" style="cursor: pointer">{{element.name}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="searchProductList.length && searchProductList.length >= 10" class="all-prod">مشاهده همه محصولات
+        </div>
       </div>
-      <div *ngIf="searchProductList.length" class="all-prod">مشاهده همه محصولات</div>
+      <div fxFlex="2.5"></div>
     </div>
-    <div fxFlex="2.5"></div>
+  </div>
+  <div *ngIf="searchWaiting && searchAreaFlag">
+    <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
+                          [strokeWidth]="'2'">
+    </mat-progress-spinner>
   </div>
 </div>
-<div *ngIf="searchWaiting && searchAreaFlag">
-  <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
-                        [strokeWidth]="'2'">
-  </mat-progress-spinner>
-</div>
+
 
