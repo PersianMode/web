@@ -5,14 +5,11 @@
 }
 
 .co-left-text {
-  float: left;
   padding-left: 10px;
-  color: black;
 }
 
 .co-right-text {
-  color: black;
-  padding: 5px;
+  padding: 2px;
 }
 
 .checkout-box {
@@ -25,5 +22,9 @@
 }
 
 .no-duration-selected {
-  color : red;
+  color : #8f8f8f;
+}
+
+.checkout-summary {
+  color: #8f8f8f;
 }

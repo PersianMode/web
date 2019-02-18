@@ -1,72 +1,54 @@
-<div fxLayout="row" class="outer-div">
+<div fxLayout="row" class="outer-div checkout-page" fxLayoutAlign="center center">
   <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
   <div fxFlex="80" fxFlex.sm="80" fxFlex.xs="100">
-    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"
-         fxLayoutAlign="center center" fxLayoutAlign.sm="center center" fxLayoutAlign.xs="start center"
-         class="middle-div-wrapper">
-      <div fxFlex="70" class="middle-div">
-        <mat-accordion multi>
-          <mat-expansion-panel expanded>
-            <mat-expansion-panel-header>خلاصه</mat-expansion-panel-header>
+    <div class="middle-div-wrapper">
+      <div class="middle-div">
+        <h2>خلاصه خرید</h2>
 
-
-            <app-checkout-summary [total]="total" [discount]="discount" [usedBalance]="usedBalance"
-                                  [usedLoyaltyPoint]="usedLoyaltyPoint" [deliveryCost]="deliveryCost"
-                                  [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
-                                  [earnedLoyaltyPoint]="earnedLoyaltyPoint"
-                                  [showCostLabel]="showCostLabel"
-                                  [showEarnPointLabel]="showEarnPointLabel"
-                                  [noDuration]="noDuration"></app-checkout-summary>
-
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title>نوع پرداخت</mat-panel-title>
-            </mat-expansion-panel-header>
-
-
-            <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
-                              (selectedType)="changePaymentType($event)"></app-payment-type>
-
-
-          </mat-expansion-panel>
-          <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header>
-              <mat-panel-title>آدرس</mat-panel-title>
-            </mat-expansion-panel-header>
-
-
-            <app-address-table [isProfile]=false (deliveryType)="setCostLabel($event)"
-                               (noDuration)="noDuration = $event"
-                               (durationType)="calculateDiscount($event)"></app-address-table>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <form #bankDataFormId method="post" Action="https://pep.shaparak.ir/gateway.aspx">
-          <input type="hidden" #invoiceNumber name="invoiceNumber"/>
-          <input type="hidden" #invoiceDate name="invoiceDate"/>
-          <input type="hidden" #amount name="amount"/>
-          <input type="hidden" #terminalCode name="terminalCode"/>
-          <input type="hidden" #merchantCode name="merchantCode"/>
-          <input type="hidden" #redirectAddress name="redirectAddress"/>
-          <input type="hidden" #timeStamp name="timeStamp"/>
-          <input type="hidden" #action name="action"/>
-          <input type="hidden" #mobile name="mobile"/>
-          <input type="hidden" #email name="email"/>
-          <input type="hidden" #sign name="sign"/>
-        </form>
-        <button mat-raised-button
-                class="payment-button"
-                (click)="checkout()" [disabled]="disabled"
-                [style.background]="disabled ? 'gray' : 'black'">پرداخت
-        </button>
-        <button mat-raised-button
-                class="payment-button"
-                (click)="checkoutDemo()"
-                [style.background]="!isDev || disabled ? 'gray' : 'black'">دمو پرداخت
-        </button>
+        <app-checkout-summary [total]="total" [discount]="discount" [usedBalance]="usedBalance"
+                              [usedLoyaltyPoint]="usedLoyaltyPoint" [deliveryCost]="deliveryCost"
+                              [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
+                              [earnedLoyaltyPoint]="earnedLoyaltyPoint"
+                              [showCostLabel]="showCostLabel"
+                              [showEarnPointLabel]="showEarnPointLabel"
+                              [noDuration]="noDuration"></app-checkout-summary>
       </div>
+      <hr class="line-breaker">
+      <div>
+        <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
+                          (selectedType)="changePaymentType($event)"></app-payment-type>
+      </div>
+      <hr class="line">
+      <div class="deliveryOptionsWrapper">
+        <app-address-table [isProfile]=false (deliveryType)="setCostLabel($event)"
+                           (noDuration)="noDuration = $event"
+                           (durationType)="calculateDiscount($event)"></app-address-table>
+      </div>
+      <hr class="bottom-line">
+      <form #bankDataFormId method="post" Action="https://pep.shaparak.ir/gateway.aspx">
+        <input type="hidden" #invoiceNumber name="invoiceNumber"/>
+        <input type="hidden" #invoiceDate name="invoiceDate"/>
+        <input type="hidden" #amount name="amount"/>
+        <input type="hidden" #terminalCode name="terminalCode"/>
+        <input type="hidden" #merchantCode name="merchantCode"/>
+        <input type="hidden" #redirectAddress name="redirectAddress"/>
+        <input type="hidden" #timeStamp name="timeStamp"/>
+        <input type="hidden" #action name="action"/>
+        <input type="hidden" #mobile name="mobile"/>
+        <input type="hidden" #email name="email"/>
+        <input type="hidden" #sign name="sign"/>
+      </form>
+      <button mat-raised-button
+              class="payment-button"
+              (click)="checkout()" [disabled]="disabled">پرداخت
+      </button>
+      <button mat-raised-button
+              class="payment-button"
+              (click)="checkoutDemo()">دمو پرداخت
+      </button>
     </div>
   </div>
   <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
 </div>
+
 

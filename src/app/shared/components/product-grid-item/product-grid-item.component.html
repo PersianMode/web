@@ -17,7 +17,24 @@
       </div>
       <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
     </div>
-    <p>{{data.colors.length.toLocaleString('fa')}} رنگ <span *ngIf="soldOut" class="soldOut">تمام شد</span></p>
+    <div class="colorprev">
+        <span *ngIf="soldOut" class="soldOut">تمام شد</span>
+    <div *ngFor =" let color of data.colors" style="display:inline-block " >
+      <span *ngIf="color.colorcode == '#ffffff'" class="noborder" > 
+        <svg  class="svgw" height="15" width="15">
+          <rect x="1" y="1" width="15" height="15" 
+                  attr.fill="{{color.colorcode}}"></rect>
+        </svg>
+      </span>
+      <span *ngIf="color.name !== white && color.colorcode" class="noborder" >
+          <svg  height="15" width="15">
+              <rect x="1" y="1" width="15" height="15" 
+                      attr.fill="{{color.colorcode}}"></rect>
+            </svg>
+          </span>
+   
+    </div>
+  </div>
     <h2>{{data.name}}</h2>
     <h3>{{desc}}</h3>
     <h4 [class.overridden]="discounted">{{price}} تومان</h4> <h4 *ngIf="discounted">{{discountedPrice}} تومان</h4>
