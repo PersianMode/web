@@ -1,0 +1,6 @@
+<div class="container">
+  <img [src]="data.url" [width]="data.w" [height]="data.h">
+  <div *ngIf="data.covering" class="closeBtn" (click)="onClose()">
+    <mat-icon style="color: white">close</mat-icon>
+  </div>
+</div>

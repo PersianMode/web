@@ -7,7 +7,7 @@
         <div *ngFor="let item of itemChunk" class="photoWrapper">
           <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
             <source src="{{item.url}}" type="video/webm"></video>
-          <img *ngIf="item.type !== 'video'" src="{{item.url}}">
+          <img *ngIf="item.type !== 'video'" src="{{item.url}}" (click)="fullSizeView(item.url)">
         </div>
       </div>
     </section>
