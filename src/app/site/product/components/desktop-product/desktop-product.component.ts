@@ -146,18 +146,17 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   fullSizeView(url) {
-    const img = new Image();
+    const img: HTMLImageElement = new Image();
     let w, h;
-    const self = this;
-    img.onload = function() {
-      w = this.width;
-      h = this.height;
-      self.dialog.open(GenDialogComponent, {
+    img.onload = () => {
+      w = img.naturalWidth;
+      h = img.naturalHeight;
+      this.dialog.open(GenDialogComponent, {
         width: Math.min(w, window.innerWidth) + 'px',
         height: Math.min(h, window.innerHeight) + 'px',
         data: {
           componentName: DialogEnum.photoFullSize,
-          extraData: {url, w, h}
+          extraData: {url, w, h, covering: w >= window.innerWidth && h >= window.innerHeight}
         }
       });
     };

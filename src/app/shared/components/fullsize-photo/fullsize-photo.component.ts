@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-fullsize-photo',
@@ -7,9 +7,13 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class FullsizePhotoComponent implements OnInit {
   @Input() data;
+  @Output() closeDialog = new EventEmitter<any>();
   constructor() { }
 
   ngOnInit() {
   }
 
+  onClose() {
+    this.closeDialog.next();
+  }
 }

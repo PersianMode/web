@@ -1,0 +1,12 @@
+.closeBtn {
+  position: fixed;
+  font-size: 30px;
+  top: 50px;
+  right: 50px;
+  background: black;
+  opacity: .2;
+  border-radius: 20px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}

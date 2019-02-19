@@ -6,5 +6,5 @@
   <app-forgot-password *ngIf="componentName === dialogEnum.forgotPassword" (closeDialog)="close($event)"></app-forgot-password>
   <app-order-return *ngIf="componentName === dialogEnum.orderReturnComponent" (closeDialog)="close($event)" [isNotMobile]="true"></app-order-return>
   <app-bank-refund-form *ngIf="componentName === dialogEnum.refundBank" (closeDialog)="close($event)" [isNotMobile]="true"></app-bank-refund-form>
-  <app-fullsize-photo *ngIf="componentName === dialogEnum.photoFullSize" closeDialog)="close($event)" [isNotMobile]="true" [data]="extraData"></app-fullsize-photo>
+  <app-fullsize-photo *ngIf="componentName === dialogEnum.photoFullSize" [data]="extraData" (closeDialog)="close()"></app-fullsize-photo>
 </div>

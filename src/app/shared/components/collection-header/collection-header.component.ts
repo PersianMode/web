@@ -305,6 +305,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     this.searchProductList = [];
     this.searchCollectionList = [];
     this.searchWaiting = false;
+    setTimeout(() => document.getElementById('search-box').focus(), 50);
   }
 
   @HostListener('document:click', ['$event'])

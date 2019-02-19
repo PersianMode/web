@@ -97,7 +97,8 @@ import { FullsizePhotoComponent } from './components/fullsize-photo/fullsize-pho
     DobComponent, MatSlideToggleModule,
     LogoHeaderComponent,
     SizePickerComponent,
-    BankRefundFormComponent
+    BankRefundFormComponent,
+    FullsizePhotoComponent,
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },
