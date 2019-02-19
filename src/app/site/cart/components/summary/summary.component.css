@@ -136,22 +136,23 @@
   color: white;
   white-space: nowrap;
   background-color: #CFDE29;
-  padding: 10px 3px;
-  position: relative;
-  top: 1px;
+  padding: 5px 3px;
+  text-align: center;
+  font-size: 130%;
+  height: 36px;
 }
 
 .coupon-input {
   border-radius: 0px;
-  padding: 10px;
-  max-width: 148px;
+  border: 0;
+  height: 34px;
   width: 100%;
-  position: relative;
-  top: 1px
 }
 
 .coupon-btn {
-  width: 256px;
   background-color: #E71096;
   color: white;
+  width:100%;
+  border-radius: 0;
+  font-size: 130%;
 }

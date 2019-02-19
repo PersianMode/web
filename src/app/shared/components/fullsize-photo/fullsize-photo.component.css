@@ -10,3 +10,13 @@
   height: 30px;
   text-align: center;
 }
+
+.container {
+  overflow: auto;
+  width: calc(100% + 48px);
+  height: calc(100% + 48px);
+  padding: 0;
+  border: 0;
+  margin: -24px -24px;
+}
+

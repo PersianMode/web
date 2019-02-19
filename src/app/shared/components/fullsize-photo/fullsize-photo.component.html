@@ -1,4 +1,4 @@
-<div style="overflow: auto;width:calc(100% + 48px);height: calc(100% + 48px);padding:0;border:0;margin: -24px -24px">
+<div class="container">
   <img [src]="data.url" [width]="data.w" [height]="data.h">
   <div *ngIf="data.covering" class="closeBtn" (click)="onClose()">
     <mat-icon style="color: white">close</mat-icon>
