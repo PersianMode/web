@@ -32,13 +32,12 @@
       <div fxFlex="40" class="coupon-name">کوپن تخفیف</div>
       <div fxFlex="60" style="padding: 1px 0 0 2px">
         <input matInput *ngIf="!used_coupon_code" class="coupon-input" type="text" [(ngModel)]="coupon_code" title="coupon code"/>
-        <input matInput *ngIf="!!used_coupon_code" class="coupon-input" type="text" [value]="used_coupon_code" title="coupon code"
+        <input matInput *ngIf="used_coupon_code" class="coupon-input" type="text" [value]="used_coupon_code" title="coupon code"
                readonly/>
       </div>
     </div>
     <div>
-      <button class="coupon-btn" mat-button *ngIf="!used_coupon_code" (click)="applyCoupon()">اعمال</button>
-      <button class="coupon-btn" mat-button *ngIf="used_coupon_code" (click)="applyCoupon()">حذف</button>
+      <button class="coupon-btn" mat-button (click)="applyCoupon()">{{used_coupon_code ? 'حذف' : 'اعمال'}}</button>
     </div>
   </div>
   <div class="rows">
