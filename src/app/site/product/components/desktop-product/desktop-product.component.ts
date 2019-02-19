@@ -6,7 +6,9 @@ import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
 import {CartService} from '../../../../shared/services/cart.service';
 import {HttpService} from 'app/shared/services/http.service';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 
 @Component({
   selector: 'app-desktop-product',
@@ -62,7 +64,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Output() addFavorite = new EventEmitter<any>();
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-    private cartService: CartService, private snackBar: MatSnackBar) {
+    private cartService: CartService, private snackBar: MatSnackBar, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -141,5 +143,24 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     productColors['image']['angles'] = [];
     productColors['image']['angles'] = [...temparray];
     return productColors;
+  }
+
+  fullSizeView(url) {
+    const img = new Image();
+    let w, h;
+    const self = this;
+    img.onload = function() {
+      w = this.width;
+      h = this.height;
+      self.dialog.open(GenDialogComponent, {
+        width: Math.min(w, window.innerWidth) + 'px',
+        height: Math.min(h, window.innerHeight) + 'px',
+        data: {
+          componentName: DialogEnum.photoFullSize,
+          extraData: {url, w, h}
+        }
+      });
+    };
+    img.src = url;
   }
 }

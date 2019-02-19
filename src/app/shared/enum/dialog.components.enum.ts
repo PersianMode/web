@@ -5,5 +5,6 @@ export enum DialogEnum {
   orderLinesComponent,
   forgotPassword,
   orderReturnComponent,
-  refundBank
-};
+  refundBank,
+  photoFullSize,
+}

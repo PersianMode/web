@@ -1,9 +1,10 @@
 <div>
-        <app-login *ngIf="componentName === dialogEnum.login" (closeDialog)="close($event)" [loginStatus]="extraData && extraData.loginStatus ? extraData.loginStatus : 0"></app-login>
-        <app-register *ngIf="componentName === dialogEnum.register" (closeDialog)="close($event)"></app-register>
-        <app-upsert-address *ngIf="componentName === dialogEnum.upsertAddress" (closeDialog)="close($event)" [isNotMobile]="true"></app-upsert-address>
-        <app-order-lines *ngIf="componentName === dialogEnum.orderLinesComponent" (closeDialog)="close($event)" [isNotMobile]="true"></app-order-lines>
-        <app-forgot-password *ngIf="componentName === dialogEnum.forgotPassword" (closeDialog)="close($event)"></app-forgot-password>
-        <app-order-return *ngIf="componentName === dialogEnum.orderReturnComponent" (closeDialog)="close($event)" [isNotMobile]="true"></app-order-return>
-        <app-bank-refund-form *ngIf="componentName === dialogEnum.refundBank" (closeDialog)="close($event)" [isNotMobile]="true"></app-bank-refund-form>
+  <app-login *ngIf="componentName === dialogEnum.login" (closeDialog)="close($event)" [loginStatus]="extraData && extraData.loginStatus ? extraData.loginStatus : 0"></app-login>
+  <app-register *ngIf="componentName === dialogEnum.register" (closeDialog)="close($event)"></app-register>
+  <app-upsert-address *ngIf="componentName === dialogEnum.upsertAddress" (closeDialog)="close($event)" [isNotMobile]="true"></app-upsert-address>
+  <app-order-lines *ngIf="componentName === dialogEnum.orderLinesComponent" (closeDialog)="close($event)" [isNotMobile]="true"></app-order-lines>
+  <app-forgot-password *ngIf="componentName === dialogEnum.forgotPassword" (closeDialog)="close($event)"></app-forgot-password>
+  <app-order-return *ngIf="componentName === dialogEnum.orderReturnComponent" (closeDialog)="close($event)" [isNotMobile]="true"></app-order-return>
+  <app-bank-refund-form *ngIf="componentName === dialogEnum.refundBank" (closeDialog)="close($event)" [isNotMobile]="true"></app-bank-refund-form>
+  <app-fullsize-photo *ngIf="componentName === dialogEnum.photoFullSize" closeDialog)="close($event)" [isNotMobile]="true" [data]="extraData"></app-fullsize-photo>
 </div>
