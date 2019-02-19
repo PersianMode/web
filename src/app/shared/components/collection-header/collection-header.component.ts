@@ -44,6 +44,8 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   itemSubs;
   display_name;
   searchAreaFlag = false;
+  showMoreFlag = false;
+  searchTotalRes = [];
 
 
   constructor(private router: Router, private pageService: PageService,
@@ -156,52 +158,83 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
 
   searchFinished() {
     this.searchProductList = [];
+    this.searchTotalRes = [];
+    this.rows = [];
     this.searchCollectionList = [];
     this.searchWaiting = false;
     this.searchAreaFlag = false;
+    this.showMoreFlag = false;
     this.searchPhrase = null;
   }
 
   searchProduct() {
-    this.searchProductList = [];
-    if (!this.searchPhrase) {
+    if (this.searchPhrase.length > 2) {
+      this.showMoreFlag = false;
       this.searchProductList = [];
       this.searchCollectionList = [];
-      this.searchWaiting = false;
-      return;
-    }
-
-    this.searchWaiting = true;
-    this.httpService.post('search/Product', {
-      options: {
-        phrase: this.searchPhrase,
-      },
-      offset: 0,
-      limit: 10,
-    }).subscribe(
-      (data) => {
-        this.searchProductList = [];
-        if (data.data) {
-          data.data.forEach(el => {
-            this.searchProductList.push({
-              id: el._id,
-              name: el.name,
-              brand: this.dictionaryService.translateWord(el.brand.name),
-              type: this.dictionaryService.translateWord(el.product_type.name),
-              imgUrl: this.getProductThumbnail(el),
-              tags: this.dictionaryService.translateWord(el.tags.name),
-              article_no: el.article_no,
-            });
-          });
-        }
-        this.alignRow();
-        this.searchCollection();
-      },
-      (err) => {
-        console.error('Cannot get search data: ', err);
+      this.searchTotalRes = [];
+      this.rows = [];
+      if (!this.searchPhrase) {
         this.searchWaiting = false;
-      });
+        return;
+      }
+
+      this.searchWaiting = true;
+      this.httpService.post('search/Product', {
+        options: {
+          phrase: this.searchPhrase,
+        },
+        offset: 0,
+        limit: 10,
+      }).subscribe(
+        (data) => {
+          this.searchProductList = [];
+          this.searchCollectionList = [];
+          this.searchTotalRes = [];
+          this.rows = [];
+          if (data.data) {
+            data.data.forEach(el => {
+              this.searchProductList.push({
+                id: el._id,
+                name: el.name,
+                brand: this.dictionaryService.translateWord(el.brand.name),
+                type: this.dictionaryService.translateWord(el.product_type.name),
+                imgUrl: this.getProductThumbnail(el),
+                tags: this.dictionaryService.translateWord(el.tags.name),
+                article_no: el.article_no,
+              });
+            });
+
+            this.searchTotalRes = data.totalRes;
+            if (this.searchTotalRes && this.searchTotalRes.length > 10)
+              this.showMoreFlag = true;
+          }
+          this.alignRow(this.searchProductList);
+          this.searchCollection();
+        },
+        (err) => {
+          console.error('Cannot get search data: ', err);
+          this.searchWaiting = false;
+        });
+    }
   }
+
+  alignMoreProd() {
+    this.showMoreFlag = false;
+    this.searchProductList = [];
+    this.searchTotalRes.forEach(el => {
+      this.searchProductList.push({
+        id: el._id,
+        name: el.name,
+        brand: this.dictionaryService.translateWord(el.brand.name),
+        type: this.dictionaryService.translateWord(el.product_type.name),
+        imgUrl: this.getProductThumbnail(el),
+        tags: this.dictionaryService.translateWord(el.tags.name),
+        article_no: el.article_no,
+      });
+    });
+    this.alignRow(this.searchProductList);
+  };
 
   searchCollection() {
     this.searchCollectionList = [];
@@ -275,16 +308,16 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
       'assets/nike-brand.jpg';
   }
 
-  alignRow() {
-    if (this.searchProductList.length <= 0) {
+  alignRow(productList) {
+    if (productList.length <= 0) {
       this.rows = [];
       return;
     }
     this.rows = [];
     let chunk = [], counter = 0;
-    for (const sp in this.searchProductList) {
-      if (this.searchProductList.hasOwnProperty(sp)) {
-        chunk.push(this.searchProductList[sp]);
+    for (const sp in productList) {
+      if (productList.hasOwnProperty(sp)) {
+        chunk.push(productList[sp]);
         counter++;
 
         if (counter >= 5) {
@@ -304,6 +337,8 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
     this.searchPhrase = null;
     this.searchProductList = [];
     this.searchCollectionList = [];
+    this.searchTotalRes = [];
+    this.rows = [];
     this.searchWaiting = false;
   }
 
@@ -354,30 +389,4 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   navigateToCart() {
     this.router.navigate(['/', 'cart']);
   }
-
-  navigateToProfile() {
-    this.router.navigate(['/', 'profile']);
-  }
-
-  goToRoot() {
-    this.router.navigate(['']);
-  }
-
-  searchFocused() {
-    if (this.searchPhrase)
-      this.searchProduct();
-    else {
-      this.searchProductList = [];
-      this.searchCollectionList = [];
-      this.searchWaiting = false;
-    }
-  }
-
-  onClose() {
-    this.searchPhrase = null;
-    this.searchProductList = [];
-    this.searchCollectionList = [];
-    this.searchWaiting = false;
-  }
-
 }
