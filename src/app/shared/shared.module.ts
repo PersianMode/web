@@ -30,6 +30,7 @@ import {ProductService} from './services/product.service';
 import {AuthGuard} from '../site/auth.guard';
 import {SpinnerService} from './services/spinner.service';
 import { BankRefundFormComponent } from './components/bank-refund-form/bank-refund-form.component';
+import { FullsizePhotoComponent } from './components/fullsize-photo/fullsize-photo.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { BankRefundFormComponent } from './components/bank-refund-form/bank-refu
     SaveChangeConfirmComponent,
     ShelfCodePrinterComponent,
     BankRefundFormComponent,
+    FullsizePhotoComponent,
   ],
   imports: [
     MatSlideToggleModule,
@@ -95,7 +97,8 @@ import { BankRefundFormComponent } from './components/bank-refund-form/bank-refu
     DobComponent, MatSlideToggleModule,
     LogoHeaderComponent,
     SizePickerComponent,
-    BankRefundFormComponent
+    BankRefundFormComponent,
+    FullsizePhotoComponent,
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },

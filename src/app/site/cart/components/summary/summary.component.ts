@@ -7,7 +7,7 @@ import {CheckoutService} from '../../../../shared/services/checkout.service';
 import {WINDOW} from '../../../../shared/services/window.service';
 import { GenDialogComponent } from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
-import { MatDialog } from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -61,7 +61,7 @@ export class SummaryComponent implements OnInit, OnChanges {
   isLoggedIn = false;
 
   constructor(@Inject(WINDOW) private window, public dialog: MatDialog, private cartService: CartService, private authService: AuthService,
-    private router: Router, private checkoutService: CheckoutService) {
+    private router: Router, private checkoutService: CheckoutService, private snack: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -105,6 +105,12 @@ export class SummaryComponent implements OnInit, OnChanges {
   }
 
   applyCoupon() {
+    if (!this.isLoggedIn) {
+      this.snack.open('برای استفاده از کوپن باید ثبت‌نام کنید و وارد شوید', null, {
+          duration: 3000,
+        });
+      return;
+    }
     if (this.used_coupon_code) {
       // false is a signal to let the cart component and service
       // know that they have to clear the used coupon code field
