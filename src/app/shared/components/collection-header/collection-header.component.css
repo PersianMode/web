@@ -24,10 +24,6 @@
 .search-more-result {
   background-color: #FF009C;
   width: 100%;
-  /*margin: 0;*/
-  /*border: 0;*/
-  /*z-index: 100;*/
-  /*padding-bottom: 15px;*/
 }
 
 .search-item {
@@ -43,7 +39,6 @@
 
 .search-item div img {
   width: 100%;
-  /*height: 75%;*/
 }
 
 .search-name {
