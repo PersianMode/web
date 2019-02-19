@@ -70,7 +70,7 @@ export class FooterComponent implements OnInit {
     leftColumn: [
       {
         header: true,
-        text: 'درباره پرشین مد',
+        text: 'درباره لیتیم',
         href: '#',
       },
       {
