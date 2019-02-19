@@ -103,7 +103,7 @@
     <div *ngIf="!searchProductList.length" class="search-title-lith">محصولی برای جستجوی شما یافت نشد.</div>
     <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="space-around stretch">
       <div fxFlex="2.5"></div>
-      <div fxFlex="55">
+      <div fxFlex="55" style="overflow-y: auto; height: 340px">
         <div *ngFor="let row of rows" fxLayout="row" fxLayout.xs="col">
           <div *ngFor="let element of row" fxFlex="20" fxLayout="col" (click)="selectSearchResult(element, true)"
                class="search-item">
@@ -115,29 +115,26 @@
           </div>
         </div>
       </div>
-      <div fxFlex="40">
+      <div fxFlex="40" class="collection-results">
         <div style="height: 85%">
           <div *ngIf="!searchCollectionList || !searchCollectionList.length" class="search-title-lith"
                style="text-align: center">مجموعه ای متناسب با جستجوی شما یافت نشد.
           </div>
           <div *ngIf="searchCollectionList && searchCollectionList.length">
-            <div *ngFor="let element of searchCollectionList"
-                 style="padding-bottom: 20px">
+            <div *ngFor="let element of searchCollectionList">
               <div *ngIf="element.pages && element.pages.length">
                 <div class="search-name">
-                  <span (click)="selectSearchResult(element, false)" style="cursor: pointer">{{element.name_fa}}</span>
-                </div>
-              </div>
-              <div *ngIf="element.pages && element.pages.length">
-                <div class="search-name">
-                  <span (click)="selectSearchResult(element, false)" style="cursor: pointer">{{element.name}}</span>
+                  <button mat-button (click)="selectSearchResult(element, false)">
+                    <div style="padding:0;height:30px">{{element.name_fa}}</div>
+                    <div style="padding:0;height:30px">{{element.name}}</div></button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div *ngIf="searchProductList.length && searchProductList.length >= 10" class="all-prod">مشاهده همه محصولات
-        </div>
+        <button mat-button *ngIf=" searchProductList && searchProductList.length && searchTotalRes && searchTotalRes.length > 10 && showMoreFlag" class="all-prod" (click)="alignMoreProd()">
+          {{'مشاهده تمام محصولات ('+ searchTotalRes.length.toLocaleString('fa') +')'}}
+        </button>
       </div>
       <div fxFlex="2.5"></div>
     </div>
@@ -148,5 +145,6 @@
     </mat-progress-spinner>
   </div>
 </div>
+
 
 

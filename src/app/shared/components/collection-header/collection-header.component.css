@@ -21,6 +21,15 @@
   padding-bottom: 15px;
 }
 
+.search-more-result {
+  background-color: #FF009C;
+  width: 100%;
+  /*margin: 0;*/
+  /*border: 0;*/
+  /*z-index: 100;*/
+  /*padding-bottom: 15px;*/
+}
+
 .search-item {
   text-align: right;
   cursor: pointer;
@@ -129,12 +138,17 @@
   text-align: left;
   font-weight: bold;
   font-size: 12px;
-  height: 15%;
-  position: relative;
-  top: 20px
 }
 
 .font-style {
   color: white;
   font-family: iranyekan, sans-serif;
+}
+
+.collection-results {
+  text-align: left;
+}
+
+.collection-results button {
+  text-align: left;
 }
