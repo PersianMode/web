@@ -31,8 +31,8 @@
     <div fxLayout="row">
       <div fxFlex="40" class="coupon-name">کوپن تخفیف</div>
       <div fxFlex="60" style="padding: 1px 0 0 2px">
-        <input matInput *ngIf="!used_coupon_code" class="coupon-input" type="text" [(ngModel)]="coupon_code"/>
-        <input matInput *ngIf="!!used_coupon_code" class="coupon-input" type="text" [value]="used_coupon_code"
+        <input matInput *ngIf="!used_coupon_code" class="coupon-input" type="text" [(ngModel)]="coupon_code" title="coupon code"/>
+        <input matInput *ngIf="!!used_coupon_code" class="coupon-input" type="text" [value]="used_coupon_code" title="coupon code"
                readonly/>
       </div>
     </div>
