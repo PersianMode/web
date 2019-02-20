@@ -12,11 +12,11 @@ export class HttpService {
   public static Host;
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {
-    HttpService.Host = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port);
-    if (this.isInDevMode()) {
-      HttpService.Host = HttpService.Host.replace(window.location.port, '3000');
-    }
-    // HttpService.Host = 'http://bankofstyle.com';
+    // HttpService.Host = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port);
+    // if (this.isInDevMode()) {
+    //   HttpService.Host = HttpService.Host.replace(window.location.port, '3000');
+    // }
+    HttpService.Host = 'http://bankofstyle.com';
   }
 
   isInDevMode() {

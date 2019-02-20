@@ -103,7 +103,7 @@
     <div *ngIf="!searchProductList.length" class="search-title-lith">محصولی برای جستجوی شما یافت نشد.</div>
     <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="space-around stretch">
       <div fxFlex="2.5"></div>
-      <div fxFlex="55" style="overflow-y: auto; height: 340px">
+      <div fxFlex="55" class="showcase">
         <div *ngFor="let row of rows" fxLayout="row" fxLayout.xs="col">
           <div *ngFor="let element of row" fxFlex="20" fxLayout="col" (click)="selectSearchResult(element, true)"
                class="search-item">

@@ -106,7 +106,7 @@
 
 .search-input {
   text-align: center;
-  width: 50%;
+  width: 100%;
   border-radius: 0px;
   border-style: none;
   height: 40px;
@@ -146,4 +146,15 @@
 
 .collection-results button {
   text-align: left;
+}
+
+.showcase {
+  overflow-y: auto;
+  max-height: calc(100vh - 395px);
+}
+
+.collection-results > button {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
 }
