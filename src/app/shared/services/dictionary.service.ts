@@ -43,18 +43,24 @@ export class DictionaryService {
       .reduce((x, y) => x.concat(y)).map(r => this.translateWord(r)).join(' / ') : 'نامعین';
   }
 
-  convertColor(color: string): string {
+  convertColor(color) {
+    if (color.includes('(')) {
+      color = color.replace('(', '').replace(')', '');
+    }
+
     let convertedColor = this.colorDictionary[color.toUpperCase()];
     if (!convertedColor) {
-      convertedColor = color;
+      if (color.includes(' ')) {
+        convertedColor = color.split(' ').find(r => this.convertColor(r));
+      } else if (color.includes('-')) {
+        convertedColor = color.split('-').find(r => this.convertColor(r));
+      } else try {
+        convertedColor = safeColorConverter(color);
+      } catch (e) {
+        convertedColor =  null;
+      }
     }
-
-    try {
-      convertedColor = safeColorConverter(convertedColor);
-    } catch (e) {
-      return null;
-    }
-
+    this.colorDictionary[color.toUpperCase()] = convertedColor;
     return convertedColor;
   }
 

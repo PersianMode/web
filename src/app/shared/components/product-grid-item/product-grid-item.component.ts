@@ -1,13 +1,14 @@
-import { Component, Input, OnInit, NgZone, Inject, ViewChild, HostListener } from '@angular/core';
-import { WINDOW } from '../../services/window.service';
-import { Router } from '@angular/router';
-import { priceFormatter } from '../../lib/priceFormatter';
-import { ResponsiveService } from '../../services/responsive.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { HttpService } from '../../services/http.service';
-import { DictionaryService } from '../../services/dictionary.service';
-import { safeColorConverter } from '../../services/colorConverter';
+import {Component, Input, OnInit, NgZone, Inject, ViewChild, HostListener} from '@angular/core';
+import {WINDOW} from '../../services/window.service';
+import {Router} from '@angular/router';
+import {priceFormatter} from '../../lib/priceFormatter';
+import {ResponsiveService} from '../../services/responsive.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {HttpService} from '../../services/http.service';
+import {DictionaryService} from '../../services/dictionary.service';
+
 const tagNames = ['Sub Division', 'Category', 'Gender'];
+
 @Component({
   selector: 'app-product-grid-item',
   templateUrl: './product-grid-item.component.html',
@@ -17,6 +18,7 @@ export class ProductGridItemComponent implements OnInit {
   @Input() data;
   @Input() width;
   @Input() height;
+  myColors = [];
   @ViewChild('slider') slider;
   pos = 0;
   desc = '';
@@ -34,19 +36,22 @@ export class ProductGridItemComponent implements OnInit {
   discountedPrice: any;
 
   constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router,
-    private responsiveService: ResponsiveService, private sanitizer: DomSanitizer,
-    private dict: DictionaryService) {
+              private responsiveService: ResponsiveService, private sanitizer: DomSanitizer,
+              private dict: DictionaryService) {
     this.zone.runOutsideAngular(() => {
       this.window.document.addEventListener('mousemove', this.mouseMove.bind(this));
     });
   }
 
   ngOnInit() {
-    
     this.data.colors.forEach(color => {
-      let cc = safeColorConverter(color.name)
-      color.colorcode = cc
-    }); 
+      this.myColors = this.myColors.concat(
+        color.name.split('/')
+          .map(r => r.split('-')).reduce((x, y) => x.concat(y), [])
+          .map(r => this.dict.convertColor(r.trim()))
+          .filter(r => r));
+    });
+    this.myColors = this.myColors.filter((r, i, o) => o.indexOf(r) === i);
     this.desc = this.data.tags
       .filter(r => tagNames.includes(r.tg_name))
       .sort((x, y) => tagNames.findIndex(r => x.tg_name === r) - tagNames.findIndex(r => y.tg_name === r))
