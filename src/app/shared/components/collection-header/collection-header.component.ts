@@ -1,6 +1,5 @@
 import {Component, OnInit, HostListener, Inject, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
 import {PageService} from '../../services/page.service';
 import {HttpService} from '../../services/http.service';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -32,7 +31,6 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   placements: any = {};
   topMenu = [];
   searchPhrase = null;
-  searchProductList = [];
   searchCollectionList = [];
   searchWaiting = false;
   rows: any = [];
@@ -46,6 +44,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   searchAreaFlag = false;
   showMoreFlag = false;
   searchTotalRes = [];
+  searchProductList = [];
 
 
   constructor(private router: Router, private pageService: PageService,
@@ -168,17 +167,16 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   searchProduct() {
+    this.searchProductList = [];
+    this.searchCollectionList = [];
+    this.searchTotalRes = [];
+    this.rows = [];
+    this.showMoreFlag = false;
+    if (!this.searchPhrase || this.searchPhrase.length < 3) {
+      this.searchWaiting = false;
+      return;
+    }
     if (this.searchPhrase.length > 2) {
-      this.showMoreFlag = false;
-      this.searchProductList = [];
-      this.searchCollectionList = [];
-      this.searchTotalRes = [];
-      this.rows = [];
-      if (!this.searchPhrase) {
-        this.searchWaiting = false;
-        return;
-      }
-
       this.searchWaiting = true;
       this.httpService.post('search/Product', {
         options: {
@@ -192,24 +190,13 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
           this.searchCollectionList = [];
           this.searchTotalRes = [];
           this.rows = [];
-          if (data.data) {
-            data.data.forEach(el => {
-              this.searchProductList.push({
-                id: el._id,
-                name: el.name,
-                brand: this.dictionaryService.translateWord(el.brand.name),
-                type: this.dictionaryService.translateWord(el.product_type.name),
-                imgUrl: this.getProductThumbnail(el),
-                tags: this.dictionaryService.translateWord(el.tags.name),
-                article_no: el.article_no,
-              });
-            });
+          if (data.data || data.totalRes) {
 
-            this.searchTotalRes = data.totalRes;
+            this.searchTotalRes = data.totalRes ? data.totalRes : data.data;
             if (this.searchTotalRes && this.searchTotalRes.length > 10)
               this.showMoreFlag = true;
           }
-          this.alignRow(this.searchProductList);
+          this.alignRow(this.searchTotalRes, this.searchTotalRes.length > 10 ? 10 : this.searchTotalRes.length);
           this.searchCollection();
         },
         (err) => {
@@ -221,19 +208,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
 
   alignMoreProd() {
     this.showMoreFlag = false;
-    this.searchProductList = [];
-    this.searchTotalRes.forEach(el => {
-      this.searchProductList.push({
-        id: el._id,
-        name: el.name,
-        brand: this.dictionaryService.translateWord(el.brand.name),
-        type: this.dictionaryService.translateWord(el.product_type.name),
-        imgUrl: this.getProductThumbnail(el),
-        tags: this.dictionaryService.translateWord(el.tags.name),
-        article_no: el.article_no,
-      });
-    });
-    this.alignRow(this.searchProductList);
+    this.alignRow(this.searchTotalRes, this.searchTotalRes.length);
   };
 
   searchCollection() {
@@ -308,16 +283,33 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
       'assets/nike-brand.jpg';
   }
 
-  alignRow(productList) {
-    if (productList.length <= 0) {
+  alignRow(productList, count) {
+    if (count > 10 && this.showMoreFlag === true)
+      this.showMoreFlag = false;
+
+    this.searchProductList = [];
+    for (let i = 0; i < count; i++) {
+      const el = productList[i];
+      this.searchProductList.push({
+        id: el._id,
+        name: el.name,
+        brand: this.dictionaryService.translateWord(el.brand.name),
+        type: this.dictionaryService.translateWord(el.product_type.name),
+        imgUrl: this.getProductThumbnail(el),
+        tags: this.dictionaryService.translateWord(el.tags.name),
+        article_no: el.article_no,
+      });
+    }
+
+    if (this.searchProductList.length <= 0) {
       this.rows = [];
       return;
     }
     this.rows = [];
     let chunk = [], counter = 0;
-    for (const sp in productList) {
-      if (productList.hasOwnProperty(sp)) {
-        chunk.push(productList[sp]);
+    for (const sp in this.searchProductList) {
+      if (this.searchProductList.hasOwnProperty(sp)) {
+        chunk.push(this.searchProductList[sp]);
         counter++;
 
         if (counter >= 5) {

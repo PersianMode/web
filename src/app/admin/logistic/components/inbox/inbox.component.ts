@@ -180,7 +180,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
       (status) => {
         if (status) {
           this.progressService.enable();
-          this.httpService.post('order/loss', {
+          this.httpService.post('order/lost', {
             orderId: orderLine.order_id,
             orderLineId: orderLine.order_line_id
           }).subscribe(res => {
