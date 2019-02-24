@@ -14,6 +14,7 @@ export class FooterComponent implements OnInit {
   curHeight = 100;
   footerSiteLinksItems: any = {};
   footerSocialNetworkItems: any[] = [];
+  bottomMessage = '';
 
   constructor(@Inject(WINDOW) private window, private pageService: PageService) {
   }
@@ -65,6 +66,8 @@ export class FooterComponent implements OnInit {
         return 0;
       });
     });
+    const minKeys = Math.min(...Object.keys(this.footerSiteLinksItems).map(r => +r));
+    this.bottomMessage = minKeys && this.footerSiteLinksItems[minKeys] ? this.footerSiteLinksItems[minKeys][this.footerSiteLinksItems[minKeys].length - 1].text : '';
   }
 
   setFooterSocialLinks(list) {

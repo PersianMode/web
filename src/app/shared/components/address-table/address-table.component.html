@@ -1,41 +1,50 @@
 <!--<h3 *ngIf="!isProfile">آدرس</h3>-->
-<span *ngIf="!isProfile" class="check-box-div">
-  <mat-radio-group [(ngModel)]="withDelivery" (change)="changeWithDelivery()">
-      <mat-radio-button [value]="true">
-       ارسال به آدرس شما
-      </mat-radio-button>
-      <mat-radio-button [value]="false">
-        دریافت از فروشگاه
-      </mat-radio-button>
-    </mat-radio-group>
-</span>
-<div *ngIf="withDelivery && !isProfile" [class.check-box-div]="isMobile">
-  <label class="label-field">زمان تحویل</label>
-  <mat-radio-group [(ngModel)]="deliveryDays" class="radio-field">
-    <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days"
-                      (change)="changeDurationType(d._id, d.delivery_days)"
-                      [checked]="d._id === (durationId ? durationId : null)" [class.radio-option]="!isMobile && i > 0">
-      {{d.name}}{{d.delivery_days === 3 ? ' (مخصوص استان تهران)' : ''}}
-    </mat-radio-button>
-  </mat-radio-group>
+<div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+     fxLayoutAlign.xs="center center">
+  <div *ngIf="!isProfile" fxFlex="40">
+    <h2 class="title-area"><i class="fa fa-truck"></i> روش تحویل</h2>
+    <div class="address-box">
+      <mat-radio-group [(ngModel)]="withDelivery" (change)="changeWithDelivery()">
+        <mat-radio-button [value]="true" class="type">ارسال به آدرس شما</mat-radio-button>
+        <mat-radio-button [value]="false" class="type">تحویل از فروشگاه</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+
+  <div *ngIf="withDelivery && !isProfile" fxFlex="30">
+    <h2 class="title-area">زمان تحویل</h2>
+    <div class="address-box">
+      <mat-radio-group [(ngModel)]="deliveryDays" class="radio-field">
+        <mat-radio-button *ngFor="let d of durations; let i = index" [value]="d.delivery_days"
+                          (change)="changeDurationType(d._id, d.delivery_days)"
+                          [checked]="d._id === (durationId ? durationId : null)"
+                          [class.radio-option]="!isMobile && i > 0" class="type">
+          ارسال {{d.name}}{{d.delivery_days === 3 ? ' (مخصوص تهران)' : ''}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
+
+  <div *ngIf="withDelivery && !isProfile" fxFlex="30">
+    <h2 class="title-area">ساعت تحویل</h2>
+    <div class="address-box">
+      <mat-radio-group [(ngModel)]="deliveryTime" class="radio-field">
+        <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)" class="type">
+          {{getDeliveryTimeDisplay(dh)}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
 </div>
-<div *ngIf="withDelivery && !isProfile">
-  <label class="label-field">ساعت تحویل</label>
-  <mat-radio-group [(ngModel)]="deliveryTime" class="radio-field">
-    <mat-radio-button *ngFor="let dh of deliveryHour" [value]="dh" (change)="setDeliveryTime(dh)"  >
-      {{getDeliveryTimeDisplay(dh)}}
-    </mat-radio-button>
-  </mat-radio-group>
-</div>
+<hr class="line">
 <div style="direction: ltr;margin-top: 10px; margin-left: 10px">
   <button mat-raised-button class="accent" (click)="openAddressDialog()">{{isProfile||withDelivery ? 'افزودن آدرس جدید'
     : 'معرفی تحویل گیرنده'}}
   </button>
 </div>
-
 <mat-card *ngIf="!isProfile && !withDelivery && showRecipientInfo"
           style="background-color: #dedfde;border-radius: 3px; padding: 5px; margin-top: 10px;">
-  <div style="padding-right: 5px; margin-bottom: 10px; font-weight: bold"> مشخصات تحویل گیرنده :</div>
+  <div style="padding-right: 5px; margin-bottom: 10px; font-weight: bold; color: #8f8f8f;"> مشخصات تحویل گیرنده :</div>
   <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
        fxLayoutAlign.xs="center center" style="padding-right: 5px">
     <div fxFlex="50">
@@ -76,6 +85,7 @@
 <div *ngIf="addresses && addresses.length" [class.show-button]="addresses && addresses.length">
   <div *ngIf="!isMobile" class="rs-table field">
     <mat-card>
+      <h2><i class="fa fa-map-marker"></i> آدرس شما</h2>
       <table class="field table">
         <thead>
         <tr>

@@ -1,17 +1,25 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { PageService } from '../../services/page.service';
-import { HttpService } from '../../services/http.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { DictionaryService } from '../../services/dictionary.service';
+import {Component, OnInit, HostListener, Inject, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {PageService} from '../../services/page.service';
+import {HttpService} from '../../services/http.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {DictionaryService} from '../../services/dictionary.service';
+import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
+import {LoginStatus} from '../../../site/login/login-status.enum';
+import {DialogEnum} from '../../enum/dialog.components.enum';
+import {MatDialog} from '@angular/material';
+import {AuthService} from '../../services/auth.service';
+import {CheckoutService} from '../../services/checkout.service';
+import {WINDOW} from '../../services/window.service';
+import {CartService} from '../../services/cart.service';
 
 @Component({
   selector: 'app-collection-header',
   templateUrl: './collection-header.component.html',
   styleUrls: ['./collection-header.component.css']
 })
-export class CollectionHeaderComponent implements OnInit {
+export class CollectionHeaderComponent implements OnInit, OnDestroy {
   hiddenGenderMenu = true;
   selected = {
     men: false,
@@ -20,7 +28,6 @@ export class CollectionHeaderComponent implements OnInit {
     girls: false,
   };
   persistedList = false;
-  searchIsFocused = false;
   menu: any = {};
   placements: any = {};
   topMenu = [];
@@ -29,11 +36,24 @@ export class CollectionHeaderComponent implements OnInit {
   searchCollectionList = [];
   searchWaiting = false;
   rows: any = [];
+  logos = [];
+  dialogEnum = DialogEnum;
+  isLoggedIn = false;
+  isVerified = false;
+  cartNumbers = '';
+  itemSubs;
+  display_name;
+  searchAreaFlag = false;
+  showMoreFlag = false;
+  searchTotalRes = [];
 
 
   constructor(private router: Router, private pageService: PageService,
-    private httpService: HttpService, private sanitizer: DomSanitizer,
-    private dictionaryService: DictionaryService) {
+              private httpService: HttpService, private sanitizer: DomSanitizer,
+              private dictionaryService: DictionaryService,
+              public dialog: MatDialog, private authService: AuthService,
+              private CheckoutService: CheckoutService,
+              @Inject(WINDOW) private window, private cartService: CartService) {
   }
 
   ngOnInit() {
@@ -69,11 +89,41 @@ export class CollectionHeaderComponent implements OnInit {
             });
         });
       });
+    this.authService.isLoggedIn.subscribe(
+      (data) => {
+        this.isLoggedIn = this.authService.userIsLoggedIn();
+        this.display_name = this.authService.userDetails.displayName;
+      },
+      (err) => {
+        console.error('Cannot subscribe on isLoggedIn: ', err);
+        this.isLoggedIn = false;
+      });
+    this.authService.isVerified.subscribe(
+      (data) => this.isVerified = data,
+      (err) => {
+        console.error('Cannot subscribe on isVerified: ', err);
+        this.isVerified = false;
+      }
+    );
+    this.itemSubs = this.cartService.cartItems.subscribe(
+      data => {
+        data = data.length > 0 ? data.map(el => el.quantity).reduce((a, b) => (+a) + (+b)) : 0;
+        if (+data) {
+          this.cartNumbers = (+data).toLocaleString('fa', {useGrouping: false});
+        } else {
+          this.cartNumbers = '';
+        }
+      });
+    this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
+      this.logos = data && data.length ? data.sort((x, y) => x.info.column - y.info.column) : [];
+    });
+    this.display_name = this.authService.userDetails.displayName;
   }
 
   showList(type) {
+    this.searchAreaFlag = false;
     setTimeout(() => {
-      this.searchUnfocused();
+      this.searchFinished();
       this.hiddenGenderMenu = false;
       this.selected[type] = true;
       this.menu = this.placements[type + 'Menu'];
@@ -102,69 +152,89 @@ export class CollectionHeaderComponent implements OnInit {
     }
   }
 
-  goToRoot() {
-    this.router.navigate(['']);
-  }
-
   getKeyList(list) {
     return Object.keys(list);
   }
 
-  searchFocused() {
-    this.searchIsFocused = true;
-    if (this.searchPhrase)
-      this.searchProduct();
-    else {
-      this.searchProductList = [];
-      this.searchCollectionList = [];
-    }
-  }
-
-  searchUnfocused() {
-    this.searchIsFocused = false;
+  searchFinished() {
     this.searchProductList = [];
+    this.searchTotalRes = [];
+    this.rows = [];
     this.searchCollectionList = [];
+    this.searchWaiting = false;
+    this.searchAreaFlag = false;
+    this.showMoreFlag = false;
+    this.searchPhrase = null;
   }
 
   searchProduct() {
-    this.searchProductList = [];
-    if (!this.searchPhrase) {
+    if (this.searchPhrase.length > 2) {
+      this.showMoreFlag = false;
       this.searchProductList = [];
       this.searchCollectionList = [];
-      return;
-    }
-
-    this.searchWaiting = true;
-    this.httpService.post('search/Product', {
-      options: {
-        phrase: this.searchPhrase,
-      },
-      offset: 0,
-      limit: 6,
-    }).subscribe(
-      (data) => {
-        this.searchProductList = [];
-        if (data.data) {
-          data.data.forEach(el => {
-            this.searchProductList.push({
-              id: el._id,
-              name: el.name,
-              brand: this.dictionaryService.translateWord(el.brand.name),
-              type: this.dictionaryService.translateWord(el.product_type.name),
-              imgUrl: this.getProductThumbnail(el),
-              tags: this.dictionaryService.translateWord(el.tags.name),
-              article_no: el.article_no,
-            });
-          });
-        }
-        this.alignRow();
-        this.searchCollection();
-      },
-      (err) => {
-        console.error('Cannot get search data: ', err);
+      this.searchTotalRes = [];
+      this.rows = [];
+      if (!this.searchPhrase) {
         this.searchWaiting = false;
-      });
+        return;
+      }
+
+      this.searchWaiting = true;
+      this.httpService.post('search/Product', {
+        options: {
+          phrase: this.searchPhrase,
+        },
+        offset: 0,
+        limit: 10,
+      }).subscribe(
+        (data) => {
+          this.searchProductList = [];
+          this.searchCollectionList = [];
+          this.searchTotalRes = [];
+          this.rows = [];
+          if (data.data) {
+            data.data.forEach(el => {
+              this.searchProductList.push({
+                id: el._id,
+                name: el.name,
+                brand: this.dictionaryService.translateWord(el.brand.name),
+                type: this.dictionaryService.translateWord(el.product_type.name),
+                imgUrl: this.getProductThumbnail(el),
+                tags: this.dictionaryService.translateWord(el.tags.name),
+                article_no: el.article_no,
+              });
+            });
+
+            this.searchTotalRes = data.totalRes;
+            if (this.searchTotalRes && this.searchTotalRes.length > 10)
+              this.showMoreFlag = true;
+          }
+          this.alignRow(this.searchProductList);
+          this.searchCollection();
+        },
+        (err) => {
+          console.error('Cannot get search data: ', err);
+          this.searchWaiting = false;
+        });
+    }
   }
+
+  alignMoreProd() {
+    this.showMoreFlag = false;
+    this.searchProductList = [];
+    this.searchTotalRes.forEach(el => {
+      this.searchProductList.push({
+        id: el._id,
+        name: el.name,
+        brand: this.dictionaryService.translateWord(el.brand.name),
+        type: this.dictionaryService.translateWord(el.product_type.name),
+        imgUrl: this.getProductThumbnail(el),
+        tags: this.dictionaryService.translateWord(el.tags.name),
+        article_no: el.article_no,
+      });
+    });
+    this.alignRow(this.searchProductList);
+  };
 
   searchCollection() {
     this.searchCollectionList = [];
@@ -178,7 +248,7 @@ export class CollectionHeaderComponent implements OnInit {
         phrase: this.searchPhrase,
       },
       offset: 0,
-      limit: 6,
+      limit: 4,
     }).subscribe(
       (data) => {
         this.searchCollectionList = [];
@@ -216,14 +286,11 @@ export class CollectionHeaderComponent implements OnInit {
   }
 
   selectSearchResult(element, isProduct) {
+    this.searchFinished();
     if (isProduct)
       this.router.navigate([`/product/${element.id}`]);
     else
       this.router.navigate([`${element.pages[0].address}`]);
-
-    this.searchIsFocused = false;
-    this.searchProductList = [];
-    this.searchCollectionList = [];
   }
 
   getProductThumbnail(product) {
@@ -241,19 +308,19 @@ export class CollectionHeaderComponent implements OnInit {
       'assets/nike-brand.jpg';
   }
 
-  alignRow() {
-    if (this.searchProductList.length <= 0) {
+  alignRow(productList) {
+    if (productList.length <= 0) {
       this.rows = [];
       return;
     }
     this.rows = [];
     let chunk = [], counter = 0;
-    for (const sp in this.searchProductList) {
-      if (this.searchProductList.hasOwnProperty(sp)) {
-        chunk.push(this.searchProductList[sp]);
+    for (const sp in productList) {
+      if (productList.hasOwnProperty(sp)) {
+        chunk.push(productList[sp]);
         counter++;
 
-        if (counter >= 2) {
+        if (counter >= 5) {
           counter = 0;
           this.rows.push(chunk);
           chunk = [];
@@ -265,17 +332,61 @@ export class CollectionHeaderComponent implements OnInit {
     }
   }
 
-  onClose() {
+  openSearchArea() {
+    this.searchAreaFlag = !this.searchAreaFlag;
     this.searchPhrase = null;
     this.searchProductList = [];
     this.searchCollectionList = [];
+    this.searchTotalRes = [];
+    this.rows = [];
     this.searchWaiting = false;
-    this.searchIsFocused = false;
   }
 
   @HostListener('document:click', ['$event'])
   public documentClick(e: any): void {
-    if (!e.path.some(el => el.id === 'search-area'))
-      this.searchUnfocused();
+    if (!e.path.some(el => el.id === 'search-area')) {
+      if (!e.path.some(el => el.id === 'search-icon'))
+        this.searchFinished();
+    }
+  }
+
+  login() {
+    this.authService.checkValidation(this.router.url)
+      .then(() => {
+        return new Promise((innerResolve, innerReject) => {
+          this.authService.isVerified.subscribe(
+            (data) => {
+              if (!data) {
+                return innerReject('header::authService->isVerified is false');
+              }
+            }
+          );
+        });
+      })
+      .catch(err => {
+        this.dialog.open(GenDialogComponent, {
+          width: '500px',
+          data: {
+            componentName: this.dialogEnum.login,
+            extraData: {
+              loginStatus: LoginStatus.Login
+            }
+          }
+        });
+      });
+  }
+
+  logout() {
+    this.authService.logout();
+    this.CheckoutService.ccRecipientData = null;
+
+  }
+
+  ngOnDestroy() {
+    this.itemSubs.unsubscribe();
+  }
+
+  navigateToCart() {
+    this.router.navigate(['/', 'cart']);
   }
 }

@@ -13,6 +13,7 @@ import {SharedModule} from '../../shared/shared.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule} from '@angular/forms';
 import { EditOrderComponent } from './components/edit-order/edit-order.component';
+import { PriceFormatPipe } from './@pipes/price-format.pipe';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { EditOrderComponent } from './components/edit-order/edit-order.component
     CartItemsComponent,
     CartComponent,
     EditOrderComponent,
+    PriceFormatPipe,
   ],
   imports: [
     CartRouting,

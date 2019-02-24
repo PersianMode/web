@@ -1,9 +1,13 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, Inject} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {CartService} from '../../../../shared/services/cart.service';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {CheckoutService} from '../../../../shared/services/checkout.service';
+import {WINDOW} from '../../../../shared/services/window.service';
+import { GenDialogComponent } from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import {MatDialog, MatSnackBar} from '@angular/material';
 
 
 @Component({
@@ -12,6 +16,7 @@ import {CheckoutService} from '../../../../shared/services/checkout.service';
   styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent implements OnInit, OnChanges {
+  dialogEnum = DialogEnum;
   @Input()
   set total(value) {
     this._total = value;
@@ -55,8 +60,8 @@ export class SummaryComponent implements OnInit, OnChanges {
   show_coupon_area = false;
   isLoggedIn = false;
 
-  constructor(private cartService: CartService, private authService: AuthService,
-    private router: Router, private checkoutService: CheckoutService) {
+  constructor(@Inject(WINDOW) private window, public dialog: MatDialog, private cartService: CartService, private authService: AuthService,
+    private router: Router, private checkoutService: CheckoutService, private snack: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -100,6 +105,12 @@ export class SummaryComponent implements OnInit, OnChanges {
   }
 
   applyCoupon() {
+    if (!this.isLoggedIn) {
+      this.snack.open('برای استفاده از کوپن باید ثبت‌نام کنید و وارد شوید', null, {
+          duration: 3000,
+        });
+      return;
+    }
     if (this.used_coupon_code) {
       // false is a signal to let the cart component and service
       // know that they have to clear the used coupon code field
@@ -126,6 +137,19 @@ export class SummaryComponent implements OnInit, OnChanges {
         });
     } else {
       this.router.navigate(['/checkout']);
+    }
+  }
+
+  goToRegister() {
+    if (this.window.innerWidth >= 960) {
+      this.dialog.open(GenDialogComponent, {
+        width: '500px',
+        data: {
+          componentName: this.dialogEnum.register,
+        }
+      });
+    } else {
+      this.router.navigate(['register']);
     }
   }
 }

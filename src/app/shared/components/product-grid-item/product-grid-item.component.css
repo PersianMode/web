@@ -51,18 +51,11 @@
   overflow: visible;
 }
 
-.on span {
-  border: 1px solid #ccc !important;
+.on > span {
+  border: 1px solid #ccc;
   background: #fff;
 }
-.main p{
-  min-height: 20px;
-  border-bottom: 1px solid #CCC;
-  font-weight: bold;
-  margin: 10px 13px 0px;
-  font-size: 11px;
-  color: #222;
-}
+
 .mainMobile p{
   min-height: 20px;
   font-weight: bold;
@@ -159,7 +152,7 @@
 }
 .slider {
   height: 60px;
-  background: #f5f5f5;
+  background: transparent;
   white-space: nowrap;
   position: relative;
   right: 0px;
@@ -170,4 +163,16 @@
   height: 60px;
   display: inline-block;
   /*transform: scaleX(-1);*/
+}
+.colorprev{
+  margin: 1px 10px 0 2px;
+}
+.svgw{
+  display: inline-block;
+  border: 2px solid rgb(243, 243, 243);
+  padding: 0;
+  
+}
+.noborder{
+  border :none !important;
 }

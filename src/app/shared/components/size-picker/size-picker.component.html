@@ -1,8 +1,5 @@
 <div fxLayout="row">
-  <div fxFlex="50" fxFlex.sm="20" style="align-items: right">
-    <h2 *ngIf="displayTitle" style="display: inline; min-width:50%;">انتخاب اندازه</h2>
-  </div>
-  <div *ngIf="isShoes" fxFlex="50" fxFlex.sm="80" class="slider">
+  <div *ngIf="isShoes" fxFlex="50" fxFlex.sm="80" class="slider" style="text-align: right;">
     <span>US</span>
     <mat-slide-toggle [checked]="isEU" (change)="changeSizeType()">
     </mat-slide-toggle>

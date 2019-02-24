@@ -6,7 +6,9 @@ import {ResponsiveService} from '../../services/responsive.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
 import {DictionaryService} from '../../services/dictionary.service';
+
 const tagNames = ['Sub Division', 'Category', 'Gender'];
+
 @Component({
   selector: 'app-product-grid-item',
   templateUrl: './product-grid-item.component.html',
@@ -16,6 +18,7 @@ export class ProductGridItemComponent implements OnInit {
   @Input() data;
   @Input() width;
   @Input() height;
+  myColors = [];
   @ViewChild('slider') slider;
   pos = 0;
   desc = '';
@@ -23,6 +26,7 @@ export class ProductGridItemComponent implements OnInit {
   on = 0;
   images = [];
   colors = [];
+
   slide = 0;
   slidesNum = 0;
   rect;
@@ -40,7 +44,15 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.desc =  this.data.tags
+    this.data.colors.forEach(color => {
+      this.myColors = this.myColors.concat(
+        color.name.split('/')
+          .map(r => r.split('-')).reduce((x, y) => x.concat(y), [])
+          .map(r => this.dict.convertColor(r.trim()))
+          .filter(r => r));
+    });
+    this.myColors = this.myColors.filter((r, i, o) => o.indexOf(r) === i);
+    this.desc = this.data.tags
       .filter(r => tagNames.includes(r.tg_name))
       .sort((x, y) => tagNames.findIndex(r => x.tg_name === r) - tagNames.findIndex(r => y.tg_name === r))
       .map(x => this.dict.translateWord(x.name.trim()))

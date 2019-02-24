@@ -1,24 +1,27 @@
 <div style="display: inline-block; width:100%;">
   <div fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" class="main">
     <div fxFlex=0 fxFlex.lg="10" fxFlex.xl="20">&nbsp;</div>
+    <!-- summary -->
     <div class="main-divs" fxFlex="20" fxFlex.md="30">
       <app-summary (recalculateDiscount)="calculateDiscount($event)" [disabled]="disabled"
                    [discount]="discountValue" [productsData]="products"></app-summary>
     </div>
     <div class="main-divs" fxFlex=80 fxFlex.md=70 fxFlex.lg="70" fxFlex.xl="60" style="max-width: calc(100% - 350px)">
-      <div class="signUp-div" *ngIf="!isLoggedIn">
-        عضویت رایگان
-        <span style="padding-left: 10px"><a (click)="goToRegister()" class="membership-style">به ما بپیوندید</a></span>
+
+      <div class="basket-div" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="">
+          <h3>لیست خرید</h3>
+          <p>بعد از بررسی خرید خود را تائید کنید</p>
       </div>
-      <div class="basket-div">
-        سبد خرید شما ({{numberOfProducts}})
-      </div>
+      <hr class="hr-style">
+      <!-- products -->
       <div>
         <div *ngFor="let product of products; let i = index" style="margin-bottom: 10px;">
           <app-cart-items [product]="product" (updateProduct)="updateProduct($event, product, i)"
                           (valid)="changeValidation($event, i)"></app-cart-items>
         </div>
       </div>
+
+      <!-- spinner loading  -->
       <div class="center-content" *ngIf="showWaitingSpinner">
         <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
                               [strokeWidth]="'2'">
@@ -27,6 +30,7 @@
           لطفا اندکی صبر نمایید ...
         </div>
       </div>
+
     </div>
     <div fxFlex=0 fxFlex.lg="10" fxFlex.xl="20">&nbsp;</div>
   </div>

@@ -3,6 +3,10 @@
   width: 50%;
 }
 
+.btn-container  {
+  position: absolute !important;
+  left: 0px !important;
+}
 .btn-container button {
   padding: 10px;
   background: black;
@@ -41,6 +45,7 @@ h4 {
 }
 .main-price {
   text-align: left;
+  max-width: 100% !important;
 }
 .main-price section {
   margin: 19px 0px 19px 0px;
@@ -128,3 +133,31 @@ img[src=""] {
   content:url("data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
 
 }
+
+/* styling for buttons */
+.btn-text{
+  color: white !important;
+  padding: 3px;
+}
+.btn-icon {
+  position: relative;
+  right: -10px;
+  color: white;
+}
+.btn-edit {
+  display: inline-flex;
+  flex: 0 !important;
+  padding: 9px 20px !important;
+  background-color: #68D0EC !important;
+  cursor: pointer;
+  margin-right: 15px !important;
+}
+
+.btn-delete {
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 !important;
+  padding: 9px 20px !important;
+  background-color: #E71096 !important;
+}
+

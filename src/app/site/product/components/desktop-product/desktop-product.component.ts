@@ -6,7 +6,9 @@ import {WINDOW} from '../../../../shared/services/window.service';
 import {DOCUMENT} from '@angular/platform-browser';
 import {CartService} from '../../../../shared/services/cart.service';
 import {HttpService} from 'app/shared/services/http.service';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 
 @Component({
   selector: 'app-desktop-product',
@@ -51,7 +53,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Input()
   set selectedProductColorID(id) {
     if (id) {
-      this.selectedProductColor = this.product.colors.find(r => r._id === id);
+      this.selectedProductColor = this.chunkProductColor(this.product.colors.find(r => r._id === id));
       this.productSize = this.product.sizesByColor[id];
     }
   };
@@ -62,7 +64,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Output() addFavorite = new EventEmitter<any>();
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-    private cartService: CartService, private snackBar: MatSnackBar) {
+    private cartService: CartService, private snackBar: MatSnackBar, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -126,5 +128,38 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     this.snackBar.open('لینک محصول در پس زمینه کپی شد', null, {
       duration: 2000,
     });
+  }
+
+  chunkProductColor (productColors) {
+    if (!productColors || !productColors.image || !productColors.image.angles.length) {
+      return productColors;
+    }
+    let i, j;
+    const temparray = [];
+    for (i = 0, j = productColors.image.angles.length; i < j; i += 3) {
+      temparray.push( productColors.image.angles.slice(i, i + 3));
+    }
+
+    productColors['image']['angles'] = [];
+    productColors['image']['angles'] = [...temparray];
+    return productColors;
+  }
+
+  fullSizeView(url) {
+    const img: HTMLImageElement = new Image();
+    let w, h;
+    img.onload = () => {
+      w = img.naturalWidth;
+      h = img.naturalHeight;
+      this.dialog.open(GenDialogComponent, {
+        width: Math.min(w, window.innerWidth) + 'px',
+        height: Math.min(h, window.innerHeight) + 'px',
+        data: {
+          componentName: DialogEnum.photoFullSize,
+          extraData: {url, w, h, covering: w >= window.innerWidth && h >= window.innerHeight}
+        }
+      });
+    };
+    img.src = url;
   }
 }

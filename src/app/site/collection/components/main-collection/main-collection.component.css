@@ -3,8 +3,8 @@
   position: absolute;
   background: #fff;
   right: 9px;
-  padding: 24px;
-  width: 216px;
+  padding: 5px;
+  width: 250px;
   z-index: 9;
   font-size: 13px;
 }
@@ -16,73 +16,87 @@
   margin-top: 46px;
   min-height: 482px;
 }
+
 .mobileGridwall {
   padding: 10px;
 }
-.mobileGridwallTitle h1{
+
+.mobileGridwallTitle h1 {
   text-align: center;
   padding-bottom: 20px;
 
-  width:100%
+  width: 100%
 }
+
 .mobileGridwallTitle div {
   border-top: 1px solid #ccc;
 }
-.mobileGridwallTitle p{
+
+.mobileGridwallTitle p {
   float: right;
   display: inline-block;
   margin: 10px;
 }
+
 .mobileGridwallTitle i {
   font-size: 20px;
 }
-.mobileGridwallTitle span{
+
+.mobileGridwallTitle span {
   float: left;
-  margin:10px;
+  margin: 10px;
 }
+
 .gridwall-title {
   display: inline-block;
-  margin: 0;
-  padding: 0px 0px 35px 0px;
-  width: 100%;
+  padding: 0 0 30px;
   white-space: nowrap;
+  width: 100%;
 }
 
 .gridwall-title h1 {
   font-size: 19px !important;
   line-height: 24px !important;
-  margin: 0;
   display: inline-block;
-  width:20%;
+  float: left;
+  margin: 0;
 }
 
 .gridwall-title span {
-  color: #999;
+  padding-left: 0px;
+  color: rgb(0, 0, 0);
 }
+
 .sorter-row {
-  width: 80%;
   display: inline-block;
-  margin:0;
-  padding:0;
-  text-align: left;
+  margin: 0;
+  padding: 0;
+  text-align: right;
 }
-.sorter{
-  border: #e5e5e5 solid 1px;
-  border-radius: 2px;
+
+.sorter {
+
   color: #111;
   cursor: pointer;
   display: inline-block;
   font-size: 15px;
   line-height: 38px;
-  padding: 0px 35px 0px 35px;
+  padding: 0px 0px 0px 35px;
   height: 38px;
-  margin-left: 20px;
+  margin-left: 0px;
 }
+
 .sorter i {
-  font-weight: 200;
-  font-size: 75%;
+  font-weight: 20;
+  font-size: 80%;
   margin-right: 5px;
+  border-style: solid;
+  border-color: rgb(193, 189, 189);
+  border-width: 1px;
+  color: rgb(193, 189, 189);
+  margin: 5px;
 }
+
 .gridwall-content {
   display: inline-block;
   text-align: center;
@@ -93,11 +107,44 @@
 .gridwall-wrapper {
   display: inline-block;
   text-align: right;
-  width: 100%;
+  width: 1220px;
 }
+
+@media (min-width: 1520px) {
+  .gridwall-wrapper {
+    width: 1220px;
+  }
+}
+
+@media (max-width: 1519px) {
+  .gridwall-wrapper {
+    width: 100%;
+  }
+
+  .gridwall-title h1 {
+    padding-left: 30px;
+  }
+}
+
 .mobileScroll {
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;
   padding-bottom: 50px;
+}
+
+.header {
+  text-align: left;
+  padding-left: 0;
+}
+
+.sortpanel {
+  width: 150px;
+  font-size: 15px;
+  margin-right: 0;
+  padding: 5px 10px 0 10px;
+  color: rgb(140, 137, 137);
+  border-bottom: solid;
+  border-width: 1px;
+  border-color: rgb(203, 195, 195);
 }
