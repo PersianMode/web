@@ -58,7 +58,7 @@
     <span *ngIf="fo.name==='color'">
       <span *ngFor="let v of filter_options[i].values; let j=index " class="color-span " (click)="getValue(fo.name, v) "
             style="cursor: pointer; " matTooltip="{{translatedColor[v]}} " matTooltipShowDelay="500 ">
-        <svg height="20 " width="20">
+        <svg height="20 " width="20" style="height:20px">
           <rect x="1" y="1" width="20" height="20" [attr.stroke]="needsBorder[v] ? '#ccc' : 'transparent' " stroke-width="1 "
                   attr.fill="{{filter_options[i]?.values_fa[j]}} "></rect>
         </svg>
