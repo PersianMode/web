@@ -173,8 +173,10 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
       switch (message.type) {
         case SMMessageTypes.ReturnRequest:
           return 'درخواست بازگشت';
-        case SMMessageTypes.Damage:
-          return 'گزارش خرابی';
+        case SMMessageTypes.DamageWithRefund:
+          return 'گزارش خرابی با بازگشت هزینه';
+        case SMMessageTypes.DamageWithoutRefund:
+          return 'گزارش خرابی بدون بازگشت هزینه';
         case SMMessageTypes.Lost:
           return 'گزارش مفقودی';
         case SMMessageTypes.NotExists:
@@ -206,7 +208,8 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   needsProcess(message) {
     return !message.is_processed &&
       ![
-        SMMessageTypes.Damage,
+        SMMessageTypes.DamageWithRefund,
+        SMMessageTypes.DamageWithoutRefund,
         SMMessageTypes.Lost
       ].includes(message.type);
 

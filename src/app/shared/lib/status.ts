@@ -15,11 +15,15 @@ const OrderLineStatuses: any[] = [
   {name: 'بررسی نهایی موفق', title: 'در حال پردازش', status: ols.Checked},
   {name: 'ناموجود', title: 'ناموجود', status: ols.NotExists},
   {name: 'درخواست بازگشت سفارش', title: 'درخواست بازگشت سفارش', status: ols.ReturnRequested},
-  {name: 'انتظار انبار مفقودی', title: 'درخواست بازگشت سفارش', status: ols.WaitForLostWarehouse},
-  {name: 'تایید انبار مفقودی', title: 'درخواست بازگشت سفارش', status: ols.LostWarehouseVerified},
+  {name: 'انتظار انبار مفقودی', title: 'درخواست بازگشت سفارش', status: ols.WaitForLost},
+  {name: 'تایید انبار مفقودی', title: 'درخواست بازگشت سفارش', status: ols.LostVerified},
   {name: 'ّاز سر گیری فرایند', title: 'در حال پردازش', status: ols.Renew},
   {name: 'لغو سفارش', title: 'در حال پردازش', status: ols.Canceled},
-  {name: 'خراب شده', title: 'در حال پردازش', status: ols.Damaged},
+  {name: 'انتظار تایید خرابی بدون بازگشت هزینه', title: 'در حال پردازش', status: ols.WaitForDamageWithoutRefund},
+  {name: 'تایید خرابی بدون بازگشت هزینه', title: 'در حال پردازش', status: ols.DamageWithoutRefundVerified},
+  {name: 'انتظار تایید خرابی با بازگشت هزینه', title: 'در حال پردازش', status: ols.WaitForDamageWithRefund},
+  {name: 'تایید تایید خرابی با بازگشت هزینه', title: 'در حال پردازش', status: ols.DamageWithRefundVerified},
+  {name: 'از سرگیری فرایند', title: 'در حال پردازش', status: ols.Renew},
 ];
 const OrderStatuses: any[] = [
   {name: 'در انتظار تجمیع', title: 'در حال آماده سازی', status: os.WaitForAggregation},

@@ -14,11 +14,14 @@ enum ORDER_LINE_STATUS {
   Checked = 12,
   NotExists = 13,
   ReturnRequested = 14,
-  WaitForLostWarehouse = 15,
-  LostWarehouseVerified= 16,
+  WaitForLost = 15,
+  LostVerified= 16,
   Canceled = 17,
-  Renew = 18,
-  Damaged = 19,
+  WaitForDamageWithoutRefund = 18,
+  DamageWithoutRefundVerified = 19,
+  WaitForDamageWithRefund = 20,
+  DamageWithRefundVerified = 21,
+  Renew = 22,
 }
 
 

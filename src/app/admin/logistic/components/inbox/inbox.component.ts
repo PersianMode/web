@@ -11,6 +11,7 @@ import {AuthService} from 'app/shared/services/auth.service';
 import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
 import {ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
 import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
+import {ReceiveType} from 'app/shared/enum/receive_type';
 
 
 @Component({
@@ -139,13 +140,18 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     return isHubClerk && isReturnOrderLine;
   }
 
-  informDamage(orderLine) {
+  informDamage(orderLine, refund = false) {
+
+    let message: 'در صورت اعلام خرابی پیام به مسئول فروش جهت بررسی بیشتر ارسال خواهد شد';
+    if (refund) {
+      message += 'هزینه کالا به حساب مشتری بازگشت داده خواهد شد';
+    };
 
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px',
       data: {
         name: 'اعلام خرابی',
-        message: 'در صورت اعلام خرابی پیام به مسئول فروش جهت بررسی بیشتر ارسال خواهد شد'
+        message
       }
 
     });
@@ -155,7 +161,8 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
           this.progressService.enable();
           this.httpService.post('order/damage', {
             orderId: orderLine.order_id,
-            orderLineId: orderLine.order_line_id
+            orderLineId: orderLine.order_line_id,
+            type: refund ? ReceiveType.DamageWithRefund : ReceiveType.DamageWithoutRefund
           }).subscribe(res => {
             this.progressService.disable();
           }, err => {
