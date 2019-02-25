@@ -16,7 +16,7 @@ export class HttpService {
     // if (this.isInDevMode()) {
     //   HttpService.Host = HttpService.Host.replace(window.location.port, '3000');
     // }
-    HttpService.Host = 'http://bankofstyle.com';
+    HttpService.Host = 'http://localhost:3000';
   }
 
   isInDevMode() {

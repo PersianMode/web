@@ -12,15 +12,13 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {FooterComponent} from './footer/footer.component';
 import {HeaderComponent} from './header/header.component';
 import {AdminAuthGuard} from './admin.auth.guard';
-import { AppTrackListComponent } from './app-track-list/app-track-list.component';
 
 
 @NgModule({
-  declarations: [ 
+  declarations: [
     HomeComponent,
     FooterComponent,
     HeaderComponent,
-    AppTrackListComponent,
   ],
   imports: [
     AdminRouting,
