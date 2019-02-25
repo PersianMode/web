@@ -1,0 +1,8 @@
+<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
+     fxLayoutAlign.xs="center center" dir="rtl">
+
+  <app-uploader fxFlex="100"
+                [url]="'uploadData'"
+                (OnCompleted)="Success($event)"></app-uploader>
+
+</div>
