@@ -58,11 +58,12 @@
         <ng-container matColumnDef="process">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let orderLine">
-            <button mat-button *ngIf="shouldCheckProduct(orderLine)"
+            <button mat-flat-button *ngIf="shouldCheckProduct(orderLine)" style="margin: 5px; font-size: 10px"
               (click)="informDamage(orderLine, true)"> اعلام خرابی با بازگشت هزینه</button>
             <br />
-            <button mat-button color="warn" *ngIf="shouldCheckProduct(orderLine)"
-              (click)="informDamage(orderLine)">اعلام خرابی بدون بازگشن هزینه</button>
+            <button mat-flat-button color="warn" *ngIf="shouldCheckProduct(orderLine)"
+              style="margin: 5px; font-size: 10px" (click)="informDamage(orderLine)">اعلام خرابی بدون بازگشت
+              هزینه</button>
           </mat-cell>
         </ng-container>
 
