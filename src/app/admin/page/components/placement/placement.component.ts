@@ -73,7 +73,7 @@ export class PlacementComponent implements OnInit {
         this.previewShouldDisabled = false;
       },
       (err) => {
-        this.snackBar.open('برخی/همه تغیثیرات تثبیت نشدند', null, {
+        this.snackBar.open('برخی/همه تغییرات تثبیت نشدند', null, {
           duration: 3200,
         });
 

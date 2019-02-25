@@ -27,6 +27,7 @@ export class MenuPlacementComponent implements OnInit {
         return 0;
       });
       this.subMenuItems = value.filter(el => el.variable_name.toLowerCase() === 'submenu');
+      console.log('-------------------------->>>', this.subMenuItems);
     }
   }
 

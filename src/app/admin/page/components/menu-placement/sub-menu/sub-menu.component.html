@@ -67,7 +67,7 @@
     <div class="menu-area middle-menu">
       <div *ngFor="let column of middleAreaColumns" [dragula]="'sub-menu-bag'" [dragulaModel]="middleAreaItems[column]" class="menu-column">
         <div *ngFor="let item of middleAreaItems[column]; first as isFirst" class="menu-item" (click)="selectItem(item)" [ngClass]="{'selected-item': selectedItem && selectedItem._id && item._id.toString() === selectedItem._id.toString(), 'header-container': item.info.is_header, 'selected-to-revert': !canEdit && isSelectedToRevert(item)}">
-          <label class="content" [class.header]="isFirst || item.info.is_header">{{item.info.text}}</label>
+          <label class="content" [class.header]="isFirst || item.info.is_header">*{{item.info.text}}*</label>
         </div>
       </div>
       <div *ngIf="middleAreaHasNewColumn" class="menu-column empty-column" [dragula]="'sub-menu-bag'" [dragulaModel]="middleAreaNewEmptyList">

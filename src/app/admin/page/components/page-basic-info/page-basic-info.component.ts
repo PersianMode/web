@@ -258,6 +258,7 @@ export class PageBasicInfoComponent implements OnInit {
       date: plcDate,
     }).subscribe(
       (result) => {
+        console.log('*************', result.placement);
         this.placements = [];
 
         if (result.placement) {
