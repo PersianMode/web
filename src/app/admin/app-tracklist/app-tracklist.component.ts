@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-app-track-list',
-  templateUrl: './app-track-list.component.html',
-  styleUrls: ['./app-track-list.component.css']
+  templateUrl: './app-tracklist.component.html',
+  styleUrls: ['./app-tracklist.component.css']
 })
 export class AppTrackListComponent implements OnInit {
 
