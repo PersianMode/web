@@ -1,13 +1,9 @@
 <mat-card class="card-view">
   <mat-card-content>
-    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
-         fxLayoutAlign.xs="center center" dir="rtl">
 
-      <app-uploader fxFlex="100"
-                    [url]="'uploadData'"
-                    (OnCompleted)="Success($event)"></app-uploader>
-
-    </div>
+    <button mat-fab color="accent" (click)="openUploadTrackDialog()" style="margin-top: 15px">
+      <mat-icon aria-label="Add new Collection">add</mat-icon>
+    </button>
 
   </mat-card-content>
 </mat-card>

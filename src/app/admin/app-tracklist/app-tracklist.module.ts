@@ -11,10 +11,12 @@ import {SharedModule} from '../../shared/shared.module';
 import {MarkdownModule} from 'angular2-markdown';
 import {AppTrackListComponent} from './app-tracklist.component';
 import {AppTrackListRouting} from './app-tracklist.routing';
+import { UploadTrackComponent } from './component/upload-track/upload-track.component';
 
 @NgModule({
   declarations: [
     AppTrackListComponent,
+    UploadTrackComponent,
   ],
   imports: [
     AppTrackListRouting,
