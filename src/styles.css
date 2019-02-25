@@ -174,9 +174,13 @@ nav {
 
 .logoButtons {
   position: absolute;
-  top: 0px;
+  top: 0;
   right: 30px;
   direction: ltr;
+  padding:0;
+  border:0;
+  height:69px;
+  overflow: hidden;
 }
 .logoButtons button {
   height:69px;
@@ -221,15 +225,15 @@ nav {
 }
 
 .second-bar li:hover {
-  border-bottom: 2px #111 solid;
+  border-bottom: 2px #8f8f8f solid;
 }
 
 .selected {
-  border-bottom: 2px #111 solid !important;
+  border-bottom: 2px #8f8f8f solid !important;
 }
 
 .second-bar a:focus {
-  border-bottom: 2px #111 solid;
+  border-bottom: 2px #8f8f8f solid;
 }
 
 .second-bar a {
@@ -346,7 +350,7 @@ button {
 }
 
 .genderList a:hover {
-  color: #e71096;
+  color: #CFDE29;
 }
 
 .genderList a:focus {
