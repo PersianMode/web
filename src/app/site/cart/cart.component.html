@@ -2,11 +2,11 @@
   <div fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" class="main">
     <div fxFlex=0 fxFlex.lg="10" fxFlex.xl="20">&nbsp;</div>
     <!-- summary -->
-    <div class="main-divs" fxFlex="20" fxFlex.md="30">
+    <div class="main-divs" fxFlex="20" fxFlex.lg="30" fxFlex.md="40">
       <app-summary (recalculateDiscount)="calculateDiscount($event)" [disabled]="disabled"
                    [discount]="discountValue" [productsData]="products"></app-summary>
     </div>
-    <div class="main-divs" fxFlex=80 fxFlex.md=70 fxFlex.lg="70" fxFlex.xl="60" style="max-width: calc(100% - 350px)">
+    <div class="main-divs" fxFlex=80 fxFlex.md=60 fxFlex.lg="70" fxFlex.xl="60" style="max-width: calc(100% - 350px)">
 
       <div class="basket-div" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="">
           <h3>لیست خرید</h3>

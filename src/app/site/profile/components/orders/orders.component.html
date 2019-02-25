@@ -26,11 +26,11 @@
         true)}}<br/></span>{{makePersianNumber(order.total_amount - (order.discount ? order.discount : 0), true)}}
     </mat-cell>
   </ng-container>
-  <ng-container matColumnDef="used_point">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>امتیاز استفاده شده</mat-header-cell>
-    <mat-cell *matCellDef="let order">{{makePersianNumber(order.used_point, false)}}
-    </mat-cell>
-  </ng-container>
+  <!--<ng-container matColumnDef="used_point">-->
+    <!--<mat-header-cell *matHeaderCellDef mat-sort-header>امتیاز استفاده شده</mat-header-cell>-->
+    <!--<mat-cell *matCellDef="let order">{{makePersianNumber(order.used_point, false)}}-->
+    <!--</mat-cell>-->
+  <!--</ng-container>-->
 
   <ng-container matColumnDef="address">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ارسال به</mat-header-cell>
