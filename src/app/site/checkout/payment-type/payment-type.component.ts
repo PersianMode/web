@@ -32,13 +32,13 @@ export class PaymentTypeComponent implements OnInit {
   set loyaltyPoint(value) {
     this._loyaltyPoint = value ? value : 0;
 
-    if (value && value > 0) {
-      this.paymentTypes.find(el => el.value === this.paymentType.loyaltyPoint).disabled = false;
-      this.paymentTypes.find(el => el.value === this.paymentType.loyaltyPoint).amount = value;
-    } else {
-      this.paymentTypes.find(el => el.value === this.paymentType.loyaltyPoint).disabled = true;
-      this.paymentTypes.find(el => el.value === this.paymentType.loyaltyPoint).amount = 0;
-    }
+    // if (value && value > 0) {
+    //   this.paymentTypes.find(el => el.value === this.paymentType.loyaltyPoint).disabled = false;
+    //   this.paymentTypes.find(el => el.value === this.paymentType.loyaltyPoint).amount = value;
+    // } else {
+    //   this.paymentTypes.find(el => el.value === this.paymentType.loyaltyPoint).disabled = true;
+    //   this.paymentTypes.find(el => el.value === this.paymentType.loyaltyPoint).amount = 0;
+    // }
   }
 
   get loyaltyPoint() {
@@ -60,12 +60,12 @@ export class PaymentTypeComponent implements OnInit {
       disabled: true,
       amount: 0,
     },
-    {
-      name: 'امتیاز',
-      value: this.paymentType.loyaltyPoint,
-      disabled: true,
-      amount: 0,
-    }
+    // {
+    //   name: 'امتیاز',
+    //   value: this.paymentType.loyaltyPoint,
+    //   disabled: true,
+    //   amount: 0,
+    // }
   ];
   selectedPaymentType: any = this.paymentTypes[0].value;
 

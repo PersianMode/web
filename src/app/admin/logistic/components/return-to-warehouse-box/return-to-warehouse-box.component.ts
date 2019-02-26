@@ -9,6 +9,7 @@ import {HttpService} from 'app/shared/services/http.service';
 import {SocketService} from 'app/shared/services/socket.service';
 import {ProgressService} from 'app/shared/services/progress.service';
 import {OrderLineStatuses} from 'app/shared/lib/status';
+import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 
 @Component({
   selector: 'app-return-to-warehouse-box',
@@ -20,7 +21,7 @@ export class ReturnToWarehouseBoxComponent implements OnInit, AfterViewInit, OnD
 
   @Output() OnReturnDeliveryBoxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'details', 'name', 'barcode', 'status'];
+  displayedColumns = ['position', 'details', 'name', 'barcode', 'status', 'lost'];
   dataSource: MatTableDataSource<any>;
 
 
@@ -124,8 +125,34 @@ export class ReturnToWarehouseBoxComponent implements OnInit, AfterViewInit, OnD
     this.load();
   }
 
-  onMismatchDetected() {
-    this.progressService.enable();
+  lostReport(orderLine) {
+
+    const rmDialog = this.dialog.open(RemovingConfirmComponent, {
+      width: '400px',
+      data: {
+        name: 'اعلام مفقودی',
+        message: 'در صورت اعلام مفقودی کالا، پیامی به مسئول فروش ارسال و فرایند تامین کالا از سر گرفته خواهد شد'
+      }
+    });
+    rmDialog.afterClosed().subscribe(
+      (status) => {
+        if (status) {
+          this.progressService.enable();
+          this.httpService.post('order/lost', {
+            orderId: orderLine.order_id,
+            orderLineId: orderLine.order_line_id
+          }).subscribe(res => {
+            this.progressService.disable();
+          }, err => {
+            this.progressService.disable();
+            this.openSnackBar('خطا به هنگام اعلام مفقودی محصول');
+          });
+        }
+      },
+      (err) => {
+        console.log('Error in dialog: ', err);
+      }
+    );
   }
 
   ngOnDestroy(): void {
