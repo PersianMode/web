@@ -142,7 +142,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   informDamage(orderLine, refund = false) {
 
-    let message: 'در صورت اعلام خرابی پیام به مسئول فروش جهت بررسی بیشتر ارسال خواهد شد';
+    let message = 'در صورت اعلام خرابی پیام به مسئول فروش جهت بررسی بیشتر ارسال خواهد شد';
     if (refund) {
       message += 'هزینه کالا به حساب مشتری بازگشت داده خواهد شد';
     };
