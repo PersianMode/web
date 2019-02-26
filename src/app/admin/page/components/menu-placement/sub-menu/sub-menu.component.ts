@@ -95,6 +95,7 @@ export class SubMenuComponent implements OnInit {
       });
 
     this.dragulaService.dropModel.subscribe((value) => {
+      this.clearFields();
       if (this.bagName === value[0])
         this.changeMenuItemOrder();
     });
@@ -376,7 +377,7 @@ export class SubMenuComponent implements OnInit {
           const newInfo = this.getItemInfo(true);
           this.selectedItem = data.new_placement;
         }
-
+        this.clearFields();
         this.anyChanges = false;
         this.progressService.disable();
       },
