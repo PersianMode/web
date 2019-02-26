@@ -1,9 +1,13 @@
-<mat-card class="card-view">
-  <mat-card-content>
+<div  class="container" [dragula]="'field-bag'" [dragulaModel]="warehouse">
+    <div class="container1" *ngFor='let item of warehouse'>
+      <input type="checkbox" checked data-toggle="toggle" [(ngModel)]="item.is_active">
+      {{item.name}}
+    </div>
+</div>
+  <button mat-flat-button color="accent" class="button" (click)="update()">ثبت تغییرات</button>
 
-    <button mat-fab color="accent" (click)="openUploadTrackDialog()" style="margin-top: 15px">
-      <mat-icon aria-label="Add new Collection">add</mat-icon>
-    </button>
-
-  </mat-card-content>
-</mat-card>
+<div style="text-align: center">
+  <button mat-fab color="accent" (click)="openUploadTrackDialog()" style="margin-top: 15px">
+    <mat-icon aria-label="Add new Collection">add</mat-icon>
+  </button>
+</div>

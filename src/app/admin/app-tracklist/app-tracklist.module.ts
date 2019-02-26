@@ -1,8 +1,9 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
-  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
-  MatPaginatorModule, MatSelectModule,
+  MAT_DIALOG_DATA,
+  MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatDialogRef, MatIconModule, MatInputModule,
+  MatPaginatorModule, MatSelectModule, MatSlideToggleModule,
   MatSnackBarModule, MatTabsModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -12,6 +13,7 @@ import {MarkdownModule} from 'angular2-markdown';
 import {AppTrackListComponent} from './app-tracklist.component';
 import {AppTrackListRouting} from './app-tracklist.routing';
 import { UploadTrackComponent } from './component/upload-track/upload-track.component';
+import { DragulaModule } from 'ng2-dragula/ng2-dragula';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,18 @@ import { UploadTrackComponent } from './component/upload-track/upload-track.comp
     MatCheckboxModule,
     SharedModule,
     MarkdownModule.forRoot(),
+    DragulaModule
   ],
+  entryComponents: [
+    UploadTrackComponent,
+  ],
+  exports: [
+    UploadTrackComponent
+  ],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
+  ]
 })
 export class AppTracklistModule {
 }

@@ -9,6 +9,7 @@ export class HttpService {
 
 
   public static PRODUCT_IMAGE_PATH = 'images/product-image';
+  public static APP_TRACK_PATH = 'musics';
   public static Host;
   private serverAddress = '/api/';
   constructor(private http: HttpClient) {

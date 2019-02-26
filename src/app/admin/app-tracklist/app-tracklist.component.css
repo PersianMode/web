@@ -1,0 +1,35 @@
+.card-view {
+  text-align: right;
+}
+
+.container {
+  text-align: right;
+  direction: rtl;
+  margin: 0 300px;
+}
+.container1{
+  border-bottom: solid;
+  border-color: rgb(197, 193, 189);
+  font-size: 20px;
+  border-collapse: collapse;
+  padding: 10px;
+  cursor: pointer;
+}
+.button{
+  margin-left: 200px;
+  font-size: 20px;
+  margin-top: 30px;
+
+}
+.checkbox label:before {
+  border-radius: 3px;
+}
+input[type=checkbox]:checked {
+  cursor: pointer;
+  content: "\2713";
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+  font-size: 15px;
+  color: #f3f3f3;
+  text-align: center;
+  line-height: 15px;
+}
