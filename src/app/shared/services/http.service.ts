@@ -15,8 +15,7 @@ export class HttpService {
     HttpService.Host = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port);
     if (this.isInDevMode())
       HttpService.Host = HttpService.Host.replace(window.location.port, '3000');
-    else
-      HttpService.Host = 'http://lithium.style';
+
   }
 
   isInDevMode() {
