@@ -2,10 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA, MatSnackBar} from '@angular/material';
 import {TitleService} from '../../../../shared/services/title.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {PlacementModifyEnum} from '../../../page/enum/placement.modify.type.enum';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {HttpService} from '../../../../shared/services/http.service';
-import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-track',
@@ -17,12 +15,11 @@ export class UploadTrackComponent implements OnInit {
   uploadTrackForm: FormGroup;
   selectedItem = null;
   anyChanges = false;
-
+  priority = 1
 
   constructor(private snackBar: MatSnackBar, private titleService: TitleService,
               private dialogRef: MatDialogRef<UploadTrackComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, private progressService: ProgressService, private httpService: HttpService,
-              private sanitizer: DomSanitizer) {
+              @Inject(MAT_DIALOG_DATA) public data: any, private progressService: ProgressService, private httpService: HttpService) {
     {
       dialogRef.disableClose = true;
     }
@@ -44,8 +41,9 @@ export class UploadTrackComponent implements OnInit {
     }
   }
 
-  Success($event: Event) {
-
+  Success(result: any) {
+    this.data = result[0];
+    console.log('this.data result',this.data);
     this.snackBar.open('File is uploaded successfully', null, {
       duration: 2000,
     });
@@ -62,45 +60,32 @@ export class UploadTrackComponent implements OnInit {
     })
   }
 
-  // modifyItem() {
-  //   this.progressService.enable();
-  //   this.selectedItem ? this.httpService.post('placement', {
-  //
-  //     trackName : (this.uploadTrackForm.controls['trackName'].value ? this.uploadTrackForm.controls['trackName'].value : '').trim(),
-  //     artistName : (this.uploadTrackForm.controls['artistName'].value ? this.uploadTrackForm.controls['artistName'].value : '').trim()
-  //
-  //   }).subscribe(
-  //     (data: any) => {
-  //       this.anyChanges = false;
-  //       this.progressService.disable();
-  //     },
-  //     (err) => {
-  //       console.error('Cannot save item in server: ', err);
-  //       this.progressService.disable();
-  //     }
-  //   )
-  // }
-  setThumbnail(result: any) {
-    this.data.product_color.image.thumbnail = result[0];
-    // this.thumbnailURL = this.getURL(this.data.product_color.image.thumbnail);
-  }
-
-  getURL(name) {
-    if (name) {
-      const path = [HttpService.Host,
-        HttpService.APP_TRACK_PATH,
-        this.data.artistName,
-        this.data.trackName,
-        name].join('/');
-      return this.sanitizer.bypassSecurityTrustResourceUrl(path);
-    } else
-      return '';
-  }
-
-  clearFields() {
-    this.uploadTrackForm.reset();
-    this.selectedItem = null;
-    this.uploadTrackForm.controls['area'].enable();
+  submit() {
+    this.progressService.enable();
+    const sendingData = {
+      artistName: this.uploadTrackForm.controls['artistName'].value,
+      trackName: this.uploadTrackForm.controls['trackName'].value,
+      priority: this.priority + 1
+      // this.dataTrack.path =
+      // this.dataTrack.order
+    }
+    this.httpService.post('trackList', sendingData).subscribe(
+      data => {
+        this.anyChanges = false;
+        this.snackBar.open('آهنگ با موفقیت آپلود شد', null, {
+          duration: 3200
+        });
+        this.progressService.disable();
+        this.closeDialog();
+      },
+      err => {
+        console.error('Cannot save item in server: ', err);
+        this.snackBar.open('سیستم قادر به آپلود آهنگ نیست، لطفا دوباره تلاش کنید', null, {
+          duration: 3200
+        });
+        this.progressService.disable();
+      }
+    )
   }
 
   closeDialog() {

@@ -43,8 +43,8 @@ export class AppTrackListComponent implements OnInit {
 
   openUploadTrackDialog() {
     this.uploadTrackDialog = this.dialog.open(UploadTrackComponent, {
-      width: '700px',
-      height: '600px',
+      width: '600px',
+      height: '500px',
       autoFocus: false,
     });
   }
@@ -81,7 +81,7 @@ export class AppTrackListComponent implements OnInit {
         this.progressService.disable();
       },
       (err) => {
-        console.error('Cannot edit user info: ', err);
+        console.error('Cannot edit warehouse priority: ', err);
         this.progressService.disable();
       }
     );
