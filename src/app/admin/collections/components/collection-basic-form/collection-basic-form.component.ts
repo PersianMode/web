@@ -16,12 +16,11 @@ export class CollectionBasicFormComponent implements OnInit {
   @Output() onCollectionIdChanged = new EventEmitter<string>();
   originalCollection: any = null;
   collectionForm: FormGroup;
-  id: string = null;
   anyChanges = false;
   upsertBtnShouldDisabled = false;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
-    private httpService: HttpService, private snackBar: MatSnackBar) {
+              private httpService: HttpService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -31,7 +30,6 @@ export class CollectionBasicFormComponent implements OnInit {
       (params) => {
 
         this.collectionId = params['id'] && params['id'] !== 'null' ? params['id'] : null;
-        this.id = params['id'] && params['id'] !== 'null' ? params['id'] : null;
         this.initCollectionInfo();
       }
     );
@@ -54,8 +52,8 @@ export class CollectionBasicFormComponent implements OnInit {
         Validators.required,
       ]],
     }, {
-        validator: this.basicInfoValidation
-      });
+      validator: this.basicInfoValidation
+    });
   }
 
   initCollectionInfo() {
@@ -175,10 +173,10 @@ export class CollectionBasicFormComponent implements OnInit {
     this.progressService.enable();
     let func;
     // add a new page
-    func = this.httpService.put(`page`, data);
+    func = this.collectionId ? this.httpService.post(`page/${this.collectionId}`, data)  : this.httpService.put(`page`, data);
     func.subscribe(
       (result: any) => {
-        this.snackBar.open('page is ' + (this.id ? 'updated' : 'added'), null, {
+        this.snackBar.open('page is ' + (this.collectionId ? 'updated' : 'added'), null, {
           duration: 2300,
         });
         this.progressService.disable();
