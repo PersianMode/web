@@ -15,7 +15,7 @@ export class MenuPlacementComponent implements OnInit {
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
-      this.topMenuItems = value.filter(el => el.variable_name.toLowerCase() === 'topmenu');
+      this.topMenuItems = value.filter(el => el.variable_name.toLowerCase() === 'topmenu' && !el.end_date);
       this.topMenuItems.sort((a, b) => {
         a = a.info.column;
         b = b.info.column;

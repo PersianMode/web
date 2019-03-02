@@ -67,8 +67,10 @@ export class SliderPlacementComponent implements OnInit {
       });
 
     this.dragulaService.dropModel.subscribe(value => {
-      if (this.bagName === value[0])
+      if (this.bagName === value[0]) {
         this.changeSliderOrder(value.slice(1));
+        this.clearFields();
+      }
     });
   }
 
