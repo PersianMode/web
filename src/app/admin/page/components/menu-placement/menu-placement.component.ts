@@ -26,7 +26,7 @@ export class MenuPlacementComponent implements OnInit {
           return -1;
         return 0;
       });
-      this.subMenuItems = value.filter(el => el.variable_name.toLowerCase() === 'submenu');
+      this.subMenuItems = value.filter(el => el.variable_name.toLowerCase() === 'submenu' && el.end_date === undefined);
     }
   }
 
