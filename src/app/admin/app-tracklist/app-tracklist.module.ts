@@ -4,7 +4,7 @@ import {
   MAT_DIALOG_DATA,
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatDialogRef, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule, MatSlideToggleModule,
-  MatSnackBarModule, MatTabsModule
+  MatSnackBarModule, MatTableModule, MatTabsModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -43,7 +43,8 @@ import { DragulaModule } from 'ng2-dragula/ng2-dragula';
     MatCheckboxModule,
     SharedModule,
     MarkdownModule.forRoot(),
-    DragulaModule
+    DragulaModule,
+    MatTableModule
   ],
   entryComponents: [
     UploadTrackComponent,

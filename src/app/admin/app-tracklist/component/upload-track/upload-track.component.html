@@ -1,5 +1,5 @@
 <div dir="rtl">
-  <button mat-icon-button (click)="closeDialog()">
+  <button mat-icon-button style="float:left" (click)="closeDialog()">
     <mat-icon aria-label="Close">close</mat-icon>
   </button>
 
@@ -7,24 +7,24 @@
   <div class="area">
     <form (ngSubmit)="submit()" [formGroup]="uploadTrackForm">
       <div>
-          <div style="margin-top: 10px">
-            <app-uploader [url]="'trackList'" [single]="true" (OnCompleted)="Success($event)"></app-uploader>
-            <!--<app-uploader [single]="true" [url]="'trackList/'+ data.artistName + '/' +  data.trackName" (OnCompleted)="addTrack($event)"></app-uploader>-->
-          </div>
-          <div class="text-area">
-            <mat-input-container>
-              <input matInput type="text" class="persian-field menu-field" placeholder="نام خواننده"
-                     formControlName="artistName"/>
-            </mat-input-container>
-          </div>
-          <div class="text-area">
-            <mat-input-container>
-              <input matInput type="text" class="persian-field menu-field" placeholder="نام آهنگ"
-                     formControlName="trackName"/>
-            </mat-input-container>
-          </div>
-              <button mat-flat-button color="accent" class="button" [disabled]="!uploadTrackForm.valid || !anyChanges">ذخیره</button>
+        <div class="text-area">
+          <mat-input-container>
+            <input matInput type="text" class="persian-field menu-field" placeholder="نام خواننده"
+                   formControlName="artistName"/>
+          </mat-input-container>
         </div>
+        <div class="text-area">
+          <mat-input-container>
+            <input matInput type="text" class="persian-field menu-field" placeholder="نام آهنگ"
+                   formControlName="trackName"/>
+          </mat-input-container>
+        </div>
+        <div style="margin-top: 10px">
+          <app-uploader [url]="'trackList'" [single]="true" (OnCompleted)="onUploadFile($event)"></app-uploader>
+        </div>
+        <button mat-flat-button color="accent" class="button" [disabled]="!uploadTrackForm.valid || !anyChanges">ذخیره
+        </button>
+      </div>
     </form>
   </div>
 </div>

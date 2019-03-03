@@ -15,10 +15,10 @@ export class UploadTrackComponent implements OnInit {
   uploadTrackForm: FormGroup;
   selectedItem = null;
   anyChanges = false;
-  priority = 1
+  fileUploaded;
 
   constructor(private snackBar: MatSnackBar, private titleService: TitleService,
-              private dialogRef: MatDialogRef<UploadTrackComponent>,
+              public dialogRef: MatDialogRef<UploadTrackComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any, private progressService: ProgressService, private httpService: HttpService) {
     {
       dialogRef.disableClose = true;
@@ -41,10 +41,9 @@ export class UploadTrackComponent implements OnInit {
     }
   }
 
-  Success(result: any) {
-    this.data = result[0];
-    console.log('this.data result',this.data);
-    this.snackBar.open('File is uploaded successfully', null, {
+  onUploadFile(result: any) {
+    this.fileUploaded = result[0];
+    this.snackBar.open('آهنگ با موفقیت بارگذاری شد', null, {
       duration: 2000,
     });
 
@@ -60,21 +59,23 @@ export class UploadTrackComponent implements OnInit {
     })
   }
 
-  submit() {
+  async submit() {
     this.progressService.enable();
+    const priority = await this.getLastPriority();
+    console.log({priority});
     const sendingData = {
       artistName: this.uploadTrackForm.controls['artistName'].value,
       trackName: this.uploadTrackForm.controls['trackName'].value,
-      priority: this.priority + 1
-      // this.dataTrack.path =
-      // this.dataTrack.order
+      path: this.fileUploaded,
+      priority: priority + 1
     }
     this.httpService.post('trackList', sendingData).subscribe(
       data => {
         this.anyChanges = false;
-        this.snackBar.open('آهنگ با موفقیت آپلود شد', null, {
+        this.snackBar.open('اطلاعات با موفقیت دخیره شد', null, {
           duration: 3200
         });
+        this.dialogRef.close(true);
         this.progressService.disable();
         this.closeDialog();
       },
@@ -86,6 +87,18 @@ export class UploadTrackComponent implements OnInit {
         this.progressService.disable();
       }
     )
+  }
+
+  async getLastPriority() {
+    try {
+      this.progressService.enable();
+      const result = await this.httpService.get('trackList/get_tracklist').toPromise();
+      this.progressService.disable();
+      return result[result.length - 1]['priority'];
+    } catch (err) {
+      console.log(err);
+      this.progressService.disable();
+    }
   }
 
   closeDialog() {
