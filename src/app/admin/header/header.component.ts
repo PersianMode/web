@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit {
     {label: 'شرایط تحویل رایگان', path: '/agent/deliverycost/free/option', active: false},
     {label: 'بازپرداخت مبلغ', path: '/agent/refund_bank', active: false},
     {label: 'لیست خرید روزانه', path: '/agent/daily_report', active: false},
+    {label: 'لیست موسیقی اپلیکیشن', path: '/agent/app_tracklist', active: false},
   ];
   selectedLink = 'Collection';
   isLoggedIn = false;

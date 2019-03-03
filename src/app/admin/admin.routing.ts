@@ -23,6 +23,7 @@ const Admin_ROUTES: Routes = [
       {path: 'dictionary', loadChildren: 'app/admin/dictionary/dictionary.module#DictionaryModule', canActivate: [AdminAuthGuard]},
       {path: 'soldouts', loadChildren: 'app/admin/soldout/soldout.module#SoldOutModule', canActivate: [AdminAuthGuard]},
       {path: 'uploads', loadChildren: 'app/admin/upload/upload.module#UploadModule', canActivate: [AdminAuthGuard]},
+      {path: 'app_tracklist', loadChildren: 'app/admin/app-tracklist/app-tracklist.module#AppTracklistModule', canActivate: [AdminAuthGuard]},
       {
         path: 'loyaltygroup',
         loadChildren: 'app/admin/loyalty-group/loyaltygroup.module#LoyaltyGroupModule',
