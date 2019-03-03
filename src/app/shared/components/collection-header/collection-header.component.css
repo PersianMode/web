@@ -1,5 +1,5 @@
 .search-result-panel {
-  direction: ltr;
+  direction: rtl;
   background-color: #FF009C;
   padding: 3px;
   z-index: 100;
@@ -7,13 +7,11 @@
   position: fixed;
   left: 0px;
   top: 109px;
-  height: 250px;
+  height: 100%;
 }
 
 .search-result-wrapper {
   background-color: #FF009C;
-  position: fixed;
-  top: 359px;
   width: 100%;
   margin: 0;
   border: 0;
@@ -21,10 +19,6 @@
   padding-bottom: 15px;
 }
 
-.search-more-result {
-  background-color: #FF009C;
-  width: 100%;
-}
 
 .search-item {
   text-align: right;
@@ -101,7 +95,7 @@
   margin-right: 60px;
   font-size: 20px;
   margin-top: 40px;
-  height: 30%;
+  height: 5%;
 }
 
 .search-input {
@@ -126,7 +120,8 @@
 .best-offer {
   font-size: 15px;
   font-weight: bold;
-  margin-right: 60px
+  margin-right: 60px;
+  height: 5%;
 }
 
 .all-prod {

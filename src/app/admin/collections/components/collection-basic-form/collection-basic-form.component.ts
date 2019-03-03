@@ -121,7 +121,7 @@ export class CollectionBasicFormComponent implements OnInit {
         this.upsertBtnShouldDisabled = false;
 
         this.onCollectionIdChanged.emit(this.collectionId);
-        this.submitpage();
+        this.submitPage();
         this.progressService.disable();
       },
       error => {
@@ -163,7 +163,7 @@ export class CollectionBasicFormComponent implements OnInit {
   basicInfoValidation(AC: AbstractControl) {
 
   }
-  submitpage() {
+  submitPage() {
     const data = {
       address: 'collection/' + this.collectionForm.controls['name'].value,
       title: this.collectionForm.controls['name_fa'].value,
