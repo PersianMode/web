@@ -4,6 +4,7 @@
 }
 
 .btn-container  {
+  margin-top: 5px; 
   position: absolute !important;
   left: 0px !important;
 }
@@ -161,3 +162,7 @@ img[src=""] {
   background-color: #E71096 !important;
 }
 
+.clear-fixed {
+  position: relative;
+  margin-bottom: 40px;
+}
