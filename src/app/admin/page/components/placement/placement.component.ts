@@ -43,7 +43,7 @@ export class PlacementComponent implements OnInit {
   }
 
   getRelatedPlacements(type) {
-    return this.placements ? this.placements.filter(el => el.component_name.toLowerCase() === type.toLowerCase()) : [];
+    return this.placements ? this.placements.filter(el => el.component_name.toLowerCase() === type.toLowerCase() && !el.end_date) : [];
   }
 
   modify(value) {
