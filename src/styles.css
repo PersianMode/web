@@ -113,7 +113,7 @@ a:focus img {
 .general {
   height: 29px;
   position: relative;
-  opacity: .5;
+  opacity: .3;
 }
 
 .general:hover {
