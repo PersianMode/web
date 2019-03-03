@@ -126,7 +126,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
       this.hiddenGenderMenu = false;
       this.selected[type] = true;
       this.menu = this.placements[type + 'Menu'];
-    }, 100);
+    });
   }
 
   countDownHideList() {
@@ -134,7 +134,7 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
       if (!this.persistedList) {
         this.hideList();
       }
-    }, 100);
+    });
   }
 
   persistList() {

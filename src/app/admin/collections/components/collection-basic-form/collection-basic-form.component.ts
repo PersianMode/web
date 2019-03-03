@@ -120,9 +120,8 @@ export class CollectionBasicFormComponent implements OnInit {
         this.progressService.disable();
         this.upsertBtnShouldDisabled = false;
 
-        this.collectionId = data._id;
         this.onCollectionIdChanged.emit(this.collectionId);
-        this.submitpage();
+        this.submitPage();
         this.progressService.disable();
       },
       error => {
@@ -164,14 +163,15 @@ export class CollectionBasicFormComponent implements OnInit {
   basicInfoValidation(AC: AbstractControl) {
 
   }
-  submitpage() {
+  submitPage() {
     const data = {
       address: 'collection/' + this.collectionForm.controls['name'].value,
       title: this.collectionForm.controls['name_fa'].value,
       is_app: false,
-      collection_id: this.collectionId,
+      collection_id: this.id ? this.id : this.collectionId,
       content: null,
     };
+
     this.progressService.enable();
     let func;
     // add a new page
@@ -182,7 +182,9 @@ export class CollectionBasicFormComponent implements OnInit {
           duration: 2300,
         });
         this.progressService.disable();
+      }, (error: any) => {
+        console.log(error);
       }
-    );
+     );
   }
 }

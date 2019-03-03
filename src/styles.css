@@ -113,7 +113,7 @@ a:focus img {
 .general {
   height: 29px;
   position: relative;
-  opacity: .5;
+  opacity: .35;
 }
 
 .general:hover {
@@ -144,6 +144,7 @@ nav {
   color: #8f8f8f;
   transition: all .3s ease-in;
   outline: none;
+  background-color: transparent !important;
 }
 
 .persian-mode-logo:hover {
