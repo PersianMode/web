@@ -80,13 +80,11 @@ button:hover {
 /*}*/
 
 .cart {
-  width: 100%;
   /* width: 328px; */
   cursor: pointer;
 }
 
 .disable-button {
-  width: 100%;
   background: rgba(17, 17, 17, .75) !important
 }
 
