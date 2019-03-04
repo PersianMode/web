@@ -75,14 +75,19 @@ button:hover {
   background: rgba(17, 17, 17, .75) !important;
 }
 
-button:focus {
-  background: rgba(17, 17, 17, .75) !important;
-}
+/*button:focus {*/
+  /*background: rgba(17, 17, 17, .75) !important;*/
+/*}*/
 
 .cart {
   width: 100%;
   /* width: 328px; */
   cursor: pointer;
+}
+
+.disable-button {
+  width: 100%;
+  background: rgba(17, 17, 17, .75) !important
 }
 
 .description-md {
@@ -119,6 +124,7 @@ button:focus {
   font-size: 23px;
   opacity: .5;
 }
+
 .selectedImg {
   opacity: 1 !important;
   border: 1px solid #ccc

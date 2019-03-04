@@ -165,7 +165,6 @@ export class ProductComponent implements OnInit, OnDestroy {
           product_color_id: this.selectedProductColorID,
           instances: this.product.instances,
         };
-
         Object.assign(favoriteObject, this.product);
         this.cartService.saveFavoriteItem(favoriteObject);
       } else {
