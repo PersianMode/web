@@ -217,7 +217,7 @@ export class ProductService {
           } else if (f.name === 'color') {
             this.filteredProducts.forEach((p, pi) => {
               this.filteredProducts[pi].colors = p.colors
-                .filter(c => c.name ? c.name.split('/').map(a => a.split('-')).reduce((x , y) => x.concat(y)).find(a => f.values.includes(allMappedColor[a])) : false);
+                .filter(c => c.name ? c.name.split('/').map(a => a.split('-')).reduce((x, y) => x.concat(y)).find(a => f.values.includes(allMappedColor[a])) : false);
             });
 
             this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
@@ -334,7 +334,7 @@ export class ProductService {
         data.sizesByColor[color._id] = data.instances
           .filter(r => r.product_color_id === color._id)
           .map(r => {
-            const inventory = r.inventory.map(e => e.count ? e.count : 0).reduce((x, y) => x + y, 0);
+            const inventory = r.inventory.map(e => (e.count ? e.count : 0) - (e.reserved ? e.reserved : 0)).reduce((x, y) => x + y, 0);
             if (!data.sizesInventory[r.size]) {
               data.sizesInventory[r.size] = {};
             }

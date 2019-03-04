@@ -28,6 +28,7 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+
   setEvents() {
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       const result = JSON.parse(response);

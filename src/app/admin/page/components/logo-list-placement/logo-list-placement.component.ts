@@ -65,8 +65,10 @@ export class LogoListPlacementComponent implements OnInit {
       });
 
     this.dragulaService.dropModel.subscribe(value => {
-      if (this.bagName === value[0])
+      if (this.bagName === value[0]) {
         this.changeLogoOrder(value.slice(1));
+        this.clearFields();
+      }
     });
   }
 
