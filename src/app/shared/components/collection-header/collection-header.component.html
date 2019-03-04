@@ -85,7 +85,7 @@
   <div class="search-title-lith font-style">
     جستجو در لیتیم
   </div>
-  <div fxLayout="row" fxLayoutAlign="start start" style="height: 20%">
+  <div fxLayout="row" fxLayoutAlign="start start" style="height: 170px">
     <div fxFlex="15"></div>
     <div fxFlex="70" style="text-align: center">
       <input class="search-input font-style" type="text" [(ngModel)]="searchPhrase"
@@ -114,7 +114,7 @@
         </div>
       </div>
       <div fxFlex="40" class="collection-results">
-        <div style="height: 85%">
+        <!--<div style="height: 85%">-->
           <div *ngIf="!searchCollectionList || !searchCollectionList.length" class="search-title-lith"
                style="text-align: center">مجموعه ای متناسب با جستجوی شما یافت نشد.
           </div>
@@ -130,7 +130,7 @@
               </div>
             </div>
           </div>
-        </div>
+        <!--</div>-->
       </div>
       <div fxFlex="2.5"></div>
     </div>
