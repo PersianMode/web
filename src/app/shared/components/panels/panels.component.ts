@@ -46,8 +46,6 @@ export class PanelsComponent implements OnInit {
             if (r.info.topTitle)
               this.placements[r.info.row].topTitle = r.info.topTitle;
 
-
-            console.log('******', r.info.areas);
             this.placements[r.info.row].imgs.push({
               href: r.info.href,
               areas: r.info.areas,
