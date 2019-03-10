@@ -199,6 +199,7 @@ export class EditPanelComponent implements OnInit {
       buttonBackgroundColor: '#ffffff',
       buttonColor: '#000000',
     };
+    this.saveButtonShouldBeDisabled = false;
   }
 
   changedArea() {

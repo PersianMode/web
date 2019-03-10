@@ -9,6 +9,7 @@ import {HttpService} from 'app/shared/services/http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
+import {AuthService} from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-desktop-product',
@@ -49,6 +50,8 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   productSize;
   addCardBtnDisabled = true;
   focused: any = {};
+  isLoggedIn = false;
+  isVerified = false;
 
   @Input()
   set selectedProductColorID(id) {
@@ -64,11 +67,26 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   @Output() addFavorite = new EventEmitter<any>();
 
   constructor(private router: Router, @Inject(DOCUMENT) private document: Document, @Inject(WINDOW) private window,
-    private cartService: CartService, private snackBar: MatSnackBar, public dialog: MatDialog) {
+    private cartService: CartService, private snackBar: MatSnackBar, public dialog: MatDialog, private authService: AuthService) {
   }
 
   ngOnInit() {
     this.cartService.itemAdded$.subscribe(r => this.addCardBtnDisabled = !r);
+    this.authService.isLoggedIn.subscribe(
+      (data) => {
+        this.isLoggedIn = this.authService.userIsLoggedIn();
+      },
+      (err) => {
+        console.error('Cannot subscribe on isLoggedIn: ', err);
+        this.isLoggedIn = false;
+      });
+    this.authService.isVerified.subscribe(
+      (data) => this.isVerified = data,
+      (err) => {
+        console.error('Cannot subscribe on isVerified: ', err);
+        this.isVerified = false;
+      }
+    );
   }
 
   saveToCart() {
@@ -161,5 +179,9 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
       });
     };
     img.src = url;
+  }
+
+  setDisablity() {
+    return !this.isLoggedIn || !this.isVerified || this.addCardBtnDisabled || !this.size;
   }
 }
