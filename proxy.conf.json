@@ -1,6 +1,6 @@
 {
   "/api/": {
-    "target": "http://bankofstyle.com",
+    "target": "https://lithium.style",
     "secure": false
   }
 }

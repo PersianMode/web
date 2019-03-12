@@ -83,8 +83,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   private setColor() {
-    const col = this.product.colors.find(el => el._id === this.selectedProductColorID);
-    this.color = col ? col.translatedName : '';
+    if (this.product.colors) {
+      const col = this.product.colors.find(el => el._id === this.selectedProductColorID);
+      this.color = col ? col.translatedName : '';
+    }
   }
 
   ngOnDestroy(): void {
@@ -106,7 +108,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   saveToCart(size) {
     if (!size) {
-      this.snackBar.open('لطفا یک سایز را انتخاب کنید', null, {
+      this.snackBar.open('لطفا یک اندازه را انتخاب کنید', null, {
         duration: 2300,
       });
       return;

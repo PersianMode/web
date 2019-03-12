@@ -2,42 +2,47 @@
 <div>
 
   <div class="photos" #photosDiv>
-    <section *ngIf="selectedProductColor" style="text-align: center">
-      <div *ngFor="let itemChunk of selectedProductColor?.image?.angles">
-        <div *ngFor="let item of itemChunk" class="photoWrapper">
-          <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
-            <source src="{{item.url}}" type="video/webm"></video>
-          <img *ngIf="item.type !== 'video'" src="{{item.url}}" (click)="fullSizeView(item.url)">
-        </div>
+    <section *ngIf="selectedProductColor && selectedProductColor.image && selectedProductColor.image.angles"
+             style="text-align: center">
+      <div *ngFor="let item of selectedProductColor.image.angles" class="photoWrapper">
+        <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
+          <source src="{{item.url}}" type="video/webm">
+        </video>
+        <img *ngIf="item.type !== 'video'" src="{{item.url}}" (click)="fullSizeView(item.url)">
       </div>
     </section>
   </div>
 
   <!-- description and size picker -->
   <div class="description" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
-    [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
+       [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
      'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}"
-    #descPane>
+       #descPane>
     <h1 *ngIf="product">{{product.name}}</h1>
     <div *ngIf="product?.colors" class="colors">
       <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
         <span style="margin:0;" matTooltip="{{item?.translatedName}}">
           <p *ngIf="item.soldOut && !focused[item._id]" class="soldOut">تمام شد</p>
-          <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id" src="{{item.image.thumbnail}}"
-            (mouseenter)="focused[item._id]=true" (mouseout)="focused[item._id]=false">
+          <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id"
+               src="{{item.image.thumbnail}}"
+               (mouseenter)="focused[item._id]=true" (mouseout)="focused[item._id]=false">
         </span>
       </a>
-      <h2>{{sub}} <span style="margin: 0px" [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}}
+      <h2>{{sub}} <span style="margin: 0px" [class.overridden]="discounted">{{price}} تومان</span> <span
+        *ngIf="discounted">{{discountedPrice}}
           تومان</span></h2>
     </div>
-    <app-size-picker [sizes]="productSize" [productType]="productType" [gender]="gender" (value)="newSize($event)"></app-size-picker>
+    <app-size-picker [sizes]="productSize" [productType]="productType" [gender]="gender"
+                     (value)="newSize($event)"></app-size-picker>
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
       <div fxFlex="80" class="full-width">
         <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">اضافه کردن به
-          سبد خرید</button>
+          سبد خرید
+        </button>
       </div>
       <div fxFlex="20">
-        <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
+        <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i
+          class="fa fa-heart"></i></button>
       </div>
     </div>
     <div>
@@ -51,15 +56,15 @@
           </mat-expansion-panel-header>
         </mat-expansion-panel>
         <mat-expansion-panel *ngIf="product.reviews && product.reviews.length">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                نظرات مشتریان
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <p>
-              نظری داده نشده
-            </p>
-          </mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              نظرات مشتریان
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>
+            نظری داده نشده
+          </p>
+        </mat-expansion-panel>
       </mat-accordion>
       <div>
         <span>

@@ -1,12 +1,42 @@
+@media (min-width: 1440px) {
 .photos {
   margin-top: 30px;
   float: left;
   position: relative;
   background: #fff;
-  width: calc(100% - 456px);
+  width: 984px;
+  margin-left: calc(50% - 720px);
   min-height: 600px;
 }
+  .description {
+    position: absolute;
+    top: 0;
+    right: calc(50% - 720px);
+    background: #fff;
+    width: 409px;
+    padding: 35px 0 35px 60px;
+  }
+}
 
+@media (max-width: 1439px) {
+  .photos {
+    margin-top: 30px;
+    float: left;
+    position: relative;
+    background: #fff;
+    width: calc(100% - 456px);
+    margin-left: 0;
+    min-height: 600px;
+  }
+  .description {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #fff;
+    width: 409px;
+    padding: 35px 30px;
+  }
+}
 .photos span {
   display: inline-block;
   background: #fff;
@@ -15,8 +45,8 @@
 
 .photoWrapper {
   padding: 0 8px 12px 4px;
-  width: calc(50% - 280);
-  /* float: right; */
+  width: 48%;
+  min-width: 312px;
   display: inline-block;
   position: relative;
 }
@@ -29,14 +59,7 @@
   }
 }
 
-.description {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: #fff;
-  width: 409px;
-  padding: 35px 30px;
-}
+
 
 .description span {
   display: inline-block;
@@ -46,8 +69,7 @@
 img, video {
   background: #f5f5f5;
   display: inline-block;
-  /* width: 100%; */
-  width: 300px;
+   width: 100%;
 }
 
 h4 {
@@ -158,8 +180,7 @@ button:focus {
   img, video {
     background: #f5f5f5;
     display: inline-block;
-    /* width: 100%; */
-    width: 50%;
+     width: 100%;
   }
 }
 
