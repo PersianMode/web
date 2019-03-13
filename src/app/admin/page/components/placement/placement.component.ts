@@ -43,7 +43,7 @@ export class PlacementComponent implements OnInit {
   }
 
   getRelatedPlacements(type) {
-    return this.placements ? this.placements.filter(el => el.component_name.toLowerCase() === type.toLowerCase()) : [];
+    return this.placements ? this.placements.filter(el => el.component_name.toLowerCase() === type.toLowerCase() && !el.end_date) : [];
   }
 
   modify(value) {
@@ -73,7 +73,7 @@ export class PlacementComponent implements OnInit {
         this.previewShouldDisabled = false;
       },
       (err) => {
-        this.snackBar.open('برخی/همه تغیثیرات تثبیت نشدند', null, {
+        this.snackBar.open('برخی/همه تغییرات تثبیت نشدند', null, {
           duration: 3200,
         });
 

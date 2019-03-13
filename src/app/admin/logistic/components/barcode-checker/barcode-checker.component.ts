@@ -5,7 +5,6 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {DeliveryShelfCodeComponent} from '../delivery-shelf-code/delivery-shelf-code.component';
 import {AuthService} from '../../../../shared/services/auth.service';
-import {MismatchConfirmComponent} from '../mismatch-confirm/mismatch-confirm.component';
 import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
 
 

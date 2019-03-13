@@ -1,0 +1,26 @@
+<div *ngIf="tracklist.length" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+     fxLayoutAlign.sm="start center" fxLayoutAlign.xs="center center">
+  <div fxFlex="100">
+    <div style="margin-left: 360px">
+      <span style="margin-left: 70px">  نام آهنگ </span> نام خواننده
+    </div>
+    <div class="container" [dragula]="'field-bag'" [dragulaModel]="tracklist">
+      <div class="container1" *ngFor='let item of tracklist'>
+        <input type="checkbox" checked data-toggle="toggle" [(ngModel)]="item.priority">
+        <span style="margin-right: 20px"> {{item.index+1}} </span> <span
+        style="margin-right: 20px"> {{item.artistName}} </span> {{item.trackName}}
+        <button mat-icon-button (click)="remove(item._id)" color="warn">
+          <mat-icon aria-label="delete">delete</mat-icon>
+        </button>
+      </div>
+
+    </div>
+    <button mat-flat-button color="accent" class="button" (click)="update()">ثبت تغییرات</button>
+  </div>
+</div>
+<div style="text-align: center">
+  <button mat-fab color="accent" (click)="openUploadTrackDialog()" style="margin-top: 15px">
+    <mat-icon aria-label="Add new Collection">add</mat-icon>
+  </button>
+</div>
+

@@ -1,5 +1,5 @@
 .search-result-panel {
-  direction: ltr;
+  direction: rtl;
   background-color: #FF009C;
   padding: 3px;
   z-index: 100;
@@ -7,24 +7,27 @@
   position: fixed;
   left: 0px;
   top: 109px;
-  height: 250px;
+  height: calc(100vh - 116px);
+}
+
+.search-title-lith {
+  text-align: right;
+  margin-right: 60px;
+  font-size: 20px;
+  margin-top: 40px;
+  height: 43px;
 }
 
 .search-result-wrapper {
   background-color: #FF009C;
-  position: fixed;
-  top: 359px;
   width: 100%;
   margin: 0;
   border: 0;
   z-index: 100;
   padding-bottom: 15px;
+  height: 615px;
 }
 
-.search-more-result {
-  background-color: #FF009C;
-  width: 100%;
-}
 
 .search-item {
   text-align: right;
@@ -96,14 +99,6 @@
   z-index: 1;
 }
 
-.search-title-lith {
-  text-align: right;
-  margin-right: 60px;
-  font-size: 20px;
-  margin-top: 40px;
-  height: 30%;
-}
-
 .search-input {
   text-align: center;
   width: 100%;
@@ -119,14 +114,15 @@
 .search-input::placeholder {
   text-align: center;
   font-size: 22px;
-  color: white;
+  color: #FFFFFF80;
   font-family: iranyekan, sans-serif;
 }
 
 .best-offer {
   font-size: 15px;
   font-weight: bold;
-  margin-right: 60px
+  margin-right: 60px;
+  height: 35px;
 }
 
 .all-prod {
@@ -150,7 +146,7 @@
 
 .showcase {
   overflow-y: auto;
-  max-height: calc(100vh - 395px);
+  max-height: calc(100vh - 415px);
 }
 
 .collection-results > button {

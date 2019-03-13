@@ -12,7 +12,6 @@
       </div>
     </section>
   </div>
-
   <!-- description and size picker -->
   <div class="description" [class.topFixed]="topFixedFilterPanel" [class.bottomFixed]="bottomFixedFilterPanel"
        [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
@@ -36,8 +35,7 @@
                      (value)="newSize($event)"></app-size-picker>
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
       <div fxFlex="80" class="full-width">
-        <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">اضافه کردن به
-          سبد خرید
+        <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">اضافه کردن به سبد خرید
         </button>
       </div>
       <div fxFlex="20">

@@ -1,0 +1,102 @@
+.card-view {
+  text-align: right;
+}
+
+.container {
+  text-align: left;
+  direction: ltr;
+  margin: 0 300px;
+}
+.container1{
+  border-bottom: solid;
+  border-color: rgb(197, 193, 189);
+  font-size: 20px;
+  border-collapse: collapse;
+  padding: 10px;
+  cursor: pointer;
+  text-align: left;
+  margin-top: 10px;
+
+}
+.button{
+  margin-left: 200px;
+  font-size: 20px;
+  margin-top: 30px;
+}
+.checkbox label:before {
+  border-radius: 3px;
+}
+input[type=checkbox] {
+  cursor: pointer;
+  content: "\2713";
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+  font-size: 15px;
+  color: #f3f3f3;
+  text-align: right;
+  line-height: 15px;
+}
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  position: relative;
+  font-family: iranyekan, sans-serif;
+}
+
+.info-cell {
+  padding: 6px;
+}
+
+img {
+  cursor: pointer;
+  max-width: 220px;
+  height: 100%;
+  width: 100%;
+}
+
+.image-wrapper {
+  display: inline-block;
+  padding: 5px;
+}
+
+
+mat-header-cell {
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
+}
+
+mat-card-content div span:nth-of-type(2) {
+  font-weight: bold;
+}
+
+a {
+  cursor: pointer;
+}
+
+.w50 {
+  flex: 0 0 50px;
+}
+
+.w200 {
+  flex: 0 0 200px;
+}
+
+mat-cell {
+  text-align: center;
+}
+
+.trash-style {
+  text-align: left !important;
+  font-size: 18px;
+}
+
+.wish-list-data {
+  margin-top: 5px;
+  font-family: iranyekan, sans-serif;
+}
+
+.wish-item-name {
+  cursor: pointer;
+}

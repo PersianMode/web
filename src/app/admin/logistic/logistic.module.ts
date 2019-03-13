@@ -29,7 +29,6 @@ import {SmOrderComponent} from './components/sm-order/sm-order.component';
 import {DeliveryShowComponent} from './components/delivery-show/delivery-show.component';
 import {DeliveryShelfCodeComponent} from './components/delivery-shelf-code/delivery-shelf-code.component';
 import {InboxComponent} from './components/inbox/inbox.component';
-import {MismatchConfirmComponent} from './components/mismatch-confirm/mismatch-confirm.component';
 import {InternalDeliveryBoxComponent} from './components/internal-delivery-box/internal-delivery-box.component';
 import {ExternalDeliveryBoxComponent} from './components/external-delivery-box/external-delivery-box.component';
 import {ShelvsViewComponent} from './components/shelvs-view/shelvs-view.component';
@@ -62,7 +61,6 @@ import { OrderCancelConfirmComponent } from './components/sm-inbox/components/or
     SmOrderComponent,
     DeliveryShowComponent,
     DeliveryShelfCodeComponent,
-    MismatchConfirmComponent,
     InternalDeliveryBoxComponent,
     ExternalDeliveryBoxComponent,
     ShelvsViewComponent,
@@ -75,7 +73,7 @@ import { OrderCancelConfirmComponent } from './components/sm-inbox/components/or
     SmReportComponent,
     SmHistoryComponent,
     ShowReportComponent,
-    OrderCancelConfirmComponent
+    OrderCancelConfirmComponent,
   ],
   imports: [
     LogisticRouting,
@@ -111,7 +109,6 @@ import { OrderCancelConfirmComponent } from './components/sm-inbox/components/or
     TicketComponent,
     DeliveryShowComponent,
     DeliveryShelfCodeComponent,
-    MismatchConfirmComponent,
     DeliveryTrackingComponent,
     DeliveryDetailsComponent,
     ExpiredDateDialogComponent,

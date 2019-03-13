@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
 import {HttpService} from '../../../../shared/services/http.service';
-import {AuthService} from '../../../../shared/services/auth.service';
 import {SocketService} from '../../../../shared/services/socket.service';
 import {OrderAddressComponent} from '../order-address/order-address.component';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
@@ -12,8 +11,6 @@ import * as moment from 'jalali-moment';
 import {SMMessageTypes} from 'app/shared/enum/sm_message';
 import {ReturnDeliveryGeneratorComponent} from './components/return-delivery-generator/return-delivery-generator.component';
 import {SmReportComponent} from './components/sm-report/sm-report.component';
-import {ShowReportComponent} from './components/show-report/show-report.component';
-import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
 import {OrderCancelConfirmComponent} from './components/order-cancel-confirm/order-cancel-confirm.component';
 
 @Component({
@@ -175,11 +172,13 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
     try {
       switch (message.type) {
         case SMMessageTypes.ReturnRequest:
-          return 'درخواست بازگشت کالا';
-        case SMMessageTypes.Damage:
-          return 'گزارش خرابی کالا';
-        case SMMessageTypes.Loss:
-          return 'گزارش مفقودی کالا';
+          return 'درخواست بازگشت';
+        case SMMessageTypes.DamageWithRefund:
+          return 'گزارش خرابی با بازگشت هزینه';
+        case SMMessageTypes.DamageWithoutRefund:
+          return 'گزارش خرابی بدون بازگشت هزینه';
+        case SMMessageTypes.Lost:
+          return 'گزارش مفقودی';
         case SMMessageTypes.NotExists:
           return 'عدم موجودی';
       }
@@ -209,7 +208,9 @@ export class SmInboxComponent implements OnInit, AfterViewInit, OnDestroy {
   needsProcess(message) {
     return !message.is_processed &&
       ![
-        SMMessageTypes.Damage,
+        SMMessageTypes.DamageWithRefund,
+        SMMessageTypes.DamageWithoutRefund,
+        SMMessageTypes.Lost
       ].includes(message.type);
 
   }

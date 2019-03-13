@@ -20,11 +20,11 @@ export class FooterPlacementComponent implements OnInit {
   @Input()
   set placements(value: IPlacement[]) {
     if (value.length) {
-      this.arrangeTextLinkItems(value.filter(el => el.variable_name.toLowerCase() === 'site_link'));
+      this.arrangeTextLinkItems(value.filter(el => el.variable_name.toLowerCase() === 'site_link'  && !el.end_date));
 
       this.socialLinkItems = [];
       this.socialLinkItems = value
-        .filter(el => el.variable_name.toLowerCase() === 'social_link')
+        .filter(el => el.variable_name.toLowerCase() === 'social_link' && !el.end_date)
         .sort((a, b) => {
           if (a.info.column > b.info.column)
             return 1;
@@ -123,10 +123,13 @@ export class FooterPlacementComponent implements OnInit {
       });
 
     this.dragulaService.dropModel.subscribe(value => {
-      if (this.socialBag === value[0])
+      if (this.socialBag === value[0]) {
         this.changeSocialIconOrder();
-      else if (this.textBag === value[0])
+        this. clearSocialNetworkField();
+      } else if (this.textBag === value[0]) {
         this.changeTextLinkOrder();
+        this.clearTextLinkField();
+      }
     });
   }
 
@@ -370,7 +373,7 @@ export class FooterPlacementComponent implements OnInit {
           );
         }
       }
-    )
+    );
   }
 
   modifySocialNetwork() {

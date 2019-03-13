@@ -109,6 +109,9 @@
                   <p>
                     <b>وضعیت:</b> {{getOrderLineStatus(ol)}}</p>
                 </td>
+                <td>
+                  <button mat-button color="warn" (click)="lostReport(orderLine)">اعلام مفقودی</button>
+                </td>
               </tr>
             </table>
 

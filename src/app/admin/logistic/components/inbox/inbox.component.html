@@ -1,5 +1,6 @@
 <!-- barcode checker -->
-<app-barcode-checker *ngIf="total" [trigger]="trigger" (onMismatchListener)="onMismatchDetected()"></app-barcode-checker>
+<app-barcode-checker *ngIf="total" [trigger]="trigger" (onMismatchListener)="onMismatchDetected()">
+</app-barcode-checker>
 
 <mat-card>
 
@@ -33,12 +34,14 @@
 
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef>نام</mat-header-cell>
-          <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.product_name}}</span></mat-cell>
+          <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px">
+              {{orderLine.instance.product_name}}</span></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="barcode">
           <mat-header-cell *matHeaderCellDef>بارکد</mat-header-cell>
-          <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.barcode}}</span></mat-cell>
+          <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.barcode}}</span>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="status">
@@ -51,18 +54,23 @@
           <mat-header-cell *matHeaderCellDef>تعداد</mat-header-cell>
           <mat-cell *matCellDef="let orderLine"> {{orderLine.count}}</mat-cell>
         </ng-container>
-        
+
         <ng-container matColumnDef="process">
           <mat-header-cell *matHeaderCellDef>پردازش</mat-header-cell>
           <mat-cell *matCellDef="let orderLine">
-            <button mat-button color="warn" *ngIf="shouldCheckProduct(orderLine)" (click)="informDamage(orderLine)">اعلام خرابی</button>
+            <button mat-flat-button *ngIf="shouldCheckProduct(orderLine)" style="margin: 5px; font-size: 10px"
+              (click)="informDamage(orderLine, true)"> اعلام خرابی با بازگشت هزینه</button>
+            <br />
+            <button mat-flat-button color="warn" *ngIf="shouldCheckProduct(orderLine)"
+              style="margin: 5px; font-size: 10px" (click)="informDamage(orderLine)">اعلام خرابی بدون بازگشت
+              هزینه</button>
           </mat-cell>
         </ng-container>
-       
-        <ng-container matColumnDef="loss">
+
+        <ng-container matColumnDef="lost">
           <mat-header-cell *matHeaderCellDef>مفقودی</mat-header-cell>
           <mat-cell *matCellDef="let orderLine">
-            <button mat-button color="warn"  (click)="informLoss(orderLine)">اعلام مفقودی</button>
+            <button mat-button color="warn" (click)="lostReport(orderLine)">اعلام مفقودی</button>
           </mat-cell>
         </ng-container>
 

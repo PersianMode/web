@@ -23,6 +23,7 @@ enum ItemArea {
 export class SubMenuComponent implements OnInit {
   @Input() pageId = null;
   @Input() canEdit = true;
+
   @Input()
   set placements(value: IPlacement[]) {
     if (value) {
@@ -79,10 +80,10 @@ export class SubMenuComponent implements OnInit {
   middleAreaHasNewColumn = false;
   leftAreaNewEmptyList = [];
   leftAreaHasNewColumn = false;
-  
+
   constructor(private httpService: HttpService, private dragulaService: DragulaService,
-    private progressService: ProgressService, private dialog: MatDialog,
-    private revertService: RevertPlacementService) {
+              private progressService: ProgressService, private dialog: MatDialog,
+              private revertService: RevertPlacementService) {
   }
 
   ngOnInit() {
@@ -95,8 +96,10 @@ export class SubMenuComponent implements OnInit {
       });
 
     this.dragulaService.dropModel.subscribe((value) => {
-      if (this.bagName === value[0])
+      if (this.bagName === value[0]) {
         this.changeMenuItemOrder();
+        this.clearFields();
+      }
     });
 
     this.initForm();
@@ -342,21 +345,21 @@ export class SubMenuComponent implements OnInit {
   modifyItem() {
     this.progressService.enable();
     (this.selectedItem ? this.httpService.post('placement', {
-      page_id: this.pageId,
-      placements: [
-        {
-          _id: this.selectedItem._id,
-          info: this.getItemInfo(),
+        page_id: this.pageId,
+        placements: [
+          {
+            _id: this.selectedItem._id,
+            info: this.getItemInfo(),
+          }
+        ]
+      }) : this.httpService.put('placement', {
+        page_id: this.pageId,
+        placement: {
+          component_name: 'menu',
+          variable_name: 'subMenu',
+          info: this.getItemInfo(true),
         }
-      ]
-    }) : this.httpService.put('placement', {
-      page_id: this.pageId,
-      placement: {
-        component_name: 'menu',
-        variable_name: 'subMenu',
-        info: this.getItemInfo(true),
-      }
-    })
+      })
     ).subscribe(
       (data: any) => {
         this.modifyPlacement.emit({
@@ -376,7 +379,7 @@ export class SubMenuComponent implements OnInit {
           const newInfo = this.getItemInfo(true);
           this.selectedItem = data.new_placement;
         }
-
+        this.clearFields();
         this.anyChanges = false;
         this.progressService.disable();
       },
@@ -431,6 +434,7 @@ export class SubMenuComponent implements OnInit {
       }
       res['section'] = this.selectedSection + '/' + tempSectionName;
     }
+
 
     return res;
   }

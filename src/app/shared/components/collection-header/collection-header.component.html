@@ -1,5 +1,5 @@
 <div class="second-bar">
-  <div class="persian-mode-logo" [routerLink]="['/']"><img style="height:60px"
+  <div class="persian-mode-logo" [routerLink]="['/']"><img style="height:60px; background-color: transparent; !important;"
                                                            alt="Lithium"
                                                            src="/assets/cliparts/logo.png">
   </div>
@@ -81,19 +81,17 @@
   </div>
 </div>
 
-<div id="search-area">
-  <div *ngIf="searchAreaFlag" class="search-result-panel">
-    <div class="search-title-lith font-style">
-      جستجو در لیتیم
+<div id="search-area" *ngIf="searchAreaFlag" class="search-result-panel">
+  <div class="search-title-lith font-style">
+    جستجو در لیتیم
+  </div>
+  <div fxLayout="row" fxLayoutAlign="start start" style="height: 170px">
+    <div fxFlex="15"></div>
+    <div fxFlex="70" style="text-align: center">
+      <input class="search-input font-style" type="text" [(ngModel)]="searchPhrase"
+             (ngModelChange)="searchProduct()" placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید" autofocus/>
     </div>
-    <div fxLayout="row" fxLayoutAlign="start start">
-      <div fxFlex="15"></div>
-      <div fxFlex="70" style="text-align: center">
-        <input class="search-input font-style" type="text" [(ngModel)]="searchPhrase"
-               (ngModelChange)="searchProduct()" placeholder="نام / کالا / رنگ / مدل مورد نظر را تایپ کنید" autofocus />
-      </div>
-      <div fxFlex="15"></div>
-    </div>
+    <div fxFlex="15"></div>
   </div>
   <div *ngIf="!searchWaiting && (searchProductList.length || searchCollectionList.length) && searchPhrase"
        class="search-result-wrapper font-style">
@@ -116,7 +114,7 @@
         </div>
       </div>
       <div fxFlex="40" class="collection-results">
-        <div style="height: 85%">
+        <!--<div style="height: 85%">-->
           <div *ngIf="!searchCollectionList || !searchCollectionList.length" class="search-title-lith"
                style="text-align: center">مجموعه ای متناسب با جستجوی شما یافت نشد.
           </div>
@@ -126,13 +124,22 @@
                 <div class="search-name">
                   <button mat-button (click)="selectSearchResult(element, false)">
                     <div style="padding:0;height:30px">{{element.name_fa}}</div>
-                    <div style="padding:0;height:30px">{{element.name}}</div></button>
+                    <div style="padding:0;height:30px">{{element.name}}</div>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <button mat-button *ngIf=" searchProductList && searchProductList.length && searchTotalRes && searchTotalRes.length > 10 && showMoreFlag" class="all-prod" (click)="alignMoreProd()">
+        <!--</div>-->
+      </div>
+      <div fxFlex="2.5"></div>
+    </div>
+    <div fxLayout="row" fxLayout.xs="row" fxLayoutAlign="space-around stretch">
+      <div fxFlex="2.5"></div>
+      <div fxFlex="95" class="all-prod">
+        <button mat-button
+                *ngIf=" searchProductList && searchProductList.length && searchTotalRes && searchTotalRes.length > 10 && showMoreFlag"
+                (click)="alignMoreProd()">
           {{'مشاهده تمام محصولات ('+ searchTotalRes.length.toLocaleString('fa') +')'}}
         </button>
       </div>
