@@ -37,10 +37,10 @@
       <div fxFlex="80" class="full-width">
             <button mat-button class="full-width" [class.cart]="!addCardBtnDisabled && size" [class.disable-button]="addCardBtnDisabled || !size" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">اضافه کردن به	        <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">اضافه کردن به سبد خرید
           سبد خرید	
-        </button>	        </button>
-      </div>	      </div>
-      <div fxFlex="20">	      <div fxFlex="20">
-        <button mat-button matTooltip="افزودن به علاقه مندی ها" [class.wishlist]="isLoggedIn && isVerified && !addCardBtnDisabled && size" [class.disable-button]="setDisablity()"  [disabled]="setDisablity()" (click)="saveToFavorites()"><i	        <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i
+        </button>
+      </div>
+      <div fxFlex="20">
+        <button mat-button matTooltip="افزودن به علاقه مندی ها" [class.wishlist]="isLoggedIn && isVerified && !addCardBtnDisabled && size" [class.disable-button]="setDisablity()"  [disabled]="setDisablity()" (click)="saveToFavorites()"><i
           class="fa fa-heart"></i></button>
       </div>
     </div>
