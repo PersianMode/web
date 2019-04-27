@@ -1,7 +1,7 @@
 <span *ngIf="sideOptions.length">
 <button mat-button [style.fontWeight]="isChecked.main.all ? 900 : 100" (click)="sideOptionClicked('main','all')">همه محصولات ({{allCount}})</button>
 <div *ngFor="let fo of sideOptions;let i=index">
-  <button *ngIf="i < 5 || moreSides"mat-button class="check-box-text" [style.fontWeight]="isChecked[fo.name][fo.value] ? 900 : 100"
+  <button *ngIf="i < 5 || moreSides"mat-button class="check-box-text" [style.fontWeight]="isChecked[fo.name] && isChecked[fo.name][fo.value] ? 900 : 100"
           (click)="sideOptionClicked(fo.name, fo.value)">
     {{fo.fa}} <span *ngIf="fo.count">({{fo.countFa}})</span>
   </button>
