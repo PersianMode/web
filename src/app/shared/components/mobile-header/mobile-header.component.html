@@ -36,8 +36,8 @@
         </div>
       </div>
       <div *ngIf="isSecondLevel">
-        <div class="menu-item menu-title" (click)="back(1)">
-          <span style="float: right;">
+        <div class="menu-item menu-title">
+          <span style="float: right;"  (click)="back(1)">
             <i class="fa fa-angle-right" aria-hidden="true"></i>
           </span>
           <span>{{secondLevelTitle}}</span>
