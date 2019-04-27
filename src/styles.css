@@ -147,10 +147,6 @@ nav {
   background-color: transparent !important;
 }
 
-.persian-mode-logo:hover {
-  filter: drop-shadow(0 4px 0.1px #9f9f9f);
-}
-
 .persian-mode-logo span {
   top: -20px;
   right: -16px;
