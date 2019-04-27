@@ -1,26 +1,27 @@
-<div class="container">
-  <h1>{{product.name}}</h1>
-  <h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}}
+<h1>{{product.name}}</h1>
+<h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}}
     تومان</span></h4>
-  <swiper *ngIf="selectedProductColor" [config]="config" [(index)]="index">
-    <div *ngFor="let item of selectedProductColor?.image?.angles">
-      <img *ngIf="item.type !== 'video'" src="{{item.url}}">
-      <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
-        <source src="{{item.url}}" type="video/webm">
-      </video>
-    </div>
-  </swiper>
-  <div *ngIf="product.colors" class="colors">
-    <div [style.width]="(product.colors.length * 136) + 'px'">
-      <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
+<swiper *ngIf="selectedProductColor" [config]="config" [(index)]="index">
+  <div *ngFor="let item of selectedProductColor?.image?.angles">
+    <img *ngIf="item.type !== 'video'" src="{{item.url}}">
+    <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
+      <source src="{{item.url}}" type="video/webm">
+    </video>
+  </div>
+</swiper>
+
+<div *ngIf="product.colors" class="colors">
+  <div [style.width]="(product.colors.length * 136) + 'px'">
+    <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
       <span style="margin:0">
         <p *ngIf="item.soldOut" class="soldOut">تمام شد</p>
         <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id"
              src="{{item.image.thumbnail}}">
       </span>
-      </a>
-    </div>
+    </a>
   </div>
+</div>
+<div class="container">
   <app-size-picker [sizes]="productSize" [productType]="productType" (value)="newSize($event)"
                    [gender]="gender"></app-size-picker>
 

@@ -39,11 +39,11 @@ button:focus{
   width: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
-  height: 125px;
+  height: 140px;
   padding: 0;
 }
 .colors div {
-  max-height: 125px;
+  max-height: 140px;
 }
 .colors img {
   max-height: 127px;
@@ -52,7 +52,7 @@ button:focus{
   max-width: 127px;
   width: auto;
   height: auto;
-  margin-left:4px;
+  margin:4px 0 0 4px;
   display: inline-block;
   transition: all .5s ease-in-out;
   opacity: .5;
@@ -64,9 +64,9 @@ button:focus{
 }
 .soldOut {
   color: #d00000;
-  position: absolute;
   transform: rotate(-45deg) translateY(-11px) translateX(12px);
-  width: auto;
+  width: 125px;
+  height: 125px;
   font-weight: bold;
   display: inline-block;
   font-size: 40px;
