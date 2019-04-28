@@ -402,7 +402,7 @@ export class ProductService {
             }
             this.collectionId = collection_id;
             this.products = data.products;
-            this.filteredProducts = (this.products.slice());
+            this.filteredProducts = this.products.slice();
 
             this.sortProductsAndEmit();
             this.extractFilters([], '', true);
