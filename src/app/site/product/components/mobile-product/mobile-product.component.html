@@ -10,7 +10,7 @@
   </div>
 </swiper>
 
-<div *ngIf="product.colors" class="colors">
+<div *ngIf="product.colors && product.colors.length > 1" class="colors">
   <div [style.width]="(product.colors.length * 136) + 'px'">
     <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
       <span style="margin:0">
@@ -23,10 +23,10 @@
 </div>
 <div class="container">
   <app-size-picker [sizes]="productSize" [productType]="productType" (value)="newSize($event)"
-                   [gender]="gender"></app-size-picker>
+                   [gender]="gender" [redBorder]="!size && chosen"></app-size-picker>
 
   <div>
-    <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">در سبد بگذار
+    <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled">در سبد بگذار
     </button>
   </div>
   <div>

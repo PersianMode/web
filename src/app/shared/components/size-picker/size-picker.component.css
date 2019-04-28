@@ -17,3 +17,19 @@ h2 {
     text-align: right;
   }
 }
+
+.redBorder {
+  border: red solid 1px;
+  border-radius: 5px;
+  padding: 9px;
+  margin: 0;
+  display: inline-block;
+  transition: 200ms;
+}
+.noBorder {
+  border: transparent solid 1px;
+  padding: 9px;
+  margin: 0;
+  display: inline-block;
+  transition: 200ms;
+}

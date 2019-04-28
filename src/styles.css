@@ -155,7 +155,6 @@ nav {
 }
 
 .persian-mode-center-logo {
-  font-family: nastaliq !Important;
   font-size: 30px;
   display: inline-block;
   color: black;
@@ -932,6 +931,9 @@ mat-panel-title {
 
 .mat-simple-snackbar {
   font-family: iranyekan, sans-serif !important;
+}
+.snackPanel {
+  direction: rtl;
 }
 
 .menu-field {

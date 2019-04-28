@@ -101,10 +101,3 @@
   url('iranyekanwebregular.ttf') format('truetype');
   unicode-range: U+0600-06FF;
 }
-
-@font-face {
-  font-family: nastaliq;
-  font-style: normal;
-  font-weight: normal;
-  src: url('Iran.Nastaliq.2.0.ttf') format('truetype');
-}

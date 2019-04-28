@@ -32,13 +32,13 @@
           تومان</span></h2>
     </div>
     <app-size-picker [sizes]="productSize" [productType]="productType" [gender]="gender"
-                     (value)="newSize($event)"></app-size-picker>
+                     (value)="newSize($event)" [redBorder]="!size && chosen"></app-size-picker>
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
       <div fxFlex="80" class="full-width">
-            <button mat-button class="full-width" [class.cart]="!addCardBtnDisabled && size" [class.disable-button]="addCardBtnDisabled || !size" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">اضافه کردن به سبد خرید</button>
+            <button mat-button class="full-width" [class.cart]="!addCardBtnDisabled" (click)="saveToCart()" [disabled]="addCardBtnDisabled">اضافه کردن به سبد خرید</button>
       </div>
       <div fxFlex="20">
-        <button mat-button matTooltip="افزودن به علاقه مندی ها" [class.wishlist]="isLoggedIn && isVerified && !addCardBtnDisabled && size" [class.disable-button]="setDisablity()"  [disabled]="setDisablity()" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
+        <button mat-button matTooltip="افزودن به علاقه‌مندی‌ها" [class.wishlist]="isLoggedIn && isVerified && !addCardBtnDisabled && size" [class.disable-button]="setDisability()" [disabled]="setDisability()" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
       </div>
     </div>
     <div>
