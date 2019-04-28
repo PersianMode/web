@@ -173,23 +173,26 @@ nav {
   top: 0;
   right: 30px;
   direction: ltr;
-  padding:0;
-  border:0;
-  height:69px;
+  padding: 0;
+  border: 0;
+  height: 69px;
   overflow: hidden;
 }
+
 .logoButtons button {
-  height:69px;
+  height: 69px;
   padding: 0 5px;
-  margin:0;
+  margin: 0;
   min-width: 30px !important;
   width: 40px;
 }
+
 .logoButtons span button img {
-  height:30px;
-  top:5px;
+  height: 30px;
+  top: 5px;
   position: relative
 }
+
 .second-bar {
   position: absolute;
   top: 40px;
@@ -243,13 +246,15 @@ nav {
 .search-bar {
   position: absolute;
   display: inline-block;
-  right: 13px;
-  top: 14px;
+  right: 12px;
+  top: 8px;
   border: #E5E5E5 solid 1px;
-  /* padding: 3px; */
   transition: all .3s ease;
   overflow: hidden;
   white-space: nowrap;
+  width: calc(100vw - 24px);
+  padding-top: 5px;
+  direction: rtl;
 }
 
 .search-bar input,
@@ -360,7 +365,7 @@ button {
   margin: 0;
   overflow: hidden;
   background: #8f8f8f;
-  border:0;
+  border: 0;
 }
 
 .hidden {
@@ -601,7 +606,7 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .filter-size .mat-button-toggle-label-content {
-  
+
   width: 42px !important;
   font-size: 17px !important;
   margin: 5px;
@@ -834,8 +839,10 @@ mat-panel-title {
   background: #ffffff !important;
   border: 2px #111111 solid !important;
 }
+
 .mat-checkbox-checkmark-path {
- stroke:black !important;}
+  stroke: black !important;
+}
 
 .mat-checkbox {
   font-family: iranyekan, sans-serif !important;
@@ -932,6 +939,7 @@ mat-panel-title {
 .mat-simple-snackbar {
   font-family: iranyekan, sans-serif !important;
 }
+
 .snackPanel {
   direction: rtl;
 }
@@ -962,21 +970,21 @@ mat-panel-title {
 }
 
 .mat-slide-toggle-bar {
-background-color: rgb(131, 131, 131);
-height: 17px !important;
+  background-color: rgb(131, 131, 131);
+  height: 17px !important;
 }
 
 .mat-slide-toggle-thumb-container {
-top: -2px !important;
-left: -4px !important
+  top: -2px !important;
+  left: -4px !important
 }
 
 .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-background-color: rgb(131, 131, 131);
+  background-color: rgb(131, 131, 131);
 }
 
 .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-background-color: #fff;
+  background-color: #fff;
 }
 
 .persian-field input {
@@ -1077,11 +1085,11 @@ p {
   font-family: iranyekan, sans-serif !important;
 }
 
-
 .overridden {
   line-height: 3px;
   position: relative;
 }
+
 .overridden::after {
   border-bottom: 1px solid red;
   content: "";
@@ -1090,7 +1098,7 @@ p {
   position: absolute;
   right: 0;
   top: 50%;
-   transform: rotate(-10deg);
+  transform: rotate(-10deg);
 }
 
 .wishlist {
