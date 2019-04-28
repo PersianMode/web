@@ -82,7 +82,9 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
             .forEach(r => {
               let routerLink = ['/'].concat(r.info.href.split('/'));
               this.menuItems[r.info.text] = {
-                menu: {},
+                menu: {
+                  ['همه محصولات ' + r.info.text]: {routerLink: ['/'].concat(r.info.href.split('/').filter(el => el !== '#'))}
+                }
               };
               let section = r.info.section ? r.info.section : routerLink[2];
               sectionMenu[section] = this.menuItems[r.info.text];
@@ -130,7 +132,9 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
                   if (row.info.row === 1 || row.info.is_header) {
                     sub = row.info.text;
                     this.menuItems[r.info.text].menu[sub] = {
-                      menu: {},
+                      menu: {
+                        [`همه ${sub} (${r.info.text})`]: {routerLink: ['/'].concat(row.info.href.split('/').filter(el => el !== '#'))}
+                      },
                     };
                   } else {
                     this.menuItems[r.info.text].menu[sub].menu[row.info.text] = {routerLink};

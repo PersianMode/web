@@ -31,11 +31,12 @@ export class MobileProductComponent implements OnInit {
 
   productSize = [];
   selectedProductColor: any = {};
-  addCardBtnDisabled = true;
+  addCardBtnDisabled = false;
   @Output() add = new EventEmitter<any>();
   @Output() addFavorite = new EventEmitter<any>();
   @Output() changeSize = new EventEmitter<any>();
   size = '';
+  chosen = false;
 
   constructor(private cartService: CartService, private router: Router,
     private snackBar: MatSnackBar) {
@@ -52,6 +53,8 @@ export class MobileProductComponent implements OnInit {
   }
 
   saveToCart() {
+    this.chosen = true;
+    console.log(this.size);
     this.add.emit(this.size);
   }
 

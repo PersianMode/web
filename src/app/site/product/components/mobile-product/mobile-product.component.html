@@ -9,78 +9,65 @@
     </video>
   </div>
 </swiper>
-<div *ngIf="product.colors" class="colors">
+
+<div *ngIf="product.colors && product.colors.length > 1" class="colors">
   <div [style.width]="(product.colors.length * 136) + 'px'">
     <a *ngFor="let item of product.colors" [routerLink]="['/', 'product', product.id, item._id]">
       <span style="margin:0">
         <p *ngIf="item.soldOut" class="soldOut">تمام شد</p>
-        <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id" src="{{item.image.thumbnail}}">
+        <img [class.selectedImg]="selectedProductColor && item._id === selectedProductColor._id"
+             src="{{item.image.thumbnail}}">
       </span>
     </a>
   </div>
 </div>
 <div class="container">
-  <div style="width:100%">
-    <app-size-picker [sizes]="productSize" [productType]="productType" (value)="newSize($event)" [gender]="gender"></app-size-picker>
-  </div>
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
-    <div fxFlex="80" class="full-width">
-      <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled || !size">در سبد بگذار</button>
-    </div>
-    <div fxFlex="20">
-      <button class="wishlist" matTooltip="افزودن به علاقه مندی ها" (click)="saveToFavorites()"><i class="fa fa-heart"></i></button>
-    </div>
-  </div>
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
-    <div fxFlex="30" class="share-parts full-width">
-      <fb-like url="{{getProductShareLink()}}"></fb-like>
-    </div>
-    <div fxFlex="15" class="share-parts full-width">
-      <google-plus url="{{getProductShareLink()}}"></google-plus>
-    </div>
-    <div fxFlex="15" class="share-parts full-width">
-      <tweet url="{{getProductShareLink()}}"></tweet>
-    </div>
-    <div fxFlex="20" class="share-parts full-width">
-      <linkedin-share url="{{getProductShareLink()}}"></linkedin-share>
-    </div>
-    <div fxFlex="20" class="share-parts full-width">
-      <button mat-raised-button class="share-button clickable-link" (click)="copyLinkToClipboard()">
-        <div class="inner-copy-link">کپی لینک</div>
-      </button>
-    </div>
-  </div>
+  <app-size-picker [sizes]="productSize" [productType]="productType" (value)="newSize($event)"
+                   [gender]="gender" [redBorder]="!size && chosen"></app-size-picker>
 
-  <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          سایر مشخصات محصول
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <ul>
-        <li *ngIf="color"><strong>رنگ:</strong> {{color}}</li>
-        <li *ngIf="barcode"><strong>بارکد:</strong> {{barcode}}</li>
-        <li *ngIf="product.article_no"><strong>Article No:</strong> {{product.article_no}}</li>
-      </ul>
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header *ngIf="product.desc">
-        <mat-panel-title>
-          بیشتر بدانید
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="description-md">
-        {{product.desc}}
-      </div>
-    </mat-expansion-panel>
-    <mat-expansion-panel *ngIf="product.reviews && product.reviews.length">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          نظرات مشتریان
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-
-    </mat-expansion-panel>
-  </mat-accordion>
+  <div>
+    <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled">در سبد بگذار
+    </button>
+  </div>
+  <div>
+    <button class="wishlist" matTooltip="افزودن به علاقه‌مندی‌ها" (click)="saveToFavorites()"><i
+      class="fa fa-heart"></i></button>
+  </div>
+  <div>
+    <button mat-raised-button (click)="copyLinkToClipboard()">
+      کپی لینک
+    </button>
+  </div>
 </div>
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        سایر مشخصات محصول
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ul>
+      <li *ngIf="color"><strong>رنگ:</strong> {{color}}</li>
+      <li *ngIf="barcode"><strong>بارکد:</strong> {{barcode}}</li>
+      <li *ngIf="product.article_no"><strong>Article No:</strong> {{product.article_no}}</li>
+    </ul>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header *ngIf="product.desc">
+      <mat-panel-title>
+        بیشتر بدانید
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="description-md">
+      {{product.desc}}
+    </div>
+  </mat-expansion-panel>
+  <mat-expansion-panel *ngIf="product.reviews && product.reviews.length">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        نظرات مشتریان
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+  </mat-expansion-panel>
+</mat-accordion>

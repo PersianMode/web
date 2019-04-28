@@ -110,6 +110,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     if (!size) {
       this.snackBar.open('لطفا یک اندازه را انتخاب کنید', null, {
         duration: 2300,
+        panelClass: ['snackPanel'],
       });
       return;
     }

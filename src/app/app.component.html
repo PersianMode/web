@@ -1,8 +1,6 @@
-<div *ngIf="loadingRouteConfig">
-  <div class="spinner">
-    <div style="position:absolute; left: calc(50% - 98px); top: calc(50% - 98px) ">
-      <img src="../assets/spinner.gif " alt="Loading... "/>
-    </div>
+<div *ngIf="loadingRouteConfig" class="page">
+  <div class="spinner-wrapper">
+    <i class="fa fa-circle-o-notch fa-spin"></i>
   </div>
 </div>
 <router-outlet></router-outlet>

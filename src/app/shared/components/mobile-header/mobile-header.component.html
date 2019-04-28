@@ -36,8 +36,8 @@
         </div>
       </div>
       <div *ngIf="isSecondLevel">
-        <div class="menu-item menu-title" (click)="back(1)">
-          <span style="float: right;">
+        <div class="menu-item menu-title">
+          <span style="float: right;"  (click)="back(1)">
             <i class="fa fa-angle-right" aria-hidden="true"></i>
           </span>
           <span>{{secondLevelTitle}}</span>
@@ -114,7 +114,6 @@
     <mat-sidenav-content>
       <div id="search-area" class="search-bar"
            [style.borderColor]="searchIsFocused ? 'black' : '#E5E5E5'"
-           style="width: 99.5%; height: 100%; left: 0px !important; top: 0px !important; padding-top: 12px; direction: rtl;"
            fxLayout="row"
            fxLayoutAlign="start start">
         <div fxFlex="7" style="text-align: left; padding-right: 3px"><i class="fa fa-search fa-flip-horizontal"></i>

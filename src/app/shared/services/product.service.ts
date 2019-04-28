@@ -195,11 +195,11 @@ export class ProductService {
 
   countProducts(tag = null, value = null) {
     if (tag && value) {
-      return this.filteredProducts
+      return cleanProductsList(this.filteredProducts)
         .filter(p => p.tags.find(t => value === t.name))
         .length;
     } else {
-      return this.filteredProducts.length;
+      return cleanProductsList(this.filteredProducts).length;
     }
   }
 
@@ -217,7 +217,10 @@ export class ProductService {
           } else if (f.name === 'color') {
             this.filteredProducts.forEach((p, pi) => {
               this.filteredProducts[pi].colors = p.colors
-                .filter(c => c.name ? c.name.split('/').map(a => a.split('-')).reduce((x, y) => x.concat(y)).find(a => f.values.includes(allMappedColor[a])) : false);
+                .filter(c => c.name ? c.name.split('/')
+                  .map(a => a.split('-'))
+                  .reduce((x, y) => x.concat(y))
+                  .find(a => f.values.includes(allMappedColor[a])) : false);
             });
 
             this.filteredProducts.forEach((p, pi) => this.enrichProductData(this.filteredProducts[pi]));
@@ -446,14 +449,14 @@ export class ProductService {
         break;
       }
       case 'tagsCustomerInterested': {
-        sortedProducts = this.sortByTagsIntrestedCustomer(this.filteredProducts);
+        sortedProducts = this.sortByTagsInterestedCustomer(this.filteredProducts);
         break;
       }
       default: {
         sortedProducts = this.filteredProducts;
       }
     }
-    this.productList$.next(sortedProducts);
+    this.productList$.next(cleanProductsList(sortedProducts));
     this.spinnerService.disable();
 
   }
@@ -468,7 +471,7 @@ export class ProductService {
     this.applyFilters(filterState, '');
   }
 
-  sortByTagsIntrestedCustomer(products) {
+  sortByTagsInterestedCustomer(products) {
     const list_top = [];
     const list_down = [];
     const preferred_tags = this.authService.userDetails.preferred_tags; // get customer tags interested

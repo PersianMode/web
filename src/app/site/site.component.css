@@ -1,19 +1,21 @@
-.content{
+.content {
   position: absolute;
   width: 100%;
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
   top: 170px;
 }
+
 .scrollable {
 
 }
-.fixed{
+
+.fixed {
   position: fixed;
   z-index: 1000;
-  top:0;
-  right:0;
-  width:100%;
+  top: 0;
+  right: 0;
+  width: 100%;
   background-color: #fff;
 }
 
@@ -21,4 +23,13 @@
   position: relative;
   top: 50px;
   width: 100%;
+}
+
+.spinner-wrapper {
+  position: fixed;
+  left: calc(50vw - 100px);
+  top: calc(50vh - 50px);
+  width: 200px;
+  text-align: center;
+  height: 100px;
 }

@@ -17,6 +17,7 @@ import {AuthService} from '../../services/auth.service';
 export class SizePickerComponent implements OnInit {
   sizeSplits = [];
   _pt = '';
+  _rb = false;
   @Input() gender: String = 'MENS';
 
   @Input()
@@ -29,6 +30,22 @@ export class SizePickerComponent implements OnInit {
     return this._pt;
   }
 
+  @Input()
+  set redBorder(rb) {
+    this._rb = rb;
+    if (rb) {
+      let i = 0;
+      const interval = setInterval(() => {
+        this._rb = !this._rb;
+        if (i ++ > 4) {
+          clearInterval(interval);
+        }
+      }, 200);
+    }
+  }
+  get redBorder() {
+    return this._rb;
+  }
   isShoes = false;
   isEU = true;
   productSize;

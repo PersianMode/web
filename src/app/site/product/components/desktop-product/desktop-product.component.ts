@@ -48,10 +48,11 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   innerScroll = false;
   size: any;
   productSize;
-  addCardBtnDisabled = true;
+  addCardBtnDisabled = false;
   focused: any = {};
   isLoggedIn = false;
   isVerified = false;
+  chosen = false;
 
   @Input()
   set selectedProductColorID(id) {
@@ -90,6 +91,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   saveToCart() {
+    this.chosen = true;
     this.add.emit(this.size);
   }
 
@@ -99,7 +101,6 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
 
   newSize(event) {
     this.size = event;
-    this.addCardBtnDisabled = !this.size;
     this.changeSize.emit(this.size);
   }
 
@@ -166,7 +167,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     img.src = url;
   }
 
-  setDisablity() {
+  setDisability() {
     return !this.isLoggedIn || !this.isVerified || this.addCardBtnDisabled || !this.size;
   }
 }
