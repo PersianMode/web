@@ -1,0 +1,13 @@
+{
+  "name": "لیتیم",
+  "short_name": "لیتیم",
+  "start_url": "index.html",
+  "display": "standalone",
+  "icons": [{
+    "src": "assets/cliparts/icon.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff"
+}
