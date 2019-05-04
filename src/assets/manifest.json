@@ -1,7 +1,7 @@
 {
   "name": "لیتیم",
+  "start_url": "https://lithium.style/",
   "short_name": "لیتیم",
-  "start_url": "index.html",
   "display": "standalone",
   "icons": [{
     "src": "assets/cliparts/icon.png",
