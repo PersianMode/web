@@ -58,12 +58,18 @@ export class ProductGridItemComponent implements OnInit {
       .map(x => this.dict.translateWord(x.name.trim()))
       .join(' ');
     this.setPrice();
-
-    const arrImages = this.data.colors.map(r => r.image.thumbnail);
-    this.images = Array.from(new Set<string>(arrImages));
-    this.slidesNum = Math.ceil(this.data.colors.length / 3);
     this.isMobile = this.responsiveService.isMobile;
-    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    const arrImages = this.data.colors.map(r => this.isMobile ? r.image.angles[1] ? r.image.angles[1].url : r.image.angles[0].url : r.image.thumbnail);
+    this.images = Array.from(new Set<string>(arrImages));
+    console.log(this.images);
+    this.slidesNum = Math.ceil(this.data.colors.length / 3);
+
+    this.responsiveService.switch$.subscribe(isMobile => {
+      this.isMobile = isMobile;
+      const arrImages = this.data.colors.map(r => this.isMobile ? r.image.angles[1] ? r.image.angles[1].url : r.image.angles[0].url : r.image.thumbnail);
+      this.images = Array.from(new Set<string>(arrImages));
+      this.slidesNum = Math.ceil(this.data.colors.length / 3);
+    });
     this.soldOut = this.data.soldOut;
     this.discounted = !!this.data.discount;
     this.setPrice();
