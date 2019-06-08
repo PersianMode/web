@@ -1,11 +1,10 @@
 <mat-card class="card-view">
   <mat-card-content>
-    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
-         fxLayoutAlign.xs="center center" dir="rtl">
+    <div fxLayout="column" fxLayoutAlign="start start" dir="rtl" fxLayoutGap="10px">
 
-      <app-uploader fxFlex="100"
-                    [url]="'uploadData'"
-                    (OnCompleted)="Success($event)"></app-uploader>
+      <app-uploader fxFlex="100" [url]="'uploadData'" (OnCompleted)="OnResult($event)" [single]="true"></app-uploader>
+      <h3 fxFlex="100">درصد بررسی فایل: {{progress}} %</h3>
+      <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
 
     </div>
 
