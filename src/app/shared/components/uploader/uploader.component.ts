@@ -4,7 +4,10 @@ import {FileUploader} from 'ng2-file-upload';
 @Component({
   selector: 'app-uploader',
   templateUrl: './uploader.component.html',
-  styleUrls: ['./uploader.component.css']
+  styleUrls: [
+    '../../../../../node_modules/bootstrap/dist/css/bootstrap.min.css',
+    './uploader.component.css'
+  ]
 })
 export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -35,7 +38,10 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
       if (result)
         this.results.push(result);
 
+      this.OnCompleted.emit(this.results);
     };
+
+
 
     this.uploader.onCompleteAll = () => {
       if (Math.max(...this.results.map(el => Object.keys(el).length)) === 1)
@@ -44,6 +50,9 @@ export class UploaderComponent implements OnInit, OnChanges, OnDestroy {
       // Note: if it was 'single', the output is an array with one element, not only the element itself!
       this.OnCompleted.emit(this.results);
       this.results = [];
+    };
+
+    this.uploader.onErrorItem = (err) => {
     };
 
     this.uploader.onAfterAddingFile = () => {

@@ -1,83 +1,81 @@
-<p *ngIf="!single">صف بارگذاری: {{ uploader?.queue?.length }}</p>
-<table class="table">
-  <thead>
-  <tr>
-    <th>نام فایل</th>
-    <th>اندازه</th>
-    <th>درصد پیشرفت</th>
-    <th>وضعیت</th>
-    <th>عملیات</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let item of uploader.queue">
-    <td><strong>{{ item?.file?.name }}</strong></td>
-    <td nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-    <td>
-      <div class="progress" style="margin-bottom: 0;">
-        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
-      </div>
-    </td>
-    <td class="text-center">
-      <span *ngIf="item.isSuccess"><i class="fa fa-check"></i></span>
-      <span *ngIf="item.isCancel"><i class="fa fa-ban"></i></span>
-      <span *ngIf="item.isError"><i class="fa fa-remove"></i></span>
-    </td>
-    <td nowrap>
-      <button type="button" class="btn btn-success btn-xs"
-              (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess || !personnel_id">
-        <span class="fa fa-upload"></span> بارگذاری
-      </button>
-      <button type="button" class="btn btn-warning btn-xs"
-              (click)="item.cancel()" [disabled]="!item.isUploading">
-        <span class="fa fa-ban"></span> لغو
-      </button>
-      <button type="button" class="btn btn-danger btn-xs"
-              (click)="item.remove()">
-        <span class="fa fa-trash"></span> حذف
-      </button>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="5">
-      <div ng2FileDrop
-           [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-           (fileOver)="fileOverBase($event)"
-           [uploader]="uploader"
-           class="well my-drop-zone"
-           [style.minHeight]="single ? '100px' : '200px'">
-      </div>
-    </td>
-  </tr>
-  </tbody>
-</table>
-<div class="input-uploader">
-  <input type="file" ng2FileSelect [uploader]="uploader" multiple *ngIf="!single">
-  <input type="file" ng2FileSelect [uploader]="uploader" *ngIf="single">
-</div>
-<div>
+<div class="container">
+  <p *ngIf="!single">صف بارگذاری: {{ uploader?.queue?.length }}</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>نام فایل</th>
+        <th>اندازه</th>
+        <th>درصد پیشرفت</th>
+        <th>وضعیت</th>
+        <th>عملیات</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of uploader.queue">
+        <td><strong>{{ item?.file?.name }}</strong></td>
+        <td nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+        <td>
+          <div class="progress" style="margin-bottom: 0;">
+            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+          </div>
+        </td>
+        <td class="text-center">
+          <span *ngIf="item.isSuccess"><i class="fa fa-check"></i></span>
+          <span *ngIf="item.isCancel"><i class="fa fa-ban"></i></span>
+          <span *ngIf="item.isError"><i class="fa fa-remove"></i></span>
+        </td>
+        <td nowrap>
+          <button type="button" class="btn btn-success btn-xs" (click)="item.upload()"
+            [disabled]="item.isReady || item.isUploading || item.isSuccess || !personnel_id">
+            <span class="fa fa-upload"></span> بارگذاری
+          </button>
+          <button type="button" class="btn btn-warning btn-xs" (click)="item.cancel()" [disabled]="!item.isUploading">
+            <span class="fa fa-ban"></span> لغو
+          </button>
+          <button type="button" class="btn btn-danger btn-xs" (click)="item.remove()">
+            <span class="fa fa-trash"></span> حذف
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="5">
+          <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)"
+            [uploader]="uploader" class="well my-drop-zone" [style.minHeight]="single ? '100px' : '200px'">
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="input-uploader">
+    <input type="file" ng2FileSelect [uploader]="uploader" multiple *ngIf="!single">
+    <input type="file" ng2FileSelect [uploader]="uploader" *ngIf="single">
+  </div>
   <div>
-    پیشرفت صف:
-    <div class="progress">
-      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+    <div>
+      پیشرفت صف:
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+      </div>
+    </div>
+    <div style="margin-top: 20px">
+      <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()"
+        [disabled]="!uploader.getNotUploadedItems().length">
+        <span class="fa fa-upload"></span>
+        <span *ngIf="!single"> بارگذاری همه</span>
+        <span *ngIf="single">بارگذاری</span>
+      </button>
+      <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()"
+        [disabled]="!uploader.isUploading">
+        <span class="fa fa-ban"></span>
+        <span *ngIf="!single">لغو همه</span>
+        <span *ngIf="single">لغو</span>
+      </button>
+      <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()"
+        [disabled]="!uploader.queue.length">
+        <span class="fa fa-trash"></span>
+        <span *ngIf="!single">حذف همه</span>
+        <span *ngIf="single">حذف</span>
+      </button>
     </div>
   </div>
-  <button type="button" class="btn btn-success btn-s"
-          (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-    <span class="fa fa-upload"></span>
-    <span *ngIf="!single"> بارگذاری همه</span>
-    <span *ngIf="single">بارگذاری</span>
-  </button>
-  <button type="button" class="btn btn-warning btn-s"
-          (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-    <span class="fa fa-ban"></span>
-    <span *ngIf="!single">لغو همه</span>
-    <span *ngIf="single">لغو</span>
-  </button>
-  <button type="button" class="btn btn-danger btn-s"
-          (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-    <span class="fa fa-trash"></span>
-    <span *ngIf="!single">حذف همه</span>
-    <span *ngIf="single">حذف</span>
-  </button>
 </div>

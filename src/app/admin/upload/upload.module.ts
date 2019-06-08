@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
   MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule,
   MatPaginatorModule, MatSelectModule,
-  MatSnackBarModule, MatTabsModule
+  MatSnackBarModule, MatTabsModule, MatProgressBarModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -39,6 +39,7 @@ import {UploadRouting} from './upload.routing';
     MatCheckboxModule,
     SharedModule,
     MarkdownModule.forRoot(),
+    MatProgressBarModule
   ],
 })
 export class UploadModule {
