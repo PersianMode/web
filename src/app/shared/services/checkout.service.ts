@@ -319,7 +319,7 @@ export class CheckoutService {
   }
 
   readPayResult(bankData) {
-    console.log('-> ', bankData);
+    console.log('-----> ', bankData);
     return new Promise((resolve, reject) => {
       this.httpService.post('payResult', bankData).subscribe(
         (data) => {
