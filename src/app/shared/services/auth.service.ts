@@ -5,17 +5,13 @@ import {Router} from '@angular/router';
 import {SocketService} from './socket.service';
 
 export const VerificationErrors = {
-  notVerified: {
-    status: 420,
-    error: 'Customer is not verified yet',
-  },
   notMobileVerified: {
     status: 421,
-    error: 'Customer\'s mobile is not verified yet',
+    error: 'ایمیل هنوز تایید نشده است',
   },
   notEmailVerified: {
     status: 422,
-    error: 'Customer\'s email is not verified yet',
+    error: 'شماره موبایل هنوز تایید نشده است',
   },
 };
 
@@ -49,7 +45,7 @@ export class AuthService {
         (data) => {
           this.populateUserDetails(data);
           this.isLoggedIn.next(data);
-          this.isVerified.next(!!data.is_verified);
+          this.isVerified.next(data.mobile_verified && data.email_verified);
 
           if (this.userDetails.warehouse_id) {
             this.socketService.init();
@@ -111,23 +107,23 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.httpService.post(
         (this.router.url.includes('agent') ? 'agent/' : '') + 'login', info).subscribe(
-        (data) => {
-          this.populateUserDetails(data);
-          this.isLoggedIn.next(data);
-          this.isVerified.next(!!data.is_verified);
-          // if (this.userDetails.warehouse_id) {
-          //   this.socketService.init();
-          // }
-          resolve(data);
-        },
-        (err) => {
-          this.isLoggedIn.next({});
-          this.isVerified.next(false);
-          console.error('Error in login: ', err);
-          this.populateUserDetails();
-          reject(err);
-        }
-      );
+          (data) => {
+            this.populateUserDetails(data);
+            this.isLoggedIn.next(data);
+            this.isVerified.next(data.mobile_verified && data.email_verified);
+            // if (this.userDetails.warehouse_id) {
+            //   this.socketService.init();
+            // }
+            resolve(data);
+          },
+          (err) => {
+            this.isLoggedIn.next({});
+            this.isVerified.next(false);
+            console.error('Error in login: ', err);
+            this.populateUserDetails();
+            reject(err);
+          }
+        );
     });
   }
 
@@ -164,7 +160,7 @@ export class AuthService {
         (data) => {
           // const rt = (this.router.url.includes('admin') ? 'admin/' : '') + 'login';
           this.isLoggedIn.next({});
-          this.isVerified.next(data.is_verified ? data.is_verified : false);
+          this.isVerified.next(data.mobile_verified && data.email_verified);
           this.populateUserDetails();
           // this.router.navigate([rt]);
           this.socketService.disconnect();
