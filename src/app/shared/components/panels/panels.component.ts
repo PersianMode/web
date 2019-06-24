@@ -6,6 +6,16 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
 import {Router} from '@angular/router';
 
+const paddingObject = marginArray => {
+  const temp: any = {};
+  ['top', 'right', 'bottom', 'left'].forEach(p => {
+    const f = marginArray.find(r => r.pos === 'margin-' + p);
+    console.log('->', p, f);
+    temp['padding-' + p + '.px'] = f ? +f.title : 0;
+  });
+  return temp;
+};
+
 @Component({
   selector: 'app-panels',
   templateUrl: './panels.component.html',
@@ -48,7 +58,8 @@ export class PanelsComponent implements OnInit {
 
             this.placements[r.info.row].imgs.push({
               href: r.info.href,
-              areas: r.info.areas,
+              areas: r.info.areas.filter(a => !a.pos.includes('margin')),
+              padding: paddingObject(r.info.areas.filter(a => a.pos.includes('margin'))),
               imgUrl: this.getUrl(r.info.imgUrl),
               fileType: r.info.fileType,
               mediaType: this.getFileTypeFromExtension(r.info.fileType && r.info.fileType['ext'], this.getImageLink(r.info.imgUrl)),
