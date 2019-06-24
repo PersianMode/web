@@ -10,7 +10,6 @@ const paddingObject = marginArray => {
   const temp: any = {};
   ['top', 'right', 'bottom', 'left'].forEach(p => {
     const f = marginArray.find(r => r.pos === 'margin-' + p);
-    console.log('->', p, f);
     temp['padding-' + p + '.px'] = f ? +f.title : 0;
   });
   return temp;
