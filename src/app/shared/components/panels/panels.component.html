@@ -8,7 +8,7 @@
          fxLayoutAlign="start start">
       <div *ngFor="let im of placements[key].imgs" [fxFlex]="getRowParts(im)" class="container"
            style="cursor: pointer;">
-        <div style="min-width: 250px; min-height: 250px">
+        <div style="min-width: 250px; min-height: 250px" [ngStyle]="im.padding">
           <a (click)="directToUrl(im.href)">
             <img *ngIf="im.mediaType === 'image'"
                  [src]="im.imgUrl" class="full-width"/>

@@ -10,30 +10,34 @@
     <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="center center">
       <div fxFlex="30" class="center-content">
         <div>
-          <mat-select [(ngModel)]="rowTemplate" placeholder="قالب مورد نظر" class="persian-field right" (ngModelChange)="changeField()"
-            style="text-align: right;">
+          <mat-select [(ngModel)]="rowTemplate" placeholder="قالب مورد نظر" class="persian-field right"
+                      (ngModelChange)="changeField()"
+                      style="text-align: right;">
             <mat-option *ngFor="let item of rowTemplateList" [value]="item.value" class="persian-field">{{item.name}}
             </mat-option>
           </mat-select>
         </div>
         <div>
           <mat-input-container class="persian-field full-width" dir="ltr">
-            <input matInput type="text" placeholder="آدرس" [(ngModel)]="urlAddress" (ngModelChange)="changeField()" style="text-align: left;"
+            <input matInput type="text" placeholder="آدرس" [(ngModel)]="urlAddress" (ngModelChange)="changeField()"
+                   style="text-align: left;"
             />
           </mat-input-container>
         </div>
       </div>
       <div fxFlex="70">
-        <app-uploader style="float: left;" [url]="imageUploadUrl()" [additionalData]="getThisPlacement()" [single]="true" (OnCompleted)="imageUploaded($event)"></app-uploader>
+        <app-uploader style="float: left;" [url]="imageUploadUrl()" [additionalData]="getThisPlacement()"
+                      [single]="true" (OnCompleted)="imageUploaded($event)"></app-uploader>
       </div>
     </div>
     <div *ngIf="rowTemplate">
       <div class="center-content">
-        <hr class="part-separator" />
+        <hr class="part-separator"/>
       </div>
       <div>
-        <div class="edit-row" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
-          fxLayoutAlign.xs="center center">
+        <div class="edit-row" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+             fxLayoutAlign.sm="center center"
+             fxLayoutAlign.xs="center center">
           <div fxFlex="30">
             <mat-checkbox [(ngModel)]="hasTopTitle" (ngModelChange)="changeField()">
               <span *ngIf="hasTopTitle">دارای عنوان بالا تصویر</span>
@@ -43,23 +47,27 @@
           <div fxFlex="70" *ngIf="hasTopTitle">
             <div>
               <mat-input-container class="text-field persian-field">
-                <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="topTitle.title" (ngModelChange)="changeField()" />
+                <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="topTitle.title"
+                       (ngModelChange)="changeField()"/>
               </mat-input-container>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="topTitle.titleColor"></p-colorPicker>
                 <label>رنگ متن</label>
-                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="topTitle.titleColor" (ngModelChange)="changeField()"
+                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="topTitle.titleColor"
+                       (ngModelChange)="changeField()"
                 />
               </div>
             </div>
             <div>
               <mat-input-container class="text-field persian-field">
-                <input matInput type="text" placeholder="متن زیر عنوان" [(ngModel)]="topTitle.text" (ngModelChange)="changeField()" />
+                <input matInput type="text" placeholder="متن زیر عنوان" [(ngModel)]="topTitle.text"
+                       (ngModelChange)="changeField()"/>
               </mat-input-container>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="topTitle.textColor"></p-colorPicker>
                 <label>رنگ متن</label>
-                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="topTitle.textColor" (ngModelChange)="changeField()"
+                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="topTitle.textColor"
+                       (ngModelChange)="changeField()"
                 />
               </div>
             </div>
@@ -67,8 +75,9 @@
         </div>
       </div>
       <div>
-        <div class="edit-row" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
-          fxLayoutAlign.xs="center center">
+        <div class="edit-row" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+             fxLayoutAlign.sm="center center"
+             fxLayoutAlign.xs="center center">
           <div fxFlex="30">
             <mat-checkbox [(ngModel)]="hasSubTitle" (ngModelChange)="changeField()">
               <span *ngIf="hasSubTitle">دارای عنوان پایین تصویر</span>
@@ -78,23 +87,27 @@
           <div fxFlex="70" *ngIf="hasSubTitle">
             <div>
               <mat-input-container class="text-field persian-field">
-                <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="subTitle.title" (ngModelChange)="changeField()" />
+                <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="subTitle.title"
+                       (ngModelChange)="changeField()"/>
               </mat-input-container>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="subTitle.titleColor"></p-colorPicker>
                 <label>رنگ متن</label>
-                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="subTitle.titleColor" (ngModelChange)="changeField()"
+                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="subTitle.titleColor"
+                       (ngModelChange)="changeField()"
                 />
               </div>
             </div>
             <div>
               <mat-input-container class="text-field persian-field">
-                <input matInput type="text" placeholder="متن زیر عنوان" [(ngModel)]="subTitle.text" (ngModelChange)="changeField()" />
+                <input matInput type="text" placeholder="متن زیر عنوان" [(ngModel)]="subTitle.text"
+                       (ngModelChange)="changeField()"/>
               </mat-input-container>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="subTitle.textColor"></p-colorPicker>
                 <label>رنگ متن</label>
-                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="subTitle.textColor" (ngModelChange)="changeField()"
+                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="subTitle.textColor"
+                       (ngModelChange)="changeField()"
                 />
               </div>
             </div>
@@ -104,58 +117,80 @@
     </div>
     <div *ngIf="showImageAreas()">
       <div class="center-content">
-        <hr class="part-separator" />
+        <hr class="part-separator"/>
       </div>
-      <div class="edit-row" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
-        fxLayoutAlign.xs="center center" style="direction: ltr">
+      <div class="edit-row" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
+           fxLayoutAlign.sm="center center"
+           fxLayoutAlign.xs="center center" style="direction: ltr">
         <div fxFlex="30" class="center-content">
           <div *ngFor="let row of getRowPositions()">
-            <div *ngFor="let pos of areaPosition[row]" (contextmenu)="changePosition(pos)" (click)="setArea(pos)" class="area-btn" [class.selected-area]="selectedArea.pos === pos"
-              [class.selected-to-switch]="selectedAreaToSwitch === pos">
+            <div *ngFor="let pos of areaPosition[row]" (contextmenu)="changePosition(pos)" (click)="setArea(pos)"
+                 class="area-btn" [class.selected-area]="selectedArea.pos === pos"
+                 [class.selected-to-switch]="selectedAreaToSwitch === pos"
+                 [class.left-right-margin]="pos.includes('margin') && (pos.includes('left') || pos.includes('right'))"
+                 [class.top-bottom-margin]="pos.includes('margin') && (pos.includes('top') || pos.includes('bottom'))">
               <i *ngIf="haveCurrentArea(pos)" class="fa fa-pencil area-icon"></i>
               <i *ngIf="!haveCurrentArea(pos)" class="fa fa-plus area-icon"></i>
+              <div *ngIf="pos.includes('margin') && !getArea(pos)" class="margin-text">حاشیه
+              </div>
+              <div *ngIf="pos.includes('margin') && getArea(pos) && getArea(pos).title" class="margin-text">{{getArea(pos).title}} px</div>
             </div>
           </div>
         </div>
         <div fxFlex="70" *ngIf="selectedArea.pos">
-          <div>
-            <mat-input-container class="text-field persian-field">
-              <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="selectedArea.title" (ngModelChange)="changedArea()" />
+          <div *ngIf="selectedArea.pos.includes('margin');else area">
+            <mat-input-container>
+              <input matInput type="number" placeholder="Pixels" [(ngModel)]="selectedArea.title" (ngModelChange)="changedArea()"/>
             </mat-input-container>
-            <div class="color-field">
-              <p-colorPicker [(ngModel)]="selectedArea.titleColor" (ngModelChange)="changedArea()"></p-colorPicker>
-              <label>رنگ متن</label>
-              <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.titleColor" (ngModelChange)="changedArea()"
-              />
-            </div>
           </div>
-          <div>
-            <mat-input-container class="text-field persian-field">
-              <input matInput type="text" placeholder="متن زیر عنوان" [(ngModel)]="selectedArea.text" (ngModelChange)="changedArea()" />
-            </mat-input-container>
-            <div class="color-field">
-              <p-colorPicker [(ngModel)]="selectedArea.textColor" (ngModelChange)="changedArea()"></p-colorPicker>
-              <label>رنگ متن</label>
-              <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.textColor" (ngModelChange)="changedArea()"
-              />
+          <ng-template #area>
+            <div>
+              <mat-input-container class="text-field persian-field">
+                <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="selectedArea.title"
+                       (ngModelChange)="changedArea()"/>
+              </mat-input-container>
+              <div class="color-field">
+                <p-colorPicker [(ngModel)]="selectedArea.titleColor" (ngModelChange)="changedArea()"></p-colorPicker>
+                <label>رنگ متن</label>
+                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.titleColor"
+                       (ngModelChange)="changedArea()"
+                />
+              </div>
             </div>
-          </div>
-          <div>
-            <mat-input-container class="text-field persian-field">
-              <input matInput type="text" placeholder="متن دکمه" [(ngModel)]="selectedArea.buttonText" (ngModelChange)="changedArea()"
-              />
-            </mat-input-container>
-            <div class="color-field">
-              <p-colorPicker [(ngModel)]="selectedArea.buttonColor" (ngModelChange)="changedArea()"></p-colorPicker>
-              <label>رنگ متن</label>
-              <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.buttonColor" (ngModelChange)="changedArea()"
-              />
-              <p-colorPicker [(ngModel)]="selectedArea.buttonBackgroundColor" (ngModelChange)="changedArea()"></p-colorPicker>
-              <label>رنگ پس زمینه</label>
-              <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.buttonBackgroundColor" (ngModelChange)="changedArea()"
-              />
+            <div>
+              <mat-input-container class="text-field persian-field">
+                <input matInput type="text" placeholder="متن زیر عنوان" [(ngModel)]="selectedArea.text"
+                       (ngModelChange)="changedArea()"/>
+              </mat-input-container>
+              <div class="color-field">
+                <p-colorPicker [(ngModel)]="selectedArea.textColor" (ngModelChange)="changedArea()"></p-colorPicker>
+                <label>رنگ متن</label>
+                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.textColor"
+                       (ngModelChange)="changedArea()"
+                />
+              </div>
             </div>
-          </div>
+            <div>
+              <mat-input-container class="text-field persian-field">
+                <input matInput type="text" placeholder="متن دکمه" [(ngModel)]="selectedArea.buttonText"
+                       (ngModelChange)="changedArea()"
+                />
+              </mat-input-container>
+              <div class="color-field">
+                <p-colorPicker [(ngModel)]="selectedArea.buttonColor" (ngModelChange)="changedArea()"></p-colorPicker>
+                <label>رنگ متن</label>
+                <input type="text" placeholder="کد" class="color-code-field" [(ngModel)]="selectedArea.buttonColor"
+                       (ngModelChange)="changedArea()"
+                />
+                <p-colorPicker [(ngModel)]="selectedArea.buttonBackgroundColor"
+                               (ngModelChange)="changedArea()"></p-colorPicker>
+                <label>رنگ پس زمینه</label>
+                <input type="text" placeholder="کد" class="color-code-field"
+                       [(ngModel)]="selectedArea.buttonBackgroundColor" (ngModelChange)="changedArea()"
+                />
+              </div>
+            </div>
+          </ng-template>
           <div>
             <button mat-icon-button (click)="saveArea()" [disabled]="areaDoneBtnShouldDisabled">
               <mat-icon aria-label="accept">done</mat-icon>

@@ -44,3 +44,23 @@
   width: 60px;
   direction: ltr;
 }
+
+.left-right-margin {
+  margin-bottom: -90px;
+  height: 128px;
+  border-radius: 5px;
+
+}
+.left-right-margin .margin-text {
+  transform: rotate(90deg);
+  position: fixed;
+  margin-top: 60px;
+}
+.top-bottom-margin {
+  width: 128px;
+  border-radius: 5px;
+}
+.margin-text {
+  position: relative;
+  color: gray;
+}
