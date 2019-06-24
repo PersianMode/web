@@ -131,7 +131,9 @@
                  [class.top-bottom-margin]="pos.includes('margin') && (pos.includes('top') || pos.includes('bottom'))">
               <i *ngIf="haveCurrentArea(pos)" class="fa fa-pencil area-icon"></i>
               <i *ngIf="!haveCurrentArea(pos)" class="fa fa-plus area-icon"></i>
-              <div *ngIf="pos.includes('margin')" class="margin-text">حاشیه</div>
+              <div *ngIf="pos.includes('margin') && !getArea(pos)" class="margin-text">حاشیه
+              </div>
+              <div *ngIf="pos.includes('margin') && getArea(pos) && getArea(pos).title" class="margin-text">{{getArea(pos).title}} px</div>
             </div>
           </div>
         </div>

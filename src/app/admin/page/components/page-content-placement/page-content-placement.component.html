@@ -57,7 +57,7 @@
               </video>
             </a>
             <div *ngFor="let ar of item.info.areas">
-              <div
+              <div *ngIf="!ar.pos.includes('margin')"
                 [style.font-size]="(item.info.panel_type === 'full' && item.info.areas.length === 1)  ? '1.5em' : '0.9em'"
                 [ngClass]="ar.pos">
                 <h1 *ngIf="ar.title" [style.color]="ar.titleColor ? ar.titleColor : null">{{ar.title}}</h1>

@@ -177,6 +177,10 @@ export class EditPanelComponent implements OnInit {
     }
   }
 
+  getArea(pos) {
+    return this.areas.find(el => el.pos.toLowerCase() === pos.toLowerCase())
+  }
+
   saveArea() {
     const areaIndex = this.areas.findIndex(el => el.pos.toLowerCase() === this.selectedArea.pos.toLowerCase());
     if (areaIndex !== -1) {
