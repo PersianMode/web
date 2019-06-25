@@ -60,7 +60,7 @@ export class ProductInstanceComponent implements OnInit, OnChanges {
     this.productInstanceForm.controls['size'].setValue(this.size);
     this.productInstanceForm.controls['warehouseId'].setValue(this.warehouseId);
     this.productInstanceForm.controls['count'].setValue(this.instances[0].inventory[0].count);
-    this.productInstanceForm.controls['reserved'].setValue(this.instances[0].inventory[0].reserved);
+    this.productInstanceForm.controls['reserved'].setValue(this.instances[0].inventory[0].reserved || 0);
     this.productInstanceForm.controls['price'].setValue(this.instances[0].price);
 
   }

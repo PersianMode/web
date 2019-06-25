@@ -46,9 +46,9 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(private authService: AuthService, private router: Router,
-              @Inject(WINDOW) private window, public dialog: MatDialog, private httpService: HttpService,
-              private dict: DictionaryService, private messageService: MessageService,
-              private spinnerService: SpinnerService) {
+    @Inject(WINDOW) private window, public dialog: MatDialog, private httpService: HttpService,
+    private dict: DictionaryService, private messageService: MessageService,
+    private spinnerService: SpinnerService) {
   }
 
   ngOnInit() {
@@ -110,18 +110,19 @@ export class LoginComponent implements OnInit {
         .catch(err => {
           // there are two possibilities here
           // one is that the user is not verified yet, and another is that the credentials are invalid
+          console.error('cannot login: ', err);
           switch (err.status) {
-            case VerificationErrors.notVerified.status:
-              this.loginStatus = LoginStatus.NotVerified;
-              break;
             case VerificationErrors.notMobileVerified.status:
               this.loginStatus = LoginStatus.VerifiedEmail;
+              this.messageService.showMessage(VerificationErrors.notMobileVerified.error, MessageType.Error);
               break;
             case VerificationErrors.notEmailVerified.status:
               this.loginStatus = LoginStatus.VerifiedMobile;
+              this.messageService.showMessage(VerificationErrors.notEmailVerified.error, MessageType.Error);
               break;
             default:
-              console.error('cannot login: ', err);
+              this.loginStatus = null;
+              this.messageService.showMessage('خطا به هنگام ورود' ,MessageType.Error);
               this.authService.tempUserData = {};
               break;
           }
@@ -244,8 +245,6 @@ export class LoginComponent implements OnInit {
               // try the latter
               this.tryLoggingIn()
                 .catch(error => {
-                  // so it's the former
-                  console.error('not validated!', err, error);
                   this.spinnerService.disable();
                   this.closeDialog.emit(true);
                   this.router.navigate(['home']);
@@ -256,7 +255,6 @@ export class LoginComponent implements OnInit {
             .catch(err => {
               // correct code but not verified via email
               this.spinnerService.disable();
-              this.messageService.showMessage('لطفا برای فعال سازی حساب خود به ایمیل خود مراجعه فرمایید', MessageType.Information);
               this.loginStatus = this.Status.VerifiedMobile;
             });
         }
@@ -265,7 +263,7 @@ export class LoginComponent implements OnInit {
         // wrong verification code
         console.error('Cannot verify registration: ', err);
         this.spinnerService.disable();
-        this.messageService.showMessage('نام کاربری یا رمز عبور اشتباه است', MessageType.Error);
+        this.messageService.showMessage('کد ورودی اشتباه است', MessageType.Error);
       }
     );
   }
@@ -283,7 +281,6 @@ export class LoginComponent implements OnInit {
         })
         .catch(err => {
           this.spinnerService.disable();
-          this.messageService.showMessage('نام کاربری یا رمز عبور اشتباه است', MessageType.Error);
           reject(err);
         });
     });

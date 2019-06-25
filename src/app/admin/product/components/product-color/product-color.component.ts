@@ -23,7 +23,6 @@ export class ProductColorComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-
   }
 
   ngOnChanges(changes: SimpleChanges): void {
