@@ -3,10 +3,10 @@
   display: inline-block;
   text-align: right;
   width: 244px;
-  height: 334px;
+  height: 342px;
   overflow: hidden;
   float: right;
-  margin-bottom: 14px;
+  margin:0;
   background: #fff;
   vertical-align: top;
   font-size: 11px;
@@ -32,7 +32,7 @@
 .main span {
   display: inline-block;
   border: 1px solid transparent;
-  padding: 13px 0 0 0;
+  padding: 0;
 }
 .mainMobile span {
   display: inline-block;
