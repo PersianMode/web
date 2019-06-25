@@ -10,7 +10,7 @@
     <!--</div>-->
     <div *ngIf="balance > 0" style="background: #ccc" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"
          dir="rtl">
-      <div fxFlex="50" class="info-cell">موجودی اکانت: <b>{{balanceFa}}</b></div>
+      <div fxFlex="50" class="info-cell">موجودی حساب: <b>{{balanceFa}}</b></div>
       <div fxFlex="50" class="info-cell">
         <button mat-raised-button style="line-height: 24px" (click)="goToRefundBank()">واریز موجودی به حساب بانکی
         </button>
@@ -18,12 +18,12 @@
     </div>
     <div *ngIf="balance === 0 && active" style="background: #ccc" fxLayout="row" fxLayout.sm="column"
          fxLayout.xs="column" dir="rtl">
-      <div fxFlex="50" class="info-cell">موجودی اکانت: <b>{{balanceFa}}</b></div>
+      <div fxFlex="50" class="info-cell">موجودی حساب: <b>{{balanceFa}}</b></div>
       <div fxFlex="50" class="info-cell">درخواست شما در حال بررسی می باشد</div>
     </div>
     <div *ngIf="balance === 0 && !active" style="background: #ccc" fxLayout="row" fxLayout.sm="column"
          fxLayout.xs="column" dir="rtl">
-      <div fxFlex="50" class="info-cell"> موجودی اکانت: <b>{{balanceFa}}</b></div>
+      <div fxFlex="50" class="info-cell"> موجودی حساب: <b>{{balanceFa}}</b></div>
       <div fxFlex="50" class="info-cell">موجودی حساب شما صفر است</div>
     </div>
 

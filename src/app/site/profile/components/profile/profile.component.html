@@ -7,20 +7,20 @@
         <app-basic-info [isEdit]=false (formTitle)="setHeaderTitle($event)"></app-basic-info>
       </mat-expansion-panel>
       <mat-expansion-panel>
-        <mat-expansion-panel-header>آدرس</mat-expansion-panel-header>
-        <app-address-table [isProfile]="true"></app-address-table>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>سفارش‌ها</mat-expansion-panel-header>
-        <app-orders></app-orders>
+        <mat-expansion-panel-header>علاقه‌مندی</mat-expansion-panel-header>
+        <app-preference></app-preference>
       </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>لیست آرزوها</mat-expansion-panel-header>
         <app-wish-list></app-wish-list>
       </mat-expansion-panel>
       <mat-expansion-panel>
-        <mat-expansion-panel-header>علاقه مندی</mat-expansion-panel-header>
-        <app-preference></app-preference>
+        <mat-expansion-panel-header>سفارش‌ها</mat-expansion-panel-header>
+        <app-orders></app-orders>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>آدرس</mat-expansion-panel-header>
+        <app-address-table [isProfile]="true"></app-address-table>
       </mat-expansion-panel>
     </mat-accordion>
   </div>
