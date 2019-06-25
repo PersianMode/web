@@ -31,7 +31,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   maxPrice;
   selectedMinPriceFormatted = '';
   selectedMaxPriceFormatted = '';
-  isEU = false;
+  isEU = true;
   isEUSubescriber: any;
   discountRangeValues: any;
   minDiscount;

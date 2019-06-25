@@ -162,7 +162,6 @@
 .slider img {
   height: 60px;
   display: inline-block;
-  /*transform: scaleX(-1);*/
 }
 .colorprev{
   margin: 1px 10px 0 2px;

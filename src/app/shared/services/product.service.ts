@@ -66,7 +66,7 @@ export class ProductService {
   product$: ReplaySubject<any> = new ReplaySubject<any>();
   collectionTags: any = {};
   collectionTagsAfterFilter: any = {};
-  collectionIsEU = false;
+  collectionIsEU = true;
   collectionIsEUObject: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   private sortInput;
   private collectionId;

@@ -73,10 +73,8 @@ export class SizePickerComponent implements OnInit {
 
   ngOnInit() {
     this.auth.isLoggedIn.filter(r => r).subscribe(() => {
-      const prevIsEu = this.isEU;
-      this.isEU = this.auth.userDetails.shoesType === 'EU';
-      if (prevIsEu !== this.isEU)
-        this.changeSizeType(false);
+      this.isEU = this.auth.userDetails.shoesType !== 'US';
+      this.changeSizeType(false);
     });
   }
 
