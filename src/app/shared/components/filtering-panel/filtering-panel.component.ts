@@ -180,7 +180,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.expanded[name] = true;
     Object.keys(this.isChecked).filter(r => r !== name && r !== 'price').forEach(k => {
       if (!Object.keys(this.isChecked[k]).map(r => this.isChecked[k][r]).reduce((x, y) => x || y, false)) {
-        this.expanded[k] = false;
+        this.expanded[k] = true;
       }
     });
 
@@ -210,7 +210,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.clear_box = false;
 
     for (const name in this.isChecked) if (this.isChecked.hasOwnProperty(name)) {
-      this.expanded[name] = false;
+      this.expanded[name] = true;
       for (const value in this.isChecked[name]) if (this.isChecked[name].hasOwnProperty(value)) {
         this.isChecked[name][value] = false;
       }

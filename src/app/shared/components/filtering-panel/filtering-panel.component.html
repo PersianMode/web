@@ -26,7 +26,7 @@
     </div>
   </mat-expansion-panel>
   <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null"
-                       [expanded]="expanded[fo.name]" (opened)="expanded[fo.name]=true"
+                       [expanded]="!(expanded[fo.name]===false)" (opened)="expanded[fo.name]=true"
                        (closed)="expanded[fo.name]=false" [hideToggle]="true" class="mat-elevation-z0">
     <mat-expansion-panel-header>
         
