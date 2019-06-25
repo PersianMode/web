@@ -44,8 +44,8 @@
 }
 
 .photoWrapper {
-  padding: 0 8px 12px 4px;
-  width: 48%;
+  padding: 10px 18px 22px 14px;
+  width: 45%;
   min-width: 312px;
   display: inline-block;
   position: relative;
@@ -63,7 +63,7 @@
 
 .description span {
   display: inline-block;
-  margin: 52px 24px 0 55px;
+  margin: 12px 24px 0 12px;
 }
 
 img, video {

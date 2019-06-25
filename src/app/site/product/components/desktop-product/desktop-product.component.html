@@ -42,7 +42,9 @@
       </div>
     </div>
     <div>
-      <p *ngIf="color"><strong>رنگ:</strong> <span dir="ltr">{{color}}</span></p>
+      <p *ngIf="color"><strong>رنگ:</strong></p> <div dir="ltr">{{color}}</div>
+      <p *ngIf="product.article_no"><strong>کد:</strong></p>
+        <div dir="ltr">{{product.article_no}}</div>
       <mat-accordion>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -62,23 +64,6 @@
           </p>
         </mat-expansion-panel>
       </mat-accordion>
-      <div>
-        <span>
-          <span style="margin: 0px">
-            <mat-icon class="icon-large">reply</mat-icon>
-          </span>
-          <p>برگشت کالا</p>
-        </span>
-        <span>
-          <span style="margin: 0px">
-            <mat-icon class="icon-large">local_shipping</mat-icon>
-          </span>
-          <p>تحویل رایگان</p>
-        </span>
-      </div>
-      <span *ngIf="product.article_no"><strong style="color: #8F8F8F;">Article No</strong>
-        <h1>{{product.article_no}}</h1>
-      </span>
     </div>
   </div>
 </div>
