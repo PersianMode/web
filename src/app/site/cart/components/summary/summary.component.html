@@ -1,5 +1,5 @@
 <div class="summary">
-  <div class="row-register" (click)="goToRegister()">
+  <div *ngIf="!isLoggedIn" class="row-register" (click)="goToRegister()">
       <span class="register-icon">
           <img width="60px" style="filter: drop-shadow(0 0 0 black);" src="/assets/cliparts/login-icon.png">
       </span>
@@ -22,8 +22,8 @@
     <!--<span class="s-left-text">{{loyaltyPoint}}</span>-->
   <!--</div>-->
   <div class="rows">
-    <span class="s-right-text"> تعدا خرید</span>
-    <span class="s-left-text">{{loyaltyPoint}}</span>
+    <span class="s-right-text"> تعداد خرید</span>
+    <span class="s-left-text">{{number}}</span>
   </div>
   <hr class="hr-style">
   <!-- coupon -->
