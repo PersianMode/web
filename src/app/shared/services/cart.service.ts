@@ -146,6 +146,10 @@ export class CartService {
     }
   }
 
+  getNumber() {
+    return this.cartItems.getValue().map(r => r.quantity).reduce((a, b) => a + b, 0);
+  }
+
   updateItem(value) {
     let items = this.cartItems.getValue();
     const instanceChange = value.instance_id !== value.pre_instance_id;
