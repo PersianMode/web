@@ -2,14 +2,6 @@
   <div class="center">
     <span class="persian-mode-center-logo">لیتیم<span>ُ</span></span>
   </div>
-  <div fxLayout="column" fxLayoutAlign="center center">
-    <div fxFlex="50">
-      <label class="center">حساب کاربری شما برای</label>
-    </div>
-    <div fxFlex="50">
-      <label class="center">هر محصول NIKE</label>
-    </div>
-  </div>
 
   <div style="margin: 25px;" *ngIf="loginStatus == Status.Login">
     <form (ngSubmit)="login()" [formGroup]="loginForm">
@@ -70,7 +62,7 @@
   </div>
   <div class="center join-link" *ngIf="loginStatus == Status.Login">
     <label>عضو نیستید؟</label>
-    <a class="clickable-link" style="text-decoration: underline;" (click)="goToRegister()">به ما بپیوندید</a>
+    <a class="clickable-link" style="color: #00769e; font-weight: 900" (click)="goToRegister()">به ما بپیوندید</a>
   </div>
 
   <div style="margin: 25px;" *ngIf="loginStatus != Status.Login">

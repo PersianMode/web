@@ -1,8 +1,8 @@
 <div class="second-bar">
-  <div class="persian-mode-logo" [routerLink]="['/']"><img style="height:60px; background-color: transparent; !important;"
+  <a class="persian-mode-logo" [routerLink]="['/']"><img style="height:60px; background-color: transparent; !important;"
                                                            alt="Lithium"
                                                            src="/assets/cliparts/logo.png">
-  </div>
+  </a>
   <ul>
     <li *ngFor="let item of topMenu" [class.selected]="selected[item.collectionName]"
         (mouseenter)="showList(item.type)"

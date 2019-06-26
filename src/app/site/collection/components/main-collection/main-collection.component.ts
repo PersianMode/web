@@ -39,20 +39,20 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   sortOptions = [
     {
       value: 'newest',
-      fa: 'تازه‌ترین‌ها',
+      fa: 'جدید‌ترین‌ها',
+    },
+    {
+      value: 'most',
+      fa: 'گران‌ترین‌ها',
     },
     {
       value: 'highest',
-      fa: 'بالاترین امتیازها',
+      fa: 'محبوب‌ترین‌ها',
     },
     {
       value: 'cheapest',
       fa: 'ارزان‌ترین‌ها',
     },
-    {
-      value: 'most',
-      fa: 'گران‌ترین‌ها',
-    }
   ];
   sortedBy: any = {value: null};
   collectionName = '';

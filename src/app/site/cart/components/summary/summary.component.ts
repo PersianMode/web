@@ -59,6 +59,7 @@ export class SummaryComponent implements OnInit, OnChanges {
   coupon_code = '';
   show_coupon_area = false;
   isLoggedIn = false;
+  number = 0;
 
   constructor(@Inject(WINDOW) private window, public dialog: MatDialog, private cartService: CartService, private authService: AuthService,
     private router: Router, private checkoutService: CheckoutService, private snack: MatSnackBar) {
@@ -93,6 +94,7 @@ export class SummaryComponent implements OnInit, OnChanges {
         this.total = this.checkoutService.calculateTotal(this.productsData);
         this.discount = this.cartService.calculateDiscount(this.productsData);
       }
+      this.number = this.cartService.getNumber().toLocaleString('fa');
     });
   }
 

@@ -9,6 +9,7 @@ import {productColorMap} from '../lib/colorNameMap';
 import {SpinnerService} from './spinner.service';
 import {AuthService} from './auth.service';
 import {safeColorConverter} from './colorConverter';
+import {sizeSorter} from '../lib/sizeSorter';
 
 const allMappedColor = {};
 const newestSort = function (a, b) {
@@ -66,7 +67,7 @@ export class ProductService {
   product$: ReplaySubject<any> = new ReplaySubject<any>();
   collectionTags: any = {};
   collectionTagsAfterFilter: any = {};
-  collectionIsEU = false;
+  collectionIsEU = true;
   collectionIsEUObject: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   private sortInput;
   private collectionId;
@@ -83,7 +84,7 @@ export class ProductService {
     const type = Array.from(new Set([...products.map(r => r.product_type)]));
 
     const size = Array.from(new Set([...products.filter(r => r.product_type !== 'FOOTWEAR').map(r => Object.keys(r.sizesInventory))
-      .reduce((x, y) => x.concat(y), []).sort()]));
+      .reduce((x, y) => x.concat(y), []).sort(sizeSorter)]));
 
     const shoesSizeMen = Array.from(new Set([...products.filter(r => r.product_type === 'FOOTWEAR')
       .filter(p => p.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name.toUpperCase() === 'MENS')

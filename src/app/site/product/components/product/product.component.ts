@@ -134,8 +134,8 @@ export class ProductComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           this.waiting = false;
           const rmDialog = this.dialog.open(AddToCardConfirmComponent, {
-            position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px'},
-            width: this.isMobile ? '100%' : '750px',
+            position: this.isMobile ? {top: '50px', left: '0px'} : {top: '108px', right: '0px', left: 'unset'},
+            width: this.isMobile ? '90%' : '750px',
             data: {
               product: this.product,
               instance,

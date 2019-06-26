@@ -1,13 +1,13 @@
 <div *ngIf="!isMobile">
-  <div class="main" [class.on]="on">
+  <div class="main" [class.on]="on" (mouseover)="turnOn()" (mouseout)="turnOff($event)" #wrapper>
   <span>
-    <div class="imgWrapper" (mouseover)="turnOn()" (mouseout)="turnOff()" (click)="openProduct()">
+    <div class="imgWrapper" (click)="openProduct()" >
       <img src="{{images[pos]}}"
            (click)="openProduct()"
            [style.right]="(220 * data.colors[pos].position) +'px'">
 
     </div>
-    <div *ngIf="on && data.colors.length > 1" class="sliderWrapper" (mouseover)="turnOn(2, 0)" (mouseout)="turnOff()"
+    <div *ngIf="on && data.colors.length > 1" class="sliderWrapper" (mouseover)="slideOn()" (mouseout)="slideOff($event)"
          #slider>
       <i *ngIf="slidesNum > 1 && slide > 0" (click)="prevSlide()" class="fa fa-chevron-right"></i>
       <div class="sliderBlind">
@@ -42,7 +42,7 @@
       <img src="{{images[0]}}" [style.right.px]="(width * data.colors[pos].position)"
            [ngStyle]="{'height.px': width - 2}">
     </div>
-    <div *ngIf="on && data.colors.length > 1" class="sliderWrapper" (mouseover)="turnOn(2, 0)" (mouseout)="turnOff()"
+    <div *ngIf="on && data.colors.length > 1" class="sliderWrapper"
          #slider>
     </div>
     <h2>{{data.name}}</h2>

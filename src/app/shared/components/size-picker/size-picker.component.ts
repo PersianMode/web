@@ -8,6 +8,7 @@ import {
 import {DictionaryService} from '../../services/dictionary.service';
 import {HttpService} from '../../services/http.service';
 import {AuthService} from '../../services/auth.service';
+import {sizeSorter} from '../../lib/sizeSorter';
 
 @Component({
   selector: 'app-size-picker',
@@ -54,6 +55,7 @@ export class SizePickerComponent implements OnInit {
   @Input()
   set sizes(productSizes) {
     this.productSize = productSizes;
+    this.productSize.sort(sizeSorter);
     this.setProductSize();
   }
 
@@ -73,10 +75,8 @@ export class SizePickerComponent implements OnInit {
 
   ngOnInit() {
     this.auth.isLoggedIn.filter(r => r).subscribe(() => {
-      const prevIsEu = this.isEU;
-      this.isEU = this.auth.userDetails.shoesType === 'EU';
-      if (prevIsEu !== this.isEU)
-        this.changeSizeType(false);
+      this.isEU = this.auth.userDetails.shoesType !== 'US';
+      this.changeSizeType(false);
     });
   }
 
