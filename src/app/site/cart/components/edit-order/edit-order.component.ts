@@ -23,13 +23,15 @@ export class EditOrderComponent implements OnInit {
   isEU = true;
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, private auth: AuthService,
-              @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private httpService: HttpService, private dict: DictionaryService) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private router: Router, private httpService: HttpService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
     this.product = this.data.dialog_product;
     this.auth.isLoggedIn.subscribe(() => {
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+      //////////////////
       this.isEU = this.auth.userDetails.shoesType !== 'US';
       const shoesType = this.isEU ? 'EU' : 'US';
       if (this.auth.userIsLoggedIn()) {
@@ -38,12 +40,12 @@ export class EditOrderComponent implements OnInit {
           });
       }
       this.auth.userDetails.shoesType = shoesType;
+      //////////////////
       this.product.instances.forEach(el => {
         if (el.quantity) {
           this.sizesArray.push({
             value: el.size,
-            name: this.dict.setShoesSize(el.size, gender, this.product.productType),
-            displayValue: this.dict.setShoesSize(el.size, gender, this.product.type),
+            name: this.dict.setShoesSize(el.size, gender, this.product.type),
             quantity: el.quantity
           });
         }

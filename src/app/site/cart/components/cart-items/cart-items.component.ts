@@ -44,19 +44,21 @@ export class CartItemsComponent implements OnInit {
     this.color = this.dict.translateColor(this.product.color);
 
 
-
+/////////////////////////////
     this.isEU = this.auth.userDetails.shoesType !== 'US';
     const shoesType = this.isEU ? 'EU' : 'US';
-    // if (this.auth.userIsLoggedIn()) {
-    //   this.httpService.post(`customer/shoesType`, {shoesType})
-    //     .subscribe(() => {
-    //     });
-    // }
+    if (this.auth.userIsLoggedIn()) {
+      this.httpService.post(`customer/shoesType`, {shoesType})
+        .subscribe(() => {
+        });
+    }
     this.auth.userDetails.shoesType = shoesType;
+////////////////////////////
     this.auth.isLoggedIn.subscribe(() => {
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
       this.displaySize = this.dict.setShoesSize(this.product.size, gender, this.product.type);
     });
+
   }
 
   deleteProduct() {
