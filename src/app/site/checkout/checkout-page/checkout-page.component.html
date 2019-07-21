@@ -39,7 +39,7 @@
         <input type="hidden" #sign name="sign"/>
       </form>
       <button mat-raised-button
-              class="payment-button"
+              class="payment-button" [class.mouse-pointer]="!disabled" [class.disabled]="disabled"
               (click)="checkout()" [disabled]="disabled">پرداخت
       </button>
       <!--<button mat-raised-button-->
