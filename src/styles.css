@@ -596,22 +596,25 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .mat-button-toggle-label-content {
-  font-family: iranyekan, sans-serif !important;
-  width: 79px;
-  padding: 4px 0 !important;
+  width: 62px!important;
+  font-size: 15px!important;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  margin: 3px;
+  padding: 0 !important;
+  line-height: 42px !important;
+  font-weight: 100;
   text-align: center;
-  border: 2px rgba(221, 221, 221, .7) solid;
   color: black;
-  font-weight: bold;
 }
-
-.filter-size .mat-button-toggle-label-content {
-
-  width: 42px !important;
-  font-size: 17px !important;
-  margin: 5px;
+.mat-button-toggle-checked {
+  color: unset;
+  background-color: transparent !important;
 }
-
+.mat-button-toggle-checked div {
+  color: white;
+  background: black;
+}
 .mat-button-toggle-group {
   box-shadow: none !important;
   margin-bottom: -1px;
@@ -622,7 +625,7 @@ dp-date-picker.dp-material .dp-picker-input {
   margin-bottom: -1px;
 }
 
-.mat-button-toggle-checked div {
+.mat-button-toggle-checked {
   background: #000;
   color: #fff !important;
 }
@@ -813,7 +816,7 @@ mat-panel-title {
   overflow: visible !important;
 }
 
-@media (max-width: 959px) {
+@media (max-width: 600px) {
   .mat-button-toggle-label-content {
     width: 50px;
     padding: 4px 0 !important;
