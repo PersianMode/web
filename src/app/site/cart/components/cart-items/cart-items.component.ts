@@ -26,7 +26,7 @@ export class CartItemsComponent implements OnInit {
   totalDiscountedPrice = null;
   discountedPrice = null;
   color = '';
-  isEU = true;
+  // isEU = true;
 
   constructor(private dialog: MatDialog, private dict: DictionaryService, private auth: AuthService, private httpService: HttpService) {
   }
@@ -45,14 +45,14 @@ export class CartItemsComponent implements OnInit {
 
 
 /////////////////////////////
-    this.isEU = this.auth.userDetails.shoesType !== 'US';
-    const shoesType = this.isEU ? 'EU' : 'US';
-    if (this.auth.userIsLoggedIn()) {
-      this.httpService.post(`customer/shoesType`, {shoesType})
-        .subscribe(() => {
-        });
-    }
-    this.auth.userDetails.shoesType = shoesType;
+//     this.isEU = this.auth.userDetails.shoesType !== 'US';
+//     const shoesType = this.isEU ? 'EU' : 'US';
+//     if (this.auth.userIsLoggedIn()) {
+//       this.httpService.post(`customer/shoesType`, {shoesType})
+//         .subscribe(() => {
+//         });
+//     }
+//     this.auth.userDetails.shoesType = shoesType;
 ////////////////////////////
     this.auth.isLoggedIn.subscribe(() => {
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
