@@ -394,15 +394,15 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       });
   }
 
-
-  checkoutDemo() {
-    this.finalCheckItems()
-      .then(res => {
-        this.checkoutService.checkoutDemo();
-      })
-      .catch(err => {
-        console.error('Error in final check: ', err);
-      });
-  }
+  //
+  // checkoutDemo() {
+  //   this.finalCheckItems()
+  //     .then(res => {
+  //       this.checkoutService.checkoutDemo();
+  //     })
+  //     .catch(err => {
+  //       console.error('Error in final check: ', err);
+  //     });
+  // }
 }
 

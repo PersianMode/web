@@ -3,6 +3,7 @@ import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {AuthService} from '../../../../shared/services/auth.service';
+import {HttpService} from '../../../../shared/services/http.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -19,28 +20,38 @@ export class EditOrderComponent implements OnInit {
     newQuantity: null
   };
   selectedQuantityArray = null;
+  // isEU = true;
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, private auth: AuthService,
-              @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private dict: DictionaryService) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private router: Router, private httpService: HttpService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
     this.product = this.data.dialog_product;
     this.auth.isLoggedIn.subscribe(() => {
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
+      //////////////////
+      // this.isEU = this.auth.userDetails.shoesType !== 'US';
+      // const shoesType = this.isEU ? 'EU' : 'US';
+      // if (this.auth.userIsLoggedIn()) {
+      //   this.httpService.post(`customer/shoesType`, {shoesType})
+      //     .subscribe(() => {
+      //     });
+      // }
+      // this.auth.userDetails.shoesType = shoesType;
+      //////////////////
       this.product.instances.forEach(el => {
         if (el.quantity) {
           this.sizesArray.push({
             value: el.size,
-            name: this.dict.setShoesSize(el.size, gender, this.product.productType),
+            name: this.dict.setShoesSize(el.size, gender, this.product.type),
             quantity: el.quantity
           });
         }
         this.editObj.newQuantity = this.product.quantity;
       });
-
       this.sizesArray = Array.from(new Set(this.sizesArray));
-
       this.sizesArray.forEach(el => {
         const tempObj: any = {
           qtyArray: [],

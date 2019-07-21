@@ -39,13 +39,13 @@
         <input type="hidden" #sign name="sign"/>
       </form>
       <button mat-raised-button
-              class="payment-button"
+              class="payment-button" [class.mouse-pointer]="!disabled" [class.disabled]="disabled"
               (click)="checkout()" [disabled]="disabled">پرداخت
       </button>
-      <button mat-raised-button
-              class="payment-button"
-              (click)="checkoutDemo()">دمو پرداخت
-      </button>
+      <!--<button mat-raised-button-->
+              <!--class="payment-button"-->
+              <!--(click)="checkoutDemo()">دمو پرداخت-->
+      <!--</button>-->
     </div>
   </div>
   <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>

@@ -9,8 +9,8 @@
     <div class="main-divs" fxFlex=80 fxFlex.md=60 fxFlex.lg="70" fxFlex.xl="60" style="max-width: calc(100% - 350px)">
 
       <div class="basket-div" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="">
-          <h3>لیست خرید</h3>
-          <p>بعد از بررسی خرید خود را تائید کنید</p>
+        <h3>لیست خرید</h3>
+        <p>بعد از بررسی خرید خود را تائید کنید</p>
       </div>
       <!-- products -->
       <div>
@@ -21,7 +21,7 @@
       </div>
 
       <!-- spinner loading  -->
-      <div class="center-content" *ngIf="showWaitingSpinner">
+      <div class="center-content" *ngIf="showWaitingSpinner" class="loading-bar">
         <mat-progress-spinner class="waiting-spinner" color="primary" [mode]="'indeterminate'" [diameter]="'35'"
                               [strokeWidth]="'2'">
         </mat-progress-spinner>
@@ -31,6 +31,7 @@
       </div>
 
     </div>
-    <div fxFlex=0 fxFlex.lg="10" fxFlex.xl="20">&nbsp;</div>
+    <div fxFlex=0 fxFlex.lg="10" fxFlex.xl="20">
+    </div>
   </div>
 </div>

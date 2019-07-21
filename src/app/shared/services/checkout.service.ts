@@ -169,7 +169,7 @@ export class CheckoutService {
         },
         err => {
           console.error('Cannot get loyalty groups: ', err);
-          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستییم. دوباره تلاش کنید', null, {
             duration: 3200,
           });
         });
@@ -299,24 +299,24 @@ export class CheckoutService {
     };
   }
 
-  checkoutDemo() {
-    const data = this.accumulateData();
-    this.httpService.post('checkout/true', data)
-      .subscribe(res => {
-          if (!this.authService.userDetails.userId) {
-            this.ccRecipientData = null;
-            let addresses = [];
-            localStorage.removeItem('address');
-            if (!this.withDelivery) {
-              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-            }
-            this.addresses$.next(addresses);
-          }
-          this.cartService.emptyCart();
-          this.router.navigate(['/', 'profile']);
-        },
-        err => console.error(err));
-  }
+  // checkoutDemo() {
+  //   const data = this.accumulateData();
+  //   this.httpService.post('checkout/true', data)
+  //     .subscribe(res => {
+  //         if (!this.authService.userDetails.userId) {
+  //           this.ccRecipientData = null;
+  //           let addresses = [];
+  //           localStorage.removeItem('address');
+  //           if (!this.withDelivery) {
+  //             addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+  //           }
+  //           this.addresses$.next(addresses);
+  //         }
+  //         this.cartService.emptyCart();
+  //         this.router.navigate(['/', 'profile']);
+  //       },
+  //       err => console.error(err));
+  // }
 
   readPayResult(bankData) {
     return new Promise((resolve, reject) => {
