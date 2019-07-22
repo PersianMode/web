@@ -32,10 +32,7 @@
     background-color: #545454 !important;
 }
 
-.payment-button:hover {
-    background: #E71096 !important;
-}
-
+.payment-button:hover,
 .coupon-btn:hover {
     background: #E71096 !important;
 }
