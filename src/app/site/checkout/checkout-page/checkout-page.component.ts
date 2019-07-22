@@ -52,7 +52,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   noDuration = null;
   loyaltyGroups = [];
   addPointArray = [];
-  selectedPaymentType = PaymentType.cash;
+  selectedPaymentType = PaymentType.balance;
   earnedLoyaltyPoint = 0;
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this
@@ -77,7 +77,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.selectedPaymentType);
     this.isDev = this.httpService.isInDevMode();
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
