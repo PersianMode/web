@@ -1,158 +1,165 @@
 .summary {
-  background-color: #191919;
-  border-radius: 2px;
-  font-size: 14px;
+    background-color: #191919;
+    border-radius: 2px;
+    font-size: 14px;
 }
 
 .s-left-text {
-  float: left;
-  padding-left: 10px;
-  color: #efefef;
+    float: left;
+    padding-left: 10px;
+    color: #efefef;
 }
 
 .s-right-text {
-  color: #efefef;
+    color: #efefef;
 }
 
 .payment-button {
-  background-color: #CFDE29;
-  color: #fff;
-  text-align: center;
-  border: 0;
-  padding: 5px 10px;
-  height: 38px;
-  width: calc(100% - 60px);
-  margin: 10px 30px;
-  border-radius: 2px;
-  cursor: pointer;
-  line-height: normal !important;
+    background-color: #CFDE29;
+    color: #fff;
+    text-align: center;
+    border: 0;
+    padding: 5px 10px;
+    height: 38px;
+    width: calc(100% - 60px);
+    margin: 10px 30px;
+    border-radius: 2px;
+    cursor: pointer;
+    line-height: normal !important;
 }
 
 .disabled {
-  background-color: #545454;
+    background-color: #545454 !important;
 }
 
 .payment-button:hover {
-  background: #E71096;
+    background: #E71096 !important;
+}
+
+.coupon-btn:hover {
+    background: #E71096 !important;
 }
 
 .total-payment {
-  font-size: 20px;
+    font-size: 20px;
 }
 
 .nowrap-row-tp {
-  display: inline-block;
+    display: inline-block;
 }
 
 .rows {
-  padding: 20px;
-  position: center;
-  margin-top: auto;
-  width: calc(100% - 40px);
+    padding: 20px;
+    position: center;
+    margin-top: auto;
+    width: calc(100% - 40px);
 }
 
 .hr-style {
-  border: 0.5px solid #555;
-  margin: 0 10px;
+    border: 0.5px solid #555;
+    margin: 0 10px;
 }
 
 .coupon_code_btn {
-  padding: 3px;
-  background-color: white;
-  text-align: center;
-  border-radius: 3px;
-  cursor: pointer;
+    padding: 3px;
+    background-color: white;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 .coupon_label {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .coupon_area {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 .coupon_field {
-  width: calc(100% - 16px);
-  border: 0;
-  border-radius: 0;
-  color: black;
-  height: 22px;
-  font-size: 14px;
+    width: calc(100% - 16px);
+    border: 0;
+    border-radius: 0;
+    color: black;
+    height: 22px;
+    font-size: 14px;
 }
 
 .open-close-field-sign {
-  vertical-align: middle;
+    vertical-align: middle;
 }
 
 
 /* styling registration */
+
 .membership-style {
-  margin-right: 10px;
-  font-size: small;
-  text-decoration: underline;
-  color: #666;
+    margin-right: 10px;
+    font-size: small;
+    text-decoration: underline;
+    color: #666;
 }
 
 .membership-style:hover {
-  color: black;
-  cursor: pointer;
-  text-decoration: none;
+    color: black;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .row-register {
-  padding: 20px;
-  position: center;
-  margin-top: auto;
-  width: calc(100% - 40px);
-  background-color: white;
-  display: inline-flex;
+    padding: 20px;
+    position: center;
+    margin-top: auto;
+    width: calc(100% - 40px);
+    background-color: white;
+    display: inline-flex;
 }
 
 .register-icon {
-  position: relative;
-  top: 36px;
-  left: 20px;
+    position: relative;
+    top: 36px;
+    left: 20px;
 }
 
 .row-register h2 {
-  color: #E71096;
-  position: relative;
-  left: 7px;
-  top: 10px;
-  font-size: 25px;
+    color: #E71096;
+    position: relative;
+    left: 7px;
+    top: 10px;
+    font-size: 25px;
 }
 
 .row-register span {
-  color: #8F8F8F;
-  position: relative;
-  top: 36px;
-  left: 20px;
-  cursor: pointer;
+    color: #8F8F8F;
+    position: relative;
+    top: 36px;
+    left: 20px;
+    cursor: pointer;
 }
 
+
 /* row-coupon */
+
 .coupon-name {
-  color: white;
-  white-space: nowrap;
-  background-color: #CFDE29;
-  padding: 5px 3px;
-  text-align: center;
-  font-size: 130%;
-  height: 36px;
+    color: white;
+    white-space: nowrap;
+    background-color: #CFDE29;
+    padding: 5px 3px;
+    text-align: center;
+    font-size: 130%;
+    height: 36px;
 }
 
 .coupon-input {
-  border-radius: 0px;
-  border: 0;
-  height: 34px;
-  width: 100%;
+    border-radius: 0px;
+    border: 0;
+    height: 34px;
+    width: 100%;
 }
 
 .coupon-btn {
-  background-color: #E71096;
-  color: white;
-  width:100%;
-  border-radius: 0;
-  font-size: 130%;
+    background-color: #E71096;
+    color: white;
+    width: 100%;
+    border-radius: 0;
+    font-size: 130%;
 }
