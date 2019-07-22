@@ -8,8 +8,8 @@
       <span class="co-left-text">{{priceFormatter(discount)}} تومان </span>
     </div>
     <div *ngIf="usedBalance">
-      <span class="co-right-text">موجودی: </span>
-      <span class="co-left-text">{{priceFormatter(usedBalance)}} تومان </span>
+      <span class="co-right-text">موجودی پس از خرید: </span>
+      <span class="co-left-text">{{priceFormatter(total > usedBalance ? 0 : (balanceValue - total))}} تومان </span>
     </div>
     <!--<div *ngIf="usedLoyaltyPoint">-->
       <!--<span class="co-right-text">امتیاز وفاداری: </span>-->
