@@ -1,8 +1,8 @@
 <h1>{{product.name}}</h1>
 <h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}}
     تومان</span></h4>
-<swiper *ngIf="selectedProductColor" [config]="config" [(index)]="index">
-  <div *ngFor="let item of selectedProductColor?.image?.angles">
+<swiper *ngIf="selectedProductColor && selectedProductColor.image && selectedProductColor.image.angles" [config]="config" style="direction: ltr">
+  <div *ngFor="let item of selectedProductColor.image.angles">
     <img *ngIf="item.type !== 'video'" src="{{item.url}}">
     <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
       <source src="{{item.url}}" type="video/webm">
