@@ -10,6 +10,7 @@
                               [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
                               [earnedLoyaltyPoint]="earnedLoyaltyPoint"
                               [showCostLabel]="showCostLabel"
+                              [balanceValue]="balanceValue"
                               [showEarnPointLabel]="showEarnPointLabel"
                               [noDuration]="noDuration"></app-checkout-summary>
       </div>
@@ -40,11 +41,12 @@
       </form>
       <button mat-raised-button
               class="payment-button" [class.mouse-pointer]="!disabled" [class.disabled]="disabled"
-              (click)="checkout()" [disabled]="disabled">پرداخت
+              (click)="(selectedPaymentType === 1  && (balanceValue >= total)) ?  checkoutDemo() : checkout()" [disabled]="disabled">
+        {{(selectedPaymentType === 1  && (balanceValue >= total)) ? 'تکمیل پرداخت' : 'پرداخت'}}
       </button>
       <!--<button mat-raised-button-->
               <!--class="payment-button"-->
-              <!--(click)="checkoutDemo()">دمو پرداخت-->
+              <!--(click)="checkoutDemo()">تکمیل خرید-->
       <!--</button>-->
     </div>
   </div>
