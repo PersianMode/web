@@ -14,7 +14,7 @@
   <app-panels></app-panels>
 
   <div class="gridwall-wrapper">
-    <h1 class="header"><span>{{collectionNameFa}}</span>
+    <h1 *ngIf="!isMobile" class="header"><span>{{collectionNameFa}}</span>
       <span>({{products.length.toLocaleString('fa')}})</span>
     </h1>
     <div *ngIf="!isMobile" class="gridwall-title">
