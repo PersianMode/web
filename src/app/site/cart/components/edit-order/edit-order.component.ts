@@ -20,7 +20,6 @@ export class EditOrderComponent implements OnInit {
     newQuantity: null
   };
   selectedQuantityArray = null;
-  // isEU = true;
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, private auth: AuthService,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -31,16 +30,6 @@ export class EditOrderComponent implements OnInit {
     this.product = this.data.dialog_product;
     this.auth.isLoggedIn.subscribe(() => {
       const gender = this.product.tags.find(tag => tag.tg_name.toUpperCase() === 'GENDER').name;
-      //////////////////
-      // this.isEU = this.auth.userDetails.shoesType !== 'US';
-      // const shoesType = this.isEU ? 'EU' : 'US';
-      // if (this.auth.userIsLoggedIn()) {
-      //   this.httpService.post(`customer/shoesType`, {shoesType})
-      //     .subscribe(() => {
-      //     });
-      // }
-      // this.auth.userDetails.shoesType = shoesType;
-      //////////////////
       this.product.instances.forEach(el => {
         if (el.quantity) {
           this.sizesArray.push({

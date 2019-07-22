@@ -70,7 +70,6 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   }
 
   ngOnInit() {
-    // this.productService.collectionIsEUObject.next(true);
     this.route.paramMap.subscribe(params => {
       if (params.get('typeName')) {
         this.pageName = 'collection/' + params.get('typeName');
