@@ -369,7 +369,11 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.logout()
+      .then(() => {
+        this.router.navigate(['home']);
+      })
+      .catch();
     this.CheckoutService.ccRecipientData = null;
 
   }

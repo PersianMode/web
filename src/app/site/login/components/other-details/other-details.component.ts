@@ -109,6 +109,10 @@ export class OtherDetailsComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.logout()
+      .then(() => {
+        this.router.navigate(['home']);
+      })
+      .catch();
   }
 }
