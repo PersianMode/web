@@ -3,6 +3,8 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {MatButtonModule, MatCardModule, MatIconModule, MatProgressSpinnerModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserWindowRef, WINDOW_PROVIDERS} from './shared/services/window.service';
 import {HttpService} from './shared/services/http.service';
 import {SocketService} from './shared/services/socket.service';
@@ -31,10 +33,12 @@ import { MessageService } from './shared/services/message.service';
   ],
   imports: [
     routing,
+    BrowserAnimationsModule,
     BrowserModule,
     SharedModule,
     FormsModule,
     HttpClientModule,
+    FlexLayoutModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
