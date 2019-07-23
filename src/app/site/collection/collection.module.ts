@@ -7,7 +7,7 @@ import {CommonModule} from '@angular/common';
 import {FilteringPanelComponent} from '../../shared/components/filtering-panel/filtering-panel.component';
 import {ProductGridItemComponent} from '../../shared/components/product-grid-item/product-grid-item.component';
 import {SharedModule} from '../../shared/shared.module';
-import {DataScrollerModule} from 'primeng/datascroller';
+import {VirtualScrollerModule} from 'primeng/virtualscroller';
 import {SidebarModule} from 'primeng/sidebar';
 import {
   MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatExpansionModule,
@@ -33,7 +33,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     CommonModule,
     FormsModule,
     SharedModule,
-    DataScrollerModule,
+    VirtualScrollerModule,
     SidebarModule,
     MatCheckboxModule,
     MatButtonModule,

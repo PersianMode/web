@@ -47,11 +47,11 @@
       </div>
     </div>
     <div class="gridwall-content">
-      <p-dataScroller [value]="products" [rows]="lazyRows">
+      <p-virtualScroller [value]="products" [rows]="lazyRows" [first]="first">
         <ng-template let-item pTemplate="item">
           <app-product-grid-item [data]="item" [width]="gridWidth" [height]="gridHeight"></app-product-grid-item>
         </ng-template>
-      </p-dataScroller>
+      </p-virtualScroller>
     </div>
   </div>
 </div>

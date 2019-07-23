@@ -20,6 +20,9 @@
       "dom"
     ],
     "module": "es2015"
+  },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": "off"
   }
 }
 

@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import {Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
-import {DOCUMENT} from '@angular/platform-browser';
+import {DOCUMENT} from '@angular/common';
 import {CartService} from '../../../../shared/services/cart.service';
 import {HttpService} from 'app/shared/services/http.service';
 import {MatDialog, MatSnackBar} from '@angular/material';

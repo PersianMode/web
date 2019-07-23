@@ -1,5 +1,5 @@
 import {AfterContentInit, Component, HostListener, Inject, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {DOCUMENT} from '@angular/platform-browser';
+import {DOCUMENT} from '@angular/common';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {ActivatedRoute} from '@angular/router';
 import {PageService} from '../../../../shared/services/page.service';
