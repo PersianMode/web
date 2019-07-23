@@ -1,7 +1,5 @@
 
-import {map} from 'rxjs/operators';
-
-import {filter} from 'rxjs/operators';
+import {map, filter} from 'rxjs/operators';
 import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {AuthService} from '../../services/auth.service';
