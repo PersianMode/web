@@ -40,8 +40,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   deliveryDiscount;
   deliveryCost;
   usedBalance = 0;
-  usedLoyaltyPoint = 0;
   balanceValue = 0;
+  usedLoyaltyPoint = 0;
   loyaltyPoint = 0;
   disabled = false;
   changeMessage = '';
@@ -76,7 +76,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
               private productService: ProductService) {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.isDev = this.httpService.isInDevMode();
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
@@ -84,6 +84,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         if (!data) return;
 
         const totalDiscount = this.checkoutService.getTotalDiscount();
+        this.changePaymentType(this.selectedPaymentType);
         this.total = totalDiscount.total;
         this.discount = totalDiscount.discount;
       }
@@ -110,10 +111,9 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.disabled = !(r && (!this.soldOuts || !this.soldOuts.length));
     });
 
-    await this.setPoints();
     this.calculateEarnPoint();
-    this.authService.isLoggedIn.subscribe(async res => {
-      await this.setPoints();
+    this.authService.isLoggedIn.subscribe(res => {
+      this.setPoints();
       this.calculateEarnPoint();
     });
 
@@ -123,7 +123,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     if (this.checkoutService.deliveryDurationId)
       this.calculateDiscount(this.checkoutService.deliveryDurationId);
 
-    await this.changePaymentType(this.selectedPaymentType);
+    this.changePaymentType(this.selectedPaymentType);
   }
 
   loadAndFillProductsAndPrice(carts, data) {

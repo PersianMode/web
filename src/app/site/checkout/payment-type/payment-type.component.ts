@@ -58,7 +58,7 @@ export class PaymentTypeComponent implements OnInit {
       amount: null,
     },
     {
-      name: ' کسر از موجودی',
+      name: 'کسر از موجودی',
       value: this.paymentType.balance,
       disabled: true,
       amount: 0,
