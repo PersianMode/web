@@ -4,14 +4,14 @@
       <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.sm="center center"
         fxLayoutAlign.xs="center center">
         <div fxFlex="25" class="full-width sub-item">
-          <mat-input-container class="full-width">
+          <mat-form-field class="full-width">
             <input matInput type="text" class="persian-field menu-field" placeholder="متن" formControlName="text" />
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div fxFlex="25" class="full-width sub-item">
-          <mat-input-container class="full-width">
+          <mat-form-field class="full-width">
             <input matInput type="text" class="persian-field menu-field left-text" placeholder="آدرس" formControlName="href" />
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div fxFlex="15" class="full-width vertical-align-item sub-item persian-field" *ngIf="(!selectedItem || !selectedItem.is_header) && !appSubMenuForm.controls['is_header'].value">
           <mat-select placeholder="بخش" formControlName="section" class="persian-field">
@@ -19,10 +19,10 @@
           </mat-select>
         </div>
         <div fxFlex="15" class="full-width sub-item" *ngIf="!selectedItem || selectedItem.is_header">
-          <mat-input-container class="full-width">
+          <mat-form-field class="full-width">
             <input matInput type="text" class="persian-field menu-field left-text" placeholder="بخش جدید اضافه کنید" formControlName="new_section"
             />
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div fxFlex="10" class="full-width vertical-align-item sub-item">
           <mat-checkbox formControlName="is_header">

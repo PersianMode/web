@@ -3,14 +3,12 @@ import { CommonModule } from '@angular/common';
 import { DesktopProductComponent } from './components/desktop-product/desktop-product.component';
 import {ProductRouting} from './product.routing';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {
-  MatDialogModule,
-  MatExpansionModule,
-  MatIconModule,
-  MatProgressSpinnerModule,
-  MatSlideToggleModule,
-  MatTooltipModule
-} from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {MarkdownModule} from 'angular2-markdown';
 import { ProductComponent } from './components/product/product.component';
 import { MobileProductComponent } from './components/mobile-product/mobile-product.component';

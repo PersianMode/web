@@ -6,7 +6,7 @@ import {ProgressService} from '../../../../../shared/services/progress.service';
 import {FormGroup, FormBuilder, Validators, AbstractControl} from '@angular/forms';
 import {DomSanitizer} from '@angular/platform-browser';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {RemovingConfirmComponent} from '../../../../../shared/components/removing-confirm/removing-confirm.component';
 import {UploadImageDialogComponent} from '../upload-image-dialog/upload-image-dialog.component';
 import {RevertPlacementService} from '../../../../../shared/services/revert-placement.service';

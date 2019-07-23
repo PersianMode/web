@@ -7,7 +7,7 @@ import {DictionaryService} from '../../services/dictionary.service';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {LoginStatus} from '../../../site/login/login-status.enum';
 import {DialogEnum} from '../../enum/dialog.components.enum';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {AuthService} from '../../services/auth.service';
 import {CheckoutService} from '../../services/checkout.service';
 import {WINDOW} from '../../services/window.service';

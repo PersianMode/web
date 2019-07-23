@@ -8,16 +8,16 @@
     <form (ngSubmit)="submit()" [formGroup]="uploadTrackForm">
       <div>
         <div class="text-area">
-          <mat-input-container>
+          <mat-form-field>
             <input matInput type="text" class="persian-field menu-field" placeholder="نام خواننده"
                    formControlName="artistName"/>
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div class="text-area">
-          <mat-input-container>
+          <mat-form-field>
             <input matInput type="text" class="persian-field menu-field" placeholder="نام آهنگ"
                    formControlName="trackName"/>
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div style="margin-top: 10px">
           <app-uploader [url]="'trackList'" [single]="true" (OnCompleted)="onUploadFile($event)"></app-uploader>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ProgressModeEnum} from '../enum/progressMode.enum';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {ReplaySubject} from 'rxjs';
 
 @Injectable()
 export class ProgressService {

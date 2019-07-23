@@ -27,7 +27,7 @@
               {{element.agent.first_name}} {{element.agent.surname}}
             </div>
             <mat-select *ngIf="!element.agent" class="select-label" placeholder="انتخاب پیک" [ngModel]="element.delivery_agent?._id"
-              (change)="deliveryAgentChange(element._id, $event.value)" >
+              (selectionChange)="deliveryAgentChange(element._id, $event.value)" >
               <mat-option *ngFor="let dg of deliveryAgentList" [value]="dg._id">
                 {{dg.first_name}} - {{dg.surname}}
               </mat-option>

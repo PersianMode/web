@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {UploadTrackComponent} from './component/upload-track/upload-track.component';
 import {ProgressService} from '../../shared/services/progress.service';
 import {HttpService} from '../../shared/services/http.service';

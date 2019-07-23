@@ -6,7 +6,11 @@ import {ProductViewerComponent} from '../product-viewer/product-viewer.component
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
-import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import {FormControl} from '@angular/forms';

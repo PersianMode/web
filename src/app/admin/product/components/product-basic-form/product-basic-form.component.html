@@ -9,7 +9,7 @@
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
                  fxLayoutAlign.xs="center center" dir="rtl">
                 <div fxFlex="100" class="field-container">
-                    <mat-input-container class="field farsi">
+                    <mat-form-field class="field farsi">
                         <input matInput type="text" placeholder="نام" formControlName="name"
                                role="name"
                                tabindex="2"/>
@@ -18,17 +18,17 @@
                                 *ngIf="productBasicForm.controls['name'].hasError('required')">
                             وارد کردن نام محصول الزامی است
                         </mat-error>
-                    </mat-input-container>
+                    </mat-form-field>
                 </div>
                 <div fxFlex="100" class="field-container">
-                    <mat-input-container class="field farsi">
+                    <mat-form-field class="field farsi">
                         <input matInput type="number" placeholder="قیمت پایه" formControlName="base_price"
                                role="base_price" tabindex="2"/>
                         <mat-hint>قیمت محصول را وارد کنید</mat-hint>
                         <mat-error *ngIf="productBasicForm.controls['base_price'].hasError('required')">
                             وارد کردن قیمت محصول الزامی است
                         </mat-error>
-                    </mat-input-container>
+                    </mat-form-field>
                 </div>
             </div>
             <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"

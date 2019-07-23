@@ -4,7 +4,11 @@ import {LoyaltyGroupRouting} from './loyaltygroup.routing';
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from 'primeng/primeng';
-import {MatCardModule, MatInputModule, MatIconModule, MatButtonModule, MatDialogModule} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [LoyaltyGroupComponent],

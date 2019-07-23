@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {HttpService} from '../../services/http.service';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {AuthService} from '../../services/auth.service';
 import {ResponsiveService} from '../../services/responsive.service';
 import {Router} from '@angular/router';

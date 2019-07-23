@@ -1,7 +1,6 @@
 import {HostListener, Inject, Injectable} from '@angular/core';
 import {WINDOW} from './window.service';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
+import {Subject, Observable} from 'rxjs';
 
 @Injectable()
 export class ResponsiveService {

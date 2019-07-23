@@ -1,7 +1,7 @@
 import {Component, OnInit, EventEmitter, Input, Output, Inject} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {CardTypes} from '../../enum/cardTypes.enum';
 
 @Component({

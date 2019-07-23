@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PageComponent } from './components/page/page.component';
 import {PageRouting} from './page.routing';
-import {MatCardModule} from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MarkdownModule} from 'angular2-markdown';
 import {SharedModule} from '../../shared/shared.module';

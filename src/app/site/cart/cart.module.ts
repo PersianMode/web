@@ -4,11 +4,14 @@ import { SummaryComponent } from './components/summary/summary.component';
 import { CartItemsComponent } from './components/cart-items/cart-items.component';
 import {CartRouting} from './cart.routing';
 import {CommonModule} from '@angular/common';
-import {
-  MatButtonModule, MatCardModule, MatDialogModule, MatIconModule, MatInputModule, MatSelectModule,
-  MatSnackBarModule,
-  MatProgressSpinnerModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {SharedModule} from '../../shared/shared.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule} from '@angular/forms';

@@ -5,7 +5,7 @@ import {HttpService} from '../../../../shared/services/http.service';
 import {AuthService, VerificationErrors} from '../../../../shared/services/auth.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {WINDOW} from '../../../../shared/services/window.service';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';

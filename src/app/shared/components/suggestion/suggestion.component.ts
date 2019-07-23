@@ -1,9 +1,11 @@
+
+import {debounceTime} from 'rxjs/operators';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {HttpService} from '../../services/http.service';
 // import {Observable} from "rxjs/Observable";
 // import {map} from "rxjs/operator/map";
-import 'rxjs/add/operator/debounceTime';
+
 import {ProgressService} from '../../services/progress.service';
 import {TargetEnum} from '../../enum/target.enum';
 
@@ -33,7 +35,7 @@ export class SuggestionComponent implements OnInit {
       this.placeholder = this.name;
 
     this.suggestionCtrl = new FormControl();
-    this.suggestionCtrl.valueChanges.debounceTime(150).subscribe(
+    this.suggestionCtrl.valueChanges.pipe(debounceTime(150)).subscribe(
       (data) => {
         this.getTextDirection(data);
         this.filtering(data);

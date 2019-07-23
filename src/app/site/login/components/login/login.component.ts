@@ -3,7 +3,8 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 import {AuthService, VerificationErrors} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {HttpService} from '../../../../shared/services/http.service';

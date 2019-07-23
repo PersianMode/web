@@ -2,12 +2,12 @@
 <br>
 <div>
   <form [formGroup]="cAndCForm" (ngSubmit)="upsertLoyaltyPoint()">
-    <mat-input-container class="name-field">
+    <mat-form-field class="name-field">
       <input matInput type="text" placeholder="نام گروه" formControlName="name" readonly/>
-    </mat-input-container>
-    <mat-input-container class="score-field">
+    </mat-form-field>
+    <mat-form-field class="score-field">
       <input matInput type="number" placeholder="میزان افزایش امتیاز وفاداری" formControlName="loyalty_point"/>
-    </mat-input-container>
+    </mat-form-field>
     <button mat-mini-fab class="button-area" type="submit" color="primary"
             [disabled]="!cAndCForm.valid || !anyChanges">
       <mat-icon aria-label="done">done</mat-icon>

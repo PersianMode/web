@@ -9,16 +9,16 @@
     <div class="search-area">
       <div fxLayout="row" fxLayoutAlign="start start">
         <div fxFlex="30" class="filter-box">
-          <mat-input-container class="filtering-field">
+          <mat-form-field class="filtering-field">
             <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده - مشتری"
                    [formControl]="recipient_name">
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div fxFlex="30" class="filter-box">
-          <mat-input-container class="filtering-field">
+          <mat-form-field class="filtering-field">
             <input class="filtering-field" matInput type="text" placeholder="مسئول ارسال"
                    [formControl]="agentSearchCtrl">
-          </mat-input-container>
+          </mat-form-field>
         </div>
 
         <div fxFlex="30" class="filter-box">
@@ -61,10 +61,10 @@
               <span *ngIf="isOrigin === false" class="checkbox-label"></span>
             </mat-checkbox>
 
-            <mat-input-container *ngIf="isOrigin === false">
+            <mat-form-field *ngIf="isOrigin === false">
               <input class="filtering-field" matInput type="text" placeholder="نام تحویل گیرنده - کد ملی"
                     [formControl]="SenderSearchCtrl">
-            </mat-input-container>
+            </mat-form-field>
             <span class="style-select-warehouse" *ngIf="isOrigin">
             <select class="select-style-dropDown" formControlName="fromWarehouseId"
                     (change)="fromWarehouseChange($event.target.value)">
@@ -81,10 +81,10 @@
               <span *ngIf="isDestination" class="checkbox-label" (change)="toWarehouseChange(null)"></span>
               <span *ngIf="isDestination === false" class="checkbox-label"></span>
             </mat-checkbox>
-            <mat-input-container *ngIf="isDestination === false">
+            <mat-form-field *ngIf="isDestination === false">
               <input class="filtering-field" matInput type="text" placeholder="نام تحویل گیرنده - کد ملی"
                      [formControl]="receiverSearchCtrl">
-            </mat-input-container>
+            </mat-form-field>
             <span class="style-select-warehouse" *ngIf="isDestination">
             <select class="select-style-dropDown" formControlName="toWarehouseId"
                     (change)="toWarehouseChange($event.target.value)">
@@ -112,7 +112,7 @@
             </div>
             <div *ngIf="element.is_internal">
               <mat-select class="select-label" placeholder="انتخاب ارسال کننده" [ngModel]="element.delivery_agent._id"
-                          (change)="deliveryAgentChange(element._id, $event)"
+                          (selectionChange)="deliveryAgentChange(element._id, $event)"
                           [disabled]="isSalesManager && !element.is_return">
                 <mat-option *ngFor="let dg of deliveryAgentList" [value]="dg._id">
                   {{dg.first_name}} - {{dg.surname}}

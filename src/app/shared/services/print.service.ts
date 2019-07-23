@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BrowserWindowRef} from './window.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class PrintService {

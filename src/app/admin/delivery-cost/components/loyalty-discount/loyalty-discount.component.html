@@ -2,12 +2,12 @@
 <br>
 <div>
   <form [formGroup]="discountForm" (ngSubmit)="upsertDiscount()">
-    <mat-input-container class="name-field">
+    <mat-form-field class="name-field">
       <input matInput type="text" placeholder="نام گروه" formControlName="name" readonly/>
-    </mat-input-container>
-    <mat-input-container class="score-field">
+    </mat-form-field>
+    <mat-form-field class="score-field">
       <input matInput type="number" placeholder="درصد تخفیف" formControlName="discount_percent"/>
-    </mat-input-container>
+    </mat-form-field>
     <button mat-mini-fab class="button-area" type="submit" color="primary"
             [disabled]="!discountForm.valid || !anyChanges">
       <mat-icon aria-label="done">done</mat-icon>

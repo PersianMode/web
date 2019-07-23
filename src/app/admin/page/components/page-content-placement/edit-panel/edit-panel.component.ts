@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {PlacementModifyEnum} from '../../../enum/placement.modify.type.enum';
 import {DragulaService} from 'ng2-dragula';
 import {HttpService} from '../../../../../shared/services/http.service';

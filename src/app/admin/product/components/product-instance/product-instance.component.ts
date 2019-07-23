@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IWarehouse} from '../../interfaces/iwarehouse';
 import {log} from 'util';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-product-instance',

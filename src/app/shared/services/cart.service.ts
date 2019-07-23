@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
 import {AuthService} from './auth.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {BehaviorSubject, ReplaySubject} from 'rxjs';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import {ProductService} from './product.service';
 import {getDiscounted} from '../lib/discountCalc';
 import {SpinnerService} from './spinner.service';

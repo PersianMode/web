@@ -1,5 +1,7 @@
+
+import {map} from 'rxjs/operators';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HttpService } from 'app/shared/services/http.service';
 import * as moment from 'jalali-moment';
 
@@ -27,8 +29,8 @@ export class DeliveryShowComponent implements OnInit {
     console.log('this.data', this.data);
     this.orderId = this.data.orderId;
     this.orderLineId = this.data.orderLineId;
-    this.httpService.post(`delivery/by_order`, {orderId: this.orderId, orderLineId: this.orderLineId})
-      .map(res => res[0])
+    this.httpService.post(`delivery/by_order`, {orderId: this.orderId, orderLineId: this.orderLineId}).pipe(
+      map(res => res[0]))
       .subscribe(data => {
       console.log('data-->', data);
       

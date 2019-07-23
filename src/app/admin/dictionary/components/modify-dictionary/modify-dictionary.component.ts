@@ -1,5 +1,5 @@
 import {Component, OnInit, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpService} from '../../../../shared/services/http.service';

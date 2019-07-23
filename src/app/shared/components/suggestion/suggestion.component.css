@@ -1,5 +1,4 @@
-mat-input-container {
-  width: 100%;
+mat-form-field width: 100%;
   direction: rtl;
   text-align: right;
 }

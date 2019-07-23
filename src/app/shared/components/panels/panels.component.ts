@@ -1,3 +1,7 @@
+
+import {map} from 'rxjs/operators';
+
+import {filter} from 'rxjs/operators';
 import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {WINDOW} from '../../services/window.service';
 import {AuthService} from '../../services/auth.service';
@@ -31,7 +35,7 @@ export class PanelsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pageService.placement$.filter(r => r[0] === 'main').map(r => r[1]).subscribe(
+    this.pageService.placement$.pipe(filter(r => r[0] === 'main'),map(r => r[1]),).subscribe(
       data => {
         this.placements = {};
         data

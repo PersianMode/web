@@ -1,3 +1,5 @@
+
+import {debounceTime} from 'rxjs/operators';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {TargetEnum} from '../../enum/target.enum';
@@ -43,7 +45,7 @@ export class SearchFieldsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.searchCtrl.valueChanges.debounceTime(500).subscribe(
+    this.searchCtrl.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.phrase = data.trim() !== '' ? data.trim() : null;
         this.searchOnData();

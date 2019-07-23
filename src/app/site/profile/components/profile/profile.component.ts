@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {TitleService} from '../../../../shared/services/title.service';
 import {CheckoutService} from '../../../../shared/services/checkout.service';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {HttpService} from '../../../../shared/services/http.service';
 
 @Component({

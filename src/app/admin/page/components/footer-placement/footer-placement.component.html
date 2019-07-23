@@ -4,16 +4,16 @@
     <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
       fxLayoutAlign.xs="center center" *ngIf="canEdit">
       <div fxFlex="25" class="full-width input-item">
-        <mat-input-container class="full-width input-item persian-field">
+        <mat-form-field class="full-width input-item persian-field">
           <input matInput type="text" class="input-item" placeholder="متن" [(ngModel)]="selectedTextLink.text" (ngModelChange)="checkTextchanges()"
           />
-        </mat-input-container>
+        </mat-form-field>
       </div>
       <div fxFlex="25" class="full-width input-item">
-        <mat-input-container class="full-width input-item persian-field">
+        <mat-form-field class="full-width input-item persian-field">
           <input matInput type="text" class="input-item left-text" placeholder="آدرس" [(ngModel)]="selectedTextLink.href" (ngModelChange)="checkTextchanges()"
           />
-        </mat-input-container>
+        </mat-form-field>
       </div>
       <div fxFlex="15" class="full-width input-item persian-field vertical-align-item">
         <mat-checkbox [(ngModel)]="selectedTextLink.is_header" (ngModelChange)="checkTextchanges()">
@@ -75,10 +75,10 @@
       <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign.sm="center center"
         fxLayoutAlign.xs="center center" *ngIf="canEdit">
         <div fxFlex="50" class="full-width">
-          <mat-input-container class="full-width" style="direction: ltr; float: left; text-align: left">
+          <mat-form-field class="full-width" style="direction: ltr; float: left; text-align: left">
             <input matInput type="text" placeholder="آدرس" [(ngModel)]="selectedSocialNetwork.href" (ngModelChange)="checkSocialchanges()"
             />
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div fxFlex="50" class="btn-area">
           <button mat-mini-fab color="primary" [disabled]="!selectedSocialNetwork.href || !socialAnyChanges" (click)="modifySocialNetwork()">

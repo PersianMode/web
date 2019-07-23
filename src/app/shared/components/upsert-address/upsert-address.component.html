@@ -19,31 +19,31 @@
         </mat-card-title>
         <mat-card-content>
           <div *ngIf="emailRequired">
-            <mat-input-container>
+            <mat-form-field>
               <input matInput type="text" placeholder="ایمیل" formControlName="recipient_email" autocomplete="email" dir="ltr"/>
               <mat-hint>ایمیل خود را وارد کنید.</mat-hint>
               <mat-error *ngIf="addressForm.controls['recipient_email'].hasError('required')">وارد کردن ایمیل الزامی است
               </mat-error>
-            </mat-input-container>
+            </mat-form-field>
           </div>
           <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
             <div fxFlex="40">
-              <mat-input-container>
+              <mat-form-field>
                 <input matInput type="text" placeholder="نام" formControlName="recipient_name" autocomplete="firstname"/>
                 <mat-hint>نام تحویل‌گیرنده را وارد کنید</mat-hint>
                 <mat-error *ngIf="addressForm.controls['recipient_name'].hasError('required')">وارد کردن نام تحویل
                   گیرنده الزامی است
                 </mat-error>
-              </mat-input-container>
+              </mat-form-field>
             </div>
             <div fxFlex="40">
-              <mat-input-container>
+              <mat-form-field>
                 <input matInput type="text" placeholder="نام خانوادگی" formControlName="recipient_surname" autocomplete="surname"/>
                 <mat-hint>نام خانوادگی تحویل‌گیرنده را وارد کنید</mat-hint>
                 <mat-error *ngIf="addressForm.controls['recipient_surname'].hasError('required')">وارد کردن نام
                   خانوادگی تحویل‌گیرنده الزامی است
                 </mat-error>
-              </mat-input-container>
+              </mat-form-field>
             </div>
             <div fxFlex="20" style="margin: 10px">
               <mat-radio-group formControlName="recipient_title">
@@ -58,7 +58,7 @@
           </div>
           <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
             <div fxFlex="50">
-              <mat-input-container>
+              <mat-form-field>
                 <input matInput type="text" placeholder="شماره ملی" formControlName="recipient_national_id"
                        autocomplete="national_id"/>
                 <mat-hint>کد ملی تحویل‌گیرنده را وارد کنید</mat-hint>
@@ -69,10 +69,10 @@
                   *ngIf="(addressForm.controls['recipient_national_id'].hasError('maxlength') || addressForm.controls['recipient_national_id'].hasError('pattern'))">
                   کد ملی نامعتبر است
                 </mat-error>
-              </mat-input-container>
+              </mat-form-field>
             </div>
             <div fxFlex="50">
-              <mat-input-container>
+              <mat-form-field>
                 <input matInput type="text" placeholder="شماره تماس" formControlName="recipient_mobile_no"
                        autocomplete="mobile_number"/>
                 <mat-hint>شماره تماس تحویل‌گیرنده را وارد کنید</mat-hint>
@@ -83,7 +83,7 @@
                   *ngIf="addressForm.controls['recipient_mobile_no'].hasError('pattern')">شماره تماس
                   نامعتبر است
                 </mat-error>
-              </mat-input-container>
+              </mat-form-field>
             </div>
           </div>
         </mat-card-content>
@@ -132,45 +132,45 @@
             </div>
           </div>
           <div dir="rtl" class="field-container">
-            <mat-input-container class="field">
+            <mat-form-field class="field">
                             <textarea matInput placeholder="آدرس" formControlName="district"
                                       readonly="{{addressInfo.partEdit}}" autocomplete="address_level_2"></textarea>
               <mat-hint>حداکثر از 500 حرف استفاده شود</mat-hint>
               <mat-error *ngIf="addressForm.controls['district'].hasError('maxlength')">لطفا حداکثر
                 از 500 حرف استفاده کنید
               </mat-error>
-            </mat-input-container>
+            </mat-form-field>
           </div>
           <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
             <div fxFlex="25">
-              <mat-input-container>
+              <mat-form-field>
                 <input matInput type="text" placeholder="خیابان" formControlName="street"
                        readonly="{{addressInfo.partEdit}}" autocomplete="street"/>
                 <mat-error *ngIf="addressForm.controls['street'].hasError('required')">
                   نام خیابان را وارد کنید
                 </mat-error>
-              </mat-input-container>
+              </mat-form-field>
             </div>
             <div fxFlex="25">
-              <mat-input-container>
+              <mat-form-field>
                 <input matInput type="text" placeholder="پلاک" formControlName="no"
                        readonly="{{addressInfo.partEdit}}" autocomplete="street_number"/>
                 <mat-error *ngIf="addressForm.controls['no'].hasError('required')">
                   پلاک را وارد کنید
                 </mat-error>
-              </mat-input-container>
+              </mat-form-field>
             </div>
             <div fxFlex="25">
-              <mat-input-container>
+              <mat-form-field>
                 <input matInput type="text" placeholder="واحد" formControlName="unit"
                        readonly="{{addressInfo.partEdit}}" autocomplete="unit_number"/>
-              </mat-input-container>
+              </mat-form-field>
             </div>
             <div fxFlex="25">
-              <mat-input-container>
+              <mat-form-field>
                 <input matInput type="text" placeholder="کدپستی" formControlName="postal_code"
                        readonly="{{addressInfo.partEdit}}" autocomplete="postcode"/>
-              </mat-input-container>
+              </mat-form-field>
             </div>
           </div>
           <div>

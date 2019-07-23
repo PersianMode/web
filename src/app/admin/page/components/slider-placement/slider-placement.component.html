@@ -9,17 +9,17 @@
     <div fxFlex="50" style="width: 100%">
       <div fxLayout="row" fxLayoutAlign="start start" fxLayout.sm="column" fxLayout.xs="column">
         <div fxFlex="65" style="width: 100%">
-          <mat-input-container class="input-field">
+          <mat-form-field class="input-field">
             <input matInput type="text" class="persian-field menu-field" placeholder="عنوان"
                    [(ngModel)]="upsertSlider.text"
                    (ngModelChange)="changeField()"/>
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div fxFlex="35" style="width: 100%">
-          <mat-input-container dir="ltr" class="input-field">
+          <mat-form-field dir="ltr" class="input-field">
             <input matInput type="text" class="menu-field left-text" placeholder="آدرس" [(ngModel)]="upsertSlider.href"
                    (ngModelChange)="changeField()"/>
-          </mat-input-container>
+          </mat-form-field>
         </div>
       </div>
     </div>

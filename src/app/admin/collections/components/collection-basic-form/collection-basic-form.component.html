@@ -10,24 +10,24 @@
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start"
            fxLayoutAlign.xs="center center" dir="rtl">
         <div fxFlex="33" class="field-container">
-          <mat-input-container class="field farsi">
+          <mat-form-field class="field farsi">
             <input matInput type="text" placeholder="name" formControlName="name"
                    role="colName" tabindex="2" style="direction: ltr">
             <mat-hint>نام انگلیسی کالکشن را وارد کنید</mat-hint>
             <mat-error *ngIf="collectionForm.controls['name'].hasError('required') && anyChanges">
               وارد کردن نام انگلیسی کالکشن الزامی است
             </mat-error>
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div fxFlex="33" class="field-container">
-          <mat-input-container class="field farsi">
+          <mat-form-field class="field farsi">
             <input matInput type="text" placeholder="نام" formControlName="name_fa"
                    role="colNameFa" tabindex="2" >
             <mat-hint>نام کالکشن را وارد کنید</mat-hint>
             <mat-error *ngIf="collectionForm.controls['name_fa'].hasError('required') && anyChanges">
               وارد کردن نام کالکشن الزامی است
             </mat-error>
-          </mat-input-container>
+          </mat-form-field>
         </div>
         <div fxFlex="20" role="submit-button" style="text-align: left; margin-top: 10px;">
           <button mat-icon-button type="submit"

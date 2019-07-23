@@ -1,6 +1,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {HttpService} from '../../../../../shared/services/http.service';
-import {MatSnackBar, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-upload-image-dialog',

@@ -1,7 +1,8 @@
 import {Component, Input, OnDestroy, OnInit, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {isUndefined} from 'util';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {HttpService} from '../../../../shared/services/http.service';
 import {ActivatedRoute} from '@angular/router';
 import {Router} from '@angular/router';

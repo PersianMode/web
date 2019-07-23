@@ -1,5 +1,9 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {HttpService} from '../../../../shared/services/http.service';
 import {SocketService} from '../../../../shared/services/socket.service';
 import {OrderAddressComponent} from '../order-address/order-address.component';

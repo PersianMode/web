@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {WINDOW} from '../../../../shared/services/window.service';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {LoginStatus} from '../../login-status.enum';

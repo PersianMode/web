@@ -1,7 +1,8 @@
 import {Component, OnInit, Inject, Input, Output, EventEmitter} from '@angular/core';
 import {HttpService} from 'app/shared/services/http.service';
 import {Location} from '@angular/common';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {ResponsiveService} from '../../../../shared/services/responsive.service';
 import {ProfileOrderService} from 'app/shared/services/profile-order.service';

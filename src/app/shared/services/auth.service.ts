@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 import {HttpService} from './http.service';
 import {Router} from '@angular/router';
 import {SocketService} from './socket.service';

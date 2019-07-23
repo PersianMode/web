@@ -2,11 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpService} from './http.service';
 // import {ReplaySubject} from 'rxjs/ReplaySubject';
 // import {IPageInfo} from '../../admin/page/interfaces/IPageInfo.interface';
-import {Subject} from 'rxjs/Subject';
+import {Subject, ReplaySubject} from 'rxjs';
 import {AuthService} from './auth.service';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
 
 const defaultComponents = ['menu', 'slider', 'logos', 'footer'];
 

@@ -1,4 +1,4 @@
-<mat-input-container class="field" style="direction: ltr;">
+<mat-form-field class="field" style="direction: ltr;">
   <input matInput type="text" placeholder="{{placeholder}}" [matAutocomplete]="auto" [formControl]="suggestionCtrl" [style.direction]="textDirection"
     [style.text-align]="textDirection === 'ltr' ? 'left' : 'right'" />
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addItem($event)">
@@ -20,4 +20,4 @@
       </span>
     </mat-option>
   </mat-autocomplete>
-</mat-input-container>
+</mat-form-field>

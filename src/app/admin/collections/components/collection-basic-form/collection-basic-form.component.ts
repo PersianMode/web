@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../../../../shared/services/http.service';
 import { isUndefined } from 'util';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProgressService } from '../../../../shared/services/progress.service';
 
 @Component({

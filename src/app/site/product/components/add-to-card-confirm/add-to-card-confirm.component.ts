@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { priceFormatter } from '../../../../shared/lib/priceFormatter';
 import { CartService } from '../../../../shared/services/cart.service';
 import { Router } from '@angular/router';

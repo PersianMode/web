@@ -1,12 +1,12 @@
 <mat-card class="card-container">
   <div>
     <form [formGroup]="lgForm" (ngSubmit)="upsertGroup()">
-      <mat-input-container class="name-field">
+      <mat-form-field class="name-field">
         <input matInput type="text" placeholder="نام گروه" formControlName="name" />
-      </mat-input-container>
-      <mat-input-container class="score-field">
+      </mat-form-field>
+      <mat-form-field class="score-field">
         <input matInput type="number" placeholder="حداقل امتیاز" formControlName="min_score" />
-      </mat-input-container>
+      </mat-form-field>
       <button mat-mini-fab class="button-area" type="submit" color="primary" [disabled]="!lgForm.valid || !anyChanges">
         <mat-icon aria-label="done" *ngIf="selectedGroup">done</mat-icon>
         <mat-icon aria-label="add" *ngIf="!selectedGroup">add</mat-icon>

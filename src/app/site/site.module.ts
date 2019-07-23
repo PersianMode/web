@@ -6,26 +6,25 @@ import {HeaderComponent} from '../shared/components/header/header.component';
 import {CollectionHeaderComponent} from '../shared/components/collection-header/collection-header.component';
 import {SlidingHeaderComponent} from '../shared/components/sliding-header/sliding-header.component';
 import {MobileHeaderComponent} from '../shared/components/mobile-header/mobile-header.component';
-import {
-  MatButtonModule,
-  MatDialogModule,
-  MatIconModule,
-  MatSidenavModule,
-  MatToolbarModule,
-  MatCardModule,
-  MatFormFieldModule,
-  MatMenuModule,
-  MatInputModule,
-  MatOptionModule,
-  MatAutocompleteModule,
-  MatCheckboxModule,
-  MatStepperModule, MatRadioModule,
-  MatSnackBarModule,
-  MatProgressSpinnerModule,
-  MatListModule,
-  MatSliderModule,
-  MatTooltipModule
-} from '@angular/material';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {AgmCoreModule} from '@agm/core';
 import {FooterComponent} from '../shared/components/footer/footer.component';
 import {FlexLayoutModule} from '@angular/flex-layout';

@@ -2,12 +2,11 @@ import {Injectable} from '@angular/core';
 import {IAddressInfo} from '../interfaces/iaddressInfo.interface';
 import {HttpService} from './http.service';
 import {CartService} from './cart.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject, ReplaySubject} from 'rxjs';
 import {PaymentType} from '../enum/payment.type.enum';
 import {AuthService} from './auth.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
-import {ReplaySubject} from 'rxjs/Rx';
 
 @Injectable()
 export class CheckoutService {

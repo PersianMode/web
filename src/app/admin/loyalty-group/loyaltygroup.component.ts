@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {HttpService} from '../../shared/services/http.service';
 import {ProgressService} from '../../shared/services/progress.service';
-import {MatSnackBar, MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 import {priceFormatter} from '../../shared/lib/priceFormatter';
 

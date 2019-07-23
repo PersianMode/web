@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {DragulaService} from 'ng2-dragula';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {HttpService} from '../../shared/services/http.service';
 import {ProgressService} from '../../shared/services/progress.service';
-import {MatSnackBar, MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({

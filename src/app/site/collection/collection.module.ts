@@ -9,11 +9,12 @@ import {ProductGridItemComponent} from '../../shared/components/product-grid-ite
 import {SharedModule} from '../../shared/shared.module';
 import {VirtualScrollerModule} from 'primeng/virtualscroller';
 import {SidebarModule} from 'primeng/sidebar';
-import {
-  MatButtonModule, MatButtonToggleModule, MatCheckboxModule, MatExpansionModule,
-  MatTooltipModule,
-  MatProgressSpinnerModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {FormsModule} from '@angular/forms';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {SliderModule} from 'primeng/slider';

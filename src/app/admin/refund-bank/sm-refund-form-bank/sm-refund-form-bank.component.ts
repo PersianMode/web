@@ -1,6 +1,7 @@
 import {Component, OnInit, EventEmitter, Input, Output, Inject} from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef, MatSnackBar} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {HttpService} from '../../../shared/services/http.service';
 
 @Component({

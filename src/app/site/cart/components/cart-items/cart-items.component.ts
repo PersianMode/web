@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 import {EditOrderComponent} from '../edit-order/edit-order.component';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {AuthService} from '../../../../shared/services/auth.service';
 

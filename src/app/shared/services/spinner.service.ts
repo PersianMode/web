@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
+import {BehaviorSubject, ReplaySubject} from 'rxjs';
 
 @Injectable()
 export class SpinnerService {

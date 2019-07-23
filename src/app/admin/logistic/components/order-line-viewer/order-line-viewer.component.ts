@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
 

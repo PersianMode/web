@@ -6,9 +6,9 @@ import {isUndefined} from 'util';
 import {HttpService} from '../../../../shared/services/http.service';
 
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {ProgressService} from '../../../../shared/services/progress.service';
 
 @Component({

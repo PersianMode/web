@@ -4,7 +4,7 @@ import {AuthService} from '../../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {AccessLevel} from '../../../../shared/enum/accessLevel.enum';
 import {ProgressService} from '../../../../shared/services/progress.service';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {TitleService} from '../../../../shared/services/title.service';
 
 @Component({

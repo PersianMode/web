@@ -6,7 +6,7 @@ import {priceFormatter} from '../../shared/lib/priceFormatter';
 import {GenDialogComponent} from '../../shared/components/gen-dialog/gen-dialog.component';
 import {Router} from '@angular/router';
 import {DialogEnum} from '../../shared/enum/dialog.components.enum';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import {TitleService} from '../../shared/services/title.service';
 import {ProductService} from '../../shared/services/product.service';
 import {CheckoutService} from '../../shared/services/checkout.service';

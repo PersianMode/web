@@ -18,11 +18,11 @@
           </mat-select>
         </div>
         <div>
-          <mat-input-container class="persian-field full-width" dir="ltr">
+          <mat-form-field class="persian-field full-width" dir="ltr">
             <input matInput type="text" placeholder="آدرس" [(ngModel)]="urlAddress" (ngModelChange)="changeField()"
                    style="text-align: left;"
             />
-          </mat-input-container>
+          </mat-form-field>
         </div>
       </div>
       <div fxFlex="70">
@@ -46,10 +46,10 @@
           </div>
           <div fxFlex="70" *ngIf="hasTopTitle">
             <div>
-              <mat-input-container class="text-field persian-field">
+              <mat-form-field class="text-field persian-field">
                 <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="topTitle.title"
                        (ngModelChange)="changeField()"/>
-              </mat-input-container>
+              </mat-form-field>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="topTitle.titleColor"></p-colorPicker>
                 <label>رنگ متن</label>
@@ -59,10 +59,10 @@
               </div>
             </div>
             <div>
-              <mat-input-container class="text-field persian-field">
+              <mat-form-field class="text-field persian-field">
                 <input matInput type="text" placeholder="متن زیر عنوان" [(ngModel)]="topTitle.text"
                        (ngModelChange)="changeField()"/>
-              </mat-input-container>
+              </mat-form-field>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="topTitle.textColor"></p-colorPicker>
                 <label>رنگ متن</label>
@@ -86,10 +86,10 @@
           </div>
           <div fxFlex="70" *ngIf="hasSubTitle">
             <div>
-              <mat-input-container class="text-field persian-field">
+              <mat-form-field class="text-field persian-field">
                 <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="subTitle.title"
                        (ngModelChange)="changeField()"/>
-              </mat-input-container>
+              </mat-form-field>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="subTitle.titleColor"></p-colorPicker>
                 <label>رنگ متن</label>
@@ -99,10 +99,10 @@
               </div>
             </div>
             <div>
-              <mat-input-container class="text-field persian-field">
+              <mat-form-field class="text-field persian-field">
                 <input matInput type="text" placeholder="متن زیر عنوان" [(ngModel)]="subTitle.text"
                        (ngModelChange)="changeField()"/>
-              </mat-input-container>
+              </mat-form-field>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="subTitle.textColor"></p-colorPicker>
                 <label>رنگ متن</label>
@@ -139,16 +139,16 @@
         </div>
         <div fxFlex="70" *ngIf="selectedArea.pos">
           <div *ngIf="selectedArea.pos.includes('margin');else area">
-            <mat-input-container>
+            <mat-form-field>
               <input matInput type="number" placeholder="Pixels" [(ngModel)]="selectedArea.title" (ngModelChange)="changedArea()"/>
-            </mat-input-container>
+            </mat-form-field>
           </div>
           <ng-template #area>
             <div>
-              <mat-input-container class="text-field persian-field">
+              <mat-form-field class="text-field persian-field">
                 <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="selectedArea.title"
                        (ngModelChange)="changedArea()"/>
-              </mat-input-container>
+              </mat-form-field>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="selectedArea.titleColor" (ngModelChange)="changedArea()"></p-colorPicker>
                 <label>رنگ متن</label>
@@ -158,10 +158,10 @@
               </div>
             </div>
             <div>
-              <mat-input-container class="text-field persian-field">
+              <mat-form-field class="text-field persian-field">
                 <input matInput type="text" placeholder="متن زیر عنوان" [(ngModel)]="selectedArea.text"
                        (ngModelChange)="changedArea()"/>
-              </mat-input-container>
+              </mat-form-field>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="selectedArea.textColor" (ngModelChange)="changedArea()"></p-colorPicker>
                 <label>رنگ متن</label>
@@ -171,11 +171,11 @@
               </div>
             </div>
             <div>
-              <mat-input-container class="text-field persian-field">
+              <mat-form-field class="text-field persian-field">
                 <input matInput type="text" placeholder="متن دکمه" [(ngModel)]="selectedArea.buttonText"
                        (ngModelChange)="changedArea()"
                 />
-              </mat-input-container>
+              </mat-form-field>
               <div class="color-field">
                 <p-colorPicker [(ngModel)]="selectedArea.buttonColor" (ngModelChange)="changedArea()"></p-colorPicker>
                 <label>رنگ متن</label>

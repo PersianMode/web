@@ -1,6 +1,9 @@
 import {Component, OnInit, Inject, ViewChild} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {MatPaginator, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'jalali-moment';
 import {HttpService} from '../../../../shared/services/http.service';
 import {OrderLineStatuses, OrderStatuses} from '../../../../shared/lib/status';

@@ -2,7 +2,8 @@ import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/c
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
-import {MatDialogRef, MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';

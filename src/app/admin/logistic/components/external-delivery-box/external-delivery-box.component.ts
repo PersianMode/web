@@ -1,5 +1,9 @@
 import {Component, OnInit, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter, Input} from '@angular/core';
-import {MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
 import {OrderAddressComponent} from '../order-address/order-address.component';

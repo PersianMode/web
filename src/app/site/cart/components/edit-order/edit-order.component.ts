@@ -1,5 +1,5 @@
 import {Component, Inject, Input, EventEmitter, OnInit, Output} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {AuthService} from '../../../../shared/services/auth.service';

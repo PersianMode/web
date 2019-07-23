@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {MatTableDataSource, MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import * as moment from 'jalali-moment';
 
 import {HttpService} from '../../shared/services/http.service';

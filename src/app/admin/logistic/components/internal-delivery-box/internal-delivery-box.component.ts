@@ -1,5 +1,9 @@
 import {Component, OnInit, Output, EventEmitter, AfterViewInit, OnDestroy, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatSort, MatPaginator, MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {HttpService} from 'app/shared/services/http.service';
 import {SocketService} from 'app/shared/services/socket.service';
 import {ProgressService} from 'app/shared/services/progress.service';

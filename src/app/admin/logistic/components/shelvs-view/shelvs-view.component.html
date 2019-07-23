@@ -4,17 +4,17 @@
   <div class="search-area">
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
       <div fxFlex="50" class="filtering-box">
-        <mat-input-container class="filtering-field">
+        <mat-form-field class="filtering-field">
           <input class="filtering-field" matInput type="text" placeholder="تحویل گیرنده: انبار - مشتری"
                  [formControl]="transfereeCtrl">
-        </mat-input-container>
+        </mat-form-field>
       </div>
       <div fxFlex="50" class="filtering-box">
-        <mat-input-container class="filtering-field">
+        <mat-form-field class="filtering-field">
           <input matInput placeholder="کد قفسه" aria-label="shelf-code"
                  [formControl]="shelfCodeCtrl">
 
-        </mat-input-container>
+        </mat-form-field>
       </div>
     </div>
   </div>

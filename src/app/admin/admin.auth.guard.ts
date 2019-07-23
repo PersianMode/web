@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {AuthService} from '../shared/services/auth.service';
 import {AccessLevel} from '../shared/enum/accessLevel.enum';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {links} from '../shared/lib/links';
 
 @Injectable()
