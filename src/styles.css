@@ -596,16 +596,20 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .mat-button-toggle-label-content {
-  width: 69px!important;
-  font-size: 17px!important;
+  font-size: 17px !important;
   border: 1px solid #eee;
   border-radius: 4px;
   margin: 3.5px;
   padding: 0 !important;
-  line-height: 48px !important;
   font-weight: 100;
   text-align: center;
   color: black;
+}
+@media (min-width: 600px) {
+  .mat-button-toggle-label-content {
+    width: 69px !important;
+    line-height: 48px !important;
+  }
 }
 .mat-button-toggle-checked {
   color: unset;
@@ -818,11 +822,8 @@ mat-panel-title {
 
 @media (max-width: 600px) {
   .mat-button-toggle-label-content {
-    width: 50px;
-    padding: 4px 0 !important;
-    text-align: center;
-    border: 1px rgba(221, 221, 221, .7) solid;
-    color: black;
+    width: 55px !important;
+    line-height: 40px !important;
   }
 
   .ui-slider {
