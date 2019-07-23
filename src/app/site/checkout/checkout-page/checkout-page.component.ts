@@ -76,7 +76,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
               private productService: ProductService) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.isDev = this.httpService.isInDevMode();
     this.titleService.setTitleWithConstant('پرداخت هزینه');
     this.checkoutService.dataIsReady.subscribe(
@@ -110,10 +110,10 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.disabled = !(r && (!this.soldOuts || !this.soldOuts.length));
     });
 
-    this.setPoints();
+    await this.setPoints();
     this.calculateEarnPoint();
-    this.authService.isLoggedIn.subscribe(res => {
-      this.setPoints();
+    this.authService.isLoggedIn.subscribe(async res => {
+      await this.setPoints();
       this.calculateEarnPoint();
     });
 
@@ -122,6 +122,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
     if (this.checkoutService.deliveryDurationId)
       this.calculateDiscount(this.checkoutService.deliveryDurationId);
+
+    await this.changePaymentType(this.selectedPaymentType);
   }
 
   loadAndFillProductsAndPrice(carts, data) {
@@ -176,8 +178,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  setPoints() {
-    this.checkoutService.getLoyaltyBalance()
+  async setPoints() {
+    await this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = res.balance;
         this.loyaltyPoint = res.loyaltyPointValue;
@@ -203,7 +205,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.cartItems$.unsubscribe();
   }
 
-  changePaymentType(data) {
+  async changePaymentType(data) {
+    await this.setPoints();
     this.usedBalance = 0;
     this.usedLoyaltyPoint = 0;
     this.selectedPaymentType = data;

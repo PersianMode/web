@@ -18,9 +18,12 @@ export class PaymentTypeComponent implements OnInit {
     if (value && value > 0) {
       this.paymentTypes.find(el => el.value === this.paymentType.balance).disabled = false;
       this.paymentTypes.find(el => el.value === this.paymentType.balance).amount = value;
+      this.selectedPaymentType = this.paymentTypes[1].value;
+      this.paymentTypeChanged();
     } else {
       this.paymentTypes.find(el => el.value === this.paymentType.balance).disabled = true;
       this.paymentTypes.find(el => el.value === this.paymentType.balance).amount = 0;
+      this.selectedPaymentType = this.paymentTypes[0].value;
     }
   }
 
@@ -55,7 +58,7 @@ export class PaymentTypeComponent implements OnInit {
       amount: null,
     },
     {
-      name: 'موجودی',
+      name: ' کسر از موجودی',
       value: this.paymentType.balance,
       disabled: true,
       amount: 0,
@@ -67,14 +70,13 @@ export class PaymentTypeComponent implements OnInit {
     //   amount: 0,
     // }
   ];
-  selectedPaymentType: any = this.paymentTypes[0].value;
-  
+  // selectedPaymentType: any = this.paymentTypes[0].value;
+  selectedPaymentType: any = null;
 
   constructor() {
   }
 
   ngOnInit() {
-    // this.selectedType.emit(this.selectedPaymentType);
   }
 
   paymentTypeChanged() {
