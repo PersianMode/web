@@ -68,6 +68,7 @@ export class PaymentTypeComponent implements OnInit {
     // }
   ];
   selectedPaymentType: any = this.paymentTypes[0].value;
+  
 
   constructor() {
   }
