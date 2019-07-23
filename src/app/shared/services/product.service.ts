@@ -53,6 +53,21 @@ const cleanProductsList = function (data: any[]) {
   return data.filter(p => p.instances.length && p.colors.length);
 };
 
+class CollectionCache {
+  private _coll_cache = {};
+
+  add(collectionId, data) {
+    this._coll_cache[collectionId] = data;
+    setTimeout(() => delete this._coll_cache[collectionId], 300000); // delete cache after 5 mins
+  }
+
+  read(collectionId) {
+    return this._coll_cache[collectionId];
+  }
+}
+
+const cache = new CollectionCache();
+
 @Injectable()
 export class ProductService {
   private collectionName: string;
@@ -387,35 +402,44 @@ export class ProductService {
   loadCollectionProducts(collection_id, sortInput = null) {
     this.spinnerService.enable();
     this.sortInput = sortInput;
-    this.httpService.get('collection/product/' + collection_id)
-      .subscribe(
-        (data) => {
-          if (data.name_fa) {
-            this.collectionName = data.name_fa;
-            this.collectionNameFa$.next(data.name_fa);
-            this.tag$.next(data.tags);
-            this.type$.next(data.types);
+    const cacheRead = cache.read(collection_id);
 
-          }
-          if (data.products) {
-            for (const product of data.products) {
-              this.enrichProductData(product);
-            }
-            this.collectionId = collection_id;
-            this.products = data.products;
-            this.filteredProducts = this.products.slice();
+    const handleCollectionData = data => {
+      if (!cacheRead) {
+        cache.add(collection_id, data);
+      }
+      if (data.name_fa) {
+        this.collectionName = data.name_fa;
+        this.collectionNameFa$.next(data.name_fa);
+        this.tag$.next(data.tags);
+        this.type$.next(data.types);
 
-            this.sortProductsAndEmit();
-            this.extractFilters([], '', true);
-          }
-          this.spinnerService.disable();
-
-        },
-        (err) => {
-          this.spinnerService.disable();
-          console.error('Cannot get products of collection: ', err);
+      }
+      if (data.products) {
+        for (const product of data.products) {
+          this.enrichProductData(product);
         }
-      );
+        this.collectionId = collection_id;
+        this.products = data.products;
+        this.filteredProducts = this.products.slice();
+
+        this.sortProductsAndEmit();
+        this.extractFilters([], '', true);
+      }
+      this.spinnerService.disable();
+    };
+
+    if (cacheRead) {
+      handleCollectionData(cacheRead);
+    } else {
+      this.httpService.get('collection/product/' + collection_id)
+        .subscribe(handleCollectionData,
+          (err) => {
+            this.spinnerService.disable();
+            console.error('Cannot get products of collection: ', err);
+          }
+        );
+    }
   }
 
   setSort(sortInput) {
