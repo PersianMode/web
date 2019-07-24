@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {MarkdownModule} from 'angular2-markdown';
+import {NgxMdModule} from 'ngx-md';
 import { ProductComponent } from './components/product/product.component';
 import { MobileProductComponent } from './components/mobile-product/mobile-product.component';
 import { SwiperModule } from 'ngx-swiper-wrapper';
@@ -33,7 +33,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     MatButtonToggleModule,
     MatIconModule,
     MatTooltipModule,
-    MarkdownModule,
+    NgxMdModule.forRoot(),
     MatExpansionModule,
     SwiperModule,
     MatDialogModule,

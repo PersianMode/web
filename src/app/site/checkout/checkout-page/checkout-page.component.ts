@@ -23,18 +23,18 @@ import {FREE_DELIVERY_AMOUNT} from 'app/shared/enum/delivery.enum';
   styleUrls: ['./checkout-page.component.css']
 })
 export class CheckoutPageComponent implements OnInit, OnDestroy {
-  @ViewChild('bankDataFormId') bankDataFormId: ElementRef;
-  @ViewChild('invoiceNumber') invoiceNumber: ElementRef;
-  @ViewChild('invoiceDate') invoiceDate: ElementRef;
-  @ViewChild('amount') amount: ElementRef;
-  @ViewChild('terminalCode') terminalCode: ElementRef;
-  @ViewChild('merchantCode') merchantCode: ElementRef;
-  @ViewChild('redirectAddress') redirectAddress: ElementRef;
-  @ViewChild('timeStamp') timeStamp: ElementRef;
-  @ViewChild('action') action: ElementRef;
-  @ViewChild('mobile') mobile: ElementRef;
-  @ViewChild('email') email: ElementRef;
-  @ViewChild('sign') sign: ElementRef;
+  @ViewChild('bankDataFormId', { static: true }) bankDataFormId: ElementRef;
+  @ViewChild('invoiceNumber', { static: true }) invoiceNumber: ElementRef;
+  @ViewChild('invoiceDate', { static: true }) invoiceDate: ElementRef;
+  @ViewChild('amount', { static: true }) amount: ElementRef;
+  @ViewChild('terminalCode', { static: true }) terminalCode: ElementRef;
+  @ViewChild('merchantCode', { static: true }) merchantCode: ElementRef;
+  @ViewChild('redirectAddress', { static: true }) redirectAddress: ElementRef;
+  @ViewChild('timeStamp', { static: true }) timeStamp: ElementRef;
+  @ViewChild('action', { static: true }) action: ElementRef;
+  @ViewChild('mobile', { static: true }) mobile: ElementRef;
+  @ViewChild('email', { static: true }) email: ElementRef;
+  @ViewChild('sign', { static: true }) sign: ElementRef;
 
   total = 0;
   discount = 0;

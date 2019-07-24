@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {AuthService} from '../shared/services/auth.service';
 import {Observable} from 'rxjs';
-import {links} from '../shared/lib/links';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -24,15 +24,14 @@ export class AuthGuard implements CanActivate {
     //   });
     this.authService.checkValidation(state.url);
 
-    return this.authService.isLoggedIn
-      .filter(x => x)
-      .map(r => {
+    return this.authService.isLoggedIn.pipe(
+      map(r => {
         if (!r.username) {
           this.router.navigate(['/']);
           // this.forbiddenStack.push({path: route.url.map(u => u.path), time: new Date()});
           return false;
         } else
           return true;
-      });
+      }));
   }
 }

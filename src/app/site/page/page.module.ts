@@ -4,7 +4,7 @@ import { PageComponent } from './components/page/page.component';
 import {PageRouting} from './page.routing';
 import { MatCardModule } from '@angular/material/card';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MarkdownModule} from 'angular2-markdown';
+import {NgxMdModule} from 'ngx-md';
 import {SharedModule} from '../../shared/shared.module';
 
 
@@ -13,7 +13,7 @@ import {SharedModule} from '../../shared/shared.module';
     PageRouting,
     MatCardModule,
     FlexLayoutModule,
-    MarkdownModule.forRoot(),
+    NgxMdModule.forRoot(),
     CommonModule,
     SharedModule,
   ],

@@ -15,6 +15,7 @@ import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-d
 import {AuthService} from '../../../../shared/services/auth.service';
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {TitleService} from '../../../../shared/services/title.service';
+import {filter} from 'rxjs/operators';
 
 
 @Component({
@@ -131,7 +132,8 @@ export class ProductComponent implements OnInit, OnDestroy {
 
       this.cartService.addItem(object);
       this.waiting = true;
-      const sub = this.cartService.itemAdded$.filter(r => r === true)
+      const sub = this.cartService.itemAdded$
+        .pipe(filter(r => r === true))
         .subscribe(() => {
           this.waiting = false;
           const rmDialog = this.dialog.open(AddToCardConfirmComponent, {

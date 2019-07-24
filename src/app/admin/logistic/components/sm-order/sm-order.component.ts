@@ -16,6 +16,7 @@ import {trigger, state, style, animate, transition} from '@angular/animations';
 import {FormControl} from '@angular/forms';
 import {ORDER_STATUS, ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
 import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
+import {debounceTime} from 'rxjs/operators';
 
 @Component({
   selector: 'app-sm-order',
@@ -47,8 +48,8 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   pageSize = 10;
   total;
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
 
   expandedElement: any;
@@ -76,7 +77,7 @@ export class SmOrderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // set status
     this.listStatus = this.listStatus.concat(OrderStatuses.map(el => ({name: el.name, status: el.status})));
-    this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
+    this.receiverSearchCtrl.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.receiver = data.trim() !== '' ? data.trim() : null;
         this.load();
@@ -85,7 +86,7 @@ export class SmOrderComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.transIdCtrl.valueChanges.debounceTime(500).subscribe(
+    this.transIdCtrl.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.transId = data.trim() !== '' ? data.trim() : null;
         this.load();
@@ -94,7 +95,7 @@ export class SmOrderComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.statusSearchCtrl.valueChanges.debounceTime(500).subscribe(
+    this.statusSearchCtrl.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.status = data;
         this.load();

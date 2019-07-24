@@ -15,7 +15,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
-import {MarkdownModule} from 'angular2-markdown';
+import {NgxMdModule} from 'ngx-md';
 import {AppTrackListComponent} from './app-tracklist.component';
 import {AppTrackListRouting} from './app-tracklist.routing';
 import { UploadTrackComponent } from './component/upload-track/upload-track.component';
@@ -48,7 +48,7 @@ import { DragulaModule } from 'ng2-dragula/ng2-dragula';
     MatTabsModule,
     MatCheckboxModule,
     SharedModule,
-    MarkdownModule.forRoot(),
+    NgxMdModule.forRoot(),
     DragulaModule,
     MatTableModule
   ],

@@ -18,6 +18,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {FooterComponent} from './footer/footer.component';
 import {HeaderComponent} from './header/header.component';
 import {AdminAuthGuard} from './admin.auth.guard';
+import {debounceTime, filter} from 'rxjs/operators';
 
 
 @NgModule({

@@ -9,6 +9,7 @@ import {DictionaryService} from '../../services/dictionary.service';
 import {HttpService} from '../../services/http.service';
 import {AuthService} from '../../services/auth.service';
 import {sizeSorter} from '../../lib/sizeSorter';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-size-picker',
@@ -38,15 +39,17 @@ export class SizePickerComponent implements OnInit {
       let i = 0;
       const interval = setInterval(() => {
         this._rb = !this._rb;
-        if (i ++ > 4) {
+        if (i++ > 4) {
           clearInterval(interval);
         }
       }, 200);
     }
   }
+
   get redBorder() {
     return this._rb;
   }
+
   isShoes = false;
   isEU = true;
   productSize;
@@ -74,10 +77,12 @@ export class SizePickerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.auth.isLoggedIn.filter(r => r).subscribe(() => {
-      this.isEU = this.auth.userDetails.shoesType !== 'US';
-      this.changeSizeType(false);
-    });
+    this.auth.isLoggedIn
+      .pipe(filter(r => r))
+      .subscribe(() => {
+        this.isEU = this.auth.userDetails.shoesType !== 'US';
+        this.changeSizeType(false);
+      });
   }
 
   onChange(e) {

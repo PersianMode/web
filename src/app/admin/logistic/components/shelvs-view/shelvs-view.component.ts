@@ -8,7 +8,7 @@ import {trigger, state, style, animate, transition} from '@angular/animations';
 import * as moment from 'jalali-moment';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {startWith, map} from 'rxjs/operators';
+import {startWith, map, debounceTime} from 'rxjs/operators';
 import {imagePathFixer} from 'app/shared/lib/imagePathFixer';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -31,8 +31,8 @@ import {OrderLineViewerComponent} from '../order-line-viewer/order-line-viewer.c
 
 export class ShelvsViewComponent implements OnInit {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Output() OnNewInboxCount = new EventEmitter();
 
   displayedColumns = ['position', 'shelf_code', 'status', 'category'];
@@ -64,7 +64,7 @@ export class ShelvsViewComponent implements OnInit {
   ngOnInit() {
     this.load();
 
-    this.transfereeCtrl.valueChanges.debounceTime(500).subscribe(
+    this.transfereeCtrl.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.transferee = data.trim() !== '' ? data.trim() : null;
         this.load();
@@ -73,7 +73,7 @@ export class ShelvsViewComponent implements OnInit {
       }
     );
 
-    this.shelfCodeCtrl.valueChanges.debounceTime(500).subscribe(
+    this.shelfCodeCtrl.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.shelfCodes = data.trim() !== '' ? data.trim() : null;
         this.load();

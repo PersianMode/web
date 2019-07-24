@@ -17,9 +17,9 @@ import {ProgressService} from '../../../../shared/services/progress.service';
   styleUrls: ['./basic-info.component.css']
 })
 export class BasicInfoComponent implements OnInit {
-  @ViewChild('old_pass') oldPass: ElementRef;
-  @ViewChild('new_pass') newPass: ElementRef;
-  @ViewChild('retype_pass') retypePass: ElementRef;
+  @ViewChild('old_pass', { static: false }) oldPass: ElementRef;
+  @ViewChild('new_pass', { static: false }) newPass: ElementRef;
+  @ViewChild('retype_pass', { static: false }) retypePass: ElementRef;
   @Input() isEdit = false;
   @Output('formTitle') formTitle = new EventEmitter();
   isChangePass = false;

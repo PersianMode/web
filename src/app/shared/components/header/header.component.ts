@@ -1,5 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {DialogEnum} from '../../enum/dialog.components.enum';
@@ -9,6 +9,7 @@ import {WINDOW} from '../../services/window.service';
 import {CartService} from '../../services/cart.service';
 import {CheckoutService} from '../../services/checkout.service'
 import {LoginStatus} from '../../../site/login/login-status.enum';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -56,9 +57,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.cartNumbers = '';
         }
       });
-    this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
-      this.logos = data && data.length ? data.sort((x, y) => x.info.column - y.info.column) : [];
-    });
+    this.pageService.placement$
+      .pipe(filter(r => r[0] === 'logos'))
+      .pipe(map(r => r[1]))
+      .subscribe(data => {
+        this.logos = data && data.length ? data.sort((x, y) => x.info.column - y.info.column) : [];
+      });
     this.display_name = this.authService.userDetails.displayName;
   }
 
@@ -90,7 +94,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
-    this.CheckoutService.ccRecipientData=null;
+    this.CheckoutService.ccRecipientData = null;
 
   }
 

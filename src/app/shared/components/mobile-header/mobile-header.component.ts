@@ -8,6 +8,7 @@ import {DictionaryService} from '../../services/dictionary.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
 import {ResponsiveService} from '../../services/responsive.service';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-mobile-header',
@@ -15,7 +16,7 @@ import {ResponsiveService} from '../../services/responsive.service';
   styleUrls: ['./mobile-header.component.css']
 })
 export class MobileHeaderComponent implements OnInit, OnDestroy {
-  @ViewChild('sidenav') sideNav;
+  @ViewChild('sidenav', {static: true}) sideNav;
   @Input() menuWidth = 100;
   @Input() menuHeight = 100;
 
@@ -71,7 +72,9 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
           this.cartNumbers = '';
       }
     );
-    this.pageService.placement$.filter(r => r[0] === 'menu').map(r => r[1]).subscribe(
+    this.pageService.placement$
+      .pipe(filter(r => r[0] === 'menu'))
+      .pipe(map(r => r[1])).subscribe(
       data => {
         this.menuItems = {};
         const sectionMenu = {};

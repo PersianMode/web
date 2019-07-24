@@ -7,11 +7,12 @@ import {DictionaryService} from '../../services/dictionary.service';
 import {GenDialogComponent} from '../gen-dialog/gen-dialog.component';
 import {LoginStatus} from '../../../site/login/login-status.enum';
 import {DialogEnum} from '../../enum/dialog.components.enum';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../services/auth.service';
 import {CheckoutService} from '../../services/checkout.service';
 import {WINDOW} from '../../services/window.service';
 import {CartService} from '../../services/cart.service';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-collection-header',
@@ -56,38 +57,41 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pageService.placement$.filter(r => r[0] === 'menu').map(r => r[1]).subscribe(
-      data => {
-        this.topMenu = data.filter(r => r.variable_name === 'topMenu');
-        this.topMenu
-          .sort((x, y) => x.info.column - y.info.column)
-          .forEach(r => {
-            r.routerLink = ['/'].concat(r.info.href.split('/'));
-            r.type = r.info.section ? r.info.section : r.routerLink[2];
-          });
-        const subMenu = data.filter(r => r.variable_name === 'subMenu');
-        const sections = Array.from(new Set(subMenu.map(r => r.info.section)));
-        this.placements = {};
-        sections.forEach(s => {
-          subMenu
-            .filter(r => r.info.section === s)
-            .sort((x, y) => (x.info.column * 100 + x.info.row) - (y.info.column * 100 + y.info.row))
+    this.pageService.placement$
+      .pipe(filter(r => r[0] === 'menu'))
+      .pipe(map(r => r[1]))
+      .subscribe(
+        data => {
+          this.topMenu = data.filter(r => r.variable_name === 'topMenu');
+          this.topMenu
+            .sort((x, y) => x.info.column - y.info.column)
             .forEach(r => {
-              const path = r.info.section.split('/');
-              r.info.routerLink = ['/'].concat(r.info.href.split('/'));
-              if (!this.placements[path[0] + 'Menu']) {
-                this.placements[path[0] + 'Menu'] = {};
-              }
-              if (!this.placements[path[0] + 'Menu'][path[1] + 'List']) {
-                this.placements[path[0] + 'Menu'][path[1] + 'List'] = {};
-              }
-              if (!this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column])
-                this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column] = [];
-
-              this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column].push(r.info);
+              r.routerLink = ['/'].concat(r.info.href.split('/'));
+              r.type = r.info.section ? r.info.section : r.routerLink[2];
             });
+          const subMenu = data.filter(r => r.variable_name === 'subMenu');
+          const sections = Array.from(new Set(subMenu.map(r => r.info.section)));
+          this.placements = {};
+          sections.forEach(s => {
+            subMenu
+              .filter(r => r.info.section === s)
+              .sort((x, y) => (x.info.column * 100 + x.info.row) - (y.info.column * 100 + y.info.row))
+              .forEach(r => {
+                const path = r.info.section.split('/');
+                r.info.routerLink = ['/'].concat(r.info.href.split('/'));
+                if (!this.placements[path[0] + 'Menu']) {
+                  this.placements[path[0] + 'Menu'] = {};
+                }
+                if (!this.placements[path[0] + 'Menu'][path[1] + 'List']) {
+                  this.placements[path[0] + 'Menu'][path[1] + 'List'] = {};
+                }
+                if (!this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column])
+                  this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column] = [];
+
+                this.placements[path[0] + 'Menu'][path[1] + 'List'][r.info.column].push(r.info);
+              });
+          });
         });
-      });
     this.authService.isLoggedIn.subscribe(
       (data) => {
         this.isLoggedIn = this.authService.userIsLoggedIn();
@@ -113,9 +117,12 @@ export class CollectionHeaderComponent implements OnInit, OnDestroy {
           this.cartNumbers = '';
         }
       });
-    this.pageService.placement$.filter(r => r[0] === 'logos').map(r => r[1]).subscribe(data => {
-      this.logos = data && data.length ? data.sort((x, y) => x.info.column - y.info.column) : [];
-    });
+    this.pageService.placement$
+      .pipe(filter(r => r[0] === 'logos'))
+      .pipe(map(r => r[1]))
+      .subscribe(data => {
+        this.logos = data && data.length ? data.sort((x, y) => x.info.column - y.info.column) : [];
+      });
     this.display_name = this.authService.userDetails.displayName;
   }
 

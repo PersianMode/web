@@ -29,7 +29,7 @@ export class PageBasicInfoComponent implements OnInit {
 
   placements: IPlacement[] = null;
 
-  @ViewChild('content') contentEl: ElementRef;
+  @ViewChild('content', { static: true }) contentEl: ElementRef;
 
   constructor(private route: ActivatedRoute, private progressService: ProgressService,
               private httpService: HttpService, private snackBar: MatSnackBar,

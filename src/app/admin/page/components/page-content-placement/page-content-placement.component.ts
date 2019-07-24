@@ -30,7 +30,7 @@ export class PageContentPlacementComponent implements OnInit {
 
   @Input() pageId = null;
   @Output() modifyPlacement = new EventEmitter();
-  @ViewChild('player') player;
+  @ViewChild('player', { static: false }) player;
 
   _placements = [];
   modifiedPlacementList = {};

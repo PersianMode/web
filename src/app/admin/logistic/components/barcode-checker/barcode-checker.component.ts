@@ -7,7 +7,7 @@ import {ProgressService} from '../../../../shared/services/progress.service';
 import {DeliveryShelfCodeComponent} from '../delivery-shelf-code/delivery-shelf-code.component';
 import {AuthService} from '../../../../shared/services/auth.service';
 import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
-
+import {debounceTime} from 'rxjs/operators';
 
 @Component({
   selector: 'app-barcode-checker',
@@ -17,14 +17,14 @@ import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
 export class BarcodeCheckerComponent implements OnInit {
 
   barcodeCtrl: FormControl;
-  currentWarehouse: String;
+  currentWarehouse: string;
 
 
   isHub = false;
-  _trigger: Number;
+  _trigger: number;
 
   @Input()
-  set trigger(value: Number) {
+  set trigger(value: number) {
     this._trigger = value;
   }
 
@@ -44,7 +44,7 @@ export class BarcodeCheckerComponent implements OnInit {
     this.isHub = this.authService.userDetails.warehouse_id === this.authService.warehouses.find(x => x.is_hub)._id;
 
     this.barcodeCtrl = new FormControl();
-    this.barcodeCtrl.valueChanges.debounceTime(150).subscribe(
+    this.barcodeCtrl.valueChanges.pipe(debounceTime(150)).subscribe(
       (res) => {
         if (res) {
           this.checkBarcode(res.trim());

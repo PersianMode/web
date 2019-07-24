@@ -44,8 +44,8 @@ export class SmHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
   pageSize = 10;
   total;
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   socketSubscription: any = null;
   startDateSearch = null;

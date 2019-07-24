@@ -437,7 +437,12 @@ button {
 .mat-drawer {
   position: fixed !important;
 }
-
+.mat-button-toggle-group-appearance-standard {
+  border: 0 !important;
+}
+.mat-button-toggle-group-appearance-standard, .mat-button-toggle-standalone.mat-button-toggle-appearance-standard {
+  border: 0 !important;
+}
 .fill-remaining-space {
   flex: 1 1 auto;
 }

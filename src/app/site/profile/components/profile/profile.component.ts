@@ -4,8 +4,9 @@ import {Router} from '@angular/router';
 import {ProfileOrderService} from '../../../../shared/services/profile-order.service';
 import {TitleService} from '../../../../shared/services/title.service';
 import {CheckoutService} from '../../../../shared/services/checkout.service';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {HttpService} from '../../../../shared/services/http.service';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -25,12 +26,14 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.isLoggedIn.filter(r => r).subscribe(() => { // on logout
-      if (!this.authService.userIsLoggedIn())
-        this.router.navigate(['/']);
-      else
-        this.titleService.setTitleWithConstant('پروفایل');
-    });
+    this.authService.isLoggedIn
+      .pipe(filter(r => r))
+      .subscribe(() => { // on logout
+        if (!this.authService.userIsLoggedIn())
+          this.router.navigate(['/']);
+        else
+          this.titleService.setTitleWithConstant('پروفایل');
+      });
     this.checkoutService.getCustomerAddresses();
   }
 

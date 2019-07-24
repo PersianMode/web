@@ -9,6 +9,7 @@ import {HttpService} from '../../shared/services/http.service';
 import {TitleService} from '../../shared/services/title.service';
 import {imagePathFixer} from '../../shared/lib/imagePathFixer';
 import {FormControl} from '@angular/forms';
+import {debounceTime} from 'rxjs/operators';
 
 
 @Component({
@@ -31,8 +32,8 @@ export class SoldOutComponent implements OnInit {
   pageSize = 3;
   phrase = '';
   offset = 0;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   soldOutCtrl: FormControl;
 
   constructor(private httpService: HttpService,
@@ -44,7 +45,7 @@ export class SoldOutComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitleWithOutConstant('ادمین: محصولات تمام شده');
     this.load();
-    this.soldOutCtrl.valueChanges.debounceTime(500).subscribe(t => this.load());
+    this.soldOutCtrl.valueChanges.pipe(debounceTime(500)).subscribe(t => this.load());
   }
 
   load() {

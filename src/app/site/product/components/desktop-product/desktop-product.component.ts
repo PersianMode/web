@@ -39,8 +39,8 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
   }
 
   private _id;
-  @ViewChild('descPane') descPane;
-  @ViewChild('photosDiv') photosDiv;
+  @ViewChild('descPane', { static: true }) descPane;
+  @ViewChild('photosDiv', { static: true }) photosDiv;
   topFixedFilterPanel = false;
   bottomFixedFilterPanel = false;
   bottomScroll = false;

@@ -9,6 +9,7 @@ import {Subject, Subscription} from 'rxjs';
 import {TitleService} from '../../../../shared/services/title.service';
 import {AuthService} from 'app/shared/services/auth.service';
 import {HttpService} from 'app/shared/services/http.service';
+import {filter, map} from 'rxjs/operators';
 
 const HEADER_HEIGHT = 209;
 
@@ -19,8 +20,8 @@ const HEADER_HEIGHT = 209;
 })
 export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentInit {
   products = [];
-  @ViewChild('filterPane') filterPane;
-  @ViewChild('gridwall') gridwall;
+  @ViewChild('filterPane', {static: false}) filterPane;
+  @ViewChild('gridwall', {static: true}) gridwall;
   topFixedFilterPanel = false;
   bottomFixedFilterPanel = false;
   bottomScroll = false;
@@ -81,26 +82,29 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
         this.pageName += '/' + params.get('l2');
       }
       this.pageService.getPage(this.pageName);
-      this.subscription = this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
-          this.title = res.title;
-          if (res && res['collection_id']) {
-            // check when customer logged in then product sort by tags that insterested
-            const tag = this.authService.userIsLoggedIn() ? 'tagsCustomerInterested' : null;
-            // second parameter for set interested customer tags (when logged in)
-            this.productService.loadCollectionProducts(res['collection_id'], tag);
-          } else {
-            this.products = [];
-            this.collectionNameFa = '';
-            this.tagId = [];
-            this.typeId = [];
-            this.productService.emptyFilters();
-            console.error('-> ', `${this.pageName} is getting empty data for page`);
+      this.subscription = this.pageService.pageInfo$
+        .pipe(filter(r => r[0] === this.pageName))
+        .pipe(map(r => r[1]))
+        .subscribe(res => {
+            this.title = res.title;
+            if (res && res['collection_id']) {
+              // check when customer logged in then product sort by tags that insterested
+              const tag = this.authService.userIsLoggedIn() ? 'tagsCustomerInterested' : null;
+              // second parameter for set interested customer tags (when logged in)
+              this.productService.loadCollectionProducts(res['collection_id'], tag);
+            } else {
+              this.products = [];
+              this.collectionNameFa = '';
+              this.tagId = [];
+              this.typeId = [];
+              this.productService.emptyFilters();
+              console.error('-> ', `${this.pageName} is getting empty data for page`);
+            }
+          },
+          err => {
+            console.error('Error when subscribing on pageInfo: ', err);
           }
-        },
-        err => {
-          console.error('Error when subscribing on pageInfo: ', err);
-        }
-      );
+        );
     });
     this.productService.collectionNameFa$.subscribe(r => {
       this.collectionNameFa = r;

@@ -30,8 +30,8 @@ export class DictionaryComponent implements OnInit {
   resultsLength = 0;
   isLoadingResults = true;
   pageSize = 20;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(private httpService: HttpService,
               private dialog: MatDialog,

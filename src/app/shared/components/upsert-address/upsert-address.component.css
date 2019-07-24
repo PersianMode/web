@@ -128,7 +128,8 @@
   margin-top: 10px;
 }
 
-mat-form-field width: 92%;
+mat-form-field {
+  width: 92%;
   margin-top: 10px;
 }
 

@@ -17,7 +17,7 @@ import {CheckoutPageComponent} from './checkout-page/checkout-page.component';
 import { PaymentTypeComponent } from './payment-type/payment-type.component';
 import { CheckoutSummaryComponent } from './checkout-summary/checkout-summary.component';
 import {SwiperModule} from 'ngx-swiper-wrapper';
-import {MarkdownModule} from 'angular2-markdown';
+import {NgxMdModule} from 'ngx-md';
 import {SharedModule} from '../../shared/shared.module';
 import { CheckoutWarningConfirmComponent } from './checkout-warning-confirm/checkout-warning-confirm.component';
 
@@ -39,7 +39,7 @@ import { CheckoutWarningConfirmComponent } from './checkout-warning-confirm/chec
     MatExpansionModule,
     SwiperModule,
     MatTooltipModule,
-    MarkdownModule,
+    NgxMdModule.forRoot(),
     MatCheckboxModule,
     SharedModule,
   ],

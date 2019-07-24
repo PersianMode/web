@@ -3,6 +3,7 @@ import {WINDOW} from '../../../shared/services/window.service';
 import {PageService} from '../../services/page.service';
 import {IPlacement} from '../../../admin/page/interfaces/IPlacement.interface';
 import {HttpService} from 'app/shared/services/http.service';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-footer',
@@ -28,9 +29,11 @@ export class FooterComponent implements OnInit {
       this.curHeight = this.window.innerHeight;
     };
 
-    this.pageService.placement$.filter(r => r[0] === 'footer').map(r => r[1]).subscribe(
+    this.pageService.placement$
+      .pipe(filter(r => r[0] === 'footer'))
+      .pipe(map(r => r[1]))
+      .subscribe(
       (data) => {
-
         if (data) {
           this.setFooterTextLinks(data.filter(el => el.variable_name === 'site_link'));
           this.setFooterSocialLinks(data.filter(el => el.variable_name === 'social_link'));

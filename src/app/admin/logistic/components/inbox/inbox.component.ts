@@ -35,8 +35,8 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   trigger = ScanTrigger.Inbox;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   socketSubscription: any;
   constructor(private httpService: HttpService,

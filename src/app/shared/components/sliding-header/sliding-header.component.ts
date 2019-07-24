@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PageService} from '../../services/page.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
+import {filter, map} from 'rxjs/operators';
 
 const defaultStyle = {
   imgWidth: 40,
@@ -23,27 +24,30 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pageService.placement$.filter(r => r[0] === 'slider').map(r => r[1]).subscribe(
-      data => {
-        this.slides = [];
-        if (data) {
-          for (let i = 0; i < data.length; i++) {
-            this.slides.push({});
-            // this.slides[i].text = data[i].variable_name;
-            this.slides[i].text = data[i].info.text;
-            this.slides[i].href = data[i].info.href;
-            this.slides[i].imgAddr = data[i].info.imgUrl;
-            this.slides[i].column = data[i].info.column;
-            for (const key in defaultStyle) {
-              if (defaultStyle.hasOwnProperty(key)) {
-                this.slides[i][key] = data[i].info.style && data[i].info.style[key] ? data[i].info.style[key] : defaultStyle[key];
+    this.pageService.placement$
+      .pipe(filter(r => r[0] === 'slider'))
+      .pipe(map(r => r[1]))
+      .subscribe(
+        data => {
+          this.slides = [];
+          if (data) {
+            for (let i = 0; i < data.length; i++) {
+              this.slides.push({});
+              // this.slides[i].text = data[i].variable_name;
+              this.slides[i].text = data[i].info.text;
+              this.slides[i].href = data[i].info.href;
+              this.slides[i].imgAddr = data[i].info.imgUrl;
+              this.slides[i].column = data[i].info.column;
+              for (const key in defaultStyle) {
+                if (defaultStyle.hasOwnProperty(key)) {
+                  this.slides[i][key] = data[i].info.style && data[i].info.style[key] ? data[i].info.style[key] : defaultStyle[key];
+                }
               }
             }
           }
-        }
 
-        this.slides.sort((a, b) => a.column > b.column ? 1 : (a.column < b.column) ? -1 : 0);
-      });
+          this.slides.sort((a, b) => a.column > b.column ? 1 : (a.column < b.column) ? -1 : 0);
+        });
 
 
     this.initSlider();

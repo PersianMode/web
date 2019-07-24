@@ -16,21 +16,22 @@ import {DeliveryTrackingComponent} from '../delivery-tracking/delivery-tracking.
 import {DeliveryStatuses} from '../../../../../../shared/lib/status';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {OrderLineViewerComponent} from '../../../order-line-viewer/order-line-viewer.component';
+import {debounceTime} from 'rxjs/operators';
 
 export interface DeliveryItem {
-  _id: String;
-  position: Number;
-  delivery_time: String;
-  delivery_agent: String;
-  shelf_code: String;
+  _id: string;
+  position: number;
+  delivery_time: string;
+  delivery_agent: string;
+  shelf_code: string;
   start: Date;
   end: Date;
   delivery_start: Date;
   delivery_end: Date;
-  is_return: Boolean;
-  is_delivered: Boolean;
-  sender_name: String;
-  receiver_name: String;
+  is_return: boolean;
+  is_delivered: boolean;
+  sender_name: string;
+  receiver_name: string;
 }
 
 @Component({
@@ -47,9 +48,9 @@ export interface DeliveryItem {
 })
 export class DeliveryHistoryComponent implements OnInit {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('table') table;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild('table', { static: true }) table;
   expandedElement: any;
   limit: any = 10;
   offset: any = 0;
@@ -117,7 +118,7 @@ export class DeliveryHistoryComponent implements OnInit {
       this.displayedColumns = this.displayedColumns.filter(el => !['view_details', 'shelf_code'].includes(el));
     }
 
-    this.receiverSearchCtrl.valueChanges.debounceTime(500).subscribe(
+    this.receiverSearchCtrl.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.transferee = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();
@@ -126,7 +127,7 @@ export class DeliveryHistoryComponent implements OnInit {
       }
     );
 
-    this.recipient_name.valueChanges.debounceTime(500).subscribe(
+    this.recipient_name.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.recipient = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();
@@ -135,7 +136,7 @@ export class DeliveryHistoryComponent implements OnInit {
       }
     );
 
-    this.agentSearchCtrl.valueChanges.debounceTime(500).subscribe(
+    this.agentSearchCtrl.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.agentName = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();
@@ -144,7 +145,7 @@ export class DeliveryHistoryComponent implements OnInit {
       }
     );
 
-    this.SenderSearchCtrl.valueChanges.debounceTime(500).subscribe(
+    this.SenderSearchCtrl.valueChanges.pipe(debounceTime(500)).subscribe(
       data => {
         this.sender = data.trim() !== '' ? data.trim() : null;
         this.getDeliveryItems();

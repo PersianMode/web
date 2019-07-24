@@ -47,11 +47,15 @@
       </div>
     </div>
     <div class="gridwall-content">
-      <p-virtualScroller [value]="products" [rows]="lazyRows" [first]="first">
-        <ng-template let-item pTemplate="item">
-          <app-product-grid-item [data]="item" [width]="gridWidth" [height]="gridHeight"></app-product-grid-item>
-        </ng-template>
-      </p-virtualScroller>
+      <div *ngFor="let item of products">
+      <app-product-grid-item [data]="item" [width]="gridWidth" [height]="gridHeight"></app-product-grid-item>
+      </div>
+      <!--<p-virtualScroller [value]="products" [scrollHeight]="540" [itemSize]="273">-->
+        <!--<ng-template let-item pTemplate="item">-->
+          <!--<app-product-grid-item [data]="item" [width]="gridWidth" [height]="gridHeight"></app-product-grid-item>-->
+        <!--</ng-template>-->
+ <!---->
+      <!--</p-virtualScroller>-->
     </div>
   </div>
 </div>

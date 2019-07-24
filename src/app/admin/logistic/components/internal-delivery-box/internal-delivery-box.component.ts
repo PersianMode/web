@@ -32,8 +32,8 @@ export class InternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   trigger = ScanTrigger.SendInternal;
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   socketSubscription: any = null;
 

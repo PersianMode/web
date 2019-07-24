@@ -14,7 +14,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../../shared/shared.module';
-import {MarkdownModule} from 'angular2-markdown';
+import {NgxMdModule} from 'ngx-md';
 import {UploadComponent} from './upload.component';
 import {UploadRouting} from './upload.routing';
 
@@ -44,7 +44,7 @@ import {UploadRouting} from './upload.routing';
     MatTabsModule,
     MatCheckboxModule,
     SharedModule,
-    MarkdownModule.forRoot(),
+    NgxMdModule.forRoot(),
     MatProgressBarModule
   ],
 })

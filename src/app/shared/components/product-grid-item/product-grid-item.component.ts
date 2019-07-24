@@ -27,8 +27,8 @@ export class ProductGridItemComponent implements OnInit {
   @Input() width;
   @Input() height;
   myColors = [];
-  @ViewChild('slider') slider;
-  @ViewChild('wrapper') wrapper;
+  @ViewChild('slider', { static: false }) slider;
+  @ViewChild('wrapper', { static: false }) wrapper;
   pos = 0;
   desc = '';
   price = '';

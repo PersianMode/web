@@ -34,8 +34,8 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
   pageSize = 10;
   total;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   socketSubscription: any;
 
