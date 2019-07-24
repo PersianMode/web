@@ -88,7 +88,7 @@ export class AuthService {
         mobile_no: null,
         national_id: null,
         warehouse_id: null,
-        shoeType: 'EU',
+        shoesType: 'EU',
       };
     }
   }

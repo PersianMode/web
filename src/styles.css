@@ -597,7 +597,7 @@ dp-date-picker.dp-material .dp-picker-input {
 
 .mat-button-toggle-label-content {
   font-size: 17px !important;
-  border: 1px solid #eee;
+  border: 1px solid #bababa;
   border-radius: 4px;
   margin: 3.5px;
   padding: 0 !important;
@@ -605,6 +605,12 @@ dp-date-picker.dp-material .dp-picker-input {
   text-align: center;
   color: black;
 }
+
+.mat-button-toggle-label-content:hover {
+  border: 1px solid black !important;
+}
+
+
 @media (min-width: 600px) {
   .mat-button-toggle-label-content {
     width: 69px !important;

@@ -1,12 +1,6 @@
 <div>
   <div class="preferred-part">
     <div>
-      <h3>سایز</h3>
-    </div>
-    <app-size-picker [sizes]="shoesSize" [displayTitle]="false" [gender]="gender" [productType]="'footwear'" (value)="selectSize($event)" [selectedSize]="preferred_size"></app-size-picker>
-  </div>
-  <div class="preferred-part">
-    <div>
       <h3>برندها</h3>
     </div>
     <div>
@@ -24,5 +18,11 @@
         <label class="preferred-name">{{tag.name}}</label>
       </div>
     </div>
+  </div>
+  <div class="preferred-part">
+    <div>
+      <h3>سایز</h3>
+    </div>
+    <app-size-picker [sizes]="shoesSize" [displayTitle]="false" [gender]="gender" [productType]="'footwear'" (value)="selectSize($event)" [selectedSize]="preferred_size"></app-size-picker>
   </div>
 </div>
