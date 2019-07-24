@@ -11,18 +11,6 @@ export class CheckoutSummaryComponent implements OnInit {
   @Input() noDuration;
   ignoreDeliveryItems = false;
 
-
-  @Input()
-  set balanceValue(value) {
-    if (value) {
-      this._balanceValue = value;
-    }
-  }
-
-  get balanceValue() {
-    return this._balanceValue;
-  }
-
   @Input()
   set showCostLabel(value) {
     this._showCostLabel = value;
@@ -94,6 +82,17 @@ export class CheckoutSummaryComponent implements OnInit {
 
   get usedBalance() {
     return this._usedBalance;
+  }
+
+  @Input()
+  set balanceValue(value) {
+    if (value) {
+      this._balanceValue = value;
+    }
+  }
+
+  get balanceValue() {
+    return this._balanceValue;
   }
 
   @Input()

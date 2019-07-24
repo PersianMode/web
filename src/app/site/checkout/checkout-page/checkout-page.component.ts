@@ -40,8 +40,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   deliveryDiscount;
   deliveryCost;
   usedBalance = 0;
-  usedLoyaltyPoint = 0;
   balanceValue = 0;
+  usedLoyaltyPoint = 0;
   loyaltyPoint = 0;
   disabled = false;
   changeMessage = '';
@@ -84,6 +84,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         if (!data) return;
 
         const totalDiscount = this.checkoutService.getTotalDiscount();
+        this.changePaymentType(this.selectedPaymentType);
         this.total = totalDiscount.total;
         this.discount = totalDiscount.discount;
       }
@@ -110,7 +111,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.disabled = !(r && (!this.soldOuts || !this.soldOuts.length));
     });
 
-    this.setPoints();
     this.calculateEarnPoint();
     this.authService.isLoggedIn.subscribe(res => {
       this.setPoints();
@@ -122,6 +122,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
     if (this.checkoutService.deliveryDurationId)
       this.calculateDiscount(this.checkoutService.deliveryDurationId);
+
+    this.changePaymentType(this.selectedPaymentType);
   }
 
   loadAndFillProductsAndPrice(carts, data) {
@@ -176,8 +178,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  setPoints() {
-    this.checkoutService.getLoyaltyBalance()
+  async setPoints() {
+    await this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = res.balance;
         this.loyaltyPoint = res.loyaltyPointValue;
@@ -203,7 +205,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.cartItems$.unsubscribe();
   }
 
-  changePaymentType(data) {
+  async changePaymentType(data) {
+    await this.setPoints();
     this.usedBalance = 0;
     this.usedLoyaltyPoint = 0;
     this.selectedPaymentType = data;

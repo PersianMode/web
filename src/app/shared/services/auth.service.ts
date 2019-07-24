@@ -169,7 +169,6 @@ export class AuthService {
         },
         (err) => {
           console.error('Cannot logout: ', err);
-
           reject();
         }
       );
