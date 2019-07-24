@@ -95,7 +95,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       })
       .catch();
     this.CheckoutService.ccRecipientData = null;
-
   }
 
   ngOnDestroy() {
