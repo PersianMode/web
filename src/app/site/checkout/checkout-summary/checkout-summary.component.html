@@ -13,7 +13,8 @@
   <!--</div>-->
     <div *ngIf="usedBalance">
       <span class="co-right-text">موجودی پس از خرید: </span>
-      <span class="co-left-text">{{priceFormatter((total + deliveryCost - deliveryDiscount) > balanceValue ? 0 : (balanceValue - (total + deliveryCost - deliveryDiscount)))}} تومان </span>
+      <span class="co-left-text" *ngIf="!showCostLabel">{{priceFormatter(total > balanceValue ? 0 : (balanceValue - total))}} تومان </span>
+      <span class="co-left-text" *ngIf="showCostLabel">{{priceFormatter((total + deliveryCost - deliveryDiscount) > balanceValue ? 0 : (balanceValue - (total + deliveryCost - deliveryDiscount)))}} تومان </span>
     </div>
     <!--<div *ngIf="usedLoyaltyPoint">-->
       <!--<span class="co-right-text">امتیاز وفاداری: </span>-->
@@ -36,7 +37,9 @@
     <div class="final-price">
       <h2 class="co-right-text" *ngIf="!usedBalance">قیمت نهایی:
         {{priceFormatter(finalTotal)}} تومان </h2>
-      <h2 class="co-right-text" *ngIf="usedBalance">قیمت نهایی:
+      <h2 class="co-right-text" *ngIf="usedBalance && showCostLabel">قیمت نهایی:
       {{priceFormatter((total + deliveryCost - deliveryDiscount) < (balanceValue) ?  0 : (total + deliveryCost - deliveryDiscount - balanceValue))}} تومان </h2>
+      <h2 class="co-right-text" *ngIf="usedBalance && !showCostLabel">قیمت نهایی:
+        {{priceFormatter(total < balanceValue ?  0 : (total - balanceValue))}} تومان </h2>
     </div>
 </div>
