@@ -42,7 +42,7 @@
       <button mat-raised-button
               class="payment-button" [class.mouse-pointer]="!disabled" [class.disabled]="disabled"
               (click)="(selectedPaymentType === 1  && (balanceValue >= total)) ?  checkoutDemo() : checkout()" [disabled]="disabled">
-        {{(selectedPaymentType === 1  && (balanceValue >= total)) ? 'تکمیل پرداخت' : 'پرداخت'}}
+        {{(selectedPaymentType === 1  && (balanceValue >= total)) ? 'تکمیل خرید' : 'پرداخت'}}
       </button>
       <!--<button mat-raised-button-->
               <!--class="payment-button"-->
