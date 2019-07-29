@@ -37,8 +37,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
   total = 0;
   discount = 0;
-  deliveryDiscount;
-  deliveryCost;
+  deliveryDiscount = 0;
+  deliveryCost = 0;
   usedBalance = 0;
   balanceValue = 0;
   usedLoyaltyPoint = 0;
@@ -400,7 +400,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         this.spinnerService.disable();
       });
   }
-
 
   checkoutDemo() {
     this.finalCheckItems()
