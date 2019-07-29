@@ -204,7 +204,7 @@ export class MobileHeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  backDropClick(data) {
+  backDropClick() {
     this.isFirstLevel = true;
     this.isSecondLevel = false;
     this.isThirdLevel = false;

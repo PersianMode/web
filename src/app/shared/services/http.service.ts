@@ -20,7 +20,8 @@ export class HttpService {
   // }
 
   constructor(private http: HttpClient) {
-    HttpService.Host = this.isInDevMode() ? 'http://localhost:3000' : 'http://bankofstyle.com';
+    HttpService.Host = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port);
+    // HttpService.Host = 'https://lithium.style';
   }
 
   isInDevMode() {
