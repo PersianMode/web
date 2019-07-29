@@ -361,6 +361,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
   checkout() {
     const orderData: any = this.checkoutService.accumulateData();
+    console.log(orderData);
     const IdArray = [
       'invoiceNumber',
       'invoiceDate',
