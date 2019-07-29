@@ -3,15 +3,10 @@
       <span class="co-right-text"> جمع قیمت: </span>
       <span class="co-left-text">{{priceFormatter(total)}}  تومان</span>
     </div>
-
     <div>
       <span class="co-right-text">تخفیف: </span>
       <span class="co-left-text">{{priceFormatter(discount)}} تومان </span>
     </div>
-  <!--<div *ngIf="usedBalance">-->
-    <!--<span class="co-right-text">موجودی پس از خرید: </span>-->
-    <!--<span class="co-left-text">{{priceFormatter(finalTotal > usedBalance ? 0 : (balanceValue - finalTotal))}} تومان </span>-->
-  <!--</div>-->
     <div *ngIf="usedBalance">
       <span class="co-right-text">موجودی پس از خرید: </span>
       <span class="co-left-text" *ngIf="!showCostLabel">{{priceFormatter(total - discount > balanceValue ? 0 : (balanceValue - (total - discount)))}} تومان </span>
