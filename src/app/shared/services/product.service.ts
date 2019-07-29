@@ -113,7 +113,7 @@ export class ProductService {
       shoesSizeMen.forEach((v, key) => shoesSizeMen[key] = this.dict.USToEU(v, 'MENS'));
       shoesSizeWomen.forEach((v, key) => shoesSizeWomen[key] = this.dict.USToEU(v, 'WOMENS'));
     }
-    const shoesSize = new Set([].concat(shoesSizeWomen, shoesSizeMen));
+    const shoesSize = [...new Set([].concat(shoesSizeWomen, shoesSizeMen))].sort(sizeSorter);
 
     let color = Array.from(new Set([...products
       .map(productColorMap)
@@ -311,12 +311,12 @@ export class ProductService {
     data.season = season ? ['HOLI', 'CORE', 'WINTER', 'SPRING', 'SUMMER', 'FALL'].indexOf(season.name) : NaN;
     data.sizesByColor = {};
     data.sizesInventory = {};
-    data.discountedPrice =
-      data.instances.forEach(instance => {
-        if (!instance.price)
-          instance.price = data.price;
-        instance.discountedPrice = discountCalc(instance.price, data.discount);
-      });
+    data.instances = data.instances.filter(instance => data.colors.find(col => instance.product_color_id === col._id));
+    data.instances.forEach(instance => {
+      if (!instance.price)
+        instance.price = data.price;
+      instance.discountedPrice = discountCalc(instance.price, data.discount);
+    });
     data.colors.forEach(color => {
       const angles = [];
 
