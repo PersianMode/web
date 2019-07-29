@@ -360,7 +360,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   checkout() {
-    console.log('in checkout function');
     const orderData: any = this.checkoutService.accumulateData();
     const IdArray = [
       'invoiceNumber',
@@ -403,7 +402,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   checkoutDemo() {
-    console.log('in demo checkout function');
     this.finalCheckItems()
       .then(res => {
         this.checkoutService.checkoutDemo();
