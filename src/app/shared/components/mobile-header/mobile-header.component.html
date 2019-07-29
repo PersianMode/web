@@ -1,5 +1,5 @@
 <div class="mobile-header">
-  <mat-drawer-container (backdropClick)="backDropClick($event)" dir="rtl">
+  <mat-drawer-container (backdropClick)="backDropClick()" dir="rtl">
   <mat-drawer #sidenav mode="push"
               style="background-color: white; margin-right: -10px;"
               [style.height]="menuHeight + 'px'" [style.width]="menuWidth + 'px'"
@@ -84,8 +84,8 @@
     </div>
   </mat-drawer>
   <mat-drawer-content *ngIf="!is_searching">
-    <div style="left: 8px; top: 8px; background-color: transparent;">
-      <a class="mobile-header-item" (click)="sidenav.toggle()">
+    <div [style.marginRight.px]="sideNavIsOpen ? -10 : 0">
+      <a class="mobile-header-item" [style.marginLeft.px]="sideNavIsOpen ? 20 : 10" (click)="sidenav.toggle()">
         <i class="fa fa-bars" aria-hidden="true"></i>
       </a>
       <a class="mobile-header-item" [routerLink]="'/cart'" id="header-cart">
@@ -160,5 +160,5 @@
   <br>
 </div>
 </div>
-<div *ngIf="sideNavIsOpen" class="backdrop" (click)="backDropClick($event)"></div>
+<div *ngIf="sideNavIsOpen" class="backdrop" (click)="backDropClick()"></div>
 
