@@ -20,8 +20,8 @@ export class HttpService {
   // }
 
   constructor(private http: HttpClient) {
-    HttpService.Host = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port);
-    // HttpService.Host = 'https://lithium.style';
+    // HttpService.Host = window.location.protocol + '//' + window.location.hostname + ':' + (window.location.port);
+    HttpService.Host = 'https://lithium.style';
   }
 
   isInDevMode() {
