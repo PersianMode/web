@@ -37,8 +37,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
   total = 0;
   discount = 0;
-  deliveryDiscount;
-  deliveryCost;
+  deliveryDiscount = 0;
+  deliveryCost = 0;
   usedBalance = 0;
   balanceValue = 0;
   usedLoyaltyPoint = 0;
@@ -360,8 +360,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   checkout() {
+    console.log('in checkout function');
     const orderData: any = this.checkoutService.accumulateData();
-    console.log(orderData);
     const IdArray = [
       'invoiceNumber',
       'invoiceDate',
@@ -402,35 +402,15 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       });
   }
 
-
   checkoutDemo() {
+    console.log('in demo checkout function');
     this.finalCheckItems()
       .then(res => {
         this.checkoutService.checkoutDemo();
       })
-      .then(res => {
-        this.checkoutService.updateVariablesAfterCheckout();
-        this.spinnerService.enable();
-      })
       .catch(err => {
         console.error('Error in final check: ', err);
-        if (!err.errCode)
-          this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید', null, {
-            duration: 3200,
-          });
-        this.spinnerService.disable();
       });
   }
-
-  // checkoutDemo() {
-  //   console.log('in demo checkout function');
-  //   this.finalCheckItems()
-  //     .then(res => {
-  //       this.checkoutService.checkoutDemo();
-  //     })
-  //     .catch(err => {
-  //       console.error('Error in final check: ', err);
-  //     });
-  // }
 }
 

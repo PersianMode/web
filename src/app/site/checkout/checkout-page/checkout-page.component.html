@@ -41,13 +41,9 @@
       </form>
       <button mat-raised-button
               class="payment-button" [class.mouse-pointer]="!disabled" [class.disabled]="disabled"
-              (click)="(selectedPaymentType === 1  && (balanceValue >= total)) ?  checkoutDemo() : checkout()" [disabled]="disabled">
-        {{(selectedPaymentType === 1  && (balanceValue >= total)) ? 'تکمیل خرید' : 'پرداخت'}}
+              (click)="(selectedPaymentType === 1   && (balanceValue >= (total + deliveryCost - deliveryDiscount - discount))) ?  checkoutDemo() : checkout()" [disabled]="disabled">
+        {{(selectedPaymentType === 1  && (balanceValue >= (total + deliveryCost - deliveryDiscount - discount))) ? 'تکمیل خرید' : 'پرداخت'}}
       </button>
-      <!--<button mat-raised-button-->
-              <!--class="payment-button"-->
-              <!--(click)="checkoutDemo()">تکمیل خرید-->
-      <!--</button>-->
     </div>
   </div>
   <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
