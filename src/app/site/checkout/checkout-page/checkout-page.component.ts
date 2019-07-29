@@ -40,8 +40,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   deliveryDiscount;
   deliveryCost;
   usedBalance = 0;
-  usedLoyaltyPoint = 0;
   balanceValue = 0;
+  usedLoyaltyPoint = 0;
   loyaltyPoint = 0;
   disabled = false;
   changeMessage = '';
@@ -52,7 +52,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   noDuration = null;
   loyaltyGroups = [];
   addPointArray = [];
-  selectedPaymentType = PaymentType.cash;
+  selectedPaymentType = PaymentType.balance;
   earnedLoyaltyPoint = 0;
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this
@@ -64,16 +64,16 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   products;
 
   constructor(private checkoutService: CheckoutService,
-    private httpService: HttpService,
-    private authService: AuthService,
-    private dialog: MatDialog,
-    private cartService: CartService,
-    private titleService: TitleService,
-    private progressService: ProgressService,
-    private snackBar: MatSnackBar,
-    private spinnerService: SpinnerService,
-    private router: Router, @Inject(DOCUMENT) private document: any, private location: Location,
-    private productService: ProductService) {
+              private httpService: HttpService,
+              private authService: AuthService,
+              private dialog: MatDialog,
+              private cartService: CartService,
+              private titleService: TitleService,
+              private progressService: ProgressService,
+              private snackBar: MatSnackBar,
+              private spinnerService: SpinnerService,
+              private router: Router, @Inject(DOCUMENT) private document: any, private location: Location,
+              private productService: ProductService) {
   }
 
   ngOnInit() {
@@ -84,6 +84,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         if (!data) return;
 
         const totalDiscount = this.checkoutService.getTotalDiscount();
+        this.changePaymentType(this.selectedPaymentType);
         this.total = totalDiscount.total;
         this.discount = totalDiscount.discount;
       }
@@ -110,7 +111,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.disabled = !(r && (!this.soldOuts || !this.soldOuts.length));
     });
 
-    this.setPoints();
     this.calculateEarnPoint();
     this.authService.isLoggedIn.subscribe(res => {
       this.setPoints();
@@ -122,6 +122,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
     if (this.checkoutService.deliveryDurationId)
       this.calculateDiscount(this.checkoutService.deliveryDurationId);
+
+    this.changePaymentType(this.selectedPaymentType);
   }
 
   loadAndFillProductsAndPrice(carts, data) {
@@ -176,8 +178,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  setPoints() {
-    this.checkoutService.getLoyaltyBalance()
+  async setPoints() {
+    await this.checkoutService.getLoyaltyBalance()
       .then((res: any) => {
         this.balanceValue = res.balance;
         this.loyaltyPoint = res.loyaltyPointValue;
@@ -203,7 +205,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.cartItems$.unsubscribe();
   }
 
-  changePaymentType(data) {
+  async changePaymentType(data) {
+    await this.setPoints();
     this.usedBalance = 0;
     this.usedLoyaltyPoint = 0;
     this.selectedPaymentType = data;
@@ -214,7 +217,12 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       }
         break;
       case PaymentType.balance: {
-        this.usedBalance = this.balanceValue;
+        if (this.balanceValue <= this.total) {
+          this.usedBalance = this.balanceValue;
+        } else {
+          this.usedBalance = this.total;
+        }
+        // this.usedBalance = this.balanceValue;
         this.checkoutService.setPaymentType(data);
       }
         break;
@@ -224,7 +232,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       }
         break;
     }
-
     this.calculateEarnPoint();
   }
 
@@ -300,49 +307,49 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     return new Promise((resolve, reject) => {
       try {
         this.checkoutService.finalCheck().subscribe(res => {
-          this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
-          this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
-          this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
-          if ((this.soldOuts && this.soldOuts.length) ||
-            (this.discountChanges && this.discountChanges.length) ||
-            (this.priceChanges && this.priceChanges.length)) {
-            this.changeMessage = '';
+            this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
+            this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
+            this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
+            if ((this.soldOuts && this.soldOuts.length) ||
+              (this.discountChanges && this.discountChanges.length) ||
+              (this.priceChanges && this.priceChanges.length)) {
+              this.changeMessage = '';
 
-            if (!!this.soldOuts && !!this.soldOuts.length)
-              this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده‌اند';
-            else if (this.discountChanges && this.discountChanges.length)
-              this.changeMessage = 'برخی از تخفیف‌ها تغییر کرده‌است';
-            else if (this.priceChanges && this.priceChanges.length)
-              this.changeMessage = 'برخی از قیمت‌ها تغییر کرده‌است';
+              if (!!this.soldOuts && !!this.soldOuts.length)
+                this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده‌اند';
+              else if (this.discountChanges && this.discountChanges.length)
+                this.changeMessage = 'برخی از تخفیف‌ها تغییر کرده‌است';
+              else if (this.priceChanges && this.priceChanges.length)
+                this.changeMessage = 'برخی از قیمت‌ها تغییر کرده‌است';
 
-            this.productService.updateProducts(res);
-            if (this.changeMessage) {
-              this.dialog.open(CheckoutWarningConfirmComponent, {
+              this.productService.updateProducts(res);
+              if (this.changeMessage) {
+                this.dialog.open(CheckoutWarningConfirmComponent, {
 
-                position: {},
-                width: '400px',
-                data: {
-                  isError: (!!this.soldOuts && !!this.soldOuts.length),
-                  warning: this.changeMessage
-                }
-              }).afterClosed().subscribe(x => {
-                if (x)
-                  resolve();
-                else {
-                  if (!!this.soldOuts && !!this.soldOuts.length)
-                    this.router.navigate(['/', 'cart']);
-                  reject({
-                    errMsg: this.changeMessage,
-                    errCode: 800,
-                  });
-                }
-              });
-            } else {
+                  position: {},
+                  width: '400px',
+                  data: {
+                    isError: (!!this.soldOuts && !!this.soldOuts.length),
+                    warning: this.changeMessage
+                  }
+                }).afterClosed().subscribe(x => {
+                  if (x)
+                    resolve();
+                  else {
+                    if (!!this.soldOuts && !!this.soldOuts.length)
+                      this.router.navigate(['/', 'cart']);
+                    reject({
+                      errMsg: this.changeMessage,
+                      errCode: 800,
+                    });
+                  }
+                });
+              } else {
+                resolve();
+              }
+            } else
               resolve();
-            }
-          } else
-            resolve();
-        },
+          },
           err => {
             console.error('error in finalCheckItems: ', err);
           });

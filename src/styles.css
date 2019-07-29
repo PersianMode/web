@@ -596,22 +596,35 @@ dp-date-picker.dp-material .dp-picker-input {
 }
 
 .mat-button-toggle-label-content {
-  font-family: iranyekan, sans-serif !important;
-  width: 79px;
-  padding: 4px 0 !important;
-  text-align: center;
-  border: 2px rgba(221, 221, 221, .7) solid;
-  color: black;
-  font-weight: bold;
-}
-
-.filter-size .mat-button-toggle-label-content {
-
-  width: 42px !important;
   font-size: 17px !important;
-  margin: 5px;
+  border: 1px solid #bababa;
+  border-radius: 4px;
+  margin: 3.5px;
+  padding: 0 !important;
+  font-weight: 100;
+  text-align: center;
+  color: black;
 }
 
+.mat-button-toggle-label-content:hover {
+  border: 1px solid black !important;
+}
+
+
+@media (min-width: 600px) {
+  .mat-button-toggle-label-content {
+    width: 69px !important;
+    line-height: 48px !important;
+  }
+}
+.mat-button-toggle-checked {
+  color: unset;
+  background-color: transparent !important;
+}
+.mat-button-toggle-checked div {
+  color: white;
+  background: black;
+}
 .mat-button-toggle-group {
   box-shadow: none !important;
   margin-bottom: -1px;
@@ -622,7 +635,7 @@ dp-date-picker.dp-material .dp-picker-input {
   margin-bottom: -1px;
 }
 
-.mat-button-toggle-checked div {
+.mat-button-toggle-checked {
   background: #000;
   color: #fff !important;
 }
@@ -813,13 +826,10 @@ mat-panel-title {
   overflow: visible !important;
 }
 
-@media (max-width: 959px) {
+@media (max-width: 600px) {
   .mat-button-toggle-label-content {
-    width: 50px;
-    padding: 4px 0 !important;
-    text-align: center;
-    border: 1px rgba(221, 221, 221, .7) solid;
-    color: black;
+    width: 55px !important;
+    line-height: 40px !important;
   }
 
   .ui-slider {

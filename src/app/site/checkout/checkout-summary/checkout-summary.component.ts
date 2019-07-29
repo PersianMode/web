@@ -85,6 +85,17 @@ export class CheckoutSummaryComponent implements OnInit {
   }
 
   @Input()
+  set balanceValue(value) {
+    if (value) {
+      this._balanceValue = value;
+    }
+  }
+
+  get balanceValue() {
+    return this._balanceValue;
+  }
+
+  @Input()
   set usedLoyaltyPoint(value) {
     this._usedLoyaltyPoint = value;
     this.calculateFinalTotal();
@@ -103,6 +114,7 @@ export class CheckoutSummaryComponent implements OnInit {
   private _total = 0;
   private _discount = 0;
   private _usedBalance = 0;
+  private _balanceValue = 0;
   private _usedLoyaltyPoint = 0;
   private _deliveryCost = 0;
   private _deliveryDiscount = 0;
