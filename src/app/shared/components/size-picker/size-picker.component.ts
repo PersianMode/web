@@ -54,8 +54,7 @@ export class SizePickerComponent implements OnInit {
 
   @Input()
   set sizes(productSizes) {
-    this.productSize = productSizes;
-    this.productSize.sort(sizeSorter);
+    this.productSize = productSizes.sort(sizeSorter);
     this.setProductSize();
   }
 

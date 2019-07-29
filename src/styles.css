@@ -828,12 +828,12 @@ mat-panel-title {
 
 @media (max-width: 600px) {
   .mat-button-toggle-label-content {
-    width: 55px !important;
-    line-height: 40px !important;
+    width: calc(100vw / 7) !important;
+    line-height: calc(100vw / 9) !important;
   }
 
   .ui-slider {
-    margin: 0px 10px !important;
+    margin: 0 10px !important;
   }
 }
 
