@@ -45,7 +45,7 @@ import {CollectionProductComponent} from './components/collection-product/collec
     CollectionBasicFormComponent,
     CollectionTypeComponent,
     CollectionTagComponent,
-    CollectionProductComponent
+    CollectionProductComponent,
   ]
 })
 export class CollectionsModule { }

@@ -2,19 +2,56 @@ import {Component, OnInit} from '@angular/core';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 import {TitleService} from '../../shared/services/title.service';
+import {AuthService} from '../../shared/services/auth.service';
+import {CheckoutService} from '../../shared/services/checkout.service';
+import {Router} from '@angular/router';
+import {ProfileOrderService} from '../../shared/services/profile-order.service';
+import {HttpService} from '../../shared/services/http.service';
+import {ProgressService} from '../../shared/services/progress.service';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-collections',
   templateUrl: './collections.component.html',
   styleUrls: ['./collections.component.css']
 })
-export class CollectionsComponent extends AbstractSearchComponent implements OnInit {
 
+export class CollectionsComponent extends AbstractSearchComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitleWithOutConstant('ادمین: ' + TitleService.collection_name);
     this.key = 'Collection';
     super.ngOnInit();
 
+
+    // this.filter_options$ = this.productService.filtering$.subscribe(r => {
+    //   this.allCount = this.productService.countProducts().toLocaleString('fa');
+    //   this.filter_options = r;
+    //   this.filter_options.forEach(el => {
+    //     if (this.sideOptions.length) {
+    //       this.sideOptions.forEach(so => {
+    //         so.count = this.productService.countProducts(so.name, so.value);
+    //         so.countFa = so.count.toLocaleString('fa');
+    //       });
+    //     } else this.productService.side$.next(r);
+    //     const found = this.current_filter_state.find(cfs => cfs.name === el.name);
+    //     if (!found) {
+    //       this.current_filter_state.push({name: el.name, values: []});
+    //     }
+    //     if (!this.isChecked[el.name]) {
+    //       this.isChecked[el.name] = {};
+    //       for (const key of el.values) {
+    //         this.isChecked[el.name][key] = false;
+    //       }
+    //     }
+    //   });
+    // });
+
+  }
+  constructor(protected httpService: HttpService, protected progressService: ProgressService,
+              protected router: Router, protected dialog: MatDialog,
+              protected snackBar: MatSnackBar, protected sanitizer: DomSanitizer, protected titleService: TitleService) {
+    super(httpService, progressService, router, dialog, snackBar, sanitizer, titleService);
   }
 
   openForm(id: string = null) {
