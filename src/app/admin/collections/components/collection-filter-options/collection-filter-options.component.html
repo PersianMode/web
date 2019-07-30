@@ -1,0 +1,12 @@
+<div *ngIf="filter_options && filter_options.length" style="margin-top: 10px">
+  <div *ngFor="let v of filter_options" style="display: inline-block; margin-left: 25px">
+    <mat-checkbox [checked]="true">
+      <span>{{v.name_fa}}</span>
+    </mat-checkbox>
+  </div>
+</div>
+<div style="text-align: left;">
+  <button mat-button (click)="saveChangesToCollectionInfo()">
+    <div>{{'ثبت تغییرات'}}</div>
+  </button>
+</div>
