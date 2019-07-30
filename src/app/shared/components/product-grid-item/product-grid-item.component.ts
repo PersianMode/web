@@ -45,7 +45,6 @@ export class ProductGridItemComponent implements OnInit {
   soldOut = false;
   discounted = false;
   discountedPrice: any;
-  @Input() productIndex: number;
 
   constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router,
               private responsiveService: ResponsiveService, private sanitizer: DomSanitizer,
@@ -148,7 +147,6 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   openProduct() {
-    this.ps.currentProductIndex = this.productIndex;
     this.router.navigate(['product', this.data._id, this.data.colors[this.pos]._id]);
   }
 

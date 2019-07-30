@@ -50,7 +50,7 @@
       <p-dataScroller [value]="lazyProducts" [rows]="lazyRows" [lazy]="true" [totalRecords]="totalRecords"
       (onLazyLoad)="lazyLoad()">
         <ng-template let-item pTemplate="item">
-          <app-product-grid-item [data]="item" [width]="gridWidth" [productIndex]="item.index"></app-product-grid-item>
+          <app-product-grid-item [data]="item" [width]="gridWidth"></app-product-grid-item>
         </ng-template>
       </p-dataScroller>
     </div>
