@@ -202,7 +202,6 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   }
 
   lazyLoad() {
-    console.log(this.productService.currentProductIndex)
     this.lazyProducts = this.lazyProducts.concat(this.products.splice(this.productService.currentProductIndex, this.lazyRows));
     this.productService.currentProductIndex = 0;
   }
