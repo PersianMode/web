@@ -36,6 +36,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   gridHeight: number;
   isMobile = false;
   scroll$ = new Subject();
+  totalRecords = 0;
   sortOptions = [
     {
       value: 'newest',
@@ -61,6 +62,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   typeId = [];
   lazyRows = 10;
   subscription: Subscription;
+  lazyProducts = [];
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
@@ -90,6 +92,8 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
             this.productService.loadCollectionProducts(res['collection_id'], tag);
           } else {
             this.products = [];
+            this.totalRecords = 0;
+            this.lazyProducts = [];
             this.collectionNameFa = '';
             this.tagId = [];
             this.typeId = [];
@@ -113,7 +117,11 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
 
       this.sortedBy = {value: null};
       this.products = r;
-      setTimeout(() => this.calcAfterScroll(), 1000);
+      this.totalRecords = this.products.length;
+      setTimeout(() => {
+        this.calcAfterScroll();
+        this.lazyProducts = this.products.splice(0, this.lazyRows);
+      }, 1000);
 
     });
     this.calcWidth();
@@ -137,7 +145,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
     this.curHeight = this.responsiveService.curHeight;
     this.gridWidth = this.responsiveService.isMobile ? this.responsiveService.curWidth - 20 : Math.max((this.curWidth - 20) / Math.floor(this.curWidth / 244) - 10, 1708);
     this.gridHeight = this.responsiveService.isMobile ? this.gridWidth + 60 : this.gridWidth + 90;
-    this.lazyRows = this.isMobile ? 10 :
+    this.lazyRows = this.isMobile ? 3 :
       Math.round(Math.floor(this.gridWidth / 242) *
         Math.ceil((this.window.innerHeight - 105) / 348) * 1.5);
     setTimeout(() => this.calcAfterScroll(), 1000);
@@ -191,5 +199,9 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  lazyLoad() {
+    this.lazyProducts = this.lazyProducts.concat(this.products.splice(0, this.lazyRows));
   }
 }

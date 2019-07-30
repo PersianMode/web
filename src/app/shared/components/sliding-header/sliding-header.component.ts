@@ -69,9 +69,6 @@ export class SlidingHeaderComponent implements OnInit, OnDestroy {
   }
 
   getURL(path: string) {
-    // TODO: these two lines are only for test! this gets images locally not from server
-    if (path && path.indexOf('assets') !== -1)
-      return path;
     if (path)
       return this.sanitizer.bypassSecurityTrustResourceUrl(HttpService.Host + path);
   }

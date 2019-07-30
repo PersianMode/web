@@ -147,3 +147,12 @@
   border-width: 1px;
   border-color: rgb(203, 195, 195);
 }
+
+.lazyBeingLoaded {
+  text-align: center;
+}
+
+.lazyBeingLoaded i {
+  font-size: 50px;
+  color: #ccc;
+}

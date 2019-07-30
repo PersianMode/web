@@ -18,14 +18,14 @@
   position: relative;
   display: inline-block;
   text-align: right;
-  /*overflow: hidden;*/
   float: right;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
   margin-bottom: 20px;
   background: #fff;
   vertical-align: top;
   font-size: 13px;
   color: #666;
-  padding:0;
   cursor: pointer;
 }
 
@@ -72,7 +72,7 @@
 .mainMobile h2{
   color: #222;
   font-size: inherit;
-  margin: 0 2px 0;
+  margin: 10px 2px 0;
 }
 .main h3{
   color: #666;
