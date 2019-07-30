@@ -158,7 +158,9 @@
   right: 0;
   transition: all 1s ease-out;
 }
-
+.slider span {
+  width: 60px;
+}
 .slider img {
   height: 60px;
   display: inline-block;
