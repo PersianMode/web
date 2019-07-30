@@ -14,7 +14,7 @@ export class TitleService {
     let names = [this.constTitle];
     if (newTitle)
       names.push(newTitle);
-    this.titleService.setTitle(names.join(': '))
+    this.titleService.setTitle(names.join(': '));
   }
 
   setTitleWithOutConstant(title: string) {

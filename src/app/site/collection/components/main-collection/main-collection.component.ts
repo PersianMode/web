@@ -114,7 +114,6 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
       this.sortedBy = {value: null};
       this.products = r;
       setTimeout(() => this.calcAfterScroll(), 1000);
-
     });
     this.calcWidth();
     this.responsiveService.resize$.subscribe(r => {
@@ -124,7 +123,6 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
 
     this.scroll$.subscribe(() => this.calcAfterScroll());
-
   }
 
 

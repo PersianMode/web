@@ -1,6 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
+import {HttpService} from '../../shared/services/http.service';
+import {ProgressService} from '../../shared/services/progress.service';
+import {Router} from '@angular/router';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {DomSanitizer} from '@angular/platform-browser';
+import {TitleService} from '../../shared/services/title.service';
 
 @Component({
   selector: 'app-page',
@@ -8,6 +14,11 @@ import {RemovingConfirmComponent} from '../../shared/components/removing-confirm
   styleUrls: ['./page.component.css']
 })
 export class PageComponent extends AbstractSearchComponent implements OnInit {
+  constructor(protected httpService: HttpService, protected progressService: ProgressService,
+              protected router: Router, protected dialog: MatDialog,
+              protected snackBar: MatSnackBar, protected sanitizer: DomSanitizer, protected titleService: TitleService) {
+    super(httpService, progressService, router, dialog, snackBar, sanitizer, titleService);
+  }
 
   ngOnInit() {
     this.titleService.setTitleWithOutConstant('ادمین: صفحه‌ها');
