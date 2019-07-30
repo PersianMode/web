@@ -13,7 +13,7 @@
 </span>
 
 <div [ngClass]="isMobile ? 'set-size-mobile' : null">
-  <h1 *ngIf="filter_options?.length">فیلترها</h1>
+  <div *ngIf="filter_options?.length" style="font-size: 19px; font-weight: bold">فیلترها</div>
 </div>
 
   <mat-expansion-panel class="exp" *ngIf="isMobile" [expanded]="expanded.sort">
