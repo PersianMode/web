@@ -113,7 +113,6 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
 
       this.sortedBy = {value: null};
       this.products = r;
-      console.log('//////////', this.products);
       setTimeout(() => this.calcAfterScroll(), 1000);
     });
     this.calcWidth();

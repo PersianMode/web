@@ -15,6 +15,7 @@ import * as ntc from 'ntcjs';
 export class FilteringPanelComponent implements OnInit, OnDestroy {
   @Input() sortOptions;
   filter_options: any;
+  filter_options$: any;
   current_filter_state = [];
   clear_box = null;
   isMobile = false;
@@ -38,7 +39,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   maxDiscount;
   selectedMinDiscountFormatted = '';
   selectedMaxDiscountFormatted = '';
-  filter_options$: any;
   side_options$: any;
   sideOptions: any[] = [];
   moreSides = false;
