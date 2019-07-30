@@ -86,6 +86,7 @@ export class ProductService {
   collectionIsEUObject: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   private sortInput;
   private collectionId;
+  currentProductIndex: number = 0;
 
   constructor(private httpService: HttpService, private dict: DictionaryService,
               private spinnerService: SpinnerService, private authService: AuthService) {
@@ -303,6 +304,7 @@ export class ProductService {
 
   private enrichProductData(data) {
     data.id = data._id;
+    data.index = this.products.findIndex(p => p._id === data.id);
     data.type = data.product_type;
     data.price = data.base_price;
     const year = data.tags.find(r => r.tg_name === 'Season Year');

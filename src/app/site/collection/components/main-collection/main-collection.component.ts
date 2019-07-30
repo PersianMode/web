@@ -116,11 +116,11 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
     this.productService.productList$.subscribe(r => {
 
       this.sortedBy = {value: null};
-      this.products = r;
+      this.products = r.slice(0);
       this.totalRecords = this.products.length;
       setTimeout(() => {
         this.calcAfterScroll();
-        this.lazyProducts = this.products.splice(0, this.lazyRows);
+        this.lazyLoad();
       }, 1000);
 
     });
@@ -202,6 +202,8 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   }
 
   lazyLoad() {
-    this.lazyProducts = this.lazyProducts.concat(this.products.splice(0, this.lazyRows));
+    console.log(this.productService.currentProductIndex)
+    this.lazyProducts = this.lazyProducts.concat(this.products.splice(this.productService.currentProductIndex, this.lazyRows));
+    this.productService.currentProductIndex = 0;
   }
 }

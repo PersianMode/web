@@ -6,6 +6,7 @@ import {ResponsiveService} from '../../services/responsive.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {HttpService} from '../../services/http.service';
 import {DictionaryService} from '../../services/dictionary.service';
+import {ProductService} from '../../services/product.service';
 
 const tagNames = ['Sub Division', 'Category', 'Gender'];
 
@@ -44,10 +45,11 @@ export class ProductGridItemComponent implements OnInit {
   soldOut = false;
   discounted = false;
   discountedPrice: any;
+  @Input() productIndex: number;
 
   constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router,
               private responsiveService: ResponsiveService, private sanitizer: DomSanitizer,
-              private dict: DictionaryService) {
+              private dict: DictionaryService, private ps: ProductService) {
     this.zone.runOutsideAngular(() => {
       this.window.document.addEventListener('mousemove', this.mouseMove.bind(this));
     });
@@ -146,6 +148,7 @@ export class ProductGridItemComponent implements OnInit {
   }
 
   openProduct() {
+    this.ps.currentProductIndex = this.productIndex;
     this.router.navigate(['product', this.data._id, this.data.colors[this.pos]._id]);
   }
 
