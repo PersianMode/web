@@ -175,3 +175,27 @@
 .noborder{
   border :none !important;
 }
+
+.soldOut {
+  color: #d00000;
+  position: absolute;
+  transform: rotate(-45deg) translateY(56px) translateX(-50px);
+  display: inline-block;
+  z-index: 10;
+  font-weight: 100;
+  font-family: iranyekan, sans-serif;
+  font-size: 63px;
+  opacity: .5;
+}
+
+.soldOutSmall {
+  color: #d00000;
+  position: absolute;
+  transform: rotate(-45deg) translateY(13px) translateX(-10px);
+  display: inline-block;
+  z-index: 10;
+  font-weight: 400;
+  font-family: iranyekan, sans-serif;
+  font-size: 17px;
+  opacity: 1;
+}
