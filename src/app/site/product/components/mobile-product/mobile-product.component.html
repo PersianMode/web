@@ -28,11 +28,11 @@
   <app-size-picker [sizes]="productSize" [productType]="productType" (value)="newSize($event)"
                    [gender]="gender" [redBorder]="!size && chosen"></app-size-picker>
 
-  <div>
+  <div style="width: 70%; display: inline-block">
     <button mat-button class="cart" (click)="saveToCart()" [disabled]="addCardBtnDisabled">در سبد بگذار
     </button>
   </div>
-  <div>
+  <div style="display: inline-block">
     <button class="wishlist" matTooltip="افزودن به علاقه‌مندی‌ها" (click)="saveToFavorites()"><i
       class="fa fa-heart"></i></button>
   </div>

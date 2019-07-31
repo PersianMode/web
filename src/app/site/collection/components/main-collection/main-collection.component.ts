@@ -10,6 +10,7 @@ import {TitleService} from '../../../../shared/services/title.service';
 import {AuthService} from 'app/shared/services/auth.service';
 import {HttpService} from 'app/shared/services/http.service';
 
+const MIN_OFFSET = 65;
 const HEADER_HEIGHT = 200;
 
 @Component({
@@ -129,7 +130,10 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
       this.calcWidth();
     });
     this.isMobile = this.responsiveService.isMobile;
-    this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+    this.responsiveService.switch$.subscribe(isMobile => {
+      this.isMobile = isMobile;
+      this.calcWidth();
+    });
 
     this.scroll$.subscribe(() => this.calcAfterScroll());
 
@@ -165,9 +169,9 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
       const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT ;
       this.innerScroll = docHeight - filterHeight < 0;
       this.innerHeight = docHeight - HEADER_HEIGHT;
-      this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
-      this.bottomScroll = !this.innerScroll && offset >= 65 && (docHeight - offset - height <  180);
-      this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= 65 &&
+      this.topFixedFilterPanel = !this.innerScroll && offset >= MIN_OFFSET && filterHeight < height;
+      this.bottomScroll = !this.innerScroll && offset >= MIN_OFFSET && (docHeight - offset - height <  180);
+      this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= MIN_OFFSET &&
         !this.bottomScroll && filterHeight - offset < height - HEADER_HEIGHT;
       this.topDist = height - filterHeight + HEADER_HEIGHT;
     }
