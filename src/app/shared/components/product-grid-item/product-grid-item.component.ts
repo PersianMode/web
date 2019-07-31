@@ -81,6 +81,8 @@ export class ProductGridItemComponent implements OnInit {
       this.slidesNum = Math.ceil(this.data.colors.length / 3);
     });
     this.soldOut = this.data.soldOut;
+    const firstAvailableIndex = this.data.colors.findIndex(c => !c.soldOut);
+    this.pos = firstAvailableIndex !== -1 ? firstAvailableIndex : 0;
     this.discounted = !!this.data.discount;
     this.setPrice();
   }

@@ -12,10 +12,7 @@
 </button>
 </span>
 
-<div [ngClass]="isMobile ? 'set-size-mobile' : null">
-  <h1 *ngIf="filter_options?.length">فیلترها</h1>
-</div>
-
+<mat-accordion [multi]="!isMobile">
   <mat-expansion-panel class="exp" *ngIf="isMobile" [expanded]="expanded.sort">
     <mat-expansion-panel-header>
       <div class="checkbox-title">ترتیب نمایش</div>
@@ -25,6 +22,9 @@
       <i *ngIf="sortedBy && (sortedBy.value === sortOption.value)" class="fa fa-check sort"></i>
     </div>
   </mat-expansion-panel>
+  <div [ngClass]="isMobile ? 'set-size-mobile' : null">
+    <h1 *ngIf="filter_options?.length">فیلترها</h1>
+  </div>
   <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null"
                        [expanded]="!(expanded[fo.name]===false)" (opened)="expanded[fo.name]=true"
                        (closed)="expanded[fo.name]=false" [hideToggle]="true" class="mat-elevation-z0">
@@ -44,7 +44,7 @@
       <p-slider [(ngModel)]="rangeValues " [range]="true " [min]="minPrice " [max]="maxPrice "
                 (onChange)="formatPrices() "
                 class="p-slider"
-                (onSlideEnd)="priceRangeChange() "></p-slider>
+                (onSlideEnd)="priceRangeChange()"></p-slider>
       <span style="float:left ">{{selectedMinPriceFormatted}} تومان</span>
       <span>{{selectedMaxPriceFormatted}} تومان</span>
     </div>
@@ -86,7 +86,7 @@
       </mat-button-toggle>
     </span>
   </mat-expansion-panel>
-
+</mat-accordion>
 <div class="actions ">
   <button mat-button *ngIf="isMobile " (click)="changeDisplayFilter() ">اعمال فیلترها</button>
   <button mat-button *ngIf="filter_options?.length " (click)="clearFilters() ">برداشتن تمام فیلترها</button>

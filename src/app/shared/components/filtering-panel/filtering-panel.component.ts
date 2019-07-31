@@ -1,11 +1,10 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
 import {priceFormatter} from '../../lib/priceFormatter';
 import {ProductService} from '../../services/product.service';
 import {colorConverter} from '../../services/colorConverter';
 import {DictionaryService} from '../../services/dictionary.service';
 import * as ntc from 'ntcjs';
-
 
 @Component({
   selector: 'app-filtering-panel',
@@ -43,6 +42,8 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   sideOptions: any[] = [];
   moreSides = false;
   allCount = '';
+  lastSlideEventTime;
+  curRange;
 
   constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
@@ -137,6 +138,19 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   formatPrices() {
     [this.selectedMinPriceFormatted, this.selectedMaxPriceFormatted] = this.rangeValues.map(priceFormatter);
+    if (this.isMobile) { // SliderEnd event doesn't work on mobile, this is to compensate
+      if (!this.curRange)
+        this.curRange = this.rangeValues.slice(0);
+      const i = setInterval(() => {
+        if (this.curRange &&
+          (this.curRange[0] !== this.rangeValues[0] || this.curRange[1] !== this.rangeValues[1])) {
+          clearInterval(i);
+          this.curRange = null;
+          this.lastSlideEventTime = null;
+          this.priceRangeChange();
+        }
+      }, 1000);
+    }
   }
 
   priceRangeChange() {

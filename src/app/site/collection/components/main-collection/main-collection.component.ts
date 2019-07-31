@@ -10,7 +10,7 @@ import {TitleService} from '../../../../shared/services/title.service';
 import {AuthService} from 'app/shared/services/auth.service';
 import {HttpService} from 'app/shared/services/http.service';
 
-const HEADER_HEIGHT = 209;
+const HEADER_HEIGHT = 200;
 
 @Component({
   selector: 'app-main-collection',
@@ -121,7 +121,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
       setTimeout(() => {
         this.calcAfterScroll();
         this.lazyLoad();
-      }, 1000);
+      }, 0);
 
     });
     this.calcWidth();
@@ -162,11 +162,11 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
       const height = this.window.innerHeight - HEADER_HEIGHT;
       const filterHeight = this.filterPane.nativeElement.scrollHeight;
-      const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT;
-      this.innerScroll = docHeight - filterHeight < 100;
+      const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT ;
+      this.innerScroll = docHeight - filterHeight < 0;
       this.innerHeight = docHeight - HEADER_HEIGHT;
       this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
-      this.bottomScroll = !this.innerScroll && offset >= 65 && (docHeight - offset - height < 180);
+      this.bottomScroll = !this.innerScroll && offset >= 65 && (docHeight - offset - height <  180);
       this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= 65 &&
         !this.bottomScroll && filterHeight - offset < height - HEADER_HEIGHT;
       this.topDist = height - filterHeight + HEADER_HEIGHT;
@@ -203,5 +203,6 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
 
   lazyLoad() {
     this.lazyProducts = this.lazyProducts.concat(this.products.splice( 0, this.lazyRows));
+    setTimeout(() => this.calcAfterScroll(), 100);
   }
 }
