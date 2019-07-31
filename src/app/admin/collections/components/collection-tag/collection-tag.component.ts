@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Router} from '@angular/router';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -11,6 +11,7 @@ import {MatSnackBar} from '@angular/material';
 })
 export class CollectionTagComponent implements OnInit {
   @Input() collectionId: string;
+  @Output() tagArray = new EventEmitter();
   tags: any[] = [];
 
   constructor(private router: Router, private httpService: HttpService, private progressService: ProgressService,
@@ -21,8 +22,10 @@ export class CollectionTagComponent implements OnInit {
     this.progressService.enable();
     this.httpService.get(`collection/tag/${this.collectionId}`).subscribe(res => {
 
-      if (res && res.tags)
+      if (res && res.tags) {
         this.tags = res.tags;
+        this.tagArray.emit(this.tags);
+      }
       this.progressService.disable();
     }, err => {
       this.snackBar.open('Couldn\'t get collection products.', null, {
@@ -37,10 +40,12 @@ export class CollectionTagComponent implements OnInit {
     this.httpService.post(`collection/tag/${this.collectionId}`, {tagId: expObj._id}).subscribe(
       data => {
         this.tags.push(expObj);
+
         this.progressService.disable();
         this.snackBar.open('tag added to collection.', null, {
           duration: 3200
         });
+        this.tagArray.emit([...this.tags]);
       }, err => {
         this.snackBar.open('Couldn\'t add tag to collection.', null, {
           duration: 3200
@@ -63,6 +68,7 @@ export class CollectionTagComponent implements OnInit {
         this.snackBar.open('tag removed to collection successfully.', null, {
           duration: 3200
         });
+        this.tagArray.emit([...this.tags]);
       }, err => {
         this.progressService.disable();
         this.snackBar.open('could not remove tag to collection.', null, {
