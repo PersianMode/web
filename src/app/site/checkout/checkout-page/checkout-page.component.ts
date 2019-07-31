@@ -52,7 +52,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   noDuration = null;
   loyaltyGroups = [];
   addPointArray = [];
-  selectedPaymentType = PaymentType.balance;
+  selectedPaymentType = PaymentType.cash;
   earnedLoyaltyPoint = 0;
   system_offline_offer = 25000;
   loyaltyValue = 400;  // system_offline offers this

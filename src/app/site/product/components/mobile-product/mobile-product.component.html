@@ -1,5 +1,5 @@
 <h1>{{product.name}}</h1>
-<h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span> <span *ngIf="discounted">{{discountedPrice}}
+<h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span><span *ngIf="discounted">{{discountedPrice}}
     تومان</span></h4>
 <swiper *ngIf="selectedProductColor && selectedProductColor.image && selectedProductColor.image.angles"
         [config]="config" style="direction: ltr">
