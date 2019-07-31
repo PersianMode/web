@@ -72,6 +72,7 @@ export class CollectionFilterOptionsComponent implements OnInit {
         item.checked = tempItem.checked;
       }
     });
+
     this.filter_options = tempArr;
   }
 
