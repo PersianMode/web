@@ -55,7 +55,7 @@
 }
 
 /* 1368px */
-@media (max-width: 600px) {
+@media (max-width: 960px) {
   .photos div {
     padding: 0 4px 6px 4px;
     width: calc(100% - 8px);
