@@ -21,13 +21,13 @@ export class CollectionFilterOptionsComponent implements OnInit {
   @Input()
   set tagArray(value) {
     console.log('***', value);
-    this.changeFilterOptions('tag');
+    this.changeFilterOptions();
   }
   @Input()
   set typeArray(value) {
     console.log('@@@', value);
     this._typeArray = value;
-    this.changeFilterOptions('type');
+    this.changeFilterOptions();
   }
 
   constructor(private router: Router, private httpService: HttpService, private progressService: ProgressService,
@@ -51,29 +51,26 @@ export class CollectionFilterOptionsComponent implements OnInit {
     });
   }
 
-  changeFilterOptions(val = '') {
+  changeFilterOptions() {
     this.productService.loadCollectionProducts(this.collectionId, null);
     this.productService.productList$.subscribe(r => {
       this.products = r;
     });
-    let filters = [];
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
-      filters = r;
-    });
-    const tempArr = [...filters].map(el => {
-      return {name: el.name, name_fa: el.name_fa, checked: true};
-    });
-    if (!this.filter_options || !this.filter_options.length)
+      const tempArr = r.map(el => {
+        return {name: el.name, name_fa: el.name_fa, checked: true};
+      });
+      if (!this.filter_options || !this.filter_options.length)
+        this.filter_options = tempArr;
+
+      tempArr.forEach(item => {
+        let tempItem = null;
+        if (tempItem = this.filter_options.find(el => el.name === item.name && el.name_fa === item.name_fa)) {
+          item.checked = tempItem.checked;
+        }
+      });
       this.filter_options = tempArr;
-
-    tempArr.forEach(item => {
-      let tempItem = null;
-      if (tempItem = this.filter_options.find(el => el.name === item.name && el.name_fa === item.name_fa)) {
-        item.checked = tempItem.checked;
-      }
     });
-
-    this.filter_options = tempArr;
   }
 
   setCheckedValue(selectedOption) {
