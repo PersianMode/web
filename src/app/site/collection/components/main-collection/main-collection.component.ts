@@ -152,7 +152,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
     this.lazyRows = this.isMobile ? 3 :
       Math.round(Math.floor(this.gridWidth / 242) *
         Math.ceil((this.window.innerHeight - 105) / 348) * 1.5);
-    setTimeout(() => this.calcAfterScroll(), 1000);
+    setTimeout(() => this.calcAfterScroll(), 0);
   }
 
   @HostListener('window:scroll', [])
@@ -165,7 +165,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
     if (!this.isMobile && this.filterPane && this.gridwall) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
       const height = this.window.innerHeight - HEADER_HEIGHT;
-      const filterHeight = this.filterPane.nativeElement.scrollHeight;
+      const filterHeight = this.filterPane.nativeElement.scrollHeight + 10;
       const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT ;
       this.innerScroll = docHeight - filterHeight < 0;
       this.innerHeight = docHeight - HEADER_HEIGHT;
