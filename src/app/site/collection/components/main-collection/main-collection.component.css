@@ -2,11 +2,24 @@
   bottom: auto;
   position: absolute;
   background: #fff;
-  right: 9px;
-  padding: 5px;
+  padding: 5px 15px;
   width: 250px;
   z-index: 9;
   font-size: 13px;
+}
+@media (max-width: 1520px) {
+  .filters {
+    right: 9px;
+  }
+}
+
+@media (min-width: 1520px) {
+  .filters {
+    right: calc((100vw - 1515px) / 2 );
+  }
+  .gridwall {
+    text-align: center;
+  }
 }
 
 .gridwall {
