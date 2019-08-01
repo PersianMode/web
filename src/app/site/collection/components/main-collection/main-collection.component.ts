@@ -9,6 +9,7 @@ import {Subject, Subscription} from 'rxjs';
 import {TitleService} from '../../../../shared/services/title.service';
 import {AuthService} from 'app/shared/services/auth.service';
 import {HttpService} from 'app/shared/services/http.service';
+import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
 const MIN_OFFSET = 65;
 const HEADER_HEIGHT = 200;
@@ -64,30 +65,52 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   lazyRows = 10;
   subscription: Subscription;
   lazyProducts = [];
+  category;
+  parentPageName;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
               private httpService: HttpService,
               private responsiveService: ResponsiveService, private productService: ProductService,
-              private titleService: TitleService, private authService: AuthService) {
+              private titleService: TitleService, private authService: AuthService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
+    this.route.queryParams
+      .filter(params => params.category)
+      .map(params => params.category)
+      .subscribe(category => {
+        this.category = category;
+      });
     this.route.paramMap.subscribe(params => {
       if (params.get('typeName')) {
         this.pageName = 'collection/' + params.get('typeName');
       }
       if ((params.get('l1'))) {
+        this.parentPageName = this.pageName;
+        this.pageService.getParentPage(this.parentPageName);
+        this.pageService.pageInfo$
+          .filter(p => p[0] === this.parentPageName && p[1] && p[1]['collection_id'])
+          .map(p => p[1])
+          .subscribe(res => {
+            // check when customer logged in then product sort by tags that interested
+            const tag = this.authService.userIsLoggedIn() ? 'tagsCustomerInterested' : null;
+            // second parameter for set interested customer tags (when logged in)
+            this.productService.loadParentProducts(res['collection_id'], tag);
+          });
         this.pageName += '/' + params.get('l1');
       }
       if ((params.get('l2'))) {
         this.pageName += '/' + params.get('l2');
       }
+      if ((params.get('l3'))) {
+        this.pageName += '/' + params.get('l3');
+      }
       this.pageService.getPage(this.pageName);
       this.subscription = this.pageService.pageInfo$.filter(r => r[0] === this.pageName).map(r => r[1]).subscribe(res => {
           this.title = res.title;
           if (res && res['collection_id']) {
-            // check when customer logged in then product sort by tags that insterested
+            // check when customer logged in then product sort by tags that interested
             const tag = this.authService.userIsLoggedIn() ? 'tagsCustomerInterested' : null;
             // second parameter for set interested customer tags (when logged in)
             this.productService.loadCollectionProducts(res['collection_id'], tag);
@@ -166,11 +189,11 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
       const height = this.window.innerHeight - HEADER_HEIGHT;
       const filterHeight = this.filterPane.nativeElement.scrollHeight + 10;
-      const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT ;
+      const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT;
       this.innerScroll = docHeight - filterHeight < 0;
       this.innerHeight = docHeight - HEADER_HEIGHT;
       this.topFixedFilterPanel = !this.innerScroll && offset >= MIN_OFFSET && filterHeight < height;
-      this.bottomScroll = !this.innerScroll && offset >= MIN_OFFSET && (docHeight - offset - height <  180);
+      this.bottomScroll = !this.innerScroll && offset >= MIN_OFFSET && (docHeight - offset - height < 180);
       this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= MIN_OFFSET &&
         !this.bottomScroll && filterHeight - offset < height - HEADER_HEIGHT;
       this.topDist = height - filterHeight + HEADER_HEIGHT;
@@ -206,7 +229,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   }
 
   lazyLoad() {
-    this.lazyProducts = this.lazyProducts.concat(this.products.splice( 0, this.lazyRows));
+    this.lazyProducts = this.lazyProducts.concat(this.products.splice(0, this.lazyRows));
     setTimeout(() => this.calcAfterScroll(), 100);
   }
 }

@@ -13,6 +13,15 @@ import * as ntc from 'ntcjs';
 })
 export class FilteringPanelComponent implements OnInit, OnDestroy {
   @Input() sortOptions;
+  private _c;
+  @Input()  get category() {return this._c};
+            set category(value)
+            {
+                this._c = value;
+                if (this.category) {
+                  this.sideOptionClicked('Category', this.category);
+                }
+            }
   filter_options: any;
   current_filter_state = [];
   clear_box = null;
@@ -20,6 +29,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   sortedBy: any = {value: null};
   @Output() displayFilterEvent = new EventEmitter<any>();
   @Output() sortedByChange = new EventEmitter<any>();
+  @Output() categoryChange = new EventEmitter<any>();
   isChecked: any = {};
   oppositeColor: any = {};
   translatedColor: any = {};
@@ -44,6 +54,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   allCount = '';
   lastSlideEventTime;
   curRange;
+  parentCategories: any[] = [];
+  isParent: any = {};
+  parentData$;
 
   constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
@@ -67,8 +80,50 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
           }
         }));
       this.sideOptions.sort((x, y) => y.count - x.count);
+      if (this.sideOptions.findIndex(s => s.value === this.category) > 4) {
+        this.moreSides = true;
+      }
       this.isChecked.main = {all: true};
       this.allCount = this.productService.countProducts().toLocaleString('fa');
+    });
+
+    this.parentData$ = this.productService.parentData$.subscribe(r => {
+      this.parentCategories = [];
+      let allCount = 0;
+      for (let category in r.categories) {
+        const count = r.categories[category];
+        allCount += count;
+        this.parentCategories.push({
+          name: category,
+          nameFa: this.dict.translateWord(category),
+          count,
+          countFa: this.dict.translateWord(count),
+        });
+      }
+      if (allCount) {
+        this.parentCategories.push({
+          name: r.name,
+          nameFa: r.nameFa,
+          count: allCount,
+          countFa: this.dict.translateWord(allCount)
+        })
+      }
+      this.parentCategories.sort((x, y) => {
+        if (r.sortedCategories) {
+          let xRank = r.sortedCategories.findIndex(s => s.toLowerCase() === x.name.toLowerCase());
+          let yRank = r.sortedCategories.findIndex(s => s.toLowerCase() === y.name.toLowerCase());
+          if (xRank !== -1) {
+            if (yRank !== -1) {
+              return xRank - yRank;
+            } else {
+              return -1;
+            }
+          } else if (yRank !== -1) {
+            return 1;
+          }
+        }
+        return y.count - x.count;
+      });
     });
 
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
@@ -130,6 +185,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
           this.oppositeColor[col] = 'white';
         }
       }
+      if (this.category) {
+        this.sideOptionClicked('Category', this.category)
+      }
     });
 
     this.isMobile = this.responsiveService.isMobile;
@@ -177,6 +235,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
         if (k1 === 'Category')
         if (k2 !== value) {
+          this.categoryChange.next(value)
           if (this.isChecked[k1][k2]) {
             this.changeFilterState(k1, k2, false);
             this.isChecked[k1][k2] = false;
@@ -187,6 +246,10 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  parentCategoryClicked(name) {
+
   }
 
   getValue(name, value) {

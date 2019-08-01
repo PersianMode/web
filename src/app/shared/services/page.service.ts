@@ -59,6 +59,10 @@ export class PageService {
     this.pageInfo$.next([pageName, placements.page_info]);
   }
 
+  getParentPage(pageName) {
+    this.getPage(pageName);
+  }
+
   getPage(pageName, emit = true) {
     const i = setInterval(() => { // All other pages should wait for initialisation of Home placements
       if (pageName === 'home' || pageName.includes('?preview') || this.homeWasLoaded) {

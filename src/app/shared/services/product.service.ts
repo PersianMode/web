@@ -86,6 +86,10 @@ export class ProductService {
   collectionIsEUObject: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   private sortInput;
   private collectionId;
+  parentProducts = [];
+  parentCollectionName = '';
+  parentCategories: any = {};
+  parentData$: ReplaySubject<any> = new ReplaySubject<any>(1);
 
   constructor(private httpService: HttpService, private dict: DictionaryService,
               private spinnerService: SpinnerService, private authService: AuthService) {
@@ -209,13 +213,14 @@ export class ProductService {
     this.filtering$.next([]);
   }
 
-  countProducts(tag = null, value = null) {
+  countProducts(tag = null, value = null, parent = false) {
+    const t = parent ? this.parentProducts : this.filteredProducts;
     if (tag && value) {
-      return cleanProductsList(this.filteredProducts)
+      return cleanProductsList(t)
         .filter(p => p.tags.find(t => value === t.name))
         .length;
     } else {
-      return cleanProductsList(this.filteredProducts).length;
+      return cleanProductsList(t).length;
     }
   }
 
@@ -399,14 +404,14 @@ export class ProductService {
     });
   }
 
-  loadCollectionProducts(collection_id, sortInput = null) {
+  loadCollectionProducts(collectionId, sortInput = null) {
     this.spinnerService.enable();
     this.sortInput = sortInput;
-    const cacheRead = cache.read(collection_id);
+    const cacheRead = cache.read(collectionId);
 
     const handleCollectionData = data => {
       if (!cacheRead) {
-        cache.add(collection_id, data);
+        cache.add(collectionId, data);
       }
       if (data.name_fa) {
         this.collectionName = data.name_fa;
@@ -419,7 +424,7 @@ export class ProductService {
         for (const product of data.products) {
           this.enrichProductData(product);
         }
-        this.collectionId = collection_id;
+        this.collectionId = collectionId;
         this.products = data.products;
         this.filteredProducts = this.products.slice();
 
@@ -432,11 +437,58 @@ export class ProductService {
     if (cacheRead) {
       handleCollectionData(cacheRead);
     } else {
-      this.httpService.get('collection/product/' + collection_id)
+      this.httpService.get('collection/product/' + collectionId)
         .subscribe(handleCollectionData,
           (err) => {
             this.spinnerService.disable();
             console.error('Cannot get products of collection: ', err);
+          }
+        );
+    }
+  }
+
+  loadParentProducts(collectionId, sortInput = null) {
+    this.spinnerService.enable();
+    this.sortInput = sortInput;
+    const cacheRead = cache.read(collectionId);
+
+    const handleCollectionData = data => {
+      if (!cacheRead) {
+        cache.add(collectionId, data);
+      }
+      if (data.name_fa) {
+        this.parentCollectionName = data.name_fa;
+      }
+      if (data.products) {
+        cleanProductsList(data.products).forEach(p => {
+          const categoryTag = p.tags.find(t => t.tg_name.toLowerCase() === 'category');
+          if (categoryTag) {
+            if (this.parentCategories[categoryTag.name]) {
+              this.parentCategories[categoryTag.name]++;
+            } else {
+              this.parentCategories[categoryTag.name] = 1;
+            }
+          }
+        });
+      }
+      data.sortedCategories= ['TENNIS'];
+      this.parentData$.next({
+        name: data.name,
+        nameFa: this.parentCollectionName,
+        categories: this.parentCategories,
+        sortedCategories: [data.name].concat(data.sortedCategories),
+      });
+      this.spinnerService.disable();
+    };
+
+    if (cacheRead) {
+      handleCollectionData(cacheRead);
+    } else {
+      this.httpService.get('collection/product/' + collectionId)
+        .subscribe(handleCollectionData,
+          (err) => {
+            this.spinnerService.disable();
+            console.error('Cannot get parent products of collection: ', err);
           }
         );
     }
