@@ -36,29 +36,10 @@ export class CollectionFilterOptionsComponent implements OnInit {
     this.filter_options = await this.getFilterOptionList();
   }
 
-  // async getFilterOptionList() {
-  //   this.progressService.enable();
-  //   await this.httpService.get(`collection/filter_option_list/${this.collectionId}`).subscribe( res => {
-  //     if (res && res.length) {
-  //       this.filter_options = res;
-  //     }
-  //     this.progressService.disable();
-  //   }, err => {
-  //     this.snackBar.open('Couldn\'t get collection filter option list.', null, {
-  //       duration: 3200
-  //     });
-  //     this.progressService.disable();
-  //   });
-  // }
-
-
   getFilterOptionList() {
     return new Promise((resolve, reject) => {
       this.httpService.get(`collection/filter_option_list/${this.collectionId}`).subscribe(
         (res) => {
-          // if (res && res.length) {
-          //   this.filter_options = res;
-          // }
           resolve(res);
         },
         (err) => {
