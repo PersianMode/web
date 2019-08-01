@@ -121,7 +121,7 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
     const height = this.window.innerHeight - HEADER_HEIGHT;
     const filterHeight = this.descPane.nativeElement.scrollHeight + 70;
     const docHeight = this.photosDiv.nativeElement.scrollHeight + HEADER_HEIGHT;
-    this.innerScroll = docHeight - filterHeight < 70;
+    this.innerScroll = docHeight - filterHeight < HEADER_HEIGHT;
     this.innerHeight = docHeight - HEADER_HEIGHT - 70;
     this.topFixedFilterPanel = !this.innerScroll && offset >= MIN_OFFSET && filterHeight < height;
     this.bottomScroll = !this.innerScroll && offset >= MIN_OFFSET && (docHeight - offset - height < 180);
