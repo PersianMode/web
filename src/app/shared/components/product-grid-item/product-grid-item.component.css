@@ -124,6 +124,7 @@
   cursor: pointer;
   overflow: hidden;
   direction:ltr;
+  min-height: calc(100vw - 20px);
 }
 
 .imgWrapper img{
