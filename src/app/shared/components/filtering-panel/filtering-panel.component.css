@@ -11,7 +11,23 @@
   color: gray;
 }
 
+.check-box-text:hover {
+  color: gray;
+}
 
+.colName {
+  color: black;
+  font-size: 16px;
+  font-weight: 400;
+  margin-right: 10px;
+  opacity: 1 !important;
+}
+.colNum {
+  color: #ccc;
+}
+.colSelected {
+  color: #ccc !important;
+}
 .circle {
   top: -25px;
   right: 0px;

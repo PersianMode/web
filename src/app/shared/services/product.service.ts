@@ -404,7 +404,7 @@ export class ProductService {
     });
   }
 
-  loadCollectionProducts(collectionId, sortInput = null) {
+  loadCollectionProducts(collectionId, sortInput = null, category = null) {
     this.spinnerService.enable();
     this.sortInput = sortInput;
     const cacheRead = cache.read(collectionId);
@@ -427,7 +427,9 @@ export class ProductService {
         this.collectionId = collectionId;
         this.products = data.products;
         this.filteredProducts = this.products.slice();
-
+        if (category) {
+          this.applyFilters([{name: 'Category', values: [category]}], 'Category', false);
+        }
         this.sortProductsAndEmit();
         this.extractFilters([], '', true);
       }
@@ -460,6 +462,7 @@ export class ProductService {
         this.parentCollectionName = data.name_fa;
       }
       if (data.products) {
+        this.parentCategories = {};
         cleanProductsList(data.products).forEach(p => {
           const categoryTag = p.tags.find(t => t.tg_name.toLowerCase() === 'category');
           if (categoryTag) {
@@ -534,6 +537,7 @@ export class ProductService {
       }
     }
     this.productList$.next(cleanProductsList(sortedProducts));
+    console.log('here', sortedProducts.length)
     this.spinnerService.disable();
 
   }

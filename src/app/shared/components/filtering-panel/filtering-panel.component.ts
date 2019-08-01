@@ -5,6 +5,7 @@ import {ProductService} from '../../services/product.service';
 import {colorConverter} from '../../services/colorConverter';
 import {DictionaryService} from '../../services/dictionary.service';
 import * as ntc from 'ntcjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-filtering-panel',
@@ -14,14 +15,20 @@ import * as ntc from 'ntcjs';
 export class FilteringPanelComponent implements OnInit, OnDestroy {
   @Input() sortOptions;
   private _c;
-  @Input()  get category() {return this._c};
-            set category(value)
-            {
-                this._c = value;
-                if (this.category) {
-                  this.sideOptionClicked('Category', this.category);
-                }
-            }
+
+  @Input() get category() {
+    return this._c
+  };
+
+  set category(value) {
+    this._c = value;
+    if (this.category || this.category === '') {
+      this.sideOptionClicked('Category', this.category);
+      this.moreSides = true;
+    }
+
+  }
+
   filter_options: any;
   current_filter_state = [];
   clear_box = null;
@@ -55,10 +62,12 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   lastSlideEventTime;
   curRange;
   parentCategories: any[] = [];
-  isParent: any = {};
   parentData$;
+  parentName;
+  prodcutList$;
 
-  constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
+  constructor(private responsiveService: ResponsiveService, private productService: ProductService,
+              private dict: DictionaryService, private router: Router) {
   }
 
   ngOnInit() {
@@ -90,6 +99,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     this.parentData$ = this.productService.parentData$.subscribe(r => {
       this.parentCategories = [];
       let allCount = 0;
+      this.parentName = r.name;
       for (let category in r.categories) {
         const count = r.categories[category];
         allCount += count;
@@ -125,7 +135,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
         return y.count - x.count;
       });
     });
-
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
       this.allCount = this.productService.countProducts().toLocaleString('fa');
       this.filter_options = r;
@@ -145,6 +154,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
           for (const key of el.values) {
             this.isChecked[el.name][key] = false;
           }
+        }
+        if (this.category) {
+          this.sideOptionClicked('Category', this.category)
         }
       });
       let prices: any = r.find(fo => fo.name === 'price');
@@ -184,9 +196,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
         } else {
           this.oppositeColor[col] = 'white';
         }
-      }
-      if (this.category) {
-        this.sideOptionClicked('Category', this.category)
       }
     });
 
@@ -234,22 +243,26 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     for (const k1 in this.isChecked) if (this.isChecked.hasOwnProperty(k1)) {
       for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
         if (k1 === 'Category')
-        if (k2 !== value) {
-          this.categoryChange.next(value)
-          if (this.isChecked[k1][k2]) {
+          if (k2 !== value) {
+            this.categoryChange.next(value);
+            if (this.isChecked[k1][k2]) {
+              this.changeFilterState(k1, k2, false);
+              this.isChecked[k1][k2] = false;
+            }
+          } else if (!this.isChecked[k1][k2]) {
             this.changeFilterState(k1, k2, false);
-            this.isChecked[k1][k2] = false;
+            this.isChecked[k1][k2] = true;
           }
-        } else if (!this.isChecked[k1][k2]) {
-          this.changeFilterState(k1, k2, false);
-          this.isChecked[k1][k2] = true;
-        }
       }
     }
   }
 
   parentCategoryClicked(name) {
-
+    if (this.router.url.split('?')[0] === '/collection/' + this.parentName) {
+      this.sideOptionClicked('Category', name);
+    } else {
+      this.router.navigate(['/collection', this.parentName], {queryParams: {category: name !== this.parentName ? name : ''}, queryParamsHandling: 'preserve'});
+    }
   }
 
   getValue(name, value) {
