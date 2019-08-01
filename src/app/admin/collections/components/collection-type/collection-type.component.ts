@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { Router} from '@angular/router';
 import {ProgressService} from '../../../../shared/services/progress.service';
 import {HttpService} from '../../../../shared/services/http.service';
@@ -11,6 +11,7 @@ import {MatSnackBar} from '@angular/material';
 })
 export class CollectionTypeComponent implements OnInit {
   @Input() collectionId: string;
+  @Output() typeArray = new EventEmitter();
   types: any[] = [];
 
   constructor(private router: Router, private httpService: HttpService, private progressService: ProgressService,
@@ -21,8 +22,10 @@ export class CollectionTypeComponent implements OnInit {
     this.progressService.enable();
     this.httpService.get(`collection/type/${this.collectionId}`).subscribe(res => {
 
-      if (res && res.types)
+      if (res && res.types) {
         this.types = res.types;
+        this.typeArray.emit(this.types);
+      }
       this.progressService.disable();
     }, err => {
       this.snackBar.open('Couldn\'t type collection products.', null, {
@@ -38,7 +41,7 @@ export class CollectionTypeComponent implements OnInit {
     this.router.navigate([`agent/type/${tid}`]);
   }
 
-  removeTag(tid) {
+  removeType(tid) {
     this.httpService.delete(`collection/type/${this.collectionId}/${tid}`).subscribe(
       (data) => {
         this.types = this.types.filter(x => x._id !== tid);
@@ -46,6 +49,7 @@ export class CollectionTypeComponent implements OnInit {
         this.snackBar.open('type added to collection successfully.', null, {
           duration: 3200
         });
+        this.typeArray.emit(this.types);
       }, err => {
         this.progressService.disable();
         this.snackBar.open('could not add type to collection.', null, {
@@ -63,6 +67,7 @@ export class CollectionTypeComponent implements OnInit {
         this.snackBar.open('type added to collection.', null, {
           duration: 3200
         });
+        this.typeArray.emit(this.types);
       }, err => {
         this.snackBar.open('Couldn\'t add type to collection.', null, {
           duration: 3200
