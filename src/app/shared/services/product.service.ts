@@ -77,6 +77,7 @@ export class ProductService {
   type$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   tag$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   productList$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  collectionFilterOptions$: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
   filtering$: ReplaySubject<IFilter[]> = new ReplaySubject<IFilter[]>(1);
   side$ = new ReplaySubject<IFilter[]>(1);
   product$: ReplaySubject<any> = new ReplaySubject<any>();
@@ -407,6 +408,7 @@ export class ProductService {
   loadCollectionProducts(collectionId, sortInput = null, category = null) {
     this.spinnerService.enable();
     this.sortInput = sortInput;
+    this.getFilterOptionList(collectionId);
     const cacheRead = cache.read(collectionId);
 
     const handleCollectionData = data => {
@@ -448,6 +450,7 @@ export class ProductService {
         );
     }
   }
+
 
   loadParentProducts(collectionId, sortInput = null) {
     this.spinnerService.enable();
@@ -540,6 +543,21 @@ export class ProductService {
     console.log('here', sortedProducts.length)
     this.spinnerService.disable();
 
+  }
+
+
+  getFilterOptionList(collectionId) {
+    return new Promise((resolve, reject) => {
+      this.httpService.get(`collection/filter_option_list/${collectionId}`).subscribe(
+        (res) => {
+          this.collectionFilterOptions$.next(res);
+          resolve(res);
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+    });
   }
 
   changeCollectionIsEU(filterState) {

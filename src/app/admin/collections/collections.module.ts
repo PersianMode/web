@@ -15,6 +15,7 @@ import {CollectionFullInfoComponent} from './components/collection-full-info/col
 import {CollectionTypeComponent} from './components/collection-type/collection-type.component';
 import {CollectionTagComponent} from './components/collection-tag/collection-tag.component';
 import {CollectionProductComponent} from './components/collection-product/collection-product.component';
+import { CollectionFilterOptionsComponent } from './components/collection-filter-options/collection-filter-options.component';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import {CollectionProductComponent} from './components/collection-product/collec
     CollectionBasicFormComponent,
     CollectionTypeComponent,
     CollectionTagComponent,
-    CollectionProductComponent
+    CollectionProductComponent,
+    CollectionFilterOptionsComponent,
   ]
 })
 export class CollectionsModule { }

@@ -26,7 +26,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       this.sideOptionClicked('Category', this.category);
       this.moreSides = true;
     }
-
   }
 
   filter_options: any;
@@ -56,6 +55,8 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   selectedMaxDiscountFormatted = '';
   filter_options$: any;
   side_options$: any;
+  collection_filter_options$: any;
+  collection_filter_options: any;
   sideOptions: any[] = [];
   moreSides = false;
   allCount = '';
@@ -71,6 +72,10 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.collection_filter_options$ = this.productService.collectionFilterOptions$.subscribe(r => {
+      this.collection_filter_options = r;
+      console.log('************', this.collection_filter_options);
+    });
     this.isEU = this.productService.collectionIsEU;
     this.isEUSubescriber = this.productService.collectionIsEUObject.subscribe(value => this.isEU = value);
     this.side_options$ = this.productService.side$.subscribe(r => {
@@ -201,6 +206,16 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+  }
+
+
+  shouldShowOption(item) {
+    if (this.collection_filter_options && this.collection_filter_options.length) {
+      let tempItem = this.collection_filter_options.filter(el => el.name === item.name && el.name_fa === item.name_fa)
+      if (tempItem && tempItem.length === 1)
+        return tempItem[0].checked;
+    }
+    return true;
   }
 
   formatPrices() {
