@@ -1,7 +1,7 @@
 export enum filter_optionsEnum {
   name = 'نام',
   colors = 'رنگ',
-  size = 'سایز',
+  size = 'اندازه',
   brand = 'برند',
   type = 'نوع',
   tags = 'تگ',

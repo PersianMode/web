@@ -73,7 +73,7 @@ export class SiteComponent implements OnInit, OnDestroy {
   }
 
   isMobileCalc(width = this.curWidth, height = this.curHeight): boolean {
-    return width < 960;
+    return width <= 960;
   }
 
   ngOnDestroy() {

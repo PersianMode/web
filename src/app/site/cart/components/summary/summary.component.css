@@ -147,10 +147,15 @@
 }
 
 .coupon-input {
-    border-radius: 0px;
-    border: 0;
-    height: 34px;
-    width: 100%;
+  border-radius: 0;
+  border: 0;
+  margin: 0;
+  height: 36px;
+  width: calc(100% - 20px);
+  text-align: left;
+  direction: ltr;
+  font-size: 30px;
+  padding: 0 10px;
 }
 
 .coupon-btn {

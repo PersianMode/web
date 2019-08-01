@@ -1,11 +1,10 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {ResponsiveService} from '../../services/responsive.service';
 import {priceFormatter} from '../../lib/priceFormatter';
 import {ProductService} from '../../services/product.service';
 import {colorConverter} from '../../services/colorConverter';
 import {DictionaryService} from '../../services/dictionary.service';
 import * as ntc from 'ntcjs';
-
 
 @Component({
   selector: 'app-filtering-panel',
@@ -14,14 +13,23 @@ import * as ntc from 'ntcjs';
 })
 export class FilteringPanelComponent implements OnInit, OnDestroy {
   @Input() sortOptions;
+  private _c;
+  @Input()  get category() {return this._c};
+            set category(value)
+            {
+                this._c = value;
+                if (this.category) {
+                  this.sideOptionClicked('Category', this.category);
+                }
+            }
   filter_options: any;
-  filter_options$: any;
   current_filter_state = [];
   clear_box = null;
   isMobile = false;
   sortedBy: any = {value: null};
   @Output() displayFilterEvent = new EventEmitter<any>();
   @Output() sortedByChange = new EventEmitter<any>();
+  @Output() categoryChange = new EventEmitter<any>();
   isChecked: any = {};
   oppositeColor: any = {};
   translatedColor: any = {};
@@ -39,10 +47,16 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   maxDiscount;
   selectedMinDiscountFormatted = '';
   selectedMaxDiscountFormatted = '';
+  filter_options$: any;
   side_options$: any;
   sideOptions: any[] = [];
   moreSides = false;
   allCount = '';
+  lastSlideEventTime;
+  curRange;
+  parentCategories: any[] = [];
+  isParent: any = {};
+  parentData$;
 
   constructor(private responsiveService: ResponsiveService, private productService: ProductService, private dict: DictionaryService) {
   }
@@ -66,12 +80,53 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
           }
         }));
       this.sideOptions.sort((x, y) => y.count - x.count);
+      if (this.sideOptions.findIndex(s => s.value === this.category) > 4) {
+        this.moreSides = true;
+      }
       this.isChecked.main = {all: true};
       this.allCount = this.productService.countProducts().toLocaleString('fa');
     });
 
+    this.parentData$ = this.productService.parentData$.subscribe(r => {
+      this.parentCategories = [];
+      let allCount = 0;
+      for (let category in r.categories) {
+        const count = r.categories[category];
+        allCount += count;
+        this.parentCategories.push({
+          name: category,
+          nameFa: this.dict.translateWord(category),
+          count,
+          countFa: this.dict.translateWord(count),
+        });
+      }
+      if (allCount) {
+        this.parentCategories.push({
+          name: r.name,
+          nameFa: r.nameFa,
+          count: allCount,
+          countFa: this.dict.translateWord(allCount)
+        })
+      }
+      this.parentCategories.sort((x, y) => {
+        if (r.sortedCategories) {
+          let xRank = r.sortedCategories.findIndex(s => s.toLowerCase() === x.name.toLowerCase());
+          let yRank = r.sortedCategories.findIndex(s => s.toLowerCase() === y.name.toLowerCase());
+          if (xRank !== -1) {
+            if (yRank !== -1) {
+              return xRank - yRank;
+            } else {
+              return -1;
+            }
+          } else if (yRank !== -1) {
+            return 1;
+          }
+        }
+        return y.count - x.count;
+      });
+    });
+
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
-      console.log('**********', r);
       this.allCount = this.productService.countProducts().toLocaleString('fa');
       this.filter_options = r;
       this.filter_options.forEach(el => {
@@ -130,6 +185,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
           this.oppositeColor[col] = 'white';
         }
       }
+      if (this.category) {
+        this.sideOptionClicked('Category', this.category)
+      }
     });
 
     this.isMobile = this.responsiveService.isMobile;
@@ -138,6 +196,19 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   formatPrices() {
     [this.selectedMinPriceFormatted, this.selectedMaxPriceFormatted] = this.rangeValues.map(priceFormatter);
+    if (this.isMobile) { // SliderEnd event doesn't work on mobile, this is to compensate
+      if (!this.curRange)
+        this.curRange = this.rangeValues.slice(0);
+      const i = setInterval(() => {
+        if (this.curRange &&
+          (this.curRange[0] !== this.rangeValues[0] || this.curRange[1] !== this.rangeValues[1])) {
+          clearInterval(i);
+          this.curRange = null;
+          this.lastSlideEventTime = null;
+          this.priceRangeChange();
+        }
+      }, 1000);
+    }
   }
 
   priceRangeChange() {
@@ -163,17 +234,22 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     for (const k1 in this.isChecked) if (this.isChecked.hasOwnProperty(k1)) {
       for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
         if (k1 === 'Category')
-          if (k2 !== value) {
-            if (this.isChecked[k1][k2]) {
-              this.changeFilterState(k1, k2, false);
-              this.isChecked[k1][k2] = false;
-            }
-          } else if (!this.isChecked[k1][k2]) {
+        if (k2 !== value) {
+          this.categoryChange.next(value)
+          if (this.isChecked[k1][k2]) {
             this.changeFilterState(k1, k2, false);
-            this.isChecked[k1][k2] = true;
+            this.isChecked[k1][k2] = false;
           }
+        } else if (!this.isChecked[k1][k2]) {
+          this.changeFilterState(k1, k2, false);
+          this.isChecked[k1][k2] = true;
+        }
       }
     }
+  }
+
+  parentCategoryClicked(name) {
+
   }
 
   getValue(name, value) {

@@ -18,14 +18,14 @@
   position: relative;
   display: inline-block;
   text-align: right;
-  /*overflow: hidden;*/
   float: right;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
   margin-bottom: 20px;
   background: #fff;
   vertical-align: top;
   font-size: 13px;
   color: #666;
-  padding:0;
   cursor: pointer;
 }
 
@@ -72,7 +72,7 @@
 .mainMobile h2{
   color: #222;
   font-size: inherit;
-  margin: 0 2px 0;
+  margin: 10px 2px 0;
 }
 .main h3{
   color: #666;
@@ -122,7 +122,6 @@
   margin: 0;
   text-align: left;
   cursor: pointer;
-  background: #f5f5f5;
   overflow: hidden;
   direction:ltr;
 }
@@ -132,7 +131,7 @@
   position: relative;
 }
 .imgWrapperMobile img {
-  position: relative;
+  width: 100%;
 }
 .sliderWrapper {
   width: 220px;
@@ -158,7 +157,9 @@
   right: 0;
   transition: all 1s ease-out;
 }
-
+.slider span {
+  width: 60px;
+}
 .slider img {
   height: 60px;
   display: inline-block;
@@ -174,4 +175,28 @@
 }
 .noborder{
   border :none !important;
+}
+
+.soldOut {
+  color: #d00000;
+  position: absolute;
+  transform: rotate(-45deg) translateY(56px) translateX(-50px);
+  display: inline-block;
+  z-index: 10;
+  font-weight: 100;
+  font-family: iranyekan, sans-serif;
+  font-size: 63px;
+  opacity: .5;
+}
+
+.soldOutSmall {
+  color: #d00000;
+  position: absolute;
+  transform: rotate(-45deg) translateY(13px) translateX(-10px);
+  display: inline-block;
+  z-index: 10;
+  font-weight: 400;
+  font-family: iranyekan, sans-serif;
+  font-size: 17px;
+  opacity: 1;
 }

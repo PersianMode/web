@@ -2,7 +2,8 @@
      [class.bottomFixed]="bottomFixedFilterPanel"
      [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
      'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}" #filterPane>
-  <app-filtering-panel (scrollChange)="calcAfterScroll()"></app-filtering-panel>
+  <app-filtering-panel (scrollChange)="calcAfterScroll()"
+                       [category]="category" (categoryChange)="category=$event"></app-filtering-panel>
 </div>
 <p-sidebar *ngIf="isMobile" [(visible)]="displayFilter" position="right" [blockScroll]="true">
   <div class="mobileScroll">
@@ -14,11 +15,11 @@
   <app-panels></app-panels>
 
   <div class="gridwall-wrapper">
-    <h1 *ngIf="!isMobile" class="header"><span>{{collectionNameFa}}</span>
-      <span>({{products.length.toLocaleString('fa')}})</span>
+    <h1 *ngIf="!isMobile && collectionNameFa" class="header"><span>{{collectionNameFa}}<span *ngIf="category && category !=='all'"> - {{dict.translateWord(category)}}</span></span>
+      <span *ngIf="products.length || lazyProducts.length">({{totalRecords.toLocaleString('fa')}})</span>
     </h1>
     <div *ngIf="!isMobile" class="gridwall-title">
-      <div class="sorter-row">
+      <div *ngIf="products.length || lazyProducts.length" class="sorter-row">
         <div class="sorter" (click)="sortPanel.toggle($event)">
           <span *ngIf="sortedBy.value"> با {{sortedBy.fa}}</span>
           <i class="fa" [ngClass]="sortPanel.visible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
@@ -38,20 +39,25 @@
       </div>
     </div>
 
-    <div *ngIf="isMobile" class="mobileGridwallTitle">
-      <h1>{{collectionNameFa}}</h1>
+    <div *ngIf="isMobile && collectionNameFa" class="mobileGridwallTitle">
+      <h1>{{collectionNameFa}}<span *ngIf="category && category !=='all'"> - {{dict.translateWord(category)}}</span></h1>
       <div>
-        <span>{{products.length.toLocaleString('fa')}} مورد</span>
+        <span *ngIf="products.length || lazyProducts.length">{{totalRecords.toLocaleString('fa')}} مورد</span>
         <p>
           <i class="fa fa-cog" (click)="displayFilter=!displayFilter"></i> فیلتر</p>
       </div>
     </div>
-    <div class="gridwall-content">
-      <p-dataScroller [value]="products" [rows]="lazyRows">
+    <div class="gridwall-content" *ngIf="lazyProducts.length">
+      <p-dataScroller [value]="lazyProducts" [rows]="lazyRows" [lazy]="true" [totalRecords]="totalRecords"
+      (onLazyLoad)="lazyLoad()">
         <ng-template let-item pTemplate="item">
-          <app-product-grid-item [data]="item" [width]="gridWidth" [height]="gridHeight"></app-product-grid-item>
+          <app-product-grid-item [data]="item"></app-product-grid-item>
         </ng-template>
       </p-dataScroller>
+    </div>
+    <div class="lazyBeingLoaded">
+        <i *ngIf="products.length" class="fa fa-circle-o-notch fa-spin"></i>
+        <i *ngIf="products.length" class="fa fa-long-arrow-down"></i>
     </div>
   </div>
 </div>
