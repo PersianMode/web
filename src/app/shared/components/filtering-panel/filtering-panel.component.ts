@@ -207,9 +207,11 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   shouldShowOption(item) {
     if (this.collection_filter_options && this.collection_filter_options.length) {
-      return (this.collection_filter_options.filter(el => el.name === item.name && el.name_fa === item.name_fa))[0].checked;
+      let tempItem = this.collection_filter_options.filter(el => el.name === item.name && el.name_fa === item.name_fa)
+      if (tempItem && tempItem.length === 1)
+        return tempItem[0].checked;
     }
-    else return true;
+    return true;
   }
 
   formatPrices() {
