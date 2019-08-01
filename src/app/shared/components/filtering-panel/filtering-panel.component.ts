@@ -71,6 +71,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     });
 
     this.filter_options$ = this.productService.filtering$.subscribe(r => {
+      console.log('**********', r);
       this.allCount = this.productService.countProducts().toLocaleString('fa');
       this.filter_options = r;
       this.filter_options.forEach(el => {
@@ -162,15 +163,15 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     for (const k1 in this.isChecked) if (this.isChecked.hasOwnProperty(k1)) {
       for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
         if (k1 === 'Category')
-        if (k2 !== value) {
-          if (this.isChecked[k1][k2]) {
+          if (k2 !== value) {
+            if (this.isChecked[k1][k2]) {
+              this.changeFilterState(k1, k2, false);
+              this.isChecked[k1][k2] = false;
+            }
+          } else if (!this.isChecked[k1][k2]) {
             this.changeFilterState(k1, k2, false);
-            this.isChecked[k1][k2] = false;
+            this.isChecked[k1][k2] = true;
           }
-        } else if (!this.isChecked[k1][k2]) {
-          this.changeFilterState(k1, k2, false);
-          this.isChecked[k1][k2] = true;
-        }
       }
     }
   }

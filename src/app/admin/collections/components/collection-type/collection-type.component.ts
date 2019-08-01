@@ -49,7 +49,7 @@ export class CollectionTypeComponent implements OnInit {
         this.snackBar.open('type added to collection successfully.', null, {
           duration: 3200
         });
-        this.typeArray.emit([...this.types]);
+        this.typeArray.emit(this.types);
       }, err => {
         this.progressService.disable();
         this.snackBar.open('could not add type to collection.', null, {
@@ -67,7 +67,7 @@ export class CollectionTypeComponent implements OnInit {
         this.snackBar.open('type added to collection.', null, {
           duration: 3200
         });
-        this.typeArray.emit(...this.types);
+        this.typeArray.emit(this.types);
       }, err => {
         this.snackBar.open('Couldn\'t add type to collection.', null, {
           duration: 3200

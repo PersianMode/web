@@ -13,63 +13,86 @@ import {priceFormatter} from '../../../../shared/lib/priceFormatter';
 })
 export class CollectionFilterOptionsComponent implements OnInit {
   @Input() collectionId: string;
-  filter_options$: any;
-  filter_options: any;
-  products = [];
-  private _typeArray;
+  filter_options$: any = null;
+  filter_options: any = [];
 
   @Input()
   set tagArray(value) {
-    console.log('***', value);
-    this.changeFilterOptions();
+    if (value && value.length)
+      this.changeFilterOptions();
   }
+
   @Input()
   set typeArray(value) {
-    console.log('@@@', value);
-    this._typeArray = value;
-    this.changeFilterOptions();
+    if (value && value.length)
+      this.changeFilterOptions();
   }
 
   constructor(private router: Router, private httpService: HttpService, private progressService: ProgressService,
               private snackBar: MatSnackBar, private productService: ProductService) {
   }
 
-  ngOnInit() {
-    this.progressService.enable();
-    this.httpService.get(`collection/filter_option_list/${this.collectionId}`).subscribe(res => {
-      if (res && res.length) {
-        this.filter_options = res;
-      } else {
-        this.changeFilterOptions();
-      }
-      this.progressService.disable();
-    }, err => {
-      this.snackBar.open('Couldn\'t get collection filter option list.', null, {
-        duration: 3200
-      });
-      this.progressService.disable();
+  async ngOnInit() {
+    this.filter_options = await this.getFilterOptionList();
+  }
+
+  // async getFilterOptionList() {
+  //   this.progressService.enable();
+  //   await this.httpService.get(`collection/filter_option_list/${this.collectionId}`).subscribe( res => {
+  //     if (res && res.length) {
+  //       this.filter_options = res;
+  //     }
+  //     this.progressService.disable();
+  //   }, err => {
+  //     this.snackBar.open('Couldn\'t get collection filter option list.', null, {
+  //       duration: 3200
+  //     });
+  //     this.progressService.disable();
+  //   });
+  // }
+
+
+  getFilterOptionList() {
+    return new Promise((resolve, reject) => {
+      this.httpService.get(`collection/filter_option_list/${this.collectionId}`).subscribe(
+        (res) => {
+          // if (res && res.length) {
+          //   this.filter_options = res;
+          // }
+          resolve(res);
+        },
+        (err) => {
+          this.snackBar.open('Couldn\'t get collection filter option list.', null, {
+            duration: 3200
+          });
+          this.progressService.disable();
+          reject(err);
+        }
+      );
     });
   }
 
-  changeFilterOptions() {
+  async changeFilterOptions() {
+    let tempArr;
+    this.filter_options = await this.getFilterOptionList();
     this.productService.loadCollectionProducts(this.collectionId, null);
-    this.productService.productList$.subscribe(r => {
-      this.products = r;
-    });
-    this.filter_options$ = this.productService.filtering$.subscribe(r => {
-      const tempArr = r.map(el => {
+    this.filter_options$ = this.productService.filtering$.subscribe(async r => {
+      tempArr = r.map(el => {
         return {name: el.name, name_fa: el.name_fa, checked: true};
       });
-      if (!this.filter_options || !this.filter_options.length)
-        this.filter_options = tempArr;
-
-      tempArr.forEach(item => {
-        let tempItem = null;
-        if (tempItem = this.filter_options.find(el => el.name === item.name && el.name_fa === item.name_fa)) {
-          item.checked = tempItem.checked;
+      if (tempArr) {
+        if (this.filter_options && this.filter_options.length) {
+          tempArr.forEach(item => {
+            let tempItem = null;
+            if (tempItem = this.filter_options.find(el => el.name === item.name && el.name_fa === item.name_fa)) {
+              item.checked = tempItem.checked;
+            }
+          });
         }
-      });
-      this.filter_options = tempArr;
+        this.filter_options = tempArr;
+      }
+
+      await this.saveChangesToCollectionInfo();
     });
   }
 
@@ -77,8 +100,8 @@ export class CollectionFilterOptionsComponent implements OnInit {
     this.filter_options.filter(el => el.name === selectedOption.name && el.name_fa === selectedOption.name_fa)[0].checked = !selectedOption.checked;
   }
 
-  saveChangesToCollectionInfo() {
-    this.httpService.post(`collection/filter_option_list/${this.collectionId}`, {filter_option_list: this.filter_options}).subscribe(
+  async saveChangesToCollectionInfo() {
+    await this.httpService.post(`collection/filter_option_list/${this.collectionId}`, {filter_option_list: this.filter_options}).subscribe(
       data => {
         this.progressService.disable();
         this.snackBar.open('filter_options added to collection.', null, {
