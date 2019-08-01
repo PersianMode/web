@@ -22,31 +22,6 @@ export class CollectionsComponent extends AbstractSearchComponent implements OnI
     this.titleService.setTitleWithOutConstant('ادمین: ' + TitleService.collection_name);
     this.key = 'Collection';
     super.ngOnInit();
-
-
-    // this.filter_options$ = this.productService.filtering$.subscribe(r => {
-    //   this.allCount = this.productService.countProducts().toLocaleString('fa');
-    //   this.filter_options = r;
-    //   this.filter_options.forEach(el => {
-    //     if (this.sideOptions.length) {
-    //       this.sideOptions.forEach(so => {
-    //         so.count = this.productService.countProducts(so.name, so.value);
-    //         so.countFa = so.count.toLocaleString('fa');
-    //       });
-    //     } else this.productService.side$.next(r);
-    //     const found = this.current_filter_state.find(cfs => cfs.name === el.name);
-    //     if (!found) {
-    //       this.current_filter_state.push({name: el.name, values: []});
-    //     }
-    //     if (!this.isChecked[el.name]) {
-    //       this.isChecked[el.name] = {};
-    //       for (const key of el.values) {
-    //         this.isChecked[el.name][key] = false;
-    //       }
-    //     }
-    //   });
-    // });
-
   }
   constructor(protected httpService: HttpService, protected progressService: ProgressService,
               protected router: Router, protected dialog: MatDialog,
