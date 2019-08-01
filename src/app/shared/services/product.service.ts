@@ -474,10 +474,10 @@ export class ProductService {
           }
         });
       }
-      data.sortedCategories= ['TENNIS'];
+      data.sortedCategories= [];
       this.parentData$.next({
-        name: data.name,
-        nameFa: this.parentCollectionName,
+        name: data.name.trim(),
+        nameFa: this.parentCollectionName.trim(),
         categories: this.parentCategories,
         sortedCategories: [data.name].concat(data.sortedCategories),
       });
@@ -537,7 +537,6 @@ export class ProductService {
       }
     }
     this.productList$.next(cleanProductsList(sortedProducts));
-    console.log('here', sortedProducts.length)
     this.spinnerService.disable();
 
   }

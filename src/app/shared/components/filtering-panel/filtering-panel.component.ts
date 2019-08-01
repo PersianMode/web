@@ -23,7 +23,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   set category(value) {
     this._c = value;
     if (this.category || this.category === '') {
-      this.sideOptionClicked('Category', this.category);
+      this.categoryChecked(this.category);
       this.moreSides = true;
     }
 
@@ -156,7 +156,7 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
           }
         }
         if (this.category) {
-          this.sideOptionClicked('Category', this.category)
+          this.categoryChecked( this.category)
         }
       });
       let prices: any = r.find(fo => fo.name === 'price');
@@ -239,6 +239,12 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     return this.dict.USToEU(size, 'WOMENS');
   }
 
+  categoryChecked(category) {
+    if (this.isChecked.Category && !this.isChecked.Category[category]) {
+      this.sideOptionClicked('Category', category);
+    }
+  }
+
   sideOptionClicked(name, value) {
     for (const k1 in this.isChecked) if (this.isChecked.hasOwnProperty(k1)) {
       for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
@@ -259,9 +265,10 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
 
   parentCategoryClicked(name) {
     if (this.router.url.split('?')[0] === '/collection/' + this.parentName) {
-      this.sideOptionClicked('Category', name);
+      this.categoryChecked(name);
+      this.category = name;
     } else {
-      this.router.navigate(['/collection', this.parentName], {queryParams: {category: name !== this.parentName ? name : ''}, queryParamsHandling: 'preserve'});
+      this.router.navigate(['/collection', this.parentName], {queryParams: {category: name !== this.parentName ? name : ''}, queryParamsHandling: 'merge'});
     }
   }
 

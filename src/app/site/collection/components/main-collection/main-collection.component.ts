@@ -65,9 +65,17 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   lazyRows = 10;
   subscription: Subscription;
   lazyProducts = [];
-  category;
+  private _c;
+  get category(){
+    return this._c;
+  };
+  set category(v) {
+    this._c = v.trim();
+    this.showCategory = v && this.pageName.split('/')[1] !== v.trim();
+  }
   parentPageName;
   parentCollectionName;
+  showCategory = false;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
@@ -78,16 +86,21 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
+      const prev = this.pageName.split('/');
       this.route.queryParams
         .filter(p => p.category)
         .map(p => p.category)
         .subscribe(category => {
           this.category = category;
+          this.showCategory = category && prev[1] !== category;
         });
       if (params.get('typeName')) {
         this.pageName = 'collection/' + params.get('typeName');
       }
-      if ((params.get('l1'))) {
+      if (params.get('l1') || prev[1] !== params.get('typeName')) {
+        if(prev[1] !== params.get('typeName')) {
+          this.category = '';
+        }
         this.parentPageName = this.pageName;
         this.parentCollectionName = params.get('typeName');
         this.pageService.getParentPage(this.parentPageName);
@@ -100,7 +113,9 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
             // second parameter for set interested customer tags (when logged in)
             this.productService.loadParentProducts(res['collection_id'], tag);
           });
-        this.pageName += '/' + params.get('l1');
+        if ((params.get('l1'))) {
+          this.pageName += '/' + params.get('l1');
+        }
       }
       if ((params.get('l2'))) {
         this.pageName += '/' + params.get('l2');
@@ -132,6 +147,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
         }
       );
     });
+
     this.productService.collectionNameFa$.subscribe(r => {
       this.collectionNameFa = r;
       if (!this.title)
