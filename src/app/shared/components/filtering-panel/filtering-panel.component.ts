@@ -14,14 +14,18 @@ import * as ntc from 'ntcjs';
 export class FilteringPanelComponent implements OnInit, OnDestroy {
   @Input() sortOptions;
   private _c;
-  @Input()  get category() {return this._c};
-            set category(value)
-            {
-                this._c = value;
-                if (this.category) {
-                  this.sideOptionClicked('Category', this.category);
-                }
-            }
+
+  @Input() get category() {
+    return this._c
+  };
+
+  set category(value) {
+    this._c = value;
+    if (this.category) {
+      this.sideOptionClicked('Category', this.category);
+    }
+  }
+
   filter_options: any;
   current_filter_state = [];
   clear_box = null;
@@ -49,6 +53,8 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   selectedMaxDiscountFormatted = '';
   filter_options$: any;
   side_options$: any;
+  collection_filter_options$: any;
+  collection_filter_options: any;
   sideOptions: any[] = [];
   moreSides = false;
   allCount = '';
@@ -62,6 +68,10 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.collection_filter_options$ = this.productService.collectionFilterOptions$.subscribe(r => {
+      this.collection_filter_options = r;
+      console.log('************', this.collection_filter_options);
+    });
     this.isEU = this.productService.collectionIsEU;
     this.isEUSubescriber = this.productService.collectionIsEUObject.subscribe(value => this.isEU = value);
     this.side_options$ = this.productService.side$.subscribe(r => {
@@ -186,12 +196,20 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
         }
       }
       if (this.category) {
-        this.sideOptionClicked('Category', this.category)
+        this.sideOptionClicked('Category', this.category);
       }
     });
 
     this.isMobile = this.responsiveService.isMobile;
     this.responsiveService.switch$.subscribe(isMobile => this.isMobile = isMobile);
+  }
+
+
+  shouldShowOption(item) {
+    if (this.collection_filter_options && this.collection_filter_options.length) {
+      return (this.collection_filter_options.filter(el => el.name === item.name && el.name_fa === item.name_fa))[0].checked;
+    }
+    else return true;
   }
 
   formatPrices() {
@@ -234,16 +252,16 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
     for (const k1 in this.isChecked) if (this.isChecked.hasOwnProperty(k1)) {
       for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
         if (k1 === 'Category')
-        if (k2 !== value) {
-          this.categoryChange.next(value)
-          if (this.isChecked[k1][k2]) {
+          if (k2 !== value) {
+            this.categoryChange.next(value)
+            if (this.isChecked[k1][k2]) {
+              this.changeFilterState(k1, k2, false);
+              this.isChecked[k1][k2] = false;
+            }
+          } else if (!this.isChecked[k1][k2]) {
             this.changeFilterState(k1, k2, false);
-            this.isChecked[k1][k2] = false;
+            this.isChecked[k1][k2] = true;
           }
-        } else if (!this.isChecked[k1][k2]) {
-          this.changeFilterState(k1, k2, false);
-          this.isChecked[k1][k2] = true;
-        }
       }
     }
   }
