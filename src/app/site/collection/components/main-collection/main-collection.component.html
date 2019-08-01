@@ -1,7 +1,7 @@
 <div *ngIf="!isMobile" class="filters" [class.topFixed]="topFixedFilterPanel"
      [class.bottomFixed]="bottomFixedFilterPanel"
      [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
-     'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 20}" #filterPane>
+     'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 0}" #filterPane>
   <app-filtering-panel (scrollChange)="calcAfterScroll()"
                        [category]="category" (categoryChange)="category=$event"></app-filtering-panel>
 </div>
@@ -15,7 +15,7 @@
   <app-panels></app-panels>
 
   <div class="gridwall-wrapper">
-    <h1 *ngIf="!isMobile && collectionNameFa" class="header"><span>{{collectionNameFa}}<span *ngIf="category && category !=='all'"> - {{dict.translateWord(category)}}</span></span>
+    <h1 *ngIf="!isMobile && collectionNameFa" class="header"><span>{{collectionNameFa}}<span *ngIf="category && category !== parentCollectionName"> - {{dict.translateWord(category)}}</span></span>
       <span *ngIf="products.length || lazyProducts.length">({{totalRecords.toLocaleString('fa')}})</span>
     </h1>
     <div *ngIf="!isMobile" class="gridwall-title">
@@ -40,7 +40,7 @@
     </div>
 
     <div *ngIf="isMobile && collectionNameFa" class="mobileGridwallTitle">
-      <h1>{{collectionNameFa}}<span *ngIf="category && category !=='all'"> - {{dict.translateWord(category)}}</span></h1>
+      <h1>{{collectionNameFa}}<span *ngIf="category && category !== 'all'"> - {{dict.translateWord(category)}}</span></h1>
       <div>
         <span *ngIf="products.length || lazyProducts.length">{{totalRecords.toLocaleString('fa')}} مورد</span>
         <p>

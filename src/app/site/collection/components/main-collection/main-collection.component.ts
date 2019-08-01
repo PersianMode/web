@@ -67,6 +67,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   lazyProducts = [];
   category;
   parentPageName;
+  parentCollectionName;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
@@ -76,18 +77,19 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   }
 
   ngOnInit() {
-    this.route.queryParams
-      .filter(params => params.category)
-      .map(params => params.category)
-      .subscribe(category => {
-        this.category = category;
-      });
     this.route.paramMap.subscribe(params => {
+      this.route.queryParams
+        .filter(p => p.category)
+        .map(p => p.category)
+        .subscribe(category => {
+          this.category = category;
+        });
       if (params.get('typeName')) {
         this.pageName = 'collection/' + params.get('typeName');
       }
       if ((params.get('l1'))) {
         this.parentPageName = this.pageName;
+        this.parentCollectionName = params.get('typeName');
         this.pageService.getParentPage(this.parentPageName);
         this.pageService.pageInfo$
           .filter(p => p[0] === this.parentPageName && p[1] && p[1]['collection_id'])
@@ -113,7 +115,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
             // check when customer logged in then product sort by tags that interested
             const tag = this.authService.userIsLoggedIn() ? 'tagsCustomerInterested' : null;
             // second parameter for set interested customer tags (when logged in)
-            this.productService.loadCollectionProducts(res['collection_id'], tag);
+            this.productService.loadCollectionProducts(res['collection_id'], tag, this.category);
           } else {
             this.products = [];
             this.totalRecords = 0;
@@ -190,7 +192,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
       const height = this.window.innerHeight - HEADER_HEIGHT;
       const filterHeight = this.filterPane.nativeElement.scrollHeight + 10;
       const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT;
-      this.innerScroll = docHeight - filterHeight < 0;
+      this.innerScroll = docHeight - filterHeight < HEADER_HEIGHT;
       this.innerHeight = docHeight - HEADER_HEIGHT;
       this.topFixedFilterPanel = !this.innerScroll && offset >= MIN_OFFSET && filterHeight < height;
       this.bottomScroll = !this.innerScroll && offset >= MIN_OFFSET && (docHeight - offset - height < 180);

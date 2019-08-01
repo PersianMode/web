@@ -1,10 +1,10 @@
+<div style="height: 20px">&nbsp;</div>
 <span *ngIf="!parentCategories.length && sideOptions.length">
-  <button mat-button [style.fontWeight]="isChecked.main.all ? 900 : 100" (click)="sideOptionClicked('main','all')">همه محصولات ({{allCount}})</button>
+  <button mat-button [style.fontWeight]="isChecked.main.all ? 900 : 100" (click)="sideOptionClicked('main','all')"><span class="colName">همه محصولات</span> <span class="colNum">({{allCount}})</span></button>
   <div *ngFor="let fo of sideOptions;let i=index">
-    <button *ngIf="i < 5 || moreSides" mat-button class="check-box-text"
-            [style.fontWeight]="isChecked[fo.name] && isChecked[fo.name][fo.value] ? 900 : 100"
-            (click)="sideOptionClicked(fo.name, fo.value)">
-      {{fo.fa}} <span *ngIf="fo.count">({{fo.countFa}})</span>
+    <button *ngIf="i < 5 || moreSides" mat-button
+            [class.colSelected]="isChecked[fo.name] && isChecked[fo.name][fo.value]"
+            (click)="sideOptionClicked(fo.name, fo.value)" class="colName">{{fo.fa}} <span *ngIf="fo.count" class="colNum">({{fo.countFa}})</span>
     </button>
   </div>
   <button *ngIf="sideOptions.length > 4 && !moreSides" mat-button class="check-box-text"
@@ -14,10 +14,9 @@
 </span>
 <span *ngIf="parentCategories.length">
   <div *ngFor="let fo of parentCategories;let i=index">
-    <button *ngIf="i < 5 || moreSides" mat-button class="check-box-text"
-            [style.fontWeight]="isParent[fo.name] ? 900 : 100"
-            (click)="parentCategoryClicked(fo.name)">
-      {{fo.nameFa}} <span *ngIf="fo.count">({{fo.countFa}})</span>
+    <button *ngIf="i < 5 || moreSides" mat-button
+            [class.colSelected]="category === fo.name"
+            (click)="parentCategoryClicked(fo.name)" class="colName">{{fo.nameFa}} <span *ngIf="fo.count" class="colNum">({{fo.countFa}})</span>
     </button>
   </div>
     <button *ngIf="parentCategories.length > 4 && !moreSides" mat-button class="check-box-text"
