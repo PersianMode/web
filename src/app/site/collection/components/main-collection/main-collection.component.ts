@@ -70,7 +70,7 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
     return this._c;
   };
   set category(v) {
-    this._c = v.trim();
+    this._c = v ? v.trim() : '';
     this.showCategory = v && this.pageName.split('/')[1] !== v.trim();
   }
   parentPageName;
@@ -87,13 +87,6 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const prev = this.pageName.split('/');
-      this.route.queryParams
-        .filter(p => p.category)
-        .map(p => p.category)
-        .subscribe(category => {
-          this.category = category;
-          this.showCategory = category && prev[1] !== category;
-        });
       if (params.get('typeName')) {
         this.pageName = 'collection/' + params.get('typeName');
       }
@@ -130,7 +123,13 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
             // check when customer logged in then product sort by tags that interested
             const tag = this.authService.userIsLoggedIn() ? 'tagsCustomerInterested' : null;
             // second parameter for set interested customer tags (when logged in)
-            this.productService.loadCollectionProducts(res['collection_id'], tag, this.category);
+            this.route.queryParams
+              .map(p => p.category)
+              .subscribe(category => {
+                this.category = category;
+                this.showCategory = category && prev[1] !== category;
+                this.productService.loadCollectionProducts(res['collection_id'], tag, this.category);
+              });
           } else {
             this.products = [];
             this.totalRecords = 0;

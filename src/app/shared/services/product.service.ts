@@ -431,9 +431,10 @@ export class ProductService {
         this.filteredProducts = this.products.slice();
         if (category) {
           this.applyFilters([{name: 'Category', values: [category]}], 'Category', false);
+        } else {
+          this.sortProductsAndEmit();
         }
-        this.sortProductsAndEmit();
-        this.extractFilters([], '', true);
+        this.extractFilters(category ? [{name: 'Category', values: [category]}] :[], category ? 'Category' : '', true);
       }
       this.spinnerService.disable();
     };

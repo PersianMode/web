@@ -3,7 +3,7 @@
      [class.bottomScroll]="bottomScroll" [class.innerScroll]="innerScroll" [ngStyle]="{'height': innerScroll ? innerHeight + 'px' : 'unset',
      'top.px': bottomScroll || bottomFixedFilterPanel ? topDist : 0}" #filterPane>
   <app-filtering-panel (scrollChange)="calcAfterScroll()"
-                       [category]="category" (categoryChange)="category=$event"></app-filtering-panel>
+                       [category]="category"></app-filtering-panel>
 </div>
 <p-sidebar *ngIf="isMobile" [(visible)]="displayFilter" position="right" [blockScroll]="true">
   <div class="mobileScroll">

@@ -26,6 +26,9 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       this.categoryChecked(this.category);
       this.moreSides = true;
     }
+    if (this.category === '') {
+      this.sideOptionClicked('Category', null);
+    }
   }
 
   filter_options: any;
@@ -35,7 +38,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   sortedBy: any = {value: null};
   @Output() displayFilterEvent = new EventEmitter<any>();
   @Output() sortedByChange = new EventEmitter<any>();
-  @Output() categoryChange = new EventEmitter<any>();
   isChecked: any = {};
   oppositeColor: any = {};
   translatedColor: any = {};
@@ -65,7 +67,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   parentCategories: any[] = [];
   parentData$;
   parentName;
-  prodcutList$;
 
   constructor(private responsiveService: ResponsiveService, private productService: ProductService,
               private dict: DictionaryService, private router: Router) {
@@ -74,7 +75,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.collection_filter_options$ = this.productService.collectionFilterOptions$.subscribe(r => {
       this.collection_filter_options = r;
-      console.log('************', this.collection_filter_options);
     });
     this.isEU = this.productService.collectionIsEU;
     this.isEUSubescriber = this.productService.collectionIsEUObject.subscribe(value => this.isEU = value);
@@ -265,7 +265,6 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
       for (const k2 in this.isChecked[k1]) if (this.isChecked[k1].hasOwnProperty(k2)) {
         if (k1 === 'Category')
           if (k2 !== value) {
-            this.categoryChange.next(value);
             if (this.isChecked[k1][k2]) {
               this.changeFilterState(k1, k2, false);
               this.isChecked[k1][k2] = false;
@@ -279,13 +278,8 @@ export class FilteringPanelComponent implements OnInit, OnDestroy {
   }
 
   parentCategoryClicked(name) {
-    if (this.router.url.split('?')[0] === '/collection/' + this.parentName) {
-      this.categoryChecked(name);
-      this.category = name;
-    } else {
       this.router.navigate(['/collection', this.parentName], {queryParams: {category: name !== this.parentName ? name : ''}, queryParamsHandling: 'merge'});
     }
-  }
 
   getValue(name, value) {
     this.isChecked[name][value] = !this.isChecked[name][value];
