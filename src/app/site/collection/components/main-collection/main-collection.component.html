@@ -40,11 +40,11 @@
     </div>
 
     <div *ngIf="isMobile && collectionNameFa" class="mobileGridwallTitle">
-      <h1>{{collectionNameFa}}<span *ngIf="category && category !== 'all'"> - {{dict.translateWord(category)}}</span></h1>
-      <div>
+      <h1>{{collectionNameFa}}</h1>
+      <div style="padding-bottom: 20px;">
         <span *ngIf="products.length || lazyProducts.length">{{totalRecords.toLocaleString('fa')}} مورد</span>
-        <p>
-          <i class="fa fa-cog" (click)="displayFilter=!displayFilter"></i> فیلتر</p>
+        <button mat-button (click)="displayFilter=!displayFilter">
+          <i class="fa fa-cog"></i> فیلتر</button>
       </div>
     </div>
     <div class="gridwall-content" *ngIf="lazyProducts.length">

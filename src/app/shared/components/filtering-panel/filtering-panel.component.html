@@ -1,10 +1,12 @@
 <div style="height: 20px">&nbsp;</div>
-<span *ngIf="!parentCategories.length && sideOptions.length">
-  <button mat-button [style.fontWeight]="isChecked.main.all ? 900 : 100" (click)="sideOptionClicked('main','all')"><span class="colName">همه محصولات</span> <span class="colNum">({{allCount}})</span></button>
+<span *ngIf="!isMobile &&  !parentCategories.length && sideOptions.length">
+  <button mat-button [style.fontWeight]="isChecked.main.all ? 900 : 100" (click)="sideOptionClicked('main','all')"><span
+    class="colName">همه محصولات</span> <span class="colNum">({{allCount}})</span></button>
   <div *ngFor="let fo of sideOptions;let i=index">
     <button *ngIf="i < 5 || moreSides" mat-button
             [class.colSelected]="isChecked[fo.name] && isChecked[fo.name][fo.value]"
-            (click)="sideOptionClicked(fo.name, fo.value)" class="colName">{{fo.fa}} <span *ngIf="fo.count" class="colNum">({{fo.countFa}})</span>
+            (click)="sideOptionClicked(fo.name, fo.value)" class="colName">{{fo.fa}} <span *ngIf="fo.count"
+                                                                                           class="colNum">({{fo.countFa}})</span>
     </button>
   </div>
   <button *ngIf="sideOptions.length > 4 && !moreSides" mat-button class="check-box-text"
@@ -12,11 +14,12 @@
     + بیشتر
   </button>
 </span>
-<span *ngIf="parentCategories.length">
+<span *ngIf="!isMobile && parentCategories.length">
   <div *ngFor="let fo of parentCategories;let i=index">
     <button *ngIf="i < 5 || moreSides" mat-button
             [class.colSelected]="category === fo.name"
-            (click)="parentCategoryClicked(fo.name)" class="colName">{{fo.nameFa}} <span *ngIf="fo.count" class="colNum">({{fo.countFa}})</span>
+            (click)="parentCategoryClicked(fo.name)" class="colName">{{fo.nameFa}} <span *ngIf="fo.count"
+                                                                                         class="colNum">({{fo.countFa}})</span>
     </button>
   </div>
     <button *ngIf="parentCategories.length > 4 && !moreSides" mat-button class="check-box-text"
@@ -41,13 +44,13 @@
   <mat-expansion-panel *ngFor="let fo of filter_options; let i = index" [ngClass]="isMobile ? 'set-size-mobile' : null"
                        [expanded]="!(expanded[fo.name]===false)" (opened)="expanded[fo.name]=true"
                        (closed)="expanded[fo.name]=false" [hideToggle]="true" class="mat-elevation-z0">
-    <div *ngIf="shouldShowOption(fo)">
-      <mat-expansion-panel-header>
+    <mat-expansion-panel-header *ngIf="shouldShowOption(fo)">
 
-        <div class="checkbox-title"><span *ngIf="expanded[fo.name]">-</span><span *ngIf="!expanded[fo.name]">+</span>
-          {{fo.name_fa}}
-        </div>
-      </mat-expansion-panel-header>
+      <div class="checkbox-title"><span *ngIf="expanded[fo.name]">-</span><span *ngIf="!expanded[fo.name]">+</span>
+        {{fo.name_fa}}
+      </div>
+    </mat-expansion-panel-header>
+    <div *ngIf="shouldShowOption(fo)">
       <div *ngFor="let v of filter_options[i].values;let j=index"
            [ngClass]="isMobile ? 'fit-check-box-mobile' : 'fit-check-box'">
         <mat-checkbox
@@ -56,22 +59,23 @@
           <span class="check-box-text">{{filter_options[i].values_fa[j]}}</span>
         </mat-checkbox>
       </div>
-      <div *ngIf="fo.name==='price' ">
-        <p-slider [(ngModel)]="rangeValues " [range]="true " [min]="minPrice " [max]="maxPrice "
-                  (onChange)="formatPrices() "
-                  class="p-slider"
-                  (onSlideEnd)="priceRangeChange()"></p-slider>
-        <span style="float:left ">{{selectedMinPriceFormatted}} تومان</span>
-        <span>{{selectedMaxPriceFormatted}} تومان</span>
-      </div>
-      <div *ngIf="fo.name==='discount' ">
-        <p-slider [(ngModel)]="discountRangeValues " [range]="true " [min]="minDiscount " [max]="maxDiscount
+    </div>
+    <div *ngIf="shouldShowOption(fo) && fo.name==='price' ">
+      <p-slider [(ngModel)]="rangeValues " [range]="true " [min]="minPrice " [max]="maxPrice "
+                (onChange)="formatPrices() "
+                class="p-slider"
+                (onSlideEnd)="priceRangeChange()"></p-slider>
+      <span style="float:left ">{{selectedMinPriceFormatted}} تومان</span>
+      <span>{{selectedMaxPriceFormatted}} تومان</span>
+    </div>
+    <div *ngIf="shouldShowOption(fo) && fo.name==='discount' ">
+      <p-slider [(ngModel)]="discountRangeValues " [range]="true " [min]="minDiscount " [max]="maxDiscount
         "
-                  (onChange)="formatDiscount() " (onSlideEnd)="discountRangeChange() "></p-slider>
-        <span style="float: left ">{{selectedMinDiscountFormatted}} درصد</span>
-        <span>{{selectedMaxDiscountFormatted}} درصد</span>
-      </div>
-      <span *ngIf="fo.name==='color'">
+                (onChange)="formatDiscount() " (onSlideEnd)="discountRangeChange() "></p-slider>
+      <span style="float: left ">{{selectedMinDiscountFormatted}} درصد</span>
+      <span>{{selectedMaxDiscountFormatted}} درصد</span>
+    </div>
+    <span *ngIf="shouldShowOption(fo) && fo.name==='color'">
       <span *ngFor="let v of filter_options[i].values; let j=index " class="color-span " (click)="getValue(fo.name, v) "
             style="cursor: pointer; " matTooltip="{{translatedColor[v]}} " matTooltipShowDelay="500 ">
         <svg height="20 " width="20" style="height:20px">
@@ -82,14 +86,14 @@
         <i *ngIf="isChecked[fo.name][v] " class="fa fa-check circle" [style.color]="oppositeColor[v] "></i>
       </span>
     </span>
-      <span *ngIf="fo.name==='size' ">
+    <span *ngIf="shouldShowOption(fo) && fo.name==='size' ">
       <mat-button-toggle *ngFor="let v of filter_options[i].values; let j=index " class="filter-size "
                          (click)="getValue(fo.name, v) "
                          [checked]="isChecked[fo.name][v] ">
         {{filter_options[i].values_fa[j]}}
       </mat-button-toggle>
     </span>
-      <span *ngIf="fo.name==='shoesSize' ">
+    <span *ngIf="shouldShowOption(fo) && fo.name==='shoesSize' ">
       <div fxFlex="50 " fxFlex.sm="80 " class="slider ">
         <span>US</span>
         <mat-slide-toggle [checked]="isEU" (change)="changeSizeType(fo.name)">
@@ -102,7 +106,6 @@
         {{filter_options[i].values_fa[j]}}
       </mat-button-toggle>
     </span>
-    </div>
   </mat-expansion-panel>
 </mat-accordion>
 <div class="actions ">
