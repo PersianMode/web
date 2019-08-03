@@ -1,17 +1,25 @@
 <h1>{{product.name}}</h1>
 <h4>{{sub}} <span [class.overridden]="discounted">{{price}} تومان</span><span *ngIf="discounted">{{discountedPrice}}
     تومان</span></h4>
-<swiper *ngIf="selectedProductColor && selectedProductColor.image && selectedProductColor.image.angles"
-        [config]="config" style="direction: ltr">
-  <div *ngFor="let item of selectedProductColor.image.angles">
-    <div>
-      <img *ngIf="item.type !== 'video'" src="{{item.url}}">
-      <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1">
-        <source src="{{item.url}}" type="video/webm">
-      </video>
+<div *ngIf="selectedProductColor && selectedProductColor.image && selectedProductColor.image.angles">
+  <swiper [config]="config" style="direction: ltr" [useSwiperClass]="true">
+    <div *ngFor="let item of selectedProductColor.image.angles;let i=index">
+      <div *ngIf="!item.isLoaded" class="loadingImage"><i class="fa fa-circle-o-notch fa-spin"></i><br/><span
+        style="font-size: 50%"><span [class.disabled]="!i">&lt;  </span>{{i+1}} of {{selectedProductColor.image.angles.length}}<span
+        [class.disabled]="i + 1 === selectedProductColor.image.angles.length"> &gt;</span></span></div>
+      <img *ngIf="!item.isLoaded"
+           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+      <div [class.invisible]="!item.isLoaded">
+        <img *ngIf="item.type !== 'video'" src="{{item.url}}"
+             (load)="item.isLoaded = true">
+        <video *ngIf="item.type === 'video'" autoplay loop playsinline tabindex="-1"
+               (load)="item.isLoaded = true">
+          <source src="{{item.url}}" type="video/webm">
+        </video>
+      </div>
     </div>
-  </div>
-</swiper>
+  </swiper>
+</div>
 
 <div *ngIf="product.colors && product.colors.length > 1" class="colors">
   <div [style.width]="(product.colors.length * 136) + 'px'">

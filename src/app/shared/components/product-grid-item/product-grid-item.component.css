@@ -123,8 +123,10 @@
   text-align: left;
   cursor: pointer;
   overflow: hidden;
+  background: #ccc;
   direction:ltr;
-  min-height: calc(100vw - 20px);
+  min-height: calc(100vw - 30px);
+  min-width: calc(100vw - 20px);
 }
 
 .imgWrapper img{

@@ -41,10 +41,8 @@
 <div *ngIf="isMobile">
   <div class="mainMobile" (click)="openProduct()" [ngStyle]="{'width.px': width, 'height.px': height}">
   <span>
-    <div class="imgWrapperMobile"
-         [ngStyle]="{'width.px': width - 2, 'height.px': width - 2}">
-      <img src="{{images[0]}}" [style.right.px]="(width * data.colors[pos].position)"
-           [ngStyle]="{'height.px': width - 2}">
+    <div class="imgWrapperMobile" [style.minHeight.px]="isLoaded ? 0 : width - 2" [style.background]="isLoaded ? 'white' : 'inherit'">
+      <img src="{{images[0]}}" [style.right.px]="(width * data.colors[pos].position)" (load)="isLoaded = true">
     </div>
     <div *ngIf="on && data.colors.length > 1" class="sliderWrapper"
          #slider>

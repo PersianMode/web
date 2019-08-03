@@ -45,6 +45,7 @@ export class ProductGridItemComponent implements OnInit {
   soldOut = false;
   discounted = false;
   discountedPrice: any;
+  isLoaded = false;
 
   constructor(@Inject(WINDOW) private window, private zone: NgZone, private router: Router,
               private responsiveService: ResponsiveService, private sanitizer: DomSanitizer,
