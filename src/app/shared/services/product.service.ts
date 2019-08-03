@@ -434,7 +434,7 @@ export class ProductService {
         } else {
           this.sortProductsAndEmit();
         }
-        this.extractFilters(category ? [{name: 'Category', values: [category]}] :[], category ? 'Category' : '', true);
+        this.extractFilters([], '', true);
       }
       this.spinnerService.disable();
     };
