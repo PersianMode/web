@@ -9,7 +9,7 @@ const TIME_SLOT = {
   },
 };
 
-const FREE_DELIVERY_AMOUNT = 1000000;
+const FREE_DELIVERY_AMOUNT = 200000;
 
 export {
   TIME_SLOT,
