@@ -127,7 +127,7 @@ button:hover {
   width: auto;
   margin-left: 2px;
   display: inline-block;
-  transition: all .5s ease-in-out;
+  transition: opacity .5s ease-in-out;
   opacity: .5;
 }
 
