@@ -242,6 +242,33 @@ export class CheckoutService {
     this.addedProvince = '';
   }
 
+  checkoutDemo() {
+    const data = this.accumulateData();
+    this.httpService.post('checkoutDemo', data)
+      .subscribe(res => {
+          if (!this.authService.userDetails.userId) {
+            this.ccRecipientData = null;
+            let addresses = [];
+            localStorage.removeItem('address');
+            if (!this.withDelivery) {
+              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+            }
+            this.addresses$.next(addresses);
+          }
+          this.selectedCustomerAddress = -1;
+          this.selectedWarehouseAddress = -1;
+          this.withDelivery = true;
+          this.deliveryDays = null;
+          this.deliveryTime = null;
+          this.addressObj = {};
+          this.ccRecipientData = null;
+          this.addedProvince = '';
+          this.cartService.emptyCart();
+          this.router.navigate(['/', 'shopBalanceResult'], {queryParams: {tref: res.invoiceNumber, iD: res.invoiceDate, uB: res.usedBalance}, queryParamsHandling: 'merge'});
+        },
+        err => console.error(err));
+  }
+
   calculateDeliveryDiscount(durationId) {
     const data = {
       customer_id: this.authService.userDetails.userId ? this.authService.userDetails.userId : null,
@@ -299,24 +326,6 @@ export class CheckoutService {
     });
   }
 
-  checkoutDemo() {
-    const data = this.accumulateData();
-    this.httpService.post('checkout/true', data)
-      .subscribe(res => {
-          if (!this.authService.userDetails.userId) {
-            this.ccRecipientData = null;
-            let addresses = [];
-            localStorage.removeItem('address');
-            if (!this.withDelivery) {
-              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-            }
-            this.addresses$.next(addresses);
-          }
-          this.cartService.emptyCart();
-          this.router.navigate(['/', 'profile']);
-        },
-        err => console.error(err));
-  }
   getDataFromServerToSendBank(data) {
     return new Promise((resolve, reject) => {
       this.httpService.post('checkout/false', data)

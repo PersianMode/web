@@ -15,6 +15,7 @@ import {DOCUMENT, Location} from '@angular/common';
 import {SpinnerService} from '../../../shared/services/spinner.service';
 import {priceFormatter} from '../../../shared/lib/priceFormatter';
 import {FREE_DELIVERY_AMOUNT} from 'app/shared/enum/delivery.enum';
+import {resolve} from 'q';
 
 @Component({
   selector: 'app-checkout-page',
@@ -377,14 +378,12 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
     this.finalCheckItems()
       .then(res => {
-        console.log('*-*-*-', orderData);
         // first-step-1 :
         // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
         // from server to post and redirect to bank gateway page
         return this.checkoutService.getDataFromServerToSendBank(orderData);
       })
       .then(res => {
-        console.log('////////', res);
         this.checkoutService.updateVariablesAfterCheckout();
         this.spinnerService.enable();
         this.bankData = res;
@@ -404,47 +403,12 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   checkoutDemo() {
-    // this.finalCheckItems()
-    //   .then(res => {
-    //     this.checkoutService.checkoutDemo();
-    //   })
-    //   .catch(err => {
-    //     console.error('Error in final check: ', err);
-    //   });
-
-
-    const orderData: any = this.checkoutService.accumulateData();
-    const IdArray = [
-      'invoiceNumber',
-      'invoiceDate',
-      'amount',
-      'terminalCode',
-      'merchantCode',
-      'redirectAddress',
-      'timeStamp',
-      'action',
-      'mobile',
-      'email',
-      'sign'
-    ];
-
     this.finalCheckItems()
       .then(res => {
-        console.log('*-*-*-', orderData);
-        // first-step-1 :
-        // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
-        // from server to post and redirect to bank gateway page
-        return this.checkoutService.getDataFromServerToSendBank(orderData);
-      })
-      .then(res => {
-        console.log('////////', res);
-        this.checkoutService.updateVariablesAfterCheckout();
-        this.spinnerService.enable();
-        this.bankData = res;
-        IdArray.forEach(el => {
-          this[el].nativeElement.value = this.bankData[el];
-        });
-        // this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
+        return this.checkoutService.checkoutDemo();
+      // })
+      // .then(res => {
+        // this.checkoutService.updateVariablesAfterCheckout();
       })
       .catch(err => {
         console.error('Error in final check: ', err);
