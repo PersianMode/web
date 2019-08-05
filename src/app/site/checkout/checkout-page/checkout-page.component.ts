@@ -377,19 +377,21 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
     this.finalCheckItems()
       .then(res => {
+        console.log('*-*-*-', orderData);
         // first-step-1 :
         // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
         // from server to post and redirect to bank gateway page
         return this.checkoutService.getDataFromServerToSendBank(orderData);
       })
       .then(res => {
+        console.log('////////', res);
         this.checkoutService.updateVariablesAfterCheckout();
         this.spinnerService.enable();
         this.bankData = res;
         IdArray.forEach(el => {
           this[el].nativeElement.value = this.bankData[el];
         });
-        this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
+        // this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
       })
       .catch(err => {
         console.error('Error in final check: ', err);
@@ -402,13 +404,57 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   checkoutDemo() {
+    // this.finalCheckItems()
+    //   .then(res => {
+    //     this.checkoutService.checkoutDemo();
+    //   })
+    //   .catch(err => {
+    //     console.error('Error in final check: ', err);
+    //   });
+
+
+    const orderData: any = this.checkoutService.accumulateData();
+    const IdArray = [
+      'invoiceNumber',
+      'invoiceDate',
+      'amount',
+      'terminalCode',
+      'merchantCode',
+      'redirectAddress',
+      'timeStamp',
+      'action',
+      'mobile',
+      'email',
+      'sign'
+    ];
+
     this.finalCheckItems()
       .then(res => {
-        this.checkoutService.checkoutDemo();
+        console.log('*-*-*-', orderData);
+        // first-step-1 :
+        // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
+        // from server to post and redirect to bank gateway page
+        return this.checkoutService.getDataFromServerToSendBank(orderData);
+      })
+      .then(res => {
+        console.log('////////', res);
+        this.checkoutService.updateVariablesAfterCheckout();
+        this.spinnerService.enable();
+        this.bankData = res;
+        IdArray.forEach(el => {
+          this[el].nativeElement.value = this.bankData[el];
+        });
+        // this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
       })
       .catch(err => {
         console.error('Error in final check: ', err);
+        if (!err.errCode)
+          this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید', null, {
+            duration: 3200,
+          });
+        this.spinnerService.disable();
       });
+
   }
 }
 

@@ -223,19 +223,6 @@ export class CheckoutService {
     }
   }
 
-  getDataFromServerToSendBank(data) {
-    return new Promise((resolve, reject) => {
-      this.httpService.post('checkout/false', data)
-        .subscribe(res => {
-            resolve(res);
-          },
-          err => {
-            reject(err);
-          });
-    });
-  }
-
-
   updateVariablesAfterCheckout() {
     if (!this.authService.userDetails.userId) {
       this.ccRecipientData = null;
@@ -299,6 +286,19 @@ export class CheckoutService {
     };
   }
 
+  readPayResult(bankData) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('payResult', bankData).subscribe(
+        (data) => {
+          resolve(data);
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+    });
+  }
+
   checkoutDemo() {
     const data = this.accumulateData();
     this.httpService.post('checkout/true', data)
@@ -317,17 +317,15 @@ export class CheckoutService {
         },
         err => console.error(err));
   }
-
-  readPayResult(bankData) {
+  getDataFromServerToSendBank(data) {
     return new Promise((resolve, reject) => {
-      this.httpService.post('payResult', bankData).subscribe(
-        (data) => {
-          resolve(data);
-        },
-        (err) => {
-          reject(err);
-        }
-      );
+      this.httpService.post('checkout/false', data)
+        .subscribe(res => {
+            resolve(res);
+          },
+          err => {
+            reject(err);
+          });
     });
   }
 
