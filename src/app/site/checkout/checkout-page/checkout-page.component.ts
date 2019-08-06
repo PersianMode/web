@@ -390,7 +390,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         IdArray.forEach(el => {
           this[el].nativeElement.value = this.bankData[el];
         });
-        // this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
+        this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
       })
       .catch(err => {
         console.error('Error in final check: ', err);
@@ -406,17 +406,9 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.finalCheckItems()
       .then(res => {
         return this.checkoutService.checkoutDemo();
-      // })
-      // .then(res => {
-        // this.checkoutService.updateVariablesAfterCheckout();
       })
       .catch(err => {
-        console.error('Error in final check: ', err);
-        if (!err.errCode)
-          this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید', null, {
-            duration: 3200,
-          });
-        this.spinnerService.disable();
+        console.error(err);
       });
 
   }

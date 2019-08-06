@@ -25,7 +25,6 @@ export class ShopBalanceResultComponent implements OnInit {
     this.spinnerService.enable();
     this.cartService.loadCartsForShopRes();
     this.route.queryParams.subscribe(params => {
-      console.log('***********', params);
       this.payResult = params;
     });
     this.jalali_date = dateFormatter(this.payResult.invoiceDate);

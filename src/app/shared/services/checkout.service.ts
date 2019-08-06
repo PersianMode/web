@@ -8,6 +8,7 @@ import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs/Rx';
+import {reject} from 'q';
 
 @Injectable()
 export class CheckoutService {
@@ -244,6 +245,7 @@ export class CheckoutService {
 
   checkoutDemo() {
     const data = this.accumulateData();
+    return new Promise((resolve, reject) => {
     this.httpService.post('checkoutDemo', data)
       .subscribe(res => {
           if (!this.authService.userDetails.userId) {
@@ -266,7 +268,15 @@ export class CheckoutService {
           this.cartService.emptyCart();
           this.router.navigate(['/', 'shopBalanceResult'], {queryParams: {tref: res.invoiceNumber, iD: res.invoiceDate, uB: res.usedBalance}, queryParamsHandling: 'merge'});
         },
-        err => console.error(err));
+        err => {
+          console.error(err);
+          if (err.error === 'not enough balance for fully payment by balance') {
+            this.snackBar.open('موجودی حساب جهت تکمیل خرید کافی نیست', null, {
+              duration: 3200,
+            });
+          }
+        });
+    });
   }
 
   calculateDeliveryDiscount(durationId) {
