@@ -1,0 +1,29 @@
+<div
+  *ngIf="payResult && !payResult.error"
+  fxLayout="row" fxLayoutAlign="center center">
+  <div fxFlex="5"></div>
+  <div fxFlex="90">
+    <mat-card class="result-card">
+      <mat-card-content>
+        <mat-card-title>
+          نتیجه تراکنش :
+          <span>{{'تراکنش موفق، کسر ازموجودی کاربر'}}</span>
+        </mat-card-title>
+        <div>
+          شماره پیگیری : {{makePersianNumber(payResult.tref)}}
+        </div>
+        <div>
+          تاریخ تراکنش : {{jalali_date[0]}}
+        </div>
+        <div>
+          مبلغ فاکتور : {{makePersianNumber(payResult.uB)}} ریال
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxFlex="5"></div>
+</div>
+<div *ngIf="payResult && payResult.error">
+  <div class="cancel-div" style="color: darkred"><span>تراکنش ناموفق ،در صورت کسر مبلغ از موجودی شما، این مبلغ تا ۷۲ ساعت آینده به موجودی حساب شما افزوده میگردد.</span></div>
+</div>

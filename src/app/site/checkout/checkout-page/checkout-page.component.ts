@@ -15,6 +15,7 @@ import {DOCUMENT, Location} from '@angular/common';
 import {SpinnerService} from '../../../shared/services/spinner.service';
 import {priceFormatter} from '../../../shared/lib/priceFormatter';
 import {FREE_DELIVERY_AMOUNT} from 'app/shared/enum/delivery.enum';
+import {resolve} from 'q';
 
 @Component({
   selector: 'app-checkout-page',
@@ -404,11 +405,12 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   checkoutDemo() {
     this.finalCheckItems()
       .then(res => {
-        this.checkoutService.checkoutDemo();
+        return this.checkoutService.checkoutDemo();
       })
       .catch(err => {
-        console.error('Error in final check: ', err);
+        console.error(err);
       });
+
   }
 }
 
