@@ -243,10 +243,10 @@ export class CheckoutService {
     this.addedProvince = '';
   }
 
-  checkoutDemo() {
+  completeShop() {
     const data = this.accumulateData();
     return new Promise((resolve, reject) => {
-    this.httpService.post('checkoutDemo', data)
+    this.httpService.post('checkout', data)
       .subscribe(res => {
           if (!this.authService.userDetails.userId) {
             this.ccRecipientData = null;
@@ -338,7 +338,7 @@ export class CheckoutService {
 
   getDataFromServerToSendBank(data) {
     return new Promise((resolve, reject) => {
-      this.httpService.post('checkout/false', data)
+      this.httpService.post('checkout', data)
         .subscribe(res => {
             resolve(res);
           },
@@ -347,5 +347,4 @@ export class CheckoutService {
           });
     });
   }
-
 }

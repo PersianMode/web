@@ -402,15 +402,14 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  checkoutDemo() {
+  completeShop() {
     this.finalCheckItems()
       .then(res => {
-        return this.checkoutService.checkoutDemo();
+        return this.checkoutService.completeShop();
       })
       .catch(err => {
         console.error(err);
       });
-
   }
 }
 
