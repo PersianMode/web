@@ -212,16 +212,18 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
         this.topDist = filterHeight - height + 109;
       }
       this.justPassTheTop = !this.footerVisible && offset > 60;
-      if (diff > 0) {
-        this.topDist += diff;
-        if(this.topDist > filterHeight - height + 109)
-          this.topDist = filterHeight - height + 109;
-        this.filterPane.nativeElement.scroll({top: this.topDist});
-      } else {
-        this.topDist += diff;
-        if(this.topDist < 0)
-          this.topDist = 0;
-        this.filterPane.nativeElement.scroll({top: this.topDist})
+      if (!this.littleScroll && !this.footerVisible) {
+        if (diff > 0) {
+          this.topDist += diff;
+          if (this.topDist > filterHeight - height + 109)
+            this.topDist = filterHeight - height + 109;
+          this.filterPane.nativeElement.scroll({top: this.topDist});
+        } else {
+          this.topDist += diff;
+          this.filterPane.nativeElement.scroll({top: this.topDist})
+        }
+      } else if (this.littleScroll) {
+        this.topDist = 0;
       }
     }
 
