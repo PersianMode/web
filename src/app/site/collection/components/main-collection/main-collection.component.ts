@@ -11,8 +11,6 @@ import {AuthService} from 'app/shared/services/auth.service';
 import {HttpService} from 'app/shared/services/http.service';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 
-const MIN_OFFSET = 65;
-const HEADER_HEIGHT = 200;
 
 @Component({
   selector: 'app-main-collection',
@@ -23,13 +21,8 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   products = [];
   @ViewChild('filterPane') filterPane;
   @ViewChild('gridwall') gridwall;
-  topFixedFilterPanel = false;
-  bottomFixedFilterPanel = false;
-  bottomScroll = false;
   topDist = 0;
-  innerHeight = 0;
   title = '';
-  innerScroll = false;
   pageName = '';
   curWidth: number;
   curHeight: number;
@@ -76,6 +69,11 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   parentPageName;
   parentCollectionName;
   showCategory = false;
+  prevOffset = 0;
+  littleScroll = true;
+  justPassTheTop = false;
+  footerVisible = true;
+  prevDiff = 0;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
@@ -201,19 +199,30 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   }
 
   calcAfterScroll() {
-
     if (!this.isMobile && this.filterPane && this.gridwall) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
-      const height = this.window.innerHeight - HEADER_HEIGHT;
+      const diff = offset - this.prevOffset;
+      this.prevOffset = offset;
+      const height = this.window.innerHeight;
+      const docHeight = this.gridwall.nativeElement.scrollHeight;
       const filterHeight = this.filterPane.nativeElement.scrollHeight + 10;
-      const docHeight = this.gridwall.nativeElement.scrollHeight + HEADER_HEIGHT;
-      this.innerScroll = docHeight - filterHeight < HEADER_HEIGHT;
-      this.innerHeight = docHeight - HEADER_HEIGHT;
-      this.topFixedFilterPanel = !this.innerScroll && offset >= MIN_OFFSET && filterHeight < height;
-      this.bottomScroll = !this.innerScroll && offset >= MIN_OFFSET && (docHeight - offset - height < 180);
-      this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= MIN_OFFSET &&
-        !this.bottomScroll && filterHeight - offset < height - HEADER_HEIGHT;
-      this.topDist = height - filterHeight + HEADER_HEIGHT;
+      this.littleScroll = offset < 60;
+      this.footerVisible = docHeight - offset < height - 214;
+      if (this.footerVisible) {
+        this.topDist = filterHeight - height + 109;
+      }
+      this.justPassTheTop = !this.footerVisible && offset > 60;
+      if (diff > 0) {
+        this.topDist += diff;
+        if(this.topDist > filterHeight - height + 109)
+          this.topDist = filterHeight - height + 109;
+        this.filterPane.nativeElement.scroll({top: this.topDist});
+      } else {
+        this.topDist += diff;
+        if(this.topDist < 0)
+          this.topDist = 0;
+        this.filterPane.nativeElement.scroll({top: this.topDist})
+      }
     }
 
   }

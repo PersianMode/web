@@ -1,12 +1,11 @@
 .filters {
-  bottom: auto;
-  position: absolute;
   background: #fff;
   padding: 5px 15px;
   width: 250px;
   z-index: 9;
   font-size: 13px;
 }
+
 @media (max-width: 1520px) {
   .filters {
     right: 9px;
@@ -15,10 +14,32 @@
 
 @media (min-width: 1520px) {
   .filters {
-    right: calc((100vw - 1515px) / 2 );
+    right: calc((100vw - 1515px) / 2);
   }
+
   .gridwall {
     text-align: center;
+  }
+}
+@media (min-width: 960px) {
+  .littleScroll {
+    position: absolute;
+    top: 0;
+    height: unset;
+  }
+
+  .justPassTheTop {
+    position: fixed;
+    top: 109px;
+    overflow: hidden;
+    height: calc(100vh - 120px);
+  }
+
+  .footerVisible {
+    position: absolute;
+    bottom: 227px;
+    height: unset;
+    overflow: auto;
   }
 }
 
