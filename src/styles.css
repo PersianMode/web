@@ -641,15 +641,18 @@ dp-date-picker.dp-material .dp-picker-input {
   background: #000;
   color: #fff !important;
 }
-
+.mat-button-toggle-disabled {
+  background: unset !important;
+}
 .mat-button-toggle-disabled div {
-  color: rgb(99, 99, 99) !important;
+  color: rgb(221, 221, 221) !important;
+  background: rgb(247, 247, 247) !important;
+  border-color: unset !important;
 }
 
-.mat-button-toggle-disabled div:hover {
-  border: rgb(221, 221, 221) 1px solid;
+.mat-button-toggle-disabled .mat-button-toggle-label-content:hover {
+  border-color: unset !important;
 }
-
 .mat-button-toggle {
   margin: -1px;
 }

@@ -73,7 +73,6 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
   littleScroll = true;
   justPassTheTop = false;
   footerVisible = true;
-  prevDiff = 0;
 
   constructor(private route: ActivatedRoute, @Inject(DOCUMENT) private document: Document,
               @Inject(WINDOW) private window, private pageService: PageService,
@@ -202,6 +201,8 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
     if (!this.isMobile && this.filterPane && this.gridwall) {
       const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
       const diff = offset - this.prevOffset;
+      this.topDist += diff;
+      this.filterPane.nativeElement.scroll({top: this.topDist});
       this.prevOffset = offset;
       const height = this.window.innerHeight;
       const docHeight = this.gridwall.nativeElement.scrollHeight;
@@ -214,13 +215,11 @@ export class MainCollectionComponent implements OnInit, OnDestroy, AfterContentI
       this.justPassTheTop = !this.footerVisible && offset > 60;
       if (!this.littleScroll && !this.footerVisible) {
         if (diff > 0) {
-          this.topDist += diff;
           if (this.topDist > filterHeight - height + 109)
             this.topDist = filterHeight - height + 109;
-          this.filterPane.nativeElement.scroll({top: this.topDist});
         } else {
-          this.topDist += diff;
-          this.filterPane.nativeElement.scroll({top: this.topDist})
+          if (this.topDist < 0)
+            this.topDist = 0;
         }
       } else if (this.littleScroll) {
         this.topDist = 0;
