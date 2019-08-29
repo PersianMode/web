@@ -7,16 +7,16 @@
     <label *ngIf="!isAdd">ویرایش یک مورد</label>
   </div>
   <mat-dialog-content>
-    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="center center">
-      <div fxFlex="30" class="center-content">
-        <div>
+    <div>
+      <div class="center-content">
+        <mat-form-field>
           <mat-select [(ngModel)]="rowTemplate" placeholder="قالب مورد نظر" class="persian-field right"
                       (ngModelChange)="changeField()"
                       style="text-align: right;">
             <mat-option *ngFor="let item of rowTemplateList" [value]="item.value" class="persian-field">{{item.name}}
             </mat-option>
           </mat-select>
-        </div>
+        </mat-form-field>
         <div>
           <mat-input-container class="persian-field full-width" dir="ltr">
             <input matInput type="text" placeholder="آدرس" [(ngModel)]="urlAddress" (ngModelChange)="changeField()"
@@ -25,7 +25,7 @@
           </mat-input-container>
         </div>
       </div>
-      <div fxFlex="70">
+      <div>
         <app-uploader style="float: left;" [url]="imageUploadUrl()" [additionalData]="getThisPlacement()"
                       [single]="true" (OnCompleted)="imageUploaded($event)"></app-uploader>
       </div>
@@ -35,16 +35,14 @@
         <hr class="part-separator"/>
       </div>
       <div>
-        <div class="edit-row" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
-             fxLayoutAlign.sm="center center"
-             fxLayoutAlign.xs="center center">
-          <div fxFlex="30">
+        <div>
+          <div>
             <mat-checkbox [(ngModel)]="hasTopTitle" (ngModelChange)="changeField()">
               <span *ngIf="hasTopTitle">دارای عنوان بالا تصویر</span>
               <span *ngIf="!hasTopTitle">بدون عنوان بالا تصویر</span>
             </mat-checkbox>
           </div>
-          <div fxFlex="70" *ngIf="hasTopTitle">
+          <div *ngIf="hasTopTitle">
             <div>
               <mat-input-container class="text-field persian-field">
                 <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="topTitle.title"
@@ -75,16 +73,14 @@
         </div>
       </div>
       <div>
-        <div class="edit-row" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutAlign="start start"
-             fxLayoutAlign.sm="center center"
-             fxLayoutAlign.xs="center center">
-          <div fxFlex="30">
+        <div>
+          <div>
             <mat-checkbox [(ngModel)]="hasSubTitle" (ngModelChange)="changeField()">
               <span *ngIf="hasSubTitle">دارای عنوان پایین تصویر</span>
               <span *ngIf="!hasSubTitle">بدون عنوان پایین تصویر</span>
             </mat-checkbox>
           </div>
-          <div fxFlex="70" *ngIf="hasSubTitle">
+          <div *ngIf="hasSubTitle">
             <div>
               <mat-input-container class="text-field persian-field">
                 <input matInput type="text" placeholder="متن عنوان" [(ngModel)]="subTitle.title"

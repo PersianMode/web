@@ -1,6 +1,6 @@
 <div class="container">
   <p *ngIf="!single">صف بارگذاری: {{ uploader?.queue?.length }}</p>
-  <table class="table">
+  <table *ngIf="!single" class="table">
     <thead>
       <tr>
         <th>نام فایل</th>
