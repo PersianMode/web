@@ -34,6 +34,7 @@ export class ProductColorEditComponent implements OnInit {
   }
 
   addAngle(result: any) {
+    result = result.map( r => r.downloadURL).filter(r => r);
     this.data.product_color.image.angles = this.data.product_color.image.angles.concat(result);
   }
 

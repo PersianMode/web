@@ -1,11 +1,11 @@
 <h3 >تصویر بند انگشتی:</h3>
   
-<div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center">
+<div fxLayout="row">
   <div fxFlex="70">
     <app-uploader [single]="true" [url]="'product/image/'+ data.productId + '/' +  data.product_color._id  + '/' + true" (OnCompleted)="setThumbnail($event)"></app-uploader>
   </div>
-  <div fxFlex="30">
-    <img *ngIf="thumbnailURL" [src]="thumbnailURL" style="width: 72px; height: 72px;">
+  <div fxFlex="30" style="text-align: center">
+    <img *ngIf="thumbnailURL" [src]="thumbnailURL" style="width: 220px; height: 220px;">
   </div>
 </div>
 <mat-divider style="margin-top: 20px"></mat-divider>
@@ -15,12 +15,12 @@
     <app-uploader [single]="false" [url]="'product/image/'+ data.productId + '/' +  data.product_color._id  + '/' + false" (OnCompleted)="addAngle($event)"></app-uploader>
   </div>
 
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" >
-    <div *ngFor="let angle of data.product_color.image?.angles" fxFlex="25">
+  <div >
+    <div *ngFor="let angle of data.product_color.image?.angles" style="display: inline-block">
   
     <mat-card class="card">
       <mat-card-content>
-      <img mat-card-image [src]="getURL(angle)">
+      <img mat-card-image [src]="getURL(angle)" style="width:220px">
       </mat-card-content>
       <mat-card-actions>
         <button mat-icon-button (click)="removeAngle(angle)">
