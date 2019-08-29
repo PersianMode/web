@@ -24,7 +24,6 @@
               "src/styles.css",
               "src/assets/fonts/mat-icon-font/material-icons.css",
               "src/assets/fonts/iran-fonts/index.css",
-              "src/assets/css/bootstrap.min.css",
               "node_modules/font-awesome/css/font-awesome.min.css",
               "node_modules/primeng/resources/themes/omega/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
