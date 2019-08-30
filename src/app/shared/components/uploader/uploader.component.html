@@ -1,6 +1,6 @@
-<div class="container">
+<div>
   <p *ngIf="!single">صف بارگذاری: {{ uploader?.queue?.length }}</p>
-  <table class="table">
+  <table *ngIf="!single" class="table">
     <thead>
       <tr>
         <th>نام فایل</th>
@@ -24,7 +24,7 @@
           <span *ngIf="item.isCancel"><i class="fa fa-ban"></i></span>
           <span *ngIf="item.isError"><i class="fa fa-remove"></i></span>
         </td>
-        <td nowrap>
+        <td>
           <button type="button" class="btn btn-success btn-xs" (click)="item.upload()"
             [disabled]="item.isReady || item.isUploading || item.isSuccess || !personnel_id">
             <span class="fa fa-upload"></span> بارگذاری

@@ -21,7 +21,8 @@
       <div class="item-data">
         <span>  تعداد:</span>
         <section>{{countFa}}</section>
-        <p [class.overridden]="product.discount">{{farsiPrice}}</p><p *ngIf="product.discount">{{discountedPrice}}</p>
+        <div *ngIf="!isMobile"><p [class.overridden]="product.discount">{{farsiPrice}}</p><p *ngIf="product.discount">{{discountedPrice}}</p></div>
+        <h4 *ngIf="isMobile"><p [class.overridden]="product.discount">{{farsiPrice}}</p><p *ngIf="product.discount">{{discountedPrice}}</p></h4>
       </div>
       <div class="bag-btn">
         <button mat-button (click)="navigateToCart()">دیدن سبد خرید</button>

@@ -10,8 +10,9 @@
                               [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
                               [earnedLoyaltyPoint]="earnedLoyaltyPoint"
                               [showCostLabel]="showCostLabel"
+                              [balanceValue]="balanceValue"
                               [showEarnPointLabel]="showEarnPointLabel"
-                              [noDuration]="noDuration"></app-checkout-summary>
+        ></app-checkout-summary>
       </div>
       <hr class="line-breaker">
       <div>
@@ -39,16 +40,11 @@
         <input type="hidden" #sign name="sign"/>
       </form>
       <button mat-raised-button
-              class="payment-button"
-              (click)="checkout()" [disabled]="disabled">پرداخت
-      </button>
-      <button mat-raised-button
-              class="payment-button"
-              (click)="checkoutDemo()">دمو پرداخت
+              class="payment-button" [class.mouse-pointer]="!disabled" [class.disabled]="disabled"
+              (click)="(selectedPaymentType === 1   && (balanceValue >= (total + deliveryCost - deliveryDiscount - discount))) ?  completeShop() : checkout()" [disabled]="disabled">
+        {{(selectedPaymentType === 1  && (balanceValue >= (total + deliveryCost - deliveryDiscount - discount))) ? 'تکمیل خرید' : 'پرداخت'}}
       </button>
     </div>
   </div>
   <div fxFlex="10" fxFlex.sm="10" fxFlex.xs="0">&nbsp;</div>
 </div>
-
-

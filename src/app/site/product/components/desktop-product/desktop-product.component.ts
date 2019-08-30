@@ -11,6 +11,9 @@ import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-d
 import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
 import {AuthService} from '../../../../shared/services/auth.service';
 
+const MIN_OFFSET = 65;
+const HEADER_HEIGHT = 200;
+
 @Component({
   selector: 'app-desktop-product',
   templateUrl: './desktop-product.component.html',
@@ -115,16 +118,16 @@ export class DesktopProductComponent implements OnInit, AfterContentChecked {
 
   private onScroll() {
     const offset = this.window.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0;
-    const height = this.window.innerHeight - 209;
-    const filterHeight = this.descPane.nativeElement.scrollHeight;
-    const docHeight = this.photosDiv.nativeElement.scrollHeight + 209;
-    this.innerScroll = docHeight - filterHeight < 100;
-    this.innerHeight = docHeight - 209;
-    this.topFixedFilterPanel = !this.innerScroll && offset >= 65 && filterHeight < height;
-    this.bottomScroll = !this.innerScroll && offset >= 65 && (docHeight - offset - height < 180);
-    this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= 65 &&
-      !this.bottomScroll && filterHeight - offset < height - 209;
-    this.topDist = height - filterHeight + 209;
+    const height = this.window.innerHeight - HEADER_HEIGHT;
+    const filterHeight = this.descPane.nativeElement.scrollHeight + 70;
+    const docHeight = this.photosDiv.nativeElement.scrollHeight + HEADER_HEIGHT;
+    this.innerScroll = docHeight - filterHeight < HEADER_HEIGHT;
+    this.innerHeight = docHeight - HEADER_HEIGHT - 70;
+    this.topFixedFilterPanel = !this.innerScroll && offset >= MIN_OFFSET && filterHeight < height;
+    this.bottomScroll = !this.innerScroll && offset >= MIN_OFFSET && (docHeight - offset - height < 180);
+    this.bottomFixedFilterPanel = !this.innerScroll && !this.topFixedFilterPanel && offset >= MIN_OFFSET &&
+      !this.bottomScroll && filterHeight - offset < height - HEADER_HEIGHT;
+    this.topDist = height - filterHeight + HEADER_HEIGHT;
   }
 
   getProductShareLink() {

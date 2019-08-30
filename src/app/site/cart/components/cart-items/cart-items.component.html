@@ -17,8 +17,8 @@
               </h4>
             </div>
             <div fxFlex="30" class="main-price">
-              <section *ngIf="!notExist"><span style="color: #8F8F8F;font-size: 20px;"
-                [class.overridden]="product?.discount">{{displayTotalPrice}}</span><br/><span style="color: black;font-size: 20px;" *ngIf="product?.discount">{{totalDiscountedPrice}}</span>
+              <section *ngIf="!notExist"><h4><span style="color: #8F8F8F;font-size: 20px;"
+                [class.overridden]="product?.discount">{{displayTotalPrice}}</span><br/><span style="color: black;font-size: 20px;" *ngIf="product?.discount">{{totalDiscountedPrice}}</span></h4>
               </section>
               <section *ngIf="notExist && !product.count">ناموجود</section>
               <section *ngIf="notExist && product.count">فقط {{stock}} عدد موجود است</section>
@@ -27,7 +27,7 @@
         </div>
         <div class="item-data">
           <div>
-            <span style="color: #8f8f8f;">سایز:</span> &nbsp;
+            <span style="color: #8f8f8f;">اندازه:</span> &nbsp;
             <span style="position: relative;left: 9px;">{{displaySize}}</span>
           </div>
           <section><span style="color: #8f8f8f;">تعداد:</span><span style="position: relative;left: 20px;">{{displayQuantity}} {{' عدد'}}</span></section>

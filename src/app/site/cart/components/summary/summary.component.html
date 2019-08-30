@@ -1,69 +1,68 @@
 <div class="summary">
-  <div class="row-register" (click)="goToRegister()">
-      <span class="register-icon">
+    <div *ngIf="!isLoggedIn" class="row-register" (click)="goToRegister()">
+        <span class="register-icon">
           <img width="60px" style="filter: drop-shadow(0 0 0 black);" src="/assets/cliparts/login-icon.png">
       </span>
-    <div style="cursor: pointer;">
-      <h2 style="white-space: nowrap">عضویت رایگان</h2>
-      <p style="position: relative; bottom: 8px;">به ما بپیوندید</p>
+        <div style="cursor: pointer;">
+            <h2 style="white-space: nowrap">عضویت رایگان</h2>
+            <p style="position: relative; bottom: 8px;">به ما بپیوندید</p>
+        </div>
     </div>
-  </div>
-  <div class="rows">
-    <div class="s-right-text total-payment" style="display: inline-flex;">
-      <span>
+    <div class="rows">
+        <div class="s-right-text total-payment" style="display: inline-flex;">
+            <span>
           <img width="60px" style="filter: invert(1);" src="/assets/cliparts/cart-icon.png">
       </span>
-      <span style="position: relative;top: 20px;">سبد خرید</span>
+            <span style="position: relative;top: 20px;">سبد خرید</span>
+        </div>
     </div>
-  </div>
-  <hr class="hr-style">
-  <!--<div class="rows">-->
+    <hr class="hr-style">
+    <!--<div class="rows">-->
     <!--<span class="s-right-text"> امتیاز</span>-->
     <!--<span class="s-left-text">{{loyaltyPoint}}</span>-->
-  <!--</div>-->
-  <div class="rows">
-    <span class="s-right-text"> تعدا خرید</span>
-    <span class="s-left-text">{{loyaltyPoint}}</span>
-  </div>
-  <hr class="hr-style">
-  <!-- coupon -->
-  <div class="rows coupon-rows">
-    <div fxLayout="row">
-      <div fxFlex="40" class="coupon-name">کوپن تخفیف</div>
-      <div fxFlex="60" style="padding: 1px 0 0 2px">
-        <input matInput *ngIf="!used_coupon_code" class="coupon-input" type="text" [(ngModel)]="coupon_code" title="coupon code" autocomplete="off"/>
-        <input matInput *ngIf="used_coupon_code" class="coupon-input" type="text" [value]="used_coupon_code" title="coupon code"
-               readonly/>
-      </div>
+    <!--</div>-->
+    <div class="rows">
+        <span class="s-right-text"> تعداد خرید</span>
+        <span class="s-left-text">{{number}}</span>
     </div>
+    <hr class="hr-style">
+    <!-- coupon -->
+    <div class="rows coupon-rows">
+        <div fxLayout="row">
+            <div fxFlex="40" class="coupon-name">کوپن تخفیف</div>
+            <div fxFlex="60">
+                <input matInput *ngIf="!used_coupon_code" class="coupon-input" type="text" [(ngModel)]="coupon_code" title="coupon code" autocomplete="off" />
+                <input matInput *ngIf="used_coupon_code" class="coupon-input" type="text" [value]="used_coupon_code" title="coupon code" readonly/>
+            </div>
+        </div>
+        <div>
+            <button class="coupon-btn" mat-button (click)="applyCoupon()" [class.disabled]="disabled" [disabled]="disabled">{{used_coupon_code ? 'حذف' : 'اعمال'}}</button>
+        </div>
+    </div>
+    <div class="rows">
+        <span class="s-right-text"> موجودی</span>
+        <span class="s-left-text">{{balanceValue | priceFormat:','}}  تومان</span>
+    </div>
+    <hr class="hr-style">
+    <hr class="hr-style" />
+    <div class="rows">
+        <span class="s-right-text">جمع خرید</span>
+        <span class="s-left-text">{{totalValue | priceFormat:','}}  تومان</span>
+    </div>
+    <hr class="hr-style">
+    <div class="rows">
+        <span class="s-right-text">تخفیف</span>
+        <span class="s-left-text">{{discountValue | priceFormat:','}} تومان </span>
+    </div>
+    <hr class="hr-style">
+    <div class="rows nowrap-row-tp">
+        <span class="s-right-text total-payment">قیمت نهایی</span>
+        <span class="s-left-text total-payment">{{finalTotal | priceFormat:','}}  تومان</span>
+    </div>
+    <hr class="hr-style">
     <div>
-      <button class="coupon-btn" mat-button (click)="applyCoupon()">{{used_coupon_code ? 'حذف' : 'اعمال'}}</button>
-    </div>
-  </div>
-  <div class="rows">
-    <span class="s-right-text"> موجودی</span>
-    <span class="s-left-text">{{balanceValue | priceFormat:','}}  تومان</span>
-  </div>
-  <hr class="hr-style">
-  <hr class="hr-style"/>
-  <div class="rows">
-    <span class="s-right-text">جمع خرید</span>
-    <span class="s-left-text">{{totalValue | priceFormat:','}}  تومان</span>
-  </div>
-  <hr class="hr-style">
-  <div class="rows">
-    <span class="s-right-text">تخفیف</span>
-    <span class="s-left-text">{{discountValue | priceFormat:','}} تومان </span>
-  </div>
-  <hr class="hr-style">
-  <div class="rows nowrap-row-tp">
-    <span class="s-right-text total-payment">قیمت نهایی</span>
-    <span class="s-left-text total-payment">{{finalTotal | priceFormat:','}}  تومان</span>
-  </div>
-  <hr class="hr-style">
-  <div>
-    <button mat-button class="payment-button" [class.disabled]="disabled" (click)="pay()" [disabled]="disabled">
+        <button mat-button class="payment-button" [class.disabled]="disabled" (click)="pay()" [disabled]="disabled">
       تأیید نهایی
     </button>
-  </div>
+    </div>
 </div>

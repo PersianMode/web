@@ -37,6 +37,7 @@ export class MobileProductComponent implements OnInit {
   @Output() changeSize = new EventEmitter<any>();
   size = '';
   chosen = false;
+  config = {scrollbar: true, slidePreview: 1}
 
   constructor(private cartService: CartService, private router: Router,
     private snackBar: MatSnackBar) {

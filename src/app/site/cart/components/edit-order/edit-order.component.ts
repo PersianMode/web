@@ -3,6 +3,7 @@ import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
 import {DictionaryService} from '../../../../shared/services/dictionary.service';
 import {AuthService} from '../../../../shared/services/auth.service';
+import {HttpService} from '../../../../shared/services/http.service';
 
 @Component({
   selector: 'app-edit-order',
@@ -21,7 +22,8 @@ export class EditOrderComponent implements OnInit {
   selectedQuantityArray = null;
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<EditOrderComponent>, private auth: AuthService,
-              @Inject(MAT_DIALOG_DATA) public data: any, private router: Router, private dict: DictionaryService) {
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              private router: Router, private httpService: HttpService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
@@ -32,15 +34,13 @@ export class EditOrderComponent implements OnInit {
         if (el.quantity) {
           this.sizesArray.push({
             value: el.size,
-            name: this.dict.setShoesSize(el.size, gender, this.product.productType),
+            name: this.dict.setShoesSize(el.size, gender, this.product.type),
             quantity: el.quantity
           });
         }
         this.editObj.newQuantity = this.product.quantity;
       });
-
       this.sizesArray = Array.from(new Set(this.sizesArray));
-
       this.sizesArray.forEach(el => {
         const tempObj: any = {
           qtyArray: [],

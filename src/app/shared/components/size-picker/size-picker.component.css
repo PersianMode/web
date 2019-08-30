@@ -4,17 +4,19 @@ h2 {
   margin: 0;
 }
 .slider{
-  margin: 10px;
+  white-space: nowrap;
+  text-align: right;
 }
 @media(min-width: 960px) {
   .slider {
-    text-align: left;
+    margin: 5px;
+
   }
 }
 
 @media(max-width: 959px){
   .slider {
-    text-align: right;
+    margin: 25px 5px;
   }
 }
 

@@ -10,10 +10,13 @@
       </mat-tab>
 
       <mat-tab *ngIf="collectionId" label="دسته‌ها">
-        <app-collection-type [collectionId]="collectionId"></app-collection-type>
+        <app-collection-type [collectionId]="collectionId" (typeArray)="showFilterOptionTab($event, null)"></app-collection-type>
       </mat-tab>
       <mat-tab *ngIf="collectionId" label="تگ‌ها">
-        <app-collection-tag [collectionId]="collectionId"></app-collection-tag>
+        <app-collection-tag [collectionId]="collectionId" (tagArray)="showFilterOptionTab(null, $event)"></app-collection-tag>
+      </mat-tab>
+      <mat-tab *ngIf="collectionId && ((tagArray && tagArray.length) || (typeArray && typeArray.length))" label="نمایش آپشن های فیلتر">
+        <app-collection-filter-options [collectionId]="collectionId" [tagArray]="tagArray" [typeArray]="typeArray"></app-collection-filter-options>
       </mat-tab>
     </mat-tab-group>
   </mat-card>

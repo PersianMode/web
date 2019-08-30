@@ -69,7 +69,7 @@ h3 a {
     height: 20%;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 960px) {
     .btn-container {
         position: absolute;
         bottom: 30px;

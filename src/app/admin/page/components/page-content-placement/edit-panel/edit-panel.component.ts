@@ -32,9 +32,11 @@ export class EditPanelComponent implements OnInit {
     }
   ];
   areaPosition: any = {
-    'top': ['left-top', 'center-top', 'right-top'],
+    'margin-top': ['margin-top'],
+    'top': ['margin-left','left-top', 'center-top', 'right-top', 'margin-right'],
     'center': ['left-center', 'center-center', 'right-center'],
     'bottom': ['left-bottom', 'center-bottom', 'right-bottom'],
+    'margin-bottom': ['margin-bottom'],
   };
   selectedArea = {
     pos: null,
@@ -175,6 +177,10 @@ export class EditPanelComponent implements OnInit {
     }
   }
 
+  getArea(pos) {
+    return this.areas.find(el => el.pos.toLowerCase() === pos.toLowerCase())
+  }
+
   saveArea() {
     const areaIndex = this.areas.findIndex(el => el.pos.toLowerCase() === this.selectedArea.pos.toLowerCase());
     if (areaIndex !== -1) {
@@ -211,6 +217,8 @@ export class EditPanelComponent implements OnInit {
     if (!this.isAdd && obj) {
       // This area exists
       Object.keys(this.selectedArea).forEach(el => {
+        this.selectedArea[el] += '';
+        obj[el] += '';
         if (obj[el].toLowerCase() !== this.selectedArea[el].toLowerCase()) {
           this.areaDoneBtnShouldDisabled = false;
           return;
@@ -220,7 +228,7 @@ export class EditPanelComponent implements OnInit {
       // This area doesn't exist
       let noError = false;
       ['title', 'text', 'buttonText'].forEach(el => {
-        if (this.selectedArea[el] && this.selectedArea[el].trim())
+        if (this.selectedArea[el] && (!this.selectedArea[el].trim || this.selectedArea[el].trim()))
           noError = true;
       });
       ['titleColor', 'textColor', 'buttonBackgroundColor', 'buttonColor'].forEach(el => {
@@ -294,7 +302,7 @@ export class EditPanelComponent implements OnInit {
             anyChanges = true;
           else
             Object.keys(el).forEach(i => {
-              if (el[i].toLowerCase() !== arObj[i].toLowerCase())
+              if (el[i] !== arObj[i])
                 anyChanges = true;
             });
         });

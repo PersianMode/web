@@ -3,10 +3,10 @@
   display: inline-block;
   text-align: right;
   width: 244px;
-  height: 334px;
+  height: 342px;
   overflow: hidden;
   float: right;
-  margin-bottom: 14px;
+  margin:0;
   background: #fff;
   vertical-align: top;
   font-size: 11px;
@@ -18,21 +18,21 @@
   position: relative;
   display: inline-block;
   text-align: right;
-  /*overflow: hidden;*/
   float: right;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
   margin-bottom: 20px;
   background: #fff;
   vertical-align: top;
   font-size: 13px;
   color: #666;
-  padding:0;
   cursor: pointer;
 }
 
 .main span {
   display: inline-block;
   border: 1px solid transparent;
-  padding: 13px 0 0 0;
+  padding: 0;
 }
 .mainMobile span {
   display: inline-block;
@@ -67,17 +67,17 @@
 .main h2{
   color: #222;
   font-size: inherit;
-  margin: 0px 13px 0px ;
+  margin: 0 13px 0;
 }
 .mainMobile h2{
   color: #222;
   font-size: inherit;
-  margin: 0px 2px 0px ;
+  margin: 10px 2px 0;
 }
 .main h3{
   color: #666;
   font-size: inherit;
-  margin: 0px 13px 6px;
+  margin: 0 13px 6px;
   font-weight: 200;
   max-height: 30px;
   overflow: hidden;
@@ -86,7 +86,7 @@
 .mainMobile h3{
   color: #222;
   font-size: inherit;
-  margin: 0px 2px 1px ;
+  margin: 0 2px 1px ;
   font-weight: 200;
   max-height: 36px;
   overflow: hidden;
@@ -95,7 +95,7 @@
 .main h4 {
   color: #666;
   font-size: inherit;
-  margin: -5px 13px 6px 0px;
+  margin: -5px 13px 6px 0;
   font-weight: 200;
   display: inline-block;
 }
@@ -109,7 +109,7 @@
 .imgWrapper{
   width: 220px;
   height: 220px;
-  margin: 0px 10px;
+  margin: 0 10px;
   text-align: left;
   max-height: 220px;
   cursor: pointer;
@@ -119,12 +119,14 @@
   transition: all .5s ease-out;
 }
 .imgWrapperMobile{
-  margin: 0px;
+  margin: 0;
   text-align: left;
   cursor: pointer;
-  background: #f5f5f5;
   overflow: hidden;
+  background: #ccc;
   direction:ltr;
+  min-height: calc(100vw - 30px);
+  min-width: calc(100vw - 20px);
 }
 
 .imgWrapper img{
@@ -132,7 +134,7 @@
   position: relative;
 }
 .imgWrapperMobile img {
-  position: relative;
+  width: 100%;
 }
 .sliderWrapper {
   width: 220px;
@@ -155,14 +157,15 @@
   background: transparent;
   white-space: nowrap;
   position: relative;
-  right: 0px;
-  transition: all .5s ease-out;
+  right: 0;
+  transition: all 1s ease-out;
 }
-
+.slider span {
+  width: 60px;
+}
 .slider img {
   height: 60px;
   display: inline-block;
-  /*transform: scaleX(-1);*/
 }
 .colorprev{
   margin: 1px 10px 0 2px;
@@ -175,4 +178,28 @@
 }
 .noborder{
   border :none !important;
+}
+
+.soldOut {
+  color: #d00000;
+  position: absolute;
+  transform: rotate(-45deg) translateY(56px) translateX(-50px);
+  display: inline-block;
+  z-index: 10;
+  font-weight: 100;
+  font-family: iranyekan, sans-serif;
+  font-size: 63px;
+  opacity: .5;
+}
+
+.soldOutSmall {
+  color: #d00000;
+  position: absolute;
+  transform: rotate(-45deg) translateY(13px) translateX(-10px);
+  display: inline-block;
+  z-index: 10;
+  font-weight: 400;
+  font-family: iranyekan, sans-serif;
+  font-size: 17px;
+  opacity: 1;
 }

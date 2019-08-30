@@ -5,6 +5,7 @@ import { CartService } from '../../../../shared/services/cart.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { DictionaryService } from '../../../../shared/services/dictionary.service';
+import {ResponsiveService} from '../../../../shared/services/responsive.service';
 
 @Component({
   selector: 'app-add-to-card-confirm',
@@ -20,15 +21,16 @@ export class AddToCardConfirmComponent implements OnInit {
   discountedPrice = null;
   thumbnail;
   countFa;
+  isMobile;
 
 
   constructor(private dialog: MatDialog, public dialogRef: MatDialogRef<AddToCardConfirmComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private cartService: CartService,
+    @Inject(MAT_DIALOG_DATA) public data: any, private cartService: CartService, private res: ResponsiveService,
     private router: Router, private auth: AuthService, private dict: DictionaryService) {
   }
 
   ngOnInit() {
-
+    this.isMobile = this.res.isMobile;
     this.cartNumbers = 0;
     this.name = (this.data && this.data.name) ? this.data.name : null;
     this.product = this.data.product;

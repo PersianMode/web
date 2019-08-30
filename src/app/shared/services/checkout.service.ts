@@ -8,6 +8,7 @@ import {AuthService} from './auth.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 import {ReplaySubject} from 'rxjs/Rx';
+import {reject} from 'q';
 
 @Injectable()
 export class CheckoutService {
@@ -169,7 +170,7 @@ export class CheckoutService {
         },
         err => {
           console.error('Cannot get loyalty groups: ', err);
-          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
+          this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستییم. دوباره تلاش کنید', null, {
             duration: 3200,
           });
         });
@@ -223,19 +224,6 @@ export class CheckoutService {
     }
   }
 
-  getDataFromServerToSendBank(data) {
-    return new Promise((resolve, reject) => {
-      this.httpService.post('checkout/false', data)
-        .subscribe(res => {
-            resolve(res);
-          },
-          err => {
-            reject(err);
-          });
-    });
-  }
-
-
   updateVariablesAfterCheckout() {
     if (!this.authService.userDetails.userId) {
       this.ccRecipientData = null;
@@ -253,6 +241,42 @@ export class CheckoutService {
     this.addressObj = {};
     this.ccRecipientData = null;
     this.addedProvince = '';
+  }
+
+  completeShop() {
+    const data = this.accumulateData();
+    return new Promise((resolve, reject) => {
+    this.httpService.post('checkout', data)
+      .subscribe(res => {
+          if (!this.authService.userDetails.userId) {
+            this.ccRecipientData = null;
+            let addresses = [];
+            localStorage.removeItem('address');
+            if (!this.withDelivery) {
+              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+            }
+            this.addresses$.next(addresses);
+          }
+          this.selectedCustomerAddress = -1;
+          this.selectedWarehouseAddress = -1;
+          this.withDelivery = true;
+          this.deliveryDays = null;
+          this.deliveryTime = null;
+          this.addressObj = {};
+          this.ccRecipientData = null;
+          this.addedProvince = '';
+          this.cartService.emptyCart();
+          this.router.navigate(['/', 'shopBalanceResult'], {queryParams: {tref: res.invoiceNumber, iD: res.invoiceDate, uB: res.usedBalance}, queryParamsHandling: 'merge'});
+        },
+        err => {
+          console.error(err);
+          if (err.error === 'not enough balance for fully payment by balance') {
+            this.snackBar.open('موجودی حساب جهت تکمیل خرید کافی نیست', null, {
+              duration: 3200,
+            });
+          }
+        });
+    });
   }
 
   calculateDeliveryDiscount(durationId) {
@@ -299,25 +323,6 @@ export class CheckoutService {
     };
   }
 
-  checkoutDemo() {
-    const data = this.accumulateData();
-    this.httpService.post('checkout/true', data)
-      .subscribe(res => {
-          if (!this.authService.userDetails.userId) {
-            this.ccRecipientData = null;
-            let addresses = [];
-            localStorage.removeItem('address');
-            if (!this.withDelivery) {
-              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
-            }
-            this.addresses$.next(addresses);
-          }
-          this.cartService.emptyCart();
-          this.router.navigate(['/', 'profile']);
-        },
-        err => console.error(err));
-  }
-
   readPayResult(bankData) {
     return new Promise((resolve, reject) => {
       this.httpService.post('payResult', bankData).subscribe(
@@ -331,4 +336,15 @@ export class CheckoutService {
     });
   }
 
+  getDataFromServerToSendBank(data) {
+    return new Promise((resolve, reject) => {
+      this.httpService.post('checkout', data)
+        .subscribe(res => {
+            resolve(res);
+          },
+          err => {
+            reject(err);
+          });
+    });
+  }
 }

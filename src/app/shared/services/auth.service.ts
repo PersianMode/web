@@ -88,6 +88,7 @@ export class AuthService {
         mobile_no: null,
         national_id: null,
         warehouse_id: null,
+        shoesType: 'EU',
       };
     }
   }
@@ -168,7 +169,6 @@ export class AuthService {
         },
         (err) => {
           console.error('Cannot logout: ', err);
-
           reject();
         }
       );

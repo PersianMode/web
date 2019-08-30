@@ -8,11 +8,11 @@ export class DictionaryService {
   wordDictionary = {};
   colorDictionary = {};
   shoesSizeMap: any = {};
-  isEU = false;
+  isEU = true;
 
   constructor(httpService: HttpService, private auth: AuthService) {
     this.auth.isLoggedIn.subscribe(() => {
-      this.isEU = this.auth.userDetails.shoesType === 'EU';
+      this.isEU = this.auth.userDetails.shoesType !== 'US';
     });
     httpService.get('dictionary').subscribe((res: any) => {
       res.forEach(x => {

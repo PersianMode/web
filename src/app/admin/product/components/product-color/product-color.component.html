@@ -1,36 +1,38 @@
 <mat-card class="card-view">
   <mat-card-content>
-          <table class="field mat-elevation-z1">
+          <table class="field mat-elevation-z1 table table-bordered">
             <thead>
-              <td style="width: 10%">
+              <th>
                 <b>ردیف</b>
-              </td>
-              <td style="width: 20%">
+              </th>
+              <th>
                 <b>رنگ</b>
-              </td>
-              <td style="width: 20%;">
+              </th>
+              <th>
                 <b>تصویر بندانگشتی</b>
-              </td>
-              <td style="width: 30%;">
+              </th>
+              <th>
                 <b>تصاویر</b>
-              </td>
-              <td style="width: 10%">
+              </th>
+              <th>
                 <b>تغییر</b>
-              </td>
-              <td style="width: 10%">
+              </th>
+              <th>
                 <b>حذف</b>
-              </td>
+              </th>
             </thead>
             <tbody>
               <tr *ngFor="let pc of product.colors; let i = index">
                 <td>{{i+1}}</td>
                 <td style="direction: ltr">{{pc.name}}</td>
                 <td>
-                  <img class="thumbnail" [src]="getURL(pc.image?.thumbnail, pc)">
+                  <div class="angle">
+                    <img [src]="getURL(pc.image?.thumbnail, pc)">
+                  </div>
                 </td>
                 <td>
                   <div style="text-align: center">
-                    <div *ngFor="let angle of pc.image?.angles">
+                    <div *ngFor="let angle of pc.image?.angles" class="angle">
                       <img [src]="getURL(angle, pc)" class="angle">
                     </div>
                   </div>

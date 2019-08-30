@@ -5,11 +5,12 @@
 
 .backdrop{
   position: absolute;
-  /*left: 0;*/
-  right: 0;
+  left: 0;
   top: 0;
   bottom: 0;
-  background-color: #E5E5E5;
+  width: 100vw;
+  height:100vh;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .search-brand, .search-type, .search-article_no {
@@ -79,7 +80,6 @@
   font-size: 20px;
   position: absolute;
   top: 4px;
-  line-height: 40px;
   left: 13px;
   display: inline-block;
   color: black;

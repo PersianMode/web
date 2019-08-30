@@ -12,7 +12,6 @@ import {TitleService} from '../../services/title.service';
   styles: []
 })
 export class AbstractSearchComponent implements OnInit {
-
   cards: any = null;
   selectedId: string = null;
   rows: any = [];

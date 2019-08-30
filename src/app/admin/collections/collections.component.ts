@@ -2,19 +2,31 @@ import {Component, OnInit} from '@angular/core';
 import {AbstractSearchComponent} from '../../shared/components/abstract-search/abstract-search.component';
 import {RemovingConfirmComponent} from '../../shared/components/removing-confirm/removing-confirm.component';
 import {TitleService} from '../../shared/services/title.service';
+import {AuthService} from '../../shared/services/auth.service';
+import {CheckoutService} from '../../shared/services/checkout.service';
+import {Router} from '@angular/router';
+import {ProfileOrderService} from '../../shared/services/profile-order.service';
+import {HttpService} from '../../shared/services/http.service';
+import {ProgressService} from '../../shared/services/progress.service';
+import {MatDialog, MatSnackBar} from '@angular/material';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-collections',
   templateUrl: './collections.component.html',
   styleUrls: ['./collections.component.css']
 })
-export class CollectionsComponent extends AbstractSearchComponent implements OnInit {
 
+export class CollectionsComponent extends AbstractSearchComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitleWithOutConstant('ادمین: ' + TitleService.collection_name);
     this.key = 'Collection';
     super.ngOnInit();
-
+  }
+  constructor(protected httpService: HttpService, protected progressService: ProgressService,
+              protected router: Router, protected dialog: MatDialog,
+              protected snackBar: MatSnackBar, protected sanitizer: DomSanitizer, protected titleService: TitleService) {
+    super(httpService, progressService, router, dialog, snackBar, sanitizer, titleService);
   }
 
   openForm(id: string = null) {

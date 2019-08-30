@@ -93,8 +93,11 @@ export class CartComponent implements OnInit, OnDestroy {
           this.numberOfProducts = priceFormatter(this.products.map(el => el.quantity).reduce((a, b) => a + b));
           this.totalPrice = this.checkoutService.calculateTotal();
           this.calculateDiscount();
-        } else if (prevProductCount) {
-          this.router.navigate(['/']);
+        } else {
+          this.disabled = true;
+          if (prevProductCount) {
+            this.router.navigate(['/']);
+          }
         }
         this.showHideSpinner(false);
       }).catch(err => {
