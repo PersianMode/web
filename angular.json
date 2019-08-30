@@ -51,6 +51,15 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
+              ],
+              "budgets": [
+                {
+                  "type": "bundle",
+                  "name": "vendor",
+                  "baseline": "750kb",
+                  "warning": "100kb",
+                  "error": "200kb"
+                }
               ]
             }
           }
