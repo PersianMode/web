@@ -10,6 +10,7 @@ import {PaymentType} from '../../../shared/enum/payment.type.enum';
 export class PaymentTypeComponent implements OnInit {
   paymentType = PaymentType;
   @Output() selectedType = new EventEmitter();
+  @Output() changeUseLoyalty = new EventEmitter();
 
   @Input()
   set balance(value) {
@@ -52,7 +53,7 @@ export class PaymentTypeComponent implements OnInit {
   private _loyaltyPoint = 0;
   paymentTypes: any[] = [
     {
-      name: 'نقدی',
+      name: 'آنلاین',
       value: this.paymentType.cash,
       disabled: false,
       amount: null,
@@ -85,5 +86,9 @@ export class PaymentTypeComponent implements OnInit {
 
   priceFormatter(p) {
     return priceFormatter(p);
+  }
+
+  onUseLoyaltyChange(event) {
+    this.changeUseLoyalty.emit(event.checked)
   }
 }
