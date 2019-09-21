@@ -17,7 +17,7 @@
       </div>
       <hr class="line">
       <div class="deliveryOptionsWrapper">
-        <app-address-table [isProfile]=false (deliveryType)="setCostLabel($event)" (noDuration)="noDuration = $event"
+        <app-address-table [isProfile]=false (noDuration)="noDuration = $event"
           (durationType)="calculateDiscount($event)"></app-address-table>
       </div>
       <hr class="bottom-line">

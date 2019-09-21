@@ -1,17 +1,17 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit} from '@angular/core';
-import {MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar} from '@angular/material';
-import {HttpService} from '../../../../shared/services/http.service';
-import {SocketService} from '../../../../shared/services/socket.service';
-import {OrderLineStatuses} from '../../../../shared/lib/status';
-import {ProductViewerComponent} from '../product-viewer/product-viewer.component';
-import {ProgressService} from '../../../../shared/services/progress.service';
-import {imagePathFixer} from '../../../../shared/lib/imagePathFixer';
-import {ScanTrigger} from 'app/shared/enum/scanTrigger.enum';
-import {AuthService} from 'app/shared/services/auth.service';
-import {AccessLevel} from 'app/shared/enum/accessLevel.enum';
-import {ORDER_LINE_STATUS} from 'app/shared/enum/status.enum';
-import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
-import {ReceiveType} from 'app/shared/enum/receive_type';
+import { Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar } from '@angular/material';
+import { HttpService } from '../../../../shared/services/http.service';
+import { SocketService } from '../../../../shared/services/socket.service';
+import { OrderLineStatuses } from '../../../../shared/lib/status';
+import { ProductViewerComponent } from '../product-viewer/product-viewer.component';
+import { ProgressService } from '../../../../shared/services/progress.service';
+import { imagePathFixer } from '../../../../shared/lib/imagePathFixer';
+import { ScanTrigger } from 'app/shared/enum/scanTrigger.enum';
+import { AuthService } from 'app/shared/services/auth.service';
+import { AccessLevel } from 'app/shared/enum/accessLevel.enum';
+import { ORDER_LINE_STATUS } from 'app/shared/enum/status.enum';
+import { RemovingConfirmComponent } from 'app/shared/components/removing-confirm/removing-confirm.component';
+import { ReceiveType } from 'app/shared/enum/receive_type';
 
 
 @Component({
@@ -51,6 +51,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    
     this.load();
   }
 
@@ -65,7 +66,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     const offset = this.paginator.pageIndex * +this.pageSize;
     const limit = this.pageSize;
 
-    this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
+    this.httpService.post('search/Ticket', { options, offset, limit }).subscribe(res => {
       this.progressService.disable();
 
       res.data.forEach((order, index) => {
