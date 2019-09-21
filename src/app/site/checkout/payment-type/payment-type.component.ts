@@ -15,17 +15,18 @@ export class PaymentTypeComponent implements OnInit {
   @Input()
   set balance(value) {
     this._balance = value ? value : 0;
-
+    
+    this.selectedPaymentType = this.paymentType.cash;
+    
     if (value && value > 0) {
       this.paymentTypes.find(el => el.value === this.paymentType.balance).disabled = false;
       this.paymentTypes.find(el => el.value === this.paymentType.balance).amount = value;
-      this.selectedPaymentType = this.paymentTypes[1].value;
       this.paymentTypeChanged();
     } else {
       this.paymentTypes.find(el => el.value === this.paymentType.balance).disabled = true;
       this.paymentTypes.find(el => el.value === this.paymentType.balance).amount = 0;
-      this.selectedPaymentType = this.paymentTypes[0].value;
     }
+
   }
 
   get balance() {

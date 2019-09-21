@@ -37,6 +37,7 @@ export class CheckoutService {
   deliveryDurationId: any = null;
   deliveryTime: any = null;
   addressObj: any = {};
+  useLoyalty: boolean = false;
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
@@ -309,6 +310,7 @@ export class CheckoutService {
       duration_id: this.withDelivery ? this.deliveryDurationId : null,
       time_slot: this.withDelivery ? this.deliveryTime : null,
       paymentType: this.selectedPaymentType,
+      useLoyalty: this.useLoyalty,
     };
   }
 

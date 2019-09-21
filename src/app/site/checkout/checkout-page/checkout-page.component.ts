@@ -43,7 +43,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   soldOuts: any[] = [];
   discountChanges: any[];
   priceChanges: any[];
-  showCostLabel: true;
   noDuration = null;
   loyaltyGroups = [];
   addPointArray = [];
@@ -51,6 +50,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   loyaltyValue = 700;  // system_offline offers this
   bankData: any = null;
   isDev: boolean = true;
+
+  useBalance: boolean = false;
 
   cartItems$;
   products;
@@ -201,6 +202,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.maxLoyaltyDiscount = 0;
     this.selectedPaymentType = data;
 
+    this.useBalance = false;
     switch (data) {
       case PaymentType.cash: {
         this.checkoutService.setPaymentType(data);
@@ -208,18 +210,17 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         break;
       case PaymentType.balance: {
         this.checkoutService.setPaymentType(data);
+        this.useBalance = true;
       }
         break;
     }
   }
 
   onLoyaltyUseChange(useLoyalyty: boolean) {
+    this.checkoutService.useLoyalty = useLoyalyty;
     this.maxLoyaltyDiscount = useLoyalyty ? this.loyaltyPoint * this.loyaltyValue : 0
   }
 
-  setCostLabel(data) {
-    this.showCostLabel = data;
-  }
 
 
   calculateDiscount(durationId) {
@@ -296,56 +297,59 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  checkout() {
-    const orderData: any = this.checkoutService.accumulateData();
-    const IdArray = [
-      'invoiceNumber',
-      'invoiceDate',
-      'amount',
-      'terminalCode',
-      'merchantCode',
-      'redirectAddress',
-      'timeStamp',
-      'action',
-      'mobile',
-      'email',
-      'sign'
-    ];
+  async checkout() {
 
-    this.finalCheckItems()
-      .then(res => {
-        // first-step-1 :
-        // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
-        // from server to post and redirect to bank gateway page
-        return this.checkoutService.getDataFromServerToSendBank(orderData);
-      })
-      .then(res => {
-        this.checkoutService.updateVariablesAfterCheckout();
-        this.spinnerService.enable();
-        this.bankData = res;
-        IdArray.forEach(el => {
-          this[el].nativeElement.value = this.bankData[el];
-        });
-        this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
-      })
-      .catch(err => {
-        console.error('Error in final check: ', err);
-        if (!err.errCode)
-          this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید', null, {
-            duration: 3200,
-          });
-        this.spinnerService.disable();
+    try {
+
+      const orderData: any = this.checkoutService.accumulateData();
+      const IdArray = [
+        'invoiceNumber',
+        'invoiceDate',
+        'amount',
+        'terminalCode',
+        'merchantCode',
+        'redirectAddress',
+        'timeStamp',
+        'action',
+        'mobile',
+        'email',
+        'sign'
+      ];
+
+      await this.finalCheckItems()
+      // first-step-1 :
+      // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
+      // from server to post and redirect to bank gateway page
+      const res = await this.checkoutService.getDataFromServerToSendBank(orderData);
+      this.checkoutService.updateVariablesAfterCheckout();
+      this.spinnerService.enable();
+      this.bankData = res;
+      IdArray.forEach(el => {
+        this[el].nativeElement.value = this.bankData[el];
       });
+      this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
+
+    } catch (error) {
+      console.error('Error in final check: ', error);
+      if (!error.errCode)
+        this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید', null, {
+          duration: 3200,
+        });
+    }
+    this.spinnerService.disable();
   }
 
-  completeShop() {
-    this.finalCheckItems()
-      .then(res => {
-        return this.checkoutService.completeShop();
-      })
-      .catch(err => {
-        console.error(err);
-      });
+  async completeShop() {
+    try {
+
+      this.spinnerService.enable();
+      await this.finalCheckItems()
+      await this.checkoutService.completeShop();
+    } catch (error) {
+      console.error(' -> ', error);
+    }
+    this.spinnerService.disable();
+
   }
 
   totalChanged($event) {

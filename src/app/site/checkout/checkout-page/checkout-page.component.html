@@ -5,9 +5,9 @@
       <div class="middle-div">
         <h2>خلاصه خرید</h2>
 
-        <app-checkout-summary [total]="total" [discount]="discount" [maxLoyaltyDiscount]="maxLoyaltyDiscount"
+        <app-checkout-summary [total]="total" [discount]="discount" [maxLoyaltyDiscount]="maxLoyaltyDiscount" [useBalance]="useBalance"
           [deliveryCost]="deliveryCost" [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
-          [showCostLabel]="showCostLabel" [balanceValue]="balanceValue" (onFinalTotalChange)='totalChanged($event)'>
+          [balanceValue]="balanceValue" (onFinalTotalChange)='totalChanged($event)'>
         </app-checkout-summary>
       </div>
       <hr class="line-breaker">

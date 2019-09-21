@@ -11,14 +11,6 @@ export class CheckoutSummaryComponent implements OnInit {
   @Input() noDuration;
   ignoreDeliveryItems = false;
 
-  @Input()
-  set showCostLabel(value) {
-    this._showCostLabel = value;
-    this.ignoreDeliveryItems = !value;
-
-    this.calculateFinalTotal();
-  }
-
   @Output() onFinalTotalChange = new EventEmitter();
 
   private _total = 0;
@@ -27,23 +19,27 @@ export class CheckoutSummaryComponent implements OnInit {
   private _maxLoyaltyDiscount = 0;
   private _deliveryCost = 0;
   private _deliveryDiscount = 0;
-  private _showCostLabel = true;
-
+  private _useBalance = false;
 
   loyaltyDiscount = 0;
 
   finalTotal = 0;
 
+  modifiedBalance = 0;
+
   ngOnInit() {
-    this.showCostLabel = true;
     this.deliveryCost = 0;
     this.deliveryDiscount = 0;
   }
 
+  @Input()
+  set useBalance(value) {
+    this._useBalance = value;
+    this.calculateFinalTotal();
+  }
 
-
-  get showCostLabel() {
-    return this._showCostLabel;
+  get useBalance() {
+    return this._useBalance;
   }
 
   @Input()
@@ -71,6 +67,10 @@ export class CheckoutSummaryComponent implements OnInit {
     return this._deliveryDiscount;
   }
 
+  get discount() {
+    return this._discount;
+  }
+
   @Input()
   set total(value) {
     this._total = value;
@@ -83,6 +83,10 @@ export class CheckoutSummaryComponent implements OnInit {
     return this._total;
   }
 
+  get balanceValue() {
+    return this._balanceValue
+  }
+
   @Input()
   set discount(value) {
     if (!value)
@@ -92,20 +96,11 @@ export class CheckoutSummaryComponent implements OnInit {
     this.calculateFinalTotal();
   }
 
-  get discount() {
-    return this._discount;
-  }
-
-
   @Input()
   set balanceValue(value) {
     if (value) {
       this._balanceValue = value;
     }
-  }
-
-  get balanceValue() {
-    return this._balanceValue;
   }
 
   @Input()
@@ -120,10 +115,10 @@ export class CheckoutSummaryComponent implements OnInit {
 
   calculateFinalTotal() {
 
-    this.finalTotal = this.total + (this.ignoreDeliveryItems ? 0 : (this.deliveryCost - this.deliveryDiscount)) - this.balanceValue;
+    this.finalTotal = this.total + (this.ignoreDeliveryItems ? 0 : (this.deliveryCost - this.deliveryDiscount))
 
-    if (this.finalTotal < 0)
-      this.finalTotal = 0;
+    this.modifiedBalance = this.balanceValue;
+
 
     if (!this.maxLoyaltyDiscount)
       this.loyaltyDiscount = 0;
@@ -137,6 +132,27 @@ export class CheckoutSummaryComponent implements OnInit {
         this.finalTotal = 0;
       }
     }
+
+    if (this.finalTotal <= 0) {
+      this.finalTotal = 0;
+      this.onFinalTotalChange.emit(this.finalTotal);
+      return;
+    }
+
+    if (this.useBalance) {
+
+      if (this.finalTotal >= this.modifiedBalance) {
+        this.finalTotal -= this.modifiedBalance;
+        this.modifiedBalance = 0;
+      } else {
+        this.modifiedBalance -= this.finalTotal;
+        this.finalTotal = 0;
+      }
+
+      if (this.finalTotal <= 0)
+        this.finalTotal = 0;
+    }
+
 
     this.onFinalTotalChange.emit(this.finalTotal);
   }
