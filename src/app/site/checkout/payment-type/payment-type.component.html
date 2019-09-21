@@ -12,11 +12,12 @@
             </div>
             <div fxFlex="30">
               <label *ngIf="type.amount !== null && type.amount !== undefined">{{priceFormatter(type.amount)}}</label>
-              <label *ngIf="type.name === 'کسر از موجودی'">تومان </label>
+              <label *ngIf="type.name === 'کسر از موجودی'">تومان (موجودی فعلی)</label>
             </div>
           </div>
         </mat-radio-button>
       </mat-radio-group>
+      <mat-checkbox (change)="onUseLoyaltyChange($event)">استفاده از تخفیف وفاداری</mat-checkbox>
     </div>
   </div>
 </div>

@@ -1,22 +1,17 @@
-import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {PaymentType} from '../../../shared/enum/payment.type.enum';
-import {CheckoutService} from '../../../shared/services/checkout.service';
-import {HttpService} from '../../../shared/services/http.service';
-import {CartService} from '../../../shared/services/cart.service';
-import {TitleService} from '../../../shared/services/title.service';
-import {ProductService} from '../../../shared/services/product.service';
-import {MatDialog, MatSnackBar} from '@angular/material';
-import {CheckoutWarningConfirmComponent} from '../checkout-warning-confirm/checkout-warning-confirm.component';
-import {Router} from '@angular/router';
-
-import {ProgressService} from '../../../shared/services/progress.service';
-import {AuthService} from '../../../shared/services/auth.service';
-import {DOCUMENT, Location} from '@angular/common';
-import {SpinnerService} from '../../../shared/services/spinner.service';
-import {priceFormatter} from '../../../shared/lib/priceFormatter';
-import {FREE_DELIVERY_AMOUNT} from 'app/shared/enum/delivery.enum';
-import {resolve} from 'q';
-
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { PaymentType } from '../../../shared/enum/payment.type.enum';
+import { CheckoutService } from '../../../shared/services/checkout.service';
+import { HttpService } from '../../../shared/services/http.service';
+import { CartService } from '../../../shared/services/cart.service';
+import { TitleService } from '../../../shared/services/title.service';
+import { ProductService } from '../../../shared/services/product.service';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { CheckoutWarningConfirmComponent } from '../checkout-warning-confirm/checkout-warning-confirm.component';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../shared/services/auth.service';
+import { DOCUMENT, Location } from '@angular/common';
+import { SpinnerService } from '../../../shared/services/spinner.service';
+import { FREE_DELIVERY_AMOUNT } from 'app/shared/enum/delivery.enum';
 @Component({
   selector: 'app-checkout-page',
   templateUrl: './checkout-page.component.html',
@@ -40,41 +35,39 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   discount = 0;
   deliveryDiscount = 0;
   deliveryCost = 0;
-  usedBalance = 0;
   balanceValue = 0;
-  usedLoyaltyPoint = 0;
   loyaltyPoint = 0;
+  maxLoyaltyDiscount = 0;
   disabled = false;
   changeMessage = '';
   soldOuts: any[] = [];
   discountChanges: any[];
   priceChanges: any[];
-  showCostLabel: true;
   noDuration = null;
   loyaltyGroups = [];
   addPointArray = [];
   selectedPaymentType = PaymentType.cash;
-  earnedLoyaltyPoint = 0;
-  system_offline_offer = 25000;
-  loyaltyValue = 400;  // system_offline offers this
-  showEarnPointLabel = true;
+  loyaltyValue = 700;  // system_offline offers this
   bankData: any = null;
   isDev: boolean = true;
+
+  useBalance: boolean = false;
 
   cartItems$;
   products;
 
+  finalTotal = 0;
+
   constructor(private checkoutService: CheckoutService,
-              private httpService: HttpService,
-              private authService: AuthService,
-              private dialog: MatDialog,
-              private cartService: CartService,
-              private titleService: TitleService,
-              private progressService: ProgressService,
-              private snackBar: MatSnackBar,
-              private spinnerService: SpinnerService,
-              private router: Router, @Inject(DOCUMENT) private document: any, private location: Location,
-              private productService: ProductService) {
+    private httpService: HttpService,
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private cartService: CartService,
+    private titleService: TitleService,
+    private snackBar: MatSnackBar,
+    private spinnerService: SpinnerService,
+    private router: Router,
+    private productService: ProductService) {
   }
 
   ngOnInit() {
@@ -97,7 +90,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.spinnerService.enable();
       this.productService.loadProducts(productIds).then((data: any[]) => {
         this.loadAndFillProductsAndPrice(carts, data);
-        this.calculateEarnPoint();
         this.checkoutService.getTotalDiscount();
         this.spinnerService.disable();
       }).catch(err => {
@@ -112,10 +104,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.disabled = !(r && (!this.soldOuts || !this.soldOuts.length));
     });
 
-    this.calculateEarnPoint();
     this.authService.isLoggedIn.subscribe(res => {
       this.setPoints();
-      this.calculateEarnPoint();
     });
 
     // this.checkoutService.setPaymentType(this.paymentType.cash);
@@ -132,8 +122,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     carts.forEach(p => {
       const item = {};
       const product = data.filter(e => e._id === p.product_id)[0];
-      const instance = product.instances.find(i => i._id === p.instance_id) || {inventory: []};
-      const color = product.colors.find(c => c._id === instance.product_color_id) || {image: {}};
+      const instance = product.instances.find(i => i._id === p.instance_id) || { inventory: [] };
+      const color = product.colors.find(c => c._id === instance.product_color_id) || { image: {} };
       const instances = [];
       product.instances.forEach(inst => {
         const newInstance = {
@@ -180,26 +170,27 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   async setPoints() {
-    await this.checkoutService.getLoyaltyBalance()
-      .then((res: any) => {
-        this.balanceValue = res.balance;
-        this.loyaltyPoint = res.loyaltyPointValue;
-      })
-      .catch(err => {
-        console.error('Cannot get balance and loyalty points of customer: ', err);
-      });
 
-    if (!this.authService.userDetails.userId) {
-      this.showEarnPointLabel = false;
-      this.earnedLoyaltyPoint = 0;
-    } else {
-      this.showEarnPointLabel = true;
-      this.checkoutService.loyaltyGroups.subscribe(data => this.loyaltyGroups = data);
-      this.checkoutService.addPointArray.subscribe(data => {
-        if (data && data[0])
-          this.addPointArray = data[0].add_point;
-      });
+    try {
+      this.spinnerService.enable();
+      const res: any = await this.checkoutService.getLoyaltyBalance()
+      this.balanceValue = res.balance;
+      this.loyaltyPoint = res.loyaltyPoint;
+
+      if (!this.authService.userDetails.userId) {
+      } else {
+        this.checkoutService.loyaltyGroups.subscribe(data => this.loyaltyGroups = data);
+        this.checkoutService.addPointArray.subscribe(data => {
+          if (data && data[0])
+            this.addPointArray = data[0].add_point;
+        });
+      }
+    } catch (error) {
+      console.log(' -> ', error);
+    } finally {
+      this.spinnerService.disable();
     }
+
   }
 
   ngOnDestroy() {
@@ -208,83 +199,29 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
 
   async changePaymentType(data) {
     await this.setPoints();
-    this.usedBalance = 0;
-    this.usedLoyaltyPoint = 0;
+    this.maxLoyaltyDiscount = 0;
     this.selectedPaymentType = data;
 
+    this.useBalance = false;
     switch (data) {
       case PaymentType.cash: {
         this.checkoutService.setPaymentType(data);
       }
         break;
       case PaymentType.balance: {
-        if (this.balanceValue <= this.total) {
-          this.usedBalance = this.balanceValue;
-        } else {
-          this.usedBalance = this.total;
-        }
-        // this.usedBalance = this.balanceValue;
         this.checkoutService.setPaymentType(data);
-      }
-        break;
-      case PaymentType.loyaltyPoint: {
-        this.usedLoyaltyPoint = this.loyaltyPoint * this.loyaltyValue;
-        this.checkoutService.setPaymentType(data);
+        this.useBalance = true;
       }
         break;
     }
-    this.calculateEarnPoint();
   }
 
-  setCostLabel(data) {
-    this.showCostLabel = data;
-    this.calculateEarnPoint();
+  onLoyaltyUseChange(useLoyalyty: boolean) {
+    this.checkoutService.useLoyalty = useLoyalyty;
+    this.maxLoyaltyDiscount = useLoyalyty ? this.loyaltyPoint * this.loyaltyValue : 0
   }
 
-  calculateEarnPoint() {
-    try {
-      let scoreArray;
-      let maxScore;
-      let customer_loyaltyGroup;
-      let valid_loyaltyGroups;
 
-      if (!this.authService.userDetails.userId) {
-        this.earnedLoyaltyPoint = 0;
-        this.showEarnPointLabel = false;
-        return;
-      }
-
-      if (this.selectedPaymentType === PaymentType.loyaltyPoint)
-        this.earnedLoyaltyPoint = 0;
-
-      else if (this.showCostLabel) {
-        // calculate earn point
-        this.earnedLoyaltyPoint = Math.floor(this.total / this.system_offline_offer);
-      } else {
-        // calculate earn point in C&C mode
-        valid_loyaltyGroups = this.loyaltyGroups.filter(el => el.min_score <= this.loyaltyPoint);
-
-        if (!valid_loyaltyGroups.length) {
-          scoreArray = this.loyaltyGroups.map(el => el.min_score);
-          maxScore = Math.min(...scoreArray);
-          customer_loyaltyGroup = this.loyaltyGroups.filter(el => el.min_score === maxScore);
-        } else {
-          scoreArray = valid_loyaltyGroups.map(el => el.min_score);
-          maxScore = Math.max(...scoreArray);
-          customer_loyaltyGroup = valid_loyaltyGroups.filter(el => el.min_score === maxScore);
-        }
-        try {
-          this.earnedLoyaltyPoint = parseInt(this.addPointArray.filter(el => el.name === customer_loyaltyGroup[0].name)[0].added_point)
-            + Math.floor(this.total / this.system_offline_offer);
-
-        } catch (err) {
-        }
-      }
-      this.checkoutService.setEarnSpentPoint(this.earnedLoyaltyPoint);
-    } catch (e) {
-      console.error('error in calculateEarnPoint: ', e);
-    }
-  }
 
   calculateDiscount(durationId) {
     if (this.total - this.discount >= FREE_DELIVERY_AMOUNT) {
@@ -308,49 +245,49 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     return new Promise((resolve, reject) => {
       try {
         this.checkoutService.finalCheck().subscribe(res => {
-            this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
-            this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
-            this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
-            if ((this.soldOuts && this.soldOuts.length) ||
-              (this.discountChanges && this.discountChanges.length) ||
-              (this.priceChanges && this.priceChanges.length)) {
-              this.changeMessage = '';
+          this.soldOuts = res.filter(x => x.errors && x.errors.length && x.errors.includes('soldOut'));
+          this.discountChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('discountChanged'));
+          this.priceChanges = res.filter(x => x.warnings && x.warnings.length && x.warnings.includes('priceChanged'));
+          if ((this.soldOuts && this.soldOuts.length) ||
+            (this.discountChanges && this.discountChanges.length) ||
+            (this.priceChanges && this.priceChanges.length)) {
+            this.changeMessage = '';
 
-              if (!!this.soldOuts && !!this.soldOuts.length)
-                this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده‌اند';
-              else if (this.discountChanges && this.discountChanges.length)
-                this.changeMessage = 'برخی از تخفیف‌ها تغییر کرده‌است';
-              else if (this.priceChanges && this.priceChanges.length)
-                this.changeMessage = 'برخی از قیمت‌ها تغییر کرده‌است';
+            if (!!this.soldOuts && !!this.soldOuts.length)
+              this.changeMessage = 'متاسفانه برخی از محصولات به پایان رسیده‌اند';
+            else if (this.discountChanges && this.discountChanges.length)
+              this.changeMessage = 'برخی از تخفیف‌ها تغییر کرده‌است';
+            else if (this.priceChanges && this.priceChanges.length)
+              this.changeMessage = 'برخی از قیمت‌ها تغییر کرده‌است';
 
-              this.productService.updateProducts(res);
-              if (this.changeMessage) {
-                this.dialog.open(CheckoutWarningConfirmComponent, {
+            this.productService.updateProducts(res);
+            if (this.changeMessage) {
+              this.dialog.open(CheckoutWarningConfirmComponent, {
 
-                  position: {},
-                  width: '400px',
-                  data: {
-                    isError: (!!this.soldOuts && !!this.soldOuts.length),
-                    warning: this.changeMessage
-                  }
-                }).afterClosed().subscribe(x => {
-                  if (x)
-                    resolve();
-                  else {
-                    if (!!this.soldOuts && !!this.soldOuts.length)
-                      this.router.navigate(['/', 'cart']);
-                    reject({
-                      errMsg: this.changeMessage,
-                      errCode: 800,
-                    });
-                  }
-                });
-              } else {
-                resolve();
-              }
-            } else
+                position: {},
+                width: '400px',
+                data: {
+                  isError: (!!this.soldOuts && !!this.soldOuts.length),
+                  warning: this.changeMessage
+                }
+              }).afterClosed().subscribe(x => {
+                if (x)
+                  resolve();
+                else {
+                  if (!!this.soldOuts && !!this.soldOuts.length)
+                    this.router.navigate(['/', 'cart']);
+                  reject({
+                    errMsg: this.changeMessage,
+                    errCode: 800,
+                  });
+                }
+              });
+            } else {
               resolve();
-          },
+            }
+          } else
+            resolve();
+        },
           err => {
             console.error('error in finalCheckItems: ', err);
           });
@@ -360,56 +297,63 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  checkout() {
-    const orderData: any = this.checkoutService.accumulateData();
-    const IdArray = [
-      'invoiceNumber',
-      'invoiceDate',
-      'amount',
-      'terminalCode',
-      'merchantCode',
-      'redirectAddress',
-      'timeStamp',
-      'action',
-      'mobile',
-      'email',
-      'sign'
-    ];
+  async checkout() {
 
-    this.finalCheckItems()
-      .then(res => {
-        // first-step-1 :
-        // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
-        // from server to post and redirect to bank gateway page
-        return this.checkoutService.getDataFromServerToSendBank(orderData);
-      })
-      .then(res => {
-        this.checkoutService.updateVariablesAfterCheckout();
-        this.spinnerService.enable();
-        this.bankData = res;
-        IdArray.forEach(el => {
-          this[el].nativeElement.value = this.bankData[el];
-        });
-        this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
-      })
-      .catch(err => {
-        console.error('Error in final check: ', err);
-        if (!err.errCode)
-          this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید', null, {
-            duration: 3200,
-          });
-        this.spinnerService.disable();
+    try {
+
+      const orderData: any = this.checkoutService.accumulateData();
+      const IdArray = [
+        'invoiceNumber',
+        'invoiceDate',
+        'amount',
+        'terminalCode',
+        'merchantCode',
+        'redirectAddress',
+        'timeStamp',
+        'action',
+        'mobile',
+        'email',
+        'sign'
+      ];
+
+      await this.finalCheckItems()
+      // first-step-1 :
+      // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
+      // from server to post and redirect to bank gateway page
+      const res = await this.checkoutService.getDataFromServerToSendBank(orderData);
+      this.checkoutService.updateVariablesAfterCheckout();
+      this.spinnerService.enable();
+      this.bankData = res;
+      IdArray.forEach(el => {
+        this[el].nativeElement.value = this.bankData[el];
       });
+      this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
+
+    } catch (error) {
+      console.error('Error in final check: ', error);
+      if (!error.errCode)
+        this.snackBar.open('در حال حاضر امکان اتصال به درگاه پرداخت وجود ندارد، لطفا بعدا تلاش کنید', null, {
+          duration: 3200,
+        });
+    }
+    this.spinnerService.disable();
   }
 
-  completeShop() {
-    this.finalCheckItems()
-      .then(res => {
-        return this.checkoutService.completeShop();
-      })
-      .catch(err => {
-        console.error(err);
-      });
+  async completeShop() {
+    try {
+
+      this.spinnerService.enable();
+      await this.finalCheckItems()
+      await this.checkoutService.completeShop();
+    } catch (error) {
+      console.error(' -> ', error);
+    }
+    this.spinnerService.disable();
+
+  }
+
+  totalChanged($event) {
+    this.finalTotal = $event;
   }
 }
 

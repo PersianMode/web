@@ -22,6 +22,8 @@ enum ORDER_LINE_STATUS {
   WaitForDamageWithRefund = 20,
   DamageWithRefundVerified = 21,
   Renew = 22,
+  WaitForReturn = 23,
+  ReturnVerified = 24
 }
 
 

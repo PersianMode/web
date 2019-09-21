@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.conf.json --port 4200  --host 0.0.0.0",
+    "start": "ng serve --proxy-config proxy.conf.json --aot",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -75,6 +75,7 @@
     "protractor": "^5.4.1",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "~2.6.2"
+    "typescript": "~2.6.2",
+    "webpack-bundle-analyzer": "^3.3.2"
   }
 }

@@ -1,5 +1,4 @@
 export enum PaymentType {
   cash,
-  balance,
-  loyaltyPoint,
+  balance
 };

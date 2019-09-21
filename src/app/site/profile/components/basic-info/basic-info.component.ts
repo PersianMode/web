@@ -1,15 +1,16 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {AuthService} from '../../../../shared/services/auth.service';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AuthService } from '../../../../shared/services/auth.service';
 import * as moment from 'jalali-moment';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {isUndefined} from 'util';
-import {HttpService} from '../../../../shared/services/http.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { isUndefined } from 'util';
+import { HttpService } from '../../../../shared/services/http.service';
 
-import {GenDialogComponent} from '../../../../shared/components/gen-dialog/gen-dialog.component';
-import {MatDialog} from '@angular/material';
-import {DialogEnum} from '../../../../shared/enum/dialog.components.enum';
-import {MatSnackBar} from '@angular/material';
-import {ProgressService} from '../../../../shared/services/progress.service';
+import { GenDialogComponent } from '../../../../shared/components/gen-dialog/gen-dialog.component';
+import { MatDialog } from '@angular/material';
+import { DialogEnum } from '../../../../shared/enum/dialog.components.enum';
+import { MatSnackBar } from '@angular/material';
+import { ProgressService } from '../../../../shared/services/progress.service';
+import { CheckoutService } from './../../../../shared/services/checkout.service';
 
 @Component({
   selector: 'app-basic-info',
@@ -49,7 +50,6 @@ export class BasicInfoComponent implements OnInit {
   active = false;
   loyaltyPoints = 0;
   loyaltyPointsValue = 0;
-  loyaltyValue = 400;
   balanceFa = '';
   loyaltyPointsFa = '';
   loyaltyPointsValueFa = '';
@@ -57,7 +57,7 @@ export class BasicInfoComponent implements OnInit {
 
 
   constructor(private authService: AuthService, private httpService: HttpService,
-    private snackBar: MatSnackBar, protected progressService: ProgressService, private dialog: MatDialog) {
+    private snackBar: MatSnackBar, protected progressService: ProgressService, private dialog: MatDialog, private checkoutService: CheckoutService) {
   }
 
   ngOnInit() {
@@ -74,8 +74,6 @@ export class BasicInfoComponent implements OnInit {
     this.formTitle.emit(this.title);
     this.httpService.get(`customer/balance`).subscribe(res => {
       this.balance = res.balance;
-      this.loyaltyPoints = res.loyalty_points;
-      this.loyaltyPointsValue = res.loyalty_points * this.loyaltyValue;
       this.balanceFa = this.balance ? this.balance.toLocaleString('fa') : '-';
       this.loyaltyPointsFa = this.loyaltyPoints ? this.loyaltyPoints.toLocaleString('fa') : '-';
       this.loyaltyPointsValueFa = this.loyaltyPointsValue ? this.loyaltyPointsValue.toLocaleString('fa') : '-';
@@ -84,7 +82,7 @@ export class BasicInfoComponent implements OnInit {
 
   private formatDob() {
     const dob = moment(this.customerBasicInfo.dob);
-    this.birthDate = [dob.jDate(), dob.jMonth() + 1, dob.jYear()].map(r => r.toLocaleString('fa', {useGrouping: false})).join(' / ');
+    this.birthDate = [dob.jDate(), dob.jMonth() + 1, dob.jYear()].map(r => r.toLocaleString('fa', { useGrouping: false })).join(' / ');
   }
 
   dobChange(dob) {
@@ -345,5 +343,17 @@ export class BasicInfoComponent implements OnInit {
       }
     });
 
+  }
+
+  async requestForLoyalty() {
+    try {
+      this.progressService.enable();
+      const res: any = await this.checkoutService.getLoyaltyBalance();
+      this.loyaltyPoints = res.loyaltyPoint || '-';
+      this.loyaltyPointsFa = this.loyaltyPoints.toLocaleString('fa');
+    } catch (error) {
+
+    }
+    this.progressService.disable()
   }
 }

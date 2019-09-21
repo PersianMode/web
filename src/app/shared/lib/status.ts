@@ -24,6 +24,8 @@ const OrderLineStatuses: any[] = [
   {name: 'انتظار تایید خرابی با بازگشت هزینه', title: 'در حال پردازش', status: ols.WaitForDamageWithRefund},
   {name: 'تایید تایید خرابی با بازگشت هزینه', title: 'در حال پردازش', status: ols.DamageWithRefundVerified},
   {name: 'از سرگیری فرایند', title: 'در حال پردازش', status: ols.Renew},
+  {name: 'انتظاز تایید بازگشت', title: 'در حال پردازش', status: ols.WaitForReturn},
+  {name: 'تایید بازگشت', title: 'در حال پردازش', status: ols.ReturnVerified},
 ];
 const OrderStatuses: any[] = [
   {name: 'در انتظار تجمیع', title: 'در حال آماده سازی', status: os.WaitForAggregation},

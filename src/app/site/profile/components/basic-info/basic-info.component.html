@@ -4,12 +4,19 @@
       <div fxFlex="50" class="info-cell">نام: <b>{{customerBasicInfo.name}}</b></div>
       <div fxFlex="50" class="info-cell">نام خانوادگی: <b>{{customerBasicInfo.surname}}</b></div>
     </div>
+    <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
+      <div fxFlex="50" class="info-cell">امتیاز وفاداری: <b>{{loyaltyPoints || '-'}}</b></div>
+      <div fxFlex="50" class="info-cell">
+        <button mat-raised-button style="line-height: 24px" (click)="requestForLoyalty()">دریافت آخرین امتیاز وفاداری
+        </button>
+      </div>
+    </div>
     <!--<div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">-->
-      <!--<div fxFlex="50" class="info-cell">امتیاز وفاداری: <b>{{loyaltyPointsFa}}</b></div>-->
-      <!--<div fxFlex="50" class="info-cell">ارزش امتیاز به تومان: <b>{{loyaltyPointsValueFa}}</b></div>-->
+    <!--<div fxFlex="50" class="info-cell">امتیاز وفاداری: <b>{{loyaltyPointsFa}}</b></div>-->
+    <!--<div fxFlex="50" class="info-cell">ارزش امتیاز به تومان: <b>{{loyaltyPointsValueFa}}</b></div>-->
     <!--</div>-->
     <div *ngIf="balance > 0" style="background: #ccc" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"
-         dir="rtl">
+      dir="rtl">
       <div fxFlex="50" class="info-cell">موجودی حساب: <b>{{balanceFa}}</b></div>
       <div fxFlex="50" class="info-cell">
         <button mat-raised-button style="line-height: 24px" (click)="goToRefundBank()">واریز موجودی به حساب بانکی
@@ -17,12 +24,12 @@
       </div>
     </div>
     <div *ngIf="balance === 0 && active" style="background: #ccc" fxLayout="row" fxLayout.sm="column"
-         fxLayout.xs="column" dir="rtl">
+      fxLayout.xs="column" dir="rtl">
       <div fxFlex="50" class="info-cell">موجودی حساب: <b>{{balanceFa}}</b></div>
       <div fxFlex="50" class="info-cell">درخواست شما در حال بررسی می باشد</div>
     </div>
     <div *ngIf="balance === 0 && !active" style="background: #ccc" fxLayout="row" fxLayout.sm="column"
-         fxLayout.xs="column" dir="rtl">
+      fxLayout.xs="column" dir="rtl">
       <div fxFlex="50" class="info-cell"> موجودی حساب: <b>{{balanceFa}}</b></div>
       <div fxFlex="50" class="info-cell">موجودی حساب شما صفر است</div>
     </div>
@@ -51,30 +58,23 @@
     <form (ngSubmit)="submitEditInfo()" [formGroup]="userInfoForm">
       <div fxLayout="row">
         <div fxFlex="10" fxFlex.sm="5" fxFlex.xs="0">&nbsp;</div>
-        <div fxLayout="column" fxFlex=80 fxFlex.sm=90 fxFlex.xs=100
-             dir="rtl">
+        <div fxLayout="column" fxFlex=80 fxFlex.sm=90 fxFlex.xs=100 dir="rtl">
           <div fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" dir="rtl">
             <div fxFlex="15" class="input-label"><span>نام</span>
             </div>
             <div fxFlex="35" class="input-container">
 
-              <input class="input-field" type="text"
-                     formControlName="name"
-                     placeholder="نام"
-                     [ngClass]="userInfoForm.controls['name'].hasError('required') ? 'input-error' : null"/>
-              <label class="field-error"
-                     *ngIf="userInfoForm.controls['name'].hasError('required')">لطفا
+              <input class="input-field" type="text" formControlName="name" placeholder="نام"
+                [ngClass]="userInfoForm.controls['name'].hasError('required') ? 'input-error' : null" />
+              <label class="field-error" *ngIf="userInfoForm.controls['name'].hasError('required')">لطفا
                 نام را وارد کنید</label>
             </div>
             <div fxFlex="15" class="input-label"><span>نام خانوادگی</span>
             </div>
             <div fxFlex="35" class="input-container">
-              <input class="input-field" type="text"
-                     formControlName="surname"
-                     placeholder="نام خانوادگی"
-                     [ngClass]="userInfoForm.controls['surname'].hasError('required') ? 'input-error' : null"/>
-              <label class="field-error"
-                     *ngIf="userInfoForm.controls['surname'].hasError('required')">لطفا
+              <input class="input-field" type="text" formControlName="surname" placeholder="نام خانوادگی"
+                [ngClass]="userInfoForm.controls['surname'].hasError('required') ? 'input-error' : null" />
+              <label class="field-error" *ngIf="userInfoForm.controls['surname'].hasError('required')">لطفا
                 نام خانوادگی را وارد کنید</label>
             </div>
           </div>
@@ -87,13 +87,11 @@
             <div fxFlex="15" class="input-label"><span>شماره ملی</span>
             </div>
             <div fxFlex="35" class="input-container">
-              <input class="input-field"
-                     formControlName="national_id"
-                     placeholder="شماره ملی"
-                     [readonly]=nationalIdDisabled
-                     [ngClass]="(userInfoForm.controls['national_id'].hasError('maxLength') || userInfoForm.controls['national_id'].hasError('minLength') || userInfoForm.controls['national_id'].hasError('pattern')) ? 'input-error' : null"/>
+              <input class="input-field" formControlName="national_id" placeholder="شماره ملی"
+                [readonly]=nationalIdDisabled
+                [ngClass]="(userInfoForm.controls['national_id'].hasError('maxLength') || userInfoForm.controls['national_id'].hasError('minLength') || userInfoForm.controls['national_id'].hasError('pattern')) ? 'input-error' : null" />
               <label class="field-error"
-                     *ngIf="(userInfoForm.controls['national_id'].hasError('maxLength') || userInfoForm.controls['national_id'].hasError('minLength') || userInfoForm.controls['national_id'].hasError('pattern'))">لطفا
+                *ngIf="(userInfoForm.controls['national_id'].hasError('maxLength') || userInfoForm.controls['national_id'].hasError('minLength') || userInfoForm.controls['national_id'].hasError('pattern'))">لطفا
                 کد ملی معتبری وارد کنید</label>
             </div>
 
@@ -102,31 +100,26 @@
             <div fxFlex="15" class="input-label"><span>ایمیل</span>
             </div>
             <div fxFlex="35" class="input-container">
-              <input class="input-field" type="email"
-                     placeholder="نام کاربری (ایمیل)"
-                     formControlName="username"
-                     [ngClass]="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('email')) ? 'input-error' : null"/>
+              <input class="input-field" type="email" placeholder="نام کاربری (ایمیل)" formControlName="username"
+                [ngClass]="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('email')) ? 'input-error' : null" />
               <label class="field-error"
-                     *ngIf="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('email'))">لطفا
+                *ngIf="(userInfoForm.controls['username'].hasError('required') || userInfoForm.controls['username'].hasError('email'))">لطفا
                 ایمیل معتبری وارد کنید</label>
             </div>
             <div fxFlex="15" class="input-label"><span>شماره موبایل</span>
             </div>
             <div fxFlex="35" class="input-container">
-              <input class="input-field"
-                     formControlName="mobile_no"
-                     placeholder="شماره موبایل"
-                     [readonly]=true
-                     [ngClass]="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('pattern')) ? 'input-error' : null"/>
+              <input class="input-field" formControlName="mobile_no" placeholder="شماره موبایل" [readonly]=true
+                [ngClass]="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('pattern')) ? 'input-error' : null" />
               <label class="field-error"
-                     *ngIf="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('pattern'))">لطفا
+                *ngIf="(userInfoForm.controls['mobile_no'].hasError('required') || userInfoForm.controls['mobile_no'].hasError('pattern'))">لطفا
                 شماره موبایل معتبری وارد کنید</label>
             </div>
           </div>
           <div fxLayout="row" class="submit-cancel-change-btn">
             <button mat-button fxFlex="50" class="action-button" type="submit"
-                    [disabled]="!userInfoForm.valid || (!anyChanges && !changeDobFlag)"
-                    [class.btn-disable]="!userInfoForm.valid || (!anyChanges && !changeDobFlag)">ثبت
+              [disabled]="!userInfoForm.valid || (!anyChanges && !changeDobFlag)"
+              [class.btn-disable]="!userInfoForm.valid || (!anyChanges && !changeDobFlag)">ثبت
               اطلاعات
             </button>
             <button mat-button fxFlex="50" class="action-button" (click)="cancelEditOrChangePass()">
@@ -153,14 +146,11 @@
             <div fxFlex="50" fxLayout="row" dir="rtl">
               <div fxFlex="80" class="input-container">
 
-                <input class="input-field" type="password"
-                       formControlName="oldPass"
-                       (focus)="setSeen('oldPass')"
-                       (blur)="curFocus = null"
-                       #old_pass
-                       [ngClass]="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ? 'input-error' : null"/>
+                <input class="input-field" type="password" formControlName="oldPass" (focus)="setSeen('oldPass')"
+                  (blur)="curFocus = null" #old_pass
+                  [ngClass]="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ? 'input-error' : null" />
                 <label class="field-error"
-                       *ngIf="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ">
+                  *ngIf="(changePassForm.controls['oldPass'].hasError('required') || changePassForm.controls['oldPass'].hasError('minlength')) && seen['oldPass'] && curFocus !== 'oldPass' ">
                   {{errorMsgOld}}</label>
               </div>
               <div fxFlex="20" class="eye-div">
@@ -175,14 +165,11 @@
             <div fxFlex="50" fxLayout="row" dir="rtl">
               <div fxFlex="80" class="input-container">
 
-                <input class="input-field" type="password"
-                       formControlName="newPass"
-                       (focus)="setSeen('newPass')"
-                       (blur)="curFocus = null"
-                       #new_pass
-                       [ngClass]="(changePassForm.controls['newPass'].hasError('required') || changePassForm.controls['newPass'].hasError('minlength')) && seen['newPass'] && curFocus !== 'newPass'  ? 'input-error' : null"/>
+                <input class="input-field" type="password" formControlName="newPass" (focus)="setSeen('newPass')"
+                  (blur)="curFocus = null" #new_pass
+                  [ngClass]="(changePassForm.controls['newPass'].hasError('required') || changePassForm.controls['newPass'].hasError('minlength')) && seen['newPass'] && curFocus !== 'newPass'  ? 'input-error' : null" />
                 <label class="field-error"
-                       *ngIf="(changePassForm.controls['newPass'].hasError('required') || changePassForm.controls['newPass'].hasError('minlength'))  && seen['newPass'] && curFocus !== 'newPass'">
+                  *ngIf="(changePassForm.controls['newPass'].hasError('required') || changePassForm.controls['newPass'].hasError('minlength'))  && seen['newPass'] && curFocus !== 'newPass'">
                   {{errorMsgNew}}</label>
               </div>
               <div fxFlex="20" class="eye-div">
@@ -196,14 +183,11 @@
             </div>
             <div fxFlex="50" fxLayout="row" dir="rtl">
               <div fxFlex="80" class="input-container">
-                <input class="input-field" type="password"
-                       formControlName="retypePass"
-                       (focus)="setSeen('retypePass')"
-                       (blur)="curFocus = null"
-                       #retype_pass
-                       [ngClass]="(changePassForm.controls['retypePass'].hasError('required') || changePassForm.controls['retypePass'].hasError('minlength')) && seen['retypePass'] && curFocus !== 'retypePass' ? 'input-error' : null"/>
+                <input class="input-field" type="password" formControlName="retypePass" (focus)="setSeen('retypePass')"
+                  (blur)="curFocus = null" #retype_pass
+                  [ngClass]="(changePassForm.controls['retypePass'].hasError('required') || changePassForm.controls['retypePass'].hasError('minlength')) && seen['retypePass'] && curFocus !== 'retypePass' ? 'input-error' : null" />
                 <label class="field-error"
-                       *ngIf="(changePassForm.controls['retypePass'].hasError('required') || changePassForm.controls['retypePass'].hasError('minlength')) && seen['retypePass'] && curFocus !== 'retypePass'">
+                  *ngIf="(changePassForm.controls['retypePass'].hasError('required') || changePassForm.controls['retypePass'].hasError('minlength')) && seen['retypePass'] && curFocus !== 'retypePass'">
                   {{errorMsgRetype}}</label>
               </div>
               <div fxFlex="20" class="eye-div">
@@ -213,8 +197,8 @@
           </div>
           <div fxLayout="row" class="submit-cancel-change-btn">
             <button mat-button fxFlex="50" class="action-button" type="submit"
-                    [disabled]="!changePassForm.valid || !passCompatible "
-                    [class.btn-disable]="!changePassForm.valid || !passCompatible">تغییر کلمه عبور
+              [disabled]="!changePassForm.valid || !passCompatible "
+              [class.btn-disable]="!changePassForm.valid || !passCompatible">تغییر کلمه عبور
             </button>
             <button mat-button fxFlex="50" class="action-button" (click)="cancelEditOrChangePass()">
               بازگشت
@@ -226,6 +210,3 @@
     </form>
   </mat-card-content>
 </mat-card>
-
-
-

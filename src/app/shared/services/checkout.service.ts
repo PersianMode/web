@@ -1,14 +1,13 @@
-import {Injectable} from '@angular/core';
-import {IAddressInfo} from '../interfaces/iaddressInfo.interface';
-import {HttpService} from './http.service';
-import {CartService} from './cart.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {PaymentType} from '../enum/payment.type.enum';
-import {AuthService} from './auth.service';
-import {MatSnackBar} from '@angular/material';
-import {Router} from '@angular/router';
-import {ReplaySubject} from 'rxjs/Rx';
-import {reject} from 'q';
+import { Injectable } from '@angular/core';
+import { IAddressInfo } from '../interfaces/iaddressInfo.interface';
+import { HttpService } from './http.service';
+import { CartService } from './cart.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { PaymentType } from '../enum/payment.type.enum';
+import { AuthService } from './auth.service';
+import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
+import { ReplaySubject } from 'rxjs/Rx';
 
 @Injectable()
 export class CheckoutService {
@@ -18,9 +17,8 @@ export class CheckoutService {
   private selectedPaymentType = this.paymentType.cash;
   private total = 0;
   private discount = 0;
-  private loyaltyPointValue = 0;
+  private loyaltyPoint = 0;
   private balance = 0;
-  private earnSpentPointObj: any = {};
   private durations: any;
   loyaltyGroups: ReplaySubject<any> = new ReplaySubject<any>();
   addPointArray: ReplaySubject<any> = new ReplaySubject<any>();
@@ -39,11 +37,12 @@ export class CheckoutService {
   deliveryDurationId: any = null;
   deliveryTime: any = null;
   addressObj: any = {};
+  useLoyalty: boolean = false;
 
 
   constructor(private cartService: CartService, private httpService: HttpService,
-              private authService: AuthService, private snackBar: MatSnackBar,
-              private router: Router) {
+    private authService: AuthService, private snackBar: MatSnackBar,
+    private router: Router) {
     this.cartService.cartItems.subscribe(
       data => {
         this.dataIsReady.next(data && data.length);
@@ -71,10 +70,10 @@ export class CheckoutService {
     if (isLoggedIn) {
       this.httpService.get(`customer/address`)
         .subscribe(res => {
-            this.addresses$.next(res.addresses);
-          }, err => {
-            console.error(err);
-          }
+          this.addresses$.next(res.addresses);
+        }, err => {
+          console.error(err);
+        }
         );
     } else {
       const address = JSON.parse(localStorage.getItem('address'));
@@ -108,15 +107,6 @@ export class CheckoutService {
     this.selectedPaymentType = pt;
   }
 
-  setEarnSpentPoint(et) {
-    this.earnSpentPointObj = {
-      delivery_spent: 0,
-      shop_spent: 0,
-      delivery_value: 0,
-      shop_value: 0,
-      earn_point: et,
-    };
-  }
 
   finalCheck() {
     if (!this.productData) return null;
@@ -133,28 +123,28 @@ export class CheckoutService {
     return this.httpService.post('finalCheck', cartItems);
   }
 
-  getLoyaltyBalance() {
-    return new Promise((resolve, reject) => {
-      this.cartService.getLoyaltyBalance()
-        .then((res: any) => {
-          this.balance = res.balance;
-          // this.loyaltyPointValue = res.loyalty_points * this.loyaltyValue;
-          this.loyaltyPointValue = res.loyalty_points;
+  async getLoyaltyBalance() {
+    
+    try {
+      const res: any = await this.cartService.getLoyaltyBalance();
+      this.balance = res.balance;
+      this.loyaltyPoint = res.loyalty_points;
+      return {
+        balance: this.balance,
+        loyaltyPoint: this.loyaltyPoint,
+      }
+    } catch (error) {
+      console.log(' -> ', error);
+    } finally {
+    }
 
-          resolve({
-            balance: this.balance,
-            loyaltyPointValue: this.loyaltyPointValue,
-          });
-        })
-        .catch(err => reject(err));
-    });
   }
 
   getLoyaltyGroup() {
     this.httpService.get('loyaltygroup')
       .subscribe(res => {
-          this.loyaltyGroups.next(res);
-        },
+        this.loyaltyGroups.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستیم. دوباره تلاش کنید', null, {
@@ -166,8 +156,8 @@ export class CheckoutService {
   getAddLoyaltyPoints() {
     this.httpService.get('deliverycc')
       .subscribe(res => {
-          this.addPointArray.next(res);
-        },
+        this.addPointArray.next(res);
+      },
         err => {
           console.error('Cannot get loyalty groups: ', err);
           this.snackBar.open('قادر به دریافت اطلاعات گروه های وفاداری نیستییم. دوباره تلاش کنید', null, {
@@ -229,7 +219,7 @@ export class CheckoutService {
       this.ccRecipientData = null;
       let addresses = [];
       if (!this.withDelivery) {
-        addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+        addresses = this.warehouseAddresses.map(r => Object.assign({ name: r.name }, r.address));
       }
       this.addresses$.next(addresses);
     }
@@ -246,14 +236,14 @@ export class CheckoutService {
   completeShop() {
     const data = this.accumulateData();
     return new Promise((resolve, reject) => {
-    this.httpService.post('checkout', data)
-      .subscribe(res => {
+      this.httpService.post('checkout', data)
+        .subscribe(res => {
           if (!this.authService.userDetails.userId) {
             this.ccRecipientData = null;
             let addresses = [];
             localStorage.removeItem('address');
             if (!this.withDelivery) {
-              addresses = this.warehouseAddresses.map(r => Object.assign({name: r.name}, r.address));
+              addresses = this.warehouseAddresses.map(r => Object.assign({ name: r.name }, r.address));
             }
             this.addresses$.next(addresses);
           }
@@ -266,16 +256,16 @@ export class CheckoutService {
           this.ccRecipientData = null;
           this.addedProvince = '';
           this.cartService.emptyCart();
-          this.router.navigate(['/', 'shopBalanceResult'], {queryParams: {tref: res.invoiceNumber, iD: res.invoiceDate, uB: res.usedBalance}, queryParamsHandling: 'merge'});
+          this.router.navigate(['/', 'shopBalanceResult'], { queryParams: { tref: res.invoiceNumber, iD: res.invoiceDate, uB: res.usedBalance }, queryParamsHandling: 'merge' });
         },
-        err => {
-          console.error(err);
-          if (err.error === 'not enough balance for fully payment by balance') {
-            this.snackBar.open('موجودی حساب جهت تکمیل خرید کافی نیست', null, {
-              duration: 3200,
-            });
-          }
-        });
+          err => {
+            console.error(err);
+            if (err.error === 'not enough balance for fully payment by balance') {
+              this.snackBar.open('موجودی حساب جهت تکمیل خرید کافی نیست', null, {
+                duration: 3200,
+              });
+            }
+          });
     });
   }
 
@@ -287,8 +277,8 @@ export class CheckoutService {
     return new Promise((resolve, reject) => {
       this.httpService.post('/calculate/order/price', data)
         .subscribe(res => {
-            resolve(res);
-          },
+          resolve(res);
+        },
           err => {
             reject();
           });
@@ -320,6 +310,7 @@ export class CheckoutService {
       duration_id: this.withDelivery ? this.deliveryDurationId : null,
       time_slot: this.withDelivery ? this.deliveryTime : null,
       paymentType: this.selectedPaymentType,
+      useLoyalty: this.useLoyalty,
     };
   }
 
@@ -340,8 +331,8 @@ export class CheckoutService {
     return new Promise((resolve, reject) => {
       this.httpService.post('checkout', data)
         .subscribe(res => {
-            resolve(res);
-          },
+          resolve(res);
+        },
           err => {
             reject(err);
           });
