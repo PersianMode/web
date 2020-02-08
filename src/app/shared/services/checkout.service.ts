@@ -232,46 +232,47 @@ export class CheckoutService {
     this.ccRecipientData = null;
     this.addedProvince = '';
   }
-  //
-  // completeShop() {
-  //   const data = this.accumulateData();
-  //   return new Promise((resolve, reject) => {
-  //     this.httpService.post('checkout', data)
-  //       .subscribe(res => {
-  //         if (!this.authService.userDetails.userId) {
-  //           this.ccRecipientData = null;
-  //           let addresses = [];
-  //           localStorage.removeItem('address');
-  //           if (!this.withDelivery) {
-  //             addresses = this.warehouseAddresses.map(r => Object.assign({ name: r.name }, r.address));
-  //           }
-  //           this.addresses$.next(addresses);
-  //         }
-  //         this.selectedCustomerAddress = -1;
-  //         this.selectedWarehouseAddress = -1;
-  //         this.withDelivery = true;
-  //         this.deliveryDays = null;
-  //         this.deliveryTime = null;
-  //         this.addressObj = {};
-  //         this.ccRecipientData = null;
-  //         this.addedProvince = '';
-  //         this.cartService.emptyCart();
-  //         this.router.navigate(['/', 'shopBalanceResult'], { queryParams: { tref: res.invoiceNumber, iD: res.invoiceDate, uB: res.usedBalance }, queryParamsHandling: 'merge' });
-  //       },
-  //         err => {
-  //           console.error(err);
-  //           if (err.error === 'not enough balance for fully payment by balance') {
-  //             this.snackBar.open('موجودی حساب جهت تکمیل خرید کافی نیست', null, {
-  //               duration: 3200,
-  //             });
-  //           }
-  //         });
-  //   });
-  // }
 
-
-  completeShop() {
+  completeShopBalancePay() {
     const data = this.accumulateData();
+    return new Promise((resolve, reject) => {
+      this.httpService.post('checkout', data)
+        .subscribe(res => {
+          if (!this.authService.userDetails.userId) {
+            this.ccRecipientData = null;
+            let addresses = [];
+            localStorage.removeItem('address');
+            if (!this.withDelivery) {
+              addresses = this.warehouseAddresses.map(r => Object.assign({ name: r.name }, r.address));
+            }
+            this.addresses$.next(addresses);
+          }
+          this.selectedCustomerAddress = -1;
+          this.selectedWarehouseAddress = -1;
+          this.withDelivery = true;
+          this.deliveryDays = null;
+          this.deliveryTime = null;
+          this.addressObj = {};
+          this.ccRecipientData = null;
+          this.addedProvince = '';
+          this.cartService.emptyCart();
+          this.router.navigate(['/', 'shopBalanceResult'], { queryParams: { tref: res.invoiceNumber, iD: res.invoiceDate, uB: res.usedBalance }, queryParamsHandling: 'merge' });
+        },
+          err => {
+            console.error(err);
+            if (err.error === 'not enough balance for fully payment by balance') {
+              this.snackBar.open('موجودی حساب جهت تکمیل خرید کافی نیست', null, {
+                duration: 3200,
+              });
+            }
+          });
+    });
+  }
+
+
+  completeShopEasyPay() {
+    const data = this.accumulateData();
+    console.log('/*/*/*/*/', data);
     return new Promise((resolve, reject) => {
       this.httpService.post('checkout', data)
         .subscribe(res => {
