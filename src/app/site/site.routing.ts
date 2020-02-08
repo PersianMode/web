@@ -12,6 +12,7 @@ import {ForgotPasswordComponent} from './login/components/forgot-password/forgot
 import {OrderReturnComponent} from './profile/components/order-return/order-return.component';
 import {ShopResultComponent} from './shop-result/shop-result.component';
 import {ShopBalanceResultComponent} from './shop-balance-result/shop-balance-result.component';
+import {ShopEasyPayResultComponent} from './shop-easy-pay-result/shop-easy-pay-result.component';
 
 const Site_ROUTES: Routes = [
   {
@@ -33,7 +34,9 @@ const Site_ROUTES: Routes = [
       {path: 'profile/orderlines', component: OrderLinesComponent},
       {path: 'profile/orderlines/return', component: OrderReturnComponent},
       {path: 'shopResult', component: ShopResultComponent},
-      {path: 'shopBalanceResult', component: ShopBalanceResultComponent}
+      {path: 'shopBalanceResult', component: ShopBalanceResultComponent},
+      {path: 'shopEasyPayResult', component: ShopEasyPayResultComponent}
+
     ]
   }
 ];

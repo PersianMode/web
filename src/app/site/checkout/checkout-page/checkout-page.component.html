@@ -35,8 +35,8 @@
         <input type="hidden" #sign name="sign" />
       </form>
       <button mat-raised-button class="payment-button" [class.mouse-pointer]="!disabled" [class.disabled]="disabled"
-        (click)=" finalTotal === 0 ?  completeShop() : checkout()" [disabled]="disabled">
-        {{ finalTotal === 0 ? 'تکمیل خرید' : 'پرداخت'}}
+        (click)="selectedPaymentType === 2 || finalTotal === 0 ?  completeShop() : checkout()" [disabled]="disabled">
+        {{selectedPaymentType === 2 || finalTotal === 0 ? 'تکمیل خرید' : 'پرداخت'}}
       </button>
     </div>
   </div>

@@ -65,6 +65,12 @@ export class PaymentTypeComponent implements OnInit {
       disabled: true,
       amount: 0,
     },
+    {
+      name: 'پرداخت حضوری',
+      value: this.paymentType.easyPay,
+      disabled: false,
+      amount: null,
+    }
     // {
     //   name: 'امتیاز',
     //   value: this.paymentType.loyaltyPoint,

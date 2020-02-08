@@ -47,6 +47,7 @@ import {ProductService} from '../shared/services/product.service';
 import {BlockUIModule} from 'primeng/blockui';
 import { ShopResultComponent } from './shop-result/shop-result.component';
 import { ShopBalanceResultComponent } from './shop-balance-result/shop-balance-result.component';
+import { ShopEasyPayResultComponent } from './shop-easy-pay-result/shop-easy-pay-result.component';
 
 
 @NgModule({
@@ -101,7 +102,8 @@ import { ShopBalanceResultComponent } from './shop-balance-result/shop-balance-r
     OrderLinesComponent,
     OrderReturnComponent,
     ShopResultComponent,
-    ShopBalanceResultComponent
+    ShopBalanceResultComponent,
+    ShopEasyPayResultComponent
   ],
   entryComponents: [GenDialogComponent],
   providers: [AuthGuard]

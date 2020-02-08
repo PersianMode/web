@@ -1,4 +1,5 @@
 export enum PaymentType {
   cash,
-  balance
+  balance,
+  easyPay
 };

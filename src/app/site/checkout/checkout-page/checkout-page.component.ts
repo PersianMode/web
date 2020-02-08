@@ -340,10 +340,10 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   async completeShop() {
+    console.log('------->>>>>>>>>>', this.selectedPaymentType);
     try {
-
       this.spinnerService.enable();
-      await this.finalCheckItems()
+      await this.finalCheckItems();
       await this.checkoutService.completeShop();
     } catch (error) {
       console.error(' -> ', error);
