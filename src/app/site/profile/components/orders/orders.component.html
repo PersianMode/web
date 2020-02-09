@@ -53,6 +53,15 @@
       class="fa fa-eye"></i></a></mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="easy_pay">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>پرداخت در محل</mat-header-cell>
+    <mat-cell *matCellDef="let order" style=" font-size: 20px">
+      <i *ngIf="order.easyPayment" class="fa fa-check"></i>
+      <i *ngIf="!order.easyPayment" class="fa fa-remove"></i>
+    </mat-cell>
+  </ng-container>
+
+
   <!-- status -->
   <ng-container matColumnDef="status">
     <mat-header-cell *matHeaderCellDef mat-sort-header>وضعیت</mat-header-cell>

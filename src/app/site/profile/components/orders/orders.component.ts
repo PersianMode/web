@@ -30,6 +30,7 @@ export class OrdersComponent implements OnInit {
     // 'used_point',
     'address',
     'view_details',
+    'easy_pay',
     'status',
     'actions'
   ];

@@ -29,6 +29,7 @@ export class OrderLinesComponent implements OnInit {
   orderInfo: any;
   orderLines = [];
   expiredTime = false;
+  easy_pay = false;
   @Input() isNotMobile;
   @Output() closeDialog = new EventEmitter<boolean>();
 
@@ -45,6 +46,8 @@ export class OrderLinesComponent implements OnInit {
 
   ngOnInit() {
     this.orderInfo = this.profileOrderService.orderData;
+    this.easy_pay = this.orderInfo.dialog_order.easyPayment;
+    console.log('----------', this.orderInfo.dialog_order);
     this.orderLines = this.orderInfo.dialog_order.order_lines;
     this.findBoughtColor(this.orderLines);
     this.isMobile = this.responsiveService.isMobile;
@@ -83,8 +86,10 @@ export class OrderLinesComponent implements OnInit {
   OrderLineStatus(ol) {
     if (ol.tickets && ol.tickets.length) {
       const ticketName = OrderLineStatuses.filter(os => os.status === ol.tickets[ol.tickets.length - 1].status)[0].title;
-      return ol.cancel ? `${'لغو شده'} - ${ticketName}` : ticketName;
-
+      return ol.cancel ? `${'لغو شده'} - ${ticketName}` :
+        (!this.easy_pay ? ticketName :
+          (ticketName === 'تایید پرداخت' ? 'پرداخت در محل انجام میگیرد' : (ticketName !== 'تحویل شده'
+            || ticketName !== 'ناموجود' || ticketName !== 'درخواست بازگشت سفارش') ? ticketName + ' ،پرداخت در محل انجام میگیرد' : ticketName));
     }
   }
 

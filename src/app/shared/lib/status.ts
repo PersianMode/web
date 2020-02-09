@@ -41,7 +41,6 @@ const DeliveryStatuses: any[] = [
   {name: 'درخواست محموله توسط پیک', title: 'درخواست محموله توسط پیک', status: ds.requestPackage},
   {name: 'شروع', title: 'شروع', status: ds.started},
   {name: 'پایان', title: 'پایان', status: ds.ended},
-
 ];
 
 export {
