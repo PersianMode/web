@@ -272,7 +272,6 @@ export class CheckoutService {
 
   completeShopEasyPay() {
     const data = this.accumulateData();
-    console.log('/*/*/*/*/', data);
     return new Promise((resolve, reject) => {
       this.httpService.post('checkout', data)
         .subscribe(res => {
@@ -294,7 +293,7 @@ export class CheckoutService {
             this.ccRecipientData = null;
             this.addedProvince = '';
             this.cartService.emptyCart();
-            this.router.navigate(['/', 'shopEasyPayResult'], { queryParams: { tref: res.invoiceNumber, iD: res.invoiceDate, uB: res.usedBalance }, queryParamsHandling: 'merge' });
+            this.router.navigate(['/', 'shopEasyPayResult'], { queryParams: { tref: res.invoiceNumber, iD: res.invoiceDate, tA: res.totalAmount }, queryParamsHandling: 'merge' });
           },
           err => {
             console.error(err);

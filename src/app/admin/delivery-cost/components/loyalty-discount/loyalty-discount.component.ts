@@ -33,7 +33,6 @@ export class LoyaltyDiscountComponent implements OnInit {
           const del_loyalty = this.selectedDuration.delivery_loyalty.find(i => i._id === el._id);
           del_loyalty.discount = el.discount;
         });
-        console.log('selectedDuration : ', this.selectedDuration);
         this.progressService.disable();
         this.snackBar.open('ثبت تغییرات به درخواست شما لغو گردید', null, {
           duration: 3200,

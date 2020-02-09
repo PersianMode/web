@@ -105,8 +105,6 @@ export class LoginComponent implements OnInit {
         this.showClerkWarehouses = false;
         this.loginForm.controls['warehouse_id'].setValue(this.getClerkWarehouses(true)[0]._id);
 
-        console.log(this.loginForm.controls['warehouse_id'].value);
-
       } else {
         this.showClerkWarehouses = false;
         this.loginForm.controls['warehouse_id'].setValue(null);

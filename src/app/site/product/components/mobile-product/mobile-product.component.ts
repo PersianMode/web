@@ -55,7 +55,6 @@ export class MobileProductComponent implements OnInit {
 
   saveToCart() {
     this.chosen = true;
-    console.log(this.size);
     this.add.emit(this.size);
   }
 

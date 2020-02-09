@@ -30,12 +30,10 @@ export class DeliverypriorityComponent implements OnInit {
       });
 
       this.dragulaService.dropModel.subscribe(value => {
-        console.log(this.warehouse);
 
         this.warehouse.forEach(el => {
           el.priority = this.warehouse.indexOf(el);
         });
-        console.log(this.warehouse[0]);
       });
     }
     this.getwarehouse();
@@ -52,8 +50,6 @@ export class DeliverypriorityComponent implements OnInit {
         this.warehouse.sort((a, b) => {
           return a.priority - b.priority
         })
-
-        console.log(this.warehouse);
         this.progressService.disable();
       },
       err => {
@@ -67,7 +63,6 @@ export class DeliverypriorityComponent implements OnInit {
   }
   update() {
     this.progressService.enable();
-    console.log(this.warehouse)
     this.httpService.put('warehouse/update', {warehouses: this.warehouse}).subscribe(
       (res) => {
         this.progressService.disable();

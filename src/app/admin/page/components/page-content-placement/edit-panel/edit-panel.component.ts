@@ -109,8 +109,6 @@ export class EditPanelComponent implements OnInit {
     if (sourceArea)
       sourceArea.pos = target;
 
-    console.log(this.placement);
-
     this.progressService.enable();
     this.httpService.post('placement', {
       page_id: this.pageId,

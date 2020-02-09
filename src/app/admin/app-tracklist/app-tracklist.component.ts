@@ -33,7 +33,6 @@ export class AppTrackListComponent implements OnInit {
         this.tracklist.forEach(el => {
           el.priority = this.tracklist.indexOf(el);
         });
-        console.log(this.tracklist[0]);
       });
     }
     this.getTrackInfo();
@@ -95,7 +94,6 @@ export class AppTrackListComponent implements OnInit {
   }
 
   remove(id) {
-    console.log('id:', id);
     const rmDialog = this.dialog.open(RemovingConfirmComponent, {
       width: '400px'
     });

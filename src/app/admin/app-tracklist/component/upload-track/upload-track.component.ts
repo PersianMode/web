@@ -62,7 +62,6 @@ export class UploadTrackComponent implements OnInit {
   async submit() {
     this.progressService.enable();
     const priority = await this.getLastPriority();
-    console.log({priority});
     const sendingData = {
       artistName: this.uploadTrackForm.controls['artistName'].value,
       trackName: this.uploadTrackForm.controls['trackName'].value,

@@ -71,7 +71,6 @@ export class NewInternalDeliveryComponent implements OnInit, AfterViewInit, OnDe
 
     this.httpService.post('search/DeliveryTicket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
-      console.log('res: ', res);
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
       });
