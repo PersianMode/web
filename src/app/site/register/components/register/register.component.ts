@@ -81,37 +81,51 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    if (this.registerForm.valid && this.gender) {
-      const data: any = {};
-      Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
-      data.gender = this.gender;
-      data.dob = this.dob;
-      this.spinnerService.enable();
-      this.httpService.put('register', data).subscribe(
-        (res) => {
-          this.curStatus = this.regStatus.Verify;
-          this.spinnerService.disable();
-        },
-        (err) => {
-          console.error('Cannot register user: ', err);
-          this.spinnerService.disable();
-          if (err.error === 'customer already exist')
-            this.messageService.showMessage('کاربری با این مشخصات موجود است', MessageType.Error);
-          else
-            this.messageService.showMessage('در حال حاضر ثبت نام در سایت امکان پذیر نیست، لطفا دوباره تلاش کنید', MessageType.Error);
-        }
-      );
-    } else {
-      Object.keys(this.registerForm.controls).forEach(el => {
-        if (!this.registerForm.controls[el].valid) {
-          this.seen[el] = true;
-        }
-      });
-
-      if (!this.gender) {
-        this.seen['gender'] = true;
+    return this.httpService.put('register', {}).subscribe(
+      (res) => {
+        this.curStatus = this.regStatus.Verify;
+        this.spinnerService.disable();
+      },
+      (err) => {
+        console.error('Cannot register user: ', err);
+        this.spinnerService.disable();
+        if (err.error === 'customer already exist')
+          this.messageService.showMessage('کاربری با این مشخصات موجود است', MessageType.Error);
+        else
+          this.messageService.showMessage('در حال حاضر ثبت نام در سایت امکان پذیر نیست، لطفا دوباره تلاش کنید', MessageType.Error);
       }
-    }
+    );
+    // if (this.registerForm.valid && this.gender) {
+    //   const data: any = {};
+    //   Object.keys(this.registerForm.controls).forEach(el => data[el] = this.registerForm.controls[el].value);
+    //   data.gender = this.gender;
+    //   data.dob = this.dob;
+    //   this.spinnerService.enable();
+    //   this.httpService.put('register', data).subscribe(
+    //     (res) => {
+    //       this.curStatus = this.regStatus.Verify;
+    //       this.spinnerService.disable();
+    //     },
+    //     (err) => {
+    //       console.error('Cannot register user: ', err);
+    //       this.spinnerService.disable();
+    //       if (err.error === 'customer already exist')
+    //         this.messageService.showMessage('کاربری با این مشخصات موجود است', MessageType.Error);
+    //       else
+    //         this.messageService.showMessage('در حال حاضر ثبت نام در سایت امکان پذیر نیست، لطفا دوباره تلاش کنید', MessageType.Error);
+    //     }
+    //   );
+    // } else {
+    //   Object.keys(this.registerForm.controls).forEach(el => {
+    //     if (!this.registerForm.controls[el].valid) {
+    //       this.seen[el] = true;
+    //     }
+    //   });
+    //
+    //   if (!this.gender) {
+    //     this.seen['gender'] = true;
+    //   }
+    // }
   }
 
   changeDob(date) {

@@ -48,6 +48,14 @@
           <mat-cell *matCellDef="let orderLine"> <span style="font-size: 10px"> {{orderLine.instance.barcode}}</span></mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="easy_pay">
+          <mat-header-cell *matHeaderCellDef>پرداخت در محل</mat-header-cell>
+          <mat-cell *matCellDef="let orderLine">
+            <i *ngIf="orderLine.easyPayment" class="fa fa-check"></i>
+            <i *ngIf="!orderLine.easyPayment" class="fa fa-remove"></i>
+          </mat-cell>
+        </ng-container>
+
          
         <!-- status column -->
         <ng-container matColumnDef="status">

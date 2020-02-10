@@ -23,7 +23,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Output() OnNewInboxCount = new EventEmitter();
 
-  displayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'status', 'process', 'lost'];
+  displayedColumns = ['position', 'details', 'name', 'barcode', 'count', 'easy_pay', 'status', 'process', 'lost'];
   dataSource: MatTableDataSource<any>;
 
   pageSize = 10;
@@ -69,6 +69,8 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.httpService.post('search/Ticket', { options, offset, limit }).subscribe(res => {
       this.progressService.disable();
 
+      console.log('-------------', res.data);
+
       res.data.forEach((order, index) => {
         order['index'] = index + 1;
       });
@@ -109,8 +111,10 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
       if (orderLine && orderLine.tickets) {
         const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
         const ticketName = OrderLineStatuses.find(x => x.status === lastTicket.status).name;
-        return orderLine.cancel ? `${'لغو شده'} - ${ticketName}` : ticketName;
-
+        return orderLine.cancel ? `${'لغو شده'} - ${ticketName}` :
+          (!orderLine.easyPayment ? ticketName :
+            (ticketName === 'تایید پرداخت' ? 'پرداخت در محل انجام میگیرد' : (ticketName !== 'تحویل شده'
+              || ticketName !== 'ناموجود' || ticketName !== 'درخواست بازگشت سفارش') ? ticketName + ' ،پرداخت در محل انجام میگیرد' : ticketName));
       }
     } catch (error) {
 

@@ -172,7 +172,6 @@ export class OrdersComponent implements OnInit {
   }
 
   getOrderStatus(order) {
-
     try {
 
       const isDelivered = order.tickets.map(x => x.status).includes(ORDER_STATUS.Delivered);
