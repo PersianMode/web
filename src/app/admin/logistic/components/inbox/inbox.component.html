@@ -20,7 +20,7 @@
 
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
-          <mat-cell *matCellDef="let orderLine"> {{orderLine.index}}</mat-cell>
+          <mat-cell *matCellDef="let orderLine"> {{orderLine.index}} <mat-icon aria-label="cached" *ngIf="isOrderLineStatusIsWaitForOnlineWarehouse(orderLine)" (click)="ticketOnlineWarehouseTransfer(orderLine)">cached</mat-icon></mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="details">
