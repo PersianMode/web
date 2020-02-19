@@ -324,11 +324,13 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.checkoutService.updateVariablesAfterCheckout();
       this.spinnerService.enable();
       this.bankData = res;
-      IdArray.forEach(el => {
-        this[el].nativeElement.value = this.bankData[el];
-      });
-      this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
+      this.bankData.tref = '637171132031990000';
 
+      console.log('*****************', res);
+      // IdArray.forEach(el => {
+      //   this[el].nativeElement.value = this.bankData[el];
+      // });
+      this.router.navigate(['/shopResult'], { queryParams: { tref: this.bankData.tref, iN: this.bankData.invoiceNumber, iD: this.bankData.invoiceDate}, queryParamsHandling: 'merge' });
     } catch (error) {
       console.error('Error in final check: ', error);
       if (!error.errCode)
@@ -343,13 +345,12 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     try {
 
       this.spinnerService.enable();
-      await this.finalCheckItems()
+      await this.finalCheckItems();
       await this.checkoutService.completeShop();
     } catch (error) {
       console.error(' -> ', error);
     }
     this.spinnerService.disable();
-
   }
 
   totalChanged($event) {
