@@ -115,7 +115,7 @@ export class CheckoutSummaryComponent implements OnInit {
 
   calculateFinalTotal() {
 
-    this.finalTotal = this.total + (this.ignoreDeliveryItems ? 0 : (this.deliveryCost - this.deliveryDiscount))
+    this.finalTotal = this.total + (this.ignoreDeliveryItems ? 0 : (this.deliveryCost - this.deliveryDiscount)) - this.discount;
 
     this.modifiedBalance = this.balanceValue;
 

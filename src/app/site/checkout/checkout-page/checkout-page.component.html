@@ -6,14 +6,17 @@
         <h2>خلاصه خرید</h2>
 
         <app-checkout-summary [total]="total" [discount]="discount" [maxLoyaltyDiscount]="maxLoyaltyDiscount" [useBalance]="useBalance"
-          [deliveryCost]="deliveryCost" [deliveryDiscount]="deliveryDiscount" [noDuration]="noDuration"
-          [balanceValue]="balanceValue" (onFinalTotalChange)='totalChanged($event)'>
+                              [deliveryCost]="deliveryCost"
+                              [deliveryDiscount]="deliveryDiscount"
+                              [noDuration]="noDuration"
+                              [balanceValue]="balanceValue" (onFinalTotalChange)='totalChanged($event)'>
         </app-checkout-summary>
       </div>
       <hr class="line-breaker">
       <div>
         <app-payment-type [balance]="balanceValue" [loyaltyPoint]="loyaltyPoint"
-          (selectedType)="changePaymentType($event)" (changeUseLoyalty)="onLoyaltyUseChange($event)"></app-payment-type>
+                          (selectedType)="changePaymentType($event)"
+                          (changeUseLoyalty)="onLoyaltyUseChange($event)"></app-payment-type>
       </div>
       <hr class="line">
       <div class="deliveryOptionsWrapper">
@@ -22,20 +25,20 @@
       </div>
       <hr class="bottom-line">
       <form #bankDataFormId method="post" Action="https://pep.shaparak.ir/gateway.aspx">
-        <input type="hidden" #invoiceNumber name="invoiceNumber" />
-        <input type="hidden" #invoiceDate name="invoiceDate" />
-        <input type="hidden" #amount name="amount" />
-        <input type="hidden" #terminalCode name="terminalCode" />
-        <input type="hidden" #merchantCode name="merchantCode" />
-        <input type="hidden" #redirectAddress name="redirectAddress" />
-        <input type="hidden" #timeStamp name="timeStamp" />
-        <input type="hidden" #action name="action" />
-        <input type="hidden" #mobile name="mobile" />
-        <input type="hidden" #email name="email" />
-        <input type="hidden" #sign name="sign" />
+        <input type="hidden" #invoiceNumber name="invoiceNumber"/>
+        <input type="hidden" #invoiceDate name="invoiceDate"/>
+        <input type="hidden" #amount name="amount"/>
+        <input type="hidden" #terminalCode name="terminalCode"/>
+        <input type="hidden" #merchantCode name="merchantCode"/>
+        <input type="hidden" #redirectAddress name="redirectAddress"/>
+        <input type="hidden" #timeStamp name="timeStamp"/>
+        <input type="hidden" #action name="action"/>
+        <input type="hidden" #mobile name="mobile"/>
+        <input type="hidden" #email name="email"/>
+        <input type="hidden" #sign name="sign"/>
       </form>
       <button mat-raised-button class="payment-button" [class.mouse-pointer]="!disabled" [class.disabled]="disabled"
-        (click)=" finalTotal === 0 ?  completeShop() : checkout()" [disabled]="disabled">
+              (click)=" finalTotal === 0 ?  completeShop() : checkout()" [disabled]="disabled">
         {{ finalTotal === 0 ? 'تکمیل خرید' : 'پرداخت'}}
       </button>
     </div>

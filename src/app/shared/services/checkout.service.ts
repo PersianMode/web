@@ -275,7 +275,7 @@ export class CheckoutService {
       duration_id: durationId
     };
     return new Promise((resolve, reject) => {
-      this.httpService.post('/calculate/order/price', data)
+      this.httpService.post('/calculate/delivery/discount', data)
         .subscribe(res => {
           resolve(res);
         },
