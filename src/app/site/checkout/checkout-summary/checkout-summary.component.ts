@@ -20,17 +20,25 @@ export class CheckoutSummaryComponent implements OnInit {
   private _deliveryCost = 0;
   private _deliveryDiscount = 0;
   private _useBalance = false;
+  private _showCostLabel = true;
+
+  @Input()
+  set showCostLabel(value) {
+    this._showCostLabel = value;
+    this.ignoreDeliveryItems = !!!value;
+
+    this.calculateFinalTotal();
+  }
+
+  get showCostLabel() {
+    return this._showCostLabel;
+  }
 
   loyaltyDiscount = 0;
 
   finalTotal = 0;
 
   modifiedBalance = 0;
-
-  ngOnInit() {
-    this.deliveryCost = 0;
-    this.deliveryDiscount = 0;
-  }
 
   @Input()
   set useBalance(value) {
@@ -155,6 +163,11 @@ export class CheckoutSummaryComponent implements OnInit {
 
 
     this.onFinalTotalChange.emit(this.finalTotal);
+  }
+  ngOnInit() {
+    this.showCostLabel = true;
+    this.deliveryCost = 0;
+    this.deliveryDiscount = 0;
   }
 
 
