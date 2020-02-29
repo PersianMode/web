@@ -9,7 +9,7 @@
                               [deliveryCost]="deliveryCost"
                               [deliveryDiscount]="deliveryDiscount"
                               [noDuration]="noDuration"
-                              [showCostLabel]="showCostLabel"
+                              [showDeliveryCostLabel]="showDeliveryCostLabel"
                               [balanceValue]="balanceValue" (onFinalTotalChange)='totalChanged($event)'>
         </app-checkout-summary>
       </div>
@@ -22,7 +22,7 @@
       <hr class="line">
       <div class="deliveryOptionsWrapper">
         <app-address-table [isProfile]=false (noDuration)="noDuration = $event"
-                           (deliveryType)="setCostLabel($event)"
+                           (deliveryType)="setDeliveryCostLabel($event)"
           (durationType)="calculateDiscount($event)"></app-address-table>
       </div>
       <hr class="bottom-line">

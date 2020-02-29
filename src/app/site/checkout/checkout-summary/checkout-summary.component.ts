@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { priceFormatter } from '../../../shared/lib/priceFormatter';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {priceFormatter} from '../../../shared/lib/priceFormatter';
 
 @Component({
   selector: 'app-checkout-summary',
@@ -9,7 +9,7 @@ import { priceFormatter } from '../../../shared/lib/priceFormatter';
 export class CheckoutSummaryComponent implements OnInit {
 
   @Input() noDuration;
-  ignoreDeliveryItems = false;
+  // ignoreDeliveryItems = false;
 
   @Output() onFinalTotalChange = new EventEmitter();
 
@@ -20,18 +20,18 @@ export class CheckoutSummaryComponent implements OnInit {
   private _deliveryCost = 0;
   private _deliveryDiscount = 0;
   private _useBalance = false;
-  private _showCostLabel = true;
+  private _showDeliveryCostLabel = true;
 
   @Input()
-  set showCostLabel(value) {
-    this._showCostLabel = value;
-    this.ignoreDeliveryItems = !!!value;
+  set showDeliveryCostLabel(value) {
+    this._showDeliveryCostLabel = value;
+    // this.ignoreDeliveryItems = !!!value;
 
     this.calculateFinalTotal();
   }
 
-  get showCostLabel() {
-    return this._showCostLabel;
+  get showDeliveryCostLabel() {
+    return this._showDeliveryCostLabel;
   }
 
   loyaltyDiscount = 0;
@@ -92,7 +92,7 @@ export class CheckoutSummaryComponent implements OnInit {
   }
 
   get balanceValue() {
-    return this._balanceValue
+    return this._balanceValue;
   }
 
   @Input()
@@ -122,10 +122,22 @@ export class CheckoutSummaryComponent implements OnInit {
   }
 
   calculateFinalTotal() {
-
-    this.finalTotal = this.total + (this.ignoreDeliveryItems ? 0 : (this.deliveryCost - this.deliveryDiscount)) - this.discount;
-
+    // this.finalTotal = this.total + (this.ignoreDeliveryItems ? 0 : (this.deliveryCost - this.deliveryDiscount)) - this.discount;
+    if (this.showDeliveryCostLabel) {
+      this.finalTotal = this.total + this.deliveryCost - this.deliveryDiscount - this.discount;
+    } else {
+      this.finalTotal = this.total - this.discount;
+    }
     this.modifiedBalance = this.balanceValue;
+
+    // !this.useBalance
+    // const x = this.finalTotal;
+    //
+    // // if (this.useBalance && this.showDeliveryCostLabel)
+    // const y = (this.finalTotal < this.modifiedBalance ? 0 : (this.finalTotal - this.modifiedBalance));
+    //
+    // // if (this.useBalance && !this.showDeliveryCostLabel)
+    // const z = (this.finalTotal < this.modifiedBalance ? 0 : (this.finalTotal - this.modifiedBalance));
 
 
     if (!this.maxLoyaltyDiscount)
@@ -134,7 +146,7 @@ export class CheckoutSummaryComponent implements OnInit {
     if (this.finalTotal && this.maxLoyaltyDiscount) {
       if (this.finalTotal >= this.maxLoyaltyDiscount) {
         this.loyaltyDiscount = this.maxLoyaltyDiscount;
-        this.finalTotal -= this.loyaltyDiscount
+        this.finalTotal -= this.loyaltyDiscount;
       } else {
         this.loyaltyDiscount = this.finalTotal;
         this.finalTotal = 0;
@@ -147,11 +159,16 @@ export class CheckoutSummaryComponent implements OnInit {
       return;
     }
 
-    if (this.useBalance) {
+    // // if !withDelivery
+    // const x = (this.total - this.discount) > this.balanceValue ? 0 : (this.balanceValue - (this.total - this.discount));
+    // // if withDelivery
+    // const y = (this.total + this.deliveryCost - this.deliveryDiscount - this.discount) > this.balanceValue ? 0
+    //   : (this.balanceValue - (this.total + this.deliveryCost - this.deliveryDiscount - this.discount));
 
+    if (this.useBalance) {
       if (this.finalTotal >= this.modifiedBalance) {
-        this.finalTotal -= this.modifiedBalance;
         this.modifiedBalance = 0;
+        this.finalTotal -= this.modifiedBalance;
       } else {
         this.modifiedBalance -= this.finalTotal;
         this.finalTotal = 0;
@@ -160,12 +177,11 @@ export class CheckoutSummaryComponent implements OnInit {
       if (this.finalTotal <= 0)
         this.finalTotal = 0;
     }
-
-
     this.onFinalTotalChange.emit(this.finalTotal);
   }
+
   ngOnInit() {
-    this.showCostLabel = true;
+    this.showDeliveryCostLabel = true;
     this.deliveryCost = 0;
     this.deliveryDiscount = 0;
   }

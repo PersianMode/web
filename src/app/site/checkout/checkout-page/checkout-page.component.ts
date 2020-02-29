@@ -43,7 +43,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   soldOuts: any[] = [];
   discountChanges: any[];
   priceChanges: any[];
-  showCostLabel: true;
+  showDeliveryCostLabel: true;
   noDuration = null;
   loyaltyGroups = [];
   addPointArray = [];
@@ -222,8 +222,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.maxLoyaltyDiscount = useLoyalyty ? this.loyaltyPoint * this.loyaltyValue : 0
   }
 
-  setCostLabel(data) {
-    this.showCostLabel = data;
+  setDeliveryCostLabel(data) {
+    this.showDeliveryCostLabel = data;
   }
 
 
