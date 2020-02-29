@@ -347,7 +347,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     try {
 
       this.spinnerService.enable();
-      await this.finalCheckItems()
+      await this.finalCheckItems();
       await this.checkoutService.completeShop();
     } catch (error) {
       console.error(' -> ', error);

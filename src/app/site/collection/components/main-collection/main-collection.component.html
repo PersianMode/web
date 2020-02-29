@@ -13,7 +13,7 @@
 
   <div class="gridwall-wrapper">
     <app-panels></app-panels>
-    <h1 *ngIf="!isMobile && collectionNameFa" class="header"><span>{{collectionNameFa}}<span *ngIf="showCategory"> - {{dict.translateWord(category)}}</span></span>
+    <h1 *ngIf="!isMobile && !!collectionNameFa" class="header"><span>{{collectionNameFa}}<span *ngIf="showCategory"> - {{dict.translateWord(category)}}</span></span>
       <span *ngIf="products.length || lazyProducts.length">({{totalRecords.toLocaleString('fa')}})</span>
     </h1>
     <div *ngIf="!isMobile" class="gridwall-title">

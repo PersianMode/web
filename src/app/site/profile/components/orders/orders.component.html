@@ -1,5 +1,5 @@
 <div *ngIf="!profileOrder.length">هیچ سفارش ثبت شده ای موجود نمی باشد.</div>
-<mat-table *ngIf="!isMobile && profileOrder.length" [dataSource]="profileOrder"
+<mat-table *ngIf="!isMobile && !!profileOrder.length" [dataSource]="profileOrder"
            class="example-container mat-elevation-z8">
   <ng-container matColumnDef="col_no">
     <mat-header-cell *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>
