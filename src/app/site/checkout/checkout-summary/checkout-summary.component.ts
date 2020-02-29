@@ -9,7 +9,6 @@ import {priceFormatter} from '../../../shared/lib/priceFormatter';
 export class CheckoutSummaryComponent implements OnInit {
 
   @Input() noDuration;
-  // ignoreDeliveryItems = false;
 
   @Output() onFinalTotalChange = new EventEmitter();
 
@@ -122,23 +121,12 @@ export class CheckoutSummaryComponent implements OnInit {
   }
 
   calculateFinalTotal() {
-    // this.finalTotal = this.total + (this.ignoreDeliveryItems ? 0 : (this.deliveryCost - this.deliveryDiscount)) - this.discount;
     if (this.showDeliveryCostLabel) {
       this.finalTotal = this.total + this.deliveryCost - this.deliveryDiscount - this.discount;
     } else {
       this.finalTotal = this.total - this.discount;
     }
     this.modifiedBalance = this.balanceValue;
-
-    // !this.useBalance
-    // const x = this.finalTotal;
-    //
-    // // if (this.useBalance && this.showDeliveryCostLabel)
-    // const y = (this.finalTotal < this.modifiedBalance ? 0 : (this.finalTotal - this.modifiedBalance));
-    //
-    // // if (this.useBalance && !this.showDeliveryCostLabel)
-    // const z = (this.finalTotal < this.modifiedBalance ? 0 : (this.finalTotal - this.modifiedBalance));
-
 
     if (!this.maxLoyaltyDiscount)
       this.loyaltyDiscount = 0;
@@ -158,13 +146,6 @@ export class CheckoutSummaryComponent implements OnInit {
       this.onFinalTotalChange.emit(this.finalTotal);
       return;
     }
-
-    // // if !withDelivery
-    // const x = (this.total - this.discount) > this.balanceValue ? 0 : (this.balanceValue - (this.total - this.discount));
-    // // if withDelivery
-    // const y = (this.total + this.deliveryCost - this.deliveryDiscount - this.discount) > this.balanceValue ? 0
-    //   : (this.balanceValue - (this.total + this.deliveryCost - this.deliveryDiscount - this.discount));
-
     if (this.useBalance) {
       if (this.finalTotal >= this.modifiedBalance) {
         this.modifiedBalance = 0;
