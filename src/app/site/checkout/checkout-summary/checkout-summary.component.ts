@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { priceFormatter } from '../../../shared/lib/priceFormatter';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {priceFormatter} from '../../../shared/lib/priceFormatter';
 
 @Component({
   selector: 'app-checkout-summary',
@@ -9,7 +9,6 @@ import { priceFormatter } from '../../../shared/lib/priceFormatter';
 export class CheckoutSummaryComponent implements OnInit {
 
   @Input() noDuration;
-  ignoreDeliveryItems = false;
 
   @Output() onFinalTotalChange = new EventEmitter();
 
@@ -20,17 +19,25 @@ export class CheckoutSummaryComponent implements OnInit {
   private _deliveryCost = 0;
   private _deliveryDiscount = 0;
   private _useBalance = false;
+  private _showDeliveryCostLabel = true;
+
+  @Input()
+  set showDeliveryCostLabel(value) {
+    this._showDeliveryCostLabel = value;
+    // this.ignoreDeliveryItems = !!!value;
+
+    this.calculateFinalTotal();
+  }
+
+  get showDeliveryCostLabel() {
+    return this._showDeliveryCostLabel;
+  }
 
   loyaltyDiscount = 0;
 
   finalTotal = 0;
 
   modifiedBalance = 0;
-
-  ngOnInit() {
-    this.deliveryCost = 0;
-    this.deliveryDiscount = 0;
-  }
 
   @Input()
   set useBalance(value) {
@@ -84,7 +91,7 @@ export class CheckoutSummaryComponent implements OnInit {
   }
 
   get balanceValue() {
-    return this._balanceValue
+    return this._balanceValue;
   }
 
   @Input()
@@ -114,11 +121,12 @@ export class CheckoutSummaryComponent implements OnInit {
   }
 
   calculateFinalTotal() {
-
-    this.finalTotal = this.total + (this.ignoreDeliveryItems ? 0 : (this.deliveryCost - this.deliveryDiscount)) - this.discount;
-
+    if (this.showDeliveryCostLabel) {
+      this.finalTotal = this.total + this.deliveryCost - this.deliveryDiscount - this.discount;
+    } else {
+      this.finalTotal = this.total - this.discount;
+    }
     this.modifiedBalance = this.balanceValue;
-
 
     if (!this.maxLoyaltyDiscount)
       this.loyaltyDiscount = 0;
@@ -126,7 +134,7 @@ export class CheckoutSummaryComponent implements OnInit {
     if (this.finalTotal && this.maxLoyaltyDiscount) {
       if (this.finalTotal >= this.maxLoyaltyDiscount) {
         this.loyaltyDiscount = this.maxLoyaltyDiscount;
-        this.finalTotal -= this.loyaltyDiscount
+        this.finalTotal -= this.loyaltyDiscount;
       } else {
         this.loyaltyDiscount = this.finalTotal;
         this.finalTotal = 0;
@@ -138,12 +146,10 @@ export class CheckoutSummaryComponent implements OnInit {
       this.onFinalTotalChange.emit(this.finalTotal);
       return;
     }
-
     if (this.useBalance) {
-
       if (this.finalTotal >= this.modifiedBalance) {
-        this.finalTotal -= this.modifiedBalance;
         this.modifiedBalance = 0;
+        this.finalTotal -= this.modifiedBalance;
       } else {
         this.modifiedBalance -= this.finalTotal;
         this.finalTotal = 0;
@@ -152,9 +158,13 @@ export class CheckoutSummaryComponent implements OnInit {
       if (this.finalTotal <= 0)
         this.finalTotal = 0;
     }
-
-
     this.onFinalTotalChange.emit(this.finalTotal);
+  }
+
+  ngOnInit() {
+    this.showDeliveryCostLabel = true;
+    this.deliveryCost = 0;
+    this.deliveryDiscount = 0;
   }
 
 

@@ -43,6 +43,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   soldOuts: any[] = [];
   discountChanges: any[];
   priceChanges: any[];
+  showDeliveryCostLabel: true;
   noDuration = null;
   loyaltyGroups = [];
   addPointArray = [];
@@ -221,6 +222,9 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.maxLoyaltyDiscount = useLoyalyty ? this.loyaltyPoint * this.loyaltyValue : 0
   }
 
+  setDeliveryCostLabel(data) {
+    this.showDeliveryCostLabel = data;
+  }
 
 
   calculateDiscount(durationId) {
@@ -343,7 +347,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     try {
 
       this.spinnerService.enable();
-      await this.finalCheckItems()
+      await this.finalCheckItems();
       await this.checkoutService.completeShop();
     } catch (error) {
       console.error(' -> ', error);
