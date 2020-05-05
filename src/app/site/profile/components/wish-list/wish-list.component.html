@@ -1,5 +1,5 @@
 <div *ngIf="!profileWishList.length">هیچ محصولی در لیست آرزوهای شما موجود نمی باشد.</div>
-<mat-table *ngIf="!isMobile && profileWishList.length" [dataSource]="profileWishList"
+<mat-table *ngIf="!isMobile && !!profileWishList.length" [dataSource]="profileWishList"
            class="example-container mat-elevation-z8">
   <ng-container matColumnDef="col_no">
     <mat-header-cell class="w50" *matHeaderCellDef mat-sort-header>ردیف</mat-header-cell>

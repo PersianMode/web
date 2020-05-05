@@ -7,6 +7,7 @@
     <span class="co-right-text">تخفیف: </span>
     <span class="co-left-text">{{priceFormatter(discount)}} تومان </span>
   </div>
+  <!--<div *ngIf="useBalance">-->
   <div>
     <span class="co-right-text">موجودی پس از خرید: </span>
     <span class="co-left-text">
@@ -18,16 +19,17 @@
     <span class="co-right-text">تخفیف وفاداری: </span>
     <span class="co-left-text">{{priceFormatter(loyaltyDiscount)}} تومان</span>
   </div>
-
-  <div>
+  <div *ngIf="showDeliveryCostLabel">
     <span class="co-right-text">هزینه ارسال: </span>
-    <span class="co-left-text" [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryCost)}} تومان </span>
+    <span class="co-left-text"
+          [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryCost)}} تومان </span>
   </div>
-  <div class="no-duration-selected">
+  <div *ngIf="showDeliveryCostLabel">
     <span class="co-right-text">تخفیف ارسال: </span>
-    <span class="co-left-text" [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryDiscount)}} تومان
-    </span>
+    <span class="co-left-text"
+          [class.no-duration-selected]="!noDuration">{{priceFormatter(deliveryDiscount)}} تومان </span>
   </div>
+
   <div class="final-price">
     <h2 class="co-right-text">قیمت نهایی:
       {{priceFormatter(finalTotal)}} تومان </h2>

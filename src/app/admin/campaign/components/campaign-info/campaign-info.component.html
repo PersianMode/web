@@ -67,7 +67,7 @@
       </div>
 
       <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start start" fxLayoutAlign.xs="center center" dir="rtl"
-           *ngIf="!isCoupon && campaignId">
+           *ngIf="!isCoupon && !!campaignId">
         <div fxFlex="100" class="field-container">
           <div class="little-right-margin right-alignment" *ngIf="isActive">
             <app-suggestion [name]="'Collection'" [currentIds]="[0]" [placeholder]="'نام کالکشن'"
