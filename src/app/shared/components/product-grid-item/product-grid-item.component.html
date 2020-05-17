@@ -3,9 +3,11 @@
   <span>
     <div class="imgWrapper" (click)="openProduct()">
       <span *ngIf="data.colors[pos].soldOut" class="soldOut">تمام شد</span>
-      <img src="{{images[pos]}}"
+      <a [href]="openNewTab()">
+        <img src="{{images[pos]}}"
            (click)="openProduct()"
            [style.right]="(220 * data.colors[pos].position) +'px'">
+      </a>
 
     </div>
     <div *ngIf="on && data.colors.length > 1" class="sliderWrapper" (mouseover)="slideOn()"
@@ -16,7 +18,7 @@
         <div class="slider" [style.right]="(-slide * 180) + 'px'" (click)="openProduct()">
           <span *ngFor="let img of images;let i = index">
             <span *ngIf="data.colors[i].soldOut" class="soldOutSmall">تمام شد</span>
-            <img src="{{img}}">
+            <a [href]="openNewTab()"><img src="{{img}}"></a>
           </span>
         </div>
       </div>
