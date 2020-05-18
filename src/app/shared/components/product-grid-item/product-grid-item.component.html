@@ -1,23 +1,26 @@
 <div *ngIf="!isMobile">
   <div class="main" [class.on]="on" (mouseover)="turnOn()" (mouseout)="turnOff($event)" #wrapper>
   <span>
+    <a [href]="openNewTab()">
     <div class="imgWrapper" (click)="openProduct()">
       <span *ngIf="data.colors[pos].soldOut" class="soldOut">تمام شد</span>
-      <img src="{{images[pos]}}"
+        <img src="{{images[pos]}}"
            (click)="openProduct()"
            [style.right]="(220 * data.colors[pos].position) +'px'">
-
-    </div>
+           
+          </div>
+      </a>
     <div *ngIf="on && data.colors.length > 1" class="sliderWrapper" (mouseover)="slideOn()"
          (mouseout)="slideOff($event)"
          #slider>
       <i *ngIf="slidesNum > 1 && slide > 0" (click)="prevSlide()" class="fa fa-chevron-right"></i>
       <div class="sliderBlind">
         <div class="slider" [style.right]="(-slide * 180) + 'px'" (click)="openProduct()">
-          <span *ngFor="let img of images;let i = index">
+          <a [href]="openNewTab()"><span *ngFor="let img of images;let i = index">
             <span *ngIf="data.colors[i].soldOut" class="soldOutSmall">تمام شد</span>
             <img src="{{img}}">
           </span>
+          </a>
         </div>
       </div>
       <i *ngIf="slidesNum > 1 && slide < slidesNum" (click)="nextSlide()" class="fa fa-chevron-left"></i>
