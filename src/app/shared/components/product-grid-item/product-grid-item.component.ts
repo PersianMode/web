@@ -156,5 +156,8 @@ export class ProductGridItemComponent implements OnInit {
   getURL(url) {
     return HttpService.Host + url;
   }
+  openNewTab() {
+    return `product/${this.data._id}/${this.data.colors[this.pos]._id}`;
+  }
 
 }
