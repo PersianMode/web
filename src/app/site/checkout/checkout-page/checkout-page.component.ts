@@ -320,7 +320,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         'sign'
       ];
 
-      await this.finalCheckItems()
+      await this.finalCheckItems();
       // first-step-1 :
       // get data object (containing sign key and other information like terminal and merchant code, amount, time stamp and ...)
       // from server to post and redirect to bank gateway page
@@ -332,7 +332,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
         this[el].nativeElement.value = this.bankData[el];
       });
       this.bankDataFormId.nativeElement.submit(); // first-step-2 : post received data from server to bank gateway via form
-
     } catch (error) {
       console.error('Error in final check: ', error);
       if (!error.errCode)
@@ -353,7 +352,6 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       console.error(' -> ', error);
     }
     this.spinnerService.disable();
-
   }
 
   totalChanged($event) {
