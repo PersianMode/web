@@ -6,20 +6,26 @@
         <div fxFlex="80">
           <div *ngFor="let column of getKeyList(footerSiteLinksItems); first as isFirst" class="footer-column">
             <div *ngFor="let item of footerSiteLinksItems[column]; last as isLast" class="row-item">
-              <a *ngIf="!isFirst || !isLast" [ngClass]="{'footer-link-bold': item.is_header , 'footer-link': !item.is_header}"
-                href="{{item.href}}">{{item.text}}</a>
+              <a *ngIf="!isFirst || !isLast"
+                 [ngClass]="{'footer-link-bold': item.is_header , 'footer-link': !item.is_header}"
+                 href="{{item.href}}">{{item.text}}</a>
             </div>
           </div>
         </div>
         <div fxFlex="20">
           <div class="e-nemad-wrapper">
-              <img *ngIf="getDNSNumber() === 1" src="https://trustseal.enamad.ir/logo.aspx?id=100023&p=5JCVzc2aDSrCH87p"
-              alt="" onclick="window.open('https://trustseal.enamad.ir/Verify.aspx?id=100023&p=5JCVzc2aDSrCH87p','Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')"
-              style="cursor:pointer" id="5JCVzc2aDSrCH87p" class="e-nemad">
+            <!--<img *ngIf="getDNSNumber() === 1" src="https://trustseal.enamad.ir/logo.aspx?id=100023&p=5JCVzc2aDSrCH87p"-->
+                 <!--alt=""-->
+                 <!--onclick="window.open('https://trustseal.enamad.ir/Verify.aspx?id=100023&p=5JCVzc2aDSrCH87p','Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')"-->
+                 <!--style="cursor:pointer" id="5JCVzc2aDSrCH87p" class="e-nemad">-->
 
-            <img *ngIf="getDNSNumber() === 2" src="https://trustseal.enamad.ir/logo.aspx?id=115846&p=JVmqzKEeVv9Kg4Vj" alt=""
-              onclick="window.open('https://trustseal.enamad.ir/Verify.aspx?id=115846&p=AirZfJu0XsKnmHoW','Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')"
-              style="cursor:pointer" id="AirZfJu0XsKnmHoW" class="e-nemad">
+            <!--<img *ngIf="getDNSNumber() === 2" src="https://trustseal.enamad.ir/logo.aspx?id=115846&p=JVmqzKEeVv9Kg4Vj"-->
+                 <!--alt=""-->
+                 <!--onclick="window.open('https://trustseal.enamad.ir/Verify.aspx?id=115846&p=AirZfJu0XsKnmHoW','Popup','toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30')"-->
+                 <!--style="cursor:pointer" id="AirZfJu0XsKnmHoW" class="e-nemad">-->
+            <a target="_blank" href="https://trustseal.enamad.ir/?id=162682&amp;Code=dhQycSHzT2V5WcADD3uE"><img
+              src="https://Trustseal.eNamad.ir/logo.aspx?id=162682&amp;Code=dhQycSHzT2V5WcADD3uE" alt=""
+              style="cursor:pointer" id="dhQycSHzT2V5WcADD3uE" class="e-nemad"></a>
           </div>
         </div>
       </div>
@@ -38,7 +44,8 @@
         </div>
       </div>
       <hr class="hr-setting">
-      <div class="div-bottom" fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse" fxLayoutAlign="center center">
+      <div class="div-bottom" fxLayout="row" fxLayout.sm="column-reverse" fxLayout.xs="column-reverse"
+           fxLayoutAlign="center center">
         <div fxFlex="50" style="text-align: right;">
           <div class="div-right-reserved-symbol">
             <span>©</span>
