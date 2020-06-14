@@ -1,5 +1,5 @@
 <div style="height: 20px">&nbsp;</div>
-<span *ngIf="!isMobile &&  !parentCategories.length && sideOptions.length">
+<span *ngIf="!isMobile && !parentCategories.length && !!sideOptions.length">
   <button mat-button [style.fontWeight]="isChecked.main.all ? 900 : 100" (click)="sideOptionClicked('main','all')"><span
     class="colName">همه محصولات</span> <span class="colNum">({{allCount}})</span></button>
   <div *ngFor="let fo of sideOptions;let i=index">
@@ -14,7 +14,7 @@
     + بیشتر
   </button>
 </span>
-<span *ngIf="!isMobile && parentCategories.length">
+<span *ngIf="!isMobile && !!parentCategories.length">
   <div *ngFor="let fo of parentCategories;let i=index">
     <button *ngIf="i < 5 || moreSides" mat-button
             [class.colSelected]="category === fo.name"

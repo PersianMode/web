@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.conf.json --aot",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -12,7 +12,11 @@
   },
   "private": true,
   "dependencies": {
+<<<<<<< HEAD
     "@agm/core": "^1.0.0-beta.7",
+=======
+    "@agm/core": "^1.0.0",
+>>>>>>> eabcdd009976ceaa63bd49d2dec05acb1a426805
     "@angular/animations": "^5.2.7",
     "@angular/cdk": "^5.2.4",
     "@angular/common": "^5.1.0",
@@ -71,7 +75,7 @@
     "karma-coverage-istanbul-reporter": "^0.2.0",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "protractor": "^5.4.1",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",

@@ -213,4 +213,29 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.socketSubscription.unsubscribe();
   }
 
+  isOrderLineStatusIsWaitForOnlineWarehouse(orderLine) {
+    if (orderLine && orderLine.tickets) {
+      const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
+      return lastTicket.status === ORDER_LINE_STATUS.WaitForOnlineWarehouse;
+    }
+  }
+
+  ticketOnlineWarehouseTransfer(orderLine) {
+    const user = this.authService.userDetails;
+    this.httpService.post('order/ticket/transfer', {
+      orderId: orderLine.order_id,
+      orderLineId: orderLine.order_line_id,
+      warehouseId: user.warehouse_id,
+      userId: user.id,
+      barcode: orderLine.instance.barcode,
+    }).subscribe(res => {
+      this.progressService.disable();
+      this.openSnackBar('وضعیت تیکت با موفقیت تغییر کرد')
+    }, err => {
+      console.error('-> ', err);
+      this.progressService.disable();
+      this.openSnackBar('خطا به هنگام ثبت تیکت')
+    });
+  }
+
 }
