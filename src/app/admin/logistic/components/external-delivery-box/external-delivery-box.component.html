@@ -23,7 +23,12 @@
         <!-- position column -->
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.index}}</mat-cell>
+          <mat-cell *matCellDef="let order"> 
+            {{order.index}}
+            <button mat-icon-button color="primary" (click)="fakeResponseOfflineSystem(order)" style="margin-top: 10px;" *ngIf="checkLastTicketOfOrder(order)">
+              <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+            </button>
+          </mat-cell>
         </ng-container>
 
         <!-- customer column -->

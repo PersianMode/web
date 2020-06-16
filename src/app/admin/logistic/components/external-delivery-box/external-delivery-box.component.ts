@@ -12,6 +12,7 @@ import {ProgressService} from 'app/shared/services/progress.service';
 import {OrderLineStatuses, OrderStatuses} from 'app/shared/lib/status';
 import {ORDER_STATUS} from 'app/shared/enum/status.enum';
 import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
+import { AuthService } from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-external-delivery-box',
@@ -62,7 +63,8 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private socketService: SocketService,
-    private progressService: ProgressService) {
+    private progressService: ProgressService,
+    private authService: AuthService) {
 
   }
 
@@ -266,5 +268,26 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   ngOnDestroy(): void {
     this.socketSubscription.unsubscribe();
+  }
+
+  fakeResponseOfflineSystem(order) {
+    const user = this.authService.userDetails;
+    this.httpService.post('order/ticket/invoiceResponse', {
+      orderId: order._id,
+      warehouseId: user.warehouse_id,
+      userId: user.id,
+      invoiceId: `no-${Math.floor(Math.random() * 1000)}`
+    }).subscribe(res => {
+      this.progressService.disable();
+      this.openSnackBar('وضعیت تیکت با موفقیت تغییر کرد')
+    }, err => {
+      console.error('-> ', err);
+      this.progressService.disable();
+      this.openSnackBar('خطا به هنگام ثبت تیکت')
+    });
+  }
+
+  checkLastTicketOfOrder(order) {
+    return order.tickets[order.tickets.length - 1].status === ORDER_STATUS.WaitForInvoice;
   }
 }
