@@ -234,8 +234,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     }, err => {
       console.error('-> ', err);
       this.progressService.disable();
-      // this.openSnackBar('خطا به هنگام ثبت تیکت')
-      this.openSnackBar(err.error)
+      this.openSnackBar('خطا به هنگام ثبت تیکت')
     });
   }
 
