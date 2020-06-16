@@ -216,8 +216,7 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   isOrderLineStatusIsWaitForOnlineWarehouse(orderLine) {
     if (orderLine && orderLine.tickets) {
       const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return lastTicket.status === ORDER_LINE_STATUS.WaitForOnlineWarehouse || lastTicket.status === ORDER_LINE_STATUS.WaitForOnlineWarehouseCancel ||
-      lastTicket.status === ORDER_LINE_STATUS.WaitForLost ;
+      return lastTicket.status === ORDER_LINE_STATUS.WaitForOnlineWarehouse;
     }
   }
 
