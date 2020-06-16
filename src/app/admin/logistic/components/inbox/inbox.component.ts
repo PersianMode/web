@@ -216,7 +216,8 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
   isOrderLineStatusIsWaitForOnlineWarehouse(orderLine) {
     if (orderLine && orderLine.tickets) {
       const lastTicket = orderLine.tickets && orderLine.tickets.length ? orderLine.tickets[orderLine.tickets.length - 1] : null;
-      return lastTicket.status === ORDER_LINE_STATUS.WaitForOnlineWarehouse;
+      return lastTicket.status === ORDER_LINE_STATUS.WaitForOnlineWarehouse || lastTicket.status === ORDER_LINE_STATUS.WaitForOnlineWarehouseCancel ||
+      lastTicket.status === ORDER_LINE_STATUS.WaitForLost ;
     }
   }
 
@@ -234,7 +235,8 @@ export class InboxComponent implements OnInit, AfterViewInit, OnDestroy {
     }, err => {
       console.error('-> ', err);
       this.progressService.disable();
-      this.openSnackBar('خطا به هنگام ثبت تیکت')
+      // this.openSnackBar('خطا به هنگام ثبت تیکت')
+      this.openSnackBar(err.error)
     });
   }
 
