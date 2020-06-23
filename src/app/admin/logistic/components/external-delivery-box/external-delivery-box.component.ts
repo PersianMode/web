@@ -57,6 +57,8 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   selectedOrder: any;
 
+  offlineSystemInactive = false;
+
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService,
@@ -98,7 +100,8 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
-
+      console.log(res);
+      this.offlineSystemInactive = res.options.offlineSystemActive
       const rows = [];
       res.data.forEach((order, index) => {
         order['position'] = index + 1;
@@ -288,6 +291,6 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
   }
 
   checkLastTicketOfOrder(order) {
-    return order.tickets[order.tickets.length - 1].status === ORDER_STATUS.WaitForInvoice;
+    return order.tickets[order.tickets.length - 1].status === ORDER_STATUS.WaitForInvoice && this.offlineSystemInactive;
   }
 }
