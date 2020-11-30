@@ -56,8 +56,13 @@
             <button mat-button color="primary" (click)="showAddress(order)">نمایش</button>
           </mat-cell>
         </ng-container>
-        <!-- address column -->
 
+        <!-- transaction_id column -->
+        <ng-container matColumnDef="transaction_id">
+          <mat-header-cell *matHeaderCellDef>شماره فاکتور</mat-header-cell>
+          <mat-cell *matCellDef="let order"> {{order.transaction_id}}</mat-cell>
+        </ng-container>
+        <!-- aggregated column -->
         <ng-container matColumnDef="aggregated">
           <mat-header-cell *matHeaderCellDef>تجمیع شده</mat-header-cell>
           <mat-cell *matCellDef="let order">

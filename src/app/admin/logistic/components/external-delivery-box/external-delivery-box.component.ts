@@ -36,6 +36,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     'order_time',
     'total_order_lines',
     'address',
+    'transaction_id',
     'aggregated',
     'order_status',
     'process_order',
