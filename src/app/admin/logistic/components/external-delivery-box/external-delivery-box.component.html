@@ -23,7 +23,12 @@
         <!-- position column -->
         <ng-container matColumnDef="position">
           <mat-header-cell *matHeaderCellDef> شماره</mat-header-cell>
-          <mat-cell *matCellDef="let order"> {{order.index}}</mat-cell>
+          <mat-cell *matCellDef="let order"> 
+            {{order.index}}
+            <button mat-icon-button color="primary" (click)="fakeResponseOfflineSystem(order)" style="margin-top: 10px;" *ngIf="checkLastTicketOfOrder(order)">
+              <mat-icon aria-label="icon-button with a reload icon">cached</mat-icon>
+            </button>
+          </mat-cell>
         </ng-container>
 
         <!-- customer column -->
@@ -51,8 +56,13 @@
             <button mat-button color="primary" (click)="showAddress(order)">نمایش</button>
           </mat-cell>
         </ng-container>
-        <!-- address column -->
 
+        <!-- transaction_id column -->
+        <ng-container matColumnDef="transaction_id">
+          <mat-header-cell *matHeaderCellDef>شماره فاکتور</mat-header-cell>
+          <mat-cell *matCellDef="let order"> {{order.transaction_id}}</mat-cell>
+        </ng-container>
+        <!-- aggregated column -->
         <ng-container matColumnDef="aggregated">
           <mat-header-cell *matHeaderCellDef>تجمیع شده</mat-header-cell>
           <mat-cell *matCellDef="let order">

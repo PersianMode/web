@@ -12,6 +12,7 @@ import {ProgressService} from 'app/shared/services/progress.service';
 import {OrderLineStatuses, OrderStatuses} from 'app/shared/lib/status';
 import {ORDER_STATUS} from 'app/shared/enum/status.enum';
 import {RemovingConfirmComponent} from 'app/shared/components/removing-confirm/removing-confirm.component';
+import { AuthService } from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-external-delivery-box',
@@ -35,6 +36,7 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
     'order_time',
     'total_order_lines',
     'address',
+    'transaction_id',
     'aggregated',
     'order_status',
     'process_order',
@@ -56,13 +58,16 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   selectedOrder: any;
 
+  offlineSystemInactive = false;
+
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
 
   constructor(private httpService: HttpService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private socketService: SocketService,
-    private progressService: ProgressService) {
+    private progressService: ProgressService,
+    private authService: AuthService) {
 
   }
 
@@ -96,7 +101,8 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
     this.httpService.post('search/Ticket', {options, offset, limit}).subscribe(res => {
       this.progressService.disable();
-
+      console.log(res);
+      this.offlineSystemInactive = res.options.offlineSystemActive
       const rows = [];
       res.data.forEach((order, index) => {
         order['position'] = index + 1;
@@ -266,5 +272,26 @@ export class ExternalDeliveryBoxComponent implements OnInit, AfterViewInit, OnDe
 
   ngOnDestroy(): void {
     this.socketSubscription.unsubscribe();
+  }
+
+  fakeResponseOfflineSystem(order) {
+    const user = this.authService.userDetails;
+    this.httpService.post('order/ticket/invoiceResponse', {
+      orderId: order._id,
+      warehouseId: user.warehouse_id,
+      userId: user.id,
+      invoiceId: `no-${Math.floor(Math.random() * 1000)}`
+    }).subscribe(res => {
+      this.progressService.disable();
+      this.openSnackBar('وضعیت تیکت با موفقیت تغییر کرد')
+    }, err => {
+      console.error('-> ', err);
+      this.progressService.disable();
+      this.openSnackBar('خطا به هنگام ثبت تیکت')
+    });
+  }
+
+  checkLastTicketOfOrder(order) {
+    return order.tickets[order.tickets.length - 1].status === ORDER_STATUS.WaitForInvoice && this.offlineSystemInactive;
   }
 }
